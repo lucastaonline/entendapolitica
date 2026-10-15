@@ -541,41 +541,137 @@
    ]
   },
   {
-   "tipo": "numeros",
-   "titulo": "Quantos votos são precisos?",
-   "texto": "Para algumas decisões, não basta ganhar. É preciso alcançar um número mínimo de votos: o **quórum**.",
-   "numeros": [
+   "tipo": "comparar",
+   "etiqueta": "MAIORIA",
+   "titulo": "Três jeitos de contar a maioria",
+   "texto": "Numa votação, nem sempre basta ter mais votos. Imagine uma turma de **30 alunos** votando uma regra nova:",
+   "colunas": [
     {
-     "val": "257",
-     "rot": "deputados: maioria absoluta da Câmara",
-     "ic": "🧑‍💼"
+     "ic": "🙋",
+     "titulo": "Maioria simples",
+     "itens": [
+      "Precisa de mais da metade de quem está presente.",
+      "Quem faltou não conta."
+     ],
+     "exemplo": "Vieram 20 alunos: 11 votam “sim” e 9 votam “não”. Aprovado!"
     },
     {
-     "val": "308",
-     "rot": "deputados: 3/5 da Câmara",
-     "ic": "📕"
+     "ic": "✋",
+     "titulo": "Maioria absoluta",
+     "itens": [
+      "Precisa de mais da metade da turma **inteira**.",
+      "Quem faltou conta como se não tivesse votado “sim”."
+     ],
+     "exemplo": "Turma de 30: precisa de **16** votos “sim”, mesmo que muita gente falte."
     },
     {
-     "val": "41",
-     "rot": "senadores: maioria absoluta do Senado",
-     "ic": "🏛️"
-    },
-    {
-     "val": "49",
-     "rot": "senadores: 3/5 do Senado",
-     "ic": "📕"
+     "ic": "🖐️",
+     "titulo": "Três quintos (3/5)",
+     "itens": [
+      "Precisa de 3 em cada 5 alunos da turma inteira.",
+      "É o mais difícil de alcançar."
+     ],
+     "exemplo": "Turma de 30: precisa de **18** votos “sim”."
     }
    ],
-   "nota": "Maioria absoluta é mais da metade de todos os membros, contando quem faltou. Lei complementar e derrubada de veto precisam dela. PEC precisa de 3/5, em dois turnos, nas duas Casas.",
    "fontes": [
-    "camara-processo",
-    "cn-veto",
-    "senado-glossario",
-    "cn-maioria-absoluta",
     "cf-art47",
+    "cf-art69",
+    "cf-art60",
+    "cn-maioria-absoluta",
+    "senado-glossario"
+   ]
+  },
+  {
+   "tipo": "simulador",
+   "id": "votos-precisos",
+   "titulo": "Quantos “sim” são precisos no Congresso?",
+   "texto": "Escolha o que está sendo votado e veja as cadeiras se acenderem.",
+   "casas": [
+    {
+     "nome": "Câmara dos Deputados",
+     "total": 513,
+     "quem": "deputados"
+    },
+    {
+     "nome": "Senado Federal",
+     "total": 81,
+     "quem": "senadores"
+    }
+   ],
+   "opcoes": [
+    {
+     "ic": "📜",
+     "nome": "Lei comum",
+     "explica": "Precisa de **maioria simples**: mais da metade de quem votou. Mas a votação só vale se pelo menos metade da Casa estiver lá: 257 deputados ou 41 senadores. Esse mínimo é o **quórum**.",
+     "casas": [
+      {
+       "sim": 151,
+       "nao": 149,
+       "rot": "Exemplo: se 300 deputados votarem, 151 “sim” aprovam."
+      },
+      {
+       "sim": 26,
+       "nao": 24,
+       "rot": "Exemplo: se 50 senadores votarem, 26 “sim” aprovam."
+      }
+     ]
+    },
+    {
+     "ic": "📘",
+     "nome": "Lei complementar",
+     "explica": "Precisa de **maioria absoluta**: mais da metade de todos os membros, contando até quem faltou.",
+     "casas": [
+      {
+       "sim": 257,
+       "rot": "“sim”, no mínimo, dos 513 deputados."
+      },
+      {
+       "sim": 41,
+       "rot": "“sim”, no mínimo, dos 81 senadores."
+      }
+     ]
+    },
+    {
+     "ic": "🛑",
+     "nome": "Derrubar um veto",
+     "explica": "Deputados e senadores votam na mesma sessão do Congresso. Para derrubar o **veto** do presidente, é preciso **maioria absoluta** nas duas Casas.",
+     "casas": [
+      {
+       "sim": 257,
+       "rot": "deputados votando para derrubar o veto."
+      },
+      {
+       "sim": 41,
+       "rot": "senadores votando para derrubar o veto."
+      }
+     ]
+    },
+    {
+     "ic": "📕",
+     "nome": "Mudar a Constituição (PEC)",
+     "explica": "É o mais difícil: precisa de **3/5** de cada Casa. E a **PEC** é votada duas vezes na Câmara e duas vezes no Senado (dois **turnos**).",
+     "casas": [
+      {
+       "sim": 308,
+       "rot": "“sim”, no mínimo, dos 513 deputados, em cada turno."
+      },
+      {
+       "sim": 49,
+       "rot": "“sim”, no mínimo, dos 81 senadores, em cada turno."
+      }
+     ]
+    }
+   ],
+   "fontes": [
+    "cf-art47",
+    "cf-art69",
     "cf-art60",
     "cf-art66",
-    "cf-art69"
+    "cn-veto",
+    "cn-maioria-absoluta",
+    "camara-processo",
+    "senado-glossario"
    ]
   },
   {

@@ -29,10 +29,13 @@
    numeros    { "tipo":"numeros", "titulo":"...", "texto":"...", "numeros":[ { "val":"513", "rot":"deputados federais", "ic":"🧑‍💼" } ], "nota":"(opcional)", "fontes":["id"] }
    historia   { "tipo":"historia", "titulo":"...", "quadros":[ { "ic":"🏫", "txt":"..." } ], "moral":"...", "fontes":["id"] }
    quiz       { "tipo":"quiz", "pergunta":"...", "opcoes":["...", "..."], "certa":0, "explica":"...", "fontes":["id"] }
-   simulador  { "tipo":"simulador", "id":"quem-cuida" | "quociente" | "caminho-lei", "titulo":"...", "texto":"...", "fontes":["id"], ... }
+   simulador  { "tipo":"simulador", "id":"quem-cuida" | "quociente" | "caminho-lei" | "votos-precisos", "titulo":"...", "texto":"...", "fontes":["id"], ... }
       quem-cuida:  "itens":[ { "ic":"🏫", "txt":"Creche", "quem":"cidade", "explica":"..." } ]   // quem: pais | estado | cidade | todos
       quociente:   "cadeiras":10, "partidos":[ { "nome":"Partido Círculo", "votos":420 } ], "passos":["explicação passo a passo"]   // partidos inventados com nome de forma, nunca de cor
       caminho-lei: "passos":[ { "ic":"💡", "titulo":"...", "txt":"..." } ]
+      votos-precisos: "casas":[ { "nome":"Câmara dos Deputados", "total":513, "quem":"deputados" } ],
+                      "opcoes":[ { "ic":"📕", "nome":"Mudar a Constituição (PEC)", "explica":"...",
+                                   "casas":[ { "sim":308, "nao":0, "rot":"“sim”, no mínimo, dos 513 deputados" } ] } ]   // uma entrada em "casas" por Casa, na mesma ordem
 
    ILUSTRAÇÕES ("ilustracao"): congresso, tres-poderes, niveis, urna, constituicao, balanca, lei, cofre, mapa,
    plenario, megafone, predio, palacio, escola, tribunal, cargos, palanque. Se precisar de outra coisa, use "emoji".
@@ -202,6 +205,23 @@
         '<div class="qe-cadeiras" aria-hidden="true"></div><div class="qe-conta" aria-live="polite"></div>' +
         '<div class="botoes"><button type="button" class="btn peq" data-qe-passo="' + idx + '"></button><button type="button" class="btn peq bege" data-qe-zera="' + idx + '">↺ ' + tr("Recomeçar", "Start over") + "</button></div></div></div>";
     }
+    if (s.id === "votos-precisos") {
+      // plenário 3D de cada Casa; a criança escolhe o que está sendo votado e as cadeiras dos "sim" acendem
+      return cab(s) + '<div class="vp" data-vp="' + idx + '">' +
+        '<div class="vp-opcoes" role="group" aria-label="' + esc(tr("O que está sendo votado?", "What is being voted on?")) + '">' +
+        (s.opcoes || []).map(function (o, k) {
+          return '<button type="button" class="vp-op anim" style="--i:' + (k + 2) + '" data-vp-op="' + k + '" aria-pressed="false"><span class="vp-ic" aria-hidden="true">' +
+            esc(o.ic || "") + "</span><span>" + md(o.nome) + "</span></button>";
+        }).join("") + "</div>" +
+        '<div class="vp-explica" aria-live="polite"><p class="muted"><span aria-hidden="true">👆 </span>' + tr("Escolha uma opção acima.", "Choose an option above.") + "</p></div>" +
+        '<div class="vp-casas">' + (s.casas || []).map(function (c, j) {
+          return '<div class="vp-casa anim" style="--i:' + (j + 3) + '"><h3>' + esc(c.nome) + "</h3>" +
+            (T.plenario ? T.plenario({ total: c.total, max: c.total > 200 ? 400 : 260 }) : "") +
+            '<p class="vp-num"><b data-vp-n="' + j + '">–</b><span data-vp-rot="' + j + '">' + esc(tr("de " + EP.num(c.total) + " " + c.quem, "out of " + EP.num(c.total) + " " + c.quem)) + "</span></p></div>";
+        }).join("") + "</div>" +
+        '<p class="vp-legenda" aria-hidden="true"><span><i class="s"></i>' + tr("votos “sim” precisos", "“yes” votes needed") + '</span><span><i class="n"></i>' +
+        tr("votos “não”", "“no” votes") + "</span><span><i></i>" + tr("os outros", "the others") + "</span></p></div>";
+    }
     if (s.id === "caminho-lei") {
       var p = s.passos || [];
       return cab(s) + '<div class="tabuleiro" data-lei="' + idx + '"><ol class="casas" style="--n:' + p.length + '">' + p.map(function (x, k) {
@@ -359,7 +379,7 @@
   function entrou(sec, i) {
     animaNumeros(sec);
     sobeEscada(i);
-    var pl = sec.querySelector(".plenario");
+    var pl = [].filter.call(sec.querySelectorAll(".plenario"), function (x) { return !x.closest("[data-vp]"); })[0];  // o do jogo de votos acende por conta própria
     if (pl) { pl.classList.remove("cheio"); setTimeout(function () { pl.classList.add("cheio"); }, 500); }
     var lei = sec.querySelector("[data-lei]");
     if (lei && !lei.getAttribute("data-pos")) leiMostra(+lei.getAttribute("data-lei"), 0);
@@ -557,6 +577,27 @@
     b.textContent = ultimo ? "🎉 " + tr("Chegou ao fim!", "You made it to the end!") : "▶ " + tr("Andar uma casa", "Move one step");
     if (ultimo && pos > 0) confete();
   }
+  // quantos "sim" são precisos: acende as cadeiras de cada Casa
+  function vpEscolhe(b) {
+    var box = b.closest("[data-vp]");
+    if (!box) return;
+    var s = SL[+box.getAttribute("data-vp")].s, o = (s.opcoes || [])[+b.getAttribute("data-vp-op")];
+    if (!o) return;
+    [].forEach.call(box.querySelectorAll("[data-vp-op]"), function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+    var resumo = [];
+    [].forEach.call(box.querySelectorAll(".vp-casa"), function (casa, j) {
+      var c = (o.casas || [])[j] || {}, sim = c.sim || 0, nao = c.nao || 0;
+      [].forEach.call(casa.querySelectorAll(".plenario i"), function (it, q) {
+        it.classList.toggle("s", q < sim);
+        it.classList.toggle("n", q >= sim && q < sim + nao);
+      });
+      casa.querySelector("[data-vp-n]").textContent = EP.num(sim);
+      casa.querySelector("[data-vp-rot]").innerHTML = md(c.rot || "");
+      resumo.push(((s.casas || [])[j] || {}).nome + ": " + EP.num(sim) + " " + (c.rot || ""));
+    });
+    box.querySelector(".vp-explica").innerHTML = '<p><b><span aria-hidden="true">' + esc(o.ic || "") + " </span>" + md(o.nome) + ":</b> " + md(o.explica || "") + "</p>" +
+      '<p class="sr">' + md(resumo.join(" ")) + "</p>";
+  }
   // quociente eleitoral (Código Eleitoral, arts. 106 a 109)
   // partidos inventados (Círculo, Quadrado...): cor pela ordem, sem lembrar cores de partidos reais
   function corDe(nome, k) { return PALETA[k % PALETA.length]; }
@@ -640,7 +681,7 @@
 
   // ---------------------------------------------------------------- eventos
   document.addEventListener("click", function (e) {
-    var t = e.target.closest ? e.target.closest("[data-acao],[data-ir],[data-det],[data-quiz],[data-quiz-zera],[data-quem],[data-lei-anda],[data-lei-zera],[data-qe-passo],[data-qe-zera],[data-glossario],[data-virar],[data-abrir-parada],[data-proxima],[data-escada-replay]") : null;
+    var t = e.target.closest ? e.target.closest("[data-acao],[data-ir],[data-det],[data-quiz],[data-quiz-zera],[data-quem],[data-lei-anda],[data-lei-zera],[data-qe-passo],[data-qe-zera],[data-vp-op],[data-glossario],[data-virar],[data-abrir-parada],[data-proxima],[data-escada-replay]") : null;
     if (!t) return;
     if (t.hasAttribute("data-abrir-parada")) { EP.fechar(); abrirParte(+t.getAttribute("data-abrir-parada")); return; }
     if (t.hasAttribute("data-proxima")) { voltarAoMapa(+t.getAttribute("data-proxima")); return; }
@@ -656,6 +697,7 @@
     if (t.hasAttribute("data-lei-zera")) { leiMostra(+t.getAttribute("data-lei-zera"), 0); return; }
     if (t.hasAttribute("data-qe-passo")) { qePasso(+t.getAttribute("data-qe-passo")); return; }
     if (t.hasAttribute("data-qe-zera")) { qeZera(+t.getAttribute("data-qe-zera")); return; }
+    if (t.hasAttribute("data-vp-op")) { vpEscolhe(t); return; }
     var a = t.getAttribute("data-acao");
     if (a === "proximo") proximoSlide();
     else if (a === "recomecar") ir(0, -1);

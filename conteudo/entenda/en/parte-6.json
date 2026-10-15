@@ -567,41 +567,137 @@
    ]
   },
   {
-   "tipo": "numeros",
-   "titulo": "How many votes are needed?",
-   "texto": "For some decisions, winning is not enough. You must reach a minimum number of votes: the **quorum**.",
-   "numeros": [
+   "tipo": "comparar",
+   "etiqueta": "MAJORITY",
+   "titulo": "Three ways to count a majority",
+   "texto": "In a vote, having more votes is not always enough. Imagine a class of **30 students** voting on a new rule:",
+   "colunas": [
     {
-     "val": "257",
-     "rot": "deputies: absolute majority of the Chamber",
-     "ic": "🧑‍💼"
+     "ic": "🙋",
+     "titulo": "Simple majority",
+     "itens": [
+      "You need more than half of those who are present.",
+      "Those who are absent do not count."
+     ],
+     "exemplo": "20 students came: 11 vote “yes” and 9 vote “no”. Approved!"
     },
     {
-     "val": "308",
-     "rot": "deputies: 3/5 of the Chamber",
-     "ic": "📕"
+     "ic": "✋",
+     "titulo": "Absolute majority",
+     "itens": [
+      "You need more than half of the **whole** class.",
+      "Those who are absent count as if they had not voted “yes”."
+     ],
+     "exemplo": "Class of 30: you need **16** “yes” votes, even if many people are absent."
     },
     {
-     "val": "41",
-     "rot": "senators: absolute majority of the Senate",
-     "ic": "🏛️"
-    },
-    {
-     "val": "49",
-     "rot": "senators: 3/5 of the Senate",
-     "ic": "📕"
+     "ic": "🖐️",
+     "titulo": "Three-fifths (3/5)",
+     "itens": [
+      "You need 3 out of every 5 students in the whole class.",
+      "It is the hardest to reach."
+     ],
+     "exemplo": "Class of 30: you need **18** “yes” votes."
     }
    ],
-   "nota": "An absolute majority is more than half of all the members, counting those who are absent. Complementary laws and overriding a veto need one. A PEC needs 3/5, in two rounds, in both Houses.",
    "fontes": [
-    "camara-processo",
-    "cn-veto",
-    "senado-glossario",
-    "cn-maioria-absoluta",
     "cf-art47",
+    "cf-art69",
+    "cf-art60",
+    "cn-maioria-absoluta",
+    "senado-glossario"
+   ]
+  },
+  {
+   "tipo": "simulador",
+   "id": "votos-precisos",
+   "titulo": "How many “yes” votes are needed in Congress?",
+   "texto": "Choose what is being voted on and watch the seats light up.",
+   "casas": [
+    {
+     "nome": "Chamber of Deputies",
+     "total": 513,
+     "quem": "deputies"
+    },
+    {
+     "nome": "Federal Senate",
+     "total": 81,
+     "quem": "senators"
+    }
+   ],
+   "opcoes": [
+    {
+     "ic": "📜",
+     "nome": "Ordinary law",
+     "explica": "It needs a **simple majority**: more than half of those who voted. But the vote only counts if at least half of the House is there: 257 deputies or 41 senators. That minimum is the **quorum**.",
+     "casas": [
+      {
+       "sim": 151,
+       "nao": 149,
+       "rot": "Example: if 300 deputies vote, 151 “yes” votes approve it."
+      },
+      {
+       "sim": 26,
+       "nao": 24,
+       "rot": "Example: if 50 senators vote, 26 “yes” votes approve it."
+      }
+     ]
+    },
+    {
+     "ic": "📘",
+     "nome": "Complementary law",
+     "explica": "It needs an **absolute majority**: more than half of all the members, counting even those who are absent.",
+     "casas": [
+      {
+       "sim": 257,
+       "rot": "“yes” votes at least, out of 513 deputies."
+      },
+      {
+       "sim": 41,
+       "rot": "“yes” votes at least, out of 81 senators."
+      }
+     ]
+    },
+    {
+     "ic": "🛑",
+     "nome": "Override a veto",
+     "explica": "Deputies and senators vote in the same session of Congress. To override the President's **veto**, an **absolute majority** is needed in both Houses.",
+     "casas": [
+      {
+       "sim": 257,
+       "rot": "deputies voting to override the veto."
+      },
+      {
+       "sim": 41,
+       "rot": "senators voting to override the veto."
+      }
+     ]
+    },
+    {
+     "ic": "📕",
+     "nome": "Change the Constitution (PEC)",
+     "explica": "This is the hardest: it needs **3/5** of each House. And a **PEC** is voted on twice in the Chamber and twice in the Senate (two **rounds**).",
+     "casas": [
+      {
+       "sim": 308,
+       "rot": "“yes” votes at least, out of 513 deputies, in each round."
+      },
+      {
+       "sim": 49,
+       "rot": "“yes” votes at least, out of 81 senators, in each round."
+      }
+     ]
+    }
+   ],
+   "fontes": [
+    "cf-art47",
+    "cf-art69",
     "cf-art60",
     "cf-art66",
-    "cf-art69"
+    "cn-veto",
+    "cn-maioria-absoluta",
+    "camara-processo",
+    "senado-glossario"
    ]
   },
   {

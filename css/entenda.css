@@ -224,6 +224,51 @@
 .glossario-lista { display: grid; gap: 8px; }
 .glossario-lista div { background: #f7f3ea; border-radius: 12px; padding: 8px 12px; }
 
+/* ---------- jogo "quantos sim são precisos": botões 3D + plenário de cada Casa ---------- */
+.vp { display: grid; gap: 10px; margin-top: 10px; }
+.vp-opcoes { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; perspective: 1000px; }
+.vp-op { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; min-height: 92px; padding: 12px 10px; border: 3px solid var(--line);
+  border-radius: 18px; background: #fff; font: inherit; font-weight: 900; font-size: 1rem; line-height: 1.2; color: var(--ink); cursor: pointer; text-align: center;
+  box-shadow: 0 7px 0 #e6dcc7; transform: rotateX(10deg); transform-style: preserve-3d; transition: transform .2s, box-shadow .2s, border-color .2s, background .2s; }
+.vp-op .vp-ic { font-size: 2.1rem; line-height: 1; }
+.vp-op:hover { background: #f3f7fd; transform: rotateX(0) translateY(-3px); }
+.vp-op[aria-pressed="true"] { border-color: var(--brand); background: #eef3fa; box-shadow: 0 2px 0 var(--brand); transform: translateY(5px); }
+.vp-op[aria-pressed="true"]::after { content: "✓"; position: absolute; top: 6px; right: 10px; color: var(--brand); }
+.vp-op { position: relative; }
+.vp-op:focus-visible { outline: 4px solid var(--brand); outline-offset: 3px; }
+.vp-casas { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 16px; align-items: stretch; }
+.vp-casa { background: #fff; border: 2px solid var(--line); border-radius: 20px; padding: 10px 14px 12px; text-align: center; box-shadow: var(--sombra);
+  display: flex; flex-direction: column; justify-content: space-between; gap: 6px; }
+.vp-casa h3 { margin: 0; font-size: 1rem; }
+.vp-num { margin: 0; font-size: .92rem; color: #4a5361; font-weight: 700; display: flex; flex-wrap: wrap; align-items: baseline; justify-content: center; gap: 2px 8px; }
+.vp-num b { font-size: 2rem; line-height: 1.05; color: var(--brand); font-variant-numeric: tabular-nums; }
+.vp .plenario { margin: -7% auto -1%; }
+.vp .plenario i.s { background: #1f3a5f; box-shadow: 0 2px 0 #0d1d33; transform: translateY(-4px); }
+.vp .plenario i.n { background: #6b7f96; box-shadow: 0 2px 0 #4d5f74; }
+.vp-legenda { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 18px; margin: 0; font-size: .86rem; font-weight: 800; color: #4a5361; }
+.vp-legenda i { display: inline-block; width: 14px; height: 14px; border-radius: 4px; margin-right: 6px; vertical-align: -2px; background: #d8cfbd; box-shadow: 0 2px 0 #b8ad96; }
+.vp-legenda i.s { background: #1f3a5f; box-shadow: 0 2px 0 #0d1d33; }
+.vp-legenda i.n { background: #6b7f96; box-shadow: 0 2px 0 #4d5f74; }
+.vp-explica { background: #fffdf4; border: 2px dashed #e8d9a8; border-radius: 16px; padding: 10px 16px; min-height: 3.4em; font-size: 1.02rem; }
+.vp-explica p { margin: 4px 0; }
+@media (max-width: 860px) {
+  .vp-opcoes { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .vp-casas { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 600px) {
+  .vp-opcoes { gap: 8px; grid-template-columns: minmax(0, 1fr); }
+  .vp-op { flex-direction: row; justify-content: flex-start; text-align: left; min-height: 52px; padding: 8px 14px; font-size: .95rem; gap: 10px; transform: none; }
+  .vp-op .vp-ic { font-size: 1.4rem; flex-shrink: 0; }
+  .vp-num b { font-size: 1.7rem; }
+  .vp-op[aria-pressed="true"]::after { top: 4px; right: 6px; }
+  .vp-num b { font-size: 1.8rem; }
+  .vp-explica { font-size: .95rem; }
+}
+html.alto-contraste .vp .plenario i.s, html.alto-contraste .vp-legenda i.s { background: #000; box-shadow: none; }
+html.alto-contraste .vp .plenario i.n, html.alto-contraste .vp-legenda i.n { background: #777; box-shadow: none; }
+html.alto-contraste .vp-op[aria-pressed="true"] { outline: 3px solid #000; }
+html.sem-movimento .vp-op, html.sem-movimento .vp .plenario i { transition: none; transform: none; }
+
 @media (max-width: 860px) {
   .duas, .abertura { grid-template-columns: minmax(0, 1fr); gap: 10px; }
   .abertura .ilu, .duas .ilu { order: -1; }

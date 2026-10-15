@@ -42,9 +42,6 @@ body > .rodape { position: relative; z-index: 1; }
 .botao-acao:hover, .botao-acao:focus-visible { background: #f3f7fd; }
 .botao-acao small { display: block; color: var(--muted); font-size: .85rem; margin-top: 2px; }
 .ic-grande { font-size: 2.6rem; line-height: 1; }
-.opcoes-comp { display: grid; gap: 10px; margin: 6px 0 4px; }
-.opcoes-comp .btn { width: 100%; }
-.link-copia { display: flex; gap: 8px; align-items: center; background: #f7f3ea; border-radius: 12px; padding: 8px 10px; font-size: .85rem; word-break: break-all; }
 
 /* ---------- acessibilidade: alvos de toque e foco ---------- */
 .topo a, .topo button { min-height: 44px; min-width: 44px; justify-content: center; }

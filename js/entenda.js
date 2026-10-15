@@ -105,8 +105,9 @@
       '<br><button class="btn peq" type="button" data-abrir-parada="1">' + tr("Começar pela parada 1 ▶", "Start at stop 1 ▶") + "</button>";
     else if (p) b.innerHTML = tr("Muito bem! Você já visitou " + q + " de 9 paradas. Próxima sugestão: ", "Well done! You have visited " + q + " of 9 stops. Next suggestion: ") + "<b>" + esc(I[p].nome) + "</b>." +
       '<br><button class="btn peq" type="button" data-abrir-parada="' + p + '">' + tr("Ir para a parada ", "Go to stop ") + p + " ▶</button>";
-    else b.innerHTML = tr("Uau! Você visitou as 9 paradas! Agora veja quem está no poder.", "Wow! You visited all 9 stops! Now see who is in power.") +
-      '<br><a class="btn peq" href="brasil.html">🏛️ ' + tr("Política do Brasil", "Politics of Brazil") + '</a> <a class="btn peq claro" href="estado.html">📍 ' + tr("Meu estado", "My state") + "</a>";
+    else b.innerHTML = tr("Uau! Você visitou as 9 paradas! E agora, o que você quer fazer?", "Wow! You visited all 9 stops! What would you like to do next?") +
+      '<br><a class="btn peq" href="brasil.html' + (EP.en ? "?lang=en" : "") + '">🏛️ ' + tr("Política do Brasil", "Politics of Brazil") + '</a> <a class="btn peq claro" href="estado.html' + (EP.en ? "?lang=en" : "") + '">📍 ' +
+      tr("Meu estado", "My state") + '</a> <button class="btn peq bege" type="button" data-compartilhar="mapa-coruja">📤 ' + tr("Compartilhar", "Share") + "</button>";
   }
 
   // ---------------------------------------------------------------- pedaços de HTML
@@ -253,16 +254,35 @@
   }
   function fimHtml(P) {
     var n = P.parte, I = info(), prox = proximo(n);
+    if (!prox) return fimMapaHtml();
     return '<div class="fim-s"><div class="trofeu anim" aria-hidden="true">⭐</div><h1' + anim(1) + ">" + tr("Parada concluída!", "Stop completed!") + "</h1>" +
       '<p class="lead anim" style="--i:2">' + tr("Você aprendeu: ", "You learned: ") + "<b>" + esc(P.nome) + "</b></p>" +
       '<p class="placar anim" style="--i:3" id="placar-parada"></p>' +
       '<div class="botoes anim" style="--i:4">' +
-      (prox ? '<button class="btn" type="button" data-proxima="' + prox + '">▶ ' + tr("Próxima parada: ", "Next stop: ") + esc(I[prox].nome) + "</button>" : "") +
+      '<button class="btn" type="button" data-proxima="' + prox + '">▶ ' + tr("Próxima parada: ", "Next stop: ") + esc(I[prox].nome) + "</button>" +
       '<button class="btn claro" type="button" data-acao="mapa">🗺️ ' + tr("Voltar ao mapa", "Back to the map") + "</button>" +
-      '<button class="btn bege" type="button" data-acao="recomecar">↺ ' + tr("Ver de novo", "See it again") + "</button></div>" +
-      (!prox ? '<div class="portas-fim anim" style="--i:5"><a href="brasil.html"><span aria-hidden="true">🏛️</span><span><b>' + tr("A política do Brasil", "Politics of Brazil") + "</b><small>" +
-        tr("Presidente, ministros, senadores e deputados federais.", "President, ministers, senators and federal deputies.") + '</small></span></a><a href="estado.html"><span aria-hidden="true">📍</span><span><b>' +
-        tr("A política do meu estado", "Politics of my state") + "</b><small>" + tr("Governador, deputados estaduais, prefeito e vereadores.", "Governor, state deputies, mayor and city councilors.") + "</small></span></a></div>" : "") + "</div>";
+      '<button class="btn bege" type="button" data-acao="recomecar">↺ ' + tr("Ver esta parada de novo", "See this stop again") + "</button></div></div>";
+  }
+  // fim da última parada que faltava: o mapa está completo. Em vez de sugerir recomeçar, pergunta o que a pessoa quer fazer.
+  function fimMapaHtml() {
+    function porta(tag, attr, ic, titulo, txt) {
+      return "<" + tag + " " + attr + '><span aria-hidden="true">' + ic + "</span><span><b>" + titulo + "</b><small>" + txt + "</small></span></" + tag + ">";
+    }
+    return '<div class="fim-s fim-mapa"><div class="trofeu anim" aria-hidden="true">🏆</div>' +
+      "<h1" + anim(1) + ">" + tr("Você completou o Mapa da Política!", "You completed the Politics Map!") + "</h1>" +
+      '<p class="lead anim" style="--i:2">' + tr("Agora você sabe como a política do Brasil funciona: os Poderes, os cargos, as leis e as eleições.",
+        "Now you know how politics works in Brazil: the branches of government, the offices, the laws and the elections.") + "</p>" +
+      '<p class="placar anim" style="--i:3" id="placar-parada"></p>' +
+      '<h2 class="pergunta-fim anim" style="--i:4">' + tr("E agora, o que você quer fazer?", "What would you like to do next?") + "</h2>" +
+      '<div class="portas-fim tres anim" style="--i:5">' +
+      porta("a", 'href="brasil.html' + (EP.en ? "?lang=en" : "") + '"', "🏛️", tr("Ver quem está no poder no Brasil", "See who is in power in Brazil"),
+        tr("Presidente, ministros, senadores e deputados federais, com o que cada um propôs.", "The President, ministers, senators and federal deputies, with what each one proposed.")) +
+      porta("a", 'href="estado.html' + (EP.en ? "?lang=en" : "") + '"', "📍", tr("Ver a política do meu estado", "See the politics of my state"),
+        tr("Governador, deputados estaduais e, na sua cidade, prefeito e vereadores.", "The governor, state deputies and, in your city, the mayor and city councilors.")) +
+      porta("button", 'type="button" data-compartilhar="mapa-completo"', "📤", tr("Compartilhar o site", "Share the site"),
+        tr("Ajude mais gente a entender a política também.", "Help more people understand politics too.")) +
+      "</div>" +
+      '<p class="anim" style="--i:6"><button class="btn claro peq" type="button" data-acao="mapa">🗺️ ' + tr("Voltar ao mapa", "Back to the map") + "</button></p></div>";
   }
   function montarAula(n) {
     var P = PARTES[n];
@@ -681,8 +701,9 @@
 
   // ---------------------------------------------------------------- eventos
   document.addEventListener("click", function (e) {
-    var t = e.target.closest ? e.target.closest("[data-acao],[data-ir],[data-det],[data-quiz],[data-quiz-zera],[data-quem],[data-lei-anda],[data-lei-zera],[data-qe-passo],[data-qe-zera],[data-vp-op],[data-glossario],[data-virar],[data-abrir-parada],[data-proxima],[data-escada-replay]") : null;
+    var t = e.target.closest ? e.target.closest("[data-acao],[data-ir],[data-det],[data-quiz],[data-quiz-zera],[data-quem],[data-lei-anda],[data-lei-zera],[data-qe-passo],[data-qe-zera],[data-vp-op],[data-compartilhar],[data-glossario],[data-virar],[data-abrir-parada],[data-proxima],[data-escada-replay]") : null;
     if (!t) return;
+    if (t.hasAttribute("data-compartilhar")) { EP.compartilhar(t.getAttribute("data-compartilhar")); return; }
     if (t.hasAttribute("data-abrir-parada")) { EP.fechar(); abrirParte(+t.getAttribute("data-abrir-parada")); return; }
     if (t.hasAttribute("data-proxima")) { voltarAoMapa(+t.getAttribute("data-proxima")); return; }
     if (t.hasAttribute("data-ir")) { var n = +t.getAttribute("data-ir"); EP.fechar(); ir(n, n >= atual ? 1 : -1); return; }
@@ -714,7 +735,7 @@
   temMais.addEventListener("click", function () { var s = SECS[atual]; s.scrollBy({ top: s.clientHeight * 0.7, behavior: EP.reduzido ? "auto" : "smooth" }); });
   window.addEventListener("resize", function () { if (aulaAberta) { checaMais(); var sec = SECS[atual]; if (sec && sec.querySelector("[data-escada]")) sobeEscada(atual); } });
   document.addEventListener("keydown", function (e) {
-    if (!aulaAberta || EP.janelaAberta() || e.altKey || e.ctrlKey || e.metaKey) return;
+    if (e.defaultPrevented || !aulaAberta || EP.janelaAberta() || e.altKey || e.ctrlKey || e.metaKey) return;
     var tag = (e.target.tagName || "").toLowerCase();
     if (tag === "input" || tag === "textarea" || tag === "select") return;
     if (e.key === "ArrowRight" || e.key === "PageDown") { e.preventDefault(); proximoSlide(); }

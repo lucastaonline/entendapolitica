@@ -74,7 +74,9 @@
 .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-top: 16px; perspective: 1200px; }
 .card-3d { position: relative; display: grid; transform-style: preserve-3d; transition: transform .7s cubic-bezier(.3, 1.2, .4, 1); }
 .slide.ativo .card-3d.anim { animation: viraCard .8s cubic-bezier(.2, .8, .2, 1) backwards; animation-delay: calc(var(--i, 0) * 130ms + 150ms); }
-@keyframes viraCard { from { opacity: 0; transform: rotateY(-100deg) translateZ(-80px); } to { opacity: 1; transform: none; } }
+/* entrada sem opacity: animar opacity num elemento preserve-3d faz o Chrome "achatar" o 3D, e o verso espelhado aparecia por cima
+   da frente (ícone duplicado do outro lado) até a animação acabar. visibility esconde durante a espera; o giro para em -88° (só a frente). */
+@keyframes viraCard { from { visibility: hidden; transform: rotateY(-88deg) translateZ(-80px); } to { visibility: visible; transform: none; } }
 .card-3d.virado { transform: rotateY(180deg); }
 .card-3d > .face { grid-area: 1 / 1; backface-visibility: hidden; -webkit-backface-visibility: hidden; display: flex; flex-direction: column; gap: 6px;
   background: #fff; border: 2px solid var(--line); border-radius: 20px; padding: 16px; box-shadow: var(--sombra); }
@@ -210,10 +212,24 @@
 .fim-s { text-align: center; max-width: 860px; margin: 0 auto; }
 .fim-s .trofeu { font-size: 5rem; line-height: 1; display: inline-block; animation: trofeuGira 2.4s ease-in-out infinite; }
 @keyframes trofeuGira { 0%, 100% { transform: perspective(500px) rotateY(-25deg); } 50% { transform: perspective(500px) rotateY(25deg) translateY(-8px); } }
-.fim-s .portas-fim { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin: 20px 0; text-align: left; }
-.fim-s .portas-fim a { display: flex; gap: 12px; align-items: center; background: #fff; border: 2px solid var(--line); border-radius: 20px; padding: 16px; text-decoration: none; color: var(--ink); box-shadow: var(--sombra); }
-.fim-s .portas-fim a span:first-child { font-size: 2.4rem; }
-.fim-s .portas-fim small { display: block; color: var(--muted); }
+.fim-s .portas-fim { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin: 20px 0; text-align: left; perspective: 1000px; }
+.fim-s .portas-fim a, .fim-s .portas-fim button { display: flex; gap: 12px; align-items: center; background: #fff; border: 3px solid var(--line); border-radius: 20px; padding: 16px;
+  text-decoration: none; color: var(--ink); box-shadow: 0 8px 0 #e6dcc7, var(--sombra); font: inherit; text-align: left; cursor: pointer; width: 100%;
+  transition: transform .2s, border-color .2s, box-shadow .2s; }
+.fim-s .portas-fim a:hover, .fim-s .portas-fim button:hover { transform: translateY(-4px) rotateX(6deg); border-color: var(--amarelo); box-shadow: 0 12px 0 #e6dcc7, var(--sombra); }
+.fim-s .portas-fim a:focus-visible, .fim-s .portas-fim button:focus-visible { outline: 4px solid var(--brand); outline-offset: 3px; }
+.fim-s .portas-fim a > span:first-child, .fim-s .portas-fim button > span:first-child { font-size: 2.4rem; line-height: 1; flex-shrink: 0; }
+.fim-s .portas-fim b { display: block; font-size: 1.05rem; line-height: 1.25; }
+.fim-s .portas-fim small { display: block; color: var(--muted); margin-top: 4px; font-size: .88rem; line-height: 1.35; }
+.fim-s .portas-fim.tres { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.fim-s .portas-fim.tres a, .fim-s .portas-fim.tres button { flex-direction: column; align-items: flex-start; }
+.fim-mapa .pergunta-fim { font-size: clamp(1.2rem, 3vw, 1.6rem); margin: 22px 0 0; }
+@media (max-width: 760px) {
+  .fim-s .portas-fim, .fim-s .portas-fim.tres { grid-template-columns: minmax(0, 1fr); }
+  .fim-s .portas-fim.tres a, .fim-s .portas-fim.tres button { flex-direction: row; align-items: center; }
+}
+html.sem-movimento .fim-s .portas-fim a, html.sem-movimento .fim-s .portas-fim button { transition: none; transform: none; }
+html.alto-contraste .fim-s .portas-fim a, html.alto-contraste .fim-s .portas-fim button { border-color: #000; box-shadow: none; }
 .fim-s .botoes { justify-content: center; }
 
 /* ---------- menu de páginas e glossário ---------- */

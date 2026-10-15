@@ -33,45 +33,8 @@
   if (CONFIG.formularioRespostas) l.push('<a href="' + esc(CONFIG.formularioRespostas) + '" target="_blank" rel="noopener">' + EP.tr("Ver o que as pessoas avisaram", "See what people reported") + novaAba + "</a>");
   document.getElementById("links-erro").innerHTML = l.join(" · ");
 
-  // ---------- compartilhar (no inglês, o texto e os links vão em inglês, com ?lang=en) ----------
-  var TXT = EP.tr("A política do Brasil explicada de um jeito fácil: como funciona, quem está no poder e o que cada político propôs. Tudo com fonte:",
-    "Brazilian politics made easy: how it works, who is in power and what each politician proposed. Everything with sources:");
-  function link(origem) { return SITE + "?" + (EP.en ? "lang=en&" : "") + "utm_source=" + origem + "&utm_medium=compartilhar"; }
-  document.getElementById("btn-compartilhar").addEventListener("click", function () {
-    EP.track("compartilhar_abriu");
-    if (navigator.share && /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)) {
-      navigator.share({ title: document.title, text: TXT, url: link("celular") }).catch(function () {});
-      return;
-    }
-    var wa = "https://wa.me/?text=" + encodeURIComponent(TXT + " " + link("whatsapp"));
-    var tg = "https://t.me/share/url?url=" + encodeURIComponent(link("telegram")) + "&text=" + encodeURIComponent(TXT);
-    var fb = "https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(link("facebook"));
-    function op(url, ic, nome, classe, estilo) {
-      return '<a class="btn ' + classe + '"' + (estilo ? ' style="' + estilo + '"' : "") + ' href="' + esc(url) + '" target="_blank" rel="noopener"><span aria-hidden="true">' + ic + " </span>" + nome + novaAba + "</a>";
-    }
-    EP.abrir('<span aria-hidden="true">📤 </span>' + EP.tr("Compartilhar o site", "Share the site"),
-      "<p>" + EP.tr("Escolha por onde mandar.", "Choose how to send it.") + "</p>" +
-      '<div class="opcoes-comp">' +
-      op(wa, "💬", "WhatsApp", "", "background:#25d366;color:#08311a;box-shadow:0 5px 0 #179a4a") +
-      op(tg, "✈️", "Telegram", "claro") + op(fb, "👍", "Facebook", "claro") +
-      '<button class="btn bege" type="button" id="copiar-link"><span aria-hidden="true">🔗 </span>' + EP.tr("Copiar o link", "Copy the link") + "</button>" +
-      '<p class="link-copia" id="link-copia" hidden></p><p class="sr" id="aviso-copia" role="status" aria-live="polite"></p></div>');
-    document.getElementById("copiar-link").addEventListener("click", function () {
-      var u = link("link"), b = this, caixa = document.getElementById("link-copia"), aviso = document.getElementById("aviso-copia");
-      function ok() {
-        b.innerHTML = '<span aria-hidden="true">✅ </span>' + EP.tr("Link copiado! É só colar onde quiser.", "Link copied! Just paste it wherever you want.");
-        aviso.textContent = EP.tr("Link copiado.", "Link copied.");
-      }
-      function mostra() {
-        caixa.hidden = false;
-        caixa.textContent = u;
-        b.textContent = EP.tr("Copie o link abaixo:", "Copy the link below:");
-        aviso.textContent = EP.tr("Não deu para copiar sozinho. O link está escrito abaixo do botão.", "It could not be copied automatically. The link is written below the button.");
-      }
-      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(u).then(ok, mostra);
-      else mostra();
-    });
-  });
+  // ---------- compartilhar (a janela é a mesma do mapa: EP.compartilhar, em js/comum.js) ----------
+  document.getElementById("btn-compartilhar").addEventListener("click", function () { EP.compartilhar("inicio"); });
 
   EP.revelar();
   EP.paralaxe();

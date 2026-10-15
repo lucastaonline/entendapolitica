@@ -38,10 +38,10 @@ def txt_en(e: dict | None) -> str | None:
     if s == "nao-concorreu":
         return "Did not run in 2026"
     if not c:
-        return {"eleito": "Elected in 2026", "reeleito": "Re-elected in 2026", "segundo-turno": "In the runoff on 25 Oct 2026",
+        return {"eleito": "Elected in 2026", "reeleito": "Re-elected in 2026", "segundo-turno": "In the runoff on October 25, 2026",
                 "nao-eleito": "Not elected in 2026", "suplente": "Alternate in 2026", "candidato": "Candidate in 2026"}.get(s)
     return {"eleito": f"Elected {c} in 2026", "reeleito": f"Re-elected {c} in 2026",
-            "segundo-turno": f"In the runoff for {c} on 25 Oct 2026", "nao-eleito": f"Ran for {c} in 2026 and was not elected",
+            "segundo-turno": f"In the runoff for {c} on October 25, 2026", "nao-eleito": f"Ran for {c} in 2026 and was not elected",
             "suplente": f"Alternate for {c} in 2026", "candidato": f"Candidate for {c} in 2026"}.get(s)
 
 
@@ -62,6 +62,65 @@ def resumo2026(e: dict | None) -> dict | None:
     return {k: e[k] for k in ("situacao", "cargo", "txt", "txt_en") if e.get(k) is not None}
 
 
+# mandatos anteriores: só os do mesmo cargo/Casa, para todo mundo (cada fonte oficial só conhece os seus)
+MESMO_CARGO = {"dep": r"^deputad[oa] federal", "sen": r"^senador", "pres": r"^presidente", "vp": r"^vice-presidente"}
+
+
+def mesma_regua(p: dict, t: dict) -> None:
+    """Mesma régua para todos os perfis federais: ocupação e escolaridade declaradas ao TSE na candidatura mais
+    recente (as Casas e o Planalto descrevem isso de jeitos diferentes, ou não descrevem) e mandatos anteriores
+    só no mesmo cargo."""
+    ficha = t.get("ficha")
+    p.pop("profissoes", None)
+    p["ocupacao"] = ({"txt": ficha["ocupacao"], "ano": ficha["ano"], "fonte": ficha["fonte"]}
+                     if ficha and ficha.get("ocupacao") else None)
+    p["escolaridade"] = ficha.get("escolaridade") if ficha else None
+    if ficha and ficha.get("escolaridade"):
+        p["escolaridadeFonte"] = ficha["fonte"]
+    else:
+        p.pop("escolaridadeFonte", None)
+    exp = MESMO_CARGO.get((p.get("id") or "").split("-")[0])
+    if exp and p.get("mandatosAnteriores"):
+        p["mandatosAnteriores"] = [m for m in p["mandatosAnteriores"]
+                                   if re.search(exp, sem_acento((m.get("cargo") or "").lower()))]
+
+
+SITE = "https://entendapolitica.vercel.app"  # endereço público (troque aqui e no robots.txt se mudar)
+PAGINAS = ("", "entenda.html", "brasil.html", "estado.html", "imparcialidade.html", "dados.html")
+
+
+def sitemap() -> int:
+    """sitemap.xml com as páginas, os 27 estados e todos os perfis federais, em português e em inglês (?lang=en)."""
+    urls = [(p, None) for p in PAGINAS if p == "" or (RAIZ / p).exists()]
+    for arq in sorted((DADOS / "estados").glob("*.json")):
+        urls.append((f"estado.html?uf={arq.stem}", (ler_json(arq) or {}).get("atualizado")))
+    for arq in sorted(PESSOAS.glob("*.json")):
+        urls.append((f"pessoa.html?id={arq.stem}", (ler_json(arq) or {}).get("atualizado")))
+
+    def en(c: str) -> str:
+        return c + ("&" if "?" in c else "?") + "lang=en"
+
+    def esc(u: str) -> str:
+        return u.replace("&", "&amp;")
+
+    linhas = ['<?xml version="1.0" encoding="UTF-8"?>',
+              '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">']
+    for c, data in urls:
+        pt, ing = f"{SITE}/{c}", f"{SITE}/{en(c)}"
+        alt = (f'<xhtml:link rel="alternate" hreflang="pt-BR" href="{esc(pt)}"/>'
+               f'<xhtml:link rel="alternate" hreflang="en" href="{esc(ing)}"/>'
+               f'<xhtml:link rel="alternate" hreflang="x-default" href="{esc(pt)}"/>')
+        lm = f"<lastmod>{data}</lastmod>" if data else ""
+        for u in (pt, ing):
+            linhas.append(f"<url><loc>{esc(u)}</loc>{lm}{alt}</url>")
+    linhas.append("</urlset>")
+    txt = "\n".join(linhas) + "\n"
+    arq = RAIZ / "sitemap.xml"
+    if not arq.exists() or arq.read_text(encoding="utf-8") != txt:
+        arq.write_text(txt, encoding="utf-8")
+    return len(urls) * 2
+
+
 def main() -> None:
     fed = ler_json(DADOS / "tse" / "federais.json", {}) or {}
     cache = carregar_simples()
@@ -79,6 +138,7 @@ def main() -> None:
                 p[campo] = t[campo]
         if t.get("eleicao2026") is not None:
             p["eleicao2026"] = com_en(t["eleicao2026"])
+        mesma_regua(p, t)
         lista = (p.get("propostas") or {}).get("lista") or []
         aplicar_simples(lista, cache)
         if salvar_json(f, sem_mudar_data(p, f)):
@@ -119,6 +179,7 @@ def main() -> None:
             if m.get("eleicao2026"):
                 m["eleicao2026"] = com_en(m["eleicao2026"])
         salvar_json(arq, sem_mudar_data(e, arq))
+    log(f"sitemap.xml: {sitemap()} endereços")
     log("pronto")
 
 

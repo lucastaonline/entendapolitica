@@ -16,6 +16,7 @@
   { "id": "cf-art144", "veiculo": "Planalto", "titulo": "Constituição Federal, art. 144 (polícias)", "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm", "data": "1988-10-05" },
   { "id": "cf-art220", "veiculo": "Planalto", "titulo": "Constituição Federal, art. 220 (liberdade de informação)", "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm", "data": "1988-10-05" },
   { "id": "lcp152", "veiculo": "Planalto", "titulo": "Lei Complementar 152/2015 (aposentadoria obrigatória aos 75 anos)", "url": "https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp152.htm", "data": "2015-12-03" },
+  { "id": "ricd-art218", "veiculo": "Câmara dos Deputados", "titulo": "Regimento Interno da Câmara dos Deputados, art. 218, §§ 2º e 3º", "url": "https://www2.camara.leg.br/atividade-legislativa/legislacao/regimento-interno-da-camara-dos-deputados", "data": "1989-09-21" },
   { "id": "lei1079", "veiculo": "Planalto", "titulo": "Lei 1.079/1950 (crimes de responsabilidade), art. 14", "url": "https://www.planalto.gov.br/ccivil_03/leis/l1079.htm", "data": "1950-04-10" },
   { "id": "lei9504-41a", "veiculo": "Planalto", "titulo": "Lei 9.504/1997 (Lei das Eleições), art. 41-A (compra de votos)", "url": "https://www.planalto.gov.br/ccivil_03/leis/l9504.htm", "data": "1997-09-30" },
   { "id": "lei12527", "veiculo": "Planalto", "titulo": "Lei 12.527/2011 (Lei de Acesso à Informação), arts. 10 e 11", "url": "https://www.planalto.gov.br/ccivil_03/_ato2011-2014/2011/lei/l12527.htm", "data": "2011-11-18" },
@@ -157,13 +158,13 @@
    "titulo": "Impeachment, passo a passo",
    "texto": "É o processo que pode tirar o presidente do cargo por **crime de responsabilidade**: atos graves contra a Constituição.",
    "passos": [
-    { "ic": "📝", "titulo": "A denúncia", "txt": "Qualquer cidadão pode apresentar uma denúncia à Câmara dos Deputados." },
+    { "ic": "📝", "titulo": "A denúncia", "txt": "Qualquer cidadão pode apresentar uma denúncia à Câmara dos Deputados. O presidente da Câmara decide se ela segue; se ele negar, cabe recurso ao Plenário (todos os deputados)." },
     { "ic": "🗳️", "titulo": "A Câmara autoriza", "txt": "Para o processo seguir, 2/3 dos deputados precisam votar a favor: 342 de 513." },
     { "ic": "⏸️", "titulo": "O afastamento", "txt": "Quando o Senado abre o processo, o presidente fica afastado por até 180 dias. O vice assume." },
     { "ic": "⚖️", "titulo": "O Senado julga", "txt": "Quem comanda a sessão é o presidente do STF. Para condenar, são precisos 54 dos 81 senadores." },
     { "ic": "🚪", "titulo": "A decisão", "txt": "Se condenado, perde o cargo e fica 8 anos sem poder exercer função pública." }
    ],
-   "fontes": ["lei1079", "cf-art51-52", "cf-art79-85-86"]
+   "fontes": ["lei1079", "ricd-art218", "cf-art51-52", "cf-art79-85-86"]
   },
   {
    "tipo": "comparar",

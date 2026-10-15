@@ -110,6 +110,17 @@ AVISO_PREF = ("Prefeito(a) e vice eleitos em 2024, segundo o TSE. Pode ter havid
               "(cassação, renúncia, morte ou eleição suplementar).")
 AVISO_VER = ("Lista de quem foi eleito em 2024, segundo o TSE. Alguns podem ter saído (cassação, renúncia, "
              "licença) e suplentes podem ter assumido.")
+# os mesmos avisos em inglês (o site tem versão em inglês)
+AVISO_DEST_EN = ("List of the people elected in 2022, according to the TSE (Superior Electoral Court). Some may have "
+                 "left and substitutes may have taken their seats. Coming soon: the official list from the Legislative "
+                 "Assembly (state parliament).")
+AVISO_DIST_EN = ("List of the people elected in 2022, according to the TSE (Superior Electoral Court). Some may have "
+                 "left and substitutes may have taken their seats. Coming soon: the official list from the Legislative "
+                 "Chamber of the Federal District.")
+AVISO_PREF_EN = ("Mayor and vice mayor elected in 2024, according to the TSE (Superior Electoral Court). There may "
+                 "have been changes since then (removal from office, resignation, death or a special election).")
+AVISO_VER_EN = ("List of the people elected in 2024, according to the TSE (Superior Electoral Court). Some may have "
+                "left (removal from office, resignation, leave) and substitutes may have taken their seats.")
 
 
 # ---------------------------------------------------------------- textos
@@ -166,6 +177,14 @@ def data_br(iso: str | None) -> str | None:
     return f"{iso[8:10]}/{iso[5:7]}/{iso[:4]}" if iso else None
 
 
+MESES_EN = ("January", "February", "March", "April", "May", "June", "July", "August", "September", "October",
+            "November", "December")
+
+
+def data_en(iso: str | None) -> str | None:
+    return f"{MESES_EN[int(iso[5:7]) - 1]} {int(iso[8:10])}, {iso[:4]}" if iso else None
+
+
 def cpf_valido(s: str | None) -> str | None:
     d = re.sub(r"\D", "", s or "")
     return d.zfill(11) if 0 < len(d) <= 11 and int(d) > 0 else None
@@ -209,6 +228,7 @@ def cand(r: dict, ano: int) -> dict:
         "urna": limpa(r["NM_URNA_CANDIDATO"]), "cpf": cpf_valido(r.get("NR_CPF_CANDIDATO")),
         "partido": limpa(r["SG_PARTIDO"]), "nasc": data_iso(r["DT_NASCIMENTO"]),
         "genero": genero(r["DS_GENERO"]), "sit": (r["DS_SIT_TOT_TURNO"] or "").upper(),
+        "ocup": limpa(r.get("DS_OCUPACAO")), "instr": limpa(r.get("DS_GRAU_INSTRUCAO")),
     }
 
 
@@ -611,23 +631,26 @@ def bloco_eleicao_federal(f: dict, bases: dict, vot: dict) -> dict | None:
             "fonte": fonte_resultados(c["ano"], vot[c["ano"]]["data"]) if n is not None else fonte_cand(c, b.data)}
 
 
-def bloco_bens(f: dict, b26: Base2026, b22: Base, b18: Base, fed24: dict, bens_ano) -> dict | None:
-    """Bens da candidatura mais recente (2026, 2024, 2022 ou 2018)."""
+def candidatura_recente(f: dict, b26: Base2026, b22: Base, b18: Base, fed24: dict):
+    """(ano, linha da candidatura, data dos dados) da candidatura mais recente da pessoa (2026, 2024, 2022 ou 2018)."""
     nn = (chave_nome(f["nomeCivil"] or ""), f["nasc"])
-    escolha = None
     sqs = b26.achar(f["cpf"], f["nomeCivil"], f["nasc"])
     if sqs:
-        escolha = (2026, b26.por_sq[b26.melhor(sqs)][0], b26.data)
-    elif fed24.get(nn):
+        return (2026, b26.por_sq[b26.melhor(sqs)][0], b26.data)
+    if fed24.get(nn):
         rs = sorted(fed24[nn], key=lambda c: (PRIORIDADE_SIT.get(c["sit"], 9), c["el"] not in ORDINARIAS[2024]))
-        escolha = (2024, rs[0], None)
-    else:
-        for b in (b22, b18):
-            sqs = b.achar(f["cpf"], f["nomeCivil"], f["nasc"])
-            if sqs:
-                rs = sorted((b.linha(sq) for sq in sqs), key=lambda c: (PRIORIDADE_SIT.get(c["sit"], 9), c["sq"]))
-                escolha = (b.ano, rs[0], b.data)
-                break
+        return (2024, rs[0], None)
+    for b in (b22, b18):
+        sqs = b.achar(f["cpf"], f["nomeCivil"], f["nasc"])
+        if sqs:
+            rs = sorted((b.linha(sq) for sq in sqs), key=lambda c: (PRIORIDADE_SIT.get(c["sit"], 9), c["sq"]))
+            return (b.ano, rs[0], b.data)
+    return None
+
+
+def bloco_bens(f: dict, b26: Base2026, b22: Base, b18: Base, fed24: dict, bens_ano) -> dict | None:
+    """Bens da candidatura mais recente (2026, 2024, 2022 ou 2018)."""
+    escolha = candidatura_recente(f, b26, b22, b18, fed24)
     if not escolha:
         return None
     ano, c, _ = escolha
@@ -637,6 +660,50 @@ def bloco_bens(f: dict, b26: Base2026, b22: Base, b18: Base, fed24: dict, bens_a
     return {"ano": ano, "total": bb["bens"].get(c["sq"], 0.0),
             "fonte": fonte("TSE", f"DivulgaCandContas: bens declarados por {nome_tse(c['urna'])} ({ano})",
                            url_cand(ano, c["sq"], c["uf"], c["ue"]), bb["data"])}
+
+
+_FEMININO = {  # o TSE escreve as ocupações no masculino; para mulheres, troca as palavras que mudam
+    "DEPUTADO": "DEPUTADA", "SENADOR": "SENADORA", "VEREADOR": "VEREADORA", "PREFEITO": "PREFEITA", "GOVERNADOR": "GOVERNADORA",
+    "ADVOGADO": "ADVOGADA", "MÉDICO": "MÉDICA", "EMPRESÁRIO": "EMPRESÁRIA", "PROFESSOR": "PROFESSORA", "ENGENHEIRO": "ENGENHEIRA",
+    "SERVIDOR": "SERVIDORA", "PÚBLICO": "PÚBLICA", "ADMINISTRADOR": "ADMINISTRADORA", "DELEGADO": "DELEGADA", "AGRICULTOR": "AGRICULTORA",
+    "PRODUTOR": "PRODUTORA", "ODONTÓLOGO": "ODONTÓLOGA", "PSICÓLOGO": "PSICÓLOGA", "CONTADOR": "CONTADORA", "TÉCNICO": "TÉCNICA",
+    "SOCIÓLOGO": "SOCIÓLOGA", "BIÓLOGO": "BIÓLOGA", "FARMACÊUTICO": "FARMACÊUTICA", "ENFERMEIRO": "ENFERMEIRA", "APOSENTADO": "APOSENTADA",
+    "VETERINÁRIO": "VETERINÁRIA", "PEDAGOGO": "PEDAGOGA", "LOCUTOR": "LOCUTORA", "COMUNICADOR": "COMUNICADORA", "APRESENTADOR": "APRESENTADORA",
+    "CANTOR": "CANTORA", "ATOR": "ATRIZ", "ESCRITOR": "ESCRITORA", "PASTOR": "PASTORA", "BANCÁRIO": "BANCÁRIA", "SECRETÁRIO": "SECRETÁRIA",
+    "DIRETOR": "DIRETORA", "COMERCIÁRIO": "COMERCIÁRIA", "SERVENTUÁRIO": "SERVENTUÁRIA", "PROPRIETÁRIO": "PROPRIETÁRIA", "SUPERVISOR": "SUPERVISORA",
+    "VENDEDOR": "VENDEDORA", "AGROPECUÁRIO": "AGROPECUÁRIA", "ESTAGIÁRIO": "ESTAGIÁRIA", "BOLSISTA": "BOLSISTA", "TRABALHADOR": "TRABALHADORA", "ARQUITETO": "ARQUITETA", "GEÓGRAFO": "GEÓGRAFA", "HISTORIADOR": "HISTORIADORA",
+    "METALÚRGICO": "METALÚRGICA", "MOTORISTA": "MOTORISTA", "OPERADOR": "OPERADORA", "AUXILIAR": "AUXILIAR", "EMPREGADO": "EMPREGADA",
+}
+
+
+def _feminino(txt: str) -> str:
+    return " ".join(_FEMININO.get(w, w) for w in txt.split())
+
+
+def _ficha_txt(v: str | None, g: str | None) -> str | None:
+    v = (v or "").strip()
+    if not v or v.upper() in ("OUTROS", "#NULO#", "#NE", "NÃO DIVULGÁVEL", "NAO DIVULGAVEL"):
+        return None
+    v = v.upper()
+    if g == "F":
+        v = _feminino(v)
+    return v[:1] + v[1:].lower()
+
+
+def bloco_ficha(f: dict, b26: Base2026, b22: Base, b18: Base, fed24: dict) -> dict | None:
+    """Ocupação e escolaridade declaradas ao TSE na candidatura mais recente. É a mesma fonte para todo mundo:
+    as Casas e o Planalto descrevem (ou não) profissões e escolaridade de jeitos diferentes."""
+    escolha = candidatura_recente(f, b26, b22, b18, fed24)
+    if not escolha:
+        return None
+    ano, c, data = escolha
+    oc, ins = _ficha_txt(c.get("ocup"), f.get("genero") or c.get("genero")), _ficha_txt(c.get("instr"), None)
+    if not oc and not ins:
+        return None
+    eh_supl = c["el"] not in ORDINARIAS[ano]
+    fonte_c = (fonte_candidatos(ano, data, f"Dados Abertos: candidaturas de {ano}") if eh_supl or ano == 2024
+               else fonte_cand(c, data))
+    return {"ano": ano, "ocupacao": oc, "escolaridade": ins, "fonte": fonte_c}
 
 
 # ---------------------------------------------------------------- estados
@@ -688,23 +755,37 @@ def manual_prefeitos() -> dict:
     return (m or {}).get("cidades") or {}
 
 
+def _textos_manual(m: dict) -> dict:
+    """Textos extras da pesquisa à mão (português e inglês) que vão junto para o site."""
+    return {k: m.get(k) for k in ("comoAssumiu_en", "nota", "nota_en") if m.get(k)}
+
+
+def _vago_manual(pid: str, m: dict, extra: dict, manter: tuple) -> dict:
+    d = {"id": pid, "vago": True, "txt": m.get("txt") or m.get("nota") or m.get("comoAssumiu") or "Cargo vago",
+         "txt_en": m.get("txt_en") or m.get("nota_en") or m.get("comoAssumiu_en") or "Vacant",
+         "fontes": _fontes_manual(m)}
+    d.update(extra)
+    return limpar(d, manter=manter)
+
+
 def aplicar_manual_cidade(pid: str, m, bloco: dict | None, candidatos: list) -> dict | None:
     """Troca a ficha do TSE pela pessoa do arquivo manual (a ficha do TSE fica em "eleito2024")."""
     if not isinstance(m, dict) or not m:
         return bloco
     eleito = {k: v for k, v in bloco.items() if k not in ("id", "aConfirmar")} if bloco else None
     if m.get("vago") or chave_nome(m.get("nome") or "") in ("VAGO", "CARGO VAGO") or not (m.get("nome") or m.get("nomeCivil")):
-        return limpar({"id": pid, "vago": True, "txt": m.get("txt") or m.get("comoAssumiu") or "Cargo vago",
-                       "fontes": _fontes_manual(m), "eleito2024": eleito}, manter=("eleito2024",))
+        return _vago_manual(pid, m, {"eleito2024": eleito}, ("eleito2024",))
     foto, g = None, None
     for c, b in candidatos:
         if c and b and _mesma_pessoa(m, c):
             foto, g = b.get("foto"), c["genero"]
             break
-    return limpar({"id": pid, "nome": m.get("nome"), "nomeCivil": m.get("nomeCivil"), "partido": m.get("partido"),
-                   "genero": m.get("genero") or g, "foto": m.get("foto") or foto, "desde": m.get("desde"),
-                   "comoAssumiu": m.get("comoAssumiu"), "fontes": _fontes_manual(m), "eleito2024": eleito},
-                  manter=CAMPOS_PESSOA + ("desde", "comoAssumiu", "eleito2024"))
+    d = {"id": pid, "nome": m.get("nome"), "nomeCivil": m.get("nomeCivil"), "partido": m.get("partido"),
+         "genero": m.get("genero") or g, "foto": m.get("foto") or foto, "desde": m.get("desde"),
+         "comoAssumiu": m.get("comoAssumiu")}
+    d.update(_textos_manual(m))
+    d.update({"fontes": _fontes_manual(m), "eleito2024": eleito})
+    return limpar(d, manter=CAMPOS_PESSOA + ("desde", "comoAssumiu", "eleito2024"))
 
 
 def pessoa_executivo_estadual(uf: str, papel: str, eleito22: dict | None, outro22: dict | None,
@@ -723,19 +804,20 @@ def pessoa_executivo_estadual(uf: str, papel: str, eleito22: dict | None, outro2
                     "eleicao2026": None})
         return out
     if m.get("vago") or chave_nome(m.get("nome") or "") in ("VAGO", "CARGO VAGO") or not (m.get("nome") or m.get("nomeCivil")):
-        return limpar({"id": pid, "vago": True, "txt": m.get("txt") or m.get("comoAssumiu") or "Cargo vago",
-                       "fontes": _fontes_manual(m), "eleito2022": bloco22}, manter=("eleito2022",))
+        return _vago_manual(pid, m, {"eleito2022": bloco22}, ("eleito2022",))
     # quem está no cargo é o eleito de 2022 para este cargo, o eleito para o outro cargo (vice que assumiu) ou outra pessoa
     sq, foto, g = None, None, None
     for c, b in ((eleito22, bloco22), (outro22, bloco_outro22)):
         if c and _mesma_pessoa(m, c):
             sq, foto, g = c["sq"], b["foto"], c["genero"]
             break
-    return limpar({"id": pid, "nome": m.get("nome"), "nomeCivil": m.get("nomeCivil"), "partido": m.get("partido"),
-                   "genero": m.get("genero") or g, "foto": m.get("foto") or foto, "desde": m.get("desde"),
-                   "comoAssumiu": m.get("comoAssumiu"), "nascimento": m.get("nascimento"), "sq2022": sq,
-                   "fontes": _fontes_manual(m), "eleito2022": bloco22, "eleicao2026": None},
-                  manter=CAMPOS_PESSOA + ("desde", "comoAssumiu", "eleito2022", "eleicao2026"))
+    d = {"id": pid, "nome": m.get("nome"), "nomeCivil": m.get("nomeCivil"), "partido": m.get("partido"),
+         "genero": m.get("genero") or g, "foto": m.get("foto") or foto, "desde": m.get("desde"),
+         "comoAssumiu": m.get("comoAssumiu")}
+    d.update(_textos_manual(m))
+    d.update({"nascimento": m.get("nascimento"), "sq2022": sq, "fontes": _fontes_manual(m), "eleito2022": bloco22,
+              "eleicao2026": None})
+    return limpar(d, manter=CAMPOS_PESSOA + ("desde", "comoAssumiu", "eleito2022", "eleicao2026"))
 
 
 def _fontes_manual(m: dict | None) -> list | None:
@@ -815,6 +897,7 @@ def montar_estado(uf: str, b22: Base, vot22: dict, man: dict, fed: list[dict], n
         "deputadosFederais": [f["id"] for f in sorted((f for f in fed if f["tipo"] == "dep" and f["uf"] == uf), key=lambda f: chave_ord(f["nome"], f["id"]))],
         "deputadosEstaduais": {
             "total": len(membros), "casa": casa, "aviso": AVISO_DIST if uf == "DF" else AVISO_DEST,
+            "aviso_en": AVISO_DIST_EN if uf == "DF" else AVISO_DEST_EN,
             "fonte": fonte_resultados(2022, vot22["data"], f"Dados Abertos: eleitos para {'deputado distrital' if uf == 'DF' else 'deputado estadual'} em 2022 ({uf}) e votos"),
             "membros": membros,
         },
@@ -824,8 +907,12 @@ def montar_estado(uf: str, b22: Base, vot22: dict, man: dict, fed: list[dict], n
     if uf == "DF":
         est["aviso"] = ("O Distrito Federal não é dividido em municípios: não tem prefeito nem vereadores. "
                         "O governador e os 24 deputados distritais cuidam do DF todo.")
+        est["aviso_en"] = ("The Federal District is not divided into municipalities: it has no mayor and no city "
+                           "councilors. The governor and the 24 district deputies take care of the whole Federal District.")
     elif uf == "PE":
         est["aviso"] = "Fernando de Noronha é um distrito estadual de Pernambuco: não tem prefeito nem vereadores."
+        est["aviso_en"] = ("Fernando de Noronha is a state district of Pernambuco: it has no mayor and no city "
+                           "councilors.")
     return est
 
 
@@ -873,7 +960,7 @@ def montar_cidade(ue: str, cod: str, nome: str, uf: str, rows: list[dict], vot24
     for c in rows:
         if c["el"] not in ORDINARIAS[2024]:
             supl[c["el"]].append(c)
-    avisos = [AVISO_PREF]
+    avisos = [(AVISO_PREF, AVISO_PREF_EN)]  # (português, inglês)
     aconf = False
     # prefeito e vice: eleição de 2024 ou a eleição suplementar mais recente com resultado
     pref = eleito_exec(ords, "PREFEITO", ORDINARIAS[2024])
@@ -885,7 +972,8 @@ def montar_cidade(ue: str, cod: str, nome: str, uf: str, rows: list[dict], vot24
         if p:
             pref, vice, aplicada, origem = p, eleito_exec(rs, "VICE-PREFEITO", {el}), rs[0]["dt"], "suplementar"
     if aplicada:
-        avisos.append(f"Prefeito(a) e vice escolhidos na eleição suplementar de {data_br(aplicada)}.")
+        avisos.append((f"Prefeito(a) e vice escolhidos na eleição suplementar de {data_br(aplicada)}.",
+                       f"Mayor and vice mayor chosen in the special election held on {data_en(aplicada)}."))
     # eleições suplementares para prefeito ainda sem resultado (marcadas para o futuro ou sem resultado publicado)
     pendentes = sorted(rs[0]["dt"] for el, rs in supl.items()
                        if any(c["cargo"] == "PREFEITO" for c in rs) and not eleito_exec(rs, "PREFEITO", {el})
@@ -901,21 +989,31 @@ def montar_cidade(ue: str, cod: str, nome: str, uf: str, rows: list[dict], vot24
             ev = [c for c in ords if c["cargo"] == "VICE-PREFEITO" and tv.get(c["sq"], "").startswith("ELEITO")]
         if len(ep) == 1:
             pref, vice, origem, sit_div, aconf = ep[0], (ev[0] if len(ev) == 1 else None), "divulga", "ELEITO", True
-            avisos.append("Nos dados abertos do TSE, o resultado de 2024 desta cidade aparece sem definição "
-                          "(pode estar sendo recalculado). O nome veio do DivulgaCandContas, do TSE.")
+            avisos.append(("Nos dados abertos do TSE, o resultado de 2024 desta cidade aparece sem definição "
+                           "(pode estar sendo recalculado). O nome veio do DivulgaCandContas, do TSE.",
+                           "In the TSE open data, this city's 2024 result shows as undefined (it may be being "
+                           "recalculated). The name comes from DivulgaCandContas, the TSE candidate website."))
         else:
-            avisos.append("O TSE não mostra prefeito(a) eleito(a) em 2024 nesta cidade: a eleição pode ter sido "
-                          "anulada ou ainda estar em julgamento na Justiça Eleitoral.")
+            avisos.append(("O TSE não mostra prefeito(a) eleito(a) em 2024 nesta cidade: a eleição pode ter sido "
+                           "anulada ou ainda estar em julgamento na Justiça Eleitoral.",
+                           "The TSE shows no mayor elected in 2024 in this city: the election may have been "
+                           "annulled or may still be under review by the Electoral Courts."))
     for dt in pendentes:
         aconf = True
         if dt > hoje_iso:
-            avisos.append(f"Está marcada uma eleição suplementar para prefeito em {data_br(dt)}. Até lá, "
-                          + ("quem está no cargo pode ser outra pessoa." if pref else
-                             "a cidade é governada de forma temporária (em geral, por quem preside a Câmara Municipal)."))
+            avisos.append((f"Está marcada uma eleição suplementar para prefeito em {data_br(dt)}. Até lá, "
+                           + ("quem está no cargo pode ser outra pessoa." if pref else
+                              "a cidade é governada de forma temporária (em geral, por quem preside a Câmara Municipal)."),
+                           f"A special election for mayor is scheduled for {data_en(dt)}. Until then, "
+                           + ("the person in office may be someone else." if pref else
+                              "the city is governed temporarily (usually by the president of the City Council).")))
         else:
-            avisos.append(f"Uma eleição suplementar para prefeito foi marcada para {data_br(dt)}, mas o resultado não "
-                          "aparece nos dados abertos do TSE (ela pode ter sido suspensa ou adiada). "
-                          + ("Quem está no cargo pode ser outra pessoa." if pref else ""))
+            avisos.append((f"Uma eleição suplementar para prefeito foi marcada para {data_br(dt)}, mas o resultado não "
+                           "aparece nos dados abertos do TSE (ela pode ter sido suspensa ou adiada). "
+                           + ("Quem está no cargo pode ser outra pessoa." if pref else ""),
+                           f"A special election for mayor was scheduled for {data_en(dt)}, but the result does not "
+                           "appear in the TSE open data (it may have been suspended or postponed). "
+                           + ("The person in office may be someone else." if pref else "")))
     contagem[origem or "sem"] += 1
 
     prefeito = _pessoa_cidade(pref, f"pref-{cod}", pref, vot24, data, supl_ids, aconf, sit_div) if pref else None
@@ -924,36 +1022,44 @@ def montar_cidade(ue: str, cod: str, nome: str, uf: str, rows: list[dict], vot24
         cands = [(pref, prefeito), (vice, vice_o)]
         prefeito, vice_o = (aplicar_manual_cidade(f"pref-{cod}", manual.get("prefeito"), prefeito, cands),
                             aplicar_manual_cidade(f"vpref-{cod}", manual.get("vice"), vice_o, cands[::-1]))
-        avisos = ["Quem está no cargo hoje foi conferido à mão (veja as fontes). Em \"eleito2024\" está quem o TSE "
-                  "mostra como eleito em 2024."]
+        avisos = [("Quem está no cargo hoje foi conferido à mão, com as fontes indicadas.",
+                   "Who is in office today was checked by hand, using the sources shown.")]
         contagem["manual"] += 1
 
     # vereadores: 2024 + eleições suplementares de vereador
     ver = [c for c in ords if c["cargo"] == "VEREADOR" and eleito(c["sit"])]
-    aviso_ver = [AVISO_VER]
+    aviso_ver = [(AVISO_VER, AVISO_VER_EN)]
     for el, rs in sorted(supl.items(), key=lambda kv: kv[1][0]["dt"]):
         ev = [c for c in rs if c["cargo"] == "VEREADOR" and eleito(c["sit"])]
         if not ev:
             continue
         if not ver or len(ev) >= len(ver):
             ver = ev
-            aviso_ver.append(f"Estes vereadores foram eleitos na eleição suplementar de {data_br(rs[0]['dt'])}.")
+            aviso_ver.append((f"Estes vereadores foram eleitos na eleição suplementar de {data_br(rs[0]['dt'])}.",
+                              f"These councilors were elected in the special election held on {data_en(rs[0]['dt'])}."))
         else:
             ver = ver + ev
             nomes = ", ".join(f"{nome_tse(c['urna'])} ({c['partido']})" for c in ev)
             quem = f"foi eleit{'a' if ev[0]['genero'] == 'F' else 'o'}" if len(ev) == 1 else "foram eleitos"
-            aviso_ver.append(f"Em {data_br(rs[0]['dt'])} houve eleição suplementar para vereador: {nomes} {quem}. "
-                             "Quem saiu da Câmara não aparece nos dados do TSE, por isso a lista pode ter um nome a mais.")
+            quem_en = "was elected" if len(ev) == 1 else "were elected"
+            aviso_ver.append((f"Em {data_br(rs[0]['dt'])} houve eleição suplementar para vereador: {nomes} {quem}. "
+                              "Quem saiu da Câmara não aparece nos dados do TSE, por isso a lista pode ter um nome a mais.",
+                              f"On {data_en(rs[0]['dt'])} there was a special election for city councilor: {nomes} "
+                              f"{quem_en}. People who left the City Council do not appear in the TSE data, so the "
+                              "list may have one extra name."))
     origem_ver = "csv"
     if not ver:
         tv = divulga_totalizacao_2024(ue, 13) or {}
         ver = [dict(c, sit=tv[c["sq"]]) for c in ords if c["cargo"] == "VEREADOR" and tv.get(c["sq"], "").startswith("ELEITO")]
         origem_ver = "divulga" if ver else "sem"
         if ver:
-            aviso_ver.append("Nos dados abertos do TSE, o resultado de 2024 desta cidade aparece sem definição "
-                             "(pode estar sendo recalculado). Os nomes vieram do DivulgaCandContas, do TSE.")
+            aviso_ver.append(("Nos dados abertos do TSE, o resultado de 2024 desta cidade aparece sem definição "
+                              "(pode estar sendo recalculado). Os nomes vieram do DivulgaCandContas, do TSE.",
+                              "In the TSE open data, this city's 2024 result shows as undefined (it may be being "
+                              "recalculated). The names come from DivulgaCandContas, the TSE candidate website."))
         else:
-            aviso_ver.append("O TSE ainda não mostra os vereadores eleitos em 2024 nesta cidade.")
+            aviso_ver.append(("O TSE ainda não mostra os vereadores eleitos em 2024 nesta cidade.",
+                              "The TSE does not yet show the city councilors elected in 2024 in this city."))
     contagem["ver-" + origem_ver] += 1
     membros = []
     for c in ver:
@@ -974,8 +1080,10 @@ def montar_cidade(ue: str, cod: str, nome: str, uf: str, rows: list[dict], vot24
                           f"{DIVULGA}/#/candidato/{REGIAO[uf]}/{uf}/{ID_DIVULGA[2024]}", hoje())
     cid = {
         "ibge": cod, "nome": nome, "uf": uf, "prefeito": prefeito, "vice": vice_o,
-        "aviso": " ".join(a.strip() for a in avisos if a.strip()),
-        "vereadores": {"total": len(membros), "aviso": " ".join(aviso_ver), "fonte": fonte_ver, "membros": membros},
+        "aviso": " ".join(a[0].strip() for a in avisos if a[0].strip()),
+        "aviso_en": " ".join(a[1].strip() for a in avisos if a[1].strip()),
+        "vereadores": {"total": len(membros), "aviso": " ".join(a[0] for a in aviso_ver),
+                       "aviso_en": " ".join(a[1] for a in aviso_ver), "fonte": fonte_ver, "membros": membros},
         "atualizado": hoje(),
     }
     return cid
@@ -1084,6 +1192,7 @@ def main():
             "eleicao": bloco_eleicao_federal(f, bases, vot),
             "eleicao2026": b26.situacao(f["cpf"], f["nomeCivil"], f["nasc"], f["cargo"], f["genero"]),
             "bens": bloco_bens(f, b26, b22, b18, fed24, bens_ano),
+            "ficha": bloco_ficha(f, b26, b22, b18, fed24),
         }
     salvar(SAIDA_TSE / "federais.json", dict(sorted(federais.items())))
     log(f"dados/tse/federais.json: {len(federais)} pessoas")

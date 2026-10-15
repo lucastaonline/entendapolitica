@@ -34,6 +34,26 @@ jobs:
           path: .cache/tse
           key: tse-v1
 
+      # consultas do Senado e do Executivo (sem isso, cada rodada leva ~30 min)
+      - uses: actions/cache@v4
+        with:
+          path: |
+            .cache/senado
+            .cache/executivo
+          key: senado-${{ github.run_id }}
+          restore-keys: senado-
+
+      # Câmara: histórico das leis (não muda), gastos e consultas por deputado (~70 MB).
+      # Os arquivos anuais grandes (~1,5 GB) baixam em ~2 min e não entram no cache.
+      - uses: actions/cache@v4
+        with:
+          path: |
+            .cache/camara/tramitacoes
+            .cache/camara/cota
+            .cache/camara/api
+          key: camara-${{ github.run_id }}
+          restore-keys: camara-
+
       - name: Câmara dos Deputados
         run: python scripts/camara.py
         continue-on-error: true
@@ -65,7 +85,7 @@ jobs:
         run: |
           git config user.name "lucastaonline"
           git config user.email "31556507+lucastaonline@users.noreply.github.com"
-          git add dados img/pessoas
+          git add dados img/pessoas sitemap.xml
           if git diff --cached --quiet; then
             echo "Nada mudou."
           else

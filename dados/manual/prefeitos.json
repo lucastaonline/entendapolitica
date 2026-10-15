@@ -1,0 +1,618 @@
+{
+ "atualizado": "2026-10-15",
+ "cidades": {
+  "1200401": {
+   "nome": "Rio Branco",
+   "uf": "AC",
+   "prefeito": {
+    "nome": "Alysson Bestene",
+    "nomeCivil": "Alysson Bestene Lins",
+    "partido": "PP",
+    "genero": "M",
+    "nascimento": "1975-06-24",
+    "desde": "2026-04-03",
+    "comoAssumiu": "Era vice-prefeito e assumiu a prefeitura em 03/04/2026, quando passou a valer a renúncia de Tião Bocalom, que deixou o cargo para disputar a eleição de 2026 para governador do Acre. A cerimônia de transmissão do cargo foi em 04/04/2026.",
+    "comoAssumiu_en": "He was vice mayor and became mayor on April 3, 2026, when the resignation of Mayor Tião Bocalom took effect; Bocalom left office to run for governor of Acre state in the 2026 election. The handover ceremony was held on April 4, 2026.",
+    "fonte": [
+     {
+      "veiculo": "g1",
+      "titulo": "Tião Bocalom formaliza renúncia à Prefeitura de Rio Branco para disputar governo do Acre em 2026",
+      "url": "https://g1.globo.com/ac/acre/eleicoes/2026/noticia/2026/03/26/tiao-bocalom-formaliza-renuncia-a-prefeitura-de-rio-branco-para-disputar-governo-do-acre-em-2026.ghtml",
+      "data": "2026-03-26"
+     },
+     {
+      "veiculo": "g1",
+      "titulo": "Alysson Bestene assume Prefeitura de Rio Branco após renúncia de Bocalom",
+      "url": "https://g1.globo.com/ac/acre/eleicoes/2026/noticia/2026/04/04/alysson-bestene-assume-prefeitura-de-rio-branco-apos-renuncia-de-bocalom.ghtml",
+      "data": "2026-04-04"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 03/04/2026, quando o vice Alysson Bestene assumiu a prefeitura.",
+    "nota_en": "The office of vice mayor has been vacant since April 3, 2026, when Vice Mayor Alysson Bestene became mayor.",
+    "fonte": [
+     {
+      "veiculo": "g1",
+      "titulo": "Tião Bocalom formaliza renúncia à Prefeitura de Rio Branco para disputar governo do Acre em 2026",
+      "url": "https://g1.globo.com/ac/acre/eleicoes/2026/noticia/2026/03/26/tiao-bocalom-formaliza-renuncia-a-prefeitura-de-rio-branco-para-disputar-governo-do-acre-em-2026.ghtml",
+      "data": "2026-03-26"
+     },
+     {
+      "veiculo": "g1",
+      "titulo": "Alysson Bestene assume Prefeitura de Rio Branco após renúncia de Bocalom",
+      "url": "https://g1.globo.com/ac/acre/eleicoes/2026/noticia/2026/04/04/alysson-bestene-assume-prefeitura-de-rio-branco-apos-renuncia-de-bocalom.ghtml",
+      "data": "2026-04-04"
+     }
+    ]
+   }
+  },
+  "2704302": {
+   "nome": "Maceió",
+   "uf": "AL",
+   "prefeito": {
+    "nome": "Rodrigo Cunha",
+    "nomeCivil": "Rodrigo Santos Cunha",
+    "partido": "PODE",
+    "genero": "M",
+    "nascimento": "1981-05-11",
+    "desde": "2026-04-05",
+    "comoAssumiu": "Era vice-prefeito e tomou posse como prefeito em 05/04/2026, na Câmara Municipal, depois que JHC (João Henrique Caldas) renunciou ao cargo, em 04/04/2026, para disputar a eleição de 2026.",
+    "comoAssumiu_en": "He was vice mayor and was sworn in as mayor on April 5, 2026, at the City Council (the city's legislature), after Mayor JHC (João Henrique Caldas) resigned on April 4, 2026, to run in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "Câmara Municipal de Maceió",
+      "titulo": "Câmara Municipal empossa Rodrigo Cunha como prefeito de Maceió",
+      "url": "https://www.maceio.al.leg.br/noticia/camara-municipal-empossa-rodrigo-cunha-como-prefeito-de-maceio-05-04-2026-14-20-1264",
+      "data": "2026-04-05"
+     },
+     {
+      "veiculo": "Prefeitura de Maceió",
+      "titulo": "Prefeito",
+      "url": "https://maceio.al.gov.br/prefeito",
+      "data": "2026-10-15"
+     },
+     {
+      "veiculo": "O Globo",
+      "titulo": "Saiba quais governadores e prefeitos de capitais renunciaram aos cargos para disputar eleições; veja lista",
+      "url": "https://oglobo.globo.com/politica/noticia/2026/04/07/saiba-quais-governadores-e-prefeitos-de-capitais-renunciaram-aos-cargos-para-disputar-eleicoes-veja-lista.ghtml",
+      "data": "2026-04-07"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 05/04/2026, quando o vice Rodrigo Cunha tomou posse como prefeito.",
+    "nota_en": "The office of vice mayor has been vacant since April 5, 2026, when Vice Mayor Rodrigo Cunha was sworn in as mayor.",
+    "fonte": [
+     {
+      "veiculo": "Câmara Municipal de Maceió",
+      "titulo": "Câmara Municipal empossa Rodrigo Cunha como prefeito de Maceió",
+      "url": "https://www.maceio.al.leg.br/noticia/camara-municipal-empossa-rodrigo-cunha-como-prefeito-de-maceio-05-04-2026-14-20-1264",
+      "data": "2026-04-05"
+     }
+    ]
+   }
+  },
+  "1302603": {
+   "nome": "Manaus",
+   "uf": "AM",
+   "prefeito": {
+    "nome": "Renato Junior",
+    "nomeCivil": "Renato Frota Magalhães",
+    "partido": "AVANTE",
+    "genero": "M",
+    "nascimento": "1987-01-29",
+    "desde": "2026-03-31",
+    "comoAssumiu": "Era vice-prefeito e tomou posse como prefeito em 31/03/2026, na Câmara Municipal, depois que David Almeida renunciou ao cargo para disputar a eleição de 2026 para governador do Amazonas.",
+    "comoAssumiu_en": "He was vice mayor and was sworn in as mayor on March 31, 2026, at the City Council (the city's legislature), after Mayor David Almeida resigned to run for governor of Amazonas state in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "Câmara Municipal de Manaus",
+      "titulo": "Presidente David Reis conduz ato de renúncia do prefeito de Manaus e oficializa posse de Renato Junior",
+      "url": "https://www.cmm.am.gov.br/presidente-david-reis-conduz-ato-de-renuncia-do-prefeito-de-manaus-e-oficializa-posse-de-renato-junior/",
+      "data": "2026-04-01"
+     },
+     {
+      "veiculo": "g1",
+      "titulo": "David Almeida renuncia ao cargo de prefeito de Manaus para disputar o Governo do Amazonas",
+      "url": "https://g1.globo.com/am/amazonas/eleicoes/2026/noticia/2026/03/31/david-almeida-renuncia-ao-cargo-de-prefeito-de-manaus-nesta-terca-para-disputar-o-governo-do-amazonas.ghtml",
+      "data": "2026-03-31"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 31/03/2026, quando o vice Renato Junior tomou posse como prefeito.",
+    "nota_en": "The office of vice mayor has been vacant since March 31, 2026, when Vice Mayor Renato Junior was sworn in as mayor.",
+    "fonte": [
+     {
+      "veiculo": "Câmara Municipal de Manaus",
+      "titulo": "Presidente David Reis conduz ato de renúncia do prefeito de Manaus e oficializa posse de Renato Junior",
+      "url": "https://www.cmm.am.gov.br/presidente-david-reis-conduz-ato-de-renuncia-do-prefeito-de-manaus-e-oficializa-posse-de-renato-junior/",
+      "data": "2026-04-01"
+     },
+     {
+      "veiculo": "g1",
+      "titulo": "David Almeida renuncia ao cargo de prefeito de Manaus para disputar o Governo do Amazonas",
+      "url": "https://g1.globo.com/am/amazonas/eleicoes/2026/noticia/2026/03/31/david-almeida-renuncia-ao-cargo-de-prefeito-de-manaus-nesta-terca-para-disputar-o-governo-do-amazonas.ghtml",
+      "data": "2026-03-31"
+     }
+    ]
+   }
+  },
+  "1600303": {
+   "nome": "Macapá",
+   "uf": "AP",
+   "prefeito": {
+    "nome": "Pedro DaLua",
+    "nomeCivil": "Pedro dos Santos Martins",
+    "partido": "UNIÃO",
+    "genero": "M",
+    "nascimento": "1977-06-07",
+    "desde": "2026-03-04",
+    "comoAssumiu": "É vereador e presidente da Câmara Municipal. Assumiu a prefeitura de forma interina em 04/03/2026, depois que o ministro Flávio Dino, do Supremo Tribunal Federal (STF), afastou do cargo o prefeito Dr. Furlan e o vice-prefeito Mário Neto, a pedido da Polícia Federal, numa investigação sobre suspeita de desvio de recursos federais. Em 05/03/2026, Dr. Furlan renunciou ao mandato para disputar a eleição de 2026 para governador do Amapá.",
+    "comoAssumiu_en": "He is a city councilor and the president of the City Council (the city's legislature). He became acting mayor on March 4, 2026, after Justice Flávio Dino of the Federal Supreme Court (STF, Brazil's highest court) suspended Mayor Dr. Furlan and Vice Mayor Mário Neto from office at the request of the Federal Police, in an investigation into suspected misuse of federal funds. On March 5, 2026, Dr. Furlan resigned to run for governor of Amapá state in the 2026 election.",
+    "nota": "Entre 07/10/2026 e 15/10/2026, Pedro DaLua ficou licenciado da prefeitura para disputar a reeleição à presidência da Câmara Municipal (foi reeleito em 13/10/2026). Nesse período, a prefeitura ficou a cargo do juiz Décio José Santos Rufino, designado pelo Tribunal de Justiça do Amapá.",
+    "nota_en": "From October 7 to October 15, 2026, Pedro DaLua was on leave from the mayor's office to run for re-election as president of the City Council (he was re-elected on October 13, 2026). During that period, the city was run by Judge Décio José Santos Rufino, appointed by the Amapá State Court of Justice.",
+    "conferir": true,
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Macapá",
+      "titulo": "Pedro DaLua assume como prefeito em exercício de Macapá",
+      "url": "https://agencia.macapa.ap.gov.br/pedro-dalua-assume-como-prefeito-em-exercicio-de-macapa/",
+      "data": "2026-03-04"
+     },
+     {
+      "veiculo": "Supremo Tribunal Federal (STF)",
+      "titulo": "STF afasta prefeito e vice de Macapá em investigação sobre desvio de recursos de emendas parlamentares",
+      "url": "https://noticias.stf.jus.br/postsnoticias/stf-afasta-prefeito-e-vice-de-macapa-em-investigacao-sobre-desvio-de-recursos-de-emendas-parlamentares/",
+      "data": "2026-03-04"
+     },
+     {
+      "veiculo": "Agência Brasil",
+      "titulo": "Após ser afastado pelo STF, prefeito de Macapá renuncia ao cargo",
+      "url": "https://agenciabrasil.ebc.com.br/politica/noticia/2026-03/apos-ser-afastado-pelo-stf-prefeito-de-macapa-renuncia-ao-cargo",
+      "data": "2026-03-05"
+     },
+     {
+      "veiculo": "Prefeitura de Macapá",
+      "titulo": "A pedido da Polícia Federal STF impõe afastamento de Furlan e Mario Neto por tempo indeterminado e mantém gestão de Pedro DaLua em Macapá",
+      "url": "https://agencia.macapa.ap.gov.br/stf-impoe-afastamento-de-furlan-e-mario-neto-por-tempo-indeterminado-e-mantem-gestao-de-pedro-dalua-em-macapa/",
+      "data": "2026-05-02"
+     },
+     {
+      "veiculo": "g1",
+      "titulo": "Juiz assume comando da Prefeitura de Macapá enquanto prefeito interino disputa presidência da Câmara",
+      "url": "https://g1.globo.com/ap/amapa/noticia/2026/10/07/juiz-assume-comando-da-prefeitura-de-macapa-enquanto-prefeito-interino-disputa-presidencia-da-camara.ghtml",
+      "data": "2026-10-07"
+     },
+     {
+      "veiculo": "Diário do Amapá",
+      "titulo": "Tjap prorroga licença de Pedro DaLua até 15 de outubro por conta da eleição da Câmara",
+      "url": "https://www.diariodoamapa.com.br/cadernos/politica/tjap-prorroga-licenca-de-pedro-dalua-ate-15-de-outubro-por-conta-da-eleicao-da-camara/",
+      "data": "2026-10-13"
+     },
+     {
+      "veiculo": "g1",
+      "titulo": "Pedro DaLua é reeleito presidente da Câmara de Macapá para o biênio 2027-2028",
+      "url": "https://g1.globo.com/ap/amapa/noticia/2026/10/13/pedro-dalua-e-reeleito-presidente-da-camara-de-macapa-para-o-bienio-2027-2028.ghtml",
+      "data": "2026-10-13"
+     }
+    ]
+   },
+   "vice": {
+    "nome": "Mário Neto",
+    "nomeCivil": "Mario Rocha de Matos Neto",
+    "partido": "PODE",
+    "genero": "M",
+    "nascimento": "1982-06-24",
+    "desde": "2025-01-01",
+    "comoAssumiu": "Foi eleito vice-prefeito em 2024, na chapa de Dr. Furlan.",
+    "comoAssumiu_en": "He was elected vice mayor in 2024 on Dr. Furlan's ticket.",
+    "nota": "Está afastado do cargo desde 04/03/2026 por decisão do ministro Flávio Dino, do STF, numa investigação da Polícia Federal; depois, o STF manteve o afastamento sem prazo para terminar. Por isso, não assumiu a prefeitura quando Dr. Furlan renunciou.",
+    "nota_en": "He has been suspended from office since March 4, 2026, by order of Justice Flávio Dino of the Federal Supreme Court (STF), in a Federal Police investigation; the court later extended the suspension with no end date. For this reason, he did not become mayor when Dr. Furlan resigned.",
+    "fonte": [
+     {
+      "veiculo": "Supremo Tribunal Federal (STF)",
+      "titulo": "STF afasta prefeito e vice de Macapá em investigação sobre desvio de recursos de emendas parlamentares",
+      "url": "https://noticias.stf.jus.br/postsnoticias/stf-afasta-prefeito-e-vice-de-macapa-em-investigacao-sobre-desvio-de-recursos-de-emendas-parlamentares/",
+      "data": "2026-03-04"
+     },
+     {
+      "veiculo": "Prefeitura de Macapá",
+      "titulo": "A pedido da Polícia Federal STF impõe afastamento de Furlan e Mario Neto por tempo indeterminado e mantém gestão de Pedro DaLua em Macapá",
+      "url": "https://agencia.macapa.ap.gov.br/stf-impoe-afastamento-de-furlan-e-mario-neto-por-tempo-indeterminado-e-mantem-gestao-de-pedro-dalua-em-macapa/",
+      "data": "2026-05-02"
+     },
+     {
+      "veiculo": "g1",
+      "titulo": "Juiz assume comando da Prefeitura de Macapá enquanto prefeito interino disputa presidência da Câmara",
+      "url": "https://g1.globo.com/ap/amapa/noticia/2026/10/07/juiz-assume-comando-da-prefeitura-de-macapa-enquanto-prefeito-interino-disputa-presidencia-da-camara.ghtml",
+      "data": "2026-10-07"
+     },
+     {
+      "veiculo": "g1",
+      "titulo": "Pedro DaLua é reeleito presidente da Câmara de Macapá para o biênio 2027-2028",
+      "url": "https://g1.globo.com/ap/amapa/noticia/2026/10/13/pedro-dalua-e-reeleito-presidente-da-camara-de-macapa-para-o-bienio-2027-2028.ghtml",
+      "data": "2026-10-13"
+     }
+    ]
+   }
+  },
+  "3205309": {
+   "nome": "Vitória",
+   "uf": "ES",
+   "prefeito": {
+    "nome": "Cris Samorini",
+    "nomeCivil": "Cristhine Samorini",
+    "partido": "PP",
+    "genero": "F",
+    "nascimento": "1978-10-06",
+    "desde": "2026-04-04",
+    "comoAssumiu": "Era vice-prefeita e assumiu a prefeitura em 04/04/2026, quando passou a valer a renúncia de Lorenzo Pazolini, que deixou o cargo para disputar a eleição de 2026 para governador do Espírito Santo. A posse solene foi em 06/04/2026, na Câmara Municipal.",
+    "comoAssumiu_en": "She was vice mayor and became mayor on April 4, 2026, when the resignation of Mayor Lorenzo Pazolini took effect; he left office to run for governor of Espírito Santo state in the 2026 election. Her formal swearing-in ceremony was held on April 6, 2026, at the City Council (the city's legislature).",
+    "fonte": [
+     {
+      "veiculo": "Câmara Municipal de Vitória",
+      "titulo": "Sessão Solene na Câmara Municipal marca posse da prefeita Cris Samorini na Prefeitura de Vitória",
+      "url": "https://www.cmv.es.gov.br/noticia/ler/11685/sesso-solene-na-cmara-municipal-marca-posse-da-prefeita-cris-samorini-na-prefeitura-de-vitria",
+      "data": "2026-04-06"
+     },
+     {
+      "veiculo": "Folha Vitória",
+      "titulo": "Pazolini deixa o cargo e Cris Samorini é a nova prefeita de Vitória",
+      "url": "https://www.folhavitoria.com.br/politica/pazolini-deixa-o-cargo-e-cris-samorini-e-a-nova-prefeita-de-vitoria/",
+      "data": "2026-04-04"
+     },
+     {
+      "veiculo": "Folha Vitória",
+      "titulo": "Cris Samorini toma posse como prefeita de Vitória na segunda-feira",
+      "url": "https://www.folhavitoria.com.br/politica/cris-samorini-toma-posse-como-prefeita-de-vitoria-na-segunda-feira/",
+      "data": "2026-04-03"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 04/04/2026, quando a vice Cris Samorini assumiu a prefeitura.",
+    "nota_en": "The office of vice mayor has been vacant since April 4, 2026, when Vice Mayor Cris Samorini became mayor.",
+    "fonte": [
+     {
+      "veiculo": "Câmara Municipal de Vitória",
+      "titulo": "Sessão Solene na Câmara Municipal marca posse da prefeita Cris Samorini na Prefeitura de Vitória",
+      "url": "https://www.cmv.es.gov.br/noticia/ler/11685/sesso-solene-na-cmara-municipal-marca-posse-da-prefeita-cris-samorini-na-prefeitura-de-vitria",
+      "data": "2026-04-06"
+     },
+     {
+      "veiculo": "Folha Vitória",
+      "titulo": "Pazolini deixa o cargo e Cris Samorini é a nova prefeita de Vitória",
+      "url": "https://www.folhavitoria.com.br/politica/pazolini-deixa-o-cargo-e-cris-samorini-e-a-nova-prefeita-de-vitoria/",
+      "data": "2026-04-04"
+     }
+    ]
+   }
+  },
+  "2111300": {
+   "nome": "São Luís",
+   "uf": "MA",
+   "prefeito": {
+    "nome": "Esmênia Miranda",
+    "nomeCivil": "Esmênia Miranda Ferreira da Silva",
+    "partido": "PSD",
+    "genero": "F",
+    "nascimento": "1982-07-18",
+    "desde": "2026-03-31",
+    "comoAssumiu": "Era vice-prefeita e tomou posse como prefeita em 31/03/2026, na Câmara Municipal, depois que Eduardo Braide renunciou ao cargo para disputar a eleição de 2026 para governador do Maranhão.",
+    "comoAssumiu_en": "She was vice mayor and was sworn in as mayor on March 31, 2026, at the City Council (the city's legislature), after Mayor Eduardo Braide resigned to run for governor of Maranhão state in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de São Luís",
+      "titulo": "Esmênia Miranda toma posse como prefeita de São Luís",
+      "url": "https://www.saoluis.ma.gov.br/portal/noticias/0/3/3591/esmenia-miranda-toma-posse-como-prefeita-de-sao-luis",
+      "data": "2026-04-01"
+     },
+     {
+      "veiculo": "Câmara Municipal de São Luís",
+      "titulo": "Prefeita Esmênia Miranda toma posse na Câmara de São Luís",
+      "url": "https://www.cmsaoluis.ma.gov.br/noticia/870/Prefeita-Esmenia-Miranda-toma-posse-na-Camara-de-Sao-Luis",
+      "data": "2026-03-31"
+     },
+     {
+      "veiculo": "g1",
+      "titulo": "Esmênia Miranda toma posse como prefeita de São Luís após renúncia de Braide",
+      "url": "https://g1.globo.com/ma/maranhao/eleicoes/2026/noticia/2026/03/31/esmenia-miranda-toma-posse-como-prefeita-de-sao-luis-apos-renuncia-de-braide.ghtml",
+      "data": "2026-03-31"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 31/03/2026, quando a vice Esmênia Miranda tomou posse como prefeita.",
+    "nota_en": "The office of vice mayor has been vacant since March 31, 2026, when Vice Mayor Esmênia Miranda was sworn in as mayor.",
+    "fonte": [
+     {
+      "veiculo": "Câmara Municipal de São Luís",
+      "titulo": "Prefeita Esmênia Miranda toma posse na Câmara de São Luís",
+      "url": "https://www.cmsaoluis.ma.gov.br/noticia/870/Prefeita-Esmenia-Miranda-toma-posse-na-Camara-de-Sao-Luis",
+      "data": "2026-03-31"
+     },
+     {
+      "veiculo": "g1",
+      "titulo": "Esmênia Miranda toma posse como prefeita de São Luís após renúncia de Braide",
+      "url": "https://g1.globo.com/ma/maranhao/eleicoes/2026/noticia/2026/03/31/esmenia-miranda-toma-posse-como-prefeita-de-sao-luis-apos-renuncia-de-braide.ghtml",
+      "data": "2026-03-31"
+     }
+    ]
+   }
+  },
+  "3106200": {
+   "nome": "Belo Horizonte",
+   "uf": "MG",
+   "prefeito": {
+    "nome": "Álvaro Damião",
+    "nomeCivil": "Álvaro Damião Vieira da Paz",
+    "partido": "UNIÃO",
+    "genero": "M",
+    "nascimento": "1970-09-27",
+    "desde": "2025-03-26",
+    "comoAssumiu": "Era vice-prefeito e assumiu a prefeitura em 26/03/2025, depois da morte do prefeito Fuad Noman. Já exercia o cargo de forma interina desde o começo de janeiro de 2025, quando Fuad foi internado. Tomou posse como prefeito na Câmara Municipal em 03/04/2025.",
+    "comoAssumiu_en": "He was vice mayor and became mayor on March 26, 2025, after the death of Mayor Fuad Noman. He had been acting mayor since early January 2025, when Fuad Noman was hospitalized. He was sworn in as mayor at the City Council (the city's legislature) on April 3, 2025.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Belo Horizonte",
+      "titulo": "Álvaro Damião toma posse na Câmara Municipal como 51º prefeito de Belo Horizonte",
+      "url": "https://prefeitura.pbh.gov.br/noticias/alvaro-damiao-toma-posse-na-camara-municipal-como-51o-prefeito-de-belo-horizonte",
+      "data": "2025-04-03"
+     },
+     {
+      "veiculo": "Agência Brasil",
+      "titulo": "Morre em Belo Horizonte prefeito Fuad Noman",
+      "url": "https://agenciabrasil.ebc.com.br/politica/noticia/2025-03/morre-em-belo-horizonte-prefeito-fuad-noman",
+      "data": "2025-03-26"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 26/03/2025, quando o vice Álvaro Damião assumiu a prefeitura, depois da morte de Fuad Noman.",
+    "nota_en": "The office of vice mayor has been vacant since March 26, 2025, when Vice Mayor Álvaro Damião became mayor after the death of Fuad Noman.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Belo Horizonte",
+      "titulo": "Álvaro Damião toma posse na Câmara Municipal como 51º prefeito de Belo Horizonte",
+      "url": "https://prefeitura.pbh.gov.br/noticias/alvaro-damiao-toma-posse-na-camara-municipal-como-51o-prefeito-de-belo-horizonte",
+      "data": "2025-04-03"
+     },
+     {
+      "veiculo": "Agência Brasil",
+      "titulo": "Morre em Belo Horizonte prefeito Fuad Noman",
+      "url": "https://agenciabrasil.ebc.com.br/politica/noticia/2025-03/morre-em-belo-horizonte-prefeito-fuad-noman",
+      "data": "2025-03-26"
+     }
+    ]
+   }
+  },
+  "2507507": {
+   "nome": "João Pessoa",
+   "uf": "PB",
+   "prefeito": {
+    "nome": "Leo Bezerra",
+    "nomeCivil": "Leopoldo de Araújo Bezerra Cavalcanti",
+    "partido": "PSDB",
+    "genero": "M",
+    "nascimento": "1983-08-02",
+    "desde": "2026-04-02",
+    "comoAssumiu": "Era vice-prefeito e assumiu a prefeitura em 02/04/2026, quando Cícero Lucena renunciou ao cargo para disputar a eleição de 2026 para governador da Paraíba. A posse formal foi em 06/04/2026, em sessão da Câmara Municipal.",
+    "comoAssumiu_en": "He was vice mayor and became mayor on April 2, 2026, when Mayor Cícero Lucena resigned to run for governor of Paraíba state in the 2026 election. He was formally sworn in on April 6, 2026, at a session of the City Council (the city's legislature).",
+    "nota": "Foi eleito vice-prefeito em 2024 pelo PSB; hoje é do PSDB, partido ao qual se filiou em agosto de 2026.",
+    "nota_en": "He was elected vice mayor in 2024 for the PSB party; he is now a member of the PSDB, which he joined in August 2026.",
+    "fonte": [
+     {
+      "veiculo": "Câmara Municipal de João Pessoa (Diário Oficial Eletrônico)",
+      "titulo": "Ato do Presidente nº 007/2026: declara a vacância do cargo de prefeito do município de João Pessoa",
+      "url": "https://diario.interno.joaopessoa.pb.leg.br/uploads/store/official_journals/2026_especial_1060.pdf",
+      "data": "2026-04-02"
+     },
+     {
+      "veiculo": "Câmara Municipal de João Pessoa (Diário Oficial Eletrônico)",
+      "titulo": "Termo de posse no cargo de prefeito do município de João Pessoa",
+      "url": "https://diario.interno.joaopessoa.pb.leg.br/uploads/store/official_journals/2026_especial_1062.pdf",
+      "data": "2026-04-07"
+     },
+     {
+      "veiculo": "g1",
+      "titulo": "Leo Bezerra toma posse como prefeito de João Pessoa após renúncia de Cícero Lucena",
+      "url": "https://g1.globo.com/pb/paraiba/eleicoes/2026/noticia/2026/04/06/leo-bezerra-toma-posse-como-prefeito-de-joao-pessoa-apos-renuncia-de-cicero-lucena.ghtml",
+      "data": "2026-04-06"
+     },
+     {
+      "veiculo": "g1",
+      "titulo": "Prefeito de João Pessoa, Leo Bezerra, se filia ao PSDB",
+      "url": "https://g1.globo.com/pb/paraiba/noticia/2026/08/07/prefeito-de-joao-pessoa-leo-bezerra-se-filia-ao-psdb.ghtml",
+      "data": "2026-08-07"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 02/04/2026, quando o vice Leo Bezerra assumiu a prefeitura.",
+    "nota_en": "The office of vice mayor has been vacant since April 2, 2026, when Vice Mayor Leo Bezerra became mayor.",
+    "fonte": [
+     {
+      "veiculo": "Câmara Municipal de João Pessoa (Diário Oficial Eletrônico)",
+      "titulo": "Termo de posse no cargo de prefeito do município de João Pessoa",
+      "url": "https://diario.interno.joaopessoa.pb.leg.br/uploads/store/official_journals/2026_especial_1062.pdf",
+      "data": "2026-04-07"
+     },
+     {
+      "veiculo": "g1",
+      "titulo": "Leo Bezerra toma posse como prefeito de João Pessoa após renúncia de Cícero Lucena",
+      "url": "https://g1.globo.com/pb/paraiba/eleicoes/2026/noticia/2026/04/06/leo-bezerra-toma-posse-como-prefeito-de-joao-pessoa-apos-renuncia-de-cicero-lucena.ghtml",
+      "data": "2026-04-06"
+     }
+    ]
+   }
+  },
+  "2611606": {
+   "nome": "Recife",
+   "uf": "PE",
+   "prefeito": {
+    "nome": "Victor Marques",
+    "nomeCivil": "Victor Marques Alves",
+    "partido": "PC do B",
+    "genero": "M",
+    "nascimento": "1994-09-29",
+    "desde": "2026-04-06",
+    "comoAssumiu": "Era vice-prefeito. Assumiu a prefeitura de forma interina em 02/04/2026, quando João Campos renunciou ao cargo para disputar a eleição de 2026 para governador de Pernambuco, e tomou posse como prefeito em 06/04/2026, na Câmara Municipal.",
+    "comoAssumiu_en": "He was vice mayor. He took charge of the city on an acting basis on April 2, 2026, when Mayor João Campos resigned to run for governor of Pernambuco state in the 2026 election, and was sworn in as mayor on April 6, 2026, at the City Council (the city's legislature).",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura do Recife",
+      "titulo": "Novo prefeito do Recife é empossado e reforça compromisso com continuidade e ritmo acelerado de entregas",
+      "url": "https://www2.recife.pe.gov.br/noticias/06/04/2026/novo-prefeito-do-recife-e-empossado-e-reforca-compromisso-com-continuidade-e",
+      "data": "2026-04-06"
+     },
+     {
+      "veiculo": "g1",
+      "titulo": "João Campos renuncia à prefeitura do Recife para concorrer ao governo de Pernambuco",
+      "url": "https://g1.globo.com/pe/pernambuco/eleicoes/2026/noticia/2026/04/02/joao-campos-renuncia-a-prefeitura-do-recife-para-concorrer-ao-governo-de-pernambuco.ghtml",
+      "data": "2026-04-02"
+     },
+     {
+      "veiculo": "g1",
+      "titulo": "Victor Marques assume prefeitura do Recife após renúncia de João Campos para concorrer ao governo",
+      "url": "https://g1.globo.com/pe/pernambuco/eleicoes/2026/noticia/2026/04/06/victor-marques-assume-prefeitura-do-recife-apos-renuncia-de-joao-campos-para-concorrer-ao-governo.ghtml",
+      "data": "2026-04-06"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 06/04/2026, quando o vice Victor Marques tomou posse como prefeito.",
+    "nota_en": "The office of vice mayor has been vacant since April 6, 2026, when Vice Mayor Victor Marques was sworn in as mayor.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura do Recife",
+      "titulo": "Novo prefeito do Recife é empossado e reforça compromisso com continuidade e ritmo acelerado de entregas",
+      "url": "https://www2.recife.pe.gov.br/noticias/06/04/2026/novo-prefeito-do-recife-e-empossado-e-reforca-compromisso-com-continuidade-e",
+      "data": "2026-04-06"
+     },
+     {
+      "veiculo": "g1",
+      "titulo": "Victor Marques assume prefeitura do Recife após renúncia de João Campos para concorrer ao governo",
+      "url": "https://g1.globo.com/pe/pernambuco/eleicoes/2026/noticia/2026/04/06/victor-marques-assume-prefeitura-do-recife-apos-renuncia-de-joao-campos-para-concorrer-ao-governo.ghtml",
+      "data": "2026-04-06"
+     }
+    ]
+   }
+  },
+  "3304557": {
+   "nome": "Rio de Janeiro",
+   "uf": "RJ",
+   "prefeito": {
+    "nome": "Eduardo Cavaliere",
+    "nomeCivil": "Eduardo Cavaliere Gonçalves Pinto",
+    "partido": "PSD",
+    "genero": "M",
+    "nascimento": "1994-09-29",
+    "desde": "2026-03-20",
+    "comoAssumiu": "Era vice-prefeito e assumiu a prefeitura em 20/03/2026, depois que Eduardo Paes renunciou ao cargo para disputar a eleição de 2026 para governador do estado do Rio de Janeiro.",
+    "comoAssumiu_en": "He was vice mayor and became mayor on March 20, 2026, after Mayor Eduardo Paes resigned to run for governor of Rio de Janeiro state in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura do Rio de Janeiro",
+      "titulo": "Eduardo Cavaliere assume a Prefeitura com o compromisso de continuidade da gestão Paes",
+      "url": "https://prefeitura.rio/cidade/eduardo-cavaliere-assume-a-prefeitura-com-o-compromisso-de-continuidade-da-gestao-eduardo-paes/",
+      "data": "2026-03-20"
+     },
+     {
+      "veiculo": "Agência Brasil",
+      "titulo": "Rio de Janeiro tem novo prefeito",
+      "url": "https://agenciabrasil.ebc.com.br/politica/noticia/2026-03/rio-de-janeiro-tem-novo-prefeito",
+      "data": "2026-03-21"
+     },
+     {
+      "veiculo": "g1",
+      "titulo": "Paes renuncia, e Cavaliere, seu vice, assume a Prefeitura do Rio",
+      "url": "https://g1.globo.com/rj/rio-de-janeiro/eleicoes/2026/noticia/2026/03/20/paes-deixa-cargo-e-cavaliere-assume-a-prefeitura-do-rio.ghtml",
+      "data": "2026-03-20"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 20/03/2026, quando o vice Eduardo Cavaliere assumiu a prefeitura.",
+    "nota_en": "The office of vice mayor has been vacant since March 20, 2026, when Vice Mayor Eduardo Cavaliere became mayor.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura do Rio de Janeiro",
+      "titulo": "Eduardo Cavaliere assume a Prefeitura com o compromisso de continuidade da gestão Paes",
+      "url": "https://prefeitura.rio/cidade/eduardo-cavaliere-assume-a-prefeitura-com-o-compromisso-de-continuidade-da-gestao-eduardo-paes/",
+      "data": "2026-03-20"
+     },
+     {
+      "veiculo": "Agência Brasil",
+      "titulo": "Rio de Janeiro tem novo prefeito",
+      "url": "https://agenciabrasil.ebc.com.br/politica/noticia/2026-03/rio-de-janeiro-tem-novo-prefeito",
+      "data": "2026-03-21"
+     }
+    ]
+   }
+  },
+  "1400100": {
+   "nome": "Boa Vista",
+   "uf": "RR",
+   "prefeito": {
+    "nome": "Marcelo Zeitoune",
+    "nomeCivil": "Marcelo Zeitoune",
+    "partido": "PL",
+    "genero": "M",
+    "nascimento": "1969-01-09",
+    "desde": "2026-04-02",
+    "comoAssumiu": "Era vice-prefeito e assumiu a prefeitura em 02/04/2026, depois que Arthur Henrique renunciou ao cargo para disputar a eleição de 2026.",
+    "comoAssumiu_en": "He was vice mayor and became mayor on April 2, 2026, after Mayor Arthur Henrique resigned to run in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "g1",
+      "titulo": "Arthur Henrique renuncia ao cargo de prefeito Boa Vista pelas redes sociais",
+      "url": "https://g1.globo.com/rr/roraima/noticia/2026/04/02/arthur-henrique-deixa-cargo-de-prefeito-de-boa-vista.ghtml",
+      "data": "2026-04-02"
+     },
+     {
+      "veiculo": "g1",
+      "titulo": "Quem é Marcelo Zeitoune, novo prefeito de Boa Vista após renúncia de Arthur Henrique",
+      "url": "https://g1.globo.com/politica/eleicoes/2026/noticia/2026/04/02/quem-e-marcelo-zeitoune-novo-prefeito-de-boa-vista-apos-renuncia-de-arthur-henrique.ghtml",
+      "data": "2026-04-02"
+     },
+     {
+      "veiculo": "Folha BV",
+      "titulo": "Marcelo Zeitoune assume Prefeitura de Boa Vista; saiba quem é ele",
+      "url": "https://www.folhabv.com.br/politica/marcelo-zeitoune-assume-prefeitura-de-boa-vista-saiba-quem-e-ele/",
+      "data": "2026-04-02"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 02/04/2026, quando o vice Marcelo Zeitoune assumiu a prefeitura.",
+    "nota_en": "The office of vice mayor has been vacant since April 2, 2026, when Vice Mayor Marcelo Zeitoune became mayor.",
+    "fonte": [
+     {
+      "veiculo": "g1",
+      "titulo": "Arthur Henrique renuncia ao cargo de prefeito Boa Vista pelas redes sociais",
+      "url": "https://g1.globo.com/rr/roraima/noticia/2026/04/02/arthur-henrique-deixa-cargo-de-prefeito-de-boa-vista.ghtml",
+      "data": "2026-04-02"
+     },
+     {
+      "veiculo": "g1",
+      "titulo": "Quem é Marcelo Zeitoune, novo prefeito de Boa Vista após renúncia de Arthur Henrique",
+      "url": "https://g1.globo.com/politica/eleicoes/2026/noticia/2026/04/02/quem-e-marcelo-zeitoune-novo-prefeito-de-boa-vista-apos-renuncia-de-arthur-henrique.ghtml",
+      "data": "2026-04-02"
+     }
+    ]
+   }
+  }
+ }
+}

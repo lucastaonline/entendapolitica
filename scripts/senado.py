@@ -375,7 +375,7 @@ def numero_camara(det: dict | None) -> list[dict]:
 
 _cam_cache: dict = {}
 _cam_trava = threading.Lock()
-SIT_FINAL_CAMARA = ("lei", "arquivada", "rejeitada", "retirada")
+SIT_FINAL_CAMARA = ("lei", "arquivada", "rejeitada", "parada", "retirada")
 
 
 def _final_nas_tramitacoes(pid) -> dict | None:
@@ -436,17 +436,17 @@ def lei_da_norma(texto: str | None, det: dict | None) -> dict | None:
 
 
 DELIB_NEG = {  # deliberações que encerram a proposta sem virar lei
-    "PREJUDICADO": ("rejeitada", "Ficou prejudicada (não vai mais ser votada)"),
+    "PREJUDICADO": ("parada", "Ficou prejudicada (não vai mais ser votada)"),
     "RETIRADO_PELO_AUTOR": ("retirada", "O autor desistiu e retirou a proposta"),
     "REJEITADO_PLENARIO": ("rejeitada", "Rejeitada pelo Plenário do Senado"),
     "REJEITADO_COMISSAO_TERM": ("rejeitada", "Rejeitada por uma comissão do Senado"),
     "REJEITADO_COMISSAO_NAO_TERM": ("rejeitada", "Rejeitada por uma comissão do Senado"),
     "REJEITADO_INCONSTICIONALIDADE_CCJ": ("rejeitada", "Rejeitada na CCJ do Senado por ir contra a Constituição"),
     "REJEITADO_PLENARIO_CD": ("rejeitada", "Rejeitada pelo Plenário da Câmara"),
-    "SEM_EFICACIA": ("rejeitada", "Perdeu o efeito (ficou sem eficácia)"),
-    "IMPUGNADO_PRESIDENCIA": ("rejeitada", "Devolvida pela Presidência do Senado (não pôde seguir)"),
-    "RETIRADA_DE_ASSINATURA": ("rejeitada", "Não pôde seguir: assinaturas foram retiradas"),
-    "PERDA_EFICACIA": ("rejeitada", "Perdeu a validade (o Congresso não votou a tempo)"),
+    "SEM_EFICACIA": ("parada", "Perdeu o efeito (ficou sem eficácia)"),
+    "IMPUGNADO_PRESIDENCIA": ("parada", "Devolvida pela Presidência do Senado (não pôde seguir)"),
+    "RETIRADA_DE_ASSINATURA": ("parada", "Não pôde seguir: assinaturas foram retiradas"),
+    "PERDA_EFICACIA": ("parada", "Perdeu a validade (o Congresso não votou a tempo)"),
     "INADIMITIDA_URGENCIA": ("rejeitada", "Não foi aceita pelo Congresso"),
     "TRANSF_PROJ_LEI_SEN": ("outra", "Foi transformada em outro projeto (projeto de lei do Senado)"),
     "TRANSF_PROJ_RES_SEN": ("outra", "Foi transformada em outro projeto (projeto de resolução do Senado)"),
@@ -542,6 +542,11 @@ def classificar(x: dict, det: dict | None, cont: dict | None, det_cont: dict | N
                         nome = f"{m.group(1).replace('Lei Ordinária', 'Lei')} nº {m.group(2)}/{m.group(3)}"
                         lei, txt = {"nome": nome, "url": None}, f"Virou a {nome}"
                     return fim("lei", txt, "Câmara: norma jurídica", lei=lei, dataStatus=d_c, situacao=sit_c)
+                if stc == "parada":
+                    s_low = sem_acento(cam["situacao"].lower())
+                    txt = ("Aprovada no Senado, mas ficou prejudicada na Câmara" if "prejudicad" in s_low else
+                           "Aprovada no Senado, mas parou na Câmara")
+                    return fim("parada", txt, "Câmara: parada", dataStatus=d_c, situacao=sit_c)
                 if stc == "rejeitada":
                     s_low = sem_acento(cam["situacao"].lower())
                     if "vetad" in s_low:
@@ -585,7 +590,7 @@ def classificar(x: dict, det: dict | None, cont: dict | None, det_cont: dict | N
 
     # 6) regra comum
     st = classificar_situacao(S or None)
-    txt = {"rejeitada": "Rejeitada ou parada de vez", "arquivada": "Arquivada", "retirada": "O autor desistiu e retirou a proposta",
+    txt = {"rejeitada": "Rejeitada", "parada": "Parou (não vai mais ser votada)", "arquivada": "Arquivada", "retirada": "O autor desistiu e retirou a proposta",
            "andando": "Ainda em discussão no Senado", "lei": NORMA_GENERICA.get(sigla_de(x), "Virou lei")}.get(st) or STATUS_TXT.get(st)
     if Su == "PREJUDICADA":
         txt = "Ficou prejudicada (não vai mais ser votada)"

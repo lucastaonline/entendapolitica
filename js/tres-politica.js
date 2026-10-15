@@ -41,7 +41,7 @@
       caixa("laje") + caixa("torre t1") + caixa("torre t2") + caixa("ponte") +
       '<div class="cupula">' + fatias(16) + "</div>" +
       '<div class="cuia">' + fatias(16) + '<i class="boca"></i></div>' +
-      (o.rotulos ? '<span class="rotulo3d r-sen">🏛️ Senado</span><span class="rotulo3d r-cam">🏛️ ' + (window.EP && EP.en ? "Chamber" : "Câmara") + "</span>" : ""));
+      (o.rotulos ? '<span class="rotulo3d r-sen">🏛️ ' + (window.EP && EP.en ? "Senate" : "Senado") + '</span><span class="rotulo3d r-cam">🏛️ ' + (window.EP && EP.en ? "Chamber" : "Câmara") + "</span>" : ""));
   };
 
   // ---------------------------------------------------------------- Três Poderes: colunas da mesma altura, em triângulo

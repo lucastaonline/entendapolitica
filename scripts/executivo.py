@@ -167,12 +167,12 @@ def status_congresso(x: dict, sigla: str) -> dict:
         veto = " (com partes vetadas)" if "VETO PARCIAL" in Su else ""
         return {**r, "status": "lei", "statusTxt": f"Virou {art} {nome}{veto}", "lei": {"nome": nome, "url": None}}
     if D == "PERDA_EFICACIA":
-        return {**r, "status": "rejeitada", "statusTxt": "Perdeu a validade (o Congresso não votou a tempo)",
+        return {**r, "status": "parada", "statusTxt": "Perdeu a validade (o Congresso não votou a tempo)",
                 "situacao": S or "PERDA DE EFICÁCIA"}
     if "EFICÁCIA" in Su:
-        return {**r, "status": "rejeitada", "statusTxt": "Perdeu a validade (ficou sem eficácia)"}
+        return {**r, "status": "parada", "statusTxt": "Perdeu a validade (ficou sem eficácia)"}
     if D == "PREJUDICADO" or Su.startswith("PREJUDICAD"):
-        return {**r, "status": "rejeitada", "statusTxt": "Ficou prejudicada (não vai mais ser votada)",
+        return {**r, "status": "parada", "statusTxt": "Ficou prejudicada (não vai mais ser votada)",
                 "situacao": S or "PREJUDICADA"}
     if D == "REVOGADO" or Su.startswith("REVOGAD"):
         return {**r, "status": "retirada", "statusTxt": "Foi revogada (cancelada)"}
@@ -197,7 +197,8 @@ TXT_CAMARA = {
     "andando": "Ainda em discussão na Câmara",
     "junta": "Andando junto com outra proposta parecida",
     "arquivada": "Arquivada",
-    "rejeitada": "Rejeitada ou parada de vez",
+    "rejeitada": "Rejeitada",
+    "parada": "Parou (não vai mais ser votada)",
     "retirada": "O governo retirou a proposta",
     "outra": STATUS_TXT["outra"],
 }
@@ -237,7 +238,7 @@ def status_camara(p: dict) -> dict:
         txt = "Aprovada pelo Congresso; esperando a sanção do presidente"
     elif "vetado totalmente" in s_low:
         txt = "Aprovada pelo Congresso, mas vetada por inteiro"
-    elif st == "rejeitada" and "prejudicad" in s_low:
+    elif st == "parada" and "prejudicad" in s_low:
         txt = "Ficou prejudicada (não vai mais ser votada)"
     elif st == "aprovada" and "aguardando envio ao senado" in s_low:
         txt = "Aprovada na Câmara; vai para o Senado"
@@ -397,7 +398,7 @@ def main():
     fonte_cam = fonte("Câmara dos Deputados", "Dados Abertos: proposições e autores (arquivos por ano)",
                       "https://dadosabertos.camara.leg.br/swagger/api.html#staticfile")
     propostas = {
-        "escopo": "Propostas enviadas pelo presidente ao Congresso desde 1º de janeiro de 2023",
+        "escopo": "Propostas enviadas pelo presidente ao Congresso no mandato atual (desde 1º de janeiro de 2023)",
         "resumo": resumo_propostas(lista),
         "porTipo": dict(sorted(collections.Counter(p["tipo"] for p in lista).items())),
         "porTema": [{"tema": t, "n": n} for t, n in sorted(por_tema.items(), key=lambda kv: chave_nome(kv[0]))],
@@ -427,13 +428,12 @@ def main():
         "id": "pres-lula", "tipo": "pres", "nome": "Lula", "nomeCivil": "Luiz Inácio Lula da Silva",
         "cargo": "Presidente da República", "genero": "M", "uf": None, "municipio": None, "partido": "PT",
         "foto": foto_p, "fotoCredito": cred_p,
-        "nascimento": "1945-10-27", "naturalidade": "Garanhuns (PE)", "escolaridade": None, "profissoes": ["Metalúrgico"],
+        "nascimento": "1945-10-27", "naturalidade": "Garanhuns (PE)",
         "mandato": mand_p,
         "mandatosAnteriores": [
             {"cargo": "Presidente da República", "inicio": "2007-01-01", "fim": "2010-12-31"},
             {"cargo": "Presidente da República", "inicio": "2003-01-01", "fim": "2006-12-31"},
-            {"cargo": "Deputado federal", "inicio": "1987-02-01", "fim": "1991-01-31"},
-        ],
+        ],  # só mandatos no mesmo cargo, como para todo mundo (ver scripts/montar.py)
         "eleicao": None, "eleicao2026": None, "bens": None,
         "links": {"oficial": "https://www.gov.br/planalto/pt-br", "email": None, "redes": []},
         "comissoes": [],
@@ -441,7 +441,7 @@ def main():
         "executivo": exe,
         "gastos": None,
         "votacoes": None,
-        "fontes": [bio_p, ec111, dep_lula, fonte_cam,
+        "fontes": [bio_p, ec111, fonte_cam,
                    fonte("Congresso Nacional", "Dados Abertos: medidas provisórias e PLN por ano", f"{SENADO}/processo.json?sigla=MPV&ano={hoje()[:4]}")]
                   + ([fonte_foto_p] if fonte_foto_p else []),
         "atualizado": hoje(),
@@ -453,10 +453,13 @@ def main():
                   "https://www.gov.br/planalto/pt-br/vice-presidencia/acesso-a-informacao/institucional/biografia-do-vice-presidente-da-republica-1")
     dep_alck = fonte("Câmara dos Deputados", "Dados Abertos: deputado Geraldo Alckmin (1987-1995)",
                      "https://dadosabertos.camara.leg.br/api/v2/deputados/65480")
-    saida_mdic = [fonte("Valor Econômico", "Exoneração de Alckmin e Gleisi é publicada no DOU",
-                        "https://valor.globo.com/politica/noticia/2026/04/03/exonerao-de-alckmin-e-gleisi-publicada-no-dou.ghtml", "2026-04-03"),
-                  fonte("R7", "Lula confirma saída de Alckmin e Gleisi de ministérios",
-                        "https://noticias.r7.com/brasilia/lula-confirma-saida-de-alckmin-e-gleisi-de-ministerios-para-espaco-nas-eleicoes-03042026/", "2026-04-03")]
+    # saída do MDIC: fontes oficiais primeiro (quem ocupa o ministério desde 03/04/2026), imprensa só como apoio
+    saida_mdic = [fonte("Controladoria-Geral da União (e-Agendas)", "e-Agendas: autoridades em exercício no MDIC, com cargo e data de início",
+                        "https://eagendas.cgu.gov.br/pesquisa/agentes-publicos-obrigados-por-orgao/orgao/1399/ativo/true", hoje()),
+                  fonte("Presidência da República (Planalto)", "Ministros e Ministras (lista oficial do 1º escalão)",
+                        "https://www.gov.br/planalto/pt-br/conheca-a-presidencia/ministros-e-ministras", "2026-05-05"),
+                  fonte("Valor Econômico", "Exoneração de Alckmin e Gleisi é publicada no DOU",
+                        "https://valor.globo.com/politica/noticia/2026/04/03/exonerao-de-alckmin-e-gleisi-publicada-no-dou.ghtml", "2026-04-03")]
     cf61 = fonte("Palácio do Planalto", "Constituição Federal, arts. 61, 62, 79 e 84 (quem pode propor leis; funções do vice)",
                  "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm", "1988-10-05")
     zero = resumo_propostas([])
@@ -464,21 +467,13 @@ def main():
         "id": "vp-alckmin", "tipo": "vp", "nome": "Geraldo Alckmin", "nomeCivil": "Geraldo José Rodrigues Alckmin Filho",
         "cargo": "Vice-presidente da República", "genero": "M", "uf": None, "municipio": None, "partido": "PSB",
         "foto": foto_v, "fotoCredito": cred_v,
-        "nascimento": "1952-11-07", "naturalidade": "Pindamonhangaba (SP)", "escolaridade": None,
-        "profissoes": ["Médico (anestesiologista)", "Professor universitário"],
+        "nascimento": "1952-11-07", "naturalidade": "Pindamonhangaba (SP)",
         "mandato": {"inicio": "2023-01-01", "fim": "2027-01-05", "situacao": "Em exercício",
                     "obs": ("Também foi ministro do Desenvolvimento, Indústria, Comércio e Serviços de janeiro de 2023 até "
                             "3 de abril de 2026; hoje exerce só a Vice-Presidência. O mandato vai até a posse da próxima "
                             "chapa eleita, em 5 de janeiro de 2027."),
-                    "fonte": saida_mdic[0]},
-        "mandatosAnteriores": [
-            {"cargo": "Governador de São Paulo", "inicio": None, "fim": None, "periodo": "2001–2006 e 2011–2018"},
-            {"cargo": "Vice-governador de São Paulo", "inicio": None, "fim": None, "periodo": "1995–2001"},
-            {"cargo": "Deputado federal", "inicio": "1987-02-01", "fim": "1995-01-31"},
-            {"cargo": "Deputado estadual (SP)", "inicio": None, "fim": None, "periodo": "1983–1987"},
-            {"cargo": "Prefeito de Pindamonhangaba (SP)", "inicio": None, "fim": None, "periodo": "1977–1982"},
-            {"cargo": "Vereador de Pindamonhangaba (SP)", "inicio": None, "fim": None, "periodo": "eleito em 1972"},
-        ],
+                    "fonte": saida_mdic},
+        "mandatosAnteriores": [],  # nenhum mandato anterior como vice-presidente (só o mesmo cargo, como para todo mundo)
         "eleicao": None, "eleicao2026": None, "bens": None,
         "links": {"oficial": "https://www.gov.br/planalto/pt-br/vice-presidencia", "email": None, "redes": []},
         "comissoes": [],
@@ -490,7 +485,7 @@ def main():
         },
         "gastos": None,
         "votacoes": None,
-        "fontes": [bio_v, dep_alck, cf61, ec111] + saida_mdic + ([fonte_foto_v] if fonte_foto_v else []),
+        "fontes": [bio_v, cf61, ec111] + saida_mdic + ([fonte_foto_v] if fonte_foto_v else []),
         "atualizado": hoje(),
     }
 

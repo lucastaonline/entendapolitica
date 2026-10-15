@@ -1,0 +1,662 @@
+{
+ "parte": 7,
+ "ic": "🗳️",
+ "nome": "How elections work",
+ "resumo": "When there are elections, who votes, how the vote is protected and how votes turn into seats.",
+ "fontes": [
+  {
+   "id": "cf-art14",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 14 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art17",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 17, § 1 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art28-29",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, arts. 28 and 29 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art45-46",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, arts. 45 and 46 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art77",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 77 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "lei9504",
+   "veiculo": "Planalto",
+   "titulo": "Law 9,504/1997 (Elections Law), arts. 1, 2, 3, 5, 11, 36, 47 and 68 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/leis/l9504.htm",
+   "data": "1997-09-30",
+   "lang": "en"
+  },
+  {
+   "id": "codigo-eleitoral",
+   "veiculo": "Planalto",
+   "titulo": "Electoral Code (Law 4,737/1965), arts. 84, 106 to 111 and 224 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/leis/l4737compilado.htm",
+   "data": "1965-07-15",
+   "lang": "en"
+  },
+  {
+   "id": "lei14208",
+   "veiculo": "Planalto",
+   "titulo": "Law 14,208/2021 (party federations) (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14208.htm",
+   "data": "2021-09-28",
+   "lang": "en"
+  },
+  {
+   "id": "lcp64",
+   "veiculo": "Planalto",
+   "titulo": "Complementary Law 64/1990 (Ineligibility Law), art. 1, I, e (updated text) (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp64.htm",
+   "data": "1990-05-18",
+   "lang": "en"
+  },
+  {
+   "id": "lcp135",
+   "veiculo": "Planalto",
+   "titulo": "Complementary Law 135/2010 (Clean Record Law) (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp135.htm",
+   "data": "2010-06-04",
+   "lang": "en"
+  },
+  {
+   "id": "lcp219",
+   "veiculo": "Planalto",
+   "titulo": "Complementary Law 219/2025 (changes how ineligibility periods are counted) (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp219.htm",
+   "data": "2025-09-29",
+   "lang": "en"
+  },
+  {
+   "id": "res-tse-23610",
+   "veiculo": "TSE",
+   "titulo": "TSE Resolution 23,610/2019 (election advertising), arts. 9, 9-B and 9-C, consolidated text (in Portuguese)",
+   "url": "https://www.tse.jus.br/legislacao/compilada/res/2019/resolucao-no-23-610-de-18-de-dezembro-de-2019",
+   "data": "2019-12-18",
+   "lang": "en"
+  },
+  {
+   "id": "tse-calendario-2026",
+   "veiculo": "TSE",
+   "titulo": "Calendário eleitoral das Eleições 2026 (in Portuguese)",
+   "url": "https://www.tse.jus.br/eleicoes/calendario-eleitoral/calendario-eleitoral",
+   "data": "2026-10-15"
+  },
+  {
+   "id": "tse-urna",
+   "veiculo": "TSE",
+   "titulo": "Urna eletrônica: entenda como o equipamento transformou o processo eleitoral brasileiro (in Portuguese)",
+   "url": "https://www.tse.jus.br/comunicacao/noticias/2026/Janeiro/urna-eletronica-entenda-como-o-equipamento-transformou-o-processo-eleitoral-brasileiro",
+   "data": "2026-01-02"
+  },
+  {
+   "id": "tse-justificativa",
+   "veiculo": "TSE",
+   "titulo": "Justificativa eleitoral (2026 deadlines and the e-Título app) (in Portuguese)",
+   "url": "https://www.tse.jus.br/servicos-eleitorais/justificativa-eleitoral",
+   "data": "2026-10-15",
+   "lang": "en"
+  },
+  {
+   "id": "tse-quociente",
+   "veiculo": "TSE",
+   "titulo": "Glossário eleitoral: quociente eleitoral (in Portuguese)",
+   "url": "https://www.tse.jus.br/servicos-eleitorais/glossario/termos/quociente-eleitoral",
+   "data": "2026-10-15"
+  },
+  {
+   "id": "tse-voto-nulo",
+   "veiculo": "TSE",
+   "titulo": "Glossário eleitoral: voto nulo (in Portuguese)",
+   "url": "https://www.tse.jus.br/servicos-eleitorais/glossario/termos/voto-nulo",
+   "data": "2026-10-15"
+  },
+  {
+   "id": "tse-voto-branco",
+   "veiculo": "TSE",
+   "titulo": "Glossário eleitoral: voto em branco (in Portuguese)",
+   "url": "https://www.tse.jus.br/servicos-eleitorais/glossario/termos/voto-em-branco",
+   "data": "2026-10-15"
+  },
+  {
+   "id": "stf-sobras-2024",
+   "veiculo": "STF",
+   "titulo": "Supremo invalida regra sobre distribuição de sobras eleitorais em eleições proporcionais (in Portuguese)",
+   "url": "https://noticias.stf.jus.br/postsnoticias/supremo-invalida-regra-sobre-distribuicao-de-sobras-eleitorais-em-eleicoes-proporcionais/",
+   "data": "2024-02-28"
+  },
+  {
+   "id": "stf-sobras-2025",
+   "veiculo": "STF",
+   "titulo": "Decisão do STF sobre distribuição de sobras eleitorais vale desde 2022 (in Portuguese)",
+   "url": "https://noticias.stf.jus.br/postsnoticias/decisao-do-stf-sobre-distribuicao-de-sobras-eleitorais-vale-desde-2022/",
+   "data": "2025-03-13"
+  },
+  {
+   "id": "senado-eleicoes-2024",
+   "veiculo": "Agência Senado",
+   "titulo": "Eleições municipais 2024: tire aqui as dúvidas sobre as regras da votação (in Portuguese)",
+   "url": "https://www12.senado.leg.br/noticias/materias/2024/10/04/eleicoes-municipais-2024-tire-aqui-as-duvidas-sobre-as-regras-da-votacao",
+   "data": "2024-10-04"
+  },
+  {
+   "id": "senado-nulo",
+   "veiculo": "Agência Senado",
+   "titulo": "Votar nulo ou em branco não leva a invalidar a eleição (in Portuguese)",
+   "url": "https://www12.senado.leg.br/noticias/materias/2018/10/01/votar-nulo-ou-em-branco-nao-faz-diferenca-no-resultado-da-eleicao",
+   "data": "2018-10-01"
+  }
+ ],
+ "glossario": [
+  {
+   "termo": "election",
+   "simples": "When people vote to choose who will hold an office."
+  },
+  {
+   "termo": "general elections",
+   "simples": "The election for president, governor, senator and deputies, all on the same day."
+  },
+  {
+   "termo": "municipal elections",
+   "simples": "The election for mayor and city councilor, who take care of the cities."
+  },
+  {
+   "termo": "round",
+   "simples": "Each round of voting. Some elections have two rounds. In Portuguese: turno."
+  },
+  {
+   "termo": "voter card",
+   "simples": "The document of a person who is registered to vote. In Portuguese: título de eleitor."
+  },
+  {
+   "termo": "e-Título",
+   "simples": "An app from the Electoral Justice that keeps the voter card on a cell phone."
+  },
+  {
+   "termo": "justification",
+   "simples": "A notice to the Electoral Justice explaining why the person did not vote. In Portuguese: justificativa."
+  },
+  {
+   "termo": "optional vote",
+   "simples": "A vote that the person can choose to cast or not. In Portuguese: voto facultativo."
+  },
+  {
+   "termo": "Electoral Justice",
+   "simples": "The part of the Justice system that organizes elections and takes care of their rules. The TSE is its highest court. In Portuguese: Justiça Eleitoral."
+  },
+  {
+   "termo": "electronic voting machine",
+   "simples": "The machine we vote on. In Portuguese: urna eletrônica."
+  },
+  {
+   "termo": "polling station",
+   "simples": "The place, usually a school classroom, where a group of voters votes. In Portuguese: seção eleitoral."
+  },
+  {
+   "termo": "voting machine report",
+   "simples": "A paper that the voting machine prints at the end of voting, with the votes from that polling station. In Portuguese: boletim de urna."
+  },
+  {
+   "termo": "public security test",
+   "simples": "A test in which outside experts try to find flaws in the voting machine before the election."
+  },
+  {
+   "termo": "majoritarian system",
+   "simples": "A way of counting votes in which whoever gets the most votes wins."
+  },
+  {
+   "termo": "proportional system",
+   "simples": "A way of counting votes in which the seats are divided according to the votes of each party."
+  },
+  {
+   "termo": "party vote",
+   "simples": "A vote given only to the party's number, without choosing a candidate. In Portuguese: voto de legenda."
+  },
+  {
+   "termo": "valid votes",
+   "simples": "The votes given to candidates or to parties. Blank and null votes do not count."
+  },
+  {
+   "termo": "absolute majority",
+   "simples": "More than half."
+  },
+  {
+   "termo": "electoral quota",
+   "simples": "How many votes are worth one seat: the valid votes divided by the number of seats. In Portuguese: quociente eleitoral."
+  },
+  {
+   "termo": "leftover seats",
+   "simples": "Seats that are still free after the first division among the parties. In Portuguese: sobras."
+  },
+  {
+   "termo": "political party",
+   "simples": "A group of people with similar ideas that puts forward candidates."
+  },
+  {
+   "termo": "federation",
+   "simples": "Parties that join together for at least 4 years and act as one."
+  },
+  {
+   "termo": "coalition",
+   "simples": "A union of parties for just one election. In Portuguese: coligação."
+  },
+  {
+   "termo": "ineligible",
+   "simples": "Someone who cannot be a candidate for a period of time."
+  },
+  {
+   "termo": "collegiate body",
+   "simples": "A group of judges who decide together."
+  },
+  {
+   "termo": "election advertising",
+   "simples": "The candidates' ads asking for votes."
+  },
+  {
+   "termo": "deepfake",
+   "simples": "A fake video or audio, made by computer, that imitates a real person."
+  },
+  {
+   "termo": "AI",
+   "simples": "Artificial intelligence: a computer program that can create texts, images, videos and sounds."
+  },
+  {
+   "termo": "party member",
+   "simples": "A person who has officially joined a party."
+  },
+  {
+   "termo": "complementary law",
+   "simples": "A type of law that gives details on subjects that the Constitution says need more explanation."
+  },
+  {
+   "termo": "TSE resolution",
+   "simples": "A rule written by the TSE (Superior Electoral Court) to organize the elections."
+  }
+ ],
+ "slides": [
+  {
+   "tipo": "abertura",
+   "titulo": "Elections: the people's turn to choose",
+   "texto": "In an election, each person votes to **choose** who will decide on behalf of everyone. It is like electing the class representative, only giant-sized.",
+   "ilustracao": "urna"
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "WHEN",
+   "titulo": "There is an election every 2 years",
+   "texto": "Elections take turns: one year, it is the turn of the country and the states. Two years later, it is the cities' turn.",
+   "itens": [
+    {
+     "ic": "🇧🇷",
+     "txt": "**General elections**, like the one in 2026: president, governor, senator and deputies."
+    },
+    {
+     "ic": "🏙️",
+     "txt": "**Municipal elections**, like the one in 2024: mayor and city councilor."
+    },
+    {
+     "ic": "1️⃣",
+     "txt": "First round: on the first Sunday of October. In 2026, it was on October 4."
+    },
+    {
+     "ic": "2️⃣",
+     "txt": "Runoff (second round), when needed: on the last Sunday of October. In 2026, on October 25."
+    },
+    {
+     "ic": "⏰",
+     "txt": "Voting runs from 8 a.m. to 5 p.m., Brasília time."
+    }
+   ],
+   "emoji": "📅",
+   "fontes": [
+    "lei9504",
+    "cf-art77",
+    "cf-art28-29",
+    "tse-calendario-2026",
+    "senado-eleicoes-2024"
+   ]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "WHO VOTES",
+   "titulo": "Who votes?",
+   "texto": "To vote, a person needs a **voter card** (título de eleitor).",
+   "itens": [
+    {
+     "ic": "✅",
+     "txt": "From age 18, voting is **mandatory**."
+    },
+    {
+     "ic": "🙋",
+     "txt": "People who are 16 or 17, over 70, or cannot read have an optional vote."
+    },
+    {
+     "ic": "📱",
+     "txt": "The voter card can be kept on a cell phone, in the e-Título app."
+    },
+    {
+     "ic": "📝",
+     "txt": "People who must vote and did not vote need to justify their absence within 60 days after each round."
+    },
+    {
+     "ic": "💸",
+     "txt": "If the justification is not accepted, the person pays a fine."
+    }
+   ],
+   "emoji": "🪪",
+   "coruja": "You can justify your absence in the e-Título app itself, without leaving home.",
+   "fontes": [
+    "cf-art14",
+    "senado-eleicoes-2024",
+    "tse-justificativa"
+   ]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "THE VOTE",
+   "titulo": "How the vote is protected",
+   "itens": [
+    {
+     "ic": "🤫",
+     "txt": "The vote is **secret**: no one can see who you voted for."
+    },
+    {
+     "ic": "🗳️",
+     "txt": "The electronic voting machine (urna eletrônica) has been used in Brazil since 1996."
+    },
+    {
+     "ic": "🧾",
+     "txt": "At the end of voting, each machine prints the **voting machine report** (boletim de urna), with the votes from that polling station."
+    },
+    {
+     "ic": "🌐",
+     "txt": "The TSE (Superior Electoral Court) puts the voting machine reports on the internet. Anyone can check them."
+    },
+    {
+     "ic": "🔍",
+     "txt": "Before the election, experts test the voting machine in public to try to find flaws."
+    }
+   ],
+   "ilustracao": "urna",
+   "coruja": "The public security test for the 2026 elections took place from December 1 to 5, 2025.",
+   "fontes": [
+    "cf-art14",
+    "tse-urna",
+    "lei9504",
+    "tse-calendario-2026"
+   ]
+  },
+  {
+   "tipo": "comparar",
+   "titulo": "Two ways of counting the votes",
+   "texto": "The way depends on the **office**.",
+   "colunas": [
+    {
+     "ic": "🥇",
+     "titulo": "Majoritarian system",
+     "itens": [
+      "Whoever gets the most votes wins.",
+      "It is used for president, governor, mayor and senator.",
+      "Sometimes a runoff (second round) is needed."
+     ],
+     "exemplo": "Like the election for class representative: the one with the most votes wins."
+    },
+    {
+     "ic": "🧩",
+     "titulo": "Proportional system",
+     "itens": [
+      "It is used for deputies and city councilors.",
+      "First, the seats are divided among the parties, according to the votes of each one.",
+      "Then, the candidates with the most votes in each party get the seats.",
+      "You can vote just for the party's number: this is the party vote."
+     ],
+     "exemplo": "Like dividing the places in a tournament among the classes, according to the size of each class."
+    }
+   ],
+   "fontes": [
+    "cf-art45-46",
+    "cf-art77",
+    "cf-art28-29",
+    "codigo-eleitoral",
+    "lei9504",
+    "senado-eleicoes-2024"
+   ]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "RUNOFF",
+   "titulo": "When is there a runoff?",
+   "texto": "It can only happen for president, governor and mayor of a city with more than 200,000 voters.",
+   "itens": [
+    {
+     "ic": "🧮",
+     "txt": "To win in the first round, a candidate needs **more than half** of the valid votes."
+    },
+    {
+     "ic": "✅",
+     "txt": "Valid votes are the ones given to candidates. Blank and null votes are left out."
+    },
+    {
+     "ic": "🔁",
+     "txt": "If no one gets there, the 2 candidates with the most votes compete in a runoff."
+    },
+    {
+     "ic": "🏆",
+     "txt": "In the runoff, whoever gets the most valid votes wins."
+    },
+    {
+     "ic": "🏘️",
+     "txt": "In a city with up to 200,000 voters, the mayoral candidate with the most votes wins in the first round."
+    }
+   ],
+   "emoji": "🔁",
+   "fontes": [
+    "cf-art77",
+    "cf-art28-29",
+    "lei9504",
+    "senado-eleicoes-2024"
+   ]
+  },
+  {
+   "tipo": "simulador",
+   "id": "quociente",
+   "titulo": "Simulator: how the seats are divided",
+   "texto": "A make-believe city is going to elect 10 city councilors. Together, the parties got 1,000 valid votes.",
+   "cadeiras": 10,
+   "partidos": [
+    {
+     "nome": "Circle Party",
+     "votos": 420
+    },
+    {
+     "nome": "Square Party",
+     "votos": 270
+    },
+    {
+     "nome": "Triangle Party",
+     "votos": 190
+    },
+    {
+     "nome": "Diamond Party",
+     "votos": 120
+    }
+   ],
+   "passos": [
+    "Electoral quota = valid votes ÷ seats. Here: 1,000 ÷ 10 = **100 votes** per seat.",
+    "Each party gets 1 seat for every 100 votes: Circle 4, Square 2, Triangle 1 and Diamond 1. That is already 8 seats.",
+    "2 seats are left over. They go to the highest averages. The average is: the party's votes ÷ (seats it already has + 1).",
+    "1st leftover seat: Circle 420 ÷ 5 = 84. Square 270 ÷ 3 = 90. Triangle 190 ÷ 2 = 95. Diamond 120 ÷ 2 = 60. It goes to Triangle.",
+    "2nd leftover seat: Triangle's average drops to 190 ÷ 3 = 63.3. The highest now is Square's (90). It goes to Square.",
+    "Result: Circle 4, Square 3, Triangle 2 and Diamond 1. In each party, the candidates with the most votes get the seats.",
+    "Extra rule: for the seats from the first division, a candidate needs at least 10% of the quota (here, 10 votes).",
+    "For the leftover seats, at first only parties with 80% of the quota and candidates with 20% compete. If there are still seats left, all parties take part, as the STF decided in 2024."
+   ],
+   "fontes": [
+    "codigo-eleitoral",
+    "tse-quociente",
+    "stf-sobras-2024",
+    "stf-sobras-2025"
+   ]
+  },
+  {
+   "tipo": "cards",
+   "etiqueta": "BEFORE THE VOTE",
+   "titulo": "Parties, candidates and campaigns",
+   "texto": "Before the vote, there are rules for people who want to be candidates and for the campaign.",
+   "cards": [
+    {
+     "ic": "🎽",
+     "titulo": "Party",
+     "txt": "A group of people with similar ideas. In Brazil, you can only run for office through a party.",
+     "dados": [
+      {
+       "rot": "Candidate without a party",
+       "val": "not allowed"
+      }
+     ],
+     "mais": "The Constitution requires every candidate to be a party member (art. 14, § 3)."
+    },
+    {
+     "ic": "🤝",
+     "titulo": "Federation",
+     "txt": "Two or more parties can join together and act as if they were just one.",
+     "dados": [
+      {
+       "rot": "Minimum length",
+       "val": "4 years"
+      }
+     ],
+     "mais": "A coalition, on the other hand, is a union just for the election. Since 2020, coalitions are not allowed in elections for deputies and city councilors."
+    },
+    {
+     "ic": "📋",
+     "titulo": "Candidacy",
+     "txt": "The parties ask the Electoral Justice (Justiça Eleitoral) to register their candidates.",
+     "dados": [
+      {
+       "rot": "Deadline",
+       "val": "by August 15"
+      }
+     ]
+    },
+    {
+     "ic": "🧼",
+     "titulo": "Clean Record (Ficha Limpa)",
+     "txt": "People with certain convictions decided by a group of judges become **ineligible** for 8 years or more.",
+     "dados": [
+      {
+       "rot": "Law",
+       "val": "from 2010, changed in 2025"
+      }
+     ],
+     "mais": "In 2025, Complementary Law 219 changed how this time is counted. In many cases, the 8 years count from the conviction. In others, the person is ineligible from the conviction until 8 years after serving the sentence."
+    },
+    {
+     "ic": "📢",
+     "titulo": "Campaign",
+     "txt": "Election advertising can only start on August 16. On radio and TV, there is free airtime before the election.",
+     "dados": [
+      {
+       "rot": "Start",
+       "val": "August 16"
+      }
+     ],
+     "mais": "Paid political advertising on radio and television is forbidden."
+    },
+    {
+     "ic": "🛡️",
+     "titulo": "Against lies",
+     "txt": "It is forbidden to use false or manipulated content in election advertising, like a **deepfake**. Anything made with AI must be labeled.",
+     "mais": "These rules are in a TSE resolution (Resolution 23,610/2019). Anyone who breaks them can face the courts."
+    }
+   ],
+   "fontes": [
+    "cf-art14",
+    "cf-art17",
+    "lei14208",
+    "lei9504",
+    "lcp135",
+    "lcp64",
+    "lcp219",
+    "res-tse-23610",
+    "tse-quociente"
+   ]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "BLANK AND NULL",
+   "titulo": "What about blank or null votes?",
+   "texto": "Both are allowed. See what happens to them.",
+   "itens": [
+    {
+     "ic": "⬜",
+     "txt": "Blank vote: the person presses the BRANCO (blank) key and then confirms."
+    },
+    {
+     "ic": "❌",
+     "txt": "Null vote: the person types a number that does not belong to any candidate and confirms."
+    },
+    {
+     "ic": "➖",
+     "txt": "Both are **left out** of the count of valid votes."
+    },
+    {
+     "ic": "🚫",
+     "txt": "They do not cancel the election, even if there are many of them."
+    },
+    {
+     "ic": "⚠️",
+     "txt": "An election is only held again by a court decision, when there are problems like fraud."
+    }
+   ],
+   "emoji": "🤔",
+   "fontes": [
+    "tse-voto-nulo",
+    "tse-voto-branco",
+    "senado-nulo",
+    "lei9504",
+    "codigo-eleitoral"
+   ]
+  },
+  {
+   "tipo": "quiz",
+   "pergunta": "In an election, half of the people voted null. What happens?",
+   "opcoes": [
+    "The election is canceled",
+    "Null votes do not count, and the result of the valid votes stands",
+    "Whoever voted null must vote again"
+   ],
+   "certa": 1,
+   "explica": "Null votes and blank votes are not counted as valid votes. They do not cancel the election.",
+   "fontes": [
+    "senado-nulo",
+    "tse-voto-nulo"
+   ]
+  }
+ ]
+}

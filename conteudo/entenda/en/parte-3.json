@@ -1,0 +1,666 @@
+{
+ "parte": 3,
+ "ic": "🧱",
+ "nome": "Country, state and city",
+ "resumo": "How Brazil is divided into the Union, the states and the municipalities, and who takes care of each thing near you.",
+ "fontes": [
+  {
+   "id": "cf-art1",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 1 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art18",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 18 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art21",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 21 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art23",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 23 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art25",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 25 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art29",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 29 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art30",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 30 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art32",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 32 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art142",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 142 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art144",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 144 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art145",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 145 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art149a",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 149-A (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art198",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 198 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art211",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 211 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "lei-8080",
+   "veiculo": "Planalto",
+   "titulo": "Law No. 8,080/1990 (SUS Law), arts. 4, 17 and 18 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/leis/l8080.htm",
+   "data": "1990-09-19",
+   "lang": "en"
+  },
+  {
+   "id": "lei-11445",
+   "veiculo": "Planalto",
+   "titulo": "Law No. 11,445/2007 (basic sanitation), arts. 3 and 8 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/_ato2007-2010/2007/lei/l11445.htm",
+   "data": "2007-01-05",
+   "lang": "en"
+  },
+  {
+   "id": "lei-6766",
+   "veiculo": "Planalto",
+   "titulo": "Law No. 6,766/1979, art. 22 (streets and squares become property of the municipality) (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/leis/l6766.htm",
+   "data": "1979-12-19",
+   "lang": "en"
+  },
+  {
+   "id": "ldb",
+   "veiculo": "Planalto",
+   "titulo": "Law No. 9,394/1996 (National Education Guidelines and Bases Law), arts. 10, 11 and 30 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/leis/l9394.htm",
+   "data": "1996-12-20",
+   "lang": "en"
+  },
+  {
+   "id": "ms-sus",
+   "veiculo": "Ministério da Saúde",
+   "titulo": "Sistema Único de Saúde (SUS) (in Portuguese)",
+   "url": "https://www.gov.br/saude/pt-br/sus",
+   "data": "2026-10-15"
+  },
+  {
+   "id": "gov-passaporte",
+   "veiculo": "Polícia Federal (gov.br)",
+   "titulo": "Obter passaporte (in Portuguese)",
+   "url": "https://www.gov.br/pt-br/servicos/obter-passaporte-comum-para-brasileiro",
+   "data": "2026-10-07"
+  },
+  {
+   "id": "inss",
+   "veiculo": "INSS (gov.br)",
+   "titulo": "Institutional page: history and duties of the INSS (in Portuguese)",
+   "url": "https://www.gov.br/inss/pt-br/acesso-a-informacao/institucional/institucional",
+   "data": "2026-10-01",
+   "lang": "en"
+  },
+  {
+   "id": "ab-municipios",
+   "veiculo": "Agência Brasil",
+   "titulo": "IBGE atualiza limites territoriais do Brasil; veja o que mudou (in Portuguese)",
+   "url": "https://agenciabrasil.ebc.com.br/geral/noticia/2026-03/ibge-atualiza-limites-territoriais-do-brasil-veja-o-que-mudou",
+   "data": "2026-03-30"
+  },
+  {
+   "id": "ab-populacao",
+   "veiculo": "Agência Brasil",
+   "titulo": "Crescimento populacional caiu para 0,37% em 2026, estima IBGE (in Portuguese)",
+   "url": "https://agenciabrasil.ebc.com.br/economia/noticia/2026-08/crescimento-populacional-caiu-para-037-em-2026-estima-ibge",
+   "data": "2026-08-28"
+  },
+  {
+   "id": "plen-republica",
+   "veiculo": "Plenarinho (Câmara dos Deputados)",
+   "titulo": "O que é a República Federativa do Brasil (in Portuguese)",
+   "url": "https://plenarinho.leg.br/index.php/2018/11/o-que-e-a-republica-federativa-do-brasil/",
+   "data": "2018-11-12"
+  },
+  {
+   "id": "plen-governador",
+   "veiculo": "Plenarinho (Câmara dos Deputados)",
+   "titulo": "A Turma explica as eleições – Governadores (in Portuguese)",
+   "url": "https://plenarinho.leg.br/index.php/2022/08/turma-explica-eleicoes-governadores/",
+   "data": "2022-08-29"
+  },
+  {
+   "id": "plen-tres-poderes",
+   "veiculo": "Plenarinho (Câmara dos Deputados)",
+   "titulo": "Os Três Poderes (in Portuguese)",
+   "url": "https://plenarinho.leg.br/index.php/2017/09/os-tres-poderes/",
+   "data": "2017-09-07"
+  },
+  {
+   "id": "ibge-dtb",
+   "veiculo": "IBGE",
+   "titulo": "Brazilian Territorial Division (in Portuguese)",
+   "url": "https://www.ibge.gov.br/geociencias/organizacao-do-territorio/estrutura-territorial/23701-divisao-territorial-brasileira.html",
+   "data": "2026-03-30",
+   "lang": "en"
+  },
+  {
+   "id": "ibge-estimativas",
+   "veiculo": "IBGE",
+   "titulo": "Population estimates for municipalities and states (in Portuguese)",
+   "url": "https://www.ibge.gov.br/estatisticas/sociais/populacao/9103-estimativas-de-populacao.html",
+   "data": "2026-08-28",
+   "lang": "en"
+  }
+ ],
+ "glossario": [
+  {
+   "termo": "federation",
+   "simples": "A way of organizing a country into parts that have their own governments but stay united."
+  },
+  {
+   "termo": "autonomous",
+   "simples": "Having its own tasks, laws and money."
+  },
+  {
+   "termo": "organic law",
+   "simples": "The highest law of a municipality or of the Federal District. In Portuguese: lei orgânica."
+  },
+  {
+   "termo": "Legislative Chamber",
+   "simples": "Where the district deputies work. They make the laws of the Federal District. In Portuguese: Câmara Legislativa."
+  },
+  {
+   "termo": "district deputies",
+   "simples": "People elected to make the laws of the Federal District. In Portuguese: deputados distritais."
+  },
+  {
+   "termo": "IBGE",
+   "simples": "Instituto Brasileiro de Geografia e Estatística (Brazilian Institute of Geography and Statistics), the agency that counts and studies Brazil's population and territory."
+  },
+  {
+   "termo": "INSS",
+   "simples": "Instituto Nacional do Seguro Social (National Social Security Institute), the federal agency that pays retirement pensions and other benefits."
+  },
+  {
+   "termo": "retirement pension",
+   "simples": "Money paid every month to people who worked and paid contributions for many years, for example when they reach a certain age."
+  },
+  {
+   "termo": "Federal Police",
+   "simples": "A police force run by the Union. It also takes care of the borders and issues passports."
+  },
+  {
+   "termo": "passport",
+   "simples": "A document used to travel to other countries."
+  },
+  {
+   "termo": "Armed Forces",
+   "simples": "The Navy, the Army and the Air Force, which take care of the country's defense."
+  },
+  {
+   "termo": "SUS",
+   "simples": "Sistema Único de Saúde (Unified Health System): free public health care all over Brazil."
+  },
+  {
+   "termo": "city government",
+   "simples": "The government of the city, headed by the mayor. In Portuguese: prefeitura."
+  },
+  {
+   "termo": "governor",
+   "simples": "A person elected to head the government of a state or of the Federal District."
+  },
+  {
+   "termo": "Federal District",
+   "simples": "The part of Brazil where Brasília is; it is neither a state nor a municipality. In Portuguese: Distrito Federal (DF)."
+  },
+  {
+   "termo": "Union",
+   "simples": "The government of the whole of Brazil, also called the federal government. In Portuguese: União."
+  },
+  {
+   "termo": "municipality",
+   "simples": "A city, with its neighborhoods and the countryside around it, and with its own government. In Portuguese: município."
+  },
+  {
+   "termo": "state",
+   "simples": "Each of the 26 large parts of Brazil, with its own government."
+  }
+ ],
+ "slides": [
+  {
+   "tipo": "abertura",
+   "titulo": "Brazil is like a three-story building",
+   "texto": "The floors are the Union (the whole country), the states and the municipalities (the cities). This is called a **federation**.",
+   "ilustracao": "niveis"
+  },
+  {
+   "tipo": "cards",
+   "etiqueta": "FEDERATION",
+   "titulo": "Each floor has its own government",
+   "texto": "The three are **autonomous**: each one has its own tasks, its own laws and its own money.",
+   "cards": [
+    {
+     "ic": "🇧🇷",
+     "titulo": "Union",
+     "txt": "It is the government of the whole of Brazil, also called the federal government.",
+     "dados": [
+      {
+       "rot": "Who governs",
+       "val": "President"
+      },
+      {
+       "rot": "Who makes the laws",
+       "val": "National Congress"
+      }
+     ],
+     "mais": "The Constitution says that the union of the states, the municipalities and the Federal District cannot be undone. No state can break away from Brazil."
+    },
+    {
+     "ic": "🗺️",
+     "titulo": "States",
+     "txt": "Each state has its own government and even its own Constitution.",
+     "dados": [
+      {
+       "rot": "Who governs",
+       "val": "Governor"
+      },
+      {
+       "rot": "Who makes the laws",
+       "val": "Legislative Assembly"
+      }
+     ],
+     "mais": "Each state's Constitution must respect the Constitution of Brazil."
+    },
+    {
+     "ic": "🏘️",
+     "titulo": "Municipalities",
+     "txt": "They are the cities, with their neighborhoods and the countryside around them.",
+     "dados": [
+      {
+       "rot": "Who governs",
+       "val": "Mayor"
+      },
+      {
+       "rot": "Who makes the laws",
+       "val": "City Council"
+      }
+     ],
+     "mais": "The highest law of each municipality is called the organic law (lei orgânica). It is approved by the city councilors (vereadores)."
+    }
+   ],
+   "fontes": [
+    "cf-art1",
+    "cf-art18",
+    "cf-art25",
+    "cf-art29",
+    "cf-art145",
+    "plen-republica",
+    "plen-tres-poderes"
+   ]
+  },
+  {
+   "tipo": "numeros",
+   "titulo": "Brazil in numbers",
+   "texto": "See how many parts Brazil is divided into and how many people live here.",
+   "numeros": [
+    {
+     "val": "26",
+     "rot": "states",
+     "ic": "🗺️"
+    },
+    {
+     "val": "1",
+     "rot": "Federal District",
+     "ic": "⭐"
+    },
+    {
+     "val": "5,569",
+     "rot": "municipalities",
+     "ic": "🏘️"
+    },
+    {
+     "val": "214.2",
+     "rot": "million people",
+     "ic": "👨‍👩‍👧‍👦"
+    }
+   ],
+   "nota": "Numbers from the **IBGE**, Brazil's statistics institute. Municipalities: count from March 2026. People: estimate for July 1, 2026. Fernando de Noronha (an island in the state of Pernambuco) is not a municipality: it is a district of the state.",
+   "fontes": [
+    "plen-republica",
+    "ibge-dtb",
+    "ibge-estimativas",
+    "ab-municipios",
+    "ab-populacao"
+   ]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "UNION",
+   "titulo": "What does the Union take care of?",
+   "texto": "The **Union** takes care of what applies to the whole of Brazil.",
+   "itens": [
+    {
+     "ic": "💵",
+     "txt": "It makes the country's money: the bills and the coins."
+    },
+    {
+     "ic": "🪖",
+     "txt": "It commands the Armed Forces: the Navy, the Army and the Air Force."
+    },
+    {
+     "ic": "🌎",
+     "txt": "It talks and makes agreements with other countries."
+    },
+    {
+     "ic": "🛂",
+     "txt": "It runs the Federal Police, which also issues passports."
+    },
+    {
+     "ic": "👵",
+     "txt": "It pays the retirement pensions of the INSS, the National Social Security Institute."
+    }
+   ],
+   "ilustracao": "palacio",
+   "coruja": "Federal universities are also run by the Union.",
+   "fontes": [
+    "cf-art21",
+    "cf-art142",
+    "cf-art144",
+    "gov-passaporte",
+    "inss",
+    "cf-art211"
+   ]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "STATE",
+   "titulo": "What does the state take care of?",
+   "texto": "The state government is headed by the **governor**.",
+   "itens": [
+    {
+     "ic": "🚓",
+     "txt": "The Military Police and the Civil Police (both are state police forces) and the Fire Department."
+    },
+    {
+     "ic": "🏫",
+     "txt": "State schools, mostly high schools."
+    },
+    {
+     "ic": "🏥",
+     "txt": "State hospitals, which are part of the SUS."
+    },
+    {
+     "ic": "🔒",
+     "txt": "State prisons, which are guarded by the state's prison police."
+    }
+   ],
+   "ilustracao": "mapa",
+   "coruja": "Elementary and middle school is shared: the state and the city take care of it together.",
+   "fontes": [
+    "cf-art144",
+    "cf-art211",
+    "ldb",
+    "lei-8080",
+    "plen-governador"
+   ]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "CITY",
+   "titulo": "What does the city take care of?",
+   "texto": "The **city government** (prefeitura) is headed by the mayor. It takes care of what is closest to you.",
+   "itens": [
+    {
+     "ic": "🧸",
+     "txt": "Daycare centers, preschools and elementary schools."
+    },
+    {
+     "ic": "🩺",
+     "txt": "Health clinics."
+    },
+    {
+     "ic": "🗑️",
+     "txt": "Garbage collection and street cleaning."
+    },
+    {
+     "ic": "🚌",
+     "txt": "The buses that run inside the city."
+    },
+    {
+     "ic": "💡",
+     "txt": "Streets, squares and streetlights."
+    }
+   ],
+   "ilustracao": "predio",
+   "coruja": "For many of these tasks, the city gets help from the state and the Union.",
+   "fontes": [
+    "cf-art30",
+    "cf-art211",
+    "ldb",
+    "ms-sus",
+    "lei-11445",
+    "lei-6766",
+    "cf-art149a"
+   ]
+  },
+  {
+   "tipo": "simulador",
+   "id": "quem-cuida",
+   "titulo": "Who takes care of this?",
+   "texto": "For each thing, choose: the country (Union), the state, the city or all together.",
+   "itens": [
+    {
+     "ic": "🕳️",
+     "txt": "A pothole in the street where you live",
+     "quem": "cidade",
+     "explica": "Neighborhood streets belong to the municipality. The city government fixes them."
+    },
+    {
+     "ic": "🚓",
+     "txt": "Military Police",
+     "quem": "estado",
+     "explica": "The Military Police (PM), which patrols the streets, is under the command of the state governor."
+    },
+    {
+     "ic": "🛂",
+     "txt": "A passport to travel",
+     "quem": "pais",
+     "explica": "Passports are issued by the Federal Police, which is run by the Union."
+    },
+    {
+     "ic": "🩺",
+     "txt": "The neighborhood health clinic",
+     "quem": "cidade",
+     "explica": "The city takes care of it, with help from the state and the Union."
+    },
+    {
+     "ic": "🎓",
+     "txt": "Federal university",
+     "quem": "pais",
+     "explica": "Federal universities are run by the Union."
+    },
+    {
+     "ic": "🏫",
+     "txt": "Public high school",
+     "quem": "estado",
+     "explica": "Public high schools are mainly the job of the states."
+    },
+    {
+     "ic": "🗑️",
+     "txt": "Garbage collection",
+     "quem": "cidade",
+     "explica": "Collecting the garbage from homes is a job of the municipality."
+    },
+    {
+     "ic": "👵",
+     "txt": "INSS retirement pension",
+     "quem": "pais",
+     "explica": "The INSS is a federal agency: it pays the retirement pensions."
+    },
+    {
+     "ic": "🏥",
+     "txt": "SUS, the public health system",
+     "quem": "todos",
+     "explica": "The SUS is run by the Union, the states and the cities, together."
+    },
+    {
+     "ic": "🌳",
+     "txt": "Protecting forests and animals",
+     "quem": "todos",
+     "explica": "The Constitution gives this job to everyone: the Union, the states and the cities."
+    }
+   ],
+   "fontes": [
+    "lei-6766",
+    "cf-art30",
+    "cf-art144",
+    "gov-passaporte",
+    "cf-art211",
+    "lei-11445",
+    "inss",
+    "cf-art198",
+    "lei-8080",
+    "ms-sus",
+    "cf-art23"
+   ]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "FEDERAL DISTRICT",
+   "titulo": "The Federal District is different",
+   "texto": "The **Federal District** (Distrito Federal, DF) is neither a state nor a municipality. It has a bit of both.",
+   "itens": [
+    {
+     "ic": "🚫",
+     "txt": "It cannot be divided into municipalities. That is why it has no mayor and no city councilors."
+    },
+    {
+     "ic": "🧑‍💼",
+     "txt": "It is governed by the governor of the DF, who is elected together with the state governors."
+    },
+    {
+     "ic": "📜",
+     "txt": "The DF's laws are made by district deputies, in the Legislative Chamber (Câmara Legislativa)."
+    },
+    {
+     "ic": "🔁",
+     "txt": "The DF does the work of a state and of a city at the same time."
+    },
+    {
+     "ic": "⭐",
+     "txt": "Brasília, the capital of Brazil, is in the DF."
+    }
+   ],
+   "emoji": "🏙️",
+   "coruja": "Fun fact: it is the Union that organizes and pays for the courts and the police of the DF.",
+   "fontes": [
+    "cf-art32",
+    "cf-art18",
+    "cf-art21",
+    "plen-governador",
+    "plen-tres-poderes"
+   ]
+  },
+  {
+   "tipo": "quiz",
+   "pergunta": "If the street where you live has a pothole, who should fix it?",
+   "opcoes": [
+    "The President of the Republic",
+    "The state government",
+    "Your city government"
+   ],
+   "certa": 2,
+   "explica": "Neighborhood streets belong to the municipality, so the city government fixes them. Big roads (highways) may belong to the state or to the Union.",
+   "fontes": [
+    "lei-6766",
+    "cf-art30",
+    "cf-art144",
+    "plen-governador"
+   ]
+  },
+  {
+   "tipo": "quiz",
+   "pergunta": "Does the Federal District have a mayor?",
+   "opcoes": [
+    "Yes, one in each neighborhood",
+    "No, because the DF cannot be divided into municipalities",
+    "Yes, but only in Brasília"
+   ],
+   "certa": 1,
+   "explica": "The Constitution forbids dividing the DF into municipalities. The DF is governed by the governor of the DF.",
+   "fontes": [
+    "cf-art32"
+   ]
+  }
+ ]
+}

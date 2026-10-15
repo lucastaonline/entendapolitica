@@ -9,84 +9,96 @@
    "veiculo": "Planalto",
    "titulo": "Federal Constitution, art. 2 (in Portuguese)",
    "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
-   "data": "1988-10-05"
+   "data": "1988-10-05",
+   "lang": "en"
   },
   {
    "id": "cf-art18",
    "veiculo": "Planalto",
    "titulo": "Federal Constitution, art. 18 (Brasília is the capital) (in Portuguese)",
    "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
-   "data": "1988-10-05"
+   "data": "1988-10-05",
+   "lang": "en"
   },
   {
    "id": "cf-art44",
    "veiculo": "Planalto",
    "titulo": "Federal Constitution, art. 44 (in Portuguese)",
    "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
-   "data": "1988-10-05"
+   "data": "1988-10-05",
+   "lang": "en"
   },
   {
    "id": "cf-art60",
    "veiculo": "Planalto",
    "titulo": "Federal Constitution, art. 60, § 4 (in Portuguese)",
    "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
-   "data": "1988-10-05"
+   "data": "1988-10-05",
+   "lang": "en"
   },
   {
    "id": "cf-art66",
    "veiculo": "Planalto",
    "titulo": "Federal Constitution, art. 66 (sanction and veto) (in Portuguese)",
    "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
-   "data": "1988-10-05"
+   "data": "1988-10-05",
+   "lang": "en"
   },
   {
    "id": "cf-art76",
    "veiculo": "Planalto",
    "titulo": "Federal Constitution, art. 76 (in Portuguese)",
    "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
-   "data": "1988-10-05"
+   "data": "1988-10-05",
+   "lang": "en"
   },
   {
    "id": "cf-art92",
    "veiculo": "Planalto",
    "titulo": "Federal Constitution, art. 92 (in Portuguese)",
    "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
-   "data": "1988-10-05"
+   "data": "1988-10-05",
+   "lang": "en"
   },
   {
    "id": "cf-art101",
    "veiculo": "Planalto",
    "titulo": "Federal Constitution, art. 101 (in Portuguese)",
    "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
-   "data": "1988-10-05"
+   "data": "1988-10-05",
+   "lang": "en"
   },
   {
    "id": "cf-art102",
    "veiculo": "Planalto",
    "titulo": "Federal Constitution, art. 102 (in Portuguese)",
    "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
-   "data": "1988-10-05"
+   "data": "1988-10-05",
+   "lang": "en"
   },
   {
    "id": "cf-art125",
    "veiculo": "Planalto",
    "titulo": "Federal Constitution, art. 125 (in Portuguese)",
    "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
-   "data": "1988-10-05"
+   "data": "1988-10-05",
+   "lang": "en"
   },
   {
    "id": "cf-impeachment",
    "veiculo": "Planalto",
    "titulo": "Federal Constitution, arts. 51, 52, 85 and 86 (impeachment) (in Portuguese)",
    "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
-   "data": "1988-10-05"
+   "data": "1988-10-05",
+   "lang": "en"
   },
   {
    "id": "cf-estados-cidades",
    "veiculo": "Planalto",
    "titulo": "Federal Constitution, arts. 27, 28, 29 and 31 (states and municipalities) (in Portuguese)",
    "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
-   "data": "1988-10-05"
+   "data": "1988-10-05",
+   "lang": "en"
   },
   {
    "id": "plen-tres-poderes",
@@ -136,6 +148,14 @@
    "titulo": "Vereador e prefeito – quem faz o quê? (in Portuguese)",
    "url": "https://plenarinho.leg.br/index.php/2024/03/eleicoes-municipais-vem-ai/",
    "data": "2024-03-06"
+  },
+  {
+   "id": "cf-art52",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 52, II and sole paragraph (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
   }
  ],
  "glossario": [
@@ -374,6 +394,10 @@
      "txt": "The president chooses the STF ministers (its judges), but the Senate must approve them."
     },
     {
+     "ic": "🏛️",
+     "txt": "The Senate can also put STF ministers (the court's judges) on trial for a \"crime of responsibility\" (serious misconduct in office) and, if they are convicted, remove them from office."
+    },
+    {
      "ic": "🚨",
      "txt": "In very serious cases, the Chamber of Deputies and the Senate can remove the president from office. This is **impeachment**."
     }
@@ -384,6 +408,7 @@
     "cf-art66",
     "cf-art101",
     "cf-art102",
+    "cf-art52",
     "cf-impeachment",
     "plen-vogel",
     "plen-governador",

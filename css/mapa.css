@@ -48,6 +48,9 @@ body.mapa-pag { height: 100vh; height: 100dvh; overflow: hidden; display: grid; 
 .cartaz { line-height: 1; font-size: var(--t, 64px); transform: translateZ(var(--h, 0px)) rotateZ(calc(-1 * var(--az))) rotateX(calc(-1 * var(--ax))) translate(-50%, -100%);
   filter: drop-shadow(0 6px 4px rgba(40, 60, 20, .2)); }
 .nuvem { animation: nuvemAnda var(--dur, 90s) linear infinite; animation-delay: var(--atraso, 0s); }
+/* as nuvens voam alto e passam na frente das placas: translúcidas para não esconder o texto; no celular, nada de nuvem */
+.nuvem .cartaz { opacity: .55; }
+.estreito .nuvem { display: none; }
 @keyframes nuvemAnda { from { left: -150px; } to { left: 1150px; } }
 .andarilho .cartaz { font-size: 46px; }
 .andarilho.volta .cartaz span { display: inline-block; transform: scaleX(-1); }
@@ -96,9 +99,10 @@ body.mapa-pag { height: 100vh; height: 100dvh; overflow: hidden; display: grid; 
 /* ---------- interface por cima do mapa ---------- */
 .mapa-ui { position: absolute; inset: 0; pointer-events: none; z-index: 5; }
 .mapa-ui > * { pointer-events: auto; }
-.mapa-titulo { position: absolute; left: 16px; top: 14px; max-width: min(460px, calc(100% - 32px)); background: rgba(255, 255, 255, .92); border: 2px solid var(--line); border-radius: 20px; padding: 12px 16px; box-shadow: var(--sombra); }
-.mapa-titulo h1 { font-size: clamp(1.3rem, 3.4vw, 1.9rem); margin: 0 0 4px; }
-.mapa-titulo p { margin: 0; font-size: .92rem; color: #384150; }
+.mapa-titulo { position: absolute; left: 16px; top: 14px; max-width: min(460px, calc(100% - 32px)); background: rgba(255, 255, 255, .92); border: 2px solid var(--line); border-radius: 20px; padding: 8px 16px; box-shadow: var(--sombra); }
+.mapa-titulo h1 { font-size: clamp(1.3rem, 3.4vw, 1.9rem); margin: 0; }
+/* a explicação fica para leitores de tela; na tela, quem explica é a coruja (assim o quadro não cobre as placas) */
+.mapa-titulo p { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; margin: 0; }
 .coruja-mapa { position: absolute; left: 16px; bottom: 16px; max-width: min(430px, calc(100% - 32px)); display: flex; gap: 12px; align-items: flex-end; }
 .coruja-mapa .coruja-ic { font-size: 3.4rem; line-height: 1; animation: corujaBalanca 3s ease-in-out infinite; flex-shrink: 0; }
 @keyframes corujaBalanca { 50% { transform: rotate(-8deg) translateY(-3px); } }
@@ -125,7 +129,6 @@ body.mapa-pag { height: 100vh; height: 100dvh; overflow: hidden; display: grid; 
 @media (max-width: 760px) {
   .mapa-titulo { padding: 6px 12px; border-radius: 14px; left: 10px; top: 10px; }
   .mapa-titulo h1 { font-size: 1.15rem; margin: 0; }
-  .mapa-titulo p { display: none; }
   .coruja-mapa { bottom: 76px; left: 10px; right: 10px; max-width: none; gap: 8px; }
   .coruja-mapa .coruja-ic { font-size: 2.2rem; }
   .coruja-mapa .bolha { font-size: .8rem; padding: 8px 10px; border-width: 2px; }

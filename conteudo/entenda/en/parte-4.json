@@ -1,0 +1,833 @@
+{
+ "parte": 4,
+ "ic": "👔",
+ "nome": "Each office, one by one",
+ "resumo": "Who does what: president, governor, mayor, senator, deputies and city councilor, with term of office, minimum age, salary and party.",
+ "fontes": [
+  {
+   "id": "cf-art14",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 14, § 3 (V and VI) and § 5 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art17",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 17 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art27",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 27 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art28",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 28 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art29",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 29 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art32",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 32 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art37",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 37, XI (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art44",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 44 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art45",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 45 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art46",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 46 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art49",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 49, VII and VIII (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art56",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 56 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art77",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 77 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art79",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 79 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art82",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 82 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art76-84-87",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, arts. 76, 84 (I and XIII) and 87 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art101",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 101 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art144",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 144, § 6 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "camara-reeleicao",
+   "veiculo": "Câmara dos Deputados",
+   "titulo": "Glossary: re-election (members of legislatures can be re-elected with no limit) (in Portuguese)",
+   "url": "https://www2.camara.leg.br/a-camara/estruturaadm/gestao-na-camara-dos-deputados/responsabilidade-social-e-ambiental/acessibilidade/glossarios/dicionario-de-libras/r/reeleicao",
+   "data": "2026-10-15",
+   "lang": "en"
+  },
+  {
+   "id": "ce-sp",
+   "veiculo": "Assembleia Legislativa de São Paulo",
+   "titulo": "Constitution of the State of São Paulo, art. 47, VI (example: the governor appoints the secretaries) (in Portuguese)",
+   "url": "https://www.al.sp.gov.br/repositorio/legislacao/constituicao/1989/compilacao-constituicao-0-05.10.1989.html",
+   "data": "1989-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "lom-sp",
+   "veiculo": "Prefeitura de São Paulo",
+   "titulo": "Organic Law of the Municipality of São Paulo, art. 69, V (example: the mayor appoints the secretaries) (in Portuguese)",
+   "url": "https://prefeitura.sp.gov.br/cidade/secretarias/upload/LOM.pdf",
+   "data": "1990-04-06",
+   "lang": "en"
+  },
+  {
+   "id": "codigo-eleitoral",
+   "veiculo": "Planalto",
+   "titulo": "Electoral Code (Law 4,737/1965), arts. 84 and 112 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/leis/l4737compilado.htm",
+   "data": "1965-07-15",
+   "lang": "en"
+  },
+  {
+   "id": "lei-partidos",
+   "veiculo": "Planalto",
+   "titulo": "Political Parties Law (Law 9,096/1995), art. 11-A (party federations) (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/leis/l9096.htm",
+   "data": "1995-09-19",
+   "lang": "en"
+  },
+  {
+   "id": "cn-suplente",
+   "veiculo": "Congresso Nacional",
+   "titulo": "Glossário de Termos Legislativos: Suplente de Deputado Federal (in Portuguese)",
+   "url": "https://www.congressonacional.leg.br/legislacao-e-publicacoes/glossario-legislativo/-/legislativo/termo/suplente_de_deputado_federal",
+   "data": "2026-10-15"
+  },
+  {
+   "id": "dl-172",
+   "veiculo": "Câmara dos Deputados",
+   "titulo": "Legislative Decree 172/2022: official salaries of deputies, senators, president, vice president and ministers (R$ 46,366.19 since February 1, 2025) (in Portuguese)",
+   "url": "https://www2.camara.leg.br/legin/fed/decleg/2022/decretolegislativo-172-21-dezembro-2022-793529-publicacaooriginal-166604-pl.html",
+   "data": "2022-12-21",
+   "lang": "en"
+  },
+  {
+   "id": "camara-salario",
+   "veiculo": "Câmara dos Deputados",
+   "titulo": "Salary of federal deputies and deductions for absences (in Portuguese)",
+   "url": "https://www2.camara.leg.br/comunicacao/assessoria-de-imprensa/guia-para-jornalistas/salario-de-deputados",
+   "data": "2026-10-15",
+   "lang": "en"
+  },
+  {
+   "id": "senado-salario",
+   "veiculo": "Senado Federal",
+   "titulo": "Perguntas frequentes: Quanto ganha um senador? (in Portuguese)",
+   "url": "https://www12.senado.leg.br/perguntas-frequentes/canais-de-atendimento/gestao-de-pessoas/quanto-ganha-um-senador",
+   "data": "2026-10-15"
+  },
+  {
+   "id": "valor-senador-2026",
+   "veiculo": "Valor Econômico",
+   "titulo": "Quanto ganha um senador? (amount in force in October 2026) (in Portuguese)",
+   "url": "https://valor.globo.com/politica/eleicoes-2026/noticia/2026/10/04/quanto-ganha-um-senador.ghtml",
+   "data": "2026-10-04",
+   "lang": "en"
+  },
+  {
+   "id": "lei-14520",
+   "veiculo": "Planalto",
+   "titulo": "Law 14,520/2023: official salary of STF ministers (R$ 46,366.19 since February 1, 2025) (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2023/lei/l14520.htm",
+   "data": "2023-01-09",
+   "lang": "en"
+  },
+  {
+   "id": "tse-vagas-2024",
+   "veiculo": "TSE (Portal de Dados Abertos)",
+   "titulo": "Candidates 2024, seats file: 5,569 mayors and 58,435 city councilor seats in the 2024 Municipal Elections (sum made by this site) (in Portuguese)",
+   "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024",
+   "data": "2026-10-15",
+   "lang": "en"
+  },
+  {
+   "id": "tse-vagas-2026",
+   "veiculo": "TSE (Portal de Dados Abertos)",
+   "titulo": "Candidates 2026, seats file: 27 governors, 54 senators, 513 federal deputies, 1,035 state deputies and 24 district deputies (sum made by this site) (in Portuguese)",
+   "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2026",
+   "data": "2026-10-15",
+   "lang": "en"
+  },
+  {
+   "id": "agsenado-candidaturas",
+   "veiculo": "Agência Senado",
+   "titulo": "Eleições 2026: veja os números das candidaturas oficializadas (in Portuguese)",
+   "url": "https://www12.senado.leg.br/noticias/materias/2026/08/17/eleicoes-2026-veja-os-numeros-das-candidaturas-oficializadas",
+   "data": "2026-08-17"
+  },
+  {
+   "id": "agcamara-eleicoes-2026",
+   "veiculo": "Agência Câmara",
+   "titulo": "Eleições deste ano vão definir 54 vagas no Senado e todas as 513 vagas da Câmara (in Portuguese)",
+   "url": "https://www.camara.leg.br/noticias/1298957-eleicoes-deste-ano-vao-definir-54-vagas-no-senado-e-todas-as-513-vagas-da-camara",
+   "data": "2026-08-19"
+  },
+  {
+   "id": "camara-comprove-513",
+   "veiculo": "Câmara dos Deputados",
+   "titulo": "Comprove: é falso que são 531 vagas de deputados federais para a próxima legislatura (there are 513) (in Portuguese)",
+   "url": "https://www.camara.leg.br/comprove/1302885-e-falso-que-sao-531-vagas-de-deputados-federais-para-a-proxima-legislatura",
+   "data": "2026-09-04",
+   "lang": "en"
+  },
+  {
+   "id": "agcamara-municipais-2024",
+   "veiculo": "Agência Câmara",
+   "titulo": "TSE divulga número de candidatos nas eleições municipais 2024 (in Portuguese)",
+   "url": "https://www.camara.leg.br/noticias/1099005-tse-divulga-numero-de-candidatos-nas-eleicoes-municipais-2024/",
+   "data": "2024-09-27"
+  },
+  {
+   "id": "agcamara-prefeitos",
+   "veiculo": "Agência Câmara",
+   "titulo": "Conheça as funções de prefeitos e vereadores e como fiscalizá-los (in Portuguese)",
+   "url": "https://www.camara.leg.br/noticias/1098891-conheca-as-funcoes-de-prefeitos-e-vereadores-e-como-fiscaliza-los",
+   "data": "2024-09-26"
+  }
+ ],
+ "glossario": [
+  {
+   "termo": "term of office",
+   "simples": "The time an elected person stays in office. In Portuguese: mandato."
+  },
+  {
+   "termo": "re-election",
+   "simples": "Being elected again to the same office, right after the first term."
+  },
+  {
+   "termo": "valid votes",
+   "simples": "The votes given to candidates or parties. Blank and null votes do not count."
+  },
+  {
+   "termo": "runoff",
+   "simples": "A new vote between only the two candidates with the most votes, when no one got enough votes in the first round. In Portuguese: 2º turno."
+  },
+  {
+   "termo": "vice",
+   "simples": "The person elected together with the president, the governor or the mayor to take their place when needed."
+  },
+  {
+   "termo": "alternate",
+   "simples": "The person in reserve who takes the seat when a senator, a deputy or a city councilor leaves. In Portuguese: suplente."
+  },
+  {
+   "termo": "ticket",
+   "simples": "The group that runs together in an election, like the candidate for mayor and their vice. In Portuguese: chapa."
+  },
+  {
+   "termo": "proportional vote",
+   "simples": "A way of electing in which the seats are divided among the parties according to the votes of each one."
+  },
+  {
+   "termo": "Executive",
+   "simples": "The branch that governs: it puts the laws into practice and takes care of public services."
+  },
+  {
+   "termo": "official salary",
+   "simples": "The name of the monthly salary of elected officials, ministers and judges. In Portuguese: subsídio."
+  },
+  {
+   "termo": "salary cap",
+   "simples": "The highest salary anyone can receive in public service. In Portuguese: teto (“ceiling”)."
+  },
+  {
+   "termo": "legislative decree",
+   "simples": "A decision of Congress on matters that only Congress decides, without going to the president."
+  },
+  {
+   "termo": "Legislative",
+   "simples": "The branch that makes the laws and oversees the people who govern."
+  },
+  {
+   "termo": "minister",
+   "simples": "A person chosen by the president to take care of an area of the government, like health or education."
+  },
+  {
+   "termo": "secretaries",
+   "simples": "People chosen by the governor or the mayor to take care of an area, like health in the state or in the city."
+  },
+  {
+   "termo": "STF",
+   "simples": "Supremo Tribunal Federal (Supreme Federal Court): the highest court in the country, which takes care of the Constitution."
+  },
+  {
+   "termo": "Legislative Assembly",
+   "simples": "The House where the state deputies make the state's laws. In Portuguese: Assembleia Legislativa."
+  },
+  {
+   "termo": "Legislative Chamber",
+   "simples": "The lawmaking House of the Federal District, where the district deputies work. In Portuguese: Câmara Legislativa."
+  },
+  {
+   "termo": "City Council",
+   "simples": "The House where the city councilors make the city's laws. In Portuguese: Câmara Municipal."
+  },
+  {
+   "termo": "party",
+   "simples": "An organized group of people with similar ideas that runs in elections."
+  },
+  {
+   "termo": "party membership",
+   "simples": "Being registered as a member of a political party."
+  },
+  {
+   "termo": "party federation",
+   "simples": "A union of two or more parties that, for at least 4 years, act as if they were just one."
+  },
+  {
+   "termo": "TSE",
+   "simples": "Tribunal Superior Eleitoral (Superior Electoral Court): the court that organizes and takes care of elections."
+  },
+  {
+   "termo": "oversee",
+   "simples": "To follow and check whether someone is doing the job right and following the rules."
+  },
+  {
+   "termo": "voters",
+   "simples": "The people who can vote."
+  }
+ ],
+ "slides": [
+  {
+   "tipo": "abertura",
+   "titulo": "Each office has a job",
+   "texto": "Some govern, others make laws. Let's get to know each office, one by one!",
+   "ilustracao": "niveis"
+  },
+  {
+   "tipo": "cards",
+   "etiqueta": "WHO GOVERNS",
+   "titulo": "President, governor and mayor",
+   "texto": "They head the **Executive** branch: they put the laws into practice and take care of public services.",
+   "cards": [
+    {
+     "ic": "🌎",
+     "titulo": "President",
+     "txt": "Heads the country's government and commands the Army, the Navy and the Air Force.",
+     "dados": [
+      {
+       "rot": "Term of office",
+       "val": "4 years"
+      },
+      {
+       "rot": "Re-election",
+       "val": "Only once in a row"
+      },
+      {
+       "rot": "Minimum age",
+       "val": "35 years old"
+      },
+      {
+       "rot": "How to win",
+       "val": "More than half of the valid votes. If no one gets there, there is a runoff (second round)."
+      }
+     ],
+     "mais": "The president is elected together with the vice president, on the same ticket. Valid votes are the ones given to candidates: blank and null votes do not count. Whoever wins the 2026 election takes office on January 5, 2027."
+    },
+    {
+     "ic": "🗺️",
+     "titulo": "Governor",
+     "txt": "Heads the state government. The state's police forces are under the governor's command.",
+     "dados": [
+      {
+       "rot": "Term of office",
+       "val": "4 years"
+      },
+      {
+       "rot": "Re-election",
+       "val": "Only once in a row"
+      },
+      {
+       "rot": "Minimum age",
+       "val": "30 years old"
+      },
+      {
+       "rot": "How to win",
+       "val": "Same rule as for president: there may be a runoff."
+      }
+     ],
+     "mais": "The governor is elected together with the vice governor. The Federal District also has a governor. Whoever wins the 2026 election takes office on January 6, 2027."
+    },
+    {
+     "ic": "🏙️",
+     "titulo": "Mayor",
+     "txt": "Heads the city government, which takes care of streets, lighting and health clinics.",
+     "dados": [
+      {
+       "rot": "Term of office",
+       "val": "4 years"
+      },
+      {
+       "rot": "Re-election",
+       "val": "Only once in a row"
+      },
+      {
+       "rot": "Minimum age",
+       "val": "21 years old"
+      },
+      {
+       "rot": "How to win",
+       "val": "Whoever gets the most votes. There is a runoff only where there are more than 200,000 voters."
+      }
+     ],
+     "mais": "The mayor is elected together with the vice mayor. Today's mayors were elected in 2024 and stay until the end of 2028. The Federal District does not have a mayor."
+    }
+   ],
+   "fontes": [
+    "cf-art76-84-87",
+    "cf-art144",
+    "cf-art28",
+    "cf-art29",
+    "cf-art32",
+    "cf-art14",
+    "cf-art77",
+    "cf-art82",
+    "camara-reeleicao",
+    "agcamara-prefeitos"
+   ]
+  },
+  {
+   "tipo": "cards",
+   "etiqueta": "WHO MAKES LAWS",
+   "titulo": "Senator, deputies and city councilor",
+   "texto": "They form the **Legislative** branch: they make laws and help oversee the people who govern. They can be re-elected with no limit.",
+   "cards": [
+    {
+     "ic": "🏛️",
+     "titulo": "Senator",
+     "txt": "Makes laws for the country and represents their state in the Federal Senate (Senado Federal).",
+     "dados": [
+      {
+       "rot": "Term of office",
+       "val": "8 years"
+      },
+      {
+       "rot": "How many",
+       "val": "3 per state and 3 for the DF: 81"
+      },
+      {
+       "rot": "Minimum age",
+       "val": "35 years old"
+      },
+      {
+       "rot": "How to win",
+       "val": "Whoever gets the most votes"
+      }
+     ],
+     "mais": "Each senator is elected with 2 alternates (suplentes). Every 4 years, the Senate renews 1/3 or 2/3 of its seats. In 2026, each state chose 2 senators."
+    },
+    {
+     "ic": "🧑‍💼",
+     "titulo": "Federal deputy",
+     "txt": "Makes laws for the country and represents the people in the Chamber of Deputies (Câmara dos Deputados).",
+     "dados": [
+      {
+       "rot": "Term of office",
+       "val": "4 years"
+      },
+      {
+       "rot": "How many",
+       "val": "513"
+      },
+      {
+       "rot": "Minimum age",
+       "val": "21 years old"
+      },
+      {
+       "rot": "How to win",
+       "val": "Proportional vote"
+      }
+     ],
+     "mais": "Each state has from 8 to 70 federal deputies, depending on its population. In the proportional vote, the seats are divided among the parties according to the votes each party gets."
+    },
+    {
+     "ic": "🏢",
+     "titulo": "State or district deputy",
+     "txt": "Makes the state's laws in the Legislative Assembly.",
+     "dados": [
+      {
+       "rot": "Term of office",
+       "val": "4 years"
+      },
+      {
+       "rot": "How many",
+       "val": "1,059 in Brazil (from 24 to 94 per state)"
+      },
+      {
+       "rot": "Minimum age",
+       "val": "21 years old"
+      },
+      {
+       "rot": "How to win",
+       "val": "Proportional vote"
+      }
+     ],
+     "mais": "In the Federal District, the name is district deputy. They work in the Legislative Chamber, which has 24 deputies."
+    },
+    {
+     "ic": "🏘️",
+     "titulo": "City councilor",
+     "txt": "Makes the city's laws in the City Council (Câmara Municipal) and oversees the mayor.",
+     "dados": [
+      {
+       "rot": "Term of office",
+       "val": "4 years"
+      },
+      {
+       "rot": "How many",
+       "val": "58,435 in Brazil (up to 55 per city)"
+      },
+      {
+       "rot": "Minimum age",
+       "val": "18 years old"
+      },
+      {
+       "rot": "How to win",
+       "val": "Proportional vote"
+      }
+     ],
+     "mais": "The number of city councilors (vereadores) in each city depends on its population. The largest City Council, in São Paulo, has 55."
+    }
+   ],
+   "fontes": [
+    "cf-art14",
+    "cf-art44",
+    "cf-art45",
+    "cf-art46",
+    "cf-art27",
+    "cf-art29",
+    "cf-art32",
+    "codigo-eleitoral",
+    "camara-reeleicao",
+    "tse-vagas-2026",
+    "tse-vagas-2024",
+    "agcamara-eleicoes-2026",
+    "agcamara-prefeitos"
+   ]
+  },
+  {
+   "tipo": "comparar",
+   "titulo": "Who takes the place of someone who leaves?",
+   "texto": "Every elected office has someone in reserve. The name changes depending on the office.",
+   "colunas": [
+    {
+     "ic": "🥈",
+     "titulo": "Vice",
+     "itens": [
+      "The president, governors and mayors each have a **vice**.",
+      "The vice is elected together with them, on the same ticket.",
+      "The vice stands in for the officeholder when they cannot work.",
+      "If the office becomes vacant for good, the vice takes over until the end of the term of office."
+     ],
+     "exemplo": "If the mayor leaves office, the vice mayor takes over: she becomes the mayor."
+    },
+    {
+     "ic": "🔁",
+     "titulo": "Alternate",
+     "itens": [
+      "Each senator is elected with 2 **alternates**, on the same ticket.",
+      "Deputies and city councilors: the alternate is the next most-voted candidate from the same party or federation.",
+      "The alternate takes over when the seat becomes free or when the officeholder is away for a long time."
+     ],
+     "exemplo": "If deputy Ana becomes a minister, the alternate from her party takes her seat."
+    }
+   ],
+   "fontes": [
+    "cf-art77",
+    "cf-art79",
+    "cf-art28",
+    "cf-art29",
+    "cf-art46",
+    "cf-art56",
+    "codigo-eleitoral",
+    "lei-partidos",
+    "cn-suplente"
+   ]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "NOT ELECTED",
+   "titulo": "Who helps govern?",
+   "texto": "The president, governors and mayors put together a team. These people are **not elected**: they are chosen.",
+   "itens": [
+    {
+     "ic": "🩺",
+     "txt": "The president chooses the **ministers**. Each one takes care of an area, like health or education."
+    },
+    {
+     "ic": "🗺️",
+     "txt": "The governor chooses the state secretaries."
+    },
+    {
+     "ic": "🏙️",
+     "txt": "The mayor chooses the city secretaries."
+    },
+    {
+     "ic": "🔄",
+     "txt": "Whoever chooses them can also replace them at any time."
+    },
+    {
+     "ic": "🎂",
+     "txt": "To be a minister, you must be Brazilian and over 21."
+    }
+   ],
+   "ilustracao": "palacio",
+   "coruja": "A government minister is different from an STF minister. The STF one is a judge!",
+   "fontes": [
+    "cf-art76-84-87",
+    "ce-sp",
+    "lom-sp",
+    "cf-art101"
+   ]
+  },
+  {
+   "tipo": "numeros",
+   "titulo": "How many elected officials does Brazil have?",
+   "texto": "Adding up all the offices and the vices, there are more than **71,000** seats. Most of them are for city councilors.",
+   "numeros": [
+    {
+     "val": "81",
+     "rot": "senators",
+     "ic": "🏛️"
+    },
+    {
+     "val": "513",
+     "rot": "federal deputies",
+     "ic": "🧑‍💼"
+    },
+    {
+     "val": "1,059",
+     "rot": "state and district deputies",
+     "ic": "🏢"
+    },
+    {
+     "val": "58,435",
+     "rot": "city councilors",
+     "ic": "🏘️"
+    }
+   ],
+   "nota": "In government: 1 president, 27 governors and 5,569 mayors, each with a vice. Seats counted in the data of the TSE (Superior Electoral Court) for the 2024 and 2026 elections, checked on October 15, 2026.",
+   "fontes": [
+    "tse-vagas-2026",
+    "tse-vagas-2024",
+    "agsenado-candidaturas",
+    "camara-comprove-513",
+    "agcamara-municipais-2024",
+    "cf-art46",
+    "cf-art32"
+   ]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "HOW MUCH THEY EARN",
+   "titulo": "How much do elected officials earn?",
+   "texto": "The salary of the office is called the **official salary** (subsídio). The amounts are for 2026, before deductions, in reais (R$), Brazil's currency.",
+   "itens": [
+    {
+     "ic": "💰",
+     "txt": "President, vice president, ministers, federal deputies and senators: R$ 46,366.19 a month."
+    },
+    {
+     "ic": "📜",
+     "txt": "This amount is set by Congress itself, through a legislative decree."
+    },
+    {
+     "ic": "🏢",
+     "txt": "State deputy: at most 75% of the federal deputy's official salary."
+    },
+    {
+     "ic": "🏘️",
+     "txt": "City councilor: at most 20% to 75% of the state deputy's official salary, depending on the size of the city."
+    },
+    {
+     "ic": "🧢",
+     "txt": "**Salary cap**: by the rules, no public salary can be higher than that of an STF minister (also R$ 46,366.19)."
+    }
+   ],
+   "ilustracao": "cofre",
+   "coruja": "The salaries of the governor and of the mayor are set by state and city laws.",
+   "fontes": [
+    "dl-172",
+    "camara-salario",
+    "senado-salario",
+    "valor-senador-2026",
+    "cf-art49",
+    "cf-art27",
+    "cf-art29",
+    "cf-art28",
+    "cf-art37",
+    "lei-14520"
+   ]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "PARTIES",
+   "titulo": "Why does every candidate have a party?",
+   "texto": "A **party** is an organized group of people with similar ideas about how to take care of the country.",
+   "itens": [
+    {
+     "ic": "🎫",
+     "txt": "In Brazil, only people with **party membership**, that is, who are registered in a party, can be candidates."
+    },
+    {
+     "ic": "🚫",
+     "txt": "That is why there are no candidates without a party."
+    },
+    {
+     "ic": "🌈",
+     "txt": "Anyone can create a party, as long as they follow the rules. The country has many parties, with different ideas."
+    },
+    {
+     "ic": "📋",
+     "txt": "Every party must be national and register its rules with the TSE, the elections court."
+    },
+    {
+     "ic": "🤝",
+     "txt": "Two or more parties can form a party federation and act as if they were just one."
+    }
+   ],
+   "ilustracao": "megafone",
+   "coruja": "Made-up example: the Circle Party wants more playgrounds; the Square Party wants more buses. Each voter chooses who they agree with.",
+   "fontes": [
+    "cf-art14",
+    "cf-art17",
+    "lei-partidos"
+   ]
+  },
+  {
+   "tipo": "quiz",
+   "pergunta": "How many years does a senator's term of office last?",
+   "opcoes": [
+    "4 years",
+    "8 years",
+    "2 years"
+   ],
+   "certa": 1,
+   "explica": "A senator stays in office for 8 years. The other elected offices last 4 years.",
+   "fontes": [
+    "cf-art46",
+    "cf-art44",
+    "cf-art82",
+    "cf-art28",
+    "cf-art29",
+    "cf-art27"
+   ]
+  },
+  {
+   "tipo": "quiz",
+   "pergunta": "Who chooses the government ministers?",
+   "opcoes": [
+    "The people, in the election",
+    "The President of the Republic",
+    "The senators"
+   ],
+   "certa": 1,
+   "explica": "Ministers are not elected. The president chooses them and can replace them at any time.",
+   "fontes": [
+    "cf-art76-84-87"
+   ]
+  }
+ ]
+}

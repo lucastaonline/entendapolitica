@@ -1,0 +1,622 @@
+{
+ "parte": 9,
+ "ic": "🙋",
+ "nome": "How you can take part",
+ "resumo": "Ways to take part in politics beyond voting, some of them even as a child.",
+ "fontes": [
+  {
+   "id": "cf-art5-14",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 5, IV and VIII, and art. 14 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art58",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 58, § 2, II (public hearings) (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art61",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 61, § 2 (popular initiative) (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "res-tse-23659",
+   "veiculo": "TSE",
+   "titulo": "TSE Resolution 23,659/2021, art. 30 (voter card from age 15) (in Portuguese)",
+   "url": "https://www.tse.jus.br/legislacao/compilada/res/2021/resolucao-no-23-659-de-26-de-outubro-de-2021",
+   "data": "2021-10-26",
+   "lang": "en"
+  },
+  {
+   "id": "lei9504-91",
+   "veiculo": "Planalto",
+   "titulo": "Law 9,504/1997 (Elections Law), art. 91 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/leis/l9504.htm",
+   "data": "1997-09-30",
+   "lang": "en"
+  },
+  {
+   "id": "ecidadania-sobre",
+   "veiculo": "Senado Federal",
+   "titulo": "e-Cidadania: what the portal is and how to take part (in Portuguese)",
+   "url": "https://www12.senado.leg.br/ecidadania/sobre",
+   "data": "2026-10-15",
+   "lang": "en"
+  },
+  {
+   "id": "camara-participe",
+   "veiculo": "Câmara dos Deputados",
+   "titulo": "Participe: interactive debates and polls (in Portuguese)",
+   "url": "https://www.camara.leg.br/participe",
+   "data": "2026-10-15",
+   "lang": "en"
+  },
+  {
+   "id": "camara-sugira",
+   "veiculo": "Câmara dos Deputados",
+   "titulo": "Sugira um projeto: popular initiative and legislative suggestions (in Portuguese)",
+   "url": "https://www2.camara.leg.br/atividade-legislativa/participe/sugira-um-projeto",
+   "data": "2026-10-15",
+   "lang": "en"
+  },
+  {
+   "id": "cgu-ouvidoria",
+   "veiculo": "CGU",
+   "titulo": "Ombudsman office and the Fala.BR platform (in Portuguese)",
+   "url": "https://www.gov.br/cgu/pt-br/assuntos/ouvidoria",
+   "data": "2026-10-15",
+   "lang": "en"
+  },
+  {
+   "id": "falabr",
+   "veiculo": "CGU",
+   "titulo": "Fala.BR: Plataforma Integrada de Ouvidoria e Acesso à Informação (in Portuguese)",
+   "url": "https://falabr.cgu.gov.br/web/home",
+   "data": "2026-10-15"
+  },
+  {
+   "id": "lei12527",
+   "veiculo": "Planalto",
+   "titulo": "Law 12,527/2011 (Access to Information Law), arts. 10 and 11 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/_ato2011-2014/2011/lei/l12527.htm",
+   "data": "2011-11-18",
+   "lang": "en"
+  },
+  {
+   "id": "ldb-art14",
+   "veiculo": "Planalto",
+   "titulo": "Law 9,394/1996 (LDB, the national education law), art. 14 (school councils), as amended by Law 14,644/2023 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/leis/l9394.htm",
+   "data": "2023-08-02",
+   "lang": "en"
+  },
+  {
+   "id": "lei8142",
+   "veiculo": "Planalto",
+   "titulo": "Law 8,142/1990, art. 1 (health councils) (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/leis/l8142.htm",
+   "data": "1990-12-28",
+   "lang": "en"
+  },
+  {
+   "id": "lei7398",
+   "veiculo": "Planalto",
+   "titulo": "Law 7,398/1985 (student councils) (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/leis/l7398.htm",
+   "data": "1985-11-04",
+   "lang": "en"
+  },
+  {
+   "id": "plenarinho",
+   "veiculo": "Câmara dos Deputados (Plenarinho)",
+   "titulo": "Plenarinho: the Legislature for children (in Portuguese)",
+   "url": "https://plenarinho.leg.br/",
+   "data": "2026-10-15",
+   "lang": "en"
+  },
+  {
+   "id": "plenarinho-eleitor-mirim",
+   "veiculo": "Câmara dos Deputados (Plenarinho)",
+   "titulo": "Vote no Eleitor Mirim 2026! (in Portuguese)",
+   "url": "https://plenarinho.leg.br/index.php/2026/07/vote-no-eleitor-mirim-2026/",
+   "data": "2026-07-27"
+  },
+  {
+   "id": "plenarinho-camara-mirim",
+   "veiculo": "Câmara dos Deputados (Plenarinho)",
+   "titulo": "Câmara Mirim: who can take part (in Portuguese)",
+   "url": "https://plenarinho.leg.br/index.php/camara-mirim/",
+   "data": "2026-10-15",
+   "lang": "en"
+  },
+  {
+   "id": "plenarinho-camara-mirim-2026",
+   "veiculo": "Câmara dos Deputados (Plenarinho)",
+   "titulo": "Câmara Mirim 2026: edição especial (in Portuguese)",
+   "url": "https://plenarinho.leg.br/index.php/2026/05/camara-mirim-2026-edicao-especial/",
+   "data": "2026-05-06"
+  },
+  {
+   "id": "plenarinho-camara-mirim-2027",
+   "veiculo": "Câmara dos Deputados (Plenarinho)",
+   "titulo": "Câmara Mirim 2026: novidade para estudantes do 9º ano (in Portuguese)",
+   "url": "https://plenarinho.leg.br/index.php/2026/08/camara-mirim-2026-novidade-para-estudantes-do-9o-ano/",
+   "data": "2026-08-17"
+  },
+  {
+   "id": "jovem-senador",
+   "veiculo": "Senado Federal",
+   "titulo": "Jovem Senador (Young Senator) program: overview (in Portuguese)",
+   "url": "https://www12.senado.leg.br/jovemsenador/menu/quem-somos/apresentacao",
+   "data": "2026-10-15",
+   "lang": "en"
+  },
+  {
+   "id": "jovem-senador-2026",
+   "veiculo": "Agência Senado",
+   "titulo": "Jovem Senador 2026 termina com projetos aprovados e relatos emocionantes (in Portuguese)",
+   "url": "https://www12.senado.leg.br/jovemsenador/home/noticias-1/externas/2026/08/jovem-senador-2026-termina-com-projetos-aprovados-e-relatos-emocionantes",
+   "data": "2026-08-21"
+  },
+  {
+   "id": "camara-comprove",
+   "veiculo": "Câmara dos Deputados",
+   "titulo": "Comprove: the Chamber's fact-checking channel for news about the Chamber (in Portuguese)",
+   "url": "https://www.camara.leg.br/comprove",
+   "data": "2026-10-15",
+   "lang": "en"
+  },
+  {
+   "id": "camara-dicas",
+   "veiculo": "Câmara dos Deputados",
+   "titulo": "Comprove: dicas de checagem (in Portuguese)",
+   "url": "https://www.camara.leg.br/comprove/dicas-de-checagem",
+   "data": "2026-10-15"
+  },
+  {
+   "id": "plenarinho-fake",
+   "veiculo": "Câmara dos Deputados (Plenarinho)",
+   "titulo": "Fake News: como identificar notícias falsas na rede (in Portuguese)",
+   "url": "https://plenarinho.leg.br/index.php/2018/03/fake-news-como-identificar-noticias-falsas-na-rede/",
+   "data": "2018-03-20"
+  },
+  {
+   "id": "je-fato-boato",
+   "veiculo": "Justiça Eleitoral (TSE)",
+   "titulo": "Fato ou Boato: fact-checks about the elections (in Portuguese)",
+   "url": "https://www.justicaeleitoral.jus.br/fato-ou-boato/",
+   "data": "2026-10-15",
+   "lang": "en"
+  }
+ ],
+ "glossario": [
+  {
+   "termo": "participation",
+   "simples": "Taking part in decisions by giving ideas and opinions and by following what happens."
+  },
+  {
+   "termo": "voter card",
+   "simples": "The document of a person who is registered to vote. In Portuguese: título de eleitor."
+  },
+  {
+   "termo": "e-Cidadania",
+   "simples": "The Senate's website where people can suggest laws and give their opinion."
+  },
+  {
+   "termo": "Legislative Idea",
+   "simples": "A suggestion for a law that any registered person can send through e-Cidadania. In Portuguese: Ideia Legislativa."
+  },
+  {
+   "termo": "committee",
+   "simples": "A smaller group of lawmakers that studies a subject before the vote."
+  },
+  {
+   "termo": "report",
+   "simples": "A written opinion, with an analysis of a proposal. In Portuguese: parecer."
+  },
+  {
+   "termo": "poll",
+   "simples": "A question open to everyone, so people can give their opinion. It is not a scientific survey. In Portuguese: enquete."
+  },
+  {
+   "termo": "rapporteur",
+   "simples": "The lawmaker who studies a proposal and suggests changes to the text. In Portuguese: relator."
+  },
+  {
+   "termo": "public hearing",
+   "simples": "An open meeting to hear experts and the public about a subject."
+  },
+  {
+   "termo": "popular initiative",
+   "simples": "A bill presented by the people, with signatures from voters."
+  },
+  {
+   "termo": "ombudsman",
+   "simples": "A channel to complain, suggest, praise, point out wrongdoing or ask a public agency for something. In Portuguese: ouvidoria."
+  },
+  {
+   "termo": "Access to Information Law",
+   "simples": "A law that guarantees anyone the right to ask public agencies for data. In Portuguese: Lei de Acesso à Informação."
+  },
+  {
+   "termo": "school council",
+   "simples": "A group in a public school with the school's leaders, teachers, staff, parents, students and the community."
+  },
+  {
+   "termo": "health council",
+   "simples": "A group that follows public health, with SUS users, the government and health workers."
+  },
+  {
+   "termo": "SUS",
+   "simples": "Sistema Único de Saúde (Unified Health System): Brazil's public health system."
+  },
+  {
+   "termo": "student council",
+   "simples": "An association that represents the students of a school. In Portuguese: grêmio estudantil."
+  },
+  {
+   "termo": "democracy",
+   "simples": "A form of government in which power comes from the people, who choose their representatives."
+  },
+  {
+   "termo": "fake news",
+   "simples": "A lie that imitates real news. In Portuguese: notícia falsa."
+  },
+  {
+   "termo": "fact-checking",
+   "simples": "Checking whether a piece of information is true."
+  },
+  {
+   "termo": "alarmist",
+   "simples": "Trying to scare people by saying that something terrible is going to happen."
+  },
+  {
+   "termo": "ticket",
+   "simples": "A group of candidates who run together in an election. In Portuguese: chapa."
+  },
+  {
+   "termo": "gov.br account",
+   "simples": "A single registration to use government services on the internet."
+  }
+ ],
+ "slides": [
+  {
+   "tipo": "abertura",
+   "titulo": "Politics is not only on election day",
+   "texto": "You can give ideas, ask questions, complain and follow the work of the people who were elected. And you can **start early**!",
+   "ilustracao": "megafone"
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "THE VOTE",
+   "titulo": "Voting starts before the election",
+   "texto": "Before you vote, it is worth **getting informed** about who is running.",
+   "itens": [
+    {
+     "ic": "🔎",
+     "txt": "See what the person has already done and what they propose."
+    },
+    {
+     "ic": "📚",
+     "txt": "Compare different sources. This site shows proposals and votes, always with a link to the source."
+    },
+    {
+     "ic": "🪪",
+     "txt": "At **age 15**, you can already get your voter card (título de eleitor). But you can only vote from age 16."
+    },
+    {
+     "ic": "🙋",
+     "txt": "Young people can request their voter card on their own, without their parents' permission."
+    },
+    {
+     "ic": "📅",
+     "txt": "In an election year, voter card requests stop 150 days before the vote."
+    }
+   ],
+   "emoji": "🪪",
+   "fontes": [
+    "res-tse-23659",
+    "lei9504-91",
+    "cf-art5-14"
+   ]
+  },
+  {
+   "tipo": "cards",
+   "etiqueta": "IN CONGRESS",
+   "titulo": "Share ideas and give your opinion in Congress",
+   "texto": "The Senate and the Chamber of Deputies have channels open to the public.",
+   "cards": [
+    {
+     "ic": "💡",
+     "titulo": "Legislative Idea",
+     "txt": "On the Senate's e-Cidadania website, anyone over 12 can suggest a law.",
+     "dados": [
+      {
+       "rot": "Supporters",
+       "val": "20,000"
+      },
+      {
+       "rot": "Deadline",
+       "val": "4 months"
+      }
+     ],
+     "mais": "With 20,000 supporters in 4 months, the idea goes to a Senate committee. There, it receives a report. It is the Human Rights and Participatory Legislation Committee. You sign up with a gov.br account."
+    },
+    {
+     "ic": "📊",
+     "titulo": "Chamber polls",
+     "txt": "You can give your opinion on any proposal and point out its positive and negative points.",
+     "mais": "A poll is not a scientific survey. The rapporteur of the proposal decides whether to use the opinions."
+    },
+    {
+     "ic": "🎤",
+     "titulo": "Public hearings",
+     "txt": "Meetings where deputies and senators listen to experts and to society.",
+     "mais": "Many are interactive: you can send questions over the internet, on the Chamber's website or on e-Cidadania."
+    },
+    {
+     "ic": "✍️",
+     "titulo": "Popular initiative law",
+     "txt": "The people can present a bill to the Chamber of Deputies, with **signatures** from voters.",
+     "dados": [
+      {
+       "rot": "Signatures",
+       "val": "1% of voters"
+      },
+      {
+       "rot": "States",
+       "val": "at least 5"
+      },
+      {
+       "rot": "In each state",
+       "val": "0.3% of voters"
+      }
+     ],
+     "mais": "The Constitution requires “at least one percent of the national electorate, spread over at least five States, with no less than three tenths of one percent of the voters in each of them”."
+    }
+   ],
+   "fontes": [
+    "ecidadania-sobre",
+    "camara-participe",
+    "camara-sugira",
+    "cf-art58",
+    "cf-art61"
+   ]
+  },
+  {
+   "tipo": "cards",
+   "etiqueta": "NEAR YOU",
+   "titulo": "Ask, complain and take part",
+   "texto": "You can also take part close to home and to school.",
+   "cards": [
+    {
+     "ic": "📣",
+     "titulo": "Fala.BR",
+     "txt": "An **ombudsman** channel to point out wrongdoing, complain, suggest, praise or ask for something.",
+     "mais": "It is the Integrated Ombudsman and Access to Information Platform, run by the CGU (Office of the Comptroller General). The ombudsman offices of many public agencies use the platform."
+    },
+    {
+     "ic": "📨",
+     "titulo": "Access to Information Law",
+     "txt": "Anyone can ask public agencies for information, without saying why.",
+     "dados": [
+      {
+       "rot": "Time to answer",
+       "val": "up to 20 days, plus 10 if needed"
+      }
+     ]
+    },
+    {
+     "ic": "🏫",
+     "titulo": "School council",
+     "txt": "In public schools, it brings together the school's leaders, teachers, staff, parents, students and people from the neighborhood.",
+     "dados": [
+      {
+       "rot": "Are there seats for students?",
+       "val": "yes"
+      }
+     ]
+    },
+    {
+     "ic": "🏥",
+     "titulo": "Health council",
+     "txt": "It exists in the city, in the state and in the country. It follows and helps plan public health.",
+     "dados": [
+      {
+       "rot": "Seats for SUS users",
+       "val": "half"
+      }
+     ]
+    }
+   ],
+   "fontes": [
+    "cgu-ouvidoria",
+    "falabr",
+    "lei12527",
+    "ldb-art14",
+    "lei8142"
+   ]
+  },
+  {
+   "tipo": "cards",
+   "etiqueta": "CHILDREN AND YOUNG PEOPLE",
+   "titulo": "For children and young people",
+   "texto": "You can **practice** participation from an early age.",
+   "cards": [
+    {
+     "ic": "🏫",
+     "titulo": "Student council",
+     "txt": "It represents the students of the school. Its board is elected by the students in a direct and secret vote.",
+     "dados": [
+      {
+       "rot": "Law",
+       "val": "7,398/1985"
+      }
+     ]
+    },
+    {
+     "ic": "🎮",
+     "titulo": "Plenarinho",
+     "txt": "The Chamber of Deputies' website for children, with games, news and contests."
+    },
+    {
+     "ic": "🗳️",
+     "titulo": "Eleitor Mirim (Kid Voter)",
+     "txt": "A make-believe election run by Plenarinho, open to all ages.",
+     "dados": [
+      {
+       "rot": "In 2026",
+       "val": "voting until October 25"
+      }
+     ]
+    },
+    {
+     "ic": "🏛️",
+     "titulo": "Câmara Mirim (Kids' Chamber)",
+     "txt": "Students send in bills. The authors of the best ones go to the Chamber of Deputies to defend them.",
+     "dados": [
+      {
+       "rot": "Who",
+       "val": "5th to 9th grade"
+      }
+     ],
+     "mais": "In 2026, there was a special edition, held inside the schools. In 2027, the program goes back to its usual format."
+    },
+    {
+     "ic": "🎓",
+     "titulo": "Jovem Senador (Young Senator)",
+     "txt": "Public high school students write an essay. The winners spend a week at the Senate.",
+     "dados": [
+      {
+       "rot": "Places",
+       "val": "27, one per state and the DF"
+      }
+     ],
+     "mais": "In August 2026, the young senators approved 3 proposals. They become suggestions for a Senate committee to analyze."
+    }
+   ],
+   "fontes": [
+    "lei7398",
+    "plenarinho",
+    "plenarinho-eleitor-mirim",
+    "plenarinho-camara-mirim",
+    "plenarinho-camara-mirim-2026",
+    "plenarinho-camara-mirim-2027",
+    "jovem-senador",
+    "jovem-senador-2026"
+   ]
+  },
+  {
+   "tipo": "historia",
+   "titulo": "Imagine the student council election...",
+   "quadros": [
+    {
+     "ic": "🏫",
+     "txt": "In the student council election, Ana supports Ticket 1. Léo supports Ticket 2."
+    },
+    {
+     "ic": "👂",
+     "txt": "Ana explains her reasons. Léo listens until the end, without interrupting."
+    },
+    {
+     "ic": "💬",
+     "txt": "Léo disagrees and explains his reasons. No one calls the other names or laughs at them."
+    },
+    {
+     "ic": "🤫",
+     "txt": "When it is time to vote, each one votes in secret. No one has to tell how they voted."
+    },
+    {
+     "ic": "🤝",
+     "txt": "The result comes out. The two are still friends and play ball at recess."
+    }
+   ],
+   "moral": "Disagreeing is part of **democracy**. No one can lose rights because of their political opinion, and the vote is secret.",
+   "fontes": [
+    "cf-art5-14",
+    "lei7398"
+   ]
+  },
+  {
+   "tipo": "passos",
+   "titulo": "Before you share a news story",
+   "texto": "**Fake news** spreads fast. Ask these questions before you pass it on.",
+   "passos": [
+    {
+     "ic": "🧐",
+     "titulo": "Who published it?",
+     "txt": "Check whether the website or the profile is well known and reliable."
+    },
+    {
+     "ic": "📖",
+     "titulo": "Read all of it",
+     "txt": "Don't stop at the headline. Read to the end."
+    },
+    {
+     "ic": "🔁",
+     "titulo": "Look somewhere else",
+     "txt": "See whether other newspapers and websites also reported the news."
+    },
+    {
+     "ic": "😱",
+     "titulo": "Watch out for scares",
+     "txt": "Be suspicious of messages that try to scare you, use too many strong adjectives or ask you to send them to everyone."
+    },
+    {
+     "ic": "✅",
+     "titulo": "Use fact-checking sites",
+     "txt": "The Electoral Justice has Fato ou Boato (Fact or Rumor). The Chamber of Deputies has Comprove."
+    },
+    {
+     "ic": "🛑",
+     "titulo": "When in doubt, don't share",
+     "txt": "Even if you agree with the message."
+    }
+   ],
+   "fontes": [
+    "camara-dicas",
+    "camara-comprove",
+    "plenarinho-fake",
+    "je-fato-boato"
+   ]
+  },
+  {
+   "tipo": "quiz",
+   "pergunta": "At what age can you get your voter card?",
+   "opcoes": [
+    "15 years old",
+    "16 years old",
+    "18 years old"
+   ],
+   "certa": 0,
+   "explica": "From age 15, you can get your voter card. But you can only vote once you turn 16.",
+   "fontes": [
+    "res-tse-23659"
+   ]
+  },
+  {
+   "tipo": "quiz",
+   "pergunta": "You got a scary message that says: “send this to everyone!”. What should you do?",
+   "opcoes": [
+    "Send it right away, to warn everyone",
+    "Check it in other places and, when in doubt, don't share it",
+    "Send it only if you agree with it"
+   ],
+   "certa": 1,
+   "explica": "An alarmist message that asks to be spread deserves suspicion. When in doubt, don't share it, even if you agree with it.",
+   "fontes": [
+    "camara-dicas",
+    "plenarinho-fake"
+   ]
+  }
+ ]
+}

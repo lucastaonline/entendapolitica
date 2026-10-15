@@ -22,7 +22,7 @@
   if (q) try { localStorage.setItem("ep-lang", q); } catch (e) {}
   EP.lang = q || (salvo === "en" ? "en" : "pt");
   EP.en = EP.lang === "en";
-  EP.locale = EP.en ? "en-GB" : "pt-BR";
+  EP.locale = EP.en ? "en-US" : "pt-BR";
   raizDoc.lang = EP.en ? "en" : "pt-BR";
   EP.tr = function (pt, en) { return EP.en && en != null ? en : pt; };
   // troca os textos marcados com data-en-* (só quando a página está em inglês)
@@ -119,12 +119,13 @@
     if (!iso) return "";
     var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(iso);
     if (!m) return String(iso);
-    return EP.en ? (+m[3]) + " " + MESES.en[+m[2] - 1].slice(0, 3) + " " + m[1] : m[3] + "/" + m[2] + "/" + m[1];
+    // inglês no estilo americano, igual ao das aulas: "Oct 27, 1945" / "October 27, 1945"
+    return EP.en ? MESES.en[+m[2] - 1].slice(0, 3) + " " + (+m[3]) + ", " + m[1] : m[3] + "/" + m[2] + "/" + m[1];
   };
   EP.dataLonga = function (iso) {
     var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(iso || "");
     if (!m) return iso || "";
-    if (EP.en) return (+m[3]) + " " + MESES.en[+m[2] - 1] + " " + m[1];
+    if (EP.en) return MESES.en[+m[2] - 1] + " " + (+m[3]) + ", " + m[1];
     return (+m[3] === 1 ? "1º" : +m[3]) + " de " + MESES.pt[+m[2] - 1] + " de " + m[1];
   };
   EP.idade = function (iso) {
@@ -188,7 +189,7 @@
     "senador": "Senator", "senadora": "Senator", "deputado federal": "Federal Deputy", "deputada federal": "Federal Deputy",
     "governador": "Governor", "governadora": "Governor", "vice-governador": "Vice Governor", "vice-governadora": "Vice Governor",
     "deputado estadual": "State Deputy", "deputada estadual": "State Deputy", "deputado distrital": "District Deputy", "deputada distrital": "District Deputy",
-    "prefeito": "Mayor", "prefeita": "Mayor", "vice-prefeito": "Deputy Mayor", "vice-prefeita": "Deputy Mayor",
+    "prefeito": "Mayor", "prefeita": "Mayor", "vice-prefeito": "Vice Mayor", "vice-prefeita": "Vice Mayor",
     "vereador": "City Councilor", "vereadora": "City Councilor", "ministro": "Minister", "ministra": "Minister"
   };
   EP.cargo = function (pt) {
@@ -208,18 +209,46 @@
     "industria, comercio e servicos": "Industry, trade and services", "meio ambiente e desenvolvimento sustentavel": "Environment", "politica, partidos e eleicoes": "Politics, parties and elections",
     "previdencia e assistencia social": "Pensions and social assistance", "processo legislativo e atuacao parlamentar": "How Congress works",
     "relacoes internacionais e comercio exterior": "International relations and trade", "saude": "Health", "seguranca publica": "Public safety",
-    "trabalho e emprego": "Work and jobs", "turismo": "Tourism", "viacao, transporte e mobilidade": "Transportation"
+    "trabalho e emprego": "Work and jobs", "turismo": "Tourism", "viacao, transporte e mobilidade": "Transportation",
+    // temas do Senado (classificação própria do Senado)
+    "tributos": "Taxes", "financas publicas": "Public finances", "agentes publicos": "Public servants",
+    "direito penal e penitenciario": "Criminal and prison law", "direito eleitoral": "Electoral law", "direitos e garantias": "Rights and guarantees",
+    "organizacao administrativa": "Government organization", "organizacao federativa": "Federal organization (states and cities)", "poder legislativo": "Legislative branch",
+    "poder judiciario": "Judicial branch", "processo legislativo": "How laws are made", "processo penal": "Criminal procedure",
+    "previdencia social": "Pensions", "assistencia social": "Social assistance", "mulheres": "Women",
+    "meio ambiente": "Environment", "fiscalizacao e controle": "Oversight and control", "criancas e adolescentes": "Children and teenagers",
+    "desenvolvimento regional": "Regional development", "ciencia, tecnologia e informatica": "Science, technology and computing", "orcamento anual": "Annual budget",
+    "viacao e transportes": "Transportation", "minas e energia": "Mining and energy", "orcamento publico": "Public budget",
+    "sistema financeiro nacional": "Financial system", "direito do consumidor": "Consumer rights", "desporto e lazer": "Sports and leisure",
+    "pessoas com deficiencia": "People with disabilities", "dominio e bens publicos": "Public property", "direito civil": "Civil law",
+    "populacao indigena": "Indigenous peoples", "funcoes essenciais a justica": "Justice institutions (prosecutors, public defenders and lawyers)", "agropecuaria e abastecimento": "Farming and food supply",
+    "processo civil": "Civil procedure", "homenagem": "Tributes", "servicos publicos": "Public services",
+    "fiscalizacao e controle da atividade economica": "Business oversight", "protecao social": "Social protection", "calamidade publica e emergencia social": "Disasters and emergencies",
+    "licitacao e contratos": "Public procurement and contracts", "direito de transito": "Traffic law", "data comemorativa": "Commemorative dates",
+    "cultura": "Culture", "desenvolvimento sustentavel": "Sustainable development", "idosos": "Older people",
+    "relacoes internacionais": "International relations", "espacos especialmente protegidos": "Protected areas", "economia e desenvolvimento": "Economy and development",
+    "linha de credito": "Credit lines", "transparencia e governanca publicas": "Transparency and public governance", "desenvolvimento social e combate a fome": "Social development and fighting hunger",
+    "defesa nacional e forcas armadas": "National defense and armed forces", "politica fundiaria e reforma agraria": "Land policy and agrarian reform", "direito empresarial e economico": "Business and economic law",
+    "terceiro setor, parcerias publico-privadas e desestatizacao": "Nonprofits, public-private partnerships and privatization", "desenvolvimento urbano": "Urban development", "protecao aos animais": "Animal protection",
+    "direito notarial e registral": "Notary and registry law", "crimes e infracoes ambientais": "Environmental crimes", "vegetacao nativa": "Native vegetation",
+    "politica social": "Social policy", "residuos solidos": "Solid waste", "mudancas climaticas": "Climate change",
+    "poluicao": "Pollution", "habitacao": "Housing", "recursos hidricos": "Water resources",
+    "direito maritimo, aeronautico e espacial": "Maritime, air and space law", "processo do trabalho": "Labor procedure", "processo administrativo": "Administrative procedure",
+    "licenciamento ambiental": "Environmental licensing", "infraestrutura": "Infrastructure", "direito dos estrangeiros": "Rights of foreigners",
+    "intervencao na propriedade privada": "Government intervention in private property", "honorifico": "Honors", "diretrizes orcamentarias": "Budget guidelines",
+    "defesa do estado e das instituicoes democraticas": "Defense of the State and of democratic institutions", "soberania, defesa nacional e ordem publica": "Sovereignty, national defense and public order", "processo": "Legal procedure",
+    "patrimonio genetico": "Genetic heritage", "juridico": "Legal matters"
   };
   EP.tema = function (pt) { return EP.en ? TEMAS_EN[EP.norm(pt)] || pt : pt; };
 
   // ---------------------------------------------------------------- eleição de 2026 e cartões de pessoa
   EP.SIT2026 = {
-    eleito: { ic: "🗳️", cls: "verde" }, reeleito: { ic: "🔁", cls: "verde" }, "segundo-turno": { ic: "⏳", cls: "amarelo" },
+    eleito: { ic: "🗳️", cls: "neutro" }, reeleito: { ic: "🔁", cls: "neutro" }, "segundo-turno": { ic: "⏳", cls: "amarelo" },
     "nao-eleito": { ic: "▫️", cls: "neutro" }, suplente: { ic: "🪑", cls: "neutro" }, candidato: { ic: "🗳️", cls: "amarelo" }, "nao-concorreu": { ic: "▫️", cls: "neutro" }
   };
   function txt2026(sit, genero, curto) {
     var a = genero === "F" ? "a" : "o";
-    if (EP.en) return { eleito: "Elected in 2026", reeleito: "Re-elected in 2026", "segundo-turno": curto ? "Runoff in 2026" : "In the runoff on 25 Oct 2026",
+    if (EP.en) return { eleito: "Elected in 2026", reeleito: "Re-elected in 2026", "segundo-turno": curto ? "Runoff in 2026" : "In the runoff on October 25, 2026",
       "nao-eleito": "Not elected in 2026", suplente: "Alternate in 2026", candidato: "Candidate in 2026", "nao-concorreu": "Did not run in 2026" }[sit] || "2026";
     return { eleito: "Eleit" + a + " em 2026", reeleito: "Reeleit" + a + " em 2026", "segundo-turno": curto ? "2º turno em 2026" : "Disputa o 2º turno em 25/10/2026",
       "nao-eleito": "Não eleit" + a + " em 2026", suplente: curto ? "Suplente em 2026" : "Ficou como suplente em 2026", candidato: "Candidat" + a + " em 2026",
@@ -246,12 +275,13 @@
 
   // ---------------------------------------------------------------- situação das propostas
   EP.STATUS = {
-    lei: { ic: "🏆", txt: EP.tr("Virou lei", "Became law"), curto: EP.tr("Viraram lei", "Became law") },
-    aprovada: { ic: "✅", txt: EP.tr("Aprovada, falta pouco", "Approved, not law yet"), curto: EP.tr("Aprovadas (ainda não viraram lei)", "Approved (not law yet)") },
+    lei: { ic: "📜", txt: EP.tr("Virou lei", "Became law"), curto: EP.tr("Viraram lei", "Became law") },
+    aprovada: { ic: "☑️", txt: EP.tr("Aprovada numa etapa (ainda não é lei)", "Approved at one stage (not law yet)"), curto: EP.tr("Aprovadas numa etapa", "Approved at one stage") },
     andando: { ic: "🚶", txt: EP.tr("Em discussão", "Under discussion"), curto: EP.tr("Em discussão", "Under discussion") },
     junta: { ic: "🔗", txt: EP.tr("Junto com outra", "Joined to a similar bill"), curto: EP.tr("Andando junto com outra parecida", "Joined to a similar bill") },
     arquivada: { ic: "🗄️", txt: EP.tr("Arquivada", "Shelved"), curto: EP.tr("Arquivadas", "Shelved") },
-    rejeitada: { ic: "❌", txt: EP.tr("Rejeitada", "Rejected"), curto: EP.tr("Rejeitadas ou paradas de vez", "Rejected or stopped for good") },
+    rejeitada: { ic: "✖️", txt: EP.tr("Rejeitada", "Rejected"), curto: EP.tr("Rejeitadas ou vetadas", "Rejected or vetoed") },
+    parada: { ic: "⏹️", txt: EP.tr("Parou", "Stopped"), curto: EP.tr("Pararam sem ser rejeitadas", "Stopped without a rejection") },
     retirada: { ic: "↩️", txt: EP.tr("Autor desistiu", "Withdrawn"), curto: EP.tr("O autor desistiu", "Withdrawn by the author") },
     outra: { ic: "❔", txt: EP.tr("Outra situação", "Other status"), curto: EP.tr("Outra situação", "Other status") }
   };
@@ -272,7 +302,8 @@
       EP.esc(JSON.stringify(String(nome || "?"))) + "," + EP.esc(JSON.stringify(classe || "")) + ')">';
   };
   EP.cartaoPessoa = function (p, extra) {
-    var linha2 = [p.partido, p.uf].filter(Boolean).join(" · ");
+    var partido = /^sem partido$/i.test(p.partido || "") ? EP.tr("Sem partido", "No party") : p.partido;
+    var linha2 = [partido, p.uf].filter(Boolean).join(" · ");
     return '<a class="pessoa-card" href="pessoa.html?id=' + encodeURIComponent(p.id) + '">' + EP.av(p.foto, p.nome) +
       "<b>" + EP.esc(p.nome) + "</b>" + (extra ? "<small>" + EP.esc(extra) + "</small>" : "") + (linha2 ? "<small>" + EP.esc(linha2) + "</small>" : "") +
       EP.chip2026(p.eleicao2026, p.genero) + "</a>";
@@ -330,9 +361,12 @@
     lista = (lista || []).filter(Boolean);
     if (!lista.length) return '<p class="muted">' + EP.tr("Sem fonte registrada.", "No source recorded.") + "</p>";
     return (EP.en ? '<p class="muted">Most official sources are in Portuguese.</p>' : "") + '<ul class="fontes-lista">' + lista.map(function (f) {
-      return "<li><b>" + EP.esc(f.veiculo || hostDe(f.url)) + "</b>" +
-        (f.url ? '<a href="' + EP.esc(f.url) + '" target="_blank" rel="noopener"' + (EP.en ? ' hreflang="pt-BR"' : "") + ">" + EP.pt(EP.esc(f.titulo || f.url)) +
-          ' <span aria-hidden="true">↗</span><span class="sr">' + EP.tr("(abre em outra aba)", "(opens in a new tab)") + "</span></a>" : EP.pt(EP.esc(f.titulo || ""))) +
+      // no inglês, o título fica marcado como português, a não ser que já tenha sido traduzido (f.lang = "en")
+      var tit = EP.esc(f.titulo || f.url || "");
+      tit = f.lang === "en" ? tit : EP.pt(tit);
+      return "<li><b>" + EP.pt(EP.esc(f.veiculo || hostDe(f.url))) + "</b>" +
+        (f.url ? '<a href="' + EP.esc(f.url) + '" target="_blank" rel="noopener"' + (EP.en ? ' hreflang="pt-BR"' : "") + ">" + tit +
+          ' <span aria-hidden="true">↗</span><span class="sr">' + EP.tr("(abre em outra aba)", "(opens in a new tab)") + "</span></a>" : tit) +
         (f.data ? "<br><small>" + (/^\d{4}-\d{2}-\d{2}$/.test(f.data) ? EP.tr("Data: ", "Date: ") + EP.data(f.data) : EP.esc(f.data)) + "</small>" : "") + "</li>";
     }).join("") + "</ul>";
   };

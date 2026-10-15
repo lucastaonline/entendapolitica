@@ -188,7 +188,7 @@
    "tipo": "historia",
    "titulo": "Imagine a eleição do grêmio...",
    "quadros": [
-    { "ic": "🏫", "txt": "Na eleição do grêmio, Ana apoia a Chapa Azul. Léo apoia a Chapa Verde." },
+    { "ic": "🏫", "txt": "Na eleição do grêmio, Ana apoia a Chapa 1. Léo apoia a Chapa 2." },
     { "ic": "👂", "txt": "Ana explica os motivos dela. Léo ouve até o fim, sem interromper." },
     { "ic": "💬", "txt": "Léo discorda e explica os motivos dele. Ninguém xinga nem ri do outro." },
     { "ic": "🤫", "txt": "Na votação, cada um vota em segredo. Ninguém é obrigado a contar o voto." },

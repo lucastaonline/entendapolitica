@@ -185,6 +185,20 @@
    "titulo": "Os Três Poderes",
    "url": "https://plenarinho.leg.br/index.php/2017/09/os-tres-poderes/",
    "data": "2017-09-07"
+  },
+  {
+   "id": "ibge-dtb",
+   "veiculo": "IBGE",
+   "titulo": "Divisão Territorial Brasileira",
+   "url": "https://www.ibge.gov.br/geociencias/organizacao-do-territorio/estrutura-territorial/23701-divisao-territorial-brasileira.html",
+   "data": "2026-03-30"
+  },
+  {
+   "id": "ibge-estimativas",
+   "veiculo": "IBGE",
+   "titulo": "Estimativas da população residente para os municípios e para as unidades da federação",
+   "url": "https://www.ibge.gov.br/estatisticas/sociais/populacao/9103-estimativas-de-populacao.html",
+   "data": "2026-08-28"
   }
  ],
  "glossario": [
@@ -362,6 +376,8 @@
    "nota": "Números do **IBGE**. Municípios: conta de março de 2026. Pessoas: cálculo para 1º de julho de 2026. Fernando de Noronha (PE) não é município: é um distrito do estado.",
    "fontes": [
     "plen-republica",
+    "ibge-dtb",
+    "ibge-estimativas",
     "ab-municipios",
     "ab-populacao"
    ]
@@ -424,7 +440,7 @@
     },
     {
      "ic": "🔒",
-     "txt": "Da maior parte dos presídios."
+     "txt": "Dos presídios estaduais, protegidos pela polícia penal do estado."
     }
    ],
    "ilustracao": "mapa",
@@ -590,7 +606,6 @@
     "cf-art32",
     "cf-art18",
     "cf-art21",
-    "lei-11445",
     "plen-governador",
     "plen-tres-poderes"
    ]

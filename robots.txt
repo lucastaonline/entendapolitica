@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /testes/
+
+Sitemap: https://entendapolitica.vercel.app/sitemap.xml

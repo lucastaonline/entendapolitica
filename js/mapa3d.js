@@ -69,7 +69,7 @@
     fit = estreito ? Math.min(r.width / 1010, r.height / 780) : Math.min(r.width / 1250, r.height / 900);
     fit = Math.max(.27, Math.min(1.05, fit));
     tela.classList.toggle("estreito", estreito);
-    oyBase = estreito ? 47 : 56;
+    oyBase = estreito ? 41 : 56;
     return fit;
   }
   M.ajustar = function () {

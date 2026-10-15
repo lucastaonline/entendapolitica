@@ -136,6 +136,13 @@
    "titulo": "Vereador e prefeito – quem faz o quê?",
    "url": "https://plenarinho.leg.br/index.php/2024/03/eleicoes-municipais-vem-ai/",
    "data": "2024-03-06"
+  },
+  {
+   "id": "cf-art52",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 52, II e parágrafo único",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
   }
  ],
  "glossario": [
@@ -374,6 +381,10 @@
      "txt": "O presidente escolhe os ministros do STF, mas o Senado precisa aprovar."
     },
     {
+     "ic": "🏛️",
+     "txt": "O Senado também pode julgar os ministros do STF por **crime de responsabilidade** (uma falta grave no cargo) e, se forem condenados, tirá-los do cargo."
+    },
+    {
      "ic": "🚨",
      "txt": "Em casos muito graves, a Câmara e o Senado podem tirar o presidente do cargo. É o **impeachment**."
     }
@@ -384,6 +395,7 @@
     "cf-art66",
     "cf-art101",
     "cf-art102",
+    "cf-art52",
     "cf-impeachment",
     "plen-vogel",
     "plen-governador",

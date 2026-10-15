@@ -9,105 +9,120 @@
    "veiculo": "Planalto",
    "titulo": "Federal Constitution of 1988 (in Portuguese)",
    "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
-   "data": "1988-10-05"
+   "data": "1988-10-05",
+   "lang": "en"
   },
   {
    "id": "cf-art1",
    "veiculo": "Planalto",
    "titulo": "Federal Constitution, art. 1 (in Portuguese)",
    "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
-   "data": "1988-10-05"
+   "data": "1988-10-05",
+   "lang": "en"
   },
   {
    "id": "cf-art5",
    "veiculo": "Planalto",
    "titulo": "Federal Constitution, art. 5 (in Portuguese)",
    "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
-   "data": "1988-10-05"
+   "data": "1988-10-05",
+   "lang": "en"
   },
   {
    "id": "cf-art6",
    "veiculo": "Planalto",
    "titulo": "Federal Constitution, art. 6 (in Portuguese)",
    "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
-   "data": "1988-10-05"
+   "data": "1988-10-05",
+   "lang": "en"
   },
   {
    "id": "cf-art14",
    "veiculo": "Planalto",
    "titulo": "Federal Constitution, art. 14 (in Portuguese)",
    "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
-   "data": "1988-10-05"
+   "data": "1988-10-05",
+   "lang": "en"
   },
   {
    "id": "cf-mandatos",
    "veiculo": "Planalto",
    "titulo": "Federal Constitution, arts. 27, 28, 29, 44, 46 and 82 (length of terms of office) (in Portuguese)",
    "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
-   "data": "1988-10-05"
+   "data": "1988-10-05",
+   "lang": "en"
   },
   {
    "id": "cf-art30",
    "veiculo": "Planalto",
    "titulo": "Federal Constitution, art. 30 (in Portuguese)",
    "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
-   "data": "1988-10-05"
+   "data": "1988-10-05",
+   "lang": "en"
   },
   {
    "id": "cf-art60",
    "veiculo": "Planalto",
    "titulo": "Federal Constitution, art. 60 (in Portuguese)",
    "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
-   "data": "1988-10-05"
+   "data": "1988-10-05",
+   "lang": "en"
   },
   {
    "id": "cf-art165",
    "veiculo": "Planalto",
    "titulo": "Federal Constitution, arts. 165 and 166 (budget) (in Portuguese)",
    "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
-   "data": "1988-10-05"
+   "data": "1988-10-05",
+   "lang": "en"
   },
   {
    "id": "cf-art208",
    "veiculo": "Planalto",
    "titulo": "Federal Constitution, art. 208 (in Portuguese)",
    "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
-   "data": "1988-10-05"
+   "data": "1988-10-05",
+   "lang": "en"
   },
   {
    "id": "cf-art227",
    "veiculo": "Planalto",
    "titulo": "Federal Constitution, art. 227 (in Portuguese)",
    "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
-   "data": "1988-10-05"
+   "data": "1988-10-05",
+   "lang": "en"
   },
   {
    "id": "eca-art16",
    "veiculo": "Planalto",
    "titulo": "Law No. 8,069/1990 (Statute of the Child and Adolescent), art. 16 (in Portuguese)",
    "url": "https://www.planalto.gov.br/ccivil_03/leis/l8069.htm",
-   "data": "1990-07-13"
+   "data": "1990-07-13",
+   "lang": "en"
   },
   {
    "id": "ldb-art6",
    "veiculo": "Planalto",
    "titulo": "Law No. 9,394/1996 (National Education Guidelines and Bases Law), art. 6 (in Portuguese)",
    "url": "https://www.planalto.gov.br/ccivil_03/leis/l9394.htm",
-   "data": "1996-12-20"
+   "data": "1996-12-20",
+   "lang": "en"
   },
   {
    "id": "lei-12741",
    "veiculo": "Planalto",
    "titulo": "Law No. 12,741/2012 (taxes shown on receipts), art. 1 (in Portuguese)",
    "url": "https://www.planalto.gov.br/ccivil_03/_ato2011-2014/2012/lei/l12741.htm",
-   "data": "2012-12-08"
+   "data": "2012-12-08",
+   "lang": "en"
   },
   {
    "id": "lei-6766",
    "veiculo": "Planalto",
    "titulo": "Law No. 6,766/1979, art. 22 (streets and squares become property of the municipality) (in Portuguese)",
    "url": "https://www.planalto.gov.br/ccivil_03/leis/l6766.htm",
-   "data": "1979-12-19"
+   "data": "1979-12-19",
+   "lang": "en"
   },
   {
    "id": "ms-sus",
@@ -171,6 +186,14 @@
    "titulo": "A cidadania além das urnas (in Portuguese)",
    "url": "https://plenarinho.leg.br/index.php/2024/06/cidadania-alem-das-urnas/",
    "data": "2024-06-17"
+  },
+  {
+   "id": "ibge-estimativas",
+   "veiculo": "IBGE",
+   "titulo": "Population estimates for municipalities and states (in Portuguese)",
+   "url": "https://www.ibge.gov.br/estatisticas/sociais/populacao/9103-estimativas-de-populacao.html",
+   "data": "2026-08-28",
+   "lang": "en"
   }
  ],
  "glossario": [
@@ -364,7 +387,8 @@
     "cf-art1",
     "cf-art14",
     "cf-mandatos",
-    "plen-democracia"
+    "plen-democracia",
+    "ibge-estimativas"
    ]
   },
   {

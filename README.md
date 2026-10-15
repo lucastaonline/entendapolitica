@@ -6,11 +6,26 @@ Mesma identidade visual do [Entenda o 2º turno](https://entendaosegundoturno.ve
 
 ## As 3 portas da página inicial
 
-1. **Entenda a política** (`entenda.html`): apresentação em slides, parte por parte: o que é política, os Três Poderes, país/estado/cidade, cada cargo, o Congresso, como nasce uma lei, eleições, quem julga e fiscaliza, como participar.
+1. **Entenda a política** (`entenda.html`): um **mapa 3D** (tabuleiro) com 9 paradas: o que é política (escola), os Três Poderes, país/estado/cidade, os cargos (torre), o Congresso (no centro), como nasce uma lei, eleições (urna), quem julga e fiscaliza (tribunal) e como participar (palanque). Uma trilha amarela sugere a ordem, mas dá para clicar em qualquer lugar. Ao clicar, a câmera "mergulha" no lugar e abre a **aula daquela parada**: uma apresentação com muito 3D (escadas para processos, cartões que viram, quadrinhos que folheiam, quiz e simuladores). No fim: estrela no mapa e "próxima parada". O progresso fica salvo no aparelho.
 2. **A política do Brasil** (`brasil.html`): presidente, vice, ministros, os 81 senadores e os 513 deputados federais, com busca por qualquer político.
 3. **A política do meu estado** (`estado.html`): governador e vice, os senadores e deputados federais do estado, os deputados estaduais e, escolhendo a cidade, prefeito, vice e vereadores.
 
-Cada pessoa tem uma página (`pessoa.html?id=...`) com ficha, propostas (com explicação simples + texto oficial + link da fonte), situação de cada proposta, gastos e eleições.
+Cada pessoa tem uma página (`pessoa.html?id=...`) com ficha, propostas (com explicação simples + texto oficial + link da fonte), situação de cada proposta, votações, gastos e eleições.
+
+## Idiomas (português e inglês)
+
+O site tem versão em inglês para quem é de fora do Brasil (`?lang=en`; a escolha fica salva no aparelho; botão 🌐 no topo).
+- **HTML:** o português fica no HTML e o inglês ao lado, em atributos: `data-en`, `data-en-html`, `data-en-title`, `data-en-placeholder`, `data-en-aria-label`, `data-en-content` (meta). O `js/comum.js` troca tudo quando a página está em inglês.
+- **JavaScript:** `EP.tr("português", "English")`. Números, datas e dinheiro saem no formato do idioma (`EP.num`, `EP.data`, `EP.dinheiro`).
+- **Conteúdo do mapa:** `conteudo/entenda/en/parte-N.json` (mesma estrutura do português). Se faltar, a parada aparece em português com aviso.
+- **Dados:** campos `*_en` quando existem (ex.: `txt_en` da eleição de 2026, `s_en` da explicação simples). Textos oficiais em português (ementas, nomes) aparecem marcados com `lang="pt-BR"`.
+
+## Acessibilidade
+
+- Menu ♿ em todas as páginas: tamanho da letra (4 tamanhos), alto contraste, menos movimento, mais espaço no texto, ouvir a página (voz do aparelho), Libras (VLibras, do governo federal) e idioma. As escolhas ficam salvas e são aplicadas antes de a página aparecer (script curto no `<head>`).
+- Tudo funciona pelo teclado; janelas prendem o foco e fecham com Esc; o mapa 3D tem lista alternativa (📋) e cada parada é um botão com nome; as setas giram o mapa e trocam as páginas das aulas.
+- Respeita "reduzir movimento" do aparelho. Textos oficiais em português dentro da página em inglês têm `lang="pt-BR"`.
+- Auditoria automática: `python testes/acessibilidade.py pagina.html "pagina.html?lang=en" [--mobile]` (axe-core, WCAG 2.2 AA).
 
 ## Fases combinadas
 
@@ -35,24 +50,48 @@ Mandatos: o site mostra **quem está no cargo hoje** e marca quem foi **eleito/r
 
 ```
 index.html            página inicial (3 portas)
-entenda.html          slides "Entenda a política" (lê conteudo/entenda/parte-N.json)
+entenda.html          mapa 3D da política + aulas de cada parada (lê conteudo/entenda/[en/]parte-N.json)
 brasil.html           política do Brasil (lê dados/executivo.json, dados/senado.json, dados/camara.json)
 estado.html           política do meu estado (lê dados/estados/UF.json e dados/cidades/...)
-pessoa.html           perfil de uma pessoa (lê dados/pessoas/<id>.json)
+pessoa.html           perfil de uma pessoa (lê dados/pessoas/<id>.json e dados/votacoes/<casa>.json)
 imparcialidade.html   como cuidamos da imparcialidade
 dados.html            de onde vêm os dados, com que frequência são atualizados e os limites
-css/base.css          visual comum (cores, botões, cartões, janela)
-css/tres.css          peças 3D (vieram do site do 2º turno) + novas
-js/tres.js            monta as peças 3D
-js/comum.js           barra do topo (Início, Ouvir, A+), janela, fontes, glossário, animação ao rolar
-conteudo/entenda/     texto dos slides, uma parte por arquivo (JSON)
+css/base.css          visual comum (cores, botões, cartões, janela) + acessibilidade (contraste, movimento, espaçamento)
+css/tres.css          peças 3D que vieram do site do 2º turno (urna, cubos, formas)
+css/tres-politica.css peças 3D novas (Congresso, Três Poderes, níveis, escola, torre, tribunal, palanque, escada...)
+css/mapa.css          o mundo 3D do mapa (chão, lotes, placas, câmera)
+css/entenda.css       as aulas (slides em 3D)
+js/comum.js           idioma, acessibilidade, janela, fontes, ouvir, Libras, formatação
+js/tres.js, js/tres-politica.js   montam as peças 3D (cada modelo tem modo "cena" e modo "mundo")
+js/mapa3d.js          monta o mapa 3D, câmera (voar até um lugar), girar, zoom, lista acessível
+js/entenda.js         carrega o conteúdo, liga o mapa e as aulas (especificação dos slides no topo do arquivo)
+conteudo/entenda/     texto das 9 paradas em português; conteudo/entenda/en/ em inglês
 dados/                tudo o que os scripts geram (JSON); não edite à mão, exceto dados/manual/
 scripts/              coletores em Python (só biblioteca padrão + Pillow)
-.github/workflows/    atualização automática
-testes/               testes com Playwright
+.github/workflows/    atualização automática diária
+testes/               capturas de tela, auditoria de acessibilidade e amostras
 ```
 
-Para ver no computador: `python -m http.server 8765` dentro da pasta e abra http://127.0.0.1:8765.
+Para ver no computador: `python -m http.server 8770` dentro da pasta e abra http://127.0.0.1:8770.
+
+## Testes (com o servidor local acima rodando; precisam do Playwright com o Edge e, para acessibilidade, do axe-core em `../ferramentas/node_modules`)
+
+- `python testes/captura.py index.html "pessoa.html?id=pres-lula&lang=en" --mobile --cheia`: capturas de tela em `testes/capturas/`, erros do console e rolagem para os lados.
+- `python testes/acessibilidade.py brasil.html "brasil.html?lang=en" [--mobile]` e `--aulas` (todos os slides das 9 paradas, nos 2 idiomas): auditoria axe-core (WCAG 2.2 AA). Meta: 0 problemas.
+- `python testes/verifica_texto.py "estado.html?uf=BA&lang=en" ...`: procura "undefined"/"null" e português solto na versão em inglês.
+- `python testes/interacao.py`: teclado, busca, escolha de cidade, filtros, mapa e menu de acessibilidade.
+- `python testes/gerar_imagens.py`: gera os ícones e a imagem de compartilhamento (`testes/og.html` → `img/compartilhar.jpg`).
+- Observação: as fotos do TSE não carregam no navegador sem janela dos testes (o firewall do TSE barra); num navegador normal, carregam.
+
+## Como os dados são atualizados
+
+`.github/workflows/atualizar.yml` roda todo dia às 6h (Brasília), nesta ordem:
+1. `scripts/camara.py` (Câmara), `scripts/senado.py` (Senado), `scripts/executivo.py` (presidente e vice), `scripts/tse.py` (TSE e IBGE: estados, cidades, eleições, bens, busca);
+2. `scripts/simplificar.py`: escreve, com IA, a explicação simples (português e inglês) das propostas que ainda não têm, a partir da ementa oficial (o texto oficial aparece sempre ao lado). Usa o GitHub Models com o token do próprio Actions (grátis, cerca de 2.800 propostas por dia) ou uma chave da OpenAI no segredo `OPENAI_API_KEY` (mais rápido). Ordem: rodízio por pessoa (a cada rodada, cada político ganha a explicação da sua proposta mais nova que ainda falta), para todo mundo avançar no mesmo ritmo, sem prioridade para quem governa. Um programa confere cada explicação antes de publicar (no máximo 35 palavras em português e 45 em inglês, palavras de opinião proibidas, números e trechos entre aspas que precisam existir na ementa); a que for recusada 2 vezes fica só com o texto oficial (`dados/simples-recusadas.json`);
+3. `scripts/montar.py`: junta tudo (TSE nos perfis, explicações simples, textos em inglês da eleição de 2026);
+4. faz commit só do que mudou de verdade (datas de consulta não contam) e a Vercel publica sozinha.
+
+Correções à mão (sempre com fonte): `dados/manual/governadores.json`, `dados/manual/ministros.json`, `dados/manual/prefeitos.json` (quando quem está no cargo hoje não é quem o TSE mostra: morte, renúncia, cassação).
 
 ---
 
@@ -100,10 +139,11 @@ Todo bloco de informação leva uma `fonte` (ou uma lista `fontes`):
   "fotoCredito": "Câmara dos Deputados",
   "nascimento": "1983-04-15",
   "naturalidade": "Macapá (AP)",
-  "escolaridade": "Superior completo",
-  "profissoes": ["Advogada"],
+  "escolaridade": "Superior completo",  // declarada ao TSE na candidatura mais recente (mesma fonte para todos)
+  "escolaridadeFonte": {},
+  "ocupacao": { "txt": "Advogada", "ano": 2026, "fonte": {} },  // ocupação declarada ao TSE
   "mandato": { "inicio": "2023-02-01", "fim": "2027-01-31", "situacao": "Em exercício", "obs": null, "fonte": {} },
-  "mandatosAnteriores": [ { "cargo": "Deputada federal", "inicio": "2019-02-01", "fim": "2023-01-31" } ],
+  "mandatosAnteriores": [ { "cargo": "Deputada federal", "inicio": "2019-02-01", "fim": "2023-01-31", "obs": null } ],  // obs: quando a Câmara só informa a legislatura (1987–1995) e as datas são as da legislatura
   "eleicao": { "ano": 2022, "cargo": "Deputada federal", "votos": 12345, "situacao": "Eleita por média", "fonte": {} },
   "eleicao2026": { "cargo": "Senadora", "situacao": "eleito", "txt": "Eleita senadora em 2026", "fonte": {} },
   "bens": { "ano": 2022, "total": 123456.78, "fonte": {} },
@@ -115,6 +155,7 @@ Todo bloco de informação leva uma `fonte` (ou uma lista `fontes`):
     "porTipo": { "PL": 100, "PEC": 2, "PDL": 18 },
     "porTema": [ { "tema": "Saúde", "n": 20 } ],
     "outros": { "total": 300, "porTipo": { "REQ": 250, "INC": 50 }, "url": "https://...", "txt": "Pedidos de informação, indicações e requerimentos" },
+    "apoios": { "total": 376, "porTipo": { "PEC": 20, "REQ": 189 }, "txt": "Assinaturas só de apoio..." },  // Câmara: assinou só para a proposta de outra pessoa poder ser apresentada (não é autor nem coautor)
     "fonte": {},
     "lista": [
       {
@@ -123,8 +164,9 @@ Todo bloco de informação leva uma `fonte` (ou uma lista `fontes`):
         "tipo": "PL",
         "data": "2023-03-01",
         "ementa": "Texto oficial (ementa)",
-        "s": null,                      // explicação simples (preenchida por scripts/simplificar.py)
-        "status": "lei",                // lei | aprovada | andando | junta | arquivada | rejeitada | retirada | outra
+        "s": "Explicação simples",      // preenchida por scripts/montar.py a partir de dados/simples/ (ausente = ainda não tem)
+        "s_en": "Simple explanation",   // a mesma explicação em inglês
+        "status": "lei",                // lei | aprovada | andando | junta | arquivada | rejeitada | parada | retirada | outra
         "statusTxt": "Virou a Lei nº 14.999/2024",
         "situacao": "Transformado em Norma Jurídica",  // texto oficial da situação
         "dataStatus": "2024-05-02",
@@ -140,10 +182,8 @@ Todo bloco de informação leva uma `fonte` (ou uma lista `fontes`):
     "escopo": "Votações com voto de cada um (nominais) no Plenário da Câmara desde fevereiro de 2023",
     "resumo": { "total": 300, "Sim": 150, "Não": 120, "Abstenção": 5, "Obstrução": 20, "Outro": 5 },
     "fonte": {},
-    "lista": [
-      { "id": "camara-vot:2345678-123", "data": "2024-05-02", "propostaId": "camara:2345678", "proposta": "PL 1234/2023",
-        "descricao": "Descrição oficial do que foi votado", "voto": "Sim", "resultado": "Aprovado", "url": "https://..." }
-    ]
+    "arquivo": "dados/votacoes/camara.json",   // onde estão os detalhes de cada votação (compartilhados por todos)
+    "votos": [ ["2345678-123", "Sim"], ["2345678-120", "Não"] ]   // [chave no arquivo, voto], da mais nova para a mais antiga
   },
   "fontes": [],
   "atualizado": "2026-10-15"
@@ -151,6 +191,21 @@ Todo bloco de informação leva uma `fonte` (ou uma lista `fontes`):
 ```
 
 Campos sem informação: `null` (nunca invente). A lista de propostas vem **da mais nova para a mais antiga**.
+
+**Votações (`dados/votacoes/camara.json` e `dados/votacoes/senado.json`).** O que foi votado é igual para todos os 513 (ou 81), então fica num arquivo só e o perfil guarda apenas a chave e o voto da pessoa:
+
+```jsonc
+{
+  "votacoes": {
+    "2345678-123": { "data": "2024-05-02", "propostaId": "camara:2345678", "proposta": "PL 1234/2023",
+                     "descricao": "Descrição oficial do que foi votado", "resultado": "Aprovado", "url": "https://..." }
+  },
+  "legenda": { "NCom": "Não Compareceu" },   // só no Senado: o que quer dizer cada código de voto
+  "fonte": {}, "atualizado": "2026-10-15"
+}
+```
+
+Chaves: Câmara = id da votação na Câmara (`2345678-123`); Senado = `senado-vot:<código>`. Votações secretas do Senado (escolha de autoridades) não entram, porque o voto de cada um não é divulgado.
 
 **Situação das propostas (`status`)**, igual para Câmara, Senado e Assembleias:
 
@@ -161,7 +216,8 @@ Campos sem informação: `null` (nunca invente). A lista de propostas vem **da m
 | `andando` | ainda em discussão | Aguardando Parecer, Pronta para Pauta |
 | `junta` | está andando junto com outra proposta parecida (apensada) | Tramitando em Conjunto |
 | `arquivada` | foi para o arquivo | Arquivada |
-| `rejeitada` | votaram contra, foi vetada por inteiro ou ficou prejudicada | Rejeitada, Vetado totalmente |
+| `rejeitada` | rejeitada numa votação ou vetada por inteiro pelo presidente | Rejeitada, Vetado totalmente |
+| `parada` | parou sem ser rejeitada: perdeu a validade (medida provisória não votada a tempo), ficou prejudicada, foi devolvida ao autor ou impugnada (a Constituição, art. 62, §§ 3º e 11, trata rejeição e perda de eficácia como coisas diferentes) | Perda de eficácia, Prejudicada, Devolvida ao(à) Autor(a) |
 | `retirada` | o próprio autor desistiu | Retirado pelo(a) Autor(a) |
 | `outra` | não deu para classificar com segurança | |
 
@@ -177,13 +233,22 @@ Campos sem informação: `null` (nunca invente). A lista de propostas vem **da m
 - `dados/cidades/<UF>.json`: lista para escolher a cidade: `[ {"ibge","nome","prefeito":"Nome (PARTIDO)"} ]`.
 - `dados/cidades/<UF>/<IBGE>.json`: `{ "ibge","nome","uf","prefeito":{...},"vice":{...},"vereadores":{"total","aviso","fonte","membros":[...]},"atualizado" }`.
 - `dados/busca.json`: `[[id, nome, cargo curto, UF, partido, cidade ou null], ...]` (sem vereadores; eles aparecem na página da cidade).
-- `dados/simples/<00-99>.json`: cache das explicações simples: `{ "camara:2345678": "Explicação simples", ... }` (arquivo = 2 últimos dígitos do número).
+- `dados/simples/<00-99>.json`: cache das explicações simples: `{ "camara:2345678": { "pt": "Explicação simples", "en": "Simple explanation" }, ... }` (arquivo = 2 últimos dígitos do número). Escritas por `scripts/simplificar.py` só a partir da ementa oficial: no máximo 35 palavras, começando por um verbo (cria, muda, proíbe...), sem palavras de opinião. Quem quiser corrigir uma explicação edita o cache e roda `scripts/montar.py`.
+- `dados/tse/federais.json`: o que o TSE diz de cada pessoa do Congresso e do Executivo (eleição de 2022, bens declarados, resultado de 2026), juntado aos perfis por `scripts/montar.py`.
 
-`eleicao2026.situacao`: `eleito` | `reeleito` | `segundo-turno` | `nao-eleito` | `suplente` | `candidato` | `nao-concorreu` | `null` (não sabemos).
+`eleicao2026.situacao`: `eleito` | `reeleito` | `segundo-turno` | `nao-eleito` | `suplente` | `candidato` | `nao-concorreu` | `null` (não sabemos). `eleicao2026.txt` e `txt_en`: a frase pronta para mostrar.
+
+Campos extras de quem vem do TSE (estados e cidades): `aConfirmar` (o TSE ainda não fechou o resultado), `sq2022`, `eleito2022`/`eleito2024`, `vago` (com `txt`/`txt_en`), `votosDaChapa`, `desde` e `comoAssumiu`/`comoAssumiu_en` (quando quem está no cargo não é quem foi eleito, ex.: vice que assumiu), `nota`/`nota_en` (observação da pesquisa à mão), `casa`, `aviso`/`aviso_en` e `fonteMunicipios`.
+
+**Gastos (Câmara):** valores líquidos da cota parlamentar, iguais aos da página oficial de cada deputado, incluindo o que a página oficial mostra (passagens compradas pelo sistema da Câmara, o SIGEPA, e a complementação do auxílio-moradia). Não entram o salário nem a verba de gabinete (salários de assessores); por isso o site diz "gastos da cota" e não "tudo o que custou".
+
+**Mesma régua nos perfis federais (`scripts/montar.py`):** ocupação e escolaridade vêm, para todo mundo, da candidatura mais recente no TSE (`ocupacao`, `escolaridade`, `escolaridadeFonte`); as Casas e o Planalto descrevem isso de jeitos diferentes, ou não descrevem. "Mandatos anteriores" mostra só mandatos no mesmo cargo/Casa (deputado: Câmara; senador: Senado; presidente: Presidência), também para todo mundo.
 
 ---
 
-## Contrato dos slides (`conteudo/entenda/parte-N.json`)
+## Contrato das aulas (`conteudo/entenda/parte-N.json` e `conteudo/entenda/en/parte-N.json`)
+
+Cada parada do mapa é uma "parte". A versão em inglês tem exatamente os mesmos slides, na mesma ordem, com os mesmos ids de fonte (só os textos mudam; as fontes continuam sendo as oficiais brasileiras). No inglês, o título da fonte termina com " (in Portuguese)" e, quando foi traduzido, leva `"lang": "en"` (sem isso, o site marca o título como português para o leitor de tela). No glossário em inglês, o `termo` fica só em inglês (ex.: "alternate") e o nome em português vai no fim do `simples` ("In Portuguese: suplente."), porque o botão 📖 só aparece quando o termo inteiro está no texto do slide.
 
 ```jsonc
 {
@@ -195,7 +260,7 @@ Campos sem informação: `null` (nunca invente). A lista de propostas vem **da m
 }
 ```
 
-Tipos de slide: `abertura`, `explica`, `cards`, `passos`, `comparar`, `numeros`, `historia`, `quiz`, `simulador`. Os campos de cada tipo e as ilustrações disponíveis estão descritos no começo de `js/entenda.js`.
+Tipos de slide: `abertura`, `explica`, `cards` (cartões que viram), `passos` (escada 3D), `comparar` (portas que abrem), `numeros` (blocos que caem), `historia` (quadrinhos que folheiam), `quiz` (peças 3D), `simulador` (`quem-cuida`, `quociente`, `caminho-lei`). Os campos de cada tipo e as ilustrações disponíveis estão descritos no começo de `js/entenda.js`. Para testar uma parte nova sem mexer nas outras: `entenda.html?teste=1` carrega `testes/parte-teste.json` como parte 1.
 
 ## Publicar
 

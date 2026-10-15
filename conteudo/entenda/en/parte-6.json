@@ -1,0 +1,780 @@
+{
+ "parte": 6,
+ "ic": "📜",
+ "nome": "How a law is made",
+ "resumo": "The path of a law, from the idea to the Official Gazette, the types of proposals, the votes needed and the budget.",
+ "fontes": [
+  {
+   "id": "cf-art5",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 5 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art18",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 18 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art47",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 47 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art49",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 49, I and V (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art57",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 57, § 2 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art58",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 58, § 2, I (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art59",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 59 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art60",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 60 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art61",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 61 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art62",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 62 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art65",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 65 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art66",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 66 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art69",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 69 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art84",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 84, IV and V (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art165",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 165 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art166",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 166, §§ 9, 11 and 12 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "adct-art35",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, ADCT (Transitional Constitutional Provisions), art. 35, § 2 (deadlines for the LDO and the LOA) (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "camara-processo",
+   "veiculo": "Câmara dos Deputados",
+   "titulo": "Entenda o processo legislativo (in Portuguese)",
+   "url": "https://www.camara.leg.br/entenda-o-processo-legislativo/",
+   "data": "2026-10-15"
+  },
+  {
+   "id": "cn-veto",
+   "veiculo": "Congresso Nacional",
+   "titulo": "Entenda a tramitação do veto (257 deputies and 41 senators are needed to override a veto) (in Portuguese)",
+   "url": "https://www.congressonacional.leg.br/materias/vetos/entenda-a-tramitacao-do-veto",
+   "data": "2026-10-15",
+   "lang": "en"
+  },
+  {
+   "id": "senado-glossario",
+   "veiculo": "Agência Senado",
+   "titulo": "Glossário Legislativo (entries Comissão, Decreto, Decreto legislativo, Medida Provisória, Perda de mandato and LDO) (in Portuguese)",
+   "url": "https://www12.senado.leg.br/noticias/glossario-legislativo",
+   "data": "2026-10-15",
+   "lang": "en"
+  },
+  {
+   "id": "cn-pdl",
+   "veiculo": "Congresso Nacional",
+   "titulo": "Glossário de Termos Legislativos: Projeto de Decreto Legislativo (PDL) (in Portuguese)",
+   "url": "https://www.congressonacional.leg.br/legislacao-e-publicacoes/glossario-legislativo/-/legislativo/termo/projeto_de_decreto_legislativo_pdl",
+   "data": "2026-10-15"
+  },
+  {
+   "id": "cn-maioria-absoluta",
+   "veiculo": "Congresso Nacional",
+   "titulo": "Glossário de Termos Legislativos: Maioria Absoluta (in Portuguese)",
+   "url": "https://www.congressonacional.leg.br/legislacao-e-publicacoes/glossario-legislativo/-/legislativo/termo/maioria_absoluta",
+   "data": "2026-10-15"
+  },
+  {
+   "id": "lindb",
+   "veiculo": "Planalto",
+   "titulo": "Law of Introduction to the Norms of Brazilian Law (Decree-Law 4,657/1942), art. 1 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/decreto-lei/del4657compilado.htm",
+   "data": "1942-09-04",
+   "lang": "en"
+  },
+  {
+   "id": "lc135",
+   "veiculo": "Planalto",
+   "titulo": "Complementary Law 135/2010 (Clean Record Law) (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp135.htm",
+   "data": "2010-06-04",
+   "lang": "en"
+  },
+  {
+   "id": "camara-plp518",
+   "veiculo": "Câmara dos Deputados",
+   "titulo": "PLP 518/2009: the Clean Record bill, filed on September 29, 2009 with signatures collected by citizens (in Portuguese)",
+   "url": "https://www.camara.leg.br/propostas-legislativas/452953",
+   "data": "2009-09-29",
+   "lang": "en"
+  },
+  {
+   "id": "agcamara-iniciativa",
+   "veiculo": "Agência Câmara",
+   "titulo": "Aplicativos permitem apresentação de projetos de iniciativa popular (the Chamber had no way to check the Clean Record signatures) (in Portuguese)",
+   "url": "https://www.camara.leg.br/noticias/540773-aplicativos-permitem-apresentacao-de-projetos-de-iniciativa-popular-e-acompanhamento-da-atuacao-parlamentar/",
+   "data": "2018-06-20",
+   "lang": "en"
+  },
+  {
+   "id": "agsenado-fichalimpa",
+   "veiculo": "Agência Senado",
+   "titulo": "Lei da Ficha Limpa completa 15 anos (in Portuguese)",
+   "url": "https://www12.senado.leg.br/noticias/materias/2025/06/02/lei-da-ficha-limpa-completa-15-anos",
+   "data": "2025-06-02"
+  },
+  {
+   "id": "cn-orcamento",
+   "veiculo": "Congresso Nacional",
+   "titulo": "Federal budget: PPA, LDO and LOA (in Portuguese)",
+   "url": "https://www.congressonacional.leg.br/web/orcamento",
+   "data": "2026-10-15",
+   "lang": "en"
+  },
+  {
+   "id": "agsenado-emendas",
+   "veiculo": "Agência Senado",
+   "titulo": "O que são emendas parlamentares e como são definidas? (in Portuguese)",
+   "url": "https://www12.senado.leg.br/noticias/materias/2025/12/01/o-que-sao-emendas-parlamentares-e-como-sao-definidas",
+   "data": "2025-12-01"
+  },
+  {
+   "id": "lc210",
+   "veiculo": "Planalto",
+   "titulo": "Complementary Law 210/2024 (rules for parliamentary amendments) (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp210.htm",
+   "data": "2024-11-25",
+   "lang": "en"
+  },
+  {
+   "id": "senado-orcamentofacil",
+   "veiculo": "Senado Federal",
+   "titulo": "Orçamento Fácil: videos that explain the public budget (in Portuguese)",
+   "url": "https://www12.senado.leg.br/orcamentofacil",
+   "data": "2026-10-15",
+   "lang": "en"
+  }
+ ],
+ "glossario": [
+  {
+   "termo": "bill",
+   "simples": "The text of a law that is still being discussed and voted on. In Portuguese: projeto de lei (PL)."
+  },
+  {
+   "termo": "popular initiative",
+   "simples": "When citizens themselves present a bill, with many signatures."
+  },
+  {
+   "termo": "rapporteur",
+   "simples": "The lawmaker in charge of studying a bill and giving a report on it. In Portuguese: relator."
+  },
+  {
+   "termo": "report",
+   "simples": "The written opinion of the rapporteur or of the committee: approve, change or reject the bill. In Portuguese: parecer."
+  },
+  {
+   "termo": "reviewing House",
+   "simples": "The House that checks and reviews a bill that the other House has already approved. In Portuguese: Casa revisora."
+  },
+  {
+   "termo": "sanction",
+   "simples": "When the president agrees with the bill and signs it. Then it becomes law."
+  },
+  {
+   "termo": "veto",
+   "simples": "When the president disagrees and blocks the whole bill or a part of it."
+  },
+  {
+   "termo": "Official Gazette",
+   "simples": "The official newspaper of the federal government, where laws are published. In Portuguese: Diário Oficial da União."
+  },
+  {
+   "termo": "quorum",
+   "simples": "The minimum number of lawmakers or votes required in a vote."
+  },
+  {
+   "termo": "absolute majority",
+   "simples": "More than half of all the members of the House, counting even those who are absent."
+  },
+  {
+   "termo": "simple majority",
+   "simples": "More than half of the lawmakers present at the vote."
+  },
+  {
+   "termo": "complementary law",
+   "simples": "A type of law for subjects where the Constitution asks for more votes."
+  },
+  {
+   "termo": "PEC",
+   "simples": "Proposta de Emenda à Constituição (proposed constitutional amendment): a bill to change the Constitution."
+  },
+  {
+   "termo": "provisional measure",
+   "simples": "A rule that the president creates in urgent cases. It applies right away, but only for a while. In Portuguese: medida provisória (MP)."
+  },
+  {
+   "termo": "legislative decree",
+   "simples": "A decision of Congress on matters that only Congress decides, without going to the president."
+  },
+  {
+   "termo": "decree",
+   "simples": "An act of the president that details how a law must be carried out."
+  },
+  {
+   "termo": "rounds",
+   "simples": "The rounds of voting on a proposal. In Portuguese: turnos."
+  },
+  {
+   "termo": "promulgate",
+   "simples": "To officially declare that a new law or amendment exists."
+  },
+  {
+   "termo": "entrenched clauses",
+   "simples": "The parts of the Constitution that not even an amendment can abolish. In Portuguese: cláusulas pétreas (“stone clauses”)."
+  },
+  {
+   "termo": "separation of powers",
+   "simples": "The division of power into Executive, Legislative and Judiciary, so that no one is in charge alone."
+  },
+  {
+   "termo": "federation",
+   "simples": "Brazil organized into the Union, the states, the Federal District and the municipalities, each with its own autonomy."
+  },
+  {
+   "termo": "autonomy",
+   "simples": "Freedom to make your own decisions, within the rules."
+  },
+  {
+   "termo": "budget",
+   "simples": "The plan for how much money the government will receive and how it will spend it during the year."
+  },
+  {
+   "termo": "LDO",
+   "simples": "Lei de Diretrizes Orçamentárias (Budget Guidelines Law): the rules and priorities for preparing the next year's budget."
+  },
+  {
+   "termo": "LOA",
+   "simples": "Lei Orçamentária Anual (Annual Budget Law): the budget for the year, with what the government expects to collect and can spend."
+  },
+  {
+   "termo": "parliamentary amendments",
+   "simples": "Choices made by deputies and senators about where to spend part of the budget money. In Portuguese: emendas parlamentares."
+  },
+  {
+   "termo": "collect",
+   "simples": "To gather money, mainly through taxes."
+  },
+  {
+   "termo": "state caucus",
+   "simples": "The federal deputies and the senators from the same state, together. In Portuguese: bancada estadual."
+  },
+  {
+   "termo": "recess",
+   "simples": "Congress's vacation: at the end of July and from the end of December to the beginning of February."
+  },
+  {
+   "termo": "working days",
+   "simples": "Days of work: Monday to Friday, not counting holidays."
+  },
+  {
+   "termo": "Prosecutor General of the Republic",
+   "simples": "The head of the Federal Public Prosecutor's Office (Ministério Público da União), which defends society and demands that laws be followed."
+  },
+  {
+   "termo": "superior courts",
+   "simples": "The highest courts in the country after the STF, like the STJ and the TSE."
+  },
+  {
+   "termo": "STF",
+   "simples": "Supremo Tribunal Federal (Supreme Federal Court): the highest court in the country, which takes care of the Constitution."
+  },
+  {
+   "termo": "Constitution",
+   "simples": "The most important law of the country. All other laws must respect it."
+  }
+ ],
+ "slides": [
+  {
+   "tipo": "abertura",
+   "titulo": "Every law starts with an idea",
+   "texto": "Then the idea follows a path with several steps until it becomes a law that applies to everyone.",
+   "ilustracao": "lei"
+  },
+  {
+   "tipo": "simulador",
+   "id": "caminho-lei",
+   "titulo": "The path of a law",
+   "texto": "Move square by square. Example: an ordinary bill that starts in the Chamber of Deputies.",
+   "passos": [
+    {
+     "ic": "💡",
+     "titulo": "The idea",
+     "txt": "Someone sees a problem and thinks of a solution. Made-up example: a drinking fountain in every playground."
+    },
+    {
+     "ic": "📝",
+     "titulo": "The bill",
+     "txt": "The idea becomes a text: the **bill** (projeto de lei). Deputies, senators, committees and the President of the Republic can present one. On some subjects, so can the STF, the superior courts and the Prosecutor General of the Republic. And citizens too!"
+    },
+    {
+     "ic": "🧩",
+     "titulo": "The committees",
+     "txt": "Groups of deputies study the bill. A rapporteur (relator) gives a report, and the committee votes."
+    },
+    {
+     "ic": "🗳️",
+     "titulo": "The Plenary",
+     "txt": "All the deputies vote. Many bills skip this square: they are decided only in the committees."
+    },
+    {
+     "ic": "🔁",
+     "titulo": "The other House",
+     "txt": "The bill goes to the Senate, the reviewing House. If the Senate changes the text, the bill goes back to the Chamber to decide."
+    },
+    {
+     "ic": "✍️",
+     "titulo": "Sanction or veto",
+     "txt": "The President of the Republic has 15 working days. The president can approve (**sanction**) or block (veto) all of it or a part."
+    },
+    {
+     "ic": "⚖️",
+     "titulo": "The veto under review",
+     "txt": "If there is a veto, deputies and senators decide together whether it stays or falls."
+    },
+    {
+     "ic": "📰",
+     "titulo": "Published: it's a law!",
+     "txt": "The law comes out in the Official Gazette (Diário Oficial da União). If it does not set a date, it takes effect 45 days later."
+    }
+   ],
+   "fontes": [
+    "cf-art61",
+    "camara-processo",
+    "cf-art58",
+    "cf-art65",
+    "cf-art66",
+    "cn-veto",
+    "lindb"
+   ]
+  },
+  {
+   "tipo": "cards",
+   "etiqueta": "TYPES OF PROPOSALS",
+   "titulo": "Not every proposal is the same",
+   "texto": "Each type has its own purpose and needs a different number of votes.",
+   "cards": [
+    {
+     "ic": "📄",
+     "titulo": "PL: bill",
+     "txt": "The ordinary law, for most subjects.",
+     "dados": [
+      {
+       "rot": "To pass",
+       "val": "Simple majority of those present"
+      },
+      {
+       "rot": "Goes to the president?",
+       "val": "Yes"
+      }
+     ],
+     "mais": "To vote, the session needs at least 257 deputies (or 41 senators) present. Then the bill passes if it gets the majority of the votes."
+    },
+    {
+     "ic": "📘",
+     "titulo": "PLP: complementary law",
+     "txt": "For subjects where the Constitution asks for a complementary law.",
+     "dados": [
+      {
+       "rot": "To pass",
+       "val": "Absolute majority: 257 deputies and 41 senators"
+      },
+      {
+       "rot": "Goes to the president?",
+       "val": "Yes"
+      }
+     ]
+    },
+    {
+     "ic": "📕",
+     "titulo": "PEC: constitutional amendment",
+     "txt": "Changes the text of the Constitution.",
+     "dados": [
+      {
+       "rot": "To pass",
+       "val": "3/5: 308 deputies and 49 senators"
+      },
+      {
+       "rot": "Votes",
+       "val": "2 rounds in each House"
+      },
+      {
+       "rot": "Goes to the president?",
+       "val": "No"
+      }
+     ],
+     "mais": "Who can propose one: 1/3 of the deputies (171) or of the senators (27). Also the President of the Republic, or more than half of the state Legislative Assemblies. Once it is approved, Congress itself promulgates the amendment."
+    },
+    {
+     "ic": "⚡",
+     "titulo": "MP: provisional measure",
+     "txt": "The president creates it only in cases of “relevance and urgency”: an important subject that is in a hurry. It applies right away.",
+     "dados": [
+      {
+       "rot": "Validity",
+       "val": "60 days + 60 days"
+      },
+      {
+       "rot": "To become law",
+       "val": "The Chamber and the Senate must approve it"
+      }
+     ],
+     "mais": "If it is not approved in time, it expires. Some subjects cannot be handled by an MP, like election rules and crimes."
+    },
+    {
+     "ic": "📗",
+     "titulo": "PDL: legislative decree",
+     "txt": "For subjects that only Congress decides, like approving agreements with other countries.",
+     "dados": [
+      {
+       "rot": "Goes to the president?",
+       "val": "No"
+      }
+     ],
+     "mais": "It is also with a legislative decree that Congress sets the salaries of deputies, senators, the president and ministers."
+    },
+    {
+     "ic": "🖋️",
+     "titulo": "Decree",
+     "txt": "The president uses it to detail how a law will be carried out. A decree does not create a new law.",
+     "dados": [
+      {
+       "rot": "Who makes it",
+       "val": "The president"
+      },
+      {
+       "rot": "Goes through Congress?",
+       "val": "No"
+      }
+     ],
+     "mais": "If a decree goes beyond the limits of the law, Congress can suspend that decree."
+    }
+   ],
+   "fontes": [
+    "cf-art59",
+    "cf-art47",
+    "cf-art60",
+    "cf-art62",
+    "cf-art69",
+    "cf-art49",
+    "cf-art84",
+    "camara-processo",
+    "cn-pdl",
+    "senado-glossario",
+    "cn-veto"
+   ]
+  },
+  {
+   "tipo": "numeros",
+   "titulo": "How many votes are needed?",
+   "texto": "For some decisions, winning is not enough. You must reach a minimum number of votes: the **quorum**.",
+   "numeros": [
+    {
+     "val": "257",
+     "rot": "deputies: absolute majority of the Chamber",
+     "ic": "🧑‍💼"
+    },
+    {
+     "val": "308",
+     "rot": "deputies: 3/5 of the Chamber",
+     "ic": "📕"
+    },
+    {
+     "val": "41",
+     "rot": "senators: absolute majority of the Senate",
+     "ic": "🏛️"
+    },
+    {
+     "val": "49",
+     "rot": "senators: 3/5 of the Senate",
+     "ic": "📕"
+    }
+   ],
+   "nota": "An absolute majority is more than half of all the members, counting those who are absent. Complementary laws and overriding a veto need one. A PEC needs 3/5, in two rounds, in both Houses.",
+   "fontes": [
+    "camara-processo",
+    "cn-veto",
+    "senado-glossario",
+    "cn-maioria-absoluta",
+    "cf-art47",
+    "cf-art60",
+    "cf-art66",
+    "cf-art69"
+   ]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "THE PRESIDENT'S TURN",
+   "titulo": "Sanction or veto?",
+   "texto": "Once approved by Congress, the bill goes to the President of the Republic.",
+   "itens": [
+    {
+     "ic": "✅",
+     "txt": "**Sanction**: the president agrees and signs. The bill becomes law."
+    },
+    {
+     "ic": "⛔",
+     "txt": "**Veto**: the president blocks the whole bill (total veto) or just a part of it (partial veto)."
+    },
+    {
+     "ic": "⏰",
+     "txt": "The deadline is 15 working days. If the president stays silent, it counts as a sanction."
+    },
+    {
+     "ic": "📝",
+     "txt": "A veto needs a reason: the bill goes against the Constitution or against the public interest."
+    },
+    {
+     "ic": "🤝",
+     "txt": "Then deputies and senators review the veto together. To override it: 257 deputies and 41 senators."
+    }
+   ],
+   "ilustracao": "palacio",
+   "fontes": [
+    "cf-art66",
+    "cf-art84",
+    "cn-veto",
+    "camara-processo"
+   ]
+  },
+  {
+   "tipo": "historia",
+   "titulo": "A law that started with signatures",
+   "quadros": [
+    {
+     "ic": "✍️",
+     "txt": "For more than a year, citizens' movements collected more than 1.5 million signatures across the country."
+    },
+    {
+     "ic": "📦",
+     "txt": "In September 2009, the bill arrived at the Chamber. Since the Chamber had no way to check so many signatures, a group of deputies signed the bill."
+    },
+    {
+     "ic": "🗳️",
+     "txt": "In May 2010, the Chamber and then the Senate approved the bill."
+    },
+    {
+     "ic": "📜",
+     "txt": "On June 4, 2010, the president signed it. Complementary Law 135 was born: the **Clean Record Law** (Lei da Ficha Limpa)."
+    },
+    {
+     "ic": "🚫",
+     "txt": "The law increased the number of situations that stop someone from running for office. One example: being convicted of certain crimes by a group of judges."
+    }
+   ],
+   "moral": "Citizens can also propose laws: this is **popular initiative**. The rule requires signatures from at least 1% of the country's voters, from at least 5 states.",
+   "fontes": [
+    "agsenado-fichalimpa",
+    "camara-plp518",
+    "agcamara-iniciativa",
+    "lc135",
+    "cf-art61"
+   ]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "CANNOT BE CHANGED",
+   "titulo": "What not even a PEC can take away",
+   "texto": "Some parts of the Constitution cannot be abolished. They are the **entrenched clauses** (cláusulas pétreas; pétrea means “made of stone”).",
+   "itens": [
+    {
+     "ic": "🗳️",
+     "txt": "Direct, secret, universal and periodic voting: everyone votes for the candidates, in secret, from time to time."
+    },
+    {
+     "ic": "⚖️",
+     "txt": "The separation of powers: Executive, Legislative and Judiciary."
+    },
+    {
+     "ic": "🛡️",
+     "txt": "Each person's rights and guarantees, like freedom."
+    },
+    {
+     "ic": "🗺️",
+     "txt": "The federation: Brazil divided into the Union, the states, the DF and the municipalities, each with its own autonomy."
+    }
+   ],
+   "ilustracao": "constituicao",
+   "coruja": "A PEC that tries to abolish these parts cannot even be voted on!",
+   "fontes": [
+    "cf-art60",
+    "cf-art5",
+    "cf-art18",
+    "camara-processo"
+   ]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "THE COUNTRY'S MONEY",
+   "titulo": "The budget is a law too",
+   "texto": "Every year, the government plans how much money it will collect and how it will spend it. Congress reviews the plan, changes it and approves it.",
+   "itens": [
+    {
+     "ic": "🗓️",
+     "txt": "**LDO** (Budget Guidelines Law): the rules and priorities for the next year's budget. The president sends it by April 15."
+    },
+    {
+     "ic": "📒",
+     "txt": "**LOA** (Annual Budget Law): the budget for the year, with the money for health, schools, roads... It reaches Congress by August 31."
+    },
+    {
+     "ic": "✏️",
+     "txt": "With parliamentary amendments, deputies and senators choose where to spend a part: a public works project, a health clinic..."
+    },
+    {
+     "ic": "📌",
+     "txt": "As a rule, the government must pay the individual amendments and those of the state caucus. Half of the individual ones go to health."
+    },
+    {
+     "ic": "🆕",
+     "txt": "In 2024, a new law created rules for these amendments."
+    }
+   ],
+   "ilustracao": "cofre",
+   "coruja": "Until the LDO is approved, Congress cannot leave for its July recess!",
+   "fontes": [
+    "cn-orcamento",
+    "cf-art165",
+    "adct-art35",
+    "cf-art166",
+    "agsenado-emendas",
+    "lc210",
+    "cf-art57",
+    "senado-glossario",
+    "senado-orcamentofacil"
+   ]
+  },
+  {
+   "tipo": "quiz",
+   "pergunta": "To change the Constitution, how many votes does a PEC need in the Chamber?",
+   "opcoes": [
+    "257",
+    "308",
+    "513"
+   ],
+   "certa": 1,
+   "explica": "A PEC needs 3/5 of the deputies: 308 votes, in two rounds. In the Senate, it needs 49.",
+   "fontes": [
+    "cf-art60",
+    "camara-processo"
+   ]
+  },
+  {
+   "tipo": "quiz",
+   "pergunta": "The president received a bill and did not answer within 15 working days. What happens?",
+   "opcoes": [
+    "The bill is shelved",
+    "It counts as a sanction",
+    "The bill goes back to the Chamber"
+   ],
+   "certa": 1,
+   "explica": "The president's silence counts as a sanction, and the bill becomes law.",
+   "fontes": [
+    "cf-art66",
+    "cn-veto"
+   ]
+  }
+ ]
+}

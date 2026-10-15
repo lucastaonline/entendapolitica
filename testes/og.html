@@ -1,0 +1,43 @@
+<!doctype html>
+<!-- Molde da imagem de compartilhamento (1200 x 630). Gerada por testes/gerar_imagens.py -> img/compartilhar.jpg -->
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Imagem de compartilhamento</title>
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/tres.css">
+<link rel="stylesheet" href="../css/tres-politica.css">
+<style>
+  html, body { margin: 0; width: 1200px; height: 630px; overflow: hidden; background: #fbf7ef; }
+  .og { position: relative; width: 1200px; height: 630px; display: grid; grid-template-columns: 650px 1fr; align-items: center; padding: 0 0 0 64px; box-sizing: border-box; }
+  .tag { display: inline-block; background: #fff3c4; border: 3px solid #f2d27a; color: #6b4e00; font-weight: 900; letter-spacing: .07em; padding: 10px 22px; border-radius: 999px; font-size: 21px; }
+  h1 { font-size: 60px; line-height: 1.06; margin: 24px 0 16px; color: #1f2533; font-weight: 900; letter-spacing: -.01em; }
+  p { font-size: 27px; color: #475063; margin: 0 0 24px; line-height: 1.38; }
+  .url { font-weight: 900; color: #1f3a5f; font-size: 27px; }
+  .url small { display: block; font-size: 19px; color: #5b6475; font-weight: 800; margin-top: 6px; }
+  .barra { position: absolute; left: 0; right: 0; bottom: 0; height: 14px; background: linear-gradient(90deg, #f2b705, #e08a1e); }
+  .arte { position: relative; height: 630px; display: grid; place-items: center; }
+  .arte .cena3d { transform: translateX(-40px) scale(1.1); transform-origin: 50% 55%; }
+  .bolinha { position: absolute; font-size: 54px; filter: drop-shadow(0 8px 6px rgba(60, 40, 0, .18)); }
+</style>
+</head>
+<body>
+<div class="og">
+  <div>
+    <span class="tag">COMO FUNCIONA · QUEM ESTÁ NO PODER</span>
+    <h1>A política do Brasil, explicada de um jeito simples</h1>
+    <p>Com desenhos em 3D e fonte em cada informação. Ninguém está pedindo o seu voto.</p>
+    <div class="url">entendapolitica.vercel.app<small>🌐 Também em inglês · Also in English</small></div>
+  </div>
+  <div class="arte" id="arte"></div>
+  <div class="barra"></div>
+</div>
+<script src="../js/tres.js"></script>
+<script src="../js/tres-politica.js"></script>
+<script>
+  document.getElementById("arte").innerHTML = window.TRES.congresso({ auto: false, rotulos: true }) +
+    '<span class="bolinha" style="left:30px;top:120px">🗳️</span><span class="bolinha" style="right:70px;top:100px">📜</span>' +
+    '<span class="bolinha" style="left:20px;bottom:110px">⚖️</span>';
+</script>
+</body>
+</html>

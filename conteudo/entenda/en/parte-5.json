@@ -1,0 +1,712 @@
+{
+ "parte": 5,
+ "ic": "🗣️",
+ "nome": "The National Congress",
+ "resumo": "How Congress works: the Chamber and the Senate, committees, the Plenary, who is in charge and what it does besides making laws.",
+ "fontes": [
+  {
+   "id": "cf-art27",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 27 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art29",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 29 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art32",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 32 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art44",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 44 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art45",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 45 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art46",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 46 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art48",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 48, II (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art49",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 49, X (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art50",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 50 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art51",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 51, I (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art52",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 52, I and III (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art57",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 57, §§ 4 and 5 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art58",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 58 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art65",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 65 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art80",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 80 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art101",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 101 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art166",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 166 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "agcamara-eleicoes-2026",
+   "veiculo": "Agência Câmara",
+   "titulo": "Eleições deste ano vão definir 54 vagas no Senado e todas as 513 vagas da Câmara (in Portuguese)",
+   "url": "https://www.camara.leg.br/noticias/1298957-eleicoes-deste-ano-vao-definir-54-vagas-no-senado-e-todas-as-513-vagas-da-camara",
+   "data": "2026-08-19"
+  },
+  {
+   "id": "tse-vagas-2026",
+   "veiculo": "TSE (Portal de Dados Abertos)",
+   "titulo": "Candidates 2026, seats file: 27 governors, 54 senators, 513 federal deputies, 1,035 state deputies and 24 district deputies (sum made by this site) (in Portuguese)",
+   "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2026",
+   "data": "2026-10-15",
+   "lang": "en"
+  },
+  {
+   "id": "tse-vagas-2024",
+   "veiculo": "TSE (Portal de Dados Abertos)",
+   "titulo": "Candidates 2024, seats file: 5,569 mayors and 58,435 city councilor seats in the 2024 Municipal Elections (sum made by this site) (in Portuguese)",
+   "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024",
+   "data": "2026-10-15",
+   "lang": "en"
+  },
+  {
+   "id": "cn-bicameral",
+   "veiculo": "Congresso Nacional",
+   "titulo": "Glossário de Termos Legislativos: Bicameral (in Portuguese)",
+   "url": "https://www.congressonacional.leg.br/legislacao-e-publicacoes/glossario-legislativo/-/legislativo/termo/bicameral",
+   "data": "2026-10-15"
+  },
+  {
+   "id": "cn-casa-revisora",
+   "veiculo": "Congresso Nacional",
+   "titulo": "Glossário de Termos Legislativos: Casa Revisora (in Portuguese)",
+   "url": "https://www.congressonacional.leg.br/legislacao-e-publicacoes/glossario-legislativo/-/legislativo/termo/casa_revisora",
+   "data": "2026-10-15"
+  },
+  {
+   "id": "camara-processo",
+   "veiculo": "Câmara dos Deputados",
+   "titulo": "Entenda o processo legislativo (in Portuguese)",
+   "url": "https://www.camara.leg.br/entenda-o-processo-legislativo/",
+   "data": "2026-10-15"
+  },
+  {
+   "id": "senado-glossario",
+   "veiculo": "Agência Senado",
+   "titulo": "Glossário Legislativo (entries Comissão, Decreto, Decreto legislativo, Medida Provisória, Perda de mandato and LDO) (in Portuguese)",
+   "url": "https://www12.senado.leg.br/noticias/glossario-legislativo",
+   "data": "2026-10-15",
+   "lang": "en"
+  },
+  {
+   "id": "agsenado-emendas",
+   "veiculo": "Agência Senado",
+   "titulo": "O que são emendas parlamentares e como são definidas? (in Portuguese)",
+   "url": "https://www12.senado.leg.br/noticias/materias/2025/12/01/o-que-sao-emendas-parlamentares-e-como-sao-definidas",
+   "data": "2025-12-01"
+  },
+  {
+   "id": "camara-papel",
+   "veiculo": "Câmara dos Deputados",
+   "titulo": "Papel e estrutura da Câmara (President, Plenary and leaders) (in Portuguese)",
+   "url": "https://www.camara.leg.br/papel-e-estrutura/",
+   "data": "2026-10-15",
+   "lang": "en"
+  },
+  {
+   "id": "agsenado-presidente",
+   "veiculo": "Senado Federal (Rádio Senado)",
+   "titulo": "Conheça as atribuições do presidente do Senado (in Portuguese)",
+   "url": "https://www12.senado.leg.br/noticias/audios/2025/01/conheca-as-atribuicoes-do-presidente-do-senado",
+   "data": "2025-01-31"
+  },
+  {
+   "id": "cn-cpi",
+   "veiculo": "Congresso Nacional",
+   "titulo": "Glossário de Termos Legislativos: Comissão Parlamentar de Inquérito (CPI) (in Portuguese)",
+   "url": "https://www.congressonacional.leg.br/legislacao-e-publicacoes/glossario-legislativo/-/legislativo/termo/comissao_parlamentar_de_inquerito_cpi",
+   "data": "2026-10-15"
+  },
+  {
+   "id": "cn-bancada",
+   "veiculo": "Congresso Nacional",
+   "titulo": "Glossário de Termos Legislativos: Bancada Parlamentar (in Portuguese)",
+   "url": "https://www.congressonacional.leg.br/legislacao-e-publicacoes/glossario-legislativo/-/legislativo/termo/bancada_parlamentar",
+   "data": "2026-10-15"
+  },
+  {
+   "id": "camara-frentes",
+   "veiculo": "Câmara dos Deputados",
+   "titulo": "Frentes e grupos parlamentares (in Portuguese)",
+   "url": "https://www.camara.leg.br/deputados/frentes-e-grupos-parlamentares",
+   "data": "2026-10-15"
+  },
+  {
+   "id": "cn-lideranca",
+   "veiculo": "Congresso Nacional",
+   "titulo": "Glossário de Termos Legislativos: Liderança (the government's leader is chosen by the president) (in Portuguese)",
+   "url": "https://www.congressonacional.leg.br/legislacao-e-publicacoes/glossario-legislativo/-/legislativo/termo/lideranca",
+   "data": "2026-10-15",
+   "lang": "en"
+  },
+  {
+   "id": "cn-oposicao",
+   "veiculo": "Congresso Nacional",
+   "titulo": "Glossário de Termos Legislativos: Oposição (in Portuguese)",
+   "url": "https://www.congressonacional.leg.br/legislacao-e-publicacoes/glossario-legislativo/-/legislativo/termo/oposicao",
+   "data": "2026-10-15"
+  },
+  {
+   "id": "camara-liderancas",
+   "veiculo": "Câmara dos Deputados",
+   "titulo": "Lideranças e bancadas partidárias (government and opposition leaderships) (in Portuguese)",
+   "url": "https://www.camara.leg.br/deputados/liderancas-e-bancadas-partidarias",
+   "data": "2026-10-15",
+   "lang": "en"
+  }
+ ],
+ "glossario": [
+  {
+   "termo": "National Congress",
+   "simples": "The Chamber of Deputies and the Federal Senate together: it is where the country's laws are made."
+  },
+  {
+   "termo": "bicameral",
+   "simples": "Having two lawmaking Houses, like the National Congress."
+  },
+  {
+   "termo": "reviewing House",
+   "simples": "The House that checks and reviews a bill that the other House has already approved. In Portuguese: Casa revisora."
+  },
+  {
+   "termo": "term of office",
+   "simples": "The time an elected person stays in office. In Portuguese: mandato."
+  },
+  {
+   "termo": "committees",
+   "simples": "Smaller groups of lawmakers that study the bills on one subject."
+  },
+  {
+   "termo": "CCJ",
+   "simples": "Comissão de Constituição e Justiça (Constitution and Justice Committee): it checks whether a bill respects the Constitution."
+  },
+  {
+   "termo": "Plenary",
+   "simples": "The meeting with all the members of the House, where the big votes happen. In Portuguese: Plenário."
+  },
+  {
+   "termo": "agenda",
+   "simples": "The list of what will be discussed and voted on. In Portuguese: pauta."
+  },
+  {
+   "termo": "oversee",
+   "simples": "To follow and check whether someone is doing the job right and following the rules."
+  },
+  {
+   "termo": "budget",
+   "simples": "The plan for how much money the government will receive and how it will spend it during the year."
+  },
+  {
+   "termo": "CPI",
+   "simples": "Comissão Parlamentar de Inquérito (Parliamentary Inquiry Committee): a group of lawmakers that investigates a fact."
+  },
+  {
+   "termo": "impeachment",
+   "simples": "A process that can remove a president from office, for example for breaking serious rules of the Constitution."
+  },
+  {
+   "termo": "caucus",
+   "simples": "A group of lawmakers from the same party, from the same state or with the same interest. In Portuguese: bancada."
+  },
+  {
+   "termo": "parliamentary front",
+   "simples": "A group of lawmakers from several parties who get together to debate a topic. In Portuguese: frente parlamentar."
+  },
+  {
+   "termo": "government's base",
+   "simples": "The parties and lawmakers who support the government. In Portuguese: base do governo."
+  },
+  {
+   "termo": "opposition",
+   "simples": "The parties and lawmakers who oppose the government."
+  },
+  {
+   "termo": "leader",
+   "simples": "A lawmaker chosen to speak for their group and to guide how the group votes."
+  },
+  {
+   "termo": "lawmakers",
+   "simples": "People who hold a term of office in a lawmaking House: deputies, senators and city councilors. In Portuguese: parlamentares."
+  },
+  {
+   "termo": "sessions",
+   "simples": "The official meetings of a lawmaking House."
+  },
+  {
+   "termo": "Constitution",
+   "simples": "The most important law of the country. All other laws must respect it."
+  },
+  {
+   "termo": "STF",
+   "simples": "Supremo Tribunal Federal (Supreme Federal Court): the highest court in the country, which takes care of the Constitution."
+  },
+  {
+   "termo": "ministers",
+   "simples": "People who take care of areas of the government (or, in the case of the STF, the judges of the court)."
+  },
+  {
+   "termo": "Legislative Assembly",
+   "simples": "The House where the state deputies make the state's laws. In Portuguese: Assembleia Legislativa."
+  },
+  {
+   "termo": "Legislative Chamber",
+   "simples": "The lawmaking House of the Federal District, where the district deputies work. In Portuguese: Câmara Legislativa."
+  },
+  {
+   "termo": "City Council",
+   "simples": "The House where the city councilors make the city's laws. In Portuguese: Câmara Municipal."
+  },
+  {
+   "termo": "municipalities",
+   "simples": "Cities, with their rural areas. Each one has a mayor and city councilors."
+  }
+ ],
+ "slides": [
+  {
+   "tipo": "abertura",
+   "titulo": "The National Congress",
+   "texto": "It is where the country's laws are made. It is in Brasília, the capital, and has two Houses: the Chamber of Deputies (Câmara dos Deputados) and the Federal Senate (Senado Federal).",
+   "ilustracao": "congresso"
+  },
+  {
+   "tipo": "comparar",
+   "titulo": "Two Houses, two ways of representing",
+   "texto": "The Chamber of Deputies and the Federal Senate together form the National Congress.",
+   "colunas": [
+    {
+     "ic": "🧑‍🤝‍🧑",
+     "titulo": "Chamber of Deputies",
+     "itens": [
+      "It represents the **people**.",
+      "It has 513 federal deputies.",
+      "States with more people have more deputies: at least 8, at most 70.",
+      "4-year term of office. All the seats are chosen in the same election."
+     ],
+     "exemplo": "São Paulo, the state with the most people, has 70 deputies. Acre, Roraima and the DF have 8 each."
+    },
+    {
+     "ic": "🗺️",
+     "titulo": "Federal Senate",
+     "itens": [
+      "It represents the **states** and the DF.",
+      "It has 81 senators: 3 per state and 3 for the DF.",
+      "Big state or small state: they all have the same number.",
+      "8-year term of office. Every 4 years, 1/3 or 2/3 of the seats change."
+     ],
+     "exemplo": "In 2026, each state chose 2 senators. In the next election, each state chooses 1."
+    }
+   ],
+   "fontes": [
+    "cf-art44",
+    "cf-art45",
+    "cf-art46",
+    "agcamara-eleicoes-2026",
+    "tse-vagas-2026"
+   ]
+  },
+  {
+   "tipo": "historia",
+   "titulo": "Imagine the school creating a rule...",
+   "quadros": [
+    {
+     "ic": "🏫",
+     "txt": "The school is going to create a new rule for recess."
+    },
+    {
+     "ic": "🙋",
+     "txt": "First, the class representatives vote. Bigger classes have more representatives."
+    },
+    {
+     "ic": "🧑‍🏫",
+     "txt": "Then, a council with 3 students from each grade checks the rule. Every grade has the same weight."
+    },
+    {
+     "ic": "🔁",
+     "txt": "If the council changes something, the rule goes back to the representatives, who have the final word."
+    }
+   ],
+   "moral": "Congress works like this: the Chamber speaks for the people, and the Senate for the states. One House reviews the other: this is the **bicameral** system.",
+   "fontes": [
+    "cn-bicameral",
+    "cn-casa-revisora",
+    "cf-art65",
+    "cf-art45",
+    "cf-art46"
+   ]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "HOW THEY WORK",
+   "titulo": "Committees and the Plenary",
+   "texto": "Before the vote with everyone, bills go through smaller groups: the **committees**.",
+   "itens": [
+    {
+     "ic": "🧩",
+     "txt": "Each committee takes care of one subject: health, education, sports, the environment..."
+    },
+    {
+     "ic": "🔢",
+     "txt": "The Chamber has 30 permanent committees. The Senate has 16."
+    },
+    {
+     "ic": "⚖️",
+     "txt": "The CCJ (Constitution and Justice Committee) checks whether the bill respects the Constitution."
+    },
+    {
+     "ic": "🗳️",
+     "txt": "The **Plenary** (Plenário) is the meeting with everyone in the House. That is where the big votes happen."
+    },
+    {
+     "ic": "⏩",
+     "txt": "Many bills are decided only in the committees, without going to the Plenary."
+    }
+   ],
+   "ilustracao": "plenario",
+   "coruja": "In the Chamber, the full name of the CCJ is Comissão de Constituição e Justiça e de Cidadania (CCJC): Constitution, Justice and Citizenship Committee.",
+   "fontes": [
+    "cf-art58",
+    "camara-processo",
+    "senado-glossario",
+    "agsenado-emendas"
+   ]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "WHO IS IN CHARGE",
+   "titulo": "Each House has a president",
+   "texto": "The president is chosen by their own colleagues, for a term of office of **2 years**.",
+   "itens": [
+    {
+     "ic": "🗳️",
+     "txt": "The deputies elect the president of the Chamber. The senators elect the president of the Senate."
+    },
+    {
+     "ic": "📋",
+     "txt": "The president sets the **agenda**: the list of what will be voted on in the Plenary."
+    },
+    {
+     "ic": "🔔",
+     "txt": "They open and lead the sessions and organize the work of the House."
+    },
+    {
+     "ic": "🏛️",
+     "txt": "The president of the Senate also presides over Congress when the two Houses meet together."
+    }
+   ],
+   "ilustracao": "predio",
+   "coruja": "If the President and the Vice President of the Republic are not available, the president of the Chamber takes over for a while. Next in line are the president of the Senate and the president of the STF.",
+   "fontes": [
+    "cf-art57",
+    "camara-papel",
+    "agsenado-presidente",
+    "cf-art80"
+   ]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "BEYOND LAWS",
+   "titulo": "Congress does more than make laws",
+   "texto": "See other tasks of deputies and senators:",
+   "itens": [
+    {
+     "ic": "🔍",
+     "txt": "**Oversee** the government. Congress can even call ministers to give explanations."
+    },
+    {
+     "ic": "💰",
+     "txt": "Approve the **budget**, which says how the country's money can be spent."
+    },
+    {
+     "ic": "🕵️",
+     "txt": "Create a CPI (Parliamentary Inquiry Committee), a committee that investigates a fact. It only takes 1/3 of the members of the House asking for it."
+    },
+    {
+     "ic": "✅",
+     "txt": "Approve some of the president's choices, like the STF ministers. This is done by the Senate."
+    },
+    {
+     "ic": "⚖️",
+     "txt": "Handle impeachment: the Chamber authorizes the process and the Senate holds the trial."
+    }
+   ],
+   "ilustracao": "balanca",
+   "coruja": "Stop 8 has a full explanation of CPIs and impeachment.",
+   "fontes": [
+    "cf-art49",
+    "cf-art50",
+    "cf-art58",
+    "cf-art48",
+    "cf-art166",
+    "cf-art52",
+    "cf-art101",
+    "cf-art51",
+    "cn-cpi"
+   ]
+  },
+  {
+   "tipo": "cards",
+   "etiqueta": "IN STATES AND CITIES",
+   "titulo": "The “mini-congresses”",
+   "texto": "States, the DF and municipalities also have a lawmaking House. But there, it is just one House.",
+   "cards": [
+    {
+     "ic": "🏛️",
+     "titulo": "National Congress",
+     "txt": "Makes the country's laws.",
+     "dados": [
+      {
+       "rot": "Where",
+       "val": "Brasília"
+      },
+      {
+       "rot": "Houses",
+       "val": "2: Chamber and Senate"
+      },
+      {
+       "rot": "Who",
+       "val": "513 federal deputies and 81 senators"
+      }
+     ]
+    },
+    {
+     "ic": "🗺️",
+     "titulo": "Legislative Assembly",
+     "txt": "Makes the state's laws.",
+     "dados": [
+      {
+       "rot": "Where",
+       "val": "In each of the 26 states"
+      },
+      {
+       "rot": "Houses",
+       "val": "1"
+      },
+      {
+       "rot": "Who",
+       "val": "State deputies: from 24 to 94"
+      }
+     ]
+    },
+    {
+     "ic": "🌆",
+     "titulo": "Legislative Chamber",
+     "txt": "Makes the laws of the Federal District.",
+     "dados": [
+      {
+       "rot": "Where",
+       "val": "Federal District"
+      },
+      {
+       "rot": "Houses",
+       "val": "1"
+      },
+      {
+       "rot": "Who",
+       "val": "24 district deputies"
+      }
+     ],
+     "mais": "The DF cannot be divided into municipalities. That is why the Legislative Chamber makes laws that, in a state, would be made by the Legislative Assembly and by the City Councils."
+    },
+    {
+     "ic": "🏘️",
+     "titulo": "City Council",
+     "txt": "Makes the city's laws.",
+     "dados": [
+      {
+       "rot": "Where",
+       "val": "In each of the 5,569 municipalities"
+      },
+      {
+       "rot": "Houses",
+       "val": "1"
+      },
+      {
+       "rot": "Who",
+       "val": "City councilors: the number depends on the population"
+      }
+     ]
+    }
+   ],
+   "fontes": [
+    "cf-art44",
+    "cf-art27",
+    "cf-art29",
+    "cf-art32",
+    "tse-vagas-2026",
+    "tse-vagas-2024"
+   ]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "GROUPS",
+   "titulo": "Caucuses, fronts, base and opposition",
+   "texto": "Inside Congress, lawmakers organize themselves into groups.",
+   "itens": [
+    {
+     "ic": "👥",
+     "txt": "**Caucus**: a group from the same party, from the same state or with the same interest."
+    },
+    {
+     "ic": "🎯",
+     "txt": "**Parliamentary front**: people from several parties who get together to debate a topic."
+    },
+    {
+     "ic": "👍",
+     "txt": "Government's base: the parties and lawmakers who support the government."
+    },
+    {
+     "ic": "✋",
+     "txt": "Opposition: the parties and lawmakers who oppose the government."
+    },
+    {
+     "ic": "🎙️",
+     "txt": "Parties and blocs have a leader in the House. The President of the Republic names the government's leader."
+    }
+   ],
+   "emoji": "👥",
+   "coruja": "The base and the opposition change over time: they depend on who is governing.",
+   "fontes": [
+    "cn-bancada",
+    "camara-frentes",
+    "cn-lideranca",
+    "cn-oposicao",
+    "camara-liderancas"
+   ]
+  },
+  {
+   "tipo": "quiz",
+   "pergunta": "How many senators does each state have?",
+   "opcoes": [
+    "It depends on the population",
+    "3",
+    "8"
+   ],
+   "certa": 1,
+   "explica": "Every state and the DF have 3 senators, whether they are big or small. In the Chamber it is different: it depends on the population.",
+   "fontes": [
+    "cf-art46",
+    "cf-art45"
+   ]
+  },
+  {
+   "tipo": "quiz",
+   "pergunta": "The Chamber passed a bill that started there. What happens now?",
+   "opcoes": [
+    "It has already become law",
+    "The Senate reviews the bill",
+    "The STF votes on the bill"
+   ],
+   "certa": 1,
+   "explica": "The Senate is the reviewing House: it checks the bill. Only after that does the bill go to the President of the Republic.",
+   "fontes": [
+    "cf-art65",
+    "cn-casa-revisora",
+    "camara-processo"
+   ]
+  }
+ ]
+}

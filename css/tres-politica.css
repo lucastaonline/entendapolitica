@@ -191,8 +191,8 @@
 .funil-degrau .r { font-size: .95rem; text-align: left; flex: 1; }
 .funil-degrau .ic { font-size: 1.8rem; }
 .funil-degrau.d1 { width: 100%; background: linear-gradient(145deg, #2a4c7a, #1f3a5f); }
-.funil-degrau.d2 { width: 82%; background: linear-gradient(145deg, #2f9a5a, #1f7a3d); --sombra-d: #145429; }
-.funil-degrau.d3 { width: 64%; background: linear-gradient(145deg, #ffd34d, #f2b705); color: #2a1d00; --sombra-d: #b98a00; }
+.funil-degrau.d2 { width: 82%; background: linear-gradient(145deg, #2f6496, #2b5c8a); --sombra-d: #1d4266; }
+.funil-degrau.d3 { width: 64%; background: linear-gradient(145deg, #4373a3, #3d6f9e); color: #fff; --sombra-d: #2a5078; }
 .funil.anima .funil-degrau { animation: degrauEntra .8s cubic-bezier(.2, .9, .3, 1.2) both; }
 .funil.anima .d2 { animation-delay: .18s; }
 .funil.anima .d3 { animation-delay: .36s; }

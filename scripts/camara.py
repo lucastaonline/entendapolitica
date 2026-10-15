@@ -470,9 +470,9 @@ def status_proposta(p: dict, sigla: dict, genero_primeiro: str | None) -> tuple[
         if re.search(r"(?<!des)arquiva(d|mento)|arquive-se|\barquivo\b", texto) and "desarquiv" not in texto:
             return "arquivada", txt_arquivada(d, tram, data_st, True), "vazia + arquivamento"
         if re.search(r"devolva-se|devolvid[oa] ao autor|devolucao ao autor", texto):
-            return "rejeitada", TXT_DEVOLVIDA, "vazia + devolvida ao autor"
+            return "parada", TXT_DEVOLVIDA, "vazia + devolvida ao autor"
         if "prejudicad" in texto and "pela prejudicialidade" not in texto:
-            return "rejeitada", TXT_PREJUDICADA, "vazia + prejudicada"
+            return "parada", TXT_PREJUDICADA, "vazia + prejudicada"
         if re.search(r"veto total|vetad[oa] totalmente", texto):
             return "rejeitada", "O presidente vetou a proposta inteira", "vazia + veto total"
         if re.search(r"solicitando a retirada|retirad[oa] pel[oa] autor", texto):
@@ -497,7 +497,7 @@ def status_proposta(p: dict, sigla: dict, genero_primeiro: str | None) -> tuple[
             return "outra", f"Virou outra proposta: {m.group(1).upper()} {m.group(2)}/{a}", "renumerada"
         return "outra", "Virou outra proposta", "renumerada"
     if "devolvid" in s and "autor" in s:
-        return "rejeitada", TXT_DEVOLVIDA, "devolvida ao autor"
+        return "parada", TXT_DEVOLVIDA, "devolvida ao autor"
     if "apreciacao do veto" in s:
         if "parcial" in d or "parcial" in tram:
             return "lei", "", "veto parcial (norma)"
@@ -511,7 +511,7 @@ def status_proposta(p: dict, sigla: dict, genero_primeiro: str | None) -> tuple[
     if "analise de inconstitucionalidade" in s:
         return "andando", "Apresentada; em análise inicial na Câmara", "análise inicial"
     if "perdeu a eficacia" in s or "sem eficacia" in s:
-        return "rejeitada", "Perdeu a validade antes de virar lei", "perdeu a eficácia"
+        return "parada", "Perdeu a validade antes de virar lei", "perdeu a eficácia"
     if "vetado totalmente" in s:
         return "rejeitada", "O presidente vetou a proposta inteira", "veto total"
 
@@ -536,9 +536,15 @@ def status_proposta(p: dict, sigla: dict, genero_primeiro: str | None) -> tuple[
         if "pronta para pauta" in s:
             return st, "Pronta para ser votada", "regra comum"
         return st, "Ainda em discussão", "regra comum"
-    if st == "rejeitada":
+    if st == "parada":
         if "prejudicad" in s:
             return st, TXT_PREJUDICADA, "regra comum"
+        if "devolvid" in s:
+            return st, TXT_DEVOLVIDA, "regra comum"
+        if "eficacia" in s or "convertid" in s:
+            return st, "Perdeu a validade antes de virar lei", "regra comum"
+        return st, "Parou (não vai mais ser votada)", "regra comum"
+    if st == "rejeitada":
         return st, "Rejeitada", "regra comum"
     return st, STATUS_TXT.get(st, ""), "regra comum"
 
@@ -582,7 +588,8 @@ def txt_lei(lei: dict | None, tipo: str) -> str:
         artigo = "o" if lei["nome"].startswith("Decreto") else "a"
         return f"Virou {artigo} {lei['nome']}"
     return {"PEC": "Virou emenda à Constituição", "PDL": "Virou decreto legislativo", "PDC": "Virou decreto legislativo",
-            "PDS": "Virou decreto legislativo", "PRC": "Virou resolução da Câmara"}.get(tipo, "Virou lei")
+            "PDS": "Virou decreto legislativo", "PRC": "Virou resolução da Câmara",
+            "PRN": "Virou resolução do Congresso", "PRS": "Virou resolução do Senado"}.get(tipo, "Virou lei")
 
 
 # =================================================================== votações

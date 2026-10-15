@@ -3,41 +3,60 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Perfil | Entenda Política</title>
-  <meta name="description" content="Quem é, o que propôs, o que foi aprovado e o que virou lei. Tudo com fonte.">
+  <script>(function(d){try{var a=JSON.parse(localStorage.getItem("ep-a11y")||"{}");if(a.contraste)d.classList.add("alto-contraste");if(a.movimento)d.classList.add("sem-movimento");if(a.espaco)d.classList.add("espacado");if(a.escala)d.style.setProperty("--escala",a.escala);var q=/[?&]lang=(en|pt)\b/.exec(location.search),l=q?q[1]:localStorage.getItem("ep-lang");if(l==="en")d.lang="en";}catch(e){}})(document.documentElement)</script>
+  <title data-en="Profile | Understand Politics">Perfil | Entenda Política</title>
+  <meta name="description" content="Quem é, o que propôs, o que foi aprovado e o que virou lei. Tudo com fonte." data-en-content="Who they are, what they proposed, what was approved and what became law. Everything with sources.">
+  <link rel="canonical" href="https://entendapolitica.vercel.app/pessoa.html">
+  <link rel="alternate" hreflang="pt-BR" href="https://entendapolitica.vercel.app/pessoa.html">
+  <link rel="alternate" hreflang="en" href="https://entendapolitica.vercel.app/pessoa.html?lang=en">
+  <link rel="alternate" hreflang="x-default" href="https://entendapolitica.vercel.app/pessoa.html">
   <meta property="og:type" content="profile">
   <meta property="og:locale" content="pt_BR">
+  <meta property="og:locale:alternate" content="en_US">
   <meta property="og:site_name" content="Entenda Política">
+  <meta property="og:image" content="https://entendapolitica.vercel.app/img/compartilhar.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Desenho do Congresso Nacional em 3D com o texto: A política do Brasil, explicada de um jeito simples">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="theme-color" content="#1f3a5f">
+  <link rel="icon" href="favicon.ico" sizes="48x48">
   <link rel="icon" href="img/icone.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="css/base.css?v=1">
-  <link rel="stylesheet" href="css/tres.css?v=1">
-  <link rel="stylesheet" href="css/tres-politica.css?v=1">
-  <link rel="stylesheet" href="css/paginas.css?v=1">
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="stylesheet" href="css/base.css?v=2">
+  <link rel="stylesheet" href="css/tres.css?v=2">
+  <link rel="stylesheet" href="css/tres-politica.css?v=2">
+  <link rel="stylesheet" href="css/paginas.css?v=2">
 </head>
 <body>
-<a class="pular" href="#conteudo">Pular para o conteúdo</a>
+<a class="pular" href="#conteudo" data-en="Skip to content">Pular para o conteúdo</a>
 <header class="topo">
-  <a href="./" title="Voltar para a página inicial">🏠 <span class="rotulo">Início</span></a>
-  <a href="brasil.html" id="voltar-lista" title="Voltar para a lista">◀ <span class="rotulo">Voltar</span></a>
-  <span class="onde" id="onde"></span>
-  <button id="btn-libras" type="button" title="Traduzir para Libras">🤟 <span class="rotulo">Libras</span></button>
-  <button id="btn-ouvir" type="button" aria-pressed="false" title="Ler esta página em voz alta">🔊 <span class="rotulo">Ouvir</span></button>
-  <button id="btn-letra" type="button" title="Aumentar a letra">A+</button>
+  <a href="./" aria-label="Início" data-en-aria-label="Home" title="Página inicial" data-en-title="Home page"><span aria-hidden="true">🏠 </span><span class="rotulo" data-en="Home">Início</span></a>
+  <a href="brasil.html" id="voltar-lista" aria-label="Voltar para a lista" data-en-aria-label="Back to the list" title="Voltar para a lista" data-en-title="Back to the list"><span aria-hidden="true">◀ </span><span class="rotulo" data-en="Back">Voltar</span></a>
+  <span class="onde"><span aria-hidden="true">👤 </span><span id="onde" data-en="Profile">Perfil</span></span>
+  <a id="btn-idioma" href="?lang=en">🌐 EN</a>
+  <button id="btn-a11y" type="button" aria-haspopup="dialog"><span aria-hidden="true">♿</span><span class="rotulo" data-en=" Accessibility"> Acessibilidade</span></button>
+  <button id="btn-ouvir" type="button" aria-pressed="false"><span aria-hidden="true">🔊</span><span class="rotulo" data-en=" Listen"> Ouvir</span></button>
+  <button id="btn-letra" type="button">A+</button>
 </header>
 
 <main class="pagina" id="conteudo" data-ler>
-  <div class="miolo" id="perfil"><div class="carregando">Carregando…</div></div>
-  <footer class="miolo rodape">
-    <p id="links-erro"></p>
-    <p>Tudo nesta página vem de órgãos oficiais (Câmara, Senado, TSE e governos). <a href="dados.html">De onde vêm os dados</a> · <a href="imparcialidade.html">Como cuidamos da imparcialidade</a></p>
-  </footer>
+  <div class="miolo" id="perfil"><div class="carregando" data-en="Loading…">Carregando…</div></div>
 </main>
 
-<script src="js/config.js?v=1"></script>
-<script src="js/comum.js?v=1"></script>
-<script src="js/tres.js?v=1"></script>
-<script src="js/tres-politica.js?v=1"></script>
-<script src="js/pessoa.js?v=1"></script>
+<footer class="miolo rodape">
+  <p id="links-erro"></p>
+  <p data-en-html="The data on this page comes from official bodies (the Chamber of Deputies, the Federal Senate, the TSE, Brazil's Superior Electoral Court, and the governments), with the source next to each item. The plain-language explanations of bills are written by AI from the official text. <a href=&quot;dados.html&quot;>Where the data comes from</a> · <a href=&quot;imparcialidade.html&quot;>How we stay impartial</a>">Os dados desta página vêm de órgãos oficiais (Câmara, Senado, TSE e governos), com a fonte ao lado de cada um. As explicações em palavras simples das propostas são escritas por IA a partir do texto oficial. <a href="dados.html">De onde vêm os dados</a> · <a href="imparcialidade.html">Como cuidamos da imparcialidade</a></p>
+</footer>
+
+<noscript><p style="padding:20px">Esta página precisa de JavaScript ligado no navegador. / This page needs JavaScript.</p></noscript>
+<script src="js/config.js?v=2"></script>
+<script src="js/comum.js?v=2"></script>
+<script src="js/traducoes.js?v=2"></script>
+<script src="js/tres.js?v=2"></script>
+<script src="js/tres-politica.js?v=2"></script>
+<script src="js/pessoa.js?v=2"></script>
 </body>
 </html>

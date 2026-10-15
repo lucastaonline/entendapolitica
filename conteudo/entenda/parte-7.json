@@ -164,18 +164,18 @@
    "texto": "Uma cidade de mentirinha vai eleger 10 vereadores. Os partidos tiveram, juntos, 1.000 votos válidos.",
    "cadeiras": 10,
    "partidos": [
-    { "nome": "Partido Azul", "votos": 420 },
-    { "nome": "Partido Verde", "votos": 270 },
-    { "nome": "Partido Laranja", "votos": 190 },
-    { "nome": "Partido Roxo", "votos": 120 }
+    { "nome": "Partido Círculo", "votos": 420 },
+    { "nome": "Partido Quadrado", "votos": 270 },
+    { "nome": "Partido Triângulo", "votos": 190 },
+    { "nome": "Partido Losango", "votos": 120 }
    ],
    "passos": [
     "Quociente eleitoral = votos válidos ÷ cadeiras. Aqui: 1.000 ÷ 10 = **100 votos** por cadeira.",
-    "Cada partido ganha 1 cadeira a cada 100 votos: Azul 4, Verde 2, Laranja 1 e Roxo 1. Já são 8 cadeiras.",
+    "Cada partido ganha 1 cadeira a cada 100 votos: Círculo 4, Quadrado 2, Triângulo 1 e Losango 1. Já são 8 cadeiras.",
     "Sobraram 2 cadeiras. Elas vão para as maiores médias. A média é: votos do partido ÷ (cadeiras que já tem + 1).",
-    "1ª sobra: Azul 420 ÷ 5 = 84. Verde 270 ÷ 3 = 90. Laranja 190 ÷ 2 = 95. Roxo 120 ÷ 2 = 60. Fica com o Laranja.",
-    "2ª sobra: a média do Laranja cai para 190 ÷ 3 = 63,3. A maior agora é a do Verde (90). Fica com o Verde.",
-    "Resultado: Azul 4, Verde 3, Laranja 2 e Roxo 1. Em cada partido, entram os candidatos mais votados.",
+    "1ª sobra: Círculo 420 ÷ 5 = 84. Quadrado 270 ÷ 3 = 90. Triângulo 190 ÷ 2 = 95. Losango 120 ÷ 2 = 60. Fica com o Triângulo.",
+    "2ª sobra: a média do Triângulo cai para 190 ÷ 3 = 63,3. A maior agora é a do Quadrado (90). Fica com o Quadrado.",
+    "Resultado: Círculo 4, Quadrado 3, Triângulo 2 e Losango 1. Em cada partido, entram os candidatos mais votados.",
     "Regra extra: nas cadeiras da primeira divisão, só entra candidato com pelo menos 10% do quociente (aqui, 10 votos).",
     "Nas sobras, primeiro só disputam partidos com 80% do quociente e candidatos com 20%. Se ainda sobrar vaga, todos os partidos entram, como decidiu o STF em 2024."
    ],

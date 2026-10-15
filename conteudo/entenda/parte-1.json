@@ -171,6 +171,13 @@
    "titulo": "A cidadania além das urnas",
    "url": "https://plenarinho.leg.br/index.php/2024/06/cidadania-alem-das-urnas/",
    "data": "2024-06-17"
+  },
+  {
+   "id": "ibge-estimativas",
+   "veiculo": "IBGE",
+   "titulo": "Estimativas da população residente para os municípios e para as unidades da federação",
+   "url": "https://www.ibge.gov.br/estatisticas/sociais/populacao/9103-estimativas-de-populacao.html",
+   "data": "2026-08-28"
   }
  ],
  "glossario": [
@@ -364,7 +371,8 @@
     "cf-art1",
     "cf-art14",
     "cf-mandatos",
-    "plen-democracia"
+    "plen-democracia",
+    "ibge-estimativas"
    ]
   },
   {

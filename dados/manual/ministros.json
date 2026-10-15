@@ -4,8 +4,10 @@
   {
    "id": "min-advocacia-geral-da-uniao",
    "ministerio": "Advocacia-Geral da União",
+   "ministerio_en": "Office of the Attorney General",
    "ic": "⚖️",
    "oQueFaz": "Defende o governo federal na Justiça e dá conselhos jurídicos ao presidente e aos ministérios.",
+   "oQueFaz_en": "Defends the federal government in court and gives legal advice to the President and the ministries.",
    "nome": "Jorge Messias",
    "genero": "M",
    "partido": null,
@@ -19,18 +21,20 @@
      "data": "2026-05-05"
     },
     {
-     "veiculo": "Poder360",
-     "titulo": "TSE manda Messias apagar vídeo feito com IA a favor de Lula (\"o advogado-geral da União, Jorge Messias\")",
-     "url": "https://www.poder360.com.br/poder-eleicoes-2026/tse-manda-messias-apagar-video-feito-com-ia-a-favor-de-lula/",
-     "data": "2026-10-14"
+     "veiculo": "Advocacia-Geral da União (AGU)",
+     "titulo": "Advogado-Geral da União: Jorge Messias (página oficial)",
+     "url": "https://www.gov.br/agu/pt-br/composicao/advogado-geral-da-uniao-1/advogado-geral-da-uniao-0/oagu",
+     "data": "2026-10-15"
     }
    ]
   },
   {
    "id": "min-agricultura-e-pecuaria",
    "ministerio": "Ministério da Agricultura e Pecuária",
+   "ministerio_en": "Ministry of Agriculture and Livestock",
    "ic": "🌾",
    "oQueFaz": "Cuida das regras e do apoio para quem planta e cria animais, e da qualidade dos alimentos que vêm do campo.",
+   "oQueFaz_en": "Takes care of the rules and the support for people who grow crops and raise animals, and of the quality of the food that comes from farms.",
    "nome": "André de Paula",
    "genero": "M",
    "partido": "PSD",
@@ -56,18 +60,20 @@
      "data": "2026-03-31"
     },
     {
-     "veiculo": "Poder360",
-     "titulo": "Ministro diz estar \"otimista\" com China apesar de tarifa sobre carne (\"André de Paula (PSD)\")",
-     "url": "https://www.poder360.com.br/poder-agro/ministro-diz-estar-otimista-com-china-apesar-de-tarifa-sobre-carne/",
-     "data": "2026-10-13"
+     "veiculo": "Exame",
+     "titulo": "André de Paula, da Pesca, assume Agricultura após saída de Carlos Fávaro (\"André de Paula (PSD)\")",
+     "url": "https://exame.com/agro/andre-de-paula-assume-agricultura-apos-saida-de-carlos-favaro/",
+     "data": "2026-03-30"
     }
    ]
   },
   {
    "id": "min-casa-civil",
    "ministerio": "Casa Civil da Presidência da República",
+   "ministerio_en": "Office of the Chief of Staff (Casa Civil)",
    "ic": "🏛️",
    "oQueFaz": "Ajuda o presidente a organizar o trabalho de todos os ministérios e a acompanhar os projetos do governo.",
+   "oQueFaz_en": "Helps the President organize the work of all the ministries and keep track of the government's projects.",
    "nome": "Miriam Belchior",
    "genero": "F",
    "partido": "PT",
@@ -103,8 +109,10 @@
   {
    "id": "min-cidades",
    "ministerio": "Ministério das Cidades",
+   "ministerio_en": "Ministry of Cities",
    "ic": "🏙️",
    "oQueFaz": "Cuida de moradia, saneamento (água e esgoto) e transporte dentro das cidades.",
+   "oQueFaz_en": "Takes care of housing, sanitation (clean water and sewage) and transportation inside cities.",
    "nome": "Vladimir Lima",
    "genero": "M",
    "partido": null,
@@ -134,8 +142,10 @@
   {
    "id": "min-ciencia-tecnologia-e-inovacao",
    "ministerio": "Ministério da Ciência, Tecnologia e Inovação",
+   "ministerio_en": "Ministry of Science, Technology and Innovation",
    "ic": "🔬",
    "oQueFaz": "Apoia a pesquisa científica, a tecnologia e as novas ideias criadas no Brasil.",
+   "oQueFaz_en": "Supports scientific research, technology and new ideas created in Brazil.",
    "nome": "Luciana Santos",
    "genero": "F",
    "partido": "PCdoB",
@@ -155,18 +165,20 @@
      "data": "2026-10-15"
     },
     {
-     "veiculo": "Vermelho",
-     "titulo": "Luciana Santos visita UFPE após incêndio e reforça apoio à reconstrução (\"Luciana Santos (PCdoB)\")",
-     "url": "https://vermelho.org.br/2026/10/08/luciana-santos-visita-ufpe-apos-incendio-e-reforca-apoio-a-reconstrucao/",
-     "data": "2026-10-08"
+     "veiculo": "Ministério da Ciência, Tecnologia e Inovação (MCTI)",
+     "titulo": "Luciana Santos – Ministra de Estado da Ciência, Tecnologia e Inovação (perfil oficial; cita a presidência nacional do PCdoB)",
+     "url": "https://www.gov.br/mcti/pt-br/composicao/gm/ministra/luciana-santos",
+     "data": "2026-10-15"
     }
    ]
   },
   {
    "id": "min-comunicacoes",
    "ministerio": "Ministério das Comunicações",
+   "ministerio_en": "Ministry of Communications",
    "ic": "📡",
    "oQueFaz": "Cuida de internet, telefone, rádio, TV e Correios.",
+   "oQueFaz_en": "Takes care of the internet, phones, radio, TV and the national postal service (Correios).",
    "nome": "Frederico de Siqueira Filho",
    "genero": "M",
    "partido": null,
@@ -190,8 +202,10 @@
   {
    "id": "min-controladoria-geral-da-uniao",
    "ministerio": "Controladoria-Geral da União",
+   "ministerio_en": "Office of the Comptroller General",
    "ic": "🔍",
    "oQueFaz": "Fiscaliza como o dinheiro público é usado pelo governo federal e combate a corrupção.",
+   "oQueFaz_en": "Checks how the federal government uses public money and fights corruption.",
    "nome": "Vinícius Marques de Carvalho",
    "genero": "M",
    "partido": null,
@@ -215,8 +229,10 @@
   {
    "id": "min-cultura",
    "ministerio": "Ministério da Cultura",
+   "ministerio_en": "Ministry of Culture",
    "ic": "🎭",
    "oQueFaz": "Apoia a arte, a música, o cinema, os livros e o patrimônio histórico do Brasil.",
+   "oQueFaz_en": "Supports art, music, movies, books and Brazil's historical heritage.",
    "nome": "Margareth Menezes",
    "genero": "F",
    "partido": null,
@@ -240,8 +256,10 @@
   {
    "id": "min-defesa",
    "ministerio": "Ministério da Defesa",
+   "ministerio_en": "Ministry of Defense",
    "ic": "🛡️",
    "oQueFaz": "Cuida da defesa do país e organiza o trabalho do Exército, da Marinha e da Aeronáutica.",
+   "oQueFaz_en": "Takes care of the country's defense and organizes the work of the Army, the Navy and the Air Force.",
    "nome": "José Múcio",
    "genero": "M",
    "partido": null,
@@ -265,8 +283,10 @@
   {
    "id": "min-desenvolvimento-agrario-e-agricultura-familiar",
    "ministerio": "Ministério do Desenvolvimento Agrário e Agricultura Familiar",
+   "ministerio_en": "Ministry of Agrarian Development and Family Farming",
    "ic": "🚜",
    "oQueFaz": "Ajuda as famílias que plantam em pequenas propriedades e cuida da reforma agrária.",
+   "oQueFaz_en": "Helps families who farm on small properties and is in charge of land reform (giving land to families who need it to farm).",
    "nome": "Fernanda Machiaveli",
    "genero": "F",
    "partido": null,
@@ -296,8 +316,10 @@
   {
    "id": "min-desenvolvimento-e-assistencia-social-familia-e-combate-a-fome",
    "ministerio": "Ministério do Desenvolvimento e Assistência Social, Família e Combate à Fome",
+   "ministerio_en": "Ministry of Development and Social Assistance, Family and the Fight Against Hunger",
    "ic": "🍽️",
    "oQueFaz": "Cuida de programas que ajudam famílias com pouco dinheiro, como o Bolsa Família, e do combate à fome.",
+   "oQueFaz_en": "Runs programs that help low-income families, such as Bolsa Família (a monthly cash payment), and fights hunger.",
    "nome": "Wellington Dias",
    "genero": "M",
    "partido": "PT",
@@ -327,8 +349,10 @@
   {
    "id": "min-desenvolvimento-industria-comercio-e-servicos",
    "ministerio": "Ministério do Desenvolvimento, Indústria, Comércio e Serviços",
+   "ministerio_en": "Ministry of Development, Industry, Trade and Services",
    "ic": "🏭",
    "oQueFaz": "Cuida da indústria, do comércio, dos serviços e das vendas do Brasil para outros países.",
+   "oQueFaz_en": "Takes care of industry, trade, services and Brazil's sales to other countries.",
    "nome": "Márcio Elias Rosa",
    "genero": "M",
    "partido": null,
@@ -352,8 +376,10 @@
   {
    "id": "min-direitos-humanos-e-da-cidadania",
    "ministerio": "Ministério dos Direitos Humanos e da Cidadania",
+   "ministerio_en": "Ministry of Human Rights and Citizenship",
    "ic": "🕊️",
    "oQueFaz": "Cuida da proteção dos direitos de todas as pessoas, como crianças, idosos e pessoas com deficiência.",
+   "oQueFaz_en": "Protects the rights of all people, such as children, older people and people with disabilities.",
    "nome": "Janine Mello",
    "genero": "F",
    "partido": null,
@@ -383,8 +409,10 @@
   {
    "id": "min-educacao",
    "ministerio": "Ministério da Educação",
+   "ministerio_en": "Ministry of Education",
    "ic": "📚",
    "oQueFaz": "Cuida das regras e do apoio às escolas e universidades do país.",
+   "oQueFaz_en": "Takes care of the rules and the support for the country's schools and universities.",
    "nome": "Leonardo Barchini",
    "genero": "M",
    "partido": null,
@@ -414,8 +442,10 @@
   {
    "id": "min-empreendedorismo-da-microempresa-e-da-empresa-de-pequeno-porte",
    "ministerio": "Ministério do Empreendedorismo, da Microempresa e da Empresa de Pequeno Porte",
+   "ministerio_en": "Ministry of Entrepreneurship, Microenterprises and Small Businesses",
    "ic": "🏪",
    "oQueFaz": "Apoia pequenos negócios, microempresas e quem trabalha por conta própria.",
+   "oQueFaz_en": "Supports small businesses, very small companies and people who work for themselves.",
    "nome": "Paulo Henrique Rodrigues Pereira",
    "genero": "M",
    "partido": null,
@@ -439,8 +469,10 @@
   {
    "id": "min-esporte",
    "ministerio": "Ministério do Esporte",
+   "ministerio_en": "Ministry of Sports",
    "ic": "⚽",
    "oQueFaz": "Apoia o esporte, dos atletas profissionais às atividades esportivas nas escolas e nos bairros.",
+   "oQueFaz_en": "Supports sports, from professional athletes to sports activities in schools and neighborhoods.",
    "nome": "Paulo Henrique Perna Cordeiro",
    "genero": "M",
    "partido": null,
@@ -470,8 +502,10 @@
   {
    "id": "min-fazenda",
    "ministerio": "Ministério da Fazenda",
+   "ministerio_en": "Ministry of Finance",
    "ic": "💰",
    "oQueFaz": "Cuida do dinheiro do país: impostos, gastos do governo e economia.",
+   "oQueFaz_en": "Takes care of the country's money: taxes, government spending and the economy.",
    "nome": "Dario Durigan",
    "genero": "M",
    "partido": null,
@@ -495,8 +529,10 @@
   {
    "id": "min-gabinete-de-seguranca-institucional",
    "ministerio": "Gabinete de Segurança Institucional da Presidência da República",
+   "ministerio_en": "Institutional Security Office",
    "ic": "🔒",
    "oQueFaz": "Cuida da segurança do presidente e do vice-presidente e ajuda a proteger informações importantes do governo.",
+   "oQueFaz_en": "Keeps the President and the Vice President safe and helps protect sensitive government information.",
    "nome": "Marcos Antonio Amaro dos Santos",
    "genero": "M",
    "partido": null,
@@ -520,8 +556,10 @@
   {
    "id": "min-gestao-e-da-inovacao-em-servicos-publicos",
    "ministerio": "Ministério da Gestão e da Inovação em Serviços Públicos",
+   "ministerio_en": "Ministry of Management and Innovation in Public Services",
    "ic": "🗂️",
    "oQueFaz": "Cuida dos servidores públicos federais e de como funcionam os serviços do governo, inclusive pela internet.",
+   "oQueFaz_en": "Takes care of federal public employees and of how government services work, including online.",
    "nome": "Esther Dweck",
    "genero": "F",
    "partido": null,
@@ -545,8 +583,10 @@
   {
    "id": "min-igualdade-racial",
    "ministerio": "Ministério da Igualdade Racial",
+   "ministerio_en": "Ministry of Racial Equality",
    "ic": "👥",
    "oQueFaz": "Cria ações para combater o racismo e diminuir as diferenças entre pessoas de cores e origens diferentes.",
+   "oQueFaz_en": "Creates actions to fight racism and to reduce the gaps between people of different skin colors and backgrounds.",
    "nome": "Rachel Barros",
    "genero": "F",
    "partido": null,
@@ -576,8 +616,10 @@
   {
    "id": "min-integracao-e-do-desenvolvimento-regional",
    "ministerio": "Ministério da Integração e do Desenvolvimento Regional",
+   "ministerio_en": "Ministry of Integration and Regional Development",
    "ic": "🗺️",
    "oQueFaz": "Cuida de obras e ações para diminuir as diferenças entre as regiões e ajuda cidades atingidas por desastres, como secas e enchentes.",
+   "oQueFaz_en": "Takes care of public works and actions that reduce the gaps between Brazil's regions, and helps cities hit by disasters such as droughts and floods.",
    "nome": "Waldez Góes",
    "genero": "M",
    "partido": "PDT",
@@ -607,8 +649,10 @@
   {
    "id": "min-justica-e-seguranca-publica",
    "ministerio": "Ministério da Justiça e Segurança Pública",
+   "ministerio_en": "Ministry of Justice and Public Security",
    "ic": "🚔",
    "oQueFaz": "Cuida da segurança pública, da Polícia Federal, de temas de justiça e dos direitos do consumidor.",
+   "oQueFaz_en": "Takes care of public safety, the Federal Police, justice matters and consumer rights.",
    "nome": "Wellington César Lima e Silva",
    "genero": "M",
    "partido": null,
@@ -632,8 +676,10 @@
   {
    "id": "min-meio-ambiente-e-mudanca-do-clima",
    "ministerio": "Ministério do Meio Ambiente e Mudança do Clima",
+   "ministerio_en": "Ministry of the Environment and Climate Change",
    "ic": "🌳",
    "oQueFaz": "Cuida da proteção da natureza, das florestas, dos rios e do clima.",
+   "oQueFaz_en": "Protects nature, forests, rivers and the climate.",
    "nome": "João Paulo Capobianco",
    "genero": "M",
    "partido": null,
@@ -663,8 +709,10 @@
   {
    "id": "min-minas-e-energia",
    "ministerio": "Ministério de Minas e Energia",
+   "ministerio_en": "Ministry of Mines and Energy",
    "ic": "⚡",
    "oQueFaz": "Cuida da energia (como eletricidade, petróleo e gás) e da mineração.",
+   "oQueFaz_en": "Takes care of energy (such as electricity, oil and gas) and mining.",
    "nome": "Alexandre Silveira",
    "genero": "M",
    "partido": "PSD",
@@ -684,18 +732,20 @@
      "data": "2026-10-15"
     },
     {
-     "veiculo": "SBT News",
-     "titulo": "Ministro pedirá para Raquel Lyra rever posição e apoiar Lula (\"Alexandre Silveira (PSD)\")",
-     "url": "https://sbtnews.sbt.com.br/noticia/eleicoes/ministro-pedira-para-raquel-lyra-rever-posicao-e-apoiar-lula",
-     "data": "2026-10-06"
+     "veiculo": "eixos",
+     "titulo": "Alexandre Silveira desiste de eleições e sinaliza permanência no MME (\"Alexandre Silveira (PSD)\")",
+     "url": "https://eixos.com.br/politica/eleicoes/eleicoes-2026/alexandre-silveira-desiste-de-eleicao-e-sinaliza-permanencia-no-mme/",
+     "data": "2026-03-30"
     }
    ]
   },
   {
    "id": "min-mulheres",
    "ministerio": "Ministério das Mulheres",
+   "ministerio_en": "Ministry of Women",
    "ic": "👩",
    "oQueFaz": "Cria ações para proteger as mulheres e diminuir as diferenças entre mulheres e homens.",
+   "oQueFaz_en": "Creates actions to protect women and to reduce the gaps between women and men.",
    "nome": "Márcia Lopes",
    "genero": "F",
    "partido": null,
@@ -719,8 +769,10 @@
   {
    "id": "min-pesca-e-aquicultura",
    "ministerio": "Ministério da Pesca e Aquicultura",
+   "ministerio_en": "Ministry of Fisheries and Aquaculture",
    "ic": "🐟",
    "oQueFaz": "Apoia quem vive da pesca e da criação de peixes e de outros animais da água.",
+   "oQueFaz_en": "Supports people who make a living from fishing and from raising fish and other water animals.",
    "nome": "Rivetla Edipo Araujo Cruz",
    "genero": "M",
    "partido": null,
@@ -750,8 +802,10 @@
   {
    "id": "min-planejamento-e-orcamento",
    "ministerio": "Ministério do Planejamento e Orçamento",
+   "ministerio_en": "Ministry of Planning and Budget",
    "ic": "📊",
    "oQueFaz": "Prepara a proposta de orçamento do governo, o plano de quanto dinheiro vai para cada área (quem aprova é o Congresso).",
+   "oQueFaz_en": "Prepares the government's budget proposal: the plan for how much money goes to each area (Congress is the one that approves it).",
    "nome": "Bruno Moretti",
    "genero": "M",
    "partido": null,
@@ -781,8 +835,10 @@
   {
    "id": "min-portos-e-aeroportos",
    "ministerio": "Ministério de Portos e Aeroportos",
+   "ministerio_en": "Ministry of Ports and Airports",
    "ic": "✈️",
    "oQueFaz": "Cuida dos portos, onde chegam os navios, e dos aeroportos do país.",
+   "oQueFaz_en": "Takes care of the country's ports, where ships arrive, and its airports.",
    "nome": "Tomé Franca",
    "genero": "M",
    "partido": null,
@@ -812,8 +868,10 @@
   {
    "id": "min-povos-indigenas",
    "ministerio": "Ministério dos Povos Indígenas",
+   "ministerio_en": "Ministry of Indigenous Peoples",
    "ic": "🪶",
    "oQueFaz": "Cuida dos direitos dos povos indígenas e de suas terras.",
+   "oQueFaz_en": "Protects the rights of Indigenous peoples and their lands.",
    "nome": "Eloy Terena",
    "genero": "M",
    "partido": null,
@@ -839,13 +897,16 @@
      "data": "2026-03-31"
     }
    ],
-   "nota": "Nome civil: Luiz Henrique Eloy Amado."
+   "nota": "Nome civil: Luiz Henrique Eloy Amado.",
+   "nota_en": "Full legal name: Luiz Henrique Eloy Amado."
   },
   {
    "id": "min-previdencia-social",
    "ministerio": "Ministério da Previdência Social",
+   "ministerio_en": "Ministry of Social Security",
    "ic": "👵",
    "oQueFaz": "Cuida das aposentadorias e pensões pagas pelo INSS.",
+   "oQueFaz_en": "Takes care of the retirement pensions and other pensions paid by the INSS (Brazil's national social security agency).",
    "nome": "Wolney Queiroz",
    "genero": "M",
    "partido": "PDT",
@@ -865,9 +926,9 @@
      "data": "2026-10-15"
     },
     {
-     "veiculo": "Poder360",
-     "titulo": "Reforma da Previdência é para ferrar o trabalhador, diz ministro (\"Wolney Queiroz (PDT)\")",
-     "url": "https://www.poder360.com.br/poder-economia/reforma-da-previdencia-e-para-ferrar-o-trabalhador-diz-ministro/",
+     "veiculo": "Ministério da Previdência Social",
+     "titulo": "Ministro e Secretários (perfil oficial do ministro Wolney Queiroz; cita a filiação ao PDT)",
+     "url": "https://www.gov.br/previdencia/pt-br/composicao/ministro-e-secretarios",
      "data": "2026-10-15"
     }
    ]
@@ -875,8 +936,10 @@
   {
    "id": "min-relacoes-exteriores",
    "ministerio": "Ministério das Relações Exteriores",
+   "ministerio_en": "Ministry of Foreign Affairs",
    "ic": "🌎",
    "oQueFaz": "Cuida das relações do Brasil com outros países e das embaixadas.",
+   "oQueFaz_en": "Takes care of Brazil's relations with other countries and of its embassies.",
    "nome": "Mauro Vieira",
    "genero": "M",
    "partido": null,
@@ -900,8 +963,10 @@
   {
    "id": "min-saude",
    "ministerio": "Ministério da Saúde",
+   "ministerio_en": "Ministry of Health",
    "ic": "🏥",
    "oQueFaz": "Cuida da saúde pública, como o SUS, os hospitais públicos e as vacinas.",
+   "oQueFaz_en": "Takes care of public health, such as the SUS (Brazil's free public health system), public hospitals and vaccines.",
    "nome": "Alexandre Padilha",
    "genero": "M",
    "partido": "PT",
@@ -931,8 +996,10 @@
   {
    "id": "min-secretaria-de-comunicacao-social",
    "ministerio": "Secretaria de Comunicação Social da Presidência da República",
+   "ministerio_en": "Secretariat for Social Communication",
    "ic": "📣",
    "oQueFaz": "Cuida da comunicação do governo federal com a população.",
+   "oQueFaz_en": "Takes care of the federal government's communication with the public.",
    "nome": "Samara Castro",
    "genero": "F",
    "partido": null,
@@ -952,18 +1019,6 @@
      "data": "2026-10-15"
     },
     {
-     "veiculo": "Poder360",
-     "titulo": "Sidônio Palmeira deixará Secom para ajudar na campanha de Lula (a secretária-executiva Samara Castro deve assumir interinamente)",
-     "url": "https://www.poder360.com.br/poder-eleicoes-2026/sidonio-palmeira-deixara-secom-para-ajudar-na-campanha-de-lula/",
-     "data": "2026-10-11"
-    },
-    {
-     "veiculo": "O Globo",
-     "titulo": "Sidônio entra de férias para se dedicar 100% à campanha de Lula",
-     "url": "https://oglobo.globo.com/blogs/lauro-jardim/post/2026/10/sidonio-entra-de-ferias-para-se-dedicar-100percent-a-campanha-de-lula.ghtml",
-     "data": "2026-10-15"
-    },
-    {
      "veiculo": "Presidência da República (Planalto)",
      "titulo": "Ministros e Ministras (lista oficial do 1º escalão; página atualizada em 05/05/2026)",
      "url": "https://www.gov.br/planalto/pt-br/conheca-a-presidencia/ministros-e-ministras",
@@ -971,13 +1026,16 @@
     }
    ],
    "conferir": true,
-   "nota": "Ministra interina. O ministro titular, Sidônio Palmeira (no cargo desde 14/01/2025), está afastado: o e-Agendas registra o afastamento de 13/10/2026 a 24/10/2026, e a imprensa informa que ele tirou férias para se dedicar à campanha de reeleição do presidente Lula no 2º turno."
+   "nota": "Ministra interina. O ministro titular, Sidônio Palmeira (no cargo desde 14/01/2025), está afastado: o e-Agendas registra o afastamento de 13/10/2026 a 24/10/2026.",
+   "nota_en": "Acting minister. The minister who holds the post, Sidônio Palmeira (in office since January 14, 2025), is away from the job: e-Agendas (the federal government's official system for officials' schedules) records his absence from October 13 to October 24, 2026."
   },
   {
    "id": "min-secretaria-de-relacoes-institucionais",
    "ministerio": "Secretaria de Relações Institucionais da Presidência da República",
+   "ministerio_en": "Secretariat for Institutional Relations",
    "ic": "🤝",
    "oQueFaz": "Faz a conversa do governo com o Congresso, os estados e as cidades.",
+   "oQueFaz_en": "Handles the government's dialogue with Congress, the states and the cities.",
    "nome": "José Guimarães",
    "genero": "M",
    "partido": "PT",
@@ -1007,8 +1065,10 @@
   {
    "id": "min-secretaria-geral",
    "ministerio": "Secretaria-Geral da Presidência da República",
+   "ministerio_en": "General Secretariat of the Presidency",
    "ic": "📋",
    "oQueFaz": "Faz a ponte entre o governo e as organizações da sociedade, como associações e movimentos sociais.",
+   "oQueFaz_en": "Acts as a bridge between the government and civil society organizations, such as associations and social movements.",
    "nome": "Guilherme Boulos",
    "genero": "M",
    "partido": "PSOL",
@@ -1038,8 +1098,10 @@
   {
    "id": "min-trabalho-e-emprego",
    "ministerio": "Ministério do Trabalho e Emprego",
+   "ministerio_en": "Ministry of Labor and Employment",
    "ic": "👷",
    "oQueFaz": "Cuida das regras do trabalho, da carteira de trabalho e de programas de emprego.",
+   "oQueFaz_en": "Takes care of work rules, the work record booklet (carteira de trabalho) and job programs.",
    "nome": "Francisco Macena da Silva",
    "genero": "M",
    "partido": null,
@@ -1066,13 +1128,16 @@
     }
    ],
    "conferir": true,
-   "nota": "Ministro interino (é o secretário-executivo do ministério). O ministro titular, Luiz Marinho (no cargo desde 01/01/2023), está afastado: o e-Agendas registra o afastamento de 13/10/2026 a 24/10/2026. Não encontramos notícia sobre o motivo."
+   "nota": "Ministro interino (é o secretário-executivo do ministério). O ministro titular, Luiz Marinho (no cargo desde 01/01/2023), está afastado: o e-Agendas registra o afastamento de 13/10/2026 a 24/10/2026.",
+   "nota_en": "Acting minister (he is the ministry's executive secretary, its second-highest official). The minister who holds the post, Luiz Marinho (in office since January 1, 2023), is away from the job: e-Agendas (the federal government's official system for officials' schedules) records his absence from October 13 to October 24, 2026."
   },
   {
    "id": "min-transportes",
    "ministerio": "Ministério dos Transportes",
+   "ministerio_en": "Ministry of Transport",
    "ic": "🚌",
    "oQueFaz": "Cuida das estradas, ferrovias e hidrovias federais do país.",
+   "oQueFaz_en": "Takes care of the country's federal roads, railways and waterways.",
    "nome": "George Santoro",
    "genero": "M",
    "partido": null,
@@ -1102,8 +1167,10 @@
   {
    "id": "min-turismo",
    "ministerio": "Ministério do Turismo",
+   "ministerio_en": "Ministry of Tourism",
    "ic": "🧳",
    "oQueFaz": "Incentiva as viagens e o turismo pelo Brasil.",
+   "oQueFaz_en": "Encourages travel and tourism around Brazil.",
    "nome": "Gustavo Feliciano",
    "genero": "M",
    "partido": null,

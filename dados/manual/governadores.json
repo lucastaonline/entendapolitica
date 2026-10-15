@@ -8,7 +8,8 @@
     "partido": "PP",
     "genero": "F",
     "desde": "2026-04-02",
-    "comoAssumiu": "Era vice-governadora e assumiu em 2026-04-02 depois que Gladson Camelí renunciou para disputar o Senado",
+    "comoAssumiu": "Era vice-governadora e assumiu em 02/04/2026 depois que Gladson Camelí renunciou para disputar o Senado",
+    "comoAssumiu_en": "She was vice governor. She became governor on April 2, 2026, after Gladson Camelí resigned to run for the Senate.",
     "eleicao2026": "Disputa o 2º turno para governadora em 25/10/2026",
     "nascimento": "1976-12-10",
     "fonte": [
@@ -28,7 +29,8 @@
    },
    "vice": {
     "vago": true,
-    "nota": "O cargo de vice-governador está vago desde 2026-04-02, quando a vice Mailza Assis assumiu o governo.",
+    "nota": "O cargo de vice-governador está vago desde 02/04/2026, quando a vice Mailza Assis assumiu o governo.",
+    "nota_en": "The vice governor post has been empty since April 2, 2026, when Vice Governor Mailza Assis became governor.",
     "fonte": [
      {
       "veiculo": "g1",
@@ -46,7 +48,8 @@
     "partido": null,
     "genero": "M",
     "desde": "2026-10-14",
-    "comoAssumiu": "É presidente do Tribunal de Justiça de Alagoas e assumiu o governo de forma interina em 2026-10-14, durante as férias do governador Paulo Dantas (MDB); quem assumiria antes dele (o vice e o presidente da Assembleia Legislativa) não pôde: o cargo de vice está vago e o presidente da Assembleia estava em viagem",
+    "comoAssumiu": "É presidente do Tribunal de Justiça de Alagoas e assumiu o governo de forma interina em 14/10/2026, durante as férias do governador Paulo Dantas (MDB); ele assumiu porque o cargo de vice está vago e o presidente da Assembleia Legislativa, que viria antes na ordem de substituição, não assumiu por estar em viagem",
+    "comoAssumiu_en": "He is the president of the Alagoas Court of Justice (the state's highest court). He became acting governor on October 14, 2026, while Governor Paulo Dantas (MDB) is on vacation. He took over because the vice governor post is empty and the president of the Legislative Assembly (state parliament), who comes before him in the line of succession, did not take over because he was traveling.",
     "eleicao2026": "Não foi candidato em 2026",
     "fonte": [
      {
@@ -75,11 +78,13 @@
      }
     ],
     "conferir": true,
-    "nota": "Governo interino e por poucos dias. O governador eleito em 2022, Paulo Dantas (MDB), se afastou para tirar férias e coordenar a campanha de Lula em Alagoas no 2º turno. O g1 diz que Bittencourt fica até 30/10/2026; a Gazeta de Alagoas diz até 22/10/2026. Paulo Dantas não foi candidato em 2026."
+    "nota": "Governo interino e por poucos dias. O governador eleito em 2022, Paulo Dantas (MDB), se afastou temporariamente do cargo para tirar férias, segundo o Governo de Alagoas. O g1 diz que Bittencourt fica até 30/10/2026; a Gazeta de Alagoas diz até 22/10/2026. Paulo Dantas não foi candidato em 2026.",
+    "nota_en": "This is a temporary government that will last only a few days. The governor elected in 2022, Paulo Dantas (MDB), has temporarily stepped away from the job to take a vacation, according to the Alagoas state government. The news site g1 says Bittencourt will stay until October 30, 2026; the newspaper Gazeta de Alagoas says until October 22, 2026. Paulo Dantas was not a candidate in 2026."
    },
    "vice": {
     "vago": true,
-    "nota": "Ronaldo Lessa (PDT), eleito vice em 2022, renunciou ao cargo em 2026-10-09, com efeito imediato. O cargo está vago.",
+    "nota": "Ronaldo Lessa (PDT), eleito vice em 2022, renunciou ao cargo em 09/10/2026, com efeito imediato. O cargo está vago.",
+    "nota_en": "Ronaldo Lessa (PDT), elected vice governor in 2022, resigned on October 9, 2026, effective immediately. The post is empty.",
     "fonte": [
      {
       "veiculo": "g1",
@@ -103,20 +108,27 @@
     "partido": "UNIÃO",
     "genero": "M",
     "desde": "2026-05-04",
-    "comoAssumiu": "Era presidente da Assembleia Legislativa e assumiu o governo de forma interina em abril de 2026, depois que o governador Wilson Lima e o vice Tadeu de Souza renunciaram para disputar a eleição; em 2026-05-04 foi eleito governador pelos deputados estaduais (eleição indireta) para completar o mandato",
+    "comoAssumiu": "Era presidente da Assembleia Legislativa e assumiu o governo de forma interina em abril de 2026, depois que o governador Wilson Lima e o vice Tadeu de Souza renunciaram para disputar a eleição; em 04/05/2026 foi eleito governador pelos deputados estaduais (eleição indireta) para completar o mandato",
+    "comoAssumiu_en": "He was the president of the Legislative Assembly (state parliament). He became acting governor in April 2026, after Governor Wilson Lima and Vice Governor Tadeu de Souza resigned to run in the election. On May 4, 2026, the state deputies (members of the state parliament) chose him as governor in an indirect election (a vote by the lawmakers, not by the people) to finish the term.",
     "eleicao2026": "Disputou o governo do Amazonas e não foi eleito (1º turno, 04/10/2026)",
     "nascimento": "1986-10-02",
     "fonte": [
      {
-      "veiculo": "Folha de S.Paulo",
-      "titulo": "Roberto Cidade, do União Brasil, é escolhido governador do Amazonas em eleição indireta",
-      "url": "https://www1.folha.uol.com.br/poder/2026/05/roberto-cidade-do-uniao-brasil-e-escolhido-governador-do-amazonas-em-eleicao-indireta.shtml",
+      "veiculo": "Assembleia Legislativa do Amazonas (Aleam)",
+      "titulo": "Presidente da Aleam, Adjuto Afonso, acompanha balanço das ações estaduais de combate às queimadas no Amazonas (cita o governador Roberto Cidade e o vice-governador Serafim Corrêa)",
+      "url": "https://www.aleam.gov.br/presidente-da-aleam-adjuto-afonso-acompanha-balanco-das-acoes-estaduais-de-combate-as-queimadas-no-amazonas/",
+      "data": "2026-10-14"
+     },
+     {
+      "veiculo": "Agência Brasil",
+      "titulo": "Roberto Cidade é eleito governador do Amazonas em eleição indireta",
+      "url": "https://agenciabrasil.ebc.com.br/justica/noticia/2026-05/roberto-cidade-e-eleito-governador-do-amazonas-em-eleicao-indireta",
       "data": "2026-05-04"
      },
      {
-      "veiculo": "CartaCapital",
-      "titulo": "Assembleia do Amazonas elege Roberto Cidade (União) para governador-tampão",
-      "url": "https://www.cartacapital.com.br/politica/assembleia-do-amazonas-elege-roberto-cidade-uniao-para-governador-tampao/",
+      "veiculo": "Folha de S.Paulo",
+      "titulo": "Roberto Cidade, do União Brasil, é escolhido governador do Amazonas em eleição indireta",
+      "url": "https://www1.folha.uol.com.br/poder/2026/05/roberto-cidade-do-uniao-brasil-e-escolhido-governador-do-amazonas-em-eleicao-indireta.shtml",
       "data": "2026-05-04"
      },
      {
@@ -133,20 +145,27 @@
     "partido": "PSB",
     "genero": "M",
     "desde": "2026-05-04",
-    "comoAssumiu": "Eleito vice-governador pela Assembleia Legislativa em 2026-05-04 (eleição indireta), na chapa de Roberto Cidade",
+    "comoAssumiu": "Eleito vice-governador pela Assembleia Legislativa em 04/05/2026 (eleição indireta), na chapa de Roberto Cidade",
+    "comoAssumiu_en": "The Legislative Assembly (state parliament) chose him as vice governor on May 4, 2026, in an indirect election (a vote by the state lawmakers, not by the people), on Roberto Cidade's ticket.",
     "eleicao2026": "Foi candidato a vice-governador na chapa de Roberto Cidade e não foi eleito (1º turno, 04/10/2026)",
     "nascimento": "1947-04-03",
     "fonte": [
      {
-      "veiculo": "Folha de S.Paulo",
-      "titulo": "Roberto Cidade, do União Brasil, é escolhido governador do Amazonas em eleição indireta",
-      "url": "https://www1.folha.uol.com.br/poder/2026/05/roberto-cidade-do-uniao-brasil-e-escolhido-governador-do-amazonas-em-eleicao-indireta.shtml",
+      "veiculo": "Assembleia Legislativa do Amazonas (Aleam)",
+      "titulo": "Presidente da Aleam, Adjuto Afonso, acompanha balanço das ações estaduais de combate às queimadas no Amazonas (cita o governador Roberto Cidade e o vice-governador Serafim Corrêa)",
+      "url": "https://www.aleam.gov.br/presidente-da-aleam-adjuto-afonso-acompanha-balanco-das-acoes-estaduais-de-combate-as-queimadas-no-amazonas/",
+      "data": "2026-10-14"
+     },
+     {
+      "veiculo": "Agência Brasil",
+      "titulo": "Roberto Cidade é eleito governador do Amazonas em eleição indireta",
+      "url": "https://agenciabrasil.ebc.com.br/justica/noticia/2026-05/roberto-cidade-e-eleito-governador-do-amazonas-em-eleicao-indireta",
       "data": "2026-05-04"
      },
      {
-      "veiculo": "CartaCapital",
-      "titulo": "Assembleia do Amazonas elege Roberto Cidade (União) para governador-tampão",
-      "url": "https://www.cartacapital.com.br/politica/assembleia-do-amazonas-elege-roberto-cidade-uniao-para-governador-tampao/",
+      "veiculo": "Folha de S.Paulo",
+      "titulo": "Roberto Cidade, do União Brasil, é escolhido governador do Amazonas em eleição indireta",
+      "url": "https://www1.folha.uol.com.br/poder/2026/05/roberto-cidade-do-uniao-brasil-e-escolhido-governador-do-amazonas-em-eleicao-indireta.shtml",
       "data": "2026-05-04"
      },
      {
@@ -166,20 +185,21 @@
     "genero": "M",
     "desde": "2023-01-01",
     "comoAssumiu": "Eleito em 2022",
+    "comoAssumiu_en": "Elected in 2022",
     "eleicao2026": "Disputou a reeleição e não foi eleito (1º turno, 04/10/2026)",
     "nascimento": "1972-04-08",
     "fonte": [
+     {
+      "veiculo": "Governo do Amapá",
+      "titulo": "Gestores do Governo (página oficial: governador Clécio Luís e vice-governador Teles Júnior)",
+      "url": "https://amapa.gov.br/gestores",
+      "data": "2026-10-15"
+     },
      {
       "veiculo": "g1",
       "titulo": "Clécio Luís toma posse para o 1º mandato como governador do Amapá",
       "url": "https://g1.globo.com/ap/amapa/noticia/2023/01/01/clecio-luis-toma-posse-para-o-1o-mandato-como-governador-do-amapa.ghtml",
       "data": "2023-01-01"
-     },
-     {
-      "veiculo": "g1",
-      "titulo": "Teles Júnior deixa pré-candidatura ao Senado pelo Amapá e retorna como vice na chapa de Clécio",
-      "url": "https://g1.globo.com/politica/eleicoes/2026/noticia/2026/07/16/teles-junior-deixa-pre-candidatura-ao-senado-pelo-amapa-e-retorna-como-vice-na-chapa-de-clecio.ghtml",
-      "data": "2026-07-16"
      },
      {
       "veiculo": "Agência Brasil",
@@ -200,7 +220,8 @@
       "data": "2026-10-15"
      }
     ],
-    "nota": "Foi eleito em 2022 pelo Solidariedade; hoje é do União Brasil."
+    "nota": "Foi eleito em 2022 pelo Solidariedade; hoje é do União Brasil.",
+    "nota_en": "He was elected in 2022 as a Solidariedade candidate. He is now a member of União Brasil."
    },
    "vice": {
     "nome": "Teles Júnior",
@@ -209,14 +230,21 @@
     "genero": "M",
     "desde": "2023-01-01",
     "comoAssumiu": "Eleito em 2022",
+    "comoAssumiu_en": "Elected in 2022",
     "eleicao2026": "Foi candidato a vice-governador na chapa de Clécio Luís e não foi eleito (1º turno, 04/10/2026)",
     "nascimento": "1983-06-20",
     "fonte": [
      {
+      "veiculo": "Governo do Amapá",
+      "titulo": "Gestores do Governo (página oficial: governador Clécio Luís e vice-governador Teles Júnior)",
+      "url": "https://amapa.gov.br/gestores",
+      "data": "2026-10-15"
+     },
+     {
       "veiculo": "g1",
-      "titulo": "Teles Júnior deixa pré-candidatura ao Senado pelo Amapá e retorna como vice na chapa de Clécio",
-      "url": "https://g1.globo.com/politica/eleicoes/2026/noticia/2026/07/16/teles-junior-deixa-pre-candidatura-ao-senado-pelo-amapa-e-retorna-como-vice-na-chapa-de-clecio.ghtml",
-      "data": "2026-07-16"
+      "titulo": "Clécio Luís toma posse para o 1º mandato como governador do Amapá (o vice-governador Teles Júnior também foi empossado)",
+      "url": "https://g1.globo.com/ap/amapa/noticia/2023/01/01/clecio-luis-toma-posse-para-o-1o-mandato-como-governador-do-amapa.ghtml",
+      "data": "2023-01-01"
      },
      {
       "veiculo": "Tribunal Superior Eleitoral (TSE)",
@@ -235,6 +263,7 @@
     "genero": "M",
     "desde": "2023-01-01",
     "comoAssumiu": "Eleito em 2022",
+    "comoAssumiu_en": "Elected in 2022",
     "eleicao2026": "Reeleito governador no 1º turno (04/10/2026)",
     "nascimento": "1965-04-03",
     "fonte": [
@@ -265,14 +294,21 @@
     "genero": "M",
     "desde": "2023-01-01",
     "comoAssumiu": "Eleito em 2022",
+    "comoAssumiu_en": "Elected in 2022",
     "eleicao2026": "Reeleito vice-governador no 1º turno (04/10/2026), na chapa de Jerônimo Rodrigues",
     "nascimento": "1969-05-07",
     "fonte": [
      {
-      "veiculo": "Política ao Ponto",
-      "titulo": "\"A Bahia é o maior canteiro de obras do Brasil\", afirma Geraldo Júnior ao exaltar pacto federativo com Lula",
-      "url": "https://politicaaoponto.com.br/a-bahia-e-o-maior-canteiro-de-obras-do-brasil-afirma-geraldo-junior-ao-exaltar-pacto-federativo-com-lula/",
-      "data": "2026-10-15"
+      "veiculo": "Governo da Bahia (Secom)",
+      "titulo": "Equipe de Governo (página oficial: governador Jerônimo Rodrigues e vice-governador Geraldo Júnior)",
+      "url": "https://www.ba.gov.br/comunicacao/equipe-de-governo",
+      "data": "2026-09-15"
+     },
+     {
+      "veiculo": "g1",
+      "titulo": "Jerônimo Rodrigues toma posse como governador da Bahia (o vice-governador Geraldo Júnior também foi empossado)",
+      "url": "https://g1.globo.com/ba/bahia/noticia/2023/01/01/jeronimo-rodrigues-toma-posse-como-governador-da-bahia.ghtml",
+      "data": "2023-01-01"
      },
      {
       "veiculo": "Tribunal Superior Eleitoral (TSE)",
@@ -291,6 +327,7 @@
     "genero": "M",
     "desde": "2023-01-01",
     "comoAssumiu": "Eleito em 2022",
+    "comoAssumiu_en": "Elected in 2022",
     "eleicao2026": "Reeleito governador no 1º turno (04/10/2026)",
     "nascimento": "1970-04-12",
     "fonte": [
@@ -327,6 +364,7 @@
     "genero": "F",
     "desde": "2023-01-01",
     "comoAssumiu": "Eleita em 2022",
+    "comoAssumiu_en": "Elected in 2022",
     "eleicao2026": "Eleita deputada estadual em 2026 (o novo mandato começa em 2027)",
     "nascimento": "1985-07-12",
     "fonte": [
@@ -349,7 +387,8 @@
       "data": "2026-10-04"
      }
     ],
-    "nota": "Foi eleita vice em 2022 pelo MDB; em 2026 se candidatou pelo PT."
+    "nota": "Foi eleita vice em 2022 pelo MDB; em 2026 se candidatou pelo PT.",
+    "nota_en": "She was elected vice governor in 2022 as an MDB candidate. In 2026 she ran as a PT candidate."
    }
   },
   "DF": {
@@ -359,14 +398,15 @@
     "partido": "PP",
     "genero": "F",
     "desde": "2026-03-30",
-    "comoAssumiu": "Era vice-governadora e assumiu em 2026-03-30 depois que Ibaneis Rocha renunciou ao governo (ele anunciou que disputaria o Senado)",
+    "comoAssumiu": "Era vice-governadora e assumiu em 30/03/2026 depois que Ibaneis Rocha renunciou ao governo (ele anunciou que disputaria o Senado)",
+    "comoAssumiu_en": "She was vice governor. She became governor on March 30, 2026, after Ibaneis Rocha resigned (he had announced that he would run for the Senate).",
     "eleicao2026": "Disputa o 2º turno para governadora em 25/10/2026",
     "nascimento": "1977-03-02",
     "fonte": [
      {
-      "veiculo": "O Globo",
-      "titulo": "Celina Leão assume governo no DF, afasta ligação com caso Master e promete 'respostas' sobre BRB",
-      "url": "https://oglobo.globo.com/politica/noticia/2026/03/30/celina-leao-assume-governo-no-df-afasta-ligacao-com-caso-master-e-promete-respostas-sobre-brb.ghtml",
+      "veiculo": "Jornal de Brasília",
+      "titulo": "Celina Leão assume governo do DF após renúncia de Ibaneis Rocha",
+      "url": "https://jornaldebrasilia.com.br/brasilia/celina-leao-assume-governo-do-df-apos-renuncia-de-ibaneis-rocha/",
       "data": "2026-03-30"
      },
      {
@@ -391,12 +431,13 @@
    },
    "vice": {
     "vago": true,
-    "nota": "O cargo de vice-governador está vago desde 2026-03-30, quando a vice Celina Leão assumiu o governo.",
+    "nota": "O cargo de vice-governador está vago desde 30/03/2026, quando a vice Celina Leão assumiu o governo.",
+    "nota_en": "The vice governor post has been empty since March 30, 2026, when Vice Governor Celina Leão became governor.",
     "fonte": [
      {
-      "veiculo": "O Globo",
-      "titulo": "Celina Leão assume governo no DF, afasta ligação com caso Master e promete 'respostas' sobre BRB",
-      "url": "https://oglobo.globo.com/politica/noticia/2026/03/30/celina-leao-assume-governo-no-df-afasta-ligacao-com-caso-master-e-promete-respostas-sobre-brb.ghtml",
+      "veiculo": "Jornal de Brasília",
+      "titulo": "Celina Leão assume governo do DF após renúncia de Ibaneis Rocha",
+      "url": "https://jornaldebrasilia.com.br/brasilia/celina-leao-assume-governo-do-df-apos-renuncia-de-ibaneis-rocha/",
       "data": "2026-03-30"
      }
     ]
@@ -409,7 +450,8 @@
     "partido": "MDB",
     "genero": "M",
     "desde": "2026-04-02",
-    "comoAssumiu": "Era vice-governador e assumiu em 2026-04-02 depois que Renato Casagrande renunciou para disputar o Senado",
+    "comoAssumiu": "Era vice-governador e assumiu em 02/04/2026 depois que Renato Casagrande renunciou para disputar o Senado",
+    "comoAssumiu_en": "He was vice governor. He became governor on April 2, 2026, after Renato Casagrande resigned to run for the Senate.",
     "eleicao2026": "Disputa o 2º turno para governador em 25/10/2026",
     "nascimento": "1963-08-17",
     "fonte": [
@@ -435,7 +477,8 @@
    },
    "vice": {
     "vago": true,
-    "nota": "O cargo de vice-governador está vago desde 2026-04-02, quando o vice Ricardo Ferraço assumiu o governo.",
+    "nota": "O cargo de vice-governador está vago desde 02/04/2026, quando o vice Ricardo Ferraço assumiu o governo.",
+    "nota_en": "The vice governor post has been empty since April 2, 2026, when Vice Governor Ricardo Ferraço became governor.",
     "fonte": [
      {
       "veiculo": "A Gazeta",
@@ -453,7 +496,8 @@
     "partido": "MDB",
     "genero": "M",
     "desde": "2026-03-31",
-    "comoAssumiu": "Era vice-governador e assumiu em 2026-03-31 depois que Ronaldo Caiado renunciou para disputar a Presidência da República",
+    "comoAssumiu": "Era vice-governador e assumiu em 31/03/2026 depois que Ronaldo Caiado renunciou para disputar a Presidência da República",
+    "comoAssumiu_en": "He was vice governor. He became governor on March 31, 2026, after Ronaldo Caiado resigned to run for President of Brazil.",
     "eleicao2026": "Eleito governador no 1º turno (04/10/2026)",
     "nascimento": "1983-10-23",
     "fonte": [
@@ -479,7 +523,8 @@
    },
    "vice": {
     "vago": true,
-    "nota": "O cargo de vice-governador está vago desde 2026-03-31, quando o vice Daniel Vilela assumiu o governo.",
+    "nota": "O cargo de vice-governador está vago desde 31/03/2026, quando o vice Daniel Vilela assumiu o governo.",
+    "nota_en": "The vice governor post has been empty since March 31, 2026, when Vice Governor Daniel Vilela became governor.",
     "fonte": [
      {
       "veiculo": "Governo de Goiás (Agência Brasil Central)",
@@ -497,27 +542,28 @@
     "partido": "MDB",
     "genero": "M",
     "desde": "2022-04-02",
-    "comoAssumiu": "Era vice-governador e assumiu em 2022-04-02 depois que Flávio Dino renunciou para disputar o Senado; foi eleito governador em 2022",
+    "comoAssumiu": "Era vice-governador e assumiu em 02/04/2022 depois que Flávio Dino renunciou para disputar o Senado; foi eleito governador em 2022",
+    "comoAssumiu_en": "He was vice governor. He became governor on April 2, 2022, after Flávio Dino resigned to run for the Senate. He was then elected governor in 2022.",
     "eleicao2026": "Não foi candidato em 2026",
     "nascimento": "1958-06-02",
     "fonte": [
+     {
+      "veiculo": "Governo do Maranhão",
+      "titulo": "Brandão percorre a MA-014 de ponta a ponta vistoriando obras de requalificação que estão na fase final (cita o governador Carlos Brandão)",
+      "url": "https://egma.ma.gov.br/noticias/brandao-percorre-a-ma-014-de-ponta-a-ponta-vistoriando-obras-de-requalificacao-que-estao-na-fase-final",
+      "data": "2026-04-13"
+     },
+     {
+      "veiculo": "Congresso em Foco",
+      "titulo": "Eduardo Braide é eleito governador do Maranhão (cita o governador Carlos Brandão, do MDB, e o vice-governador Felipe Camarão, do PT)",
+      "url": "https://www.congressoemfoco.com.br/noticia/122671/eduardo-braide-e-eleito-governador-do-maranhao",
+      "data": "2026-10-04"
+     },
      {
       "veiculo": "g1",
       "titulo": "Carlos Brandão toma posse como governador do Maranhão",
       "url": "https://g1.globo.com/ma/maranhao/noticia/2022/04/02/carlos-brandao-toma-posse-como-governador-do-maranhao.ghtml",
       "data": "2022-04-02"
-     },
-     {
-      "veiculo": "Brasil 247",
-      "titulo": "Maranhão: prefeitos pressionam Carlos Brandão por apoio a Flávio Bolsonaro",
-      "url": "https://www.brasil247.com/nordeste/maranhao-prefeitos-pressionam-carlos-brandao-por-apoio-a-flavio-bolsonaro/",
-      "data": "2026-10-08"
-     },
-     {
-      "veiculo": "O Globo",
-      "titulo": "Candidatos ao governo do Maranhão; veja lista e conheça perfil dos concorrentes",
-      "url": "https://oglobo.globo.com/politica/eleicoes-2026/guia/candidatos-ao-governo-do-maranhao-veja-lista-e-conheca-perfil-dos-concorrentes.ghtml",
-      "data": "2026-09-28"
      },
      {
       "veiculo": "Tribunal Superior Eleitoral (TSE)",
@@ -532,7 +578,8 @@
       "data": "2026-10-15"
      }
     ],
-    "nota": "Foi eleito em 2022 pelo PSB; hoje é do MDB."
+    "nota": "Foi eleito em 2022 pelo PSB; hoje é do MDB.",
+    "nota_en": "He was elected in 2022 as a PSB candidate. He is now a member of the MDB."
    },
    "vice": {
     "nome": "Felipe Camarão",
@@ -541,26 +588,33 @@
     "genero": "M",
     "desde": "2023-01-01",
     "comoAssumiu": "Eleito em 2022",
+    "comoAssumiu_en": "Elected in 2022",
     "eleicao2026": "Disputou o governo do Maranhão e não foi eleito (1º turno, 04/10/2026)",
     "nascimento": "1981-12-31",
     "fonte": [
      {
-      "veiculo": "Imirante",
-      "titulo": "Lula em São Luís dia 20: Felipe Camarão detalha agenda",
-      "url": "https://imirante.com/noticias/sao-luis/amp/2026/10/14/ipolitica-lula-luis-dia-20-felipe-camarao-detalha-agenda",
-      "data": "2026-10-14"
+      "veiculo": "Governo do Maranhão",
+      "titulo": "BR-402 ganhará posto da PRF, após solicitação do vice-governador Felipe Camarão",
+      "url": "https://egma.ma.gov.br/noticias/br-402-ganhara-posto-da-prf-apos-solicitacao-do-vice-governador-felipe-camarao",
+      "data": "2025-05-05"
      },
      {
-      "veiculo": "O Globo",
-      "titulo": "Candidatos ao governo do Maranhão; veja lista e conheça perfil dos concorrentes",
-      "url": "https://oglobo.globo.com/politica/eleicoes-2026/guia/candidatos-ao-governo-do-maranhao-veja-lista-e-conheca-perfil-dos-concorrentes.ghtml",
-      "data": "2026-09-28"
+      "veiculo": "Congresso em Foco",
+      "titulo": "Eduardo Braide é eleito governador do Maranhão (cita o governador Carlos Brandão, do MDB, e o vice-governador Felipe Camarão, do PT)",
+      "url": "https://www.congressoemfoco.com.br/noticia/122671/eduardo-braide-e-eleito-governador-do-maranhao",
+      "data": "2026-10-04"
      },
      {
       "veiculo": "Tribunal Superior Eleitoral (TSE)",
       "titulo": "Resultado oficial do 1º turno de 2026 – governador(a) e vice – Maranhão",
       "url": "https://resultados.tse.jus.br/oficial/ele2026/6259/dados/ma/ma-c0003-e006259-u.json",
       "data": "2026-10-05"
+     },
+     {
+      "veiculo": "Tribunal Superior Eleitoral (TSE)",
+      "titulo": "Dados abertos: Candidatos – 2022 (inclui governadores e vices eleitos, com nome completo e data de nascimento)",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2022",
+      "data": "2026-10-15"
      }
     ]
    }
@@ -572,7 +626,8 @@
     "partido": "PSD",
     "genero": "M",
     "desde": "2026-03-22",
-    "comoAssumiu": "Era vice-governador e assumiu em 2026-03-22 depois que Romeu Zema renunciou para disputar a Presidência da República",
+    "comoAssumiu": "Era vice-governador e assumiu em 22/03/2026 depois que Romeu Zema renunciou para disputar a Presidência da República",
+    "comoAssumiu_en": "He was vice governor. He became governor on March 22, 2026, after Romeu Zema resigned to run for President of Brazil.",
     "eleicao2026": "Disputou o governo de Minas Gerais e não foi eleito (1º turno, 04/10/2026)",
     "nascimento": "1981-03-09",
     "fonte": [
@@ -601,11 +656,13 @@
       "data": "2026-10-05"
      }
     ],
-    "nota": "Segundo a ALMG, Mateus Simões vai se afastar entre 29/10 e 28/11/2026 (missão oficial à China, à Turquia e ao Reino Unido). Nesse período, o presidente da Assembleia, Tadeu Leite (MDB), assume o governo de forma interina."
+    "nota": "Segundo a ALMG, Mateus Simões vai se afastar entre 29/10 e 28/11/2026 (missão oficial à China, à Turquia e ao Reino Unido). Nesse período, o presidente da Assembleia, Tadeu Leite (MDB), assume o governo de forma interina.",
+    "nota_en": "According to the ALMG (the Legislative Assembly of Minas Gerais, the state parliament), Mateus Simões will be away from October 29 to November 28, 2026, on an official trip to China, Turkey and the United Kingdom. During that time, the Assembly president, Tadeu Leite (MDB), will be acting governor."
    },
    "vice": {
     "vago": true,
-    "nota": "O cargo de vice-governador está vago desde 2026-03-22, quando o vice Mateus Simões assumiu o governo.",
+    "nota": "O cargo de vice-governador está vago desde 22/03/2026, quando o vice Mateus Simões assumiu o governo.",
+    "nota_en": "The vice governor post has been empty since March 22, 2026, when Vice Governor Mateus Simões became governor.",
     "fonte": [
      {
       "veiculo": "Assembleia Legislativa de Minas Gerais",
@@ -624,6 +681,7 @@
     "genero": "M",
     "desde": "2023-01-01",
     "comoAssumiu": "Eleito em 2022",
+    "comoAssumiu_en": "Elected in 2022",
     "eleicao2026": "Reeleito governador no 1º turno (04/10/2026)",
     "nascimento": "1969-07-05",
     "fonte": [
@@ -652,7 +710,8 @@
       "data": "2026-10-04"
      }
     ],
-    "nota": "Foi eleito em 2022 pelo PSDB; desde 2025 é do PP."
+    "nota": "Foi eleito em 2022 pelo PSDB; desde 2025 é do PP.",
+    "nota_en": "He was elected in 2022 as a PSDB candidate. Since 2025 he has been a member of the PP."
    },
    "vice": {
     "nome": "Barbosinha",
@@ -661,6 +720,7 @@
     "genero": "M",
     "desde": "2023-01-01",
     "comoAssumiu": "Eleito em 2022",
+    "comoAssumiu_en": "Elected in 2022",
     "eleicao2026": "Reeleito vice-governador no 1º turno (04/10/2026), na chapa de Eduardo Riedel",
     "nascimento": "1964-10-26",
     "fonte": [
@@ -677,7 +737,8 @@
       "data": "2026-10-15"
      }
     ],
-    "nota": "Foi eleito vice em 2022 pelo PP; em 2026 se candidatou pelo Republicanos."
+    "nota": "Foi eleito vice em 2022 pelo PP; em 2026 se candidatou pelo Republicanos.",
+    "nota_en": "He was elected vice governor in 2022 as a PP candidate. In 2026 he ran as a Republicanos candidate."
    }
   },
   "MT": {
@@ -687,7 +748,8 @@
     "partido": "REPUBLICANOS",
     "genero": "M",
     "desde": "2026-03-31",
-    "comoAssumiu": "Era vice-governador e assumiu em 2026-03-31 depois que Mauro Mendes renunciou para disputar o Senado",
+    "comoAssumiu": "Era vice-governador e assumiu em 31/03/2026 depois que Mauro Mendes renunciou para disputar o Senado",
+    "comoAssumiu_en": "He was vice governor. He became governor on March 31, 2026, after Mauro Mendes resigned to run for the Senate.",
     "eleicao2026": "Eleito governador no 1º turno (04/10/2026)",
     "nascimento": "1959-05-10",
     "fonte": [
@@ -707,7 +769,8 @@
    },
    "vice": {
     "vago": true,
-    "nota": "O cargo de vice-governador está vago desde 2026-03-31, quando o vice Otaviano Pivetta assumiu o governo.",
+    "nota": "O cargo de vice-governador está vago desde 31/03/2026, quando o vice Otaviano Pivetta assumiu o governo.",
+    "nota_en": "The vice governor post has been empty since March 31, 2026, when Vice Governor Otaviano Pivetta became governor.",
     "fonte": [
      {
       "veiculo": "g1",
@@ -725,7 +788,8 @@
     "partido": "MDB",
     "genero": "F",
     "desde": "2026-04-02",
-    "comoAssumiu": "Era vice-governadora e assumiu em 2026-04-02 depois que Helder Barbalho renunciou para disputar o Senado",
+    "comoAssumiu": "Era vice-governadora e assumiu em 02/04/2026 depois que Helder Barbalho renunciou para disputar o Senado",
+    "comoAssumiu_en": "She was vice governor. She became governor on April 2, 2026, after Helder Barbalho resigned to run for the Senate.",
     "eleicao2026": "Disputou o governo do Pará e não foi eleita (1º turno, 04/10/2026)",
     "nascimento": "1968-01-16",
     "fonte": [
@@ -751,7 +815,8 @@
    },
    "vice": {
     "vago": true,
-    "nota": "O cargo de vice-governador está vago desde 2026-04-02, quando a vice Hana Ghassan assumiu o governo.",
+    "nota": "O cargo de vice-governador está vago desde 02/04/2026, quando a vice Hana Ghassan assumiu o governo.",
+    "nota_en": "The vice governor post has been empty since April 2, 2026, when Vice Governor Hana Ghassan became governor.",
     "fonte": [
      {
       "veiculo": "O Liberal",
@@ -769,7 +834,8 @@
     "partido": "PP",
     "genero": "M",
     "desde": "2026-04-02",
-    "comoAssumiu": "Era vice-governador e assumiu em 2026-04-02 depois que João Azevêdo renunciou para disputar o Senado",
+    "comoAssumiu": "Era vice-governador e assumiu em 02/04/2026 depois que João Azevêdo renunciou para disputar o Senado",
+    "comoAssumiu_en": "He was vice governor. He became governor on April 2, 2026, after João Azevêdo resigned to run for the Senate.",
     "eleicao2026": "Eleito governador no 1º turno (04/10/2026)",
     "nascimento": "1989-08-15",
     "fonte": [
@@ -795,7 +861,8 @@
    },
    "vice": {
     "vago": true,
-    "nota": "O cargo de vice-governador está vago desde 2026-04-02, quando o vice Lucas Ribeiro assumiu o governo.",
+    "nota": "O cargo de vice-governador está vago desde 02/04/2026, quando o vice Lucas Ribeiro assumiu o governo.",
+    "nota_en": "The vice governor post has been empty since April 2, 2026, when Vice Governor Lucas Ribeiro became governor.",
     "fonte": [
      {
       "veiculo": "g1",
@@ -814,6 +881,7 @@
     "genero": "F",
     "desde": "2023-01-01",
     "comoAssumiu": "Eleita em 2022",
+    "comoAssumiu_en": "Elected in 2022",
     "eleicao2026": "Reeleita governadora no 1º turno (04/10/2026)",
     "nascimento": "1978-12-02",
     "fonte": [
@@ -842,7 +910,8 @@
       "data": "2026-10-06"
      }
     ],
-    "nota": "Foi eleita em 2022 pelo PSDB; desde 2025 é do PSD."
+    "nota": "Foi eleita em 2022 pelo PSDB; desde 2025 é do PSD.",
+    "nota_en": "She was elected in 2022 as a PSDB candidate. Since 2025 she has been a member of the PSD."
    },
    "vice": {
     "nome": "Priscila Krause",
@@ -851,6 +920,7 @@
     "genero": "F",
     "desde": "2023-01-01",
     "comoAssumiu": "Eleita em 2022",
+    "comoAssumiu_en": "Elected in 2022",
     "eleicao2026": "Reeleita vice-governadora no 1º turno (04/10/2026), na chapa de Raquel Lyra",
     "nascimento": "1978-04-15",
     "fonte": [
@@ -867,7 +937,8 @@
       "data": "2026-10-15"
      }
     ],
-    "nota": "Foi eleita vice em 2022 pelo Cidadania; em 2026 se candidatou pelo PSD."
+    "nota": "Foi eleita vice em 2022 pelo Cidadania; em 2026 se candidatou pelo PSD.",
+    "nota_en": "She was elected vice governor in 2022 as a Cidadania candidate. In 2026 she ran as a PSD candidate."
    }
   },
   "PI": {
@@ -878,6 +949,7 @@
     "genero": "M",
     "desde": "2023-01-01",
     "comoAssumiu": "Eleito em 2022",
+    "comoAssumiu_en": "Elected in 2022",
     "eleicao2026": "Reeleito governador no 1º turno (04/10/2026)",
     "nascimento": "1985-05-06",
     "fonte": [
@@ -908,14 +980,15 @@
     "genero": "M",
     "desde": "2023-01-01",
     "comoAssumiu": "Eleito em 2022",
+    "comoAssumiu_en": "Elected in 2022",
     "eleicao2026": "Eleito deputado estadual em 2026 (o novo mandato começa em 2027)",
     "nascimento": "1957-12-30",
     "fonte": [
      {
-      "veiculo": "Portal Lupa1",
-      "titulo": "Themístocles Filho retorna à Assembleia e prova que voto e história não se aposentam",
-      "url": "https://lupa1.com.br/noticias/politica/themistocles-filho-retorna-a-assembleia-e-prova-que-voto-e-historia-nao-se-aposentam-76781.html",
-      "data": "2026-10-05"
+      "veiculo": "Governo do Piauí",
+      "titulo": "Vice-Governador: Themístocles de Sampaio Pereira Filho (página oficial)",
+      "url": "https://www.pi.gov.br/vice-governador/",
+      "data": "2026-10-15"
      },
      {
       "veiculo": "Tribunal Superior Eleitoral (TSE)",
@@ -934,13 +1007,14 @@
     "genero": "M",
     "desde": "2019-01-01",
     "comoAssumiu": "Eleito em 2018 e reeleito em 2022",
+    "comoAssumiu_en": "Elected in 2018 and re-elected in 2022",
     "eleicao2026": "Não foi candidato em 2026",
     "nascimento": "1981-04-19",
     "fonte": [
      {
-      "veiculo": "Blog do Doc",
-      "titulo": "Moro e Ratinho Junior se reúnem no Palácio Iguaçu para alinhar transição de governo",
-      "url": "https://blogdodoc.com/2026/10/15/moro-e-ratinho-junior-se-reunem-no-palacio-iguacu-para-alinhar-transicao-de-governo",
+      "veiculo": "CNN Brasil",
+      "titulo": "Sergio Moro e Ratinho Jr. dão início à transição de governo no Paraná",
+      "url": "https://www.cnnbrasil.com.br/eleicoes/sergio-moro-e-ratinho-jr-dao-inicio-a-transicao-de-governo-no-parana/",
       "data": "2026-10-15"
      },
      {
@@ -954,12 +1028,6 @@
       "titulo": "Ratinho Junior toma posse como governador do Paraná",
       "url": "https://g1.globo.com/pr/parana/noticia/2019/01/01/ratinho-junior-toma-posse-como-governador-do-parana.ghtml",
       "data": "2019-01-01"
-     },
-     {
-      "veiculo": "Gazeta de Toledo",
-      "titulo": "Ratinho Junior se licencia do Governo do Paraná na reta final das eleições",
-      "url": "https://gazetadetoledo.com.br/ratinho-junior-se-licencia-do-governo-do-parana-na-reta-final-das-eleicoes/",
-      "data": "2026-09-16"
      },
      {
       "veiculo": "Tribunal Superior Eleitoral (TSE)",
@@ -976,20 +1044,15 @@
     "genero": "M",
     "desde": "2019-01-01",
     "comoAssumiu": "Eleito em 2018 e reeleito em 2022",
+    "comoAssumiu_en": "Elected in 2018 and re-elected in 2022",
     "eleicao2026": "Não foi candidato em 2026",
     "nascimento": "1941-12-24",
     "fonte": [
      {
-      "veiculo": "Rede Brasil de Televisão",
+      "veiculo": "Agência Estadual de Notícias (Governo do Paraná)",
       "titulo": "Vice-governador recebe embaixador da Áustria em busca de novas cooperações para o Paraná",
-      "url": "https://rbtv.com.br/noticia/21613/vice-governador-recebe-embaixador-da-austria-em-busca-de-novas-cooperacoes-para-o-parana/amp",
+      "url": "https://www.parana.pr.gov.br/aen/Noticia/Vice-governador-recebe-embaixador-da-Austria-em-busca-de-novas-cooperacoes-para-o",
       "data": "2026-10-15"
-     },
-     {
-      "veiculo": "Gazeta de Toledo",
-      "titulo": "Ratinho Junior se licencia do Governo do Paraná na reta final das eleições",
-      "url": "https://gazetadetoledo.com.br/ratinho-junior-se-licencia-do-governo-do-parana-na-reta-final-das-eleicoes/",
-      "data": "2026-09-16"
      },
      {
       "veiculo": "g1",
@@ -1019,7 +1082,8 @@
     "partido": null,
     "genero": "M",
     "desde": "2026-03-23",
-    "comoAssumiu": "É presidente do Tribunal de Justiça do Rio de Janeiro e assumiu o governo de forma interina em 2026-03-23, depois da renúncia de Cláudio Castro, porque o cargo de vice estava vago e o presidente da Assembleia Legislativa estava afastado",
+    "comoAssumiu": "É presidente do Tribunal de Justiça do Rio de Janeiro e assumiu o governo de forma interina em 23/03/2026, depois da renúncia de Cláudio Castro, porque o cargo de vice estava vago e o presidente da Assembleia Legislativa estava afastado",
+    "comoAssumiu_en": "He is the president of the Rio de Janeiro Court of Justice (the state's highest court). He became acting governor on March 23, 2026, after Cláudio Castro resigned. He took over because the vice governor post was empty and the president of the Legislative Assembly (state parliament) was away from his post.",
     "eleicao2026": "Não foi candidato em 2026",
     "fonte": [
      {
@@ -1027,12 +1091,6 @@
       "titulo": "Ricardo Couto oficializa transição para gestão de Douglas Ruas e define nomes do grupo de trabalho",
       "url": "https://g1.globo.com/rj/rio-de-janeiro/noticia/2026/10/14/governo-do-rj-inicia-transicao-para-gestao-2027.ghtml",
       "data": "2026-10-14"
-     },
-     {
-      "veiculo": "CNN Brasil",
-      "titulo": "Presidente do TJRJ assume cargo no lugar de Castro; entenda xadrez político",
-      "url": "https://www.cnnbrasil.com.br/politica/presidente-do-tjrj-assume-cargo-no-lugar-de-castro-entenda-xadrez-politico/",
-      "data": "2026-03-23"
      },
      {
       "veiculo": "g1",
@@ -1053,18 +1111,14 @@
       "data": "2026-10-15"
      }
     ],
-    "nota": "Governo interino. Em outubro de 2026 ele oficializou a transição para o governador eleito em 2026, Douglas Ruas (PL), que toma posse em 2027."
+    "nota": "Governo interino. Em outubro de 2026 ele oficializou a transição para o governador eleito em 2026, Douglas Ruas (PL), que toma posse em 2027.",
+    "nota_en": "This is a temporary government. In October 2026 he officially started the transition (the handover) to the governor elected in 2026, Douglas Ruas (PL), who takes office in 2027."
    },
    "vice": {
     "vago": true,
     "nota": "O cargo de vice-governador está vago desde 2025, quando Thiago Pampolha deixou o cargo para ser conselheiro do Tribunal de Contas do Estado (TCE-RJ).",
+    "nota_en": "The vice governor post has been empty since 2025, when Thiago Pampolha left it to become a member of the State Court of Accounts (TCE-RJ, the body that checks how the state spends public money).",
     "fonte": [
-     {
-      "veiculo": "CNN Brasil",
-      "titulo": "Presidente do TJRJ assume cargo no lugar de Castro; entenda xadrez político",
-      "url": "https://www.cnnbrasil.com.br/politica/presidente-do-tjrj-assume-cargo-no-lugar-de-castro-entenda-xadrez-politico/",
-      "data": "2026-03-23"
-     },
      {
       "veiculo": "Agência Brasil",
       "titulo": "Entenda o que acontece no Rio com a renúncia de Cláudio Castro",
@@ -1082,6 +1136,7 @@
     "genero": "F",
     "desde": "2019-01-01",
     "comoAssumiu": "Eleita em 2018 e reeleita em 2022",
+    "comoAssumiu_en": "Elected in 2018 and re-elected in 2022",
     "eleicao2026": "Não foi candidata em 2026",
     "nascimento": "1955-05-19",
     "fonte": [
@@ -1090,12 +1145,6 @@
       "titulo": "Governadora: Maria de Fátima Bezerra",
       "url": "https://www.rn.gov.br/postagem/governadora/",
       "data": "2026-10-15"
-     },
-     {
-      "veiculo": "g1",
-      "titulo": "Quaest no RN: 42% avaliam gestão Fátima Bezerra como negativa e 25%, como positiva",
-      "url": "https://g1.globo.com/rn/rio-grande-do-norte/eleicoes/2026/noticia/2026/10/13/quaest-rn-avaliacao-governo-fatima-bezerra-13-outubro.ghtml",
-      "data": "2026-10-13"
      },
      {
       "veiculo": "g1",
@@ -1118,6 +1167,7 @@
     "genero": "M",
     "desde": "2023-01-01",
     "comoAssumiu": "Eleito em 2022",
+    "comoAssumiu_en": "Elected in 2022",
     "eleicao2026": "Foi candidato a deputado estadual em 2026 e ficou como suplente",
     "nascimento": "1980-02-27",
     "fonte": [
@@ -1144,9 +1194,16 @@
     "genero": "M",
     "desde": "2019-01-01",
     "comoAssumiu": "Eleito em 2018 e reeleito em 2022",
+    "comoAssumiu_en": "Elected in 2018 and re-elected in 2022",
     "eleicao2026": "Não foi candidato em 2026",
     "nascimento": "1968-08-03",
     "fonte": [
+     {
+      "veiculo": "Governo de Rondônia",
+      "titulo": "Estudantes, escolas e professores são contemplados em quatro modalidades de premiação do Programa Avança Rondônia (cita o governador Marcos Rocha)",
+      "url": "https://rondonia.ro.gov.br/estudantes-escolas-e-professores-sao-contemplados-em-quatro-modalidades-de-premiacao-do-programa-avanca-rondonia/",
+      "data": "2026-10-14"
+     },
      {
       "veiculo": "g1",
       "titulo": "Cel. Marcos Rocha toma posse neste domingo como governador reeleito de Rondônia",
@@ -1154,16 +1211,10 @@
       "data": "2023-01-01"
      },
      {
-      "veiculo": "Estadão",
-      "titulo": "Governador troca União pelo PSD, abre mão de disputar Senado e impede vice de assumir cargo",
-      "url": "https://www.estadao.com.br/politica/coluna-do-estadao/governador-troca-uniao-pelo-psd-abre-mao-de-disputar-senado-e-impede-vice-de-assumir-cargo/",
+      "veiculo": "Folha de S.Paulo",
+      "titulo": "Kassab filia mais um governador do União Brasil ao PSD (o governador de Rondônia, Marcos Rocha)",
+      "url": "https://www1.folha.uol.com.br/poder/2026/02/kassab-filia-mais-um-governador-do-uniao-brasil-ao-psd.shtml",
       "data": "2026-02-01"
-     },
-     {
-      "veiculo": "Valor & Mercado RO",
-      "titulo": "Nova crise no CPA: TJRO manda Marcos Rocha reintegrar servidores demitidos da vice-governadoria",
-      "url": "https://www.valoremercadoro.com.br/nova-crise-no-cpa-tjro-manda-marcos-rocha-reintegrar-servidores-da-vice-governadoria/",
-      "data": "2026-08-06"
      },
      {
       "veiculo": "Tribunal Superior Eleitoral (TSE)",
@@ -1172,7 +1223,8 @@
       "data": "2026-10-15"
      }
     ],
-    "nota": "Foi eleito em 2022 pelo União Brasil; em 2026 passou para o PSD."
+    "nota": "Foi eleito em 2022 pelo União Brasil; em 2026 passou para o PSD.",
+    "nota_en": "He was elected in 2022 as a União Brasil candidate. In 2026 he moved to the PSD."
    },
    "vice": {
     "nome": "Sérgio Gonçalves",
@@ -1181,20 +1233,15 @@
     "genero": "M",
     "desde": "2023-01-01",
     "comoAssumiu": "Eleito em 2022",
+    "comoAssumiu_en": "Elected in 2022",
     "eleicao2026": "Não foi candidato em 2026",
     "nascimento": "1974-05-28",
     "fonte": [
      {
-      "veiculo": "Tudo Rondônia (com informações do MPRO)",
-      "titulo": "Visita institucional fortalece diálogo (vice-governador Sérgio Gonçalves visita o MPRO)",
-      "url": "https://www.tudorondonia.com/noticias/visita-institucional-fortalece-dialogo,163804.shtml",
-      "data": "2026-10-15"
-     },
-     {
-      "veiculo": "Estadão",
-      "titulo": "Governador troca União pelo PSD, abre mão de disputar Senado e impede vice de assumir cargo",
-      "url": "https://www.estadao.com.br/politica/coluna-do-estadao/governador-troca-uniao-pelo-psd-abre-mao-de-disputar-senado-e-impede-vice-de-assumir-cargo/",
-      "data": "2026-02-01"
+      "veiculo": "Ministério Público de Rondônia (MPRO)",
+      "titulo": "Integrantes da administração superior do MPRO recebem visita do vice-governador (Sérgio Gonçalves)",
+      "url": "https://www.mpro.mp.br/pages/comunicacao/noticias/view-noticias/2433008",
+      "data": "2026-10-13"
      },
      {
       "veiculo": "Tribunal Superior Eleitoral (TSE)",
@@ -1210,7 +1257,8 @@
      }
     ],
     "conferir": true,
-    "nota": "Foi eleito vice em 2022 pelo União Brasil; não encontramos fonte confiável sobre o partido atual."
+    "nota": "Foi eleito vice em 2022 pelo União Brasil; não encontramos fonte confiável sobre o partido atual.",
+    "nota_en": "He was elected vice governor in 2022 as a União Brasil candidate. We did not find a reliable source about his current party."
    }
   },
   "RR": {
@@ -1220,7 +1268,8 @@
     "partido": "REPUBLICANOS",
     "genero": "M",
     "desde": "2026-04-30",
-    "comoAssumiu": "Era presidente da Assembleia Legislativa e assumiu o governo de forma interina em 2026-04-30, depois que o TSE cassou o mandato do governador Edilson Damião (que tinha assumido com a renúncia de Antonio Denarium); continua no cargo porque o resultado da eleição suplementar de 21/06/2026 ainda depende de decisão da Justiça",
+    "comoAssumiu": "Era presidente da Assembleia Legislativa e assumiu o governo de forma interina em 30/04/2026, depois que o TSE cassou o mandato do governador Edilson Damião (que tinha assumido com a renúncia de Antonio Denarium); continua no cargo porque o resultado da eleição suplementar de 21/06/2026 ainda depende de decisão da Justiça",
+    "comoAssumiu_en": "He was the president of the Legislative Assembly (state parliament). He became acting governor on April 30, 2026, after the TSE (Brazil's Superior Electoral Court) removed Governor Edilson Damião from office. Damião had taken over when Antonio Denarium resigned. Soldado Sampaio is still in office because the result of the special election held on June 21, 2026, still depends on a court decision.",
     "eleicao2026": "Disputou o governo de Roraima e não foi eleito (1º turno, 04/10/2026)",
     "nascimento": "1976-05-12",
     "fonte": [
@@ -1243,17 +1292,25 @@
       "data": "2026-10-15"
      },
      {
+      "veiculo": "Agência Brasil",
+      "titulo": "Arthur Henrique é eleito governador de Roraima no primeiro turno",
+      "url": "https://agenciabrasil.ebc.com.br/politica/noticia/2026-10/arthur-henrique-e-eleito-governador-de-roraima-no-primeiro-turno",
+      "data": "2026-10-04"
+     },
+     {
       "veiculo": "Tribunal Superior Eleitoral (TSE)",
       "titulo": "Resultado oficial do 1º turno de 2026 – governador(a) e vice – Roraima",
       "url": "https://resultados.tse.jus.br/oficial/ele2026/6259/dados/rr/rr-c0003-e006259-u.json",
       "data": "2026-10-04"
      }
     ],
-    "nota": "Governador interino. Na eleição suplementar de 21/06/2026, o mais votado foi Arthur Henrique (PL), mas a candidatura dele estava sub judice e o TSE suspendeu a diplomação até decisão do STF. Arthur Henrique foi eleito em 04/10/2026 para o mandato que começa em 2027."
+    "nota": "Governador interino. Na eleição suplementar de 21/06/2026, o mais votado foi Arthur Henrique (PL), mas a candidatura dele estava sub judice e o TSE suspendeu a diplomação até decisão do STF. Arthur Henrique foi eleito em 04/10/2026 para o mandato que começa em 2027.",
+    "nota_en": "Acting governor. In the special election (an extra election to fill the post) held on June 21, 2026, the candidate with the most votes was Arthur Henrique (PL), but his candidacy was still under review in court. The TSE (Brazil's Superior Electoral Court) put the official confirmation of the winner on hold until the STF (Brazil's Supreme Court) decides. Arthur Henrique was elected on October 4, 2026, for the term that starts in 2027."
    },
    "vice": {
     "vago": true,
-    "nota": "O cargo de vice-governador está vago: o vice eleito em 2022, Edilson Damião, assumiu o governo em abril de 2026, depois da renúncia de Antonio Denarium, e teve o mandato cassado pelo TSE em 2026-04-30.",
+    "nota": "O cargo de vice-governador está vago: o vice eleito em 2022, Edilson Damião, assumiu o governo em abril de 2026, depois da renúncia de Antonio Denarium, e teve o mandato cassado pelo TSE em 30/04/2026.",
+    "nota_en": "The vice governor post is empty. The vice governor elected in 2022, Edilson Damião, became governor in April 2026, after Antonio Denarium resigned. On April 30, 2026, the TSE (Brazil's Superior Electoral Court) removed him from office.",
     "fonte": [
      {
       "veiculo": "g1 (Jornal Nacional)",
@@ -1284,6 +1341,7 @@
     "genero": "M",
     "desde": "2023-01-01",
     "comoAssumiu": "Reeleito em 2022",
+    "comoAssumiu_en": "Re-elected in 2022",
     "eleicao2026": "Não foi candidato em 2026",
     "nascimento": "1985-03-10",
     "fonte": [
@@ -1318,7 +1376,8 @@
       "data": "2026-10-15"
      }
     ],
-    "nota": "Foi reeleito em 2022 pelo PSDB, para o segundo mandato (o primeiro começou em 2019); hoje é do PSD."
+    "nota": "Foi reeleito em 2022 pelo PSDB, para o segundo mandato (o primeiro começou em 2019); hoje é do PSD.",
+    "nota_en": "He was re-elected in 2022 as a PSDB candidate, for a second term (the first one started in 2019). He is now a member of the PSD."
    },
    "vice": {
     "nome": "Gabriel Souza",
@@ -1327,6 +1386,7 @@
     "genero": "M",
     "desde": "2023-01-01",
     "comoAssumiu": "Eleito em 2022",
+    "comoAssumiu_en": "Elected in 2022",
     "eleicao2026": "Disputou o governo do Rio Grande do Sul e não foi eleito (1º turno, 04/10/2026)",
     "nascimento": "1984-01-02",
     "fonte": [
@@ -1353,14 +1413,15 @@
     "genero": "M",
     "desde": "2023-01-01",
     "comoAssumiu": "Eleito em 2022",
+    "comoAssumiu_en": "Elected in 2022",
     "eleicao2026": "Reeleito governador no 1º turno (04/10/2026)",
     "nascimento": "1956-07-15",
     "fonte": [
      {
-      "veiculo": "g1",
-      "titulo": "Reeleito, Jorginho promete manter secretariado e prevê mudança somente na Segurança Pública",
-      "url": "https://g1.globo.com/sc/santa-catarina/eleicoes/2026/noticia/2026/10/05/apos-eleito-jorginho-mello-promete-manter-secretariado-nsc-tv.ghtml",
-      "data": "2026-10-05"
+      "veiculo": "Governo de Santa Catarina",
+      "titulo": "Governo do Estado forma 948 novos soldados temporários da Polícia Militar de Santa Catarina (cita o governador Jorginho Mello e a vice-governadora Marilisa Boehm)",
+      "url": "https://noticias.sc.gov.br/governo-do-estado-forma-948-novos-soldados-temporarios-da-policia-militar-de-santa-catarina/",
+      "data": "2026-10-09"
      },
      {
       "veiculo": "g1",
@@ -1369,12 +1430,20 @@
       "data": "2023-01-01"
      },
      {
+      "veiculo": "Assembleia Legislativa de Santa Catarina",
+      "titulo": "Alesc aprova licença de Jorginho Mello até 5 de outubro (a vice-governadora Marilisa Boehm assume no período)",
+      "url": "https://www.alesc.sc.gov.br/agencia/noticia/licenca-jorginho-mello/",
+      "data": "2026-08-26"
+     },
+     {
       "veiculo": "Tribunal Superior Eleitoral (TSE)",
       "titulo": "Resultado oficial do 1º turno de 2026 – governador(a) e vice – Santa Catarina",
       "url": "https://resultados.tse.jus.br/oficial/ele2026/6259/dados/sc/sc-c0003-e006259-u.json",
       "data": "2026-10-15"
      }
-    ]
+    ],
+    "nota": "Ficou licenciado de 29/08 a 05/10/2026 (aprovado pela Assembleia Legislativa); nesse período, a vice Marilisa Boehm governou o estado.",
+    "nota_en": "He was on leave from August 29 to October 5, 2026 (approved by the Legislative Assembly, the state parliament). During that time, Vice Governor Marilisa Boehm governed the state."
    },
    "vice": {
     "nome": "Marilisa Boehm",
@@ -1383,26 +1452,27 @@
     "genero": "F",
     "desde": "2023-01-01",
     "comoAssumiu": "Eleita em 2022",
+    "comoAssumiu_en": "Elected in 2022",
     "eleicao2026": "Não foi candidata em 2026",
     "nascimento": "1964-12-16",
     "fonte": [
+     {
+      "veiculo": "Governo de Santa Catarina",
+      "titulo": "Governo do Estado forma 948 novos soldados temporários da Polícia Militar de Santa Catarina (cita o governador Jorginho Mello e a vice-governadora Marilisa Boehm)",
+      "url": "https://noticias.sc.gov.br/governo-do-estado-forma-948-novos-soldados-temporarios-da-policia-militar-de-santa-catarina/",
+      "data": "2026-10-09"
+     },
+     {
+      "veiculo": "Assembleia Legislativa de Santa Catarina",
+      "titulo": "Alesc aprova licença de Jorginho Mello até 5 de outubro (a vice-governadora Marilisa Boehm assume no período)",
+      "url": "https://www.alesc.sc.gov.br/agencia/noticia/licenca-jorginho-mello/",
+      "data": "2026-08-26"
+     },
      {
       "veiculo": "4oito",
       "titulo": "Marilisa Boehm será secretária de Segurança Pública no segundo governo de Jorginho Mello",
       "url": "https://www.4oito.com.br/noticia/marilisa-boehm-sera-secretaria-de-seguranca-publica-no-segundo-governo-de-jorginho-mello-89353",
       "data": "2026-10-05"
-     },
-     {
-      "veiculo": "g1",
-      "titulo": "Reeleito, Jorginho promete manter secretariado e prevê mudança somente na Segurança Pública",
-      "url": "https://g1.globo.com/sc/santa-catarina/eleicoes/2026/noticia/2026/10/05/apos-eleito-jorginho-mello-promete-manter-secretariado-nsc-tv.ghtml",
-      "data": "2026-10-05"
-     },
-     {
-      "veiculo": "Grupo Portal de Notícias",
-      "titulo": "Encontro entre a vice-governadora de SC e o embaixador da Áustria no Brasil aborda parcerias",
-      "url": "https://grupoportaldenoticias.com.br/encontro-entre-a-vice-governadora-de-sc-e-o-embaixador-da-austria-no-brasil-aborda-parcerias-e-instalacao-de-consulado-honorario-em-florianopolis/",
-      "data": "2026-10-12"
      }
     ]
    }
@@ -1415,6 +1485,7 @@
     "genero": "M",
     "desde": "2023-01-01",
     "comoAssumiu": "Eleito em 2022",
+    "comoAssumiu_en": "Elected in 2022",
     "eleicao2026": "Reeleito governador no 1º turno (04/10/2026)",
     "nascimento": "1977-02-24",
     "fonte": [
@@ -1445,6 +1516,7 @@
     "genero": "M",
     "desde": "2023-01-01",
     "comoAssumiu": "Eleito em 2022",
+    "comoAssumiu_en": "Elected in 2022",
     "eleicao2026": "Eleito deputado estadual em 2026 (o novo mandato começa em 2027)",
     "nascimento": "1965-12-26",
     "fonte": [
@@ -1461,7 +1533,8 @@
       "data": "2026-10-04"
      }
     ],
-    "nota": "Foi eleito vice em 2022 pelo PDT; em 2026 se candidatou pelo PSB."
+    "nota": "Foi eleito vice em 2022 pelo PDT; em 2026 se candidatou pelo PSB.",
+    "nota_en": "He was elected vice governor in 2022 as a PDT candidate. In 2026 he ran as a PSB candidate."
    }
   },
   "SP": {
@@ -1472,6 +1545,7 @@
     "genero": "M",
     "desde": "2023-01-01",
     "comoAssumiu": "Eleito em 2022",
+    "comoAssumiu_en": "Elected in 2022",
     "eleicao2026": "Reeleito governador no 1º turno (04/10/2026)",
     "nascimento": "1975-06-19",
     "fonte": [
@@ -1502,6 +1576,7 @@
     "genero": "M",
     "desde": "2023-01-01",
     "comoAssumiu": "Eleito em 2022",
+    "comoAssumiu_en": "Elected in 2022",
     "eleicao2026": "Reeleito vice-governador no 1º turno (04/10/2026), na chapa de Tarcísio de Freitas",
     "nascimento": "1968-11-11",
     "fonte": [
@@ -1518,7 +1593,8 @@
       "data": "2026-10-15"
      }
     ],
-    "nota": "Foi eleito vice em 2022 pelo PSD; em 2026 se candidatou pelo MDB."
+    "nota": "Foi eleito vice em 2022 pelo PSD; em 2026 se candidatou pelo MDB.",
+    "nota_en": "He was elected vice governor in 2022 as a PSD candidate. In 2026 he ran as an MDB candidate."
    }
   },
   "TO": {
@@ -1528,21 +1604,28 @@
     "partido": "REPUBLICANOS",
     "genero": "M",
     "desde": "2022-03-11",
-    "comoAssumiu": "Era vice-governador e assumiu em 2022-03-11 depois da renúncia de Mauro Carlesse; foi eleito governador em 2022",
+    "comoAssumiu": "Era vice-governador e assumiu em 11/03/2022 depois da renúncia de Mauro Carlesse; foi eleito governador em 2022",
+    "comoAssumiu_en": "He was vice governor. He became governor on March 11, 2022, after Mauro Carlesse resigned. He was then elected governor in 2022.",
     "eleicao2026": "Não foi candidato em 2026",
     "nascimento": "1964-03-12",
     "fonte": [
      {
-      "veiculo": "g1",
-      "titulo": "Quaest no TO: 58% aprovam e 26% desaprovam governo de Wanderlei Barbosa",
-      "url": "https://g1.globo.com/to/tocantins/eleicoes/2026/noticia/2026/10/14/quaest-to-avaliacao-governo-wanderlei-barbosa-14-outubro.ghtml",
-      "data": "2026-10-14"
+      "veiculo": "Governo do Tocantins (Secom)",
+      "titulo": "Governador: Wanderlei Barbosa Castro (página oficial)",
+      "url": "https://www.to.gov.br/secom/governador/21pfeahm3org",
+      "data": "2026-10-15"
      },
      {
       "veiculo": "g1",
       "titulo": "Wanderlei Barbosa toma posse como governador do Tocantins",
       "url": "https://g1.globo.com/to/tocantins/noticia/2022/03/11/wanderlei-barbosa-toma-posse-como-governador-do-tocantins.ghtml",
       "data": "2022-03-11"
+     },
+     {
+      "veiculo": "g1",
+      "titulo": "Wanderlei Barbosa toma posse para segundo mandato como governador do Tocantins (o vice Laurez Moreira também tomou posse)",
+      "url": "https://g1.globo.com/to/tocantins/noticia/2023/01/01/wanderlei-barbosa-toma-posse-para-segundo-mandato-como-governador-do-tocantins.ghtml",
+      "data": "2023-01-01"
      },
      {
       "veiculo": "g1",
@@ -1557,7 +1640,8 @@
       "data": "2026-10-15"
      }
     ],
-    "nota": "Ficou afastado do cargo por decisão judicial entre setembro e dezembro de 2025 (nesse período, o vice Laurez Moreira governou) e voltou em 2025-12-05."
+    "nota": "Ficou afastado do cargo por decisão judicial entre setembro e dezembro de 2025 (nesse período, o vice Laurez Moreira governou) e voltou em 05/12/2025.",
+    "nota_en": "He was suspended from office by a court decision from September to December 2025 (during that time, Vice Governor Laurez Moreira governed the state). He returned on December 5, 2025."
    },
    "vice": {
     "nome": "Laurez Moreira",
@@ -1566,14 +1650,21 @@
     "genero": "M",
     "desde": "2023-01-01",
     "comoAssumiu": "Eleito em 2022",
+    "comoAssumiu_en": "Elected in 2022",
     "eleicao2026": "Disputou o governo do Tocantins e não foi eleito (1º turno, 04/10/2026)",
     "nascimento": "1957-07-03",
     "fonte": [
      {
       "veiculo": "g1",
-      "titulo": "Laurez Moreira declara apoio a Vicentinho Júnior no 2º turno para governo do Tocantins",
-      "url": "https://g1.globo.com/to/tocantins/eleicoes/2026/noticia/2026/10/08/laurez-moreira-declara-apoio-a-vicentinho-junior-no-2o-turno-do-governo-do-tocantins.ghtml",
-      "data": "2026-10-08"
+      "titulo": "Wanderlei Barbosa toma posse para segundo mandato como governador do Tocantins (o vice Laurez Moreira também tomou posse)",
+      "url": "https://g1.globo.com/to/tocantins/noticia/2023/01/01/wanderlei-barbosa-toma-posse-para-segundo-mandato-como-governador-do-tocantins.ghtml",
+      "data": "2023-01-01"
+     },
+     {
+      "veiculo": "g1",
+      "titulo": "Wanderlei Barbosa retorna ao cargo de governador do Tocantins após três meses afastado (cita o vice Laurez Moreira, do PSD)",
+      "url": "https://g1.globo.com/to/tocantins/noticia/2025/12/05/wanderlei-barbosa-retorna-ao-cargo-de-governador-do-tocantins-apos-tres-meses-afastados.ghtml",
+      "data": "2025-12-05"
      },
      {
       "veiculo": "Tribunal Superior Eleitoral (TSE)",
@@ -1582,7 +1673,8 @@
       "data": "2026-10-04"
      }
     ],
-    "nota": "Foi eleito vice em 2022 pelo PDT; hoje é do PSD."
+    "nota": "Foi eleito vice em 2022 pelo PDT; hoje é do PSD.",
+    "nota_en": "He was elected vice governor in 2022 as a PDT candidate. He is now a member of the PSD."
    }
   }
  }

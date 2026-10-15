@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <script>(function(d){try{var a=JSON.parse(localStorage.getItem("ep-a11y")||"{}");if(a.contraste)d.classList.add("alto-contraste");if(a.movimento)d.classList.add("sem-movimento");if(a.espaco)d.classList.add("espacado");if(a.escala)d.style.setProperty("--escala",a.escala);var q=/[?&]lang=(en|pt)\b/.exec(location.search),l=q?q[1]:localStorage.getItem("ep-lang");if(l==="en")d.lang="en";}catch(e){}})(document.documentElement)</script>
+  <title data-en="Where the data comes from | Understand Politics">De onde vêm os dados | Entenda Política</title>
+  <meta name="description" content="De onde vem cada informação do Entenda Política: Câmara dos Deputados, Senado Federal, Presidência da República, TSE, IBGE e pesquisa com fontes. Quando os dados são atualizados e quais são os limites." data-en-content="Where each piece of information on Understand Politics (Entenda Política) comes from: the Chamber of Deputies, the Federal Senate, the Presidency, the TSE (Superior Electoral Court), IBGE (the national statistics institute) and research with sources. When the data is updated and what its limits are.">
+  <link rel="canonical" href="https://entendapolitica.vercel.app/dados.html">
+  <link rel="alternate" hreflang="pt-BR" href="https://entendapolitica.vercel.app/dados.html">
+  <link rel="alternate" hreflang="en" href="https://entendapolitica.vercel.app/dados.html?lang=en">
+  <link rel="alternate" hreflang="x-default" href="https://entendapolitica.vercel.app/dados.html">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:site_name" content="Entenda Política">
+  <meta property="og:url" content="https://entendapolitica.vercel.app/dados.html">
+  <meta property="og:title" content="De onde vêm os dados do Entenda Política">
+  <meta property="og:description" content="Câmara, Senado, Presidência, TSE, IBGE e pesquisa com fontes. Quando os dados são atualizados e quais são os limites.">
+  <meta property="og:image" content="https://entendapolitica.vercel.app/img/compartilhar.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Desenho do Congresso Nacional em 3D com o texto: A política do Brasil, explicada de um jeito simples">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#1f3a5f">
+  <link rel="icon" href="favicon.ico" sizes="48x48">
+  <link rel="icon" href="img/icone.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="stylesheet" href="css/base.css?v=2">
+  <link rel="stylesheet" href="css/tres.css?v=2">
+  <link rel="stylesheet" href="css/tres-politica.css?v=2">
+  <link rel="stylesheet" href="css/paginas.css?v=2">
+</head>
+<body>
+<a class="pular" href="#conteudo" data-en="Skip to content">Pular para o conteúdo</a>
+<header class="topo">
+  <a href="./" aria-label="Início" data-en-aria-label="Home" title="Página inicial" data-en-title="Home page"><span aria-hidden="true">🏠 </span><span class="rotulo" data-en="Home">Início</span></a>
+  <span class="onde"><span aria-hidden="true">🗂️ </span><span data-en="Where the data comes from">De onde vêm os dados</span></span>
+  <a id="btn-idioma" href="?lang=en">🌐 EN</a>
+  <button id="btn-a11y" type="button" aria-haspopup="dialog"><span aria-hidden="true">♿</span><span class="rotulo" data-en=" Accessibility"> Acessibilidade</span></button>
+  <button id="btn-ouvir" type="button" aria-pressed="false"><span aria-hidden="true">🔊</span><span class="rotulo" data-en=" Listen"> Ouvir</span></button>
+  <button id="btn-letra" type="button">A+</button>
+</header>
+
+<main class="pagina info" id="conteudo" data-ler>
+  <section class="miolo cab-pagina" aria-labelledby="titulo-pagina">
+    <div class="cab-txt rev">
+      <span class="selo-topo" data-en="Transparency">Transparência</span>
+      <h1 id="titulo-pagina" data-en="Where the data comes from">De onde vêm os dados</h1>
+      <p class="lead" data-en-html="Almost everything here comes from <b>official bodies</b>, as <b>open data</b>: files that the government publishes for anyone to use. A program fetches these files and updates the site by itself, every morning. What does not come ready-made was researched by hand, always with a source.">Quase tudo aqui vem de <b>órgãos oficiais</b>, em <b>dados abertos</b>: arquivos que o governo publica para qualquer pessoa usar. Um programa busca esses arquivos e atualiza o site sozinho, todo dia de manhã. O que não vem pronto foi pesquisado à mão, sempre com fonte.</p>
+    </div>
+    <div class="cab-3d rev pop" style="--i:1" id="ilu" data-ilu="predio" aria-hidden="true"></div>
+  </section>
+
+  <nav class="miolo atalhos rev" aria-label="Ir direto para" data-en-aria-label="Jump to">
+    <a class="chip" href="#fontes"><span aria-hidden="true">🏛️</span><span data-en="The sources">As fontes</span></a>
+    <a class="chip" href="#situacao"><span aria-hidden="true">🚦</span><span data-en="Bill status">Situação das propostas</span></a>
+    <a class="chip" href="#autor"><span aria-hidden="true">✍️</span><span data-en="Who is an author">Quem é autor</span></a>
+    <a class="chip" href="#limites"><span aria-hidden="true">⚠️</span><span data-en="Limits">Limites</span></a>
+    <a class="chip" href="#atualizacao"><span aria-hidden="true">🔄</span><span data-en="When it updates">Quando atualiza</span></a>
+    <a class="chip" href="#publicos"><span aria-hidden="true">🔓</span><span data-en="Public data">Dados públicos</span></a>
+  </nav>
+
+  <section class="miolo bloco" id="fontes" aria-labelledby="t-fontes">
+    <div class="cab-bloco rev"><span class="ic-bloco" aria-hidden="true">🏛️</span><div><h2 id="t-fontes" data-en="Where each piece of information comes from">De onde vem cada informação</h2><p class="muted" data-en="Each card shows a place the data comes from and what we use from it. The links open the official pages, which are in Portuguese.">Cada cartão mostra um lugar de onde os dados vêm e o que usamos de lá. Os links abrem a página oficial.</p></div></div>
+    <ul class="grade-info">
+      <li class="cartao fonte-card rev">
+        <h3><span class="ic" aria-hidden="true">🏛️</span><span data-en-html="Chamber of Deputies (<span lang=&quot;pt-BR&quot;>Câmara dos Deputados</span>)">Câmara dos Deputados</span></h3>
+        <p data-en-html="<b>What we use:</b> the 513 federal deputies, the bills of each one and who signed them, the status of each bill, the votes in the full Chamber where each member's vote is recorded, the spending of the office allowance, the committees and each deputy's previous terms in the Chamber."><b>O que usamos:</b> os 513 deputados federais, as propostas de cada um e quem assinou, a situação de cada proposta, as votações do Plenário em que o voto de cada um fica registrado, os gastos da cota, as comissões e os mandatos anteriores de cada um na Câmara.</p>
+        <ul class="links-fora">
+          <li><a href="https://dadosabertos.camara.leg.br/" target="_blank" rel="noopener" hreflang="pt-BR"><span data-en="Chamber of Deputies open data">Dados Abertos da Câmara</span> <span aria-hidden="true">↗</span><span class="sr" data-en=" (opens in a new tab)"> (abre em outra aba)</span></a></li>
+          <li><a href="https://www.camara.leg.br/cota-parlamentar/" target="_blank" rel="noopener" hreflang="pt-BR"><span data-en-html="Office allowance lookup (<span lang=&quot;pt-BR&quot;>cota parlamentar</span>)">Consulta da cota parlamentar</span> <span aria-hidden="true">↗</span><span class="sr" data-en=" (opens in a new tab)"> (abre em outra aba)</span></a></li>
+        </ul>
+      </li>
+      <li class="cartao fonte-card rev" style="--i:1">
+        <h3><span class="ic" aria-hidden="true">🏛️</span><span data-en-html="Federal Senate (<span lang=&quot;pt-BR&quot;>Senado Federal</span>)">Senado Federal</span></h3>
+        <p data-en-html="<b>What we use:</b> the 81 senators, the bills of each one, the open votes in the full Senate, the spending of the office allowance (in the Senate it is called <span lang=&quot;pt-BR&quot;>CEAPS</span>), the committees and each senator's previous terms in the Senate."><b>O que usamos:</b> os 81 senadores, as propostas de cada um, as votações abertas do Plenário, os gastos da cota (no Senado, ela se chama CEAPS), as comissões e os mandatos anteriores de cada um no Senado.</p>
+        <ul class="links-fora">
+          <li><a href="https://www12.senado.leg.br/dados-abertos" target="_blank" rel="noopener" hreflang="pt-BR"><span data-en="Senate open data">Dados Abertos do Senado</span> <span aria-hidden="true">↗</span><span class="sr" data-en=" (opens in a new tab)"> (abre em outra aba)</span></a></li>
+          <li><a href="https://www25.senado.leg.br/web/atividade/votacoes-nominais" target="_blank" rel="noopener" hreflang="pt-BR"><span data-en="Senate roll-call votes">Votações nominais do Senado</span> <span aria-hidden="true">↗</span><span class="sr" data-en=" (opens in a new tab)"> (abre em outra aba)</span></a></li>
+        </ul>
+      </li>
+      <li class="cartao fonte-card rev">
+        <h3><span class="ic" aria-hidden="true">🏢</span><span data-en="The Presidency">Presidência da República</span></h3>
+        <p data-en-html="<b>What we use:</b> the bills the President has sent to Congress since 2023, with the status of each one, and how many laws he signed and vetoed. This comes from the open data of the Chamber of Deputies, the Senate and the National Congress. The biographies of the President and the Vice President come from official government websites."><b>O que usamos:</b> as propostas que o presidente enviou ao Congresso desde 2023, com a situação de cada uma, e quantas leis ele sancionou e vetou. Isso vem dos dados abertos da Câmara, do Senado e do Congresso Nacional. As biografias do presidente e do vice vêm dos sites oficiais do governo.</p>
+        <ul class="links-fora">
+          <li><a href="https://www.gov.br/planalto/pt-br" target="_blank" rel="noopener" hreflang="pt-BR"><span data-en="Website of the Presidency (Planalto)">Site do Palácio do Planalto</span> <span aria-hidden="true">↗</span><span class="sr" data-en=" (opens in a new tab)"> (abre em outra aba)</span></a></li>
+          <li><a href="https://www.congressonacional.leg.br/materias/medidas-provisorias" target="_blank" rel="noopener" hreflang="pt-BR"><span data-en="Provisional measures in the National Congress">Medidas provisórias no Congresso Nacional</span> <span aria-hidden="true">↗</span><span class="sr" data-en=" (opens in a new tab)"> (abre em outra aba)</span></a></li>
+        </ul>
+      </li>
+      <li class="cartao fonte-card rev" style="--i:1">
+        <h3><span class="ic" aria-hidden="true">🗳️</span><span data-en="TSE (Superior Electoral Court)">TSE (Tribunal Superior Eleitoral)</span></h3>
+        <p data-en-html="<b>What we use:</b> the candidacies, the results of the 2022, 2024 and 2026 elections, the assets each candidate declared, the candidates' photos and the special elections (out-of-season elections, held for example when an elected mayor is removed from office). The occupation shown in every profile is the one the person declared to the TSE in their most recent candidacy."><b>O que usamos:</b> as candidaturas, os resultados das eleições de 2022, 2024 e 2026, os bens que cada candidato declarou, as fotos dos candidatos e as eleições suplementares (eleições fora de época, feitas, por exemplo, quando um prefeito eleito tem o mandato cassado). A profissão que aparece em todos os perfis é a ocupação que a pessoa declarou ao TSE na candidatura mais recente.</p>
+        <ul class="links-fora">
+          <li><a href="https://dadosabertos.tse.jus.br/" target="_blank" rel="noopener" hreflang="pt-BR"><span data-en="TSE open data portal">Portal de Dados Abertos do TSE</span> <span aria-hidden="true">↗</span><span class="sr" data-en=" (opens in a new tab)"> (abre em outra aba)</span></a></li>
+          <li><a href="https://divulgacandcontas.tse.jus.br/divulga/" target="_blank" rel="noopener" hreflang="pt-BR"><span data-en-html="Candidacies on <span lang=&quot;pt-BR&quot;>DivulgaCandContas</span>">Candidaturas no DivulgaCandContas</span> <span aria-hidden="true">↗</span><span class="sr" data-en=" (opens in a new tab)"> (abre em outra aba)</span></a></li>
+        </ul>
+      </li>
+      <li class="cartao fonte-card rev">
+        <h3><span class="ic" aria-hidden="true">🗺️</span><span data-en="IBGE (the national statistics institute)">IBGE</span></h3>
+        <p data-en-html="<b>What we use:</b> the official list of states and municipalities, with the name and code of each one. It is this list that tells us which cities exist."><b>O que usamos:</b> a lista oficial dos estados e dos municípios, com o nome e o código de cada um. É ela que diz quais cidades existem.</p>
+        <ul class="links-fora">
+          <li><a href="https://www.ibge.gov.br/explica/codigos-dos-municipios.php" target="_blank" rel="noopener" hreflang="pt-BR"><span data-en="IBGE municipality codes">Códigos dos municípios no IBGE</span> <span aria-hidden="true">↗</span><span class="sr" data-en=" (opens in a new tab)"> (abre em outra aba)</span></a></li>
+          <li><a href="https://servicodados.ibge.gov.br/api/docs/localidades" target="_blank" rel="noopener" hreflang="pt-BR"><span data-en="IBGE places data service (API)">Serviço de dados de localidades (API)</span> <span aria-hidden="true">↗</span><span class="sr" data-en=" (opens in a new tab)"> (abre em outra aba)</span></a></li>
+        </ul>
+      </li>
+      <li class="cartao fonte-card rev" style="--i:1">
+        <h3><span class="ic" aria-hidden="true">📜</span><span data-en="LexML, the Senate and the Presidency">LexML, Senado e Planalto</span></h3>
+        <p data-en-html="<b>What we use:</b> when a bill became law, the profile links to the text of the law, on LexML (the official network of legislative and legal information) or on the Senate's federal legislation website. The laws and the Constitution quoted on the site come from the Presidency's legislation portal."><b>O que usamos:</b> quando uma proposta virou lei, o perfil mostra o link para o texto da lei, no LexML (a rede oficial de informação legislativa e jurídica) ou no site de legislação do Senado. As leis e a Constituição citadas no site vêm do Portal da Legislação do Planalto.</p>
+        <ul class="links-fora">
+          <li><a href="https://www.lexml.gov.br/" target="_blank" rel="noopener" hreflang="pt-BR"><span data-en="LexML Brazil">LexML Brasil</span> <span aria-hidden="true">↗</span><span class="sr" data-en=" (opens in a new tab)"> (abre em outra aba)</span></a></li>
+          <li><a href="https://legis.senado.leg.br/norma/" target="_blank" rel="noopener" hreflang="pt-BR"><span data-en="Federal legislation on the Senate website">Legislação federal no site do Senado</span> <span aria-hidden="true">↗</span><span class="sr" data-en=" (opens in a new tab)"> (abre em outra aba)</span></a></li>
+          <li><a href="https://www4.planalto.gov.br/legislacao/" target="_blank" rel="noopener" hreflang="pt-BR"><span data-en="Legislation portal of the Presidency (Planalto)">Portal da Legislação do Planalto</span> <span aria-hidden="true">↗</span><span class="sr" data-en=" (opens in a new tab)"> (abre em outra aba)</span></a></li>
+        </ul>
+      </li>
+      <li class="cartao fonte-card rev">
+        <h3><span class="ic" aria-hidden="true">🔎</span><span data-en="Research by hand, with sources">Pesquisa à mão, com fonte</span></h3>
+        <p data-en-html="<b>What we use:</b> some information does not come ready as open data: who the governor and the vice governor are today, the ministers, and the mayors of state capitals who changed after the election. This was researched by hand and checked on official websites, such as <span lang=&quot;pt-BR&quot;>e-Agendas</span> of the CGU (the federal comptroller's office), the Presidency's website, official gazettes, state and city governments, state legislatures and the TSE. When there is no official page, we use news reports that only state the fact."><b>O que usamos:</b> algumas informações não vêm prontas em dados abertos: quem é governador e vice hoje, os ministros e os prefeitos das capitais que mudaram depois da eleição. Isso foi pesquisado à mão e conferido em sites oficiais, como o e-Agendas da CGU (Controladoria-Geral da União), o site do Planalto, Diários Oficiais, governos, prefeituras, Assembleias Legislativas e o TSE. Quando não há página oficial, usamos notícias que contam só o fato.</p>
+        <ul class="links-fora">
+          <li><a href="https://eagendas.cgu.gov.br/" target="_blank" rel="noopener" hreflang="pt-BR"><span data-en-html="<span lang=&quot;pt-BR&quot;>e-Agendas</span> (CGU)">e-Agendas da CGU</span> <span aria-hidden="true">↗</span><span class="sr" data-en=" (opens in a new tab)"> (abre em outra aba)</span></a></li>
+          <li><a href="https://www.gov.br/planalto/pt-br/conheca-a-presidencia/ministros-e-ministras" target="_blank" rel="noopener" hreflang="pt-BR"><span data-en="List of ministers (Planalto)">Lista de ministros e ministras (Planalto)</span> <span aria-hidden="true">↗</span><span class="sr" data-en=" (opens in a new tab)"> (abre em outra aba)</span></a></li>
+        </ul>
+      </li>
+      <li class="cartao fonte-card rev" style="--i:1">
+        <h3><span class="ic" aria-hidden="true">📷</span><span data-en="Photos">Fotos</span></h3>
+        <p data-en-html="<b>What we use:</b> the official photos from the Chamber of Deputies, the Senate and the TSE. The photos of the President and the Vice President are official photos published on Wikimedia Commons under a CC BY license, which lets anyone use them as long as they credit the photographer. The photographer's name is shown in the profile."><b>O que usamos:</b> as fotos oficiais da Câmara, do Senado e do TSE. As do presidente e do vice são fotos oficiais publicadas no Wikimedia Commons com licença CC BY, que deixa qualquer pessoa usar a foto, desde que diga quem tirou. O nome de quem tirou aparece no perfil.</p>
+        <ul class="links-fora">
+          <li><a href="https://commons.wikimedia.org/wiki/Main_Page" target="_blank" rel="noopener"><span>Wikimedia Commons</span> <span aria-hidden="true">↗</span><span class="sr" data-en=" (opens in a new tab)"> (abre em outra aba)</span></a></li>
+          <li><a href="https://creativecommons.org/licenses/by/2.0/deed.pt-br" data-href-en="https://creativecommons.org/licenses/by/2.0/deed.en" target="_blank" rel="noopener"><span data-en="What the CC BY 2.0 license allows">O que a licença CC BY 2.0 permite</span> <span aria-hidden="true">↗</span><span class="sr" data-en=" (opens in a new tab)"> (abre em outra aba)</span></a></li>
+        </ul>
+      </li>
+    </ul>
+  </section>
+
+  <section class="miolo bloco" id="situacao" aria-labelledby="t-situacao">
+    <div class="cab-bloco rev"><span class="ic-bloco" aria-hidden="true">🚦</span><div><h2 id="t-situacao" data-en="What each bill status means">O que quer dizer cada situação de proposta</h2><p class="muted" data-en="The Chamber of Deputies and the Senate each describe where a bill stands in their own way, with difficult words. The site turns that into one of these 9 statuses, with the same rule for everyone.">A Câmara e o Senado escrevem a situação de cada proposta do seu jeito, com palavras difíceis. O site traduz para uma destas 9 situações, com a mesma regra para todo mundo.</p></div></div>
+    <div class="tabela-caixa rev">
+      <table class="tabela-info" role="table" aria-labelledby="cap-situacoes">
+        <caption id="cap-situacoes" data-en="The 9 statuses of a bill, with an example of the official text">As 9 situações de uma proposta, com um exemplo do texto oficial</caption>
+        <thead role="rowgroup">
+          <tr role="row">
+            <th scope="col" role="columnheader" data-en="Status on the site">Situação no site</th>
+            <th scope="col" role="columnheader" data-en="What it means">O que quer dizer</th>
+            <th scope="col" role="columnheader" data-en="Example of the official text (in Portuguese)">Exemplo do texto oficial</th>
+          </tr>
+        </thead>
+        <tbody role="rowgroup">
+          <tr role="row">
+            <th scope="row" role="rowheader"><span class="carimbo s-lei"><span aria-hidden="true">📜 </span><span data-en="Became law">Virou lei</span></span></th>
+            <td role="cell" data-en="It was approved and became a law, or another official rule, like an amendment to the Constitution or a legislative decree.">Foi aprovada e virou lei, ou outra regra oficial, como uma emenda à Constituição ou um decreto legislativo.</td>
+            <td role="cell" data-en-html="<span lang=&quot;pt-BR&quot;>“Transformado em Norma Jurídica”</span> <span class=&quot;traducao&quot;>(turned into a legal rule)</span>">“Transformado em Norma Jurídica”</td>
+          </tr>
+          <tr role="row">
+            <th scope="row" role="rowheader"><span class="carimbo s-aprovada"><span aria-hidden="true">☑️ </span><span data-en="Approved at one stage (not law yet)">Aprovada numa etapa (ainda não é lei)</span></span></th>
+            <td role="cell" data-en="It passed one stage: it was approved in one house of Congress and sent to the other, or it is waiting for the President to sign it.">Passou por uma etapa: foi aprovada numa Casa do Congresso e foi para a outra, ou está esperando o presidente assinar.</td>
+            <td role="cell" data-en-html="<span lang=&quot;pt-BR&quot;>“Aguardando Apreciação pelo Senado Federal”</span> <span class=&quot;traducao&quot;>(waiting to be considered by the Federal Senate)</span>">“Aguardando Apreciação pelo Senado Federal”</td>
+          </tr>
+          <tr role="row">
+            <th scope="row" role="rowheader"><span class="carimbo s-andando"><span aria-hidden="true">🚶 </span><span data-en="Still under discussion">Ainda em discussão</span></span></th>
+            <td role="cell" data-en="It is still being analyzed: someone has to study it, give an official opinion on it (a report) or put it to a vote.">Ainda está sendo analisada: falta alguém estudar o texto, dar um parecer (uma opinião oficial sobre ele) ou colocar em votação.</td>
+            <td role="cell" data-en-html="<span lang=&quot;pt-BR&quot;>“Aguardando Parecer”</span> <span class=&quot;traducao&quot;>(waiting for a report)</span>, <span lang=&quot;pt-BR&quot;>“Pronta para Pauta”</span> <span class=&quot;traducao&quot;>(ready to be put on the agenda)</span>">“Aguardando Parecer”, “Pronta para Pauta”</td>
+          </tr>
+          <tr role="row">
+            <th scope="row" role="rowheader"><span class="carimbo s-junta"><span aria-hidden="true">🔗 </span><span data-en="Joined to a similar bill">Andando junto com outra parecida</span></span></th>
+            <td role="cell" data-en-html="It was attached to another bill on the same subject, and they move forward together (the official word is <i lang=&quot;pt-BR&quot;>apensada</i>).">Foi juntada a outra proposta sobre o mesmo assunto, e as duas andam juntas (a palavra oficial é “apensada”).</td>
+            <td role="cell" data-en-html="<span lang=&quot;pt-BR&quot;>“Tramitando em Conjunto”</span> <span class=&quot;traducao&quot;>(moving forward together)</span>">“Tramitando em Conjunto”</td>
+          </tr>
+          <tr role="row">
+            <th scope="row" role="rowheader"><span class="carimbo s-arquivada"><span aria-hidden="true">🗄️ </span><span data-en="Shelved">Arquivada</span></span></th>
+            <td role="cell" data-en="It was sent to the archive and stopped moving forward.">Foi para o arquivo e parou de andar.</td>
+            <td role="cell" data-en-html="<span lang=&quot;pt-BR&quot;>“Arquivada”</span> <span class=&quot;traducao&quot;>(shelved)</span>">“Arquivada”</td>
+          </tr>
+          <tr role="row">
+            <th scope="row" role="rowheader"><span class="carimbo s-rejeitada"><span aria-hidden="true">✖️ </span><span data-en="Rejected">Rejeitada</span></span></th>
+            <td role="cell" data-en="It was voted down, or the President vetoed the whole bill.">Votaram contra ela, ou o presidente vetou a proposta inteira.</td>
+            <td role="cell" data-en-html="<span lang=&quot;pt-BR&quot;>“Rejeitada”</span> <span class=&quot;traducao&quot;>(rejected)</span>, <span lang=&quot;pt-BR&quot;>“Vetado totalmente”</span> <span class=&quot;traducao&quot;>(fully vetoed)</span>">“Rejeitada”, “Vetado totalmente”</td>
+          </tr>
+          <tr role="row">
+            <th scope="row" role="rowheader"><span class="carimbo s-parada"><span aria-hidden="true">⏹️ </span><span data-en="Stopped">Parou</span></span></th>
+            <td role="cell" data-en="It stopped without a vote against it: it expired (a provisional measure that Congress did not vote on in time), it became moot (it will no longer be voted on, because another decision made the vote unnecessary), it was returned to the author by the head of the house, or it could not go ahead (for example, because signatures were withdrawn).">Parou sem uma votação contra: perdeu a validade (uma medida provisória que o Congresso não votou a tempo), ficou prejudicada (não vai mais ser votada, porque outra decisão tornou a votação desnecessária), foi devolvida ao autor pela Presidência da Casa ou não pôde seguir (por exemplo, porque assinaturas foram retiradas).</td>
+            <td role="cell" data-en-html="<span lang=&quot;pt-BR&quot;>“Sem eficácia”</span> <span class=&quot;traducao&quot;>(no longer in effect)</span>, <span lang=&quot;pt-BR&quot;>“Prejudicada”</span> <span class=&quot;traducao&quot;>(moot)</span>, <span lang=&quot;pt-BR&quot;>“Devolvida ao(à) Autor(a)”</span> <span class=&quot;traducao&quot;>(returned to the author)</span>">“Sem eficácia”, “Prejudicada”, “Devolvida ao(à) Autor(a)”</td>
+          </tr>
+          <tr role="row">
+            <th scope="row" role="rowheader"><span class="carimbo s-retirada"><span aria-hidden="true">↩️ </span><span data-en="Withdrawn by the author">O autor desistiu</span></span></th>
+            <td role="cell" data-en="The person who filed the bill asked to withdraw it.">Quem apresentou a proposta pediu para tirá-la.</td>
+            <td role="cell" data-en-html="<span lang=&quot;pt-BR&quot;>“Retirado pelo(a) Autor(a)”</span> <span class=&quot;traducao&quot;>(withdrawn by the author)</span>">“Retirado pelo(a) Autor(a)”</td>
+          </tr>
+          <tr role="row">
+            <th scope="row" role="rowheader"><span class="carimbo s-outra"><span aria-hidden="true">❔ </span><span data-en="Status not classified">Situação não classificada</span></span></th>
+            <td role="cell" data-en="It could not be safely placed in any of the other statuses. Open the official page of the bill to see where it stands.">Não deu para colocar com segurança em nenhuma das outras. Abra a página oficial da proposta para ver como ela está.</td>
+            <td role="cell" data-en-html="<span lang=&quot;pt-BR&quot;>“Transformado em nova proposição”</span> <span class=&quot;traducao&quot;>(turned into a new bill)</span>">“Transformado em nova proposição”</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="muted rev" data-en-html="The stamp is just a summary. Each bill in a profile has a link to its official page, at the Chamber of Deputies or the Senate, where you can see the status written by Congress itself.">O carimbo é só um resumo. Cada proposta do perfil tem o link para a página oficial, na Câmara ou no Senado, onde está a situação escrita pela própria Casa.</p>
+    <div class="dica-coruja rev">
+      <span class="coruja" aria-hidden="true">🦉</span>
+      <p data-en-html="<b>“Rejected” and “Stopped” are different things.</b> Rejected means it was voted down, or the President vetoed all of it. Stopped means the bill stopped moving forward without a vote against it. One example is a provisional measure: a rule that the President publishes and that already works like a law, but that Congress must approve within 120 days (not counting Congress's recess). If Congress votes against it, it was rejected; if time runs out with no vote, it expires and stops. Brazil's Constitution itself treats these two things differently."><b>“Rejeitada” e “Parou” são coisas diferentes.</b> Rejeitada é quando votaram contra ou o presidente vetou tudo. Parou é quando a proposta deixou de andar sem uma votação contra. Um exemplo é a medida provisória: uma regra que o presidente publica e que já vale como lei, mas que o Congresso precisa aprovar em até 120 dias (sem contar as férias do Congresso). Se o Congresso vota contra, ela foi rejeitada; se o prazo acaba sem votação, ela perde a validade e para. A própria Constituição trata essas duas coisas de um jeito diferente.</p>
+    </div>
+    <p class="fonte-linha" data-fonte-ids="camara-proposicoes senado-processos cf62" data-assunto="situação das propostas" data-assunto-en="bill status"></p>
+  </section>
+
+  <section class="miolo bloco" id="autor" aria-labelledby="t-autor">
+    <div class="cab-bloco rev"><span class="ic-bloco" aria-hidden="true">✍️</span><div><h2 id="t-autor" data-en="Who counts as an author">Quem conta como autor</h2><p class="muted" data-en="A bill can have many signatures. But not every signature means the same thing.">Uma proposta pode ter muitas assinaturas. Mas assinar não é tudo igual.</p></div></div>
+    <ul class="grade-info">
+      <li class="cartao regra rev">
+        <span class="ic" aria-hidden="true">✍️</span>
+        <div>
+          <h3 data-en="Main author">Autor principal</h3>
+          <p data-en="The person who signed first. In the Chamber of Deputies, it is whoever is number 1 in the signing order. In the Senate, it is the first author on the official list.">É quem assinou primeiro. Na Câmara, é quem tem o número 1 na ordem de assinatura. No Senado, é o primeiro autor da lista oficial.</p>
+        </div>
+      </li>
+      <li class="cartao regra rev" style="--i:1">
+        <span class="ic" aria-hidden="true">🤝</span>
+        <div>
+          <h3 data-en="Co-author (co-signed)">Coautor (assinou junto)</h3>
+          <p data-en="Someone who signed along with the main author, also as an author of the bill. In profiles, it shows as “Co-signed”.">É quem assinou junto, também como autor da proposta. No perfil, aparece como “Assinou junto”.</p>
+        </div>
+      </li>
+      <li class="cartao regra largo rev" style="--i:2">
+        <span class="ic" aria-hidden="true">🖊️</span>
+        <div>
+          <h3 data-en="Support only (not an author)">Só apoio (não é autor)</h3>
+          <p data-en="Some bills can only be filed with many signatures. A change to the Constitution (a PEC, proposed constitutional amendment) that starts in the Chamber of Deputies needs 171, one third of the deputies. People who sign only to help do not count as authors or co-authors: those signatures are shown separately in the profile.">Algumas propostas só podem ser apresentadas com muitas assinaturas. Uma mudança na Constituição (PEC) que começa na Câmara precisa de 171, um terço dos deputados. Quem assina só para ajudar não conta como autor nem como coautor: essas assinaturas aparecem separadas no perfil.</p>
+          <p class="fonte-linha" data-fonte-ids="cf60" data-assunto="171 assinaturas de uma PEC" data-assunto-en="171 signatures for a PEC"></p>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+  <section class="miolo bloco" id="limites" aria-labelledby="t-limites">
+    <div class="cab-bloco rev"><span class="ic-bloco" aria-hidden="true">⚠️</span><div><h2 id="t-limites" data-en="Limits you should know about">Limites que você precisa saber</h2><p class="muted" data-en="No website knows everything. Here is what is not shown yet, or is only partly shown.">Nenhum site sabe tudo. Aqui está o que ainda não aparece, ou aparece só em parte.</p></div></div>
+    <ul class="grade-info">
+      <li class="cartao regra rev">
+        <span class="ic" aria-hidden="true">🗳️</span>
+        <div>
+          <h3 data-en="Votes">Votações</h3>
+          <p data-en="Only votes in the full Chamber or the full Senate where each member's vote is recorded (roll-call votes), since February 2023, are included. Secret votes, such as the Senate's choice of some authorities, are not included, because individual votes are not published. Committee votes are not included yet.">Só entram as votações do Plenário (a reunião com todos os deputados ou todos os senadores) em que o voto de cada um fica registrado, as votações nominais, desde fevereiro de 2023. As votações secretas, como a escolha de autoridades no Senado, não entram, porque o voto de cada um não é divulgado. As votações nas comissões ainda não entram.</p>
+          <p class="fonte-linha" data-fonte-ids="camara-votacoes senado-votacoes cf52" data-assunto="votações" data-assunto-en="votes"></p>
+        </div>
+      </li>
+      <li class="cartao regra rev" style="--i:1">
+        <span class="ic" aria-hidden="true">💰</span>
+        <div>
+          <h3 data-en="Spending">Gastos</h3>
+          <p data-en-html="Only the office allowance (the <i lang=&quot;pt-BR&quot;>cota</i>): money for work expenses, such as flights, offices and fuel. The amounts are the same as on the official page of each deputy and senator (in the Chamber of Deputies, the net amount, which is what the Chamber agreed to pay). Salaries and the office budget used to pay aides are not included: they are paid separately.">Só a cota parlamentar: a verba para despesas do trabalho, como passagens, escritório e combustível. Os valores são os mesmos da página oficial de cada deputado e senador (na Câmara, o valor líquido, que é o que a Câmara aceitou pagar). Não entram o salário nem a verba de gabinete (o dinheiro para pagar os assessores), que são pagos à parte.</p>
+          <p class="fonte-linha" data-fonte-ids="camara-cota senado-dados" data-assunto="gastos" data-assunto-en="spending"></p>
+        </div>
+      </li>
+      <li class="cartao regra rev">
+        <span class="ic" aria-hidden="true">🏛️</span>
+        <div>
+          <h3 data-en="State deputies">Deputados estaduais</h3>
+          <p data-en="For now, the list shows who was elected in 2022, according to the TSE. Some may have left, and their alternates may have taken over. The bills of each state legislature will be added later, one by one (phase 2).">Por enquanto, a lista é de quem foi eleito em 2022, segundo o TSE. Alguns podem ter saído, e suplentes podem ter assumido. As propostas de cada Assembleia Legislativa vão entrar depois, uma por uma (fase 2).</p>
+        </div>
+      </li>
+      <li class="cartao regra rev" style="--i:1">
+        <span class="ic" aria-hidden="true">🏙️</span>
+        <div>
+          <h3 data-en="Mayors, vice mayors and city councilors">Prefeitos, vice-prefeitos e vereadores</h3>
+          <p data-en="They are the people elected in 2024, according to the TSE, plus those elected in special elections. When the person in office changed later (because of a death, a resignation or a removal from office), we fix it by hand in the state capitals, always with a source. The bills of city councilors will be added later, starting with the state capitals (phase 3).">São os eleitos em 2024, segundo o TSE, mais os eleitos em eleições suplementares. Quando quem está no cargo mudou depois (por morte, renúncia ou cassação), corrigimos à mão nas capitais, sempre com fonte. As propostas dos vereadores vão entrar depois, começando pelas capitais (fase 3).</p>
+        </div>
+      </li>
+      <li class="cartao regra rev">
+        <span class="ic" aria-hidden="true">🗓️</span>
+        <div>
+          <h3 data-en="The 2026 election">Eleição de 2026</h3>
+          <p data-en="The “Elected in 2026” and “Re-elected in 2026” badges come from the TSE. Whoever is in office today stays until the winners take office: the President on January 5, 2027, and governors on January 6, 2027 (Constitutional Amendment 111 of 2021); deputies and senators on February 1, 2027. Then the lists on the site change.">Os selos “Eleito em 2026” e “Reeleito em 2026” vêm do TSE. Quem está no cargo hoje continua até a posse de quem foi eleito: o presidente toma posse em 5 de janeiro de 2027 e os governadores, em 6 de janeiro (Emenda Constitucional 111, de 2021); deputados e senadores, em 1º de fevereiro de 2027. Aí as listas do site trocam.</p>
+          <p class="fonte-linha" data-fonte-ids="ec111 cf57" data-assunto="datas de posse" data-assunto-en="dates of taking office"></p>
+        </div>
+      </li>
+      <li class="cartao regra rev" style="--i:1">
+        <span class="ic" aria-hidden="true">📷</span>
+        <div>
+          <h3 data-en="Photos from the TSE">Fotos do TSE</h3>
+          <p data-en="Photos that come from the TSE are loaded straight from the TSE website. If that website is down, only the first letter of the name appears instead of the photo.">As fotos que vêm do TSE são carregadas direto do site do TSE. Se ele estiver fora do ar, aparece só a primeira letra do nome no lugar da foto.</p>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+  <section class="miolo bloco" id="atualizacao" aria-labelledby="t-atualizacao">
+    <div class="cab-bloco rev"><span class="ic-bloco" aria-hidden="true">🔄</span><div><h2 id="t-atualizacao" data-en="When the data is updated">Quando os dados são atualizados</h2><p class="muted" data-en="Nobody needs to remember to update the site: it happens by itself.">Ninguém precisa lembrar de atualizar o site: isso acontece sozinho.</p></div></div>
+    <ul class="lista-ic">
+      <li class="rev"><span class="ic" aria-hidden="true">⏰</span><p data-en-html="<b>Every day, automatically.</b> A program starts fetching the data at 6 a.m. Brasília time and updates the site."><b>Todo dia, sozinho.</b> Um programa começa a buscar os dados às 6h da manhã (horário de Brasília) e atualiza o site.</p></li>
+      <li class="rev" style="--i:1"><span class="ic" aria-hidden="true">🔁</span><p data-en-html="<b>Only what really changed is updated.</b> If nothing changed in the official source, the information stays the same."><b>Só muda o que mudou de verdade.</b> Se nada mudou na fonte oficial, a informação fica igual.</p></li>
+      <li class="rev"><span class="ic" aria-hidden="true">📅</span><p data-en-html="<b>The profiles of members of Congress, the President and the Vice President show the date of their last update</b>, at the end of the page."><b>Os perfis do Congresso, do presidente e do vice mostram a data da última atualização</b>, no fim da página.</p></li>
+      <li class="rev" style="--i:1"><span class="ic" aria-hidden="true">📚</span><p data-en-html="<b>Every piece of information has a “Where does this come from?” button</b>, with the source, the link and the date."><b>Cada informação tem o botão “De onde veio isso?”</b>, com a fonte, o link e a data.</p></li>
+    </ul>
+    <p class="demo-fontes rev" id="demo-fontes"></p>
+  </section>
+
+  <section class="miolo bloco" id="publicos" aria-labelledby="t-publicos">
+    <div class="cab-bloco rev"><span class="ic-bloco" aria-hidden="true">🔓</span><div><h2 id="t-publicos" data-en="The data is public">Os dados são públicos</h2></div></div>
+    <div class="cartao rev">
+      <p data-en-html="Public bodies must publish information that matters to everyone, in a place that is easy to find. That is what Brazil's <a href=&quot;https://www.planalto.gov.br/ccivil_03/_ato2011-2014/2011/lei/l12527.htm&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot; hreflang=&quot;pt-BR&quot;>Access to Information Law (Law No. 12,527 of 2011)<span class=&quot;sr&quot;> (opens in a new tab)</span></a> says. That is why you can check everything through the links on this page and the <span aria-hidden=&quot;true&quot;>📚 </span>“Where does this come from?” buttons in each profile. And anyone can use this data.">Os órgãos públicos têm o dever de divulgar as informações que interessam a todos, num lugar fácil de achar. É o que diz a <a href="https://www.planalto.gov.br/ccivil_03/_ato2011-2014/2011/lei/l12527.htm" target="_blank" rel="noopener" hreflang="pt-BR">Lei de Acesso à Informação (Lei nº 12.527, de 2011)<span class="sr"> (abre em outra aba)</span></a>. Por isso, você pode conferir tudo nos links desta página e nos botões <span aria-hidden="true">📚 </span>“De onde veio isso?” de cada perfil. E qualquer pessoa pode usar esses dados.</p>
+    </div>
+  </section>
+
+  <section class="miolo fim-info" aria-labelledby="t-fim">
+    <h2 class="sr" id="t-fim" data-en="Where to go next">Para onde ir agora</h2>
+    <div class="botoes rev">
+      <a class="btn azul" href="imparcialidade.html"><span aria-hidden="true">⚖️ </span><span data-en="How we stay impartial">Como cuidamos da imparcialidade</span> <span aria-hidden="true">▶</span></a>
+      <a class="btn claro" href="./"><span aria-hidden="true">🏠 </span><span data-en="Back to the home page">Voltar para a página inicial</span></a>
+    </div>
+  </section>
+</main>
+
+<footer class="miolo rodape rodape-info">
+  <p id="links-erro"></p>
+  <p data-en="Made by a citizen, as a private individual, with no sponsorship, no ties to any party and no paid promotion. The data comes from official bodies and is updated automatically.">Feito por um cidadão, como pessoa física, sem patrocínio, sem ligação com partidos e sem impulsionamento pago. Os dados vêm de órgãos oficiais e são atualizados automaticamente.</p>
+  <p data-en-html="<a href=&quot;./&quot;>Home page</a> · <a href=&quot;imparcialidade.html&quot;>How we stay impartial</a>"><a href="./">Página inicial</a> · <a href="imparcialidade.html">Como cuidamos da imparcialidade</a></p>
+</footer>
+
+<noscript><p style="padding:20px">Esta página precisa de JavaScript ligado no navegador. / This page needs JavaScript.</p></noscript>
+<script src="js/config.js?v=2"></script>
+<script src="js/comum.js?v=2"></script>
+<script src="js/traducoes.js?v=2"></script>
+<script src="js/tres.js?v=2"></script>
+<script src="js/tres-politica.js?v=2"></script>
+<script src="js/info.js?v=2"></script>
+</body>
+</html>

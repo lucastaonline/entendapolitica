@@ -1,0 +1,631 @@
+{
+ "parte": 8,
+ "ic": "⚖️",
+ "nome": "Who judges and who oversees",
+ "resumo": "Who judges, who investigates and who checks the work of the people in power, and how everyone can help oversee them.",
+ "fontes": [
+  {
+   "id": "cf-art5",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 5, LVII (presumption of innocence) (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-contas",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, arts. 31, 71 and 75 (Courts of Accounts) (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art51-52",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, arts. 51 and 52 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art55",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 55 (loss of the term of office of deputies and senators) (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art58",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 58, § 3 (CPI) (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art79-85-86",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, arts. 79, 85 and 86 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-stf",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, arts. 101 and 102 (STF) (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-judiciario",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, arts. 92, 105, 109, 114, 121, 124 and 125 (bodies of the Judiciary) (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-mp-def",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, arts. 127, 129 and 134 (Public Prosecutor's Office and Public Defender's Office) (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art144",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 144 (police forces) (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art220",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 220 (freedom of information) (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "lcp152",
+   "veiculo": "Planalto",
+   "titulo": "Complementary Law 152/2015 (mandatory retirement at 75) (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp152.htm",
+   "data": "2015-12-03",
+   "lang": "en"
+  },
+  {
+   "id": "ricd-art218",
+   "veiculo": "Câmara dos Deputados",
+   "titulo": "Internal Rules of the Chamber of Deputies, art. 218, §§ 2 and 3 (in Portuguese)",
+   "url": "https://www2.camara.leg.br/atividade-legislativa/legislacao/regimento-interno-da-camara-dos-deputados",
+   "data": "1989-09-21",
+   "lang": "en"
+  },
+  {
+   "id": "lei1079",
+   "veiculo": "Planalto",
+   "titulo": "Law 1,079/1950 (crimes of responsibility), art. 14 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/leis/l1079.htm",
+   "data": "1950-04-10",
+   "lang": "en"
+  },
+  {
+   "id": "lei9504-41a",
+   "veiculo": "Planalto",
+   "titulo": "Law 9,504/1997 (Elections Law), art. 41-A (vote buying) (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/leis/l9504.htm",
+   "data": "1997-09-30",
+   "lang": "en"
+  },
+  {
+   "id": "lei12527",
+   "veiculo": "Planalto",
+   "titulo": "Law 12,527/2011 (Access to Information Law), arts. 10 and 11 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/_ato2011-2014/2011/lei/l12527.htm",
+   "data": "2011-11-18",
+   "lang": "en"
+  },
+  {
+   "id": "ldb-art14",
+   "veiculo": "Planalto",
+   "titulo": "Law 9,394/1996 (LDB, the national education law), art. 14 (school councils), as amended by Law 14,644/2023 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/leis/l9394.htm",
+   "data": "2023-08-02",
+   "lang": "en"
+  },
+  {
+   "id": "cgu-institucional",
+   "veiculo": "CGU",
+   "titulo": "Office of the Comptroller General (CGU): institutional page (in Portuguese)",
+   "url": "https://www.gov.br/cgu/pt-br/acesso-a-informacao/institucional",
+   "data": "2026-10-15",
+   "lang": "en"
+  },
+  {
+   "id": "portal-transparencia",
+   "veiculo": "CGU",
+   "titulo": "Portal da Transparência: o que é e como funciona (in Portuguese)",
+   "url": "https://portaldatransparencia.gov.br/sobre/o-que-e-e-como-funciona",
+   "data": "2026-10-15"
+  },
+  {
+   "id": "senado-impeachment-2016-05",
+   "veiculo": "Agência Senado",
+   "titulo": "Senado julgará um presidente da República pela segunda vez (in Portuguese)",
+   "url": "https://www12.senado.leg.br/noticias/materias/2016/05/12/senado-julgara-um-presidente-da-republica-pela-segunda-vez",
+   "data": "2016-05-12"
+  },
+  {
+   "id": "senado-impeachment-2016-08",
+   "veiculo": "Agência Senado",
+   "titulo": "Dilma Rousseff perde o mandato de presidente da República, mas mantém direitos políticos (in Portuguese)",
+   "url": "https://www12.senado.leg.br/noticias/materias/2016/08/31/dilma-rousseff-perde-o-mandato-de-presidente-da-republica-mas-mantem-direitos-politicos",
+   "data": "2016-08-31"
+  }
+ ],
+ "glossario": [
+  {
+   "termo": "Judiciary",
+   "simples": "The branch that judges: judges and courts."
+  },
+  {
+   "termo": "court",
+   "simples": "A group of judges that rules on cases, often reviewing decisions made by other judges."
+  },
+  {
+   "termo": "STF",
+   "simples": "Supremo Tribunal Federal (Supreme Federal Court): the highest court in Brazil. Its main job is to protect the Constitution."
+  },
+  {
+   "termo": "STF minister",
+   "simples": "Each of the 11 judges of the STF."
+  },
+  {
+   "termo": "Constitution",
+   "simples": "The most important law of the country. All other laws must respect it."
+  },
+  {
+   "termo": "STJ",
+   "simples": "Superior Tribunal de Justiça (Superior Court of Justice): a court that helps apply federal laws in the same way all over the country."
+  },
+  {
+   "termo": "Public Prosecutor's Office",
+   "simples": "An institution that defends the interests of society and, in court, accuses people who commit crimes. In Portuguese: Ministério Público."
+  },
+  {
+   "termo": "Public Defender's Office",
+   "simples": "Public lawyers who advise and defend, for free, people who cannot pay. In Portuguese: Defensoria Pública."
+  },
+  {
+   "termo": "Court of Accounts",
+   "simples": "An agency that checks how public money was spent. In Portuguese: Tribunal de Contas."
+  },
+  {
+   "termo": "TCU",
+   "simples": "Tribunal de Contas da União (Federal Court of Accounts): it checks how federal money is used and helps Congress oversee it."
+  },
+  {
+   "termo": "CGU",
+   "simples": "Controladoria-Geral da União (Office of the Comptroller General): the agency that oversees the federal government from the inside."
+  },
+  {
+   "termo": "audit",
+   "simples": "A careful check of accounts and documents."
+  },
+  {
+   "termo": "school council",
+   "simples": "A group in a public school with the school's leaders, teachers, staff, parents, students and the community."
+  },
+  {
+   "termo": "CPI",
+   "simples": "Comissão Parlamentar de Inquérito (Parliamentary Inquiry Committee): a group of deputies or senators that investigates a subject."
+  },
+  {
+   "termo": "specific fact",
+   "simples": "A specific, well-defined subject. In Portuguese: fato determinado."
+  },
+  {
+   "termo": "crime of responsibility",
+   "simples": "A serious act by an authority against the Constitution, like the ones listed in art. 85. In Portuguese: crime de responsabilidade."
+  },
+  {
+   "termo": "impeachment",
+   "simples": "A process that can remove the president from office for a crime of responsibility."
+  },
+  {
+   "termo": "complaint",
+   "simples": "A formal request for someone to be investigated or put on trial. In Portuguese: denúncia."
+  },
+  {
+   "termo": "vice",
+   "simples": "The person who replaces the officeholder when the officeholder needs to leave."
+  },
+  {
+   "termo": "resignation",
+   "simples": "When a person leaves office by their own decision."
+  },
+  {
+   "termo": "public office",
+   "simples": "Work in a position in the government or the State."
+  },
+  {
+   "termo": "term of office",
+   "simples": "The time an elected person stays in office. In Portuguese: mandato."
+  },
+  {
+   "termo": "removal from office",
+   "simples": "When someone loses their term of office because of a decision by others. In Portuguese: cassação."
+  },
+  {
+   "termo": "decorum",
+   "simples": "The behavior expected from someone who holds an office, like a deputy or a senator."
+  },
+  {
+   "termo": "absolute majority",
+   "simples": "More than half of all the members."
+  },
+  {
+   "termo": "presumption of innocence",
+   "simples": "The rule that no one is guilty before the end of the legal process."
+  },
+  {
+   "termo": "appeal",
+   "simples": "To ask another judge or court to review a decision."
+  },
+  {
+   "termo": "Access to Information Law",
+   "simples": "A law that guarantees anyone the right to ask public agencies for data. In Portuguese: Lei de Acesso à Informação."
+  },
+  {
+   "termo": "censorship",
+   "simples": "When someone forbids a news story or an opinion from being published."
+  },
+  {
+   "termo": "Union",
+   "simples": "The federal government, which takes care of the whole country."
+  },
+  {
+   "termo": "public property",
+   "simples": "What belongs to everyone, like schools, squares and public money."
+  },
+  {
+   "termo": "corruption",
+   "simples": "When someone uses a public position to gain an illegal advantage."
+  },
+  {
+   "termo": "undue advantage",
+   "simples": "A benefit that the person had no right to receive."
+  },
+  {
+   "termo": "House",
+   "simples": "A way of referring to the Chamber of Deputies or the Senate."
+  }
+ ],
+ "slides": [
+  {
+   "tipo": "abertura",
+   "titulo": "Who makes sure the rules are followed?",
+   "texto": "In soccer, the referee blows the whistle when someone breaks a rule. In politics, several institutions do this job of **judging and overseeing**.",
+   "ilustracao": "balanca"
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "WHO JUDGES",
+   "titulo": "Judges and courts",
+   "texto": "The **Judiciary** settles conflicts and decides cases using the laws.",
+   "itens": [
+    {
+     "ic": "🏛️",
+     "txt": "The **STF** (Supreme Federal Court) is the highest court. Its main job is to protect the Constitution."
+    },
+    {
+     "ic": "👩‍⚖️",
+     "txt": "It has 11 ministers (judges). The President of the Republic nominates them, and the Senate must approve."
+    },
+    {
+     "ic": "🎂",
+     "txt": "The ministers retire at age 75 at the latest."
+    },
+    {
+     "ic": "🧭",
+     "txt": "The STJ (Superior Court of Justice) helps apply federal laws in the same way all over the country."
+    },
+    {
+     "ic": "🗂️",
+     "txt": "There are also the Labor, Electoral, Military and Federal courts, and the courts of each state."
+    }
+   ],
+   "emoji": "👩‍⚖️",
+   "coruja": "STF ministers are not elected by the people's vote: they are nominated and approved.",
+   "fontes": [
+    "cf-stf",
+    "cf-judiciario",
+    "lcp152"
+   ]
+  },
+  {
+   "tipo": "cards",
+   "etiqueta": "WHO OVERSEES",
+   "titulo": "Watching over the laws and public money",
+   "texto": "Each institution has a different job.",
+   "cards": [
+    {
+     "ic": "📣",
+     "titulo": "Public Prosecutor's Office",
+     "txt": "It defends the interests of society and, in court, accuses people who commit crimes.",
+     "dados": [
+      {
+       "rot": "In the Constitution",
+       "val": "arts. 127 to 130"
+      }
+     ],
+     "mais": "It can also go to court to protect public property and the environment."
+    },
+    {
+     "ic": "🛡️",
+     "titulo": "Public Defender's Office",
+     "txt": "It gives advice and legal defense to people who cannot pay a lawyer.",
+     "dados": [
+      {
+       "rot": "Cost",
+       "val": "free"
+      }
+     ]
+    },
+    {
+     "ic": "🧮",
+     "titulo": "Courts of Accounts",
+     "txt": "They check how public money was used.",
+     "dados": [
+      {
+       "rot": "Federal money",
+       "val": "TCU"
+      },
+      {
+       "rot": "In the states",
+       "val": "state courts of accounts"
+      }
+     ],
+     "mais": "The TCU (Federal Court of Accounts) helps Congress oversee federal money. The state courts of accounts do the same in the states and in the cities. Some places have a court just for the cities."
+    },
+    {
+     "ic": "🕵️",
+     "titulo": "Federal and Civil Police",
+     "txt": "They investigate crimes. The Federal Police handles crimes against the Union. The Civil Police investigates crimes in each state.",
+     "mais": "The Federal Police also investigates crimes that cross several states or involve other countries."
+    },
+    {
+     "ic": "🔎",
+     "titulo": "CGU",
+     "txt": "The Office of the Comptroller General (Controladoria-Geral da União) oversees the federal government from the inside, with **audits**.",
+     "mais": "It also receives complaints and works to prevent and fight corruption."
+    }
+   ],
+   "fontes": [
+    "cf-mp-def",
+    "cf-contas",
+    "cf-art144",
+    "cgu-institucional"
+   ]
+  },
+  {
+   "tipo": "historia",
+   "titulo": "Imagine that the school lunches started to disappear...",
+   "quadros": [
+    {
+     "ic": "🍎",
+     "txt": "In the made-up town of Vila Feliz (“Happy Village”), the school lunches started to run out."
+    },
+    {
+     "ic": "🙋",
+     "txt": "The school council noticed and told the authorities."
+    },
+    {
+     "ic": "🧮",
+     "txt": "The Court of Accounts checked the receipts for the school lunch purchases."
+    },
+    {
+     "ic": "🕵️",
+     "txt": "The police investigated. The Public Prosecutor's Office took the case to court."
+    },
+    {
+     "ic": "⚖️",
+     "txt": "The judge heard both sides. The Public Defender's Office defended the people who did not have a lawyer."
+    }
+   ],
+   "moral": "Each institution does one part: some keep watch, others investigate, others judge. And no one is **guilty** before the end of the legal process.",
+   "fontes": [
+    "ldb-art14",
+    "cf-contas",
+    "cf-art144",
+    "cf-mp-def",
+    "cf-art5"
+   ]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "INVESTIGATION",
+   "titulo": "CPI: Congress investigates",
+   "texto": "CPI stands for **Parliamentary Inquiry Committee** (Comissão Parlamentar de Inquérito): a group of deputies or senators who investigate a subject.",
+   "itens": [
+    {
+     "ic": "✍️",
+     "txt": "To create a CPI, 1/3 of the House must sign: 171 deputies or 27 senators."
+    },
+    {
+     "ic": "🎯",
+     "txt": "It investigates a **specific fact** and has a deadline to finish."
+    },
+    {
+     "ic": "🔍",
+     "txt": "It has investigative powers similar to those of a judge."
+    },
+    {
+     "ic": "📨",
+     "txt": "A CPI does not convict anyone. At the end, it sends its conclusions to the Public Prosecutor's Office."
+    }
+   ],
+   "ilustracao": "congresso",
+   "fontes": [
+    "cf-art58"
+   ]
+  },
+  {
+   "tipo": "passos",
+   "titulo": "Impeachment, step by step",
+   "texto": "It is the process that can remove the president from office for a **crime of responsibility**: serious acts against the Constitution.",
+   "passos": [
+    {
+     "ic": "📝",
+     "titulo": "The complaint",
+     "txt": "Any citizen can file a complaint with the Chamber of Deputies. The Speaker of the Chamber decides whether it goes ahead; if the answer is no, the full Chamber can be asked to review it."
+    },
+    {
+     "ic": "🗳️",
+     "titulo": "The Chamber authorizes",
+     "txt": "For the process to go on, 2/3 of the deputies must vote in favor: 342 out of 513."
+    },
+    {
+     "ic": "⏸️",
+     "titulo": "The suspension",
+     "txt": "When the Senate opens the process, the president is suspended from office for up to 180 days. The vice takes over."
+    },
+    {
+     "ic": "⚖️",
+     "titulo": "The Senate holds the trial",
+     "txt": "The session is led by the president of the STF. To convict, 54 of the 81 senators are needed."
+    },
+    {
+     "ic": "🚪",
+     "titulo": "The decision",
+     "txt": "If convicted, the president loses the office and cannot hold public office for 8 years."
+    }
+   ],
+   "fontes": [
+    "lei1079",
+    "ricd-art218",
+    "cf-art51-52",
+    "cf-art79-85-86"
+   ]
+  },
+  {
+   "tipo": "comparar",
+   "titulo": "This has happened twice since 1988",
+   "texto": "The two cases, told in the **same way**:",
+   "colunas": [
+    {
+     "ic": "📅",
+     "titulo": "1992",
+     "itens": [
+      "President: Fernando Collor.",
+      "The Chamber authorized the process, by 441 votes to 38.",
+      "He was suspended, and the vice president, Itamar Franco, took over.",
+      "On the day of the trial in the Senate, he resigned from office.",
+      "The Senate went on and decided, by 76 to 3: 8 years without public office."
+     ]
+    },
+    {
+     "ic": "📅",
+     "titulo": "2016",
+     "itens": [
+      "President: Dilma Rousseff.",
+      "The Chamber authorized the process, by 367 votes to 137.",
+      "She was suspended, and the vice president, Michel Temer, took over.",
+      "The Senate convicted her, by 61 to 20, and she lost the office.",
+      "In a separate vote, the 8 years without public office were not applied."
+     ]
+    }
+   ],
+   "fontes": [
+    "senado-impeachment-2016-05",
+    "senado-impeachment-2016-08",
+    "cf-art79-85-86"
+   ]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "TERM OF OFFICE",
+   "titulo": "Removal from office and the right to a defense",
+   "itens": [
+    {
+     "ic": "✂️",
+     "txt": "Deputies and senators can lose their term of office. This is called **removal from office** (cassação)."
+    },
+    {
+     "ic": "🙊",
+     "txt": "One reason is a breach of decorum: acting in a way that does not fit the office, like receiving undue advantages."
+    },
+    {
+     "ic": "🗳️",
+     "txt": "In this case, the Chamber or the Senate itself decides, by absolute majority. The person has the right to defend themselves."
+    },
+    {
+     "ic": "🏛️",
+     "txt": "The Electoral Justice can also remove from office someone who was elected by buying votes."
+    },
+    {
+     "ic": "⚖️",
+     "txt": "Someone under investigation **is not guilty**. Under the Constitution, only those who have been convicted and can no longer appeal are guilty."
+    }
+   ],
+   "emoji": "✂️",
+   "coruja": "Being investigated, or even accused, is not the same as being guilty.",
+   "fontes": [
+    "cf-art55",
+    "lei9504-41a",
+    "cf-art5"
+   ]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "TRANSPARENCY",
+   "titulo": "Everyone can oversee",
+   "texto": "Public information belongs to everyone. See some tools.",
+   "itens": [
+    {
+     "ic": "💻",
+     "txt": "The **Transparency Portal** (Portal da Transparência) shows how the federal government uses money. No password needed."
+    },
+    {
+     "ic": "📨",
+     "txt": "Under the Access to Information Law, anyone can ask for public data, without saying why."
+    },
+    {
+     "ic": "⏳",
+     "txt": "The agency has up to 20 days to answer and can ask for 10 more."
+    },
+    {
+     "ic": "📰",
+     "txt": "A **free press** also keeps watch. The Constitution forbids censorship."
+    }
+   ],
+   "ilustracao": "cofre",
+   "fontes": [
+    "portal-transparencia",
+    "lei12527",
+    "cf-art220"
+   ]
+  },
+  {
+   "tipo": "quiz",
+   "pergunta": "A CPI finished its investigation. Can it convict someone?",
+   "opcoes": [
+    "Yes, the CPI decides the punishment",
+    "No. It sends its conclusions to the Public Prosecutor's Office",
+    "Only if the President of the Republic allows it"
+   ],
+   "certa": 1,
+   "explica": "A CPI investigates, but it does not judge. It sends what it found to the Public Prosecutor's Office, which can take the case to court.",
+   "fontes": [
+    "cf-art58"
+   ]
+  }
+ ]
+}

@@ -31,7 +31,7 @@
    quiz       { "tipo":"quiz", "pergunta":"...", "opcoes":["...", "..."], "certa":0, "explica":"...", "fontes":["id"] }
    simulador  { "tipo":"simulador", "id":"quem-cuida" | "quociente" | "caminho-lei", "titulo":"...", "texto":"...", "fontes":["id"], ... }
       quem-cuida:  "itens":[ { "ic":"🏫", "txt":"Creche", "quem":"cidade", "explica":"..." } ]   // quem: pais | estado | cidade | todos
-      quociente:   "cadeiras":10, "partidos":[ { "nome":"Partido Azul", "votos":420 } ], "passos":["explicação passo a passo"]
+      quociente:   "cadeiras":10, "partidos":[ { "nome":"Partido Círculo", "votos":420 } ], "passos":["explicação passo a passo"]   // partidos inventados com nome de forma, nunca de cor
       caminho-lei: "passos":[ { "ic":"💡", "titulo":"...", "txt":"..." } ]
 
    ILUSTRAÇÕES ("ilustracao"): congresso, tres-poderes, niveis, urna, constituicao, balanca, lei, cofre, mapa,
@@ -46,7 +46,6 @@
   var TOTAL = 9;
   var LETRAS = ["A", "B", "C", "D", "E"];
   var QUEM = { pais: tr("🏛️ País", "🏛️ Country"), estado: tr("🗺️ Estado", "🗺️ State"), cidade: tr("🏘️ Cidade", "🏘️ City"), todos: tr("🤝 Todos juntos", "🤝 All together") };
-  var CORES_PARTIDO = { azul: "#2f6db5", blue: "#2f6db5", verde: "#2f9a5a", green: "#2f9a5a", laranja: "#d97a00", orange: "#d97a00", roxo: "#7c4dbd", purple: "#7c4dbd", amarelo: "#c99400", yellow: "#c99400", rosa: "#d0558f", pink: "#d0558f" };
   var PALETA = ["#2f6db5", "#2f9a5a", "#d97a00", "#7c4dbd", "#d0558f", "#0f766e"];
   var PADRAO = {
     1: ["🤝", "O que é política?", "What is politics?"], 2: ["🏛️", "Os Três Poderes", "The Three Branches"], 3: ["🧱", "País, estado e cidade", "Country, state and city"],
@@ -99,7 +98,7 @@
     pr.textContent = (q === TOTAL ? "🏆 " : "⭐ ") + q + "/" + TOTAL;
     pr.setAttribute("aria-label", tr("Você aprendeu " + q + " de 9 paradas", "You learned " + q + " of 9 stops"));
     var b = $("bolha");
-    if (q === 0) b.innerHTML = tr("Oi! Eu sou a Coruja. Toque em qualquer lugar do mapa para aprender. Uma dica: comece pela parada 1!", "Hi! I'm the Owl. Tap any place on the map to learn. A tip: start at stop 1!") +
+    if (q === 0) b.innerHTML = tr("Oi! Eu sou a Coruja. Toque em qualquer lugar do mapa para aprender. A trilha amarela mostra uma ordem sugerida: comece pela parada 1!", "Hi! I'm the Owl. Tap any place on the map to learn. The yellow trail shows a suggested order: start at stop 1!") +
       '<br><button class="btn peq" type="button" data-abrir-parada="1">' + tr("Começar pela parada 1 ▶", "Start at stop 1 ▶") + "</button>";
     else if (p) b.innerHTML = tr("Muito bem! Você já visitou " + q + " de 9 paradas. Próxima sugestão: ", "Well done! You have visited " + q + " of 9 stops. Next suggestion: ") + "<b>" + esc(I[p].nome) + "</b>." +
       '<br><button class="btn peq" type="button" data-abrir-parada="' + p + '">' + tr("Ir para a parada ", "Go to stop ") + p + " ▶</button>";
@@ -308,19 +307,20 @@
     $("btn-voltar").disabled = atual === 0;
     $("btn-proximo").textContent = atual === SL.length - 1 ? "🗺️ " + tr("Mapa", "Map") : tr("Próximo ▶", "Next ▶");
   }
-  function parseNum(s) { return parseFloat(String(s).replace(/\./g, "").replace(",", ".")); }
+  // números do conteúdo vêm escritos no formato do idioma: 5.569 / 63,3 (português) ou 5,569 / 63.3 (inglês)
+  function parseNum(s) { s = String(s); return parseFloat(EP.en ? s.replace(/,/g, "") : s.replace(/\./g, "").replace(",", ".")); }
   function animaNumeros(sec) {
     [].forEach.call(sec.querySelectorAll(".num3d"), function (n, k) {
       n.classList.remove("visivel");
       setTimeout(function () { n.classList.add("visivel"); }, EP.reduzido ? 0 : 250 + k * 160);
     });
     [].forEach.call(sec.querySelectorAll(".conta[data-alvo]"), function (el) {
-      var alvo = el.getAttribute("data-alvo"), v = parseNum(alvo), dec = (alvo.split(",")[1] || "").length;
+      var alvo = el.getAttribute("data-alvo"), v = parseNum(alvo), dec = (alvo.split(EP.en ? "." : ",")[1] || "").length;
       el.textContent = alvo;
       if (isNaN(v) || EP.reduzido || !/^[\d.,]+$/.test(alvo)) return;
       el.style.minWidth = el.offsetWidth + "px";
       var t0 = null, dur = 1300, atraso = 700, ultimo = 0;
-      function fmt(x) { return x.toLocaleString("pt-BR", { minimumFractionDigits: dec, maximumFractionDigits: dec }); }
+      function fmt(x) { return x.toLocaleString(EP.en ? "en-US" : "pt-BR", { minimumFractionDigits: dec, maximumFractionDigits: dec }); }
       el.textContent = fmt(0);
       function passo(t) {
         if (t0 === null) t0 = t;
@@ -558,11 +558,8 @@
     if (ultimo && pos > 0) confete();
   }
   // quociente eleitoral (Código Eleitoral, arts. 106 a 109)
-  function corDe(nome, k) {
-    var n = EP.norm(nome);
-    for (var c in CORES_PARTIDO) if (n.indexOf(c) > -1) return CORES_PARTIDO[c];
-    return PALETA[k % PALETA.length];
-  }
+  // partidos inventados (Círculo, Quadrado...): cor pela ordem, sem lembrar cores de partidos reais
+  function corDe(nome, k) { return PALETA[k % PALETA.length]; }
   function qeCalc(s) {
     var ps = (s.partidos || []).map(function (p, k) { return { nome: p.nome, votos: +p.votos, cor: corDe(p.nome, k), qp: 0, sobra: 0 }; });
     var total = ps.reduce(function (a, p) { return a + p.votos; }, 0), vagas = +s.cadeiras;

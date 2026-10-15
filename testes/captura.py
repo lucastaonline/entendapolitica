@@ -28,7 +28,8 @@ async def captura(pagina, url, sufixo, espera, cheia, acoes):
     erros = []
     pagina.on("console", lambda m: erros.append(f"console.{m.type}: {m.text}") if m.type in ("error", "warning") else None)
     pagina.on("pageerror", lambda e: erros.append(f"pageerror: {e}"))
-    pagina.on("requestfailed", lambda r: erros.append(f"falhou: {r.url}"))
+    pagina.on("requestfailed", lambda r: erros.append(f"falhou: {r.url}") if "divulgacandcontas.tse.jus.br" not in r.url else None)
+    # fotos do TSE: o firewall do TSE barra o navegador sem janela (headless); com janela, carregam normalmente
     await pagina.goto(BASE + url, wait_until="networkidle")
     await pagina.wait_for_timeout(espera)
     for a in acoes:
@@ -45,7 +46,18 @@ async def captura(pagina, url, sufixo, espera, cheia, acoes):
             await pagina.keyboard.press(a[6:])
         elif a.startswith("scroll:"):
             await pagina.evaluate(f"window.scrollTo(0,{a[7:]})")
+        elif a.startswith("ate:"):  # rola até o elemento (ex.: ate:#propostas)
+            await pagina.eval_on_selector(a[4:], "el => el.scrollIntoView({block: 'start'})")
+            await pagina.wait_for_timeout(700)
     await pagina.wait_for_timeout(600)
+    if cheia:
+        # rola a página toda: os blocos que aparecem ao rolar e as fotos "lazy" só carregam assim
+        await pagina.evaluate("""async () => {
+          const passo = Math.max(300, innerHeight * .8);
+          for (let y = 0; y < document.documentElement.scrollHeight; y += passo) { scrollTo(0, y); await new Promise(r => setTimeout(r, 140)); }
+          scrollTo(0, 0);
+        }""")
+        await pagina.wait_for_timeout(900)
     arq = SAIDA / f"{nome_arquivo(url)}-{sufixo}.png"
     await pagina.screenshot(path=str(arq), full_page=cheia)
     larg = await pagina.evaluate("[document.documentElement.scrollWidth, window.innerWidth]")

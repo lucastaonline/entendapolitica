@@ -3,98 +3,116 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>A política do Brasil hoje: presidente, ministros, senadores e deputados federais | Entenda Política</title>
-  <meta name="description" content="Quem está no poder no Brasil hoje: presidente, vice, ministros, os 81 senadores e os 513 deputados federais. Veja o que cada um propôs, o que foi aprovado e o que virou lei. Tudo com fonte.">
+  <script>(function(d){try{var a=JSON.parse(localStorage.getItem("ep-a11y")||"{}");if(a.contraste)d.classList.add("alto-contraste");if(a.movimento)d.classList.add("sem-movimento");if(a.espaco)d.classList.add("espacado");if(a.escala)d.style.setProperty("--escala",a.escala);var q=/[?&]lang=(en|pt)\b/.exec(location.search),l=q?q[1]:localStorage.getItem("ep-lang");if(l==="en")d.lang="en";}catch(e){}})(document.documentElement)</script>
+  <title data-en="Brazil's politics today: the President, ministers, senators and federal deputies | Understand Politics">A política do Brasil hoje: presidente, ministros, senadores e deputados federais | Entenda Política</title>
+  <meta name="description" content="Quem está no poder no Brasil hoje: presidente, vice, ministros, os 81 senadores e os 513 deputados federais. Veja o que cada um propôs, o que foi aprovado e o que virou lei. Tudo com fonte." data-en-content="Who is in power in Brazil today: the President, the Vice President, the ministers, the 81 senators and the 513 federal deputies. See what each one proposed, what was approved and what became law. Everything with sources.">
   <link rel="canonical" href="https://entendapolitica.vercel.app/brasil.html">
+  <link rel="alternate" hreflang="pt-BR" href="https://entendapolitica.vercel.app/brasil.html">
+  <link rel="alternate" hreflang="en" href="https://entendapolitica.vercel.app/brasil.html?lang=en">
+  <link rel="alternate" hreflang="x-default" href="https://entendapolitica.vercel.app/brasil.html">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="pt_BR">
+  <meta property="og:locale:alternate" content="en_US">
   <meta property="og:site_name" content="Entenda Política">
   <meta property="og:url" content="https://entendapolitica.vercel.app/brasil.html">
   <meta property="og:title" content="A política do Brasil hoje, explicada de um jeito fácil">
   <meta property="og:description" content="Presidente, ministros, senadores e deputados federais: o que cada um propôs e o que virou lei. Tudo com fonte.">
+  <meta property="og:image" content="https://entendapolitica.vercel.app/img/compartilhar.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Desenho do Congresso Nacional em 3D com o texto: A política do Brasil, explicada de um jeito simples">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="theme-color" content="#1f3a5f">
+  <link rel="icon" href="favicon.ico" sizes="48x48">
   <link rel="icon" href="img/icone.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="css/base.css?v=1">
-  <link rel="stylesheet" href="css/tres.css?v=1">
-  <link rel="stylesheet" href="css/tres-politica.css?v=1">
-  <link rel="stylesheet" href="css/paginas.css?v=1">
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="stylesheet" href="css/base.css?v=2">
+  <link rel="stylesheet" href="css/tres.css?v=2">
+  <link rel="stylesheet" href="css/tres-politica.css?v=2">
+  <link rel="stylesheet" href="css/paginas.css?v=2">
 </head>
 <body>
-<a class="pular" href="#conteudo">Pular para o conteúdo</a>
+<a class="pular" href="#conteudo" data-en="Skip to content">Pular para o conteúdo</a>
 <header class="topo">
-  <a href="./" title="Voltar para a página inicial">🏠 <span class="rotulo">Início</span></a>
-  <span class="onde">🏛️ A política do Brasil</span>
-  <button id="btn-libras" type="button" title="Traduzir para Libras">🤟 <span class="rotulo">Libras</span></button>
-  <button id="btn-ouvir" type="button" aria-pressed="false" title="Ler esta página em voz alta">🔊 <span class="rotulo">Ouvir</span></button>
-  <button id="btn-letra" type="button" title="Aumentar a letra">A+</button>
+  <a href="./" aria-label="Início" data-en-aria-label="Home" title="Página inicial" data-en-title="Home page"><span aria-hidden="true">🏠 </span><span class="rotulo" data-en="Home">Início</span></a>
+  <span class="onde"><span aria-hidden="true">🏛️ </span><span data-en="Brazil's politics">A política do Brasil</span></span>
+  <a id="btn-idioma" href="?lang=en">🌐 EN</a>
+  <button id="btn-a11y" type="button" aria-haspopup="dialog"><span aria-hidden="true">♿</span><span class="rotulo" data-en=" Accessibility"> Acessibilidade</span></button>
+  <button id="btn-ouvir" type="button" aria-pressed="false"><span aria-hidden="true">🔊</span><span class="rotulo" data-en=" Listen"> Ouvir</span></button>
+  <button id="btn-letra" type="button">A+</button>
 </header>
 
 <main class="pagina" id="conteudo" data-ler>
-  <section class="miolo cab-pagina">
+  <section class="miolo cab-pagina" aria-labelledby="titulo-pagina">
     <div class="cab-txt rev">
-      <span class="selo-topo">Quem está no poder no país hoje</span>
-      <h1>A política do Brasil</h1>
-      <p class="lead">O país tem três Poderes. Aqui você conhece quem foi eleito para o <b>Executivo</b> (quem governa) e para o <b>Legislativo</b> (quem faz as leis). Toque em qualquer pessoa para ver o que ela propôs e o que virou lei.</p>
+      <span class="selo-topo" data-en="Who is in power in the country today">Quem está no poder no país hoje</span>
+      <h1 id="titulo-pagina" data-en="Brazil's politics">A política do Brasil</h1>
+      <p class="lead" data-en-html="Brazil has three branches of government. Here you can meet who runs the <b>Executive</b> (who governs) and who was elected to the <b>Legislative</b> (who makes the laws): the President, the ministers and the National Congress. Tap anyone to see what they proposed and what became law.">O país tem três Poderes. Aqui você conhece quem comanda o <b>Executivo</b> (quem governa) e quem foi eleito para o <b>Legislativo</b> (quem faz as leis). Toque em qualquer pessoa para ver o que ela propôs e o que virou lei.</p>
     </div>
-    <div class="cab-3d rev pop" style="--i:1" id="ilu-poderes"></div>
+    <div class="cab-3d rev pop" style="--i:1" id="ilu-poderes" aria-hidden="true"></div>
   </section>
 
-  <nav class="miolo atalhos rev" aria-label="Ir direto para">
-    <a class="chip" href="#executivo">🏢 Quem governa</a>
-    <a class="chip" href="#senado">🏛️ Senado</a>
-    <a class="chip" href="#camara">🏛️ Câmara</a>
-    <a class="chip" href="#judiciario">⚖️ E o Judiciário?</a>
-    <a class="chip" href="#procurar">🔎 Procurar</a>
+  <nav class="miolo atalhos rev" aria-label="Ir direto para" data-en-aria-label="Jump to">
+    <a class="chip" href="#executivo"><span aria-hidden="true">🏢</span><span data-en="Who governs">Quem governa</span></a>
+    <a class="chip" href="#senado"><span aria-hidden="true">🏛️</span><span data-en="Senate">Senado</span></a>
+    <a class="chip" href="#camara"><span aria-hidden="true">🏛️</span><span data-en="Chamber of Deputies">Câmara</span></a>
+    <a class="chip" href="#judiciario"><span aria-hidden="true">⚖️</span><span data-en="What about the courts?">E o Judiciário?</span></a>
+    <a class="chip" href="#procurar"><span aria-hidden="true">🔎</span><span data-en="Search">Procurar</span></a>
   </nav>
 
-  <section class="miolo bloco" id="executivo">
-    <div class="cab-bloco rev"><span class="ic-bloco" aria-hidden="true">🏢</span><div><h2>Quem governa o país</h2><p class="muted">O Poder Executivo: o presidente, o vice e os ministros. Eles cuidam de fazer as coisas funcionarem.</p></div></div>
-    <div class="exec-topo" id="exec-topo"><div class="carregando">Carregando…</div></div>
-    <h3 class="sub rev">👔 Os ministros <small id="qtd-min"></small></h3>
-    <p class="muted">Ministros não são eleitos: o presidente escolhe cada um para cuidar de uma área. Toque num ministério para saber mais.</p>
-    <div class="grade-min" id="ministros"><div class="carregando">Carregando…</div></div>
+  <section class="miolo bloco" id="executivo" aria-labelledby="t-exec">
+    <div class="cab-bloco rev"><span class="ic-bloco" aria-hidden="true">🏢</span><div><h2 id="t-exec" data-en="Who governs the country">Quem governa o país</h2><p class="muted" data-en="The executive branch: the President, the Vice President and the ministers. They govern: they put the laws into practice and run public services.">O Poder Executivo: o presidente, o vice e os ministros. Eles governam: põem as leis em prática e cuidam dos serviços públicos.</p></div></div>
+    <div class="exec-topo" id="exec-topo"><div class="carregando" data-en="Loading…">Carregando…</div></div>
+    <h3 class="sub rev"><span aria-hidden="true">👔 </span><span data-en="The ministers">Os ministros</span> <small id="qtd-min"></small></h3>
+    <p class="muted" data-en="Ministers are not elected: the President chooses each one to take care of an area. Tap a ministry to learn more.">Ministros não são eleitos: o presidente escolhe cada um para cuidar de uma área. Toque num ministério para saber mais.</p>
+    <div class="grade-min" id="ministros"><div class="carregando" data-en="Loading…">Carregando…</div></div>
     <p id="fonte-min"></p>
   </section>
 
-  <section class="miolo bloco" id="senado" data-casa="senado">
-    <div class="cab-bloco rev"><span class="ic-bloco" aria-hidden="true">🏛️</span><div><h2>O Senado Federal</h2><p class="muted">81 senadores: 3 por estado e 3 pelo Distrito Federal. Eles representam os estados e ficam 8 anos no cargo.</p></div></div>
-    <div class="casa-corpo"><div class="carregando">Carregando…</div></div>
+  <section class="miolo bloco" id="senado" aria-labelledby="t-senado">
+    <div class="cab-bloco rev"><span class="ic-bloco" aria-hidden="true">🏛️</span><div><h2 id="t-senado" data-en-html="The Federal Senate (&lt;span lang=&quot;pt-BR&quot;&gt;Senado Federal&lt;/span&gt;)">O Senado Federal</h2><p class="muted" data-en="81 senators: 3 for each state and 3 for the Federal District. They represent the states and serve 8-year terms.">81 senadores: 3 por estado e 3 pelo Distrito Federal. Eles representam os estados e ficam 8 anos no cargo.</p></div></div>
+    <div class="casa-corpo"><div class="carregando" data-en="Loading…">Carregando…</div></div>
   </section>
 
-  <section class="miolo bloco" id="camara" data-casa="camara">
-    <div class="cab-bloco rev"><span class="ic-bloco" aria-hidden="true">🏛️</span><div><h2>A Câmara dos Deputados</h2><p class="muted">513 deputados federais. Eles representam o povo, e estados com mais gente têm mais deputados. Ficam 4 anos no cargo.</p></div></div>
-    <div class="casa-corpo"><div class="carregando">Carregando…</div></div>
+  <section class="miolo bloco" id="camara" aria-labelledby="t-camara">
+    <div class="cab-bloco rev"><span class="ic-bloco" aria-hidden="true">🏛️</span><div><h2 id="t-camara" data-en-html="The Chamber of Deputies (&lt;span lang=&quot;pt-BR&quot;&gt;Câmara dos Deputados&lt;/span&gt;)">A Câmara dos Deputados</h2><p class="muted" data-en="513 federal deputies. They represent the people, and states with more people have more deputies. They serve 4-year terms.">513 deputados federais. Eles representam o povo, e estados com mais gente têm mais deputados. Ficam 4 anos no cargo.</p></div></div>
+    <div class="casa-corpo"><div class="carregando" data-en="Loading…">Carregando…</div></div>
   </section>
 
-  <section class="miolo bloco" id="judiciario">
+  <section class="miolo bloco" id="judiciario" aria-labelledby="t-jud">
     <div class="cartao cartao-jud rev">
       <span class="ic-grande" aria-hidden="true">⚖️</span>
       <div>
-        <h2 style="font-size:1.3rem">E o Judiciário?</h2>
-        <p>Juízes e ministros dos tribunais <b>não são eleitos</b>: eles fazem concurso ou são indicados e aprovados por outros Poderes. Por isso eles não aparecem nesta lista. Veja como funciona na apresentação.</p>
-        <a class="btn peq claro" href="entenda.html#parte-8">Ver "Quem julga e quem fiscaliza" ▶</a>
+        <h2 id="t-jud" data-en="What about the courts?">E o Judiciário?</h2>
+        <p data-en-html="Judges and the justices of the high courts <b>are not elected</b>: they pass a public exam, or they are nominated and approved by the other branches. That is why they are not on this list. See how it works on the Politics Map.">Juízes e ministros dos tribunais <b>não são eleitos</b>: eles fazem concurso ou são indicados e aprovados por outros Poderes. Por isso eles não aparecem nesta lista. Veja como funciona no Mapa da Política.</p>
+        <a class="btn peq claro" href="entenda.html#parte-8"><span data-en="See “Who judges and who oversees”">Ver "Quem julga e quem fiscaliza"</span> <span aria-hidden="true">▶</span></a>
       </div>
     </div>
   </section>
 
-  <section class="miolo bloco" id="procurar">
-    <div class="cab-bloco rev"><span class="ic-bloco" aria-hidden="true">🔎</span><div><h2>Procurar qualquer político</h2><p class="muted">Do presidente ao prefeito. Digite o nome, a cidade, o estado ou o partido.</p></div></div>
-    <div class="busca"><input id="busca" type="search" placeholder="Ex.: nome, cidade ou partido" autocomplete="off" aria-label="Procurar um político" aria-controls="resultados"></div>
-    <ul class="resultados" id="resultados" aria-live="polite"></ul>
+  <section class="miolo bloco" id="procurar" aria-labelledby="t-procurar">
+    <div class="cab-bloco rev"><span class="ic-bloco" aria-hidden="true">🔎</span><div><h2 id="t-procurar" data-en="Search for any politician">Procurar qualquer político</h2><p class="muted" id="dica-busca" data-en="From the President to mayors. Type a name, city, state or party.">Do presidente ao prefeito. Digite o nome, a cidade, o estado ou o partido.</p></div></div>
+    <label class="sr" for="busca" data-en="Search for a politician">Procurar um político</label>
+    <div class="busca"><input id="busca" type="search" placeholder="Ex.: nome, cidade ou partido" data-en-placeholder="E.g.: name, city or party" autocomplete="off" aria-describedby="dica-busca" aria-controls="resultados"></div>
+    <ul class="resultados" id="resultados"></ul>
   </section>
-
-  <footer class="miolo rodape">
-    <p id="links-erro"></p>
-    <p>Os dados vêm da Câmara dos Deputados, do Senado Federal, do Tribunal Superior Eleitoral (TSE) e do governo federal. <a href="dados.html">Veja de onde vem cada informação</a> e <a href="imparcialidade.html">como cuidamos da imparcialidade</a>.</p>
-  </footer>
 </main>
 
-<script src="js/config.js?v=1"></script>
-<script src="js/comum.js?v=1"></script>
-<script src="js/tres.js?v=1"></script>
-<script src="js/tres-politica.js?v=1"></script>
-<script src="js/busca.js?v=1"></script>
-<script src="js/casa.js?v=1"></script>
-<script src="js/brasil.js?v=1"></script>
+<footer class="miolo rodape">
+  <p id="links-erro"></p>
+  <p data-en-html="The data comes from the Chamber of Deputies, the Federal Senate, the TSE (Brazil's Superior Electoral Court) and the federal government. <a href=&quot;dados.html&quot;>See where each piece of information comes from</a> and <a href=&quot;imparcialidade.html&quot;>how we stay impartial</a>.">Os dados vêm da Câmara dos Deputados, do Senado Federal, do Tribunal Superior Eleitoral (TSE) e do governo federal. <a href="dados.html">Veja de onde vem cada informação</a> e <a href="imparcialidade.html">como cuidamos da imparcialidade</a>.</p>
+</footer>
+
+<noscript><p style="padding:20px">Esta página precisa de JavaScript ligado no navegador. / This page needs JavaScript.</p></noscript>
+<script src="js/config.js?v=2"></script>
+<script src="js/comum.js?v=2"></script>
+<script src="js/traducoes.js?v=2"></script>
+<script src="js/tres.js?v=2"></script>
+<script src="js/tres-politica.js?v=2"></script>
+<script src="js/busca.js?v=2"></script>
+<script src="js/casa.js?v=2"></script>
+<script src="js/brasil.js?v=2"></script>
 </body>
 </html>

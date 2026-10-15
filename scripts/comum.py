@@ -150,6 +150,10 @@ def baixar(url: str, destino: Path | str | None = None, max_idade_h: float | Non
             return corpo
         except urllib.error.HTTPError as e:
             erro = e
+            try:
+                e.close()
+            except Exception:
+                pass
             if e.code in (400, 401, 403, 404, 410):
                 break
         except Exception as e:  # rede instável
@@ -179,15 +183,24 @@ def baixar_arquivo(url: str, nome_cache: str, max_idade_h: float | None = 20, **
             req = urllib.request.Request(url, headers={"User-Agent": UA})
             tmp = destino.with_suffix(destino.suffix + ".part")
             with urllib.request.urlopen(req, timeout=kw.get("timeout", 600)) as r, open(tmp, "wb") as f:
+                esperado, n = r.headers.get("Content-Length"), 0
                 while True:
                     bloco = r.read(1 << 20)
                     if not bloco:
                         break
                     f.write(bloco)
+                    n += len(bloco)
+            # lendo por partes, o Python não reclama se a conexão cair no meio: confere o tamanho
+            if esperado and esperado.isdigit() and n != int(esperado):
+                raise IOError(f"arquivo cortado ({n} de {esperado} bytes)")
             os.replace(tmp, destino)
             return destino
         except urllib.error.HTTPError as e:
             erro = e
+            try:
+                e.close()
+            except Exception:
+                pass
             if e.code in (400, 401, 403, 404, 410):
                 break
         except Exception as e:
@@ -222,14 +235,22 @@ def salvar_json(caminho, obj, indentado: bool = False) -> bool:
     return True
 
 
-def sem_mudar_data(novo: dict, caminho) -> dict:
-    """Mantém o campo 'atualizado' antigo se nada além dele mudou (evita commits só de data)."""
+def _sem_datas(v):
+    """Cópia sem as datas que mudam a cada execução ("atualizado" e a "data" de consulta das fontes)."""
+    if isinstance(v, dict):
+        eh_fonte = "url" in v and ("veiculo" in v or "titulo" in v)
+        return {k: _sem_datas(x) for k, x in v.items() if k != "atualizado" and not (eh_fonte and k == "data")}
+    if isinstance(v, list):
+        return [_sem_datas(x) for x in v]
+    return v
+
+
+def sem_mudar_data(novo, caminho):
+    """Se só mudaram datas de consulta (campo 'atualizado' e a data das fontes), devolve o conteúdo antigo,
+    para o arquivo não ser regravado todo dia sem mudança de verdade."""
     antigo = ler_json(caminho)
-    if isinstance(antigo, dict) and "atualizado" in antigo:
-        a = dict(antigo); n = dict(novo)
-        a.pop("atualizado", None); n.pop("atualizado", None)
-        if a == n:
-            novo["atualizado"] = antigo["atualizado"]
+    if antigo is not None and _sem_datas(antigo) == _sem_datas(novo):
+        return antigo
     return novo
 
 
@@ -237,7 +258,7 @@ def sem_mudar_data(novo: dict, caminho) -> dict:
 # Tipos que contam como "proposta" (vão para a lista). O resto vira contagem em "outros".
 TIPOS_PROPOSTA = {
     "PL", "PLP", "PEC", "PDL", "PRC", "MPV", "PLV", "PLN",          # atuais
-    "PDC", "PLS", "PLC", "PDS", "PRS", "PLN", "PLV", "MSC",         # antigos / Senado / Congresso
+    "PDC", "PLS", "PLC", "PDS", "PRS", "PRN", "MSC",                # antigos / Senado / Congresso
 }
 NOME_TIPO = {
     "PL": "Projeto de lei", "PLP": "Projeto de lei complementar", "PEC": "Proposta de emenda à Constituição",
@@ -246,12 +267,17 @@ NOME_TIPO = {
     "PLN": "Projeto de lei do Congresso (orçamento)", "PLS": "Projeto de lei do Senado", "PLC": "Projeto de lei da Câmara",
     "PDS": "Projeto de decreto legislativo do Senado",
 }
-STATUS = ("lei", "aprovada", "andando", "junta", "arquivada", "rejeitada", "retirada", "outra")
+STATUS = ("lei", "aprovada", "andando", "junta", "arquivada", "rejeitada", "parada", "retirada", "outra")
 
+# "rejeitada" = rejeitada numa votação ou vetada por inteiro. "parada" = parou sem ser rejeitada: perdeu a validade
+# (medida provisória não votada a tempo), ficou prejudicada, foi devolvida ao autor ou impugnada. A Constituição
+# (art. 62, §§ 3º e 11) trata "rejeição" e "perda de eficácia" como coisas diferentes, e o site também.
 _REGRAS_STATUS = [  # (expressão, status) na ordem: a primeira que bater vale
     (r"transformad[oa] em (norma|lei)|norma jur[ií]dica|transformad[oa] na lei|promulgad|sancionad|convertid[oa] na lei", "lei"),
     (r"retirad[oa]s? pel|retirad[oa] de tramita|retirad[oa] a pedido", "retirada"),
-    (r"vetad[oa] totalmente|veto total|rejeitad|prejudicad|declarad[oa] prejudicad|perdeu a efic|sem efic[aá]cia|n[aã]o convertid|n[aã]o aprovad|devolvid[oa] ao autor|inadmitid", "rejeitada"),
+    (r"perdeu a efic|perda de efic|sem efic[aá]cia|n[aã]o convertid|prejudicad|declarad[oa] prejudicad|"
+     r"devolvid[oa] ao\s*(\([aà]\)\s*)?autor|impugnad", "parada"),
+    (r"vetad[oa] totalmente|veto total|rejeitad|n[aã]o aprovad|inadmitid", "rejeitada"),
     (r"arquivad|arquivo", "arquivada"),
     (r"tramitando em conjunto|apensad|anexad[oa]", "junta"),
     (r"aguardando (aprecia[cç][aã]o|delibera[cç][aã]o) pelo senado|remetid[oa] ao senado|enviad[oa] ao senado|"
@@ -281,7 +307,8 @@ STATUS_TXT = {
     "andando": "Ainda em discussão",
     "junta": "Andando junto com outra proposta parecida",
     "arquivada": "Arquivada",
-    "rejeitada": "Rejeitada ou parada de vez",
+    "rejeitada": "Rejeitada em votação ou vetada por inteiro",
+    "parada": "Parou (perdeu a validade, ficou prejudicada ou foi devolvida)",
     "retirada": "O autor desistiu",
     "outra": "Situação não classificada",
 }
@@ -320,6 +347,9 @@ def aplicar_simples(lista: list[dict], cache: dict | None = None) -> list[dict]:
     for p in lista:
         v = cache.get(p.get("id"))
         if not v:
+            # o cache manda: explicação apagada ou recusada no cache some também do perfil
+            p.pop("s", None)
+            p.pop("s_en", None)
             continue
         if isinstance(v, str):
             p["s"] = p.get("s") or v

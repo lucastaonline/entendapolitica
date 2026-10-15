@@ -1,0 +1,754 @@
+{
+ "parte": 6,
+ "ic": "📜",
+ "nome": "Como nasce uma lei",
+ "resumo": "O caminho de uma lei, da ideia até o Diário Oficial, os tipos de proposta, os votos necessários e o orçamento.",
+ "fontes": [
+  {
+   "id": "cf-art5",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 5º",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art18",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 18",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art47",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 47",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art49",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 49, I e V",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art57",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 57, § 2º",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art58",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 58, § 2º, I",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art59",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 59",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art60",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 60",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art61",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 61",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art62",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 62",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art65",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 65",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art66",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 66",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art69",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 69",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art84",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 84, IV e V",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art165",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 165",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art166",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 166, §§ 9º, 11 e 12",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "adct-art35",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, ADCT, art. 35, § 2º (prazos da LDO e da LOA)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "camara-processo",
+   "veiculo": "Câmara dos Deputados",
+   "titulo": "Entenda o processo legislativo",
+   "url": "https://www.camara.leg.br/entenda-o-processo-legislativo/",
+   "data": "2026-10-15"
+  },
+  {
+   "id": "cn-veto",
+   "veiculo": "Congresso Nacional",
+   "titulo": "Entenda a tramitação do veto (257 deputados e 41 senadores para derrubar)",
+   "url": "https://www.congressonacional.leg.br/materias/vetos/entenda-a-tramitacao-do-veto",
+   "data": "2026-10-15"
+  },
+  {
+   "id": "senado-glossario",
+   "veiculo": "Agência Senado",
+   "titulo": "Glossário Legislativo (verbetes Comissão, Decreto, Decreto legislativo, Medida Provisória, Perda de mandato e LDO)",
+   "url": "https://www12.senado.leg.br/noticias/glossario-legislativo",
+   "data": "2026-10-15"
+  },
+  {
+   "id": "cn-pdl",
+   "veiculo": "Congresso Nacional",
+   "titulo": "Glossário de Termos Legislativos: Projeto de Decreto Legislativo (PDL)",
+   "url": "https://www.congressonacional.leg.br/legislacao-e-publicacoes/glossario-legislativo/-/legislativo/termo/projeto_de_decreto_legislativo_pdl",
+   "data": "2026-10-15"
+  },
+  {
+   "id": "cn-maioria-absoluta",
+   "veiculo": "Congresso Nacional",
+   "titulo": "Glossário de Termos Legislativos: Maioria Absoluta",
+   "url": "https://www.congressonacional.leg.br/legislacao-e-publicacoes/glossario-legislativo/-/legislativo/termo/maioria_absoluta",
+   "data": "2026-10-15"
+  },
+  {
+   "id": "lindb",
+   "veiculo": "Planalto",
+   "titulo": "Lei de Introdução às Normas do Direito Brasileiro (Decreto-Lei 4.657/1942), art. 1º",
+   "url": "https://www.planalto.gov.br/ccivil_03/decreto-lei/del4657compilado.htm",
+   "data": "1942-09-04"
+  },
+  {
+   "id": "lc135",
+   "veiculo": "Planalto",
+   "titulo": "Lei Complementar 135/2010 (Lei da Ficha Limpa)",
+   "url": "https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp135.htm",
+   "data": "2010-06-04"
+  },
+  {
+   "id": "camara-plp518",
+   "veiculo": "Câmara dos Deputados",
+   "titulo": "PLP 518/2009: projeto da Ficha Limpa, apresentado em 29/9/2009 com assinaturas colhidas pela sociedade",
+   "url": "https://www.camara.leg.br/propostas-legislativas/452953",
+   "data": "2009-09-29"
+  },
+  {
+   "id": "agcamara-iniciativa",
+   "veiculo": "Agência Câmara",
+   "titulo": "Aplicativos permitem apresentação de projetos de iniciativa popular (a Câmara não tinha como conferir as assinaturas da Ficha Limpa)",
+   "url": "https://www.camara.leg.br/noticias/540773-aplicativos-permitem-apresentacao-de-projetos-de-iniciativa-popular-e-acompanhamento-da-atuacao-parlamentar/",
+   "data": "2018-06-20"
+  },
+  {
+   "id": "agsenado-fichalimpa",
+   "veiculo": "Agência Senado",
+   "titulo": "Lei da Ficha Limpa completa 15 anos",
+   "url": "https://www12.senado.leg.br/noticias/materias/2025/06/02/lei-da-ficha-limpa-completa-15-anos",
+   "data": "2025-06-02"
+  },
+  {
+   "id": "cn-orcamento",
+   "veiculo": "Congresso Nacional",
+   "titulo": "Orçamento da União: PPA, LDO e LOA",
+   "url": "https://www.congressonacional.leg.br/web/orcamento",
+   "data": "2026-10-15"
+  },
+  {
+   "id": "agsenado-emendas",
+   "veiculo": "Agência Senado",
+   "titulo": "O que são emendas parlamentares e como são definidas?",
+   "url": "https://www12.senado.leg.br/noticias/materias/2025/12/01/o-que-sao-emendas-parlamentares-e-como-sao-definidas",
+   "data": "2025-12-01"
+  },
+  {
+   "id": "lc210",
+   "veiculo": "Planalto",
+   "titulo": "Lei Complementar 210/2024 (regras para as emendas parlamentares)",
+   "url": "https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp210.htm",
+   "data": "2024-11-25"
+  },
+  {
+   "id": "senado-orcamentofacil",
+   "veiculo": "Senado Federal",
+   "titulo": "Orçamento Fácil: vídeos que explicam o orçamento público",
+   "url": "https://www12.senado.leg.br/orcamentofacil",
+   "data": "2026-10-15"
+  }
+ ],
+ "glossario": [
+  {
+   "termo": "projeto de lei",
+   "simples": "O texto de uma lei que ainda está sendo discutido e votado."
+  },
+  {
+   "termo": "iniciativa popular",
+   "simples": "Quando os próprios cidadãos apresentam um projeto de lei, com muitas assinaturas."
+  },
+  {
+   "termo": "relator",
+   "simples": "O parlamentar encarregado de estudar um projeto e dar um parecer."
+  },
+  {
+   "termo": "parecer",
+   "simples": "A opinião por escrito do relator ou da comissão: aprovar, mudar ou rejeitar o projeto."
+  },
+  {
+   "termo": "Casa revisora",
+   "simples": "A Casa que confere e revisa um projeto que já foi aprovado na outra."
+  },
+  {
+   "termo": "sanção",
+   "simples": "Quando o presidente concorda com o projeto e assina. Aí ele vira lei."
+  },
+  {
+   "termo": "veto",
+   "simples": "Quando o presidente discorda e barra o projeto inteiro ou uma parte dele."
+  },
+  {
+   "termo": "Diário Oficial da União",
+   "simples": "O jornal oficial do governo federal, onde as leis são publicadas."
+  },
+  {
+   "termo": "quórum",
+   "simples": "O número mínimo de parlamentares ou de votos exigido numa votação."
+  },
+  {
+   "termo": "maioria absoluta",
+   "simples": "Mais da metade de todos os membros da Casa, contando até quem faltou."
+  },
+  {
+   "termo": "maioria simples",
+   "simples": "Mais da metade dos parlamentares presentes na votação."
+  },
+  {
+   "termo": "lei complementar",
+   "simples": "Um tipo de lei para assuntos em que a Constituição pede mais votos."
+  },
+  {
+   "termo": "PEC",
+   "simples": "Proposta de Emenda à Constituição: um projeto para mudar a Constituição."
+  },
+  {
+   "termo": "medida provisória",
+   "simples": "Norma que o presidente cria em casos urgentes. Vale na hora, mas só por um tempo."
+  },
+  {
+   "termo": "decreto legislativo",
+   "simples": "Decisão do Congresso sobre assuntos que só ele resolve, sem passar pelo presidente."
+  },
+  {
+   "termo": "decreto",
+   "simples": "Ato do presidente que detalha como uma lei deve ser cumprida."
+  },
+  {
+   "termo": "turnos",
+   "simples": "As rodadas de votação de uma proposta."
+  },
+  {
+   "termo": "promulgar",
+   "simples": "Declarar oficialmente que uma nova lei ou emenda existe."
+  },
+  {
+   "termo": "cláusulas pétreas",
+   "simples": "As partes da Constituição que nem uma emenda pode abolir."
+  },
+  {
+   "termo": "separação dos Poderes",
+   "simples": "A divisão do poder em Executivo, Legislativo e Judiciário, para nenhum mandar sozinho."
+  },
+  {
+   "termo": "federação",
+   "simples": "O Brasil organizado em União, estados, Distrito Federal e municípios, cada um com sua autonomia."
+  },
+  {
+   "termo": "autonomia",
+   "simples": "Liberdade para tomar as próprias decisões, dentro das regras."
+  },
+  {
+   "termo": "orçamento",
+   "simples": "O plano de quanto dinheiro o governo vai receber e de como vai gastar no ano."
+  },
+  {
+   "termo": "LDO",
+   "simples": "Lei de Diretrizes Orçamentárias: as regras e prioridades para montar o orçamento do ano seguinte."
+  },
+  {
+   "termo": "LOA",
+   "simples": "Lei Orçamentária Anual: o orçamento do ano, com o que o governo espera arrecadar e pode gastar."
+  },
+  {
+   "termo": "emendas parlamentares",
+   "simples": "Indicações de deputados e senadores sobre onde gastar uma parte do dinheiro do orçamento."
+  },
+  {
+   "termo": "arrecadar",
+   "simples": "Juntar dinheiro, principalmente com impostos."
+  },
+  {
+   "termo": "bancada estadual",
+   "simples": "Os deputados federais e senadores de um mesmo estado, juntos."
+  },
+  {
+   "termo": "recesso",
+   "simples": "As férias do Congresso: no fim de julho e entre o fim de dezembro e o começo de fevereiro."
+  },
+  {
+   "termo": "dias úteis",
+   "simples": "Dias de trabalho: de segunda a sexta, sem contar os feriados."
+  },
+  {
+   "termo": "procurador-geral da República",
+   "simples": "O chefe do Ministério Público da União, órgão que defende a sociedade e cobra o cumprimento das leis."
+  },
+  {
+   "termo": "tribunais superiores",
+   "simples": "Os tribunais mais altos do país depois do STF, como o STJ e o TSE."
+  },
+  {
+   "termo": "STF",
+   "simples": "Supremo Tribunal Federal: o tribunal mais alto do país, que cuida da Constituição."
+  },
+  {
+   "termo": "Constituição",
+   "simples": "A lei mais importante do país. Todas as outras leis precisam respeitá-la."
+  }
+ ],
+ "slides": [
+  {
+   "tipo": "abertura",
+   "titulo": "Toda lei começa com uma ideia",
+   "texto": "Depois, a ideia percorre um caminho com várias etapas até virar lei e valer para todo mundo.",
+   "ilustracao": "lei"
+  },
+  {
+   "tipo": "simulador",
+   "id": "caminho-lei",
+   "titulo": "O caminho de uma lei",
+   "texto": "Ande casa por casa. Exemplo: um projeto de lei comum que começa na Câmara.",
+   "passos": [
+    {
+     "ic": "💡",
+     "titulo": "A ideia",
+     "txt": "Alguém vê um problema e pensa numa solução. Exemplo inventado: bebedouro em todo parquinho."
+    },
+    {
+     "ic": "📝",
+     "titulo": "O projeto",
+     "txt": "A ideia vira um texto: o **projeto de lei**. Podem apresentar deputados, senadores, comissões e o presidente da República. Em alguns assuntos, também o STF, os tribunais superiores e o procurador-geral da República. E os cidadãos!"
+    },
+    {
+     "ic": "🧩",
+     "titulo": "As comissões",
+     "txt": "Grupos de deputados estudam o projeto. Um relator dá um parecer, e a comissão vota."
+    },
+    {
+     "ic": "🗳️",
+     "titulo": "O Plenário",
+     "txt": "Todos os deputados votam. Muitos projetos pulam esta casa: são decididos só nas comissões."
+    },
+    {
+     "ic": "🔁",
+     "titulo": "A outra Casa",
+     "txt": "O projeto vai para o Senado, a Casa revisora. Se o Senado mudar o texto, ele volta para a Câmara decidir."
+    },
+    {
+     "ic": "✍️",
+     "titulo": "Sanção ou veto",
+     "txt": "O presidente da República tem 15 dias úteis. Ele pode aprovar (**sanção**) ou barrar (veto) tudo ou uma parte."
+    },
+    {
+     "ic": "⚖️",
+     "titulo": "O veto em análise",
+     "txt": "Se houver veto, deputados e senadores, juntos, decidem se ele fica ou cai."
+    },
+    {
+     "ic": "📰",
+     "titulo": "Publicada: virou lei!",
+     "txt": "A lei sai no Diário Oficial da União. Se ela não disser a data, começa a valer 45 dias depois."
+    }
+   ],
+   "fontes": [
+    "cf-art61",
+    "camara-processo",
+    "cf-art58",
+    "cf-art65",
+    "cf-art66",
+    "cn-veto",
+    "lindb"
+   ]
+  },
+  {
+   "tipo": "cards",
+   "etiqueta": "TIPOS DE PROPOSTA",
+   "titulo": "Nem toda proposta é igual",
+   "texto": "Cada tipo serve para uma coisa e precisa de um número diferente de votos.",
+   "cards": [
+    {
+     "ic": "📄",
+     "titulo": "PL: projeto de lei",
+     "txt": "A lei comum, para a maioria dos assuntos.",
+     "dados": [
+      {
+       "rot": "Para aprovar",
+       "val": "Maioria simples dos presentes"
+      },
+      {
+       "rot": "Vai ao presidente?",
+       "val": "Sim"
+      }
+     ],
+     "mais": "Para votar, a sessão precisa ter pelo menos 257 deputados (ou 41 senadores). Aí, o projeto passa se tiver a maioria dos votos."
+    },
+    {
+     "ic": "📘",
+     "titulo": "PLP: lei complementar",
+     "txt": "Para assuntos em que a Constituição pede uma lei complementar.",
+     "dados": [
+      {
+       "rot": "Para aprovar",
+       "val": "Maioria absoluta: 257 deputados e 41 senadores"
+      },
+      {
+       "rot": "Vai ao presidente?",
+       "val": "Sim"
+      }
+     ]
+    },
+    {
+     "ic": "📕",
+     "titulo": "PEC: emenda à Constituição",
+     "txt": "Muda o texto da Constituição.",
+     "dados": [
+      {
+       "rot": "Para aprovar",
+       "val": "3/5: 308 deputados e 49 senadores"
+      },
+      {
+       "rot": "Votações",
+       "val": "2 turnos em cada Casa"
+      },
+      {
+       "rot": "Vai ao presidente?",
+       "val": "Não"
+      }
+     ],
+     "mais": "Quem pode propor: 1/3 dos deputados (171) ou dos senadores (27). Também o presidente da República ou mais da metade das Assembleias Legislativas. Aprovada, quem vai promulgar a emenda é o Congresso."
+    },
+    {
+     "ic": "⚡",
+     "titulo": "MP: medida provisória",
+     "txt": "O presidente cria só em caso de “relevância e urgência”: assunto importante e com pressa. Vale na hora.",
+     "dados": [
+      {
+       "rot": "Validade",
+       "val": "60 dias + 60 dias"
+      },
+      {
+       "rot": "Para virar lei",
+       "val": "Câmara e Senado precisam aprovar"
+      }
+     ],
+     "mais": "Se não for aprovada a tempo, perde a validade. Alguns assuntos não podem ser tratados por MP, como regras de eleição e crimes."
+    },
+    {
+     "ic": "📗",
+     "titulo": "PDL: decreto legislativo",
+     "txt": "Para assuntos que só o Congresso decide, como aprovar acordos com outros países.",
+     "dados": [
+      {
+       "rot": "Vai ao presidente?",
+       "val": "Não"
+      }
+     ],
+     "mais": "É também com um decreto legislativo que o Congresso fixa o salário de deputados, senadores, presidente e ministros."
+    },
+    {
+     "ic": "🖋️",
+     "titulo": "Decreto",
+     "txt": "O presidente usa para detalhar como uma lei vai ser cumprida. Decreto não cria lei nova.",
+     "dados": [
+      {
+       "rot": "Quem faz",
+       "val": "O presidente"
+      },
+      {
+       "rot": "Passa no Congresso?",
+       "val": "Não"
+      }
+     ],
+     "mais": "Se um decreto passar do limite da lei, o Congresso pode suspender esse decreto."
+    }
+   ],
+   "fontes": [
+    "cf-art59",
+    "cf-art47",
+    "cf-art60",
+    "cf-art62",
+    "cf-art69",
+    "cf-art49",
+    "cf-art84",
+    "camara-processo",
+    "cn-pdl",
+    "senado-glossario",
+    "cn-veto"
+   ]
+  },
+  {
+   "tipo": "numeros",
+   "titulo": "Quantos votos são precisos?",
+   "texto": "Para algumas decisões, não basta ganhar. É preciso alcançar um número mínimo de votos: o **quórum**.",
+   "numeros": [
+    {
+     "val": "257",
+     "rot": "deputados: maioria absoluta da Câmara",
+     "ic": "🧑‍💼"
+    },
+    {
+     "val": "308",
+     "rot": "deputados: 3/5 da Câmara",
+     "ic": "📕"
+    },
+    {
+     "val": "41",
+     "rot": "senadores: maioria absoluta do Senado",
+     "ic": "🏛️"
+    },
+    {
+     "val": "49",
+     "rot": "senadores: 3/5 do Senado",
+     "ic": "📕"
+    }
+   ],
+   "nota": "Maioria absoluta é mais da metade de todos os membros, contando quem faltou. Lei complementar e derrubada de veto precisam dela. PEC precisa de 3/5, em dois turnos, nas duas Casas.",
+   "fontes": [
+    "camara-processo",
+    "cn-veto",
+    "senado-glossario",
+    "cn-maioria-absoluta",
+    "cf-art47",
+    "cf-art60",
+    "cf-art66",
+    "cf-art69"
+   ]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "A VEZ DO PRESIDENTE",
+   "titulo": "Sanção ou veto?",
+   "texto": "Aprovado no Congresso, o projeto vai para o presidente da República.",
+   "itens": [
+    {
+     "ic": "✅",
+     "txt": "**Sanção**: o presidente concorda e assina. O projeto vira lei."
+    },
+    {
+     "ic": "⛔",
+     "txt": "**Veto**: o presidente barra o projeto inteiro (veto total) ou só uma parte (veto parcial)."
+    },
+    {
+     "ic": "⏰",
+     "txt": "O prazo é de 15 dias úteis. Se ele ficar em silêncio, vale como sanção."
+    },
+    {
+     "ic": "📝",
+     "txt": "O veto precisa de um motivo: ir contra a Constituição ou contra o interesse de todos."
+    },
+    {
+     "ic": "🤝",
+     "txt": "Depois, deputados e senadores analisam o veto juntos. Para derrubar: 257 deputados e 41 senadores."
+    }
+   ],
+   "ilustracao": "palacio",
+   "fontes": [
+    "cf-art66",
+    "cf-art84",
+    "cn-veto",
+    "camara-processo"
+   ]
+  },
+  {
+   "tipo": "historia",
+   "titulo": "Uma lei que começou com assinaturas",
+   "quadros": [
+    {
+     "ic": "✍️",
+     "txt": "Por mais de um ano, movimentos de cidadãos juntaram mais de 1,5 milhão de assinaturas pelo país."
+    },
+    {
+     "ic": "📦",
+     "txt": "Em setembro de 2009, o projeto chegou à Câmara. Como a Câmara não tinha como conferir tantas assinaturas, um grupo de deputados assinou o projeto."
+    },
+    {
+     "ic": "🗳️",
+     "txt": "Em maio de 2010, a Câmara e depois o Senado aprovaram o projeto."
+    },
+    {
+     "ic": "📜",
+     "txt": "Em 4 de junho de 2010, o presidente sancionou. Nasceu a Lei Complementar 135, a **Lei da Ficha Limpa**."
+    },
+    {
+     "ic": "🚫",
+     "txt": "A lei aumentou os casos que impedem alguém de se candidatar. Um exemplo: ser condenado por certos crimes por um grupo de juízes."
+    }
+   ],
+   "moral": "Cidadãos também podem propor leis: é a **iniciativa popular**. A regra pede assinaturas de pelo menos 1% dos eleitores do país, de pelo menos 5 estados.",
+   "fontes": [
+    "agsenado-fichalimpa",
+    "camara-plp518",
+    "agcamara-iniciativa",
+    "lc135",
+    "cf-art61"
+   ]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "NÃO PODE MUDAR",
+   "titulo": "O que nem uma PEC pode tirar",
+   "texto": "Algumas partes da Constituição não podem ser abolidas. São as **cláusulas pétreas** (pétrea quer dizer “de pedra”).",
+   "itens": [
+    {
+     "ic": "🗳️",
+     "txt": "O voto direto, secreto, universal e periódico: todos votam nos candidatos, em segredo, de tempos em tempos."
+    },
+    {
+     "ic": "⚖️",
+     "txt": "A separação dos Poderes: Executivo, Legislativo e Judiciário."
+    },
+    {
+     "ic": "🛡️",
+     "txt": "Os direitos e garantias de cada pessoa, como a liberdade."
+    },
+    {
+     "ic": "🗺️",
+     "txt": "A federação: o Brasil dividido em União, estados, DF e municípios, cada um com sua autonomia."
+    }
+   ],
+   "ilustracao": "constituicao",
+   "coruja": "Uma PEC que tente abolir essas partes nem pode ser votada!",
+   "fontes": [
+    "cf-art60",
+    "cf-art5",
+    "cf-art18",
+    "camara-processo"
+   ]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "O DINHEIRO DO PAÍS",
+   "titulo": "O orçamento também é lei",
+   "texto": "Todo ano, o governo planeja quanto vai arrecadar e como vai gastar. O Congresso analisa, muda e aprova.",
+   "itens": [
+    {
+     "ic": "🗓️",
+     "txt": "**LDO**: as regras e prioridades do orçamento do ano seguinte. O presidente envia até 15 de abril."
+    },
+    {
+     "ic": "📒",
+     "txt": "**LOA**: o orçamento do ano, com o dinheiro de saúde, escolas, estradas... Chega ao Congresso até 31 de agosto."
+    },
+    {
+     "ic": "✏️",
+     "txt": "Nas emendas parlamentares, deputados e senadores indicam onde gastar uma parte: uma obra, um posto de saúde..."
+    },
+    {
+     "ic": "📌",
+     "txt": "Em regra, o governo é obrigado a pagar as emendas individuais e as da bancada estadual. Metade das individuais vai para a saúde."
+    },
+    {
+     "ic": "🆕",
+     "txt": "Em 2024, uma lei nova criou regras para essas emendas."
+    }
+   ],
+   "ilustracao": "cofre",
+   "coruja": "Enquanto a LDO não for aprovada, o Congresso não pode sair para o recesso de julho!",
+   "fontes": [
+    "cn-orcamento",
+    "cf-art165",
+    "adct-art35",
+    "cf-art166",
+    "agsenado-emendas",
+    "lc210",
+    "cf-art57",
+    "senado-glossario",
+    "senado-orcamentofacil"
+   ]
+  },
+  {
+   "tipo": "quiz",
+   "pergunta": "Para mudar a Constituição, de quantos votos uma PEC precisa na Câmara?",
+   "opcoes": [
+    "257",
+    "308",
+    "513"
+   ],
+   "certa": 1,
+   "explica": "A PEC precisa de 3/5 dos deputados: 308 votos, em dois turnos. No Senado, são 49.",
+   "fontes": [
+    "cf-art60",
+    "camara-processo"
+   ]
+  },
+  {
+   "tipo": "quiz",
+   "pergunta": "O presidente recebeu um projeto e não respondeu em 15 dias úteis. O que acontece?",
+   "opcoes": [
+    "O projeto é arquivado",
+    "Vale como sanção",
+    "O projeto volta para a Câmara"
+   ],
+   "certa": 1,
+   "explica": "O silêncio do presidente vale como sanção, e o projeto vira lei.",
+   "fontes": [
+    "cf-art66",
+    "cn-veto"
+   ]
+  }
+ ]
+}

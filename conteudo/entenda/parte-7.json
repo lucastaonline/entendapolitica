@@ -1,0 +1,261 @@
+{
+ "parte": 7,
+ "ic": "🗳️",
+ "nome": "Como funcionam as eleições",
+ "resumo": "Quando tem eleição, quem vota, como o voto é protegido e como os votos viram cadeiras.",
+ "fontes": [
+  { "id": "cf-art14", "veiculo": "Planalto", "titulo": "Constituição Federal, art. 14", "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm", "data": "1988-10-05" },
+  { "id": "cf-art17", "veiculo": "Planalto", "titulo": "Constituição Federal, art. 17, § 1º", "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm", "data": "1988-10-05" },
+  { "id": "cf-art28-29", "veiculo": "Planalto", "titulo": "Constituição Federal, arts. 28 e 29", "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm", "data": "1988-10-05" },
+  { "id": "cf-art45-46", "veiculo": "Planalto", "titulo": "Constituição Federal, arts. 45 e 46", "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm", "data": "1988-10-05" },
+  { "id": "cf-art77", "veiculo": "Planalto", "titulo": "Constituição Federal, art. 77", "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm", "data": "1988-10-05" },
+  { "id": "lei9504", "veiculo": "Planalto", "titulo": "Lei 9.504/1997 (Lei das Eleições), arts. 1º, 2º, 3º, 5º, 11, 36, 47 e 68", "url": "https://www.planalto.gov.br/ccivil_03/leis/l9504.htm", "data": "1997-09-30" },
+  { "id": "codigo-eleitoral", "veiculo": "Planalto", "titulo": "Código Eleitoral (Lei 4.737/1965), arts. 84, 106 a 111 e 224", "url": "https://www.planalto.gov.br/ccivil_03/leis/l4737compilado.htm", "data": "1965-07-15" },
+  { "id": "lei14208", "veiculo": "Planalto", "titulo": "Lei 14.208/2021 (federações de partidos)", "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2021/lei/l14208.htm", "data": "2021-09-28" },
+  { "id": "lcp64", "veiculo": "Planalto", "titulo": "Lei Complementar 64/1990 (Lei das Inelegibilidades), art. 1º, I, e (texto atualizado)", "url": "https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp64.htm", "data": "1990-05-18" },
+  { "id": "lcp135", "veiculo": "Planalto", "titulo": "Lei Complementar 135/2010 (Lei da Ficha Limpa)", "url": "https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp135.htm", "data": "2010-06-04" },
+  { "id": "lcp219", "veiculo": "Planalto", "titulo": "Lei Complementar 219/2025 (muda a contagem dos prazos de inelegibilidade)", "url": "https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp219.htm", "data": "2025-09-29" },
+  { "id": "res-tse-23610", "veiculo": "TSE", "titulo": "Resolução TSE 23.610/2019 (propaganda eleitoral), arts. 9º, 9º-B e 9º-C, texto compilado", "url": "https://www.tse.jus.br/legislacao/compilada/res/2019/resolucao-no-23-610-de-18-de-dezembro-de-2019", "data": "2019-12-18" },
+  { "id": "tse-calendario-2026", "veiculo": "TSE", "titulo": "Calendário eleitoral das Eleições 2026", "url": "https://www.tse.jus.br/eleicoes/calendario-eleitoral/calendario-eleitoral", "data": "2026-10-15" },
+  { "id": "tse-urna", "veiculo": "TSE", "titulo": "Urna eletrônica: entenda como o equipamento transformou o processo eleitoral brasileiro", "url": "https://www.tse.jus.br/comunicacao/noticias/2026/Janeiro/urna-eletronica-entenda-como-o-equipamento-transformou-o-processo-eleitoral-brasileiro", "data": "2026-01-02" },
+  { "id": "tse-justificativa", "veiculo": "TSE", "titulo": "Justificativa eleitoral (prazos de 2026 e aplicativo e-Título)", "url": "https://www.tse.jus.br/servicos-eleitorais/justificativa-eleitoral", "data": "2026-10-15" },
+  { "id": "tse-quociente", "veiculo": "TSE", "titulo": "Glossário eleitoral: quociente eleitoral", "url": "https://www.tse.jus.br/servicos-eleitorais/glossario/termos/quociente-eleitoral", "data": "2026-10-15" },
+  { "id": "tse-voto-nulo", "veiculo": "TSE", "titulo": "Glossário eleitoral: voto nulo", "url": "https://www.tse.jus.br/servicos-eleitorais/glossario/termos/voto-nulo", "data": "2026-10-15" },
+  { "id": "tse-voto-branco", "veiculo": "TSE", "titulo": "Glossário eleitoral: voto em branco", "url": "https://www.tse.jus.br/servicos-eleitorais/glossario/termos/voto-em-branco", "data": "2026-10-15" },
+  { "id": "stf-sobras-2024", "veiculo": "STF", "titulo": "Supremo invalida regra sobre distribuição de sobras eleitorais em eleições proporcionais", "url": "https://noticias.stf.jus.br/postsnoticias/supremo-invalida-regra-sobre-distribuicao-de-sobras-eleitorais-em-eleicoes-proporcionais/", "data": "2024-02-28" },
+  { "id": "stf-sobras-2025", "veiculo": "STF", "titulo": "Decisão do STF sobre distribuição de sobras eleitorais vale desde 2022", "url": "https://noticias.stf.jus.br/postsnoticias/decisao-do-stf-sobre-distribuicao-de-sobras-eleitorais-vale-desde-2022/", "data": "2025-03-13" },
+  { "id": "senado-eleicoes-2024", "veiculo": "Agência Senado", "titulo": "Eleições municipais 2024: tire aqui as dúvidas sobre as regras da votação", "url": "https://www12.senado.leg.br/noticias/materias/2024/10/04/eleicoes-municipais-2024-tire-aqui-as-duvidas-sobre-as-regras-da-votacao", "data": "2024-10-04" },
+  { "id": "senado-nulo", "veiculo": "Agência Senado", "titulo": "Votar nulo ou em branco não leva a invalidar a eleição", "url": "https://www12.senado.leg.br/noticias/materias/2018/10/01/votar-nulo-ou-em-branco-nao-faz-diferenca-no-resultado-da-eleicao", "data": "2018-10-01" }
+ ],
+ "glossario": [
+  { "termo": "eleição", "simples": "Quando as pessoas votam para escolher quem vai ocupar um cargo." },
+  { "termo": "eleições gerais", "simples": "A eleição de presidente, governador, senador e deputados, todos no mesmo dia." },
+  { "termo": "eleições municipais", "simples": "A eleição de prefeito e vereador, que cuidam das cidades." },
+  { "termo": "turno", "simples": "Cada rodada de votação. Algumas eleições têm duas rodadas." },
+  { "termo": "título de eleitor", "simples": "O documento de quem está registrado para votar." },
+  { "termo": "e-Título", "simples": "Aplicativo da Justiça Eleitoral que guarda o título de eleitor no celular." },
+  { "termo": "justificativa", "simples": "Aviso à Justiça Eleitoral explicando por que a pessoa não votou." },
+  { "termo": "voto opcional (facultativo)", "simples": "Voto que a pessoa escolhe se quer dar ou não." },
+  { "termo": "Justiça Eleitoral", "simples": "A parte da Justiça que organiza as eleições e cuida das regras delas. O TSE é o tribunal mais alto dela." },
+  { "termo": "urna eletrônica", "simples": "A máquina onde a gente vota." },
+  { "termo": "seção eleitoral", "simples": "O lugar, em geral uma sala de escola, onde um grupo de eleitores vota." },
+  { "termo": "boletim de urna", "simples": "Papel que a urna imprime no fim da votação, com os votos daquela seção." },
+  { "termo": "teste público de segurança", "simples": "Teste em que especialistas de fora tentam achar falhas na urna antes da eleição." },
+  { "termo": "sistema majoritário", "simples": "Jeito de contar votos em que ganha quem tem mais votos." },
+  { "termo": "sistema proporcional", "simples": "Jeito de contar votos em que as cadeiras são divididas conforme os votos de cada partido." },
+  { "termo": "voto de legenda", "simples": "Voto dado só para o número do partido, sem escolher um candidato." },
+  { "termo": "votos válidos", "simples": "Os votos dados a candidatos ou a partidos. Branco e nulo não contam." },
+  { "termo": "maioria absoluta", "simples": "Mais da metade." },
+  { "termo": "quociente eleitoral", "simples": "Quantos votos valem uma cadeira: votos válidos divididos pelo número de cadeiras." },
+  { "termo": "sobras", "simples": "Cadeiras que ficam livres depois da primeira divisão entre os partidos." },
+  { "termo": "partido político", "simples": "Grupo de pessoas com ideias parecidas que lança candidatos." },
+  { "termo": "federação", "simples": "Partidos que se juntam por pelo menos 4 anos e agem como um só." },
+  { "termo": "coligação", "simples": "União de partidos só para uma eleição." },
+  { "termo": "inelegível", "simples": "Quem não pode ser candidato por um tempo." },
+  { "termo": "órgão colegiado", "simples": "Um grupo de juízes que decide junto." },
+  { "termo": "propaganda eleitoral", "simples": "Os anúncios dos candidatos para pedir votos." },
+  { "termo": "deepfake", "simples": "Vídeo ou áudio falso, feito por computador, que imita uma pessoa de verdade." },
+  { "termo": "inteligência artificial (IA)", "simples": "Programa de computador que consegue criar textos, imagens, vídeos e sons." },
+  { "termo": "filiado", "simples": "Quem entrou oficialmente para um partido." },
+  { "termo": "lei complementar", "simples": "Tipo de lei que detalha assuntos que a Constituição manda explicar melhor." },
+  { "termo": "resolução do TSE", "simples": "Regra escrita pelo TSE para organizar as eleições." }
+ ],
+ "slides": [
+  {
+   "tipo": "abertura",
+   "titulo": "Eleição: a vez do povo escolher",
+   "texto": "Na eleição, cada pessoa vota para **escolher** quem vai decidir em nome de todos. É como eleger o representante da turma, só que em tamanho gigante.",
+   "ilustracao": "urna"
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "QUANDO",
+   "titulo": "Tem eleição a cada 2 anos",
+   "texto": "As eleições se revezam: num ano, é a vez do país e dos estados. Dois anos depois, das cidades.",
+   "itens": [
+    { "ic": "🇧🇷", "txt": "**Eleições gerais**, como a de 2026: presidente, governador, senador e deputados." },
+    { "ic": "🏙️", "txt": "**Eleições municipais**, como a de 2024: prefeito e vereador." },
+    { "ic": "1️⃣", "txt": "1º turno: no primeiro domingo de outubro. Em 2026, foi no dia 4." },
+    { "ic": "2️⃣", "txt": "2º turno, quando precisa: no último domingo de outubro. Em 2026, no dia 25." },
+    { "ic": "⏰", "txt": "A votação vai das 8h às 17h, no horário de Brasília." }
+   ],
+   "emoji": "📅",
+   "fontes": ["lei9504", "cf-art77", "cf-art28-29", "tse-calendario-2026", "senado-eleicoes-2024"]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "QUEM VOTA",
+   "titulo": "Quem vota?",
+   "texto": "Para votar, a pessoa precisa ter o **título de eleitor**.",
+   "itens": [
+    { "ic": "✅", "txt": "Com 18 anos ou mais, votar é **obrigatório**." },
+    { "ic": "🙋", "txt": "É opcional para quem tem 16 ou 17 anos, mais de 70 anos ou não sabe ler." },
+    { "ic": "📱", "txt": "O título pode ficar no celular, no aplicativo e-Título." },
+    { "ic": "📝", "txt": "Quem é obrigado e não votou deve justificar em até 60 dias depois de cada turno." },
+    { "ic": "💸", "txt": "Se a justificativa não for aceita, a pessoa paga uma multa." }
+   ],
+   "emoji": "🪪",
+   "coruja": "Dá para justificar pelo próprio e-Título, sem sair de casa.",
+   "fontes": ["cf-art14", "senado-eleicoes-2024", "tse-justificativa"]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "O VOTO",
+   "titulo": "Como o voto é protegido",
+   "itens": [
+    { "ic": "🤫", "txt": "O voto é **secreto**: ninguém pode ver em quem você votou." },
+    { "ic": "🗳️", "txt": "A urna eletrônica é usada no Brasil desde 1996." },
+    { "ic": "🧾", "txt": "No fim da votação, cada urna imprime o **boletim de urna**, com os votos daquela seção." },
+    { "ic": "🌐", "txt": "O TSE coloca os boletins de urna na internet. Qualquer pessoa pode conferir." },
+    { "ic": "🔍", "txt": "Antes da eleição, especialistas testam a urna em público para tentar achar falhas." }
+   ],
+   "ilustracao": "urna",
+   "coruja": "O teste público para as eleições de 2026 foi de 1º a 5 de dezembro de 2025.",
+   "fontes": ["cf-art14", "tse-urna", "lei9504", "tse-calendario-2026"]
+  },
+  {
+   "tipo": "comparar",
+   "titulo": "Dois jeitos de contar os votos",
+   "texto": "O jeito muda conforme o **cargo**.",
+   "colunas": [
+    {
+     "ic": "🥇",
+     "titulo": "Majoritário",
+     "itens": [
+      "Ganha quem tiver mais votos.",
+      "Vale para presidente, governador, prefeito e senador.",
+      "Às vezes, precisa de 2º turno."
+     ],
+     "exemplo": "Como a eleição de representante de turma: o mais votado ganha."
+    },
+    {
+     "ic": "🧩",
+     "titulo": "Proporcional",
+     "itens": [
+      "Vale para deputados e vereadores.",
+      "Primeiro, as cadeiras são divididas entre os partidos, conforme os votos de cada um.",
+      "Depois, entram os candidatos mais votados de cada partido.",
+      "Dá para votar só no número do partido: é o voto de legenda."
+     ],
+     "exemplo": "Como dividir as vagas de um campeonato entre as turmas, conforme o tamanho de cada uma."
+    }
+   ],
+   "fontes": ["cf-art45-46", "cf-art77", "cf-art28-29", "codigo-eleitoral", "lei9504", "senado-eleicoes-2024"]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "2º TURNO",
+   "titulo": "Quando tem 2º turno?",
+   "texto": "Só pode acontecer para presidente, governador e prefeito de cidade com mais de 200 mil eleitores.",
+   "itens": [
+    { "ic": "🧮", "txt": "Para ganhar no 1º turno, é preciso ter **mais da metade** dos votos válidos." },
+    { "ic": "✅", "txt": "Votos válidos são os dados aos candidatos. Branco e nulo ficam de fora." },
+    { "ic": "🔁", "txt": "Se ninguém conseguir, os 2 mais votados disputam um 2º turno." },
+    { "ic": "🏆", "txt": "No 2º turno, ganha quem tiver mais votos válidos." },
+    { "ic": "🏘️", "txt": "Em cidade com até 200 mil eleitores, o prefeito mais votado já ganha no 1º turno." }
+   ],
+   "emoji": "🔁",
+   "fontes": ["cf-art77", "cf-art28-29", "lei9504", "senado-eleicoes-2024"]
+  },
+  {
+   "tipo": "simulador",
+   "id": "quociente",
+   "titulo": "Simulador: como as cadeiras são divididas",
+   "texto": "Uma cidade de mentirinha vai eleger 10 vereadores. Os partidos tiveram, juntos, 1.000 votos válidos.",
+   "cadeiras": 10,
+   "partidos": [
+    { "nome": "Partido Azul", "votos": 420 },
+    { "nome": "Partido Verde", "votos": 270 },
+    { "nome": "Partido Laranja", "votos": 190 },
+    { "nome": "Partido Roxo", "votos": 120 }
+   ],
+   "passos": [
+    "Quociente eleitoral = votos válidos ÷ cadeiras. Aqui: 1.000 ÷ 10 = **100 votos** por cadeira.",
+    "Cada partido ganha 1 cadeira a cada 100 votos: Azul 4, Verde 2, Laranja 1 e Roxo 1. Já são 8 cadeiras.",
+    "Sobraram 2 cadeiras. Elas vão para as maiores médias. A média é: votos do partido ÷ (cadeiras que já tem + 1).",
+    "1ª sobra: Azul 420 ÷ 5 = 84. Verde 270 ÷ 3 = 90. Laranja 190 ÷ 2 = 95. Roxo 120 ÷ 2 = 60. Fica com o Laranja.",
+    "2ª sobra: a média do Laranja cai para 190 ÷ 3 = 63,3. A maior agora é a do Verde (90). Fica com o Verde.",
+    "Resultado: Azul 4, Verde 3, Laranja 2 e Roxo 1. Em cada partido, entram os candidatos mais votados.",
+    "Regra extra: nas cadeiras da primeira divisão, só entra candidato com pelo menos 10% do quociente (aqui, 10 votos).",
+    "Nas sobras, primeiro só disputam partidos com 80% do quociente e candidatos com 20%. Se ainda sobrar vaga, todos os partidos entram, como decidiu o STF em 2024."
+   ],
+   "fontes": ["codigo-eleitoral", "tse-quociente", "stf-sobras-2024", "stf-sobras-2025"]
+  },
+  {
+   "tipo": "cards",
+   "etiqueta": "ANTES DO VOTO",
+   "titulo": "Partidos, candidatos e campanha",
+   "texto": "Antes da votação, existem regras para quem quer ser candidato e para a campanha.",
+   "cards": [
+    {
+     "ic": "🎽",
+     "titulo": "Partido",
+     "txt": "Grupo de pessoas com ideias parecidas. No Brasil, só dá para ser candidato por um partido.",
+     "dados": [ { "rot": "Candidato sem partido", "val": "não pode" } ],
+     "mais": "A Constituição exige que todo candidato seja filiado a um partido (art. 14, § 3º)."
+    },
+    {
+     "ic": "🤝",
+     "titulo": "Federação",
+     "txt": "Dois ou mais partidos podem se juntar e agir como se fossem um só.",
+     "dados": [ { "rot": "Duração mínima", "val": "4 anos" } ],
+     "mais": "Já a coligação é uma união só para a eleição. Desde 2020, ela é proibida nas eleições de deputado e vereador."
+    },
+    {
+     "ic": "📋",
+     "titulo": "Candidatura",
+     "txt": "Os partidos pedem à Justiça Eleitoral o registro dos seus candidatos.",
+     "dados": [ { "rot": "Prazo", "val": "até 15 de agosto" } ]
+    },
+    {
+     "ic": "🧼",
+     "titulo": "Ficha Limpa",
+     "txt": "Quem tem certas condenações decididas por um grupo de juízes fica **inelegível** por 8 anos ou mais.",
+     "dados": [ { "rot": "Lei", "val": "de 2010, mudada em 2025" } ],
+     "mais": "Em 2025, a Lei Complementar 219 mudou a contagem. Em vários casos, os 8 anos contam desde a condenação. Em outros, a pessoa fica inelegível desde a condenação até 8 anos depois de cumprir a pena."
+    },
+    {
+     "ic": "📢",
+     "titulo": "Campanha",
+     "txt": "A propaganda só pode começar em 16 de agosto. No rádio e na TV, há um horário gratuito antes da eleição.",
+     "dados": [ { "rot": "Início", "val": "16 de agosto" } ],
+     "mais": "Propaganda política paga no rádio e na televisão é proibida."
+    },
+    {
+     "ic": "🛡️",
+     "titulo": "Contra mentiras",
+     "txt": "É proibido usar na propaganda conteúdo falso ou manipulado, como **deepfake**. O que for feito com IA precisa de aviso.",
+     "mais": "Essas regras são do TSE (Resolução 23.610/2019). Quem não cumpre pode responder na Justiça."
+    }
+   ],
+   "fontes": ["cf-art14", "cf-art17", "lei14208", "lei9504", "lcp135", "lcp64", "lcp219", "res-tse-23610", "tse-quociente"]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "BRANCO E NULO",
+   "titulo": "E o voto em branco ou nulo?",
+   "texto": "Os dois são permitidos. Veja o que acontece com eles.",
+   "itens": [
+    { "ic": "⬜", "txt": "Voto em branco: a pessoa aperta a tecla BRANCO e depois confirma." },
+    { "ic": "❌", "txt": "Voto nulo: a pessoa digita um número que não é de nenhum candidato e confirma." },
+    { "ic": "➖", "txt": "Os dois **não entram** na conta dos votos válidos." },
+    { "ic": "🚫", "txt": "Eles não cancelam a eleição, mesmo que sejam muitos." },
+    { "ic": "⚠️", "txt": "Uma eleição só é refeita por decisão da Justiça, quando há problemas como fraude." }
+   ],
+   "emoji": "🤔",
+   "fontes": ["tse-voto-nulo", "tse-voto-branco", "senado-nulo", "lei9504", "codigo-eleitoral"]
+  },
+  {
+   "tipo": "quiz",
+   "pergunta": "Numa eleição, metade das pessoas votou nulo. O que acontece?",
+   "opcoes": [
+    "A eleição é cancelada",
+    "Os nulos não contam, e vale o resultado dos votos válidos",
+    "Quem votou nulo precisa votar de novo"
+   ],
+   "certa": 1,
+   "explica": "Voto nulo e voto em branco não entram na conta dos votos válidos. Eles não cancelam a eleição.",
+   "fontes": ["senado-nulo", "tse-voto-nulo"]
+  }
+ ]
+}

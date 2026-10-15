@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Entenda Política: a política do Brasil explicada de um jeito fácil</title>
+  <meta name="description" content="Como a política brasileira funciona, explicada para qualquer pessoa entender: os Três Poderes, cada cargo, como nasce uma lei e como são as eleições. E quem está no poder hoje, do presidente ao vereador, com o que cada um propôs e o que virou lei. Tudo com fonte.">
+  <link rel="canonical" href="https://entendapolitica.vercel.app/">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:site_name" content="Entenda Política">
+  <meta property="og:url" content="https://entendapolitica.vercel.app/">
+  <meta property="og:title" content="Entenda Política: a política do Brasil explicada de um jeito fácil">
+  <meta property="og:description" content="Como funciona, quem está no poder hoje e o que cada político propôs. Tudo com fonte e sem dizer em quem votar.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#1f3a5f">
+  <link rel="icon" href="img/icone.svg" type="image/svg+xml">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Entenda Política","url":"https://entendapolitica.vercel.app/","inLanguage":"pt-BR","description":"A política brasileira explicada de um jeito fácil, com quem está no poder hoje e o que cada político propôs. Tudo com fonte."}</script>
+  <link rel="stylesheet" href="css/base.css?v=1">
+  <link rel="stylesheet" href="css/tres.css?v=1">
+  <link rel="stylesheet" href="css/tres-politica.css?v=1">
+  <link rel="stylesheet" href="css/inicio.css?v=1">
+</head>
+<body>
+<a class="pular" href="#conteudo">Pular para o conteúdo</a>
+<header class="topo">
+  <a class="marca" href="./" aria-label="Entenda Política, página inicial">🏛️ Entenda Política</a>
+  <span class="onde"></span>
+  <button id="btn-libras" type="button" title="Traduzir para Libras">🤟 <span class="rotulo">Libras</span></button>
+  <button id="btn-ouvir" type="button" aria-pressed="false" title="Ler esta página em voz alta">🔊 <span class="rotulo">Ouvir</span></button>
+  <button id="btn-letra" type="button" title="Aumentar a letra">A+</button>
+</header>
+
+<main class="inicio" id="conteudo" data-ler>
+  <section class="miolo topo-inicio">
+    <div class="topo-txt rev">
+      <span class="selo-topo">Política do Brasil · de um jeito fácil</span>
+      <h1>Entenda a política sem complicação</h1>
+      <p class="lead">Como o Brasil é organizado, quem está no poder hoje e o que cada político fez. <b>Tudo tem fonte</b>, e ninguém aqui diz em quem você deve votar.</p>
+    </div>
+    <div class="topo-3d rev pop" style="--i:1" id="congresso"></div>
+  </section>
+
+  <section class="miolo">
+    <h2 class="escolha rev">Por onde você quer começar? <span class="pula" aria-hidden="true">👇</span></h2>
+    <div class="portas">
+      <a class="porta destaque-p rev" style="--i:1" href="entenda.html">
+        <span class="fita">⭐ Comece por aqui</span>
+        <span class="p-ic" data-cubo="1|🧩" aria-hidden="true"></span>
+        <span class="p-tit">Entenda a política</span>
+        <span class="p-txt">Como o país é organizado, o que faz cada cargo, como nasce uma lei e como funcionam as eleições. Com desenhos, animações e joguinhos.</span>
+        <span class="p-mini">🎬 Apresentação em 9 partes · dá para ouvir em voz alta</span>
+        <span class="btn">Começar ▶</span>
+      </a>
+      <a class="porta rev" style="--i:2" href="brasil.html">
+        <span class="p-ic" data-cubo="2|🏛️" aria-hidden="true"></span>
+        <span class="p-tit">A política do Brasil</span>
+        <span class="p-txt">Quem está no poder no país hoje: presidente, ministros, os 81 senadores e os 513 deputados federais. Veja o que cada um propôs e o que virou lei.</span>
+        <span class="p-mini">👥 Presidente, vice, ministros e Congresso</span>
+        <span class="btn azul">Ver o Brasil ▶</span>
+      </a>
+      <a class="porta rev" style="--i:3" href="estado.html">
+        <span class="p-ic" data-cubo="3|📍" aria-hidden="true"></span>
+        <span class="p-tit">A política do meu estado</span>
+        <span class="p-txt">Escolha seu estado e sua cidade: governador, deputados estaduais, prefeito e vereadores.</span>
+        <span class="p-mini">🗺️ 27 estados · 5.570 cidades</span>
+        <span class="btn claro">Ver meu estado ▶</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="miolo procurar rev">
+    <h2>🔎 Procurar um político</h2>
+    <p class="muted">Digite o nome de quem você quer conhecer. Também dá para procurar pela cidade, pelo estado ou pelo partido.</p>
+    <div class="busca"><input id="busca" type="search" placeholder="Ex.: nome, cidade ou partido" autocomplete="off" aria-label="Procurar um político" aria-controls="resultados"></div>
+    <ul class="resultados" id="resultados" aria-live="polite"></ul>
+  </section>
+
+  <section class="miolo acoes-inicio rev">
+    <a class="botao-acao" href="imparcialidade.html">
+      <span class="ic-grande" aria-hidden="true">⚖️</span>
+      <span><b>Como cuidamos da imparcialidade</b><small>As regras que usamos para tratar todo mundo do mesmo jeito.</small></span>
+    </a>
+    <a class="botao-acao" href="dados.html">
+      <span class="ic-grande" aria-hidden="true">🗂️</span>
+      <span><b>De onde vêm os dados</b><small>Câmara, Senado, TSE, IBGE e outros órgãos oficiais. E quando são atualizados.</small></span>
+    </a>
+    <button class="botao-acao" type="button" id="btn-compartilhar">
+      <span class="ic-grande" aria-hidden="true">📤</span>
+      <span><b>Compartilhar o site</b><small>Mande para a família, os amigos e a escola.</small></span>
+    </button>
+  </section>
+
+  <footer class="miolo rodape rev">
+    <p id="links-erro"></p>
+    <p>Feito por um cidadão, como pessoa física, sem patrocínio, sem ligação com partidos e sem impulsionamento pago. Os dados vêm de órgãos oficiais e são atualizados automaticamente.</p>
+  </footer>
+</main>
+
+<script src="js/config.js?v=1"></script>
+<script src="js/comum.js?v=1"></script>
+<script src="js/tres.js?v=1"></script>
+<script src="js/tres-politica.js?v=1"></script>
+<script src="js/busca.js?v=1"></script>
+<script src="js/inicio.js?v=1"></script>
+</body>
+</html>

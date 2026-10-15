@@ -1,0 +1,803 @@
+{
+ "parte": 4,
+ "ic": "👔",
+ "nome": "Os cargos, um por um",
+ "resumo": "Quem faz o quê: presidente, governador, prefeito, senador, deputados e vereador, com mandato, idade mínima, salário e partido.",
+ "fontes": [
+  {
+   "id": "cf-art14",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 14, § 3º (V e VI) e § 5º",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art17",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 17",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art27",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 27",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art28",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 28",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art29",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 29",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art32",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 32",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art37",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 37, XI",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art44",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 44",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art45",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 45",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art46",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 46",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art49",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 49, VII e VIII",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art56",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 56",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art77",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 77",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art79",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 79",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art82",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 82",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art76-84-87",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, arts. 76, 84 (I e XIII) e 87",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art101",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 101",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art144",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 144, § 6º",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "camara-reeleicao",
+   "veiculo": "Câmara dos Deputados",
+   "titulo": "Glossário: Reeleição (parlamentares podem se reeleger sem limite)",
+   "url": "https://www2.camara.leg.br/a-camara/estruturaadm/gestao-na-camara-dos-deputados/responsabilidade-social-e-ambiental/acessibilidade/glossarios/dicionario-de-libras/r/reeleicao",
+   "data": "2026-10-15"
+  },
+  {
+   "id": "ce-sp",
+   "veiculo": "Assembleia Legislativa de São Paulo",
+   "titulo": "Constituição do Estado de São Paulo, art. 47, VI (exemplo: o governador nomeia os secretários)",
+   "url": "https://www.al.sp.gov.br/repositorio/legislacao/constituicao/1989/compilacao-constituicao-0-05.10.1989.html",
+   "data": "1989-10-05"
+  },
+  {
+   "id": "lom-sp",
+   "veiculo": "Prefeitura de São Paulo",
+   "titulo": "Lei Orgânica do Município de São Paulo, art. 69, V (exemplo: o prefeito nomeia os secretários)",
+   "url": "https://prefeitura.sp.gov.br/cidade/secretarias/upload/LOM.pdf",
+   "data": "1990-04-06"
+  },
+  {
+   "id": "codigo-eleitoral",
+   "veiculo": "Planalto",
+   "titulo": "Código Eleitoral (Lei 4.737/1965), arts. 84 e 112",
+   "url": "https://www.planalto.gov.br/ccivil_03/leis/l4737compilado.htm",
+   "data": "1965-07-15"
+  },
+  {
+   "id": "lei-partidos",
+   "veiculo": "Planalto",
+   "titulo": "Lei dos Partidos Políticos (Lei 9.096/1995), art. 11-A (federação de partidos)",
+   "url": "https://www.planalto.gov.br/ccivil_03/leis/l9096.htm",
+   "data": "1995-09-19"
+  },
+  {
+   "id": "cn-suplente",
+   "veiculo": "Congresso Nacional",
+   "titulo": "Glossário de Termos Legislativos: Suplente de Deputado Federal",
+   "url": "https://www.congressonacional.leg.br/legislacao-e-publicacoes/glossario-legislativo/-/legislativo/termo/suplente_de_deputado_federal",
+   "data": "2026-10-15"
+  },
+  {
+   "id": "dl-172",
+   "veiculo": "Câmara dos Deputados",
+   "titulo": "Decreto Legislativo 172/2022: subsídios de deputados, senadores, presidente, vice e ministros (R$ 46.366,19 desde 1º/2/2025)",
+   "url": "https://www2.camara.leg.br/legin/fed/decleg/2022/decretolegislativo-172-21-dezembro-2022-793529-publicacaooriginal-166604-pl.html",
+   "data": "2022-12-21"
+  },
+  {
+   "id": "camara-salario",
+   "veiculo": "Câmara dos Deputados",
+   "titulo": "Salário parlamentar e desconto por faltas",
+   "url": "https://www2.camara.leg.br/comunicacao/assessoria-de-imprensa/guia-para-jornalistas/salario-de-deputados",
+   "data": "2026-10-15"
+  },
+  {
+   "id": "senado-salario",
+   "veiculo": "Senado Federal",
+   "titulo": "Perguntas frequentes: Quanto ganha um senador?",
+   "url": "https://www12.senado.leg.br/perguntas-frequentes/canais-de-atendimento/gestao-de-pessoas/quanto-ganha-um-senador",
+   "data": "2026-10-15"
+  },
+  {
+   "id": "valor-senador-2026",
+   "veiculo": "Valor Econômico",
+   "titulo": "Quanto ganha um senador? (valor em vigor em outubro de 2026)",
+   "url": "https://valor.globo.com/politica/eleicoes-2026/noticia/2026/10/04/quanto-ganha-um-senador.ghtml",
+   "data": "2026-10-04"
+  },
+  {
+   "id": "lei-14520",
+   "veiculo": "Planalto",
+   "titulo": "Lei 14.520/2023: subsídio de ministro do STF (R$ 46.366,19 desde 1º/2/2025)",
+   "url": "https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2023/lei/l14520.htm",
+   "data": "2023-01-09"
+  },
+  {
+   "id": "tse-vagas-2024",
+   "veiculo": "TSE (Portal de Dados Abertos)",
+   "titulo": "Candidatos 2024, arquivo de vagas: 5.569 prefeitos e 58.435 vagas de vereador nas Eleições Municipais 2024 (soma feita pelo site)",
+   "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2024",
+   "data": "2026-10-15"
+  },
+  {
+   "id": "tse-vagas-2026",
+   "veiculo": "TSE (Portal de Dados Abertos)",
+   "titulo": "Candidatos 2026, arquivo de vagas: 27 governadores, 54 senadores, 513 deputados federais, 1.035 estaduais e 24 distritais (soma feita pelo site)",
+   "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2026",
+   "data": "2026-10-15"
+  },
+  {
+   "id": "agsenado-candidaturas",
+   "veiculo": "Agência Senado",
+   "titulo": "Eleições 2026: veja os números das candidaturas oficializadas",
+   "url": "https://www12.senado.leg.br/noticias/materias/2026/08/17/eleicoes-2026-veja-os-numeros-das-candidaturas-oficializadas",
+   "data": "2026-08-17"
+  },
+  {
+   "id": "agcamara-eleicoes-2026",
+   "veiculo": "Agência Câmara",
+   "titulo": "Eleições deste ano vão definir 54 vagas no Senado e todas as 513 vagas da Câmara",
+   "url": "https://www.camara.leg.br/noticias/1298957-eleicoes-deste-ano-vao-definir-54-vagas-no-senado-e-todas-as-513-vagas-da-camara",
+   "data": "2026-08-19"
+  },
+  {
+   "id": "camara-comprove-513",
+   "veiculo": "Câmara dos Deputados",
+   "titulo": "Comprove: é falso que são 531 vagas de deputados federais para a próxima legislatura (são 513)",
+   "url": "https://www.camara.leg.br/comprove/1302885-e-falso-que-sao-531-vagas-de-deputados-federais-para-a-proxima-legislatura",
+   "data": "2026-09-04"
+  },
+  {
+   "id": "agcamara-municipais-2024",
+   "veiculo": "Agência Câmara",
+   "titulo": "TSE divulga número de candidatos nas eleições municipais 2024",
+   "url": "https://www.camara.leg.br/noticias/1099005-tse-divulga-numero-de-candidatos-nas-eleicoes-municipais-2024/",
+   "data": "2024-09-27"
+  },
+  {
+   "id": "agcamara-prefeitos",
+   "veiculo": "Agência Câmara",
+   "titulo": "Conheça as funções de prefeitos e vereadores e como fiscalizá-los",
+   "url": "https://www.camara.leg.br/noticias/1098891-conheca-as-funcoes-de-prefeitos-e-vereadores-e-como-fiscaliza-los",
+   "data": "2024-09-26"
+  }
+ ],
+ "glossario": [
+  {
+   "termo": "mandato",
+   "simples": "O tempo que a pessoa eleita fica no cargo."
+  },
+  {
+   "termo": "reeleição",
+   "simples": "Ser eleito de novo para o mesmo cargo, logo depois do primeiro mandato."
+  },
+  {
+   "termo": "votos válidos",
+   "simples": "Os votos dados a candidatos ou partidos. Votos brancos e nulos não contam."
+  },
+  {
+   "termo": "2º turno",
+   "simples": "Uma nova votação só entre os dois mais votados, quando ninguém teve votos suficientes na primeira."
+  },
+  {
+   "termo": "vice",
+   "simples": "Quem é eleito junto com o presidente, o governador ou o prefeito para ficar no lugar dele quando for preciso."
+  },
+  {
+   "termo": "suplente",
+   "simples": "Quem fica na reserva e assume a vaga quando um senador, deputado ou vereador sai."
+  },
+  {
+   "termo": "chapa",
+   "simples": "O grupo que concorre junto na eleição, como o candidato a prefeito e o seu vice."
+  },
+  {
+   "termo": "voto proporcional",
+   "simples": "Jeito de eleger em que as vagas são divididas entre os partidos conforme os votos de cada um."
+  },
+  {
+   "termo": "Executivo",
+   "simples": "O Poder que governa: coloca as leis em prática e cuida dos serviços públicos."
+  },
+  {
+   "termo": "subsídio",
+   "simples": "O nome do salário mensal de quem tem cargo eleito, de ministro e de juiz."
+  },
+  {
+   "termo": "teto",
+   "simples": "O maior salário que alguém pode receber no serviço público."
+  },
+  {
+   "termo": "decreto legislativo",
+   "simples": "Uma decisão do Congresso sobre assuntos que só ele resolve, sem passar pelo presidente."
+  },
+  {
+   "termo": "Legislativo",
+   "simples": "O Poder que faz as leis e fiscaliza quem governa."
+  },
+  {
+   "termo": "ministro",
+   "simples": "Pessoa escolhida pelo presidente para cuidar de uma área do governo, como saúde ou educação."
+  },
+  {
+   "termo": "secretário",
+   "simples": "Pessoa escolhida pelo governador ou pelo prefeito para cuidar de uma área, como a saúde do estado ou da cidade."
+  },
+  {
+   "termo": "STF",
+   "simples": "Supremo Tribunal Federal: o tribunal mais alto do país, que cuida da Constituição."
+  },
+  {
+   "termo": "Assembleia Legislativa",
+   "simples": "A Casa onde os deputados estaduais fazem as leis do estado."
+  },
+  {
+   "termo": "Câmara Legislativa",
+   "simples": "A Casa de leis do Distrito Federal, onde trabalham os deputados distritais."
+  },
+  {
+   "termo": "Câmara Municipal",
+   "simples": "A Casa onde os vereadores fazem as leis da cidade."
+  },
+  {
+   "termo": "partido",
+   "simples": "Grupo organizado de pessoas com ideias parecidas que disputa eleições."
+  },
+  {
+   "termo": "filiação partidária",
+   "simples": "Estar inscrito como membro de um partido político."
+  },
+  {
+   "termo": "federação de partidos",
+   "simples": "União de dois ou mais partidos que, por pelo menos 4 anos, agem como se fossem um só."
+  },
+  {
+   "termo": "TSE",
+   "simples": "Tribunal Superior Eleitoral: o tribunal que organiza e cuida das eleições."
+  },
+  {
+   "termo": "fiscalizar",
+   "simples": "Acompanhar e conferir se alguém está fazendo o trabalho direito e seguindo as regras."
+  },
+  {
+   "termo": "eleitores",
+   "simples": "As pessoas que podem votar."
+  }
+ ],
+ "slides": [
+  {
+   "tipo": "abertura",
+   "titulo": "Cada cargo tem uma tarefa",
+   "texto": "Uns governam, outros fazem leis. Vamos conhecer cada cargo, um por um!",
+   "ilustracao": "niveis"
+  },
+  {
+   "tipo": "cards",
+   "etiqueta": "QUEM GOVERNA",
+   "titulo": "Presidente, governador e prefeito",
+   "texto": "Eles chefiam o Poder **Executivo**: colocam as leis em prática e cuidam dos serviços públicos.",
+   "cards": [
+    {
+     "ic": "🌎",
+     "titulo": "Presidente",
+     "txt": "Chefia o governo do país e comanda o Exército, a Marinha e a Aeronáutica.",
+     "dados": [
+      {
+       "rot": "Mandato",
+       "val": "4 anos"
+      },
+      {
+       "rot": "Reeleição",
+       "val": "Só 1 vez seguida"
+      },
+      {
+       "rot": "Idade mínima",
+       "val": "35 anos"
+      },
+      {
+       "rot": "Como vence",
+       "val": "Mais da metade dos votos válidos. Se ninguém chegar lá, tem 2º turno."
+      }
+     ],
+     "mais": "É eleito junto com o vice-presidente, na mesma chapa. Votos válidos são os dados a candidatos: brancos e nulos não contam. Quem vencer a eleição de 2026 toma posse em 5 de janeiro de 2027."
+    },
+    {
+     "ic": "🗺️",
+     "titulo": "Governador",
+     "txt": "Chefia o governo do estado. As polícias do estado ficam sob o comando dele.",
+     "dados": [
+      {
+       "rot": "Mandato",
+       "val": "4 anos"
+      },
+      {
+       "rot": "Reeleição",
+       "val": "Só 1 vez seguida"
+      },
+      {
+       "rot": "Idade mínima",
+       "val": "30 anos"
+      },
+      {
+       "rot": "Como vence",
+       "val": "Mesma regra do presidente: pode ter 2º turno."
+      }
+     ],
+     "mais": "É eleito junto com o vice-governador. O Distrito Federal também tem governador. Quem vencer a eleição de 2026 toma posse em 6 de janeiro de 2027."
+    },
+    {
+     "ic": "🏙️",
+     "titulo": "Prefeito",
+     "txt": "Chefia o governo da cidade, que cuida de ruas, iluminação e postos de saúde.",
+     "dados": [
+      {
+       "rot": "Mandato",
+       "val": "4 anos"
+      },
+      {
+       "rot": "Reeleição",
+       "val": "Só 1 vez seguida"
+      },
+      {
+       "rot": "Idade mínima",
+       "val": "21 anos"
+      },
+      {
+       "rot": "Como vence",
+       "val": "Quem tiver mais votos. Só tem 2º turno onde há mais de 200 mil eleitores."
+      }
+     ],
+     "mais": "É eleito junto com o vice-prefeito. Os prefeitos de hoje foram eleitos em 2024 e ficam até o fim de 2028. O Distrito Federal não tem prefeito."
+    }
+   ],
+   "fontes": [
+    "cf-art76-84-87",
+    "cf-art144",
+    "cf-art28",
+    "cf-art29",
+    "cf-art32",
+    "cf-art14",
+    "cf-art77",
+    "cf-art82",
+    "camara-reeleicao",
+    "agcamara-prefeitos"
+   ]
+  },
+  {
+   "tipo": "cards",
+   "etiqueta": "QUEM FAZ LEIS",
+   "titulo": "Senador, deputados e vereador",
+   "texto": "Eles formam o Poder **Legislativo**: fazem leis e ajudam a fiscalizar quem governa. Podem ser reeleitos sem limite.",
+   "cards": [
+    {
+     "ic": "🏛️",
+     "titulo": "Senador",
+     "txt": "Faz leis para o país e representa o seu estado no Senado.",
+     "dados": [
+      {
+       "rot": "Mandato",
+       "val": "8 anos"
+      },
+      {
+       "rot": "Quantos",
+       "val": "3 por estado e 3 pelo DF: 81"
+      },
+      {
+       "rot": "Idade mínima",
+       "val": "35 anos"
+      },
+      {
+       "rot": "Como vence",
+       "val": "Quem tiver mais votos"
+      }
+     ],
+     "mais": "Cada senador é eleito com 2 suplentes. A cada 4 anos, o Senado troca 1/3 ou 2/3 das vagas. Em 2026, cada estado escolheu 2 senadores."
+    },
+    {
+     "ic": "🧑‍💼",
+     "titulo": "Deputado federal",
+     "txt": "Faz leis para o país e representa o povo na Câmara dos Deputados.",
+     "dados": [
+      {
+       "rot": "Mandato",
+       "val": "4 anos"
+      },
+      {
+       "rot": "Quantos",
+       "val": "513"
+      },
+      {
+       "rot": "Idade mínima",
+       "val": "21 anos"
+      },
+      {
+       "rot": "Como vence",
+       "val": "Voto proporcional"
+      }
+     ],
+     "mais": "Cada estado tem de 8 a 70 deputados federais, conforme a população. No voto proporcional, as vagas são divididas entre os partidos de acordo com os votos de cada um."
+    },
+    {
+     "ic": "🏢",
+     "titulo": "Deputado estadual ou distrital",
+     "txt": "Faz as leis do estado na Assembleia Legislativa.",
+     "dados": [
+      {
+       "rot": "Mandato",
+       "val": "4 anos"
+      },
+      {
+       "rot": "Quantos",
+       "val": "1.059 no Brasil (de 24 a 94 por estado)"
+      },
+      {
+       "rot": "Idade mínima",
+       "val": "21 anos"
+      },
+      {
+       "rot": "Como vence",
+       "val": "Voto proporcional"
+      }
+     ],
+     "mais": "No Distrito Federal, o nome é deputado distrital. Ele trabalha na Câmara Legislativa, que tem 24 deputados."
+    },
+    {
+     "ic": "🏘️",
+     "titulo": "Vereador",
+     "txt": "Faz as leis da cidade na Câmara Municipal e fiscaliza o prefeito.",
+     "dados": [
+      {
+       "rot": "Mandato",
+       "val": "4 anos"
+      },
+      {
+       "rot": "Quantos",
+       "val": "58.435 no Brasil (até 55 por cidade)"
+      },
+      {
+       "rot": "Idade mínima",
+       "val": "18 anos"
+      },
+      {
+       "rot": "Como vence",
+       "val": "Voto proporcional"
+      }
+     ],
+     "mais": "O número de vereadores de cada cidade depende da população. A maior Câmara Municipal, a de São Paulo, tem 55."
+    }
+   ],
+   "fontes": [
+    "cf-art14",
+    "cf-art44",
+    "cf-art45",
+    "cf-art46",
+    "cf-art27",
+    "cf-art29",
+    "cf-art32",
+    "codigo-eleitoral",
+    "camara-reeleicao",
+    "tse-vagas-2026",
+    "tse-vagas-2024",
+    "agcamara-eleicoes-2026",
+    "agcamara-prefeitos"
+   ]
+  },
+  {
+   "tipo": "comparar",
+   "titulo": "Quem fica no lugar de quem sai?",
+   "texto": "Todo cargo eleito tem alguém na reserva. O nome muda conforme o cargo.",
+   "colunas": [
+    {
+     "ic": "🥈",
+     "titulo": "Vice",
+     "itens": [
+      "Presidente, governador e prefeito têm um **vice**.",
+      "O vice é eleito junto, na mesma chapa.",
+      "Ele substitui o titular quando este não pode trabalhar.",
+      "Se o cargo ficar vago de vez, o vice assume até o fim do mandato."
+     ],
+     "exemplo": "Se o prefeito deixar o cargo, a vice-prefeita vira prefeita."
+    },
+    {
+     "ic": "🔁",
+     "titulo": "Suplente",
+     "itens": [
+      "Cada senador é eleito com 2 **suplentes**, na mesma chapa.",
+      "Deputado e vereador: o suplente é o próximo mais votado do mesmo partido ou federação.",
+      "O suplente assume quando a vaga fica livre ou quando o titular se afasta por muito tempo."
+     ],
+     "exemplo": "Se a deputada Ana virar ministra, o suplente do partido dela assume a vaga."
+    }
+   ],
+   "fontes": [
+    "cf-art77",
+    "cf-art79",
+    "cf-art28",
+    "cf-art29",
+    "cf-art46",
+    "cf-art56",
+    "codigo-eleitoral",
+    "lei-partidos",
+    "cn-suplente"
+   ]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "NÃO SÃO ELEITOS",
+   "titulo": "Quem ajuda a governar?",
+   "texto": "Presidente, governador e prefeito montam uma equipe. Essas pessoas **não são eleitas**: são escolhidas.",
+   "itens": [
+    {
+     "ic": "🩺",
+     "txt": "O presidente escolhe os **ministros**. Cada um cuida de uma área, como saúde ou educação."
+    },
+    {
+     "ic": "🗺️",
+     "txt": "O governador escolhe os secretários do estado."
+    },
+    {
+     "ic": "🏙️",
+     "txt": "O prefeito escolhe os secretários da cidade."
+    },
+    {
+     "ic": "🔄",
+     "txt": "Quem escolhe também pode trocar a pessoa quando quiser."
+    },
+    {
+     "ic": "🎂",
+     "txt": "Para ser ministro, é preciso ser brasileiro e ter mais de 21 anos."
+    }
+   ],
+   "ilustracao": "palacio",
+   "coruja": "Ministro do governo é diferente de ministro do STF. O do STF é juiz!",
+   "fontes": [
+    "cf-art76-84-87",
+    "ce-sp",
+    "lom-sp",
+    "cf-art101"
+   ]
+  },
+  {
+   "tipo": "numeros",
+   "titulo": "Quantas pessoas eleitas o Brasil tem?",
+   "texto": "Somando todos os cargos e os vices, são mais de **71 mil** vagas. A grande maioria é de vereadores.",
+   "numeros": [
+    {
+     "val": "81",
+     "rot": "senadores",
+     "ic": "🏛️"
+    },
+    {
+     "val": "513",
+     "rot": "deputados federais",
+     "ic": "🧑‍💼"
+    },
+    {
+     "val": "1.059",
+     "rot": "deputados estaduais e distritais",
+     "ic": "🏢"
+    },
+    {
+     "val": "58.435",
+     "rot": "vereadores",
+     "ic": "🏘️"
+    }
+   ],
+   "nota": "No governo: 1 presidente, 27 governadores e 5.569 prefeitos, cada um com seu vice. Vagas contadas nos dados do TSE (eleições de 2024 e 2026), consultados em 15/10/2026.",
+   "fontes": [
+    "tse-vagas-2026",
+    "tse-vagas-2024",
+    "agsenado-candidaturas",
+    "camara-comprove-513",
+    "agcamara-municipais-2024",
+    "cf-art46",
+    "cf-art32"
+   ]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "QUANTO GANHAM",
+   "titulo": "Quanto ganha quem é eleito?",
+   "texto": "O salário do cargo se chama **subsídio**. Os valores são de 2026, antes dos descontos.",
+   "itens": [
+    {
+     "ic": "💰",
+     "txt": "Presidente, vice-presidente, ministros, deputados federais e senadores: R$ 46.366,19 por mês."
+    },
+    {
+     "ic": "📜",
+     "txt": "Quem fixa esse valor é o próprio Congresso, por um decreto legislativo."
+    },
+    {
+     "ic": "🏢",
+     "txt": "Deputado estadual: no máximo 75% do subsídio do deputado federal."
+    },
+    {
+     "ic": "🏘️",
+     "txt": "Vereador: no máximo de 20% a 75% do subsídio do deputado estadual, conforme o tamanho da cidade."
+    },
+    {
+     "ic": "🧢",
+     "txt": "**Teto**: pela regra, nenhum salário público pode ser maior que o de ministro do STF (também R$ 46.366,19)."
+    }
+   ],
+   "ilustracao": "cofre",
+   "coruja": "O salário do governador e o do prefeito são decididos por leis do estado e da cidade.",
+   "fontes": [
+    "dl-172",
+    "camara-salario",
+    "senado-salario",
+    "valor-senador-2026",
+    "cf-art49",
+    "cf-art27",
+    "cf-art29",
+    "cf-art28",
+    "cf-art37",
+    "lei-14520"
+   ]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "PARTIDOS",
+   "titulo": "Por que todo candidato tem partido?",
+   "texto": "**Partido** é um grupo organizado de pessoas com ideias parecidas sobre como cuidar do país.",
+   "itens": [
+    {
+     "ic": "🎫",
+     "txt": "No Brasil, só pode ser candidato quem tem **filiação partidária**, ou seja, está inscrito num partido."
+    },
+    {
+     "ic": "🚫",
+     "txt": "Por isso, não existe candidato sem partido."
+    },
+    {
+     "ic": "🌈",
+     "txt": "Criar partidos é livre, desde que se sigam as regras. O país tem vários, com ideias diferentes."
+    },
+    {
+     "ic": "📋",
+     "txt": "Todo partido precisa ser nacional e registrar suas regras no TSE, o tribunal das eleições."
+    },
+    {
+     "ic": "🤝",
+     "txt": "Dois ou mais partidos podem formar uma federação de partidos e agir como se fossem um só."
+    }
+   ],
+   "ilustracao": "megafone",
+   "coruja": "Exemplo inventado: o Partido Azul quer mais parquinhos; o Partido Verde, mais ônibus. Cada eleitor escolhe com quem concorda.",
+   "fontes": [
+    "cf-art14",
+    "cf-art17",
+    "lei-partidos"
+   ]
+  },
+  {
+   "tipo": "quiz",
+   "pergunta": "Quantos anos dura o mandato de um senador?",
+   "opcoes": [
+    "4 anos",
+    "8 anos",
+    "2 anos"
+   ],
+   "certa": 1,
+   "explica": "O senador fica 8 anos no cargo. Os outros cargos eleitos ficam 4 anos.",
+   "fontes": [
+    "cf-art46",
+    "cf-art44",
+    "cf-art82",
+    "cf-art28",
+    "cf-art29",
+    "cf-art27"
+   ]
+  },
+  {
+   "tipo": "quiz",
+   "pergunta": "Quem escolhe os ministros do governo?",
+   "opcoes": [
+    "O povo, na eleição",
+    "O presidente da República",
+    "Os senadores"
+   ],
+   "certa": 1,
+   "explica": "Ministros não são eleitos. O presidente escolhe e pode trocar quando quiser.",
+   "fontes": [
+    "cf-art76-84-87"
+   ]
+  }
+ ]
+}

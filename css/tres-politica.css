@@ -1,0 +1,288 @@
+/* ====== Peças 3D do Entenda Política (só CSS; montadas por js/tres-politica.js) ======
+   Caixa 3D genérica (.cx) + Congresso Nacional, Três Poderes, níveis, livro, balança, lei, cofre,
+   plenário, megafone, prédio, palácio e funil de propostas. */
+
+/* ---------- caixa 3D genérica: --w, --h, --d; o centro da caixa fica no centro do elemento ---------- */
+.cx { position: absolute; left: 0; top: 0; width: var(--w); height: var(--h); transform-style: preserve-3d; }
+.cx > i { position: absolute; display: block; font-style: normal; }
+.cx > .fr, .cx > .tr { left: 0; top: 0; width: var(--w); height: var(--h); }
+.cx > .fr { transform: translateZ(calc(var(--d) / 2)); background: var(--c1, #ddd); }
+.cx > .tr { transform: rotateY(180deg) translateZ(calc(var(--d) / 2)); background: var(--c3, #bbb); }
+.cx > .ld, .cx > .le { top: 0; height: var(--h); width: var(--d); left: calc((var(--w) - var(--d)) / 2); background: var(--c2, #ccc); }
+.cx > .ld { transform: rotateY(90deg) translateZ(calc(var(--w) / 2)); }
+.cx > .le { transform: rotateY(-90deg) translateZ(calc(var(--w) / 2)); filter: brightness(.9); }
+.cx > .tp, .cx > .bs { left: 0; width: var(--w); height: var(--d); top: calc((var(--h) - var(--d)) / 2); }
+.cx > .tp { transform: rotateX(90deg) translateZ(calc(var(--h) / 2)); background: var(--c4, #eee); }
+.cx > .bs { transform: rotateX(-90deg) translateZ(calc(var(--h) / 2)); background: var(--c3, #bbb); }
+
+.cena3d { position: relative; display: flex; align-items: center; justify-content: center; perspective: 1100px; }
+.ancora3d { position: relative; width: 0; height: 0; transform-style: preserve-3d; }
+
+/* ---------- Congresso Nacional ---------- */
+.cena-congresso { height: 340px; }
+.congresso3d { top: 50px; transform: rotateX(-14deg) rotateY(-26deg); }
+.congresso3d.auto { animation: congressoBalanca 12s ease-in-out infinite; }
+@keyframes congressoBalanca {
+  0%, 100% { transform: rotateX(-14deg) rotateY(-30deg); }
+  50% { transform: rotateX(-8deg) rotateY(24deg); }
+}
+.congresso3d .laje { --w: 340px; --h: 18px; --d: 140px; --c1: #e6dfcf; --c2: #d5ccb8; --c3: #c9bfa8; --c4: #f6f2ea; transform: translate3d(-170px, 40px, -20px); }
+.congresso3d .laje > .fr { background: repeating-linear-gradient(90deg, #e6dfcf 0 22px, #ddd5c2 22px 24px); }
+.congresso3d .torre { --w: 34px; --h: 210px; --d: 26px; --c2: #c3ccd8; --c3: #aab4c2; --c4: #f2f4f7; }
+.congresso3d .torre > .fr, .congresso3d .torre > .tr {
+  background: repeating-linear-gradient(0deg, #eef1f5 0 6px, #b8c4d3 6px 8px);
+}
+.congresso3d .torre > .ld, .congresso3d .torre > .le { background: repeating-linear-gradient(0deg, #d6dde6 0 6px, #a9b5c5 6px 8px); }
+.congresso3d .torre.t1 { transform: translate3d(-42px, -170px, -55px); }
+.congresso3d .torre.t2 { transform: translate3d(8px, -170px, -55px); }
+.congresso3d .ponte { --w: 16px; --h: 40px; --d: 26px; --c1: #dfe5ec; --c2: #c3ccd8; --c4: #f2f4f7; transform: translate3d(-8px, -90px, -55px); }
+/* fatias giradas em volta do eixo vertical formam a cúpula e a cuia */
+.cupula, .cuia { position: absolute; transform-style: preserve-3d; }
+.cupula i, .cuia i { position: absolute; left: 0; top: 0; display: block; backface-visibility: visible; }
+.cupula { width: 96px; height: 40px; transform: translate3d(-158px, 0px, 25px); }
+.cupula i { width: 96px; height: 40px; border-radius: 48px 48px 0 0 / 40px 40px 0 0; transform-origin: 50% 100%;
+  background: linear-gradient(180deg, #ffffff, #e9e3d6); transform: rotateY(var(--a)); filter: brightness(var(--b, 1)); }
+.cuia { width: 124px; height: 34px; transform: translate3d(52px, 6px, 25px); }
+.cuia i { width: 124px; height: 34px; border-radius: 0 0 62px 62px / 0 0 34px 34px; transform-origin: 50% 0;
+  background: linear-gradient(0deg, #ffffff, #e6dfd0); transform: rotateY(var(--a)); filter: brightness(var(--b, 1)); }
+.cuia .boca { width: 124px; height: 124px; border-radius: 50%; top: -62px; transform-origin: 50% 50%; transform: rotateX(90deg);
+  background: radial-gradient(circle at 50% 45%, #d9d1bf 0 45%, #f1ece2 70%, #fff 72%); box-shadow: inset 0 0 0 3px #fff; }
+.espelho { position: absolute; width: 340px; height: 96px; left: -170px; top: -48px; border-radius: 12px;
+  transform: translate3d(0, 59px, 122px) rotateX(90deg);
+  background: linear-gradient(90deg, #a9d5ec, #d6ecf7 40%, #a9d5ec 60%, #c4e2f2); background-size: 200% 100%; animation: brilhoAgua 6s linear infinite; opacity: .75; }
+@keyframes brilhoAgua { from { background-position: 0 0; } to { background-position: 200% 0; } }
+.sombra-chao { position: absolute; width: 440px; height: 220px; left: -220px; top: -110px; border-radius: 50%;
+  transform: translate3d(0, 60px, 0) rotateX(90deg); background: radial-gradient(rgba(0, 0, 0, .16), transparent 65%); }
+.rotulo3d { position: absolute; white-space: nowrap; font-weight: 900; font-size: 13px; color: #1f3a5f; background: #fff; border: 2px solid #ebe2d0;
+  border-radius: 999px; padding: 3px 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, .08); }
+.congresso3d .rotulo3d.r-sen { transform: translate3d(-180px, -50px, 40px); }
+.congresso3d .rotulo3d.r-cam { transform: translate3d(70px, -46px, 40px); }
+
+/* ---------- Três Poderes: três colunas da mesma altura, em triângulo ---------- */
+.cena-poderes { height: 320px; }
+.poderes3d { transform: rotateX(-16deg) rotateY(-24deg); }
+.poderes3d.auto { animation: poderesGira 14s ease-in-out infinite; }
+@keyframes poderesGira { 0%, 100% { transform: rotateX(-16deg) rotateY(-30deg); } 50% { transform: rotateX(-10deg) rotateY(30deg); } }
+.poderes3d .base { --w: 330px; --h: 14px; --d: 220px; --c1: #e6dfcf; --c2: #d5ccb8; --c3: #c9bfa8; --c4: #f3eee3; transform: translate3d(-165px, 60px, -40px); }
+.poderes3d .pilar { --w: 78px; --h: 120px; --d: 78px; }
+.poderes3d .pilar > .fr { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-size: 34px; }
+.poderes3d .pilar > .fr small { font-size: 11px; font-weight: 900; color: #fff; letter-spacing: .02em; text-transform: uppercase; }
+.poderes3d .p-exe { --c1: #1f3a5f; --c2: #16304f; --c3: #142640; --c4: #2a4c7a; transform: translate3d(-150px, -60px, 30px); }
+.poderes3d .p-leg { --c1: #f2b705; --c2: #d9a300; --c3: #b98a00; --c4: #ffd34d; transform: translate3d(-39px, -60px, -90px); }
+.poderes3d .p-jud { --c1: #0f766e; --c2: #0c5f58; --c3: #094a45; --c4: #14958a; transform: translate3d(72px, -60px, 30px); }
+.poderes3d .p-leg > .fr small { color: #2a1d00; }
+.poderes3d .elo { position: absolute; height: 4px; top: 58px; background: repeating-linear-gradient(90deg, #8a94a3 0 8px, transparent 8px 14px); transform-origin: 0 50%; }
+
+/* ---------- níveis: país, estado e cidade empilhados ---------- */
+.cena-niveis { height: 330px; }
+.niveis3d { transform: rotateX(-20deg) rotateY(-32deg); }
+.niveis3d.auto { animation: niveisGira 12s ease-in-out infinite; }
+@keyframes niveisGira { 0%, 100% { transform: rotateX(-20deg) rotateY(-36deg); } 50% { transform: rotateX(-14deg) rotateY(20deg); } }
+.niveis3d .nivel > .fr { display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 900; color: #fff; font-size: 17px; }
+.niveis3d .n-pais { --w: 150px; --h: 62px; --d: 150px; --c1: #1f3a5f; --c2: #16304f; --c3: #142640; --c4: #2a4c7a; transform: translate3d(-75px, -96px, 0); }
+.niveis3d .n-estado { --w: 210px; --h: 62px; --d: 210px; --c1: #e08a00; --c2: #c27600; --c3: #a35f00; --c4: #f2a73a; transform: translate3d(-105px, -32px, 0); }
+.niveis3d .n-cidade { --w: 270px; --h: 62px; --d: 270px; --c1: #0f766e; --c2: #0c5f58; --c3: #094a45; --c4: #14958a; transform: translate3d(-135px, 32px, 0); }
+.niveis3d.entra .nivel { animation: nivelCai .9s cubic-bezier(.3, 1.3, .5, 1) both; }
+.niveis3d.entra .n-estado { animation-delay: .25s; }
+.niveis3d.entra .n-pais { animation-delay: .5s; }
+/* sem opacidade aqui: animar opacidade "achata" o 3D no Chrome */
+@keyframes nivelCai { 0% { visibility: hidden; translate: 0 -160px; } 1% { visibility: visible; translate: 0 -160px; } 100% { visibility: visible; translate: 0 0; } }
+
+/* ---------- livro (Constituição) ---------- */
+.cena-livro { height: 300px; }
+.livro3d { transform: rotateX(-12deg) rotateY(-30deg); }
+.livro3d.auto { animation: livroGira 10s ease-in-out infinite; }
+@keyframes livroGira { 0%, 100% { transform: rotateX(-12deg) rotateY(-38deg); } 50% { transform: rotateX(-6deg) rotateY(18deg); } }
+.livro3d .capa { --w: 170px; --h: 230px; --d: 46px; --c1: #155e3a; --c2: #f3eee1; --c3: #0f4a2d; --c4: #f3eee1; transform: translate3d(-85px, -115px, 0); }
+.livro3d .capa > .fr { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; text-align: center; color: #ffe08a;
+  border-radius: 4px 10px 10px 4px; box-shadow: inset 8px 0 0 rgba(0, 0, 0, .18); font-weight: 900; }
+.livro3d .capa > .fr b { font-size: 15px; letter-spacing: .12em; }
+.livro3d .capa > .fr span { font-size: 40px; }
+.livro3d .capa > .fr small { font-size: 22px; color: #fff; }
+.livro3d .capa > .ld, .livro3d .capa > .tp, .livro3d .capa > .bs { background: repeating-linear-gradient(90deg, #f6f1e4 0 2px, #e2dac8 2px 3px); }
+.livro3d .capa > .tp, .livro3d .capa > .bs { background: repeating-linear-gradient(0deg, #f6f1e4 0 2px, #e2dac8 2px 3px); }
+.livro3d .capa > .le { background: #0f4a2d; }
+
+/* ---------- balança ---------- */
+.cena-balanca { height: 300px; }
+.balanca { position: relative; width: 260px; height: 240px; transform: perspective(700px) rotateX(8deg) rotateY(-14deg); }
+.balanca .poste { position: absolute; left: 124px; top: 30px; width: 12px; height: 180px; border-radius: 6px; background: linear-gradient(90deg, #b98a00, #f2b705, #b98a00); }
+.balanca .pe { position: absolute; left: 70px; top: 204px; width: 120px; height: 22px; border-radius: 12px 12px 6px 6px; background: linear-gradient(#f2b705, #b98a00); }
+.balanca .topo-b { position: absolute; left: 118px; top: 18px; width: 24px; height: 24px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fff3c4, #f2b705 60%, #b98a00); }
+.balanca .viga { position: absolute; left: 20px; top: 40px; width: 220px; height: 10px; border-radius: 6px; background: linear-gradient(#ffd34d, #b98a00); transform-origin: 50% 50%; animation: vigaBalanca 4s ease-in-out infinite; }
+.balanca .prato { position: absolute; top: 5px; width: 0; height: 0; }
+.balanca .prato.e { left: 6px; }
+.balanca .prato.d { right: 6px; }
+.balanca .prato i { position: absolute; left: -1px; top: 0; width: 2px; height: 70px; background: #8a6d1e; }
+.balanca .prato b { position: absolute; left: -38px; top: 66px; width: 76px; height: 22px; border-radius: 0 0 40px 40px; background: linear-gradient(#ffd34d, #c99400); }
+.balanca .prato.e, .balanca .prato.d { animation: pratoReto 4s ease-in-out infinite; }
+@keyframes vigaBalanca { 0%, 100% { transform: rotate(-7deg); } 50% { transform: rotate(7deg); } }
+@keyframes pratoReto { 0%, 100% { transform: rotate(7deg); } 50% { transform: rotate(-7deg); } }
+
+/* ---------- lei (folha com carimbo) ---------- */
+.cena-lei { height: 300px; }
+.folha3d { position: relative; width: 200px; height: 250px; background: #fffdf7; border-radius: 10px; box-shadow: 0 20px 40px rgba(60, 40, 0, .18), inset 0 0 0 2px #ebe2d0;
+  transform: perspective(800px) rotateX(10deg) rotateY(-18deg) rotateZ(-3deg); padding: 22px 20px; animation: folhaFlutua 6s ease-in-out infinite; }
+@keyframes folhaFlutua { 0%, 100% { transform: perspective(800px) rotateX(10deg) rotateY(-18deg) rotateZ(-3deg) translateY(0); } 50% { transform: perspective(800px) rotateX(6deg) rotateY(10deg) rotateZ(-1deg) translateY(-10px); } }
+.folha3d b { display: block; font-size: 14px; font-weight: 900; color: #1f3a5f; margin-bottom: 12px; letter-spacing: .06em; }
+.folha3d i { display: block; height: 8px; border-radius: 4px; background: #e7e0d0; margin-bottom: 10px; }
+.folha3d i:nth-child(3n) { width: 70%; }
+.folha3d .selo-lei { position: absolute; right: -18px; bottom: 24px; width: 92px; height: 92px; border-radius: 50%; border: 5px solid #1f7a3d; color: #1f7a3d;
+  display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 22px; transform: rotate(-16deg); background: rgba(227, 244, 232, .85);
+  animation: carimbaLei 3.6s ease-in-out infinite; }
+@keyframes carimbaLei { 0%, 30% { opacity: 0; transform: rotate(-16deg) scale(1.8); } 42% { opacity: 1; transform: rotate(-16deg) scale(.92); } 50%, 100% { opacity: 1; transform: rotate(-16deg) scale(1); } }
+
+/* ---------- cofre (dinheiro de todos) ---------- */
+.cena-cofre { height: 300px; }
+.cofre3d { transform: rotateX(-16deg) rotateY(-28deg); }
+.cofre3d.auto { animation: cofreGira 10s ease-in-out infinite; }
+@keyframes cofreGira { 0%, 100% { transform: rotateX(-16deg) rotateY(-34deg); } 50% { transform: rotateX(-12deg) rotateY(20deg); } }
+.cofre3d .caixa { --w: 180px; --h: 130px; --d: 120px; --c1: #2a4c7a; --c2: #1f3a5f; --c3: #142640; --c4: #35609a; transform: translate3d(-90px, -20px, 0); }
+.cofre3d .caixa > .fr { display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff; font-weight: 900; font-size: 15px; gap: 4px; }
+.cofre3d .caixa > .fr span { font-size: 38px; }
+.cofre3d .caixa > .tp::after { content: ""; position: absolute; left: 50%; top: 50%; width: 70px; height: 10px; margin: -5px 0 0 -35px; border-radius: 6px; background: #0e1d33; }
+.moeda { position: absolute; left: -22px; top: -150px; width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; color: #6b4a00;
+  background: radial-gradient(circle at 35% 30%, #fff3c4, #f2b705 60%, #b98a00); box-shadow: inset 0 0 0 3px rgba(255, 255, 255, .5); animation: moedaCai 2.4s ease-in infinite; animation-delay: var(--atraso, 0s); }
+@keyframes moedaCai { 0% { opacity: 0; transform: translateY(-20px) rotateY(0); } 15% { opacity: 1; } 70% { opacity: 1; transform: translateY(120px) rotateY(720deg); } 80%, 100% { opacity: 0; transform: translateY(132px) rotateY(800deg); } }
+
+/* ---------- plenário (cadeiras em semicírculo) ---------- */
+.plenario { position: relative; width: 100%; max-width: var(--max, 340px); aspect-ratio: 1000 / 560; margin: 0 auto; transform: perspective(800px) rotateX(38deg); }
+.plenario i { position: absolute; width: var(--tam, 14px); height: var(--tam, 14px); margin: calc(var(--tam, 14px) / -2) 0 0 calc(var(--tam, 14px) / -2);
+  border-radius: 30% 30% 20% 20%; background: #d8cfbd; box-shadow: 0 2px 0 #b8ad96;
+  transition: background .4s, transform .4s; transition-delay: calc(var(--k, 0) * 10ms); }
+.plenario.cheio i { background: var(--cor, #1f3a5f); box-shadow: 0 2px 0 rgba(0, 0, 0, .35); transform: translateY(-2px); }
+.plenario.cheio i.aceso { background: #f2b705; box-shadow: 0 2px 0 #b98a00; transform: translateY(-5px); transition-delay: 0s; }
+.plenario.tem-aceso.cheio i:not(.aceso) { background: #c9cfd8; box-shadow: 0 1px 0 #a9b1bd; transform: none; transition-delay: 0s; }
+.plenario .mesa { position: absolute; left: 41%; bottom: 0; width: 18%; height: 7%; border-radius: 8px 8px 0 0; background: #1f3a5f; }
+
+/* ---------- megafone ---------- */
+.cena-megafone { height: 280px; }
+.megafone { position: relative; font-size: 120px; line-height: 1; transform: perspective(600px) rotateY(-18deg); animation: megafoneFala 2.4s ease-in-out infinite; }
+.megafone .onda { position: absolute; left: 70%; top: 50%; width: 60px; height: 60px; margin: -30px 0 0 -30px; border-radius: 50%; border: 6px solid #f2b705; opacity: 0;
+  animation: ondaSai 2.4s ease-out infinite; animation-delay: var(--atraso, 0s); }
+@keyframes ondaSai { 0% { opacity: .9; transform: translateX(0) scale(.4); } 100% { opacity: 0; transform: translateX(110px) scale(2.2); } }
+@keyframes megafoneFala { 0%, 100% { transform: perspective(600px) rotateY(-18deg) rotate(-4deg); } 50% { transform: perspective(600px) rotateY(-10deg) rotate(3deg); } }
+
+/* ---------- prédio (prefeitura) e palácio (Planalto) ---------- */
+.cena-predio { height: 300px; }
+.predio3d { transform: rotateX(-14deg) rotateY(-30deg); }
+.predio3d.auto { animation: congressoBalanca 12s ease-in-out infinite; }
+.predio3d .corpo { --w: 200px; --h: 150px; --d: 110px; --c2: #d5ccb8; --c3: #c9bfa8; --c4: #f3eee3; transform: translate3d(-100px, -60px, 0); }
+.predio3d .corpo > .fr { background: #efe7d6; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; padding: 18px 16px 0; align-content: start; }
+.predio3d .corpo > .fr span { height: 24px; border-radius: 4px; background: #8fb3d9; box-shadow: inset 0 -6px 0 rgba(0, 0, 0, .08); }
+.predio3d .corpo > .fr .porta { grid-column: 2 / 4; height: 46px; border-radius: 22px 22px 0 0; background: #1f3a5f; margin-top: 4px; }
+.predio3d .frontao { position: absolute; width: 220px; height: 40px; left: -110px; top: -104px; clip-path: polygon(0 100%, 50% 0, 100% 100%); background: #e08a00; transform: translateZ(56px); }
+.predio3d .mastro { position: absolute; left: -2px; top: -170px; width: 4px; height: 70px; background: #8a94a3; transform: translateZ(10px); }
+.predio3d .bandeira { position: absolute; left: 2px; top: -170px; width: 46px; height: 30px; background: #0f766e; border-radius: 2px; transform: translateZ(10px); transform-origin: 0 50%; animation: bandeiraBalanca 2s ease-in-out infinite; }
+@keyframes bandeiraBalanca { 0%, 100% { transform: translateZ(10px) skewY(0); } 50% { transform: translateZ(10px) skewY(6deg); } }
+.palacio3d .laje { --w: 330px; --h: 16px; --d: 130px; --c1: #f3efe6; --c2: #ddd5c4; --c4: #faf7f1; }
+.palacio3d .l1 { transform: translate3d(-165px, -40px, 0); }
+.palacio3d .l2 { transform: translate3d(-165px, 30px, 0); }
+.palacio3d .vidro { --w: 300px; --h: 54px; --d: 100px; --c1: #9fc4dd; --c2: #86afcb; --c4: #c8dfee; transform: translate3d(-150px, -24px, 0); }
+.palacio3d .vidro > .fr { background: repeating-linear-gradient(90deg, #9fc4dd 0 18px, #7fa6c2 18px 20px); }
+.palacio3d .coluna { position: absolute; width: 14px; height: 100px; top: -46px; border-radius: 50% 50% 6px 6px / 22% 22% 6px 6px; background: linear-gradient(90deg, #e9e3d6, #fff, #e2dccd);
+  transform: translateZ(76px); box-shadow: 0 4px 6px rgba(0, 0, 0, .08); }
+
+/* ---------- funil de propostas (perfil): propôs -> aprovadas -> viraram lei ---------- */
+.funil { display: grid; gap: 10px; perspective: 900px; }
+.funil-degrau { position: relative; margin: 0 auto; border-radius: 18px; padding: 14px 18px; color: #fff; font-weight: 900; display: flex; align-items: center; justify-content: space-between; gap: 14px;
+  transform-style: preserve-3d; transform: rotateX(18deg); box-shadow: 0 10px 0 var(--sombra-d, #142640), 0 18px 26px rgba(0, 0, 0, .12); min-width: 240px; }
+.funil-degrau .q { font-size: 2rem; line-height: 1; font-variant-numeric: tabular-nums; }
+.funil-degrau .r { font-size: .95rem; text-align: left; flex: 1; }
+.funil-degrau .ic { font-size: 1.8rem; }
+.funil-degrau.d1 { width: 100%; background: linear-gradient(145deg, #2a4c7a, #1f3a5f); }
+.funil-degrau.d2 { width: 82%; background: linear-gradient(145deg, #2f9a5a, #1f7a3d); --sombra-d: #145429; }
+.funil-degrau.d3 { width: 64%; background: linear-gradient(145deg, #ffd34d, #f2b705); color: #2a1d00; --sombra-d: #b98a00; }
+.funil.anima .funil-degrau { animation: degrauEntra .8s cubic-bezier(.2, .9, .3, 1.2) both; }
+.funil.anima .d2 { animation-delay: .18s; }
+.funil.anima .d3 { animation-delay: .36s; }
+@keyframes degrauEntra { from { opacity: 0; transform: rotateX(80deg) translateY(-30px); } to { opacity: 1; transform: rotateX(18deg); } }
+
+/* ---------- selo de emoji (fallback de ilustração) ---------- */
+.selo-emoji { width: 200px; height: 200px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 6.4rem; line-height: 1; margin: 0 auto;
+  background: radial-gradient(circle at 35% 30%, #fff, #fff1c9 60%, #f2cf6b); box-shadow: 0 24px 40px rgba(160, 110, 0, .2), inset 0 -10px 20px rgba(0, 0, 0, .08);
+  animation: balanca3d 4s ease-in-out infinite; }
+
+@media (max-width: 760px) {
+  .cena-congresso { height: 220px; }
+  .cena-congresso .ancora3d { scale: .6; top: 6px; }
+  .cena-poderes .ancora3d, .cena-niveis .ancora3d, .cena-cofre .ancora3d, .cena-predio .ancora3d { scale: .72; }
+  .cena-poderes, .cena-niveis, .cena-cofre, .cena-predio { height: 250px; }
+  .cena-livro { height: 230px; }
+  .cena-livro .ancora3d { scale: .75; }
+  .cena-balanca, .cena-lei { height: 240px; }
+  .balanca, .folha3d { scale: .8; }
+  .selo-emoji { width: 140px; height: 140px; font-size: 4.4rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .congresso3d.auto, .poderes3d.auto, .niveis3d.auto, .livro3d.auto, .cofre3d.auto, .predio3d.auto, .espelho, .balanca .viga, .balanca .prato,
+  .folha3d, .folha3d .selo-lei, .moeda, .megafone, .megafone .onda, .predio3d .bandeira, .selo-emoji, .niveis3d.entra .nivel, .funil.anima .funil-degrau { animation: none; }
+  .moeda, .megafone .onda { display: none; }
+  .funil-degrau { transform: none; }
+}
+
+/* ====== Modo mundo (modelos de pé no mapa) e peças novas ====== */
+.ancora3d.no-mundo { position: absolute; left: 0; top: 0 !important; transform: none !important; animation: none !important; }
+.no-mundo .urna3d, .no-mundo .folha3d { transform: none !important; animation: none !important; }
+.emoji3d { position: absolute; left: 0; top: 0; line-height: 1; display: block; filter: drop-shadow(0 4px 3px rgba(0, 0, 0, .18)); }
+
+/* escola (variação do prédio) */
+.escola3d .corpo { --c2: #e8b878; --c3: #d9a35e; --c4: #e07b54; }
+.escola3d .corpo > .fr { background: #ffd9a0; }
+.escola3d .corpo > .fr span { background: #8fc6e6; }
+.escola3d .placa-predio { grid-column: 1 / -1; font-style: normal; text-align: center; font-weight: 900; font-size: 15px; letter-spacing: .12em; color: #fff; background: #e07b54; border-radius: 6px; padding: 2px 0; }
+.escola3d .frontao { background: #e07b54; }
+.escola3d .bandeira { background: #f2b705; }
+.escola3d .sino { --w: 54px; --h: 54px; --d: 54px; --c1: #fff3d6; --c2: #e8d3a8; --c3: #d9c08c; --c4: #e07b54; transform: translate3d(-27px, -158px, 0); }
+.escola3d .sino > .fr { display: grid; place-items: center; font-size: 28px; }
+
+/* tribunal (variação do palácio) */
+.tribunal3d .laje { --c1: #e9edf2; --c2: #ccd4de; --c4: #f6f8fa; }
+.tribunal3d .vidro { --c1: #c9d6e6; --c2: #b3c3d6; --c4: #e3ebf4; }
+.tribunal3d .vidro > .fr { background: repeating-linear-gradient(90deg, #c9d6e6 0 18px, #9fb2c8 18px 20px); }
+
+/* torre dos cargos */
+.cena3d .torre3d { top: 120px; transform: rotateX(-12deg) rotateY(-28deg); }
+.torre3d.auto { animation: congressoBalanca 12s ease-in-out infinite; }
+.torre3d .bloco { --w: 136px; --h: 240px; --d: 104px; --c2: #5d7fa8; --c3: #4a6a91; --c4: #dfe8f2; transform: translate3d(-68px, -240px, 0); }
+.torre3d .bloco > .fr { background: #2a4c7a; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 14px 12px; align-content: start; }
+.torre3d .bloco > .fr span { height: 44px; border-radius: 6px; background: #cfe3f5; display: grid; place-items: center; font-size: 26px; box-shadow: inset 0 -5px 0 rgba(0, 0, 0, .08); }
+.torre3d .bloco > .ld { background: repeating-linear-gradient(0deg, #5d7fa8 0 16px, #87a5c7 16px 20px); }
+.torre3d .antena { --w: 8px; --h: 50px; --d: 8px; --c1: #8a94a3; --c2: #6b7480; --c4: #8a94a3; transform: translate3d(30px, -290px, 0); }
+
+/* palanque (participação) */
+.cena3d .palanque3d { top: 70px; transform: rotateX(-14deg) rotateY(-26deg); }
+.palanque3d.auto { animation: congressoBalanca 12s ease-in-out infinite; }
+.palanque3d .palco { --w: 260px; --h: 48px; --d: 150px; --c1: #1f3a5f; --c2: #16304f; --c3: #142640; --c4: #e9d9b4; transform: translate3d(-130px, -48px, 0); }
+.palanque3d .palco > .fr { display: grid; place-items: center; color: #ffd34d; font-weight: 900; letter-spacing: .14em; font-size: 18px;
+  background: repeating-linear-gradient(90deg, #1f3a5f 0 26px, #2a4c7a 26px 52px); }
+.palanque3d .degrau { --w: 120px; --h: 22px; --d: 40px; --c1: #e9d9b4; --c2: #d8c597; --c4: #f3e7cc; transform: translate3d(-60px, -22px, 92px); }
+
+/* pedestal da lei */
+.pedestal3d .pedestal { --w: 190px; --h: 60px; --d: 130px; --c1: #f2b705; --c2: #d9a300; --c3: #b98a00; --c4: #ffd34d; transform: translate3d(-95px, -60px, 0); }
+.pedestal3d .pedestal > .fr { display: grid; place-items: center; font-size: 20px; }
+.pedestal3d .folha-pe { position: absolute; left: -70px; top: -236px; width: 200px; transform: scale(.7); transform-origin: 0 0; }
+
+/* urna sobre a mesa */
+.urna-mesa3d .mesa { --w: 300px; --h: 70px; --d: 140px; --c1: #c9a77a; --c2: #b08c5e; --c3: #96764d; --c4: #dcc29c; transform: translate3d(-150px, -70px, 0); }
+.urna-mesa3d .urna-pe { position: absolute; left: -125px; top: -235px; transform-style: preserve-3d; }
+
+/* cubo com emoji (ilustração de reserva) */
+.cena-cubo-emoji { height: 250px; }
+.cena-cubo-emoji .cubo-num { margin: 0 auto; }
+
+/* escada: cada degrau é um passo do processo */
+.cena-escada { height: 330px; }
+.escada3d { top: 110px; transform: rotateX(-16deg) rotateY(-24deg); scale: var(--esc-escada, 1); }
+.degrau-e { --w: 108px; --d: 118px; --c1: #2a4c7a; --c2: #1f3a5f; --c3: #142640; --c4: #8fb3d9; transition: filter .3s; }
+.degrau-e > .fr { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 6px; gap: 2px; color: #fff; }
+.degrau-e .d-ic { font-size: 30px; line-height: 1; }
+.degrau-e .d-num { font-size: 14px; font-weight: 900; background: rgba(255, 255, 255, .2); border-radius: 99px; padding: 0 8px; }
+.degrau-e.aceso { --c1: #e08a00; --c2: #c27600; --c3: #a35f00; --c4: #ffd34d; }
+.degrau-e.feito { --c4: #9fd3ae; }
+.escada3d .ficha { position: absolute; left: 0; top: 0; font-size: 46px; line-height: 1; transform: translate3d(var(--fx), var(--fy), 40px);
+  transition: transform .55s cubic-bezier(.3, 1.6, .5, 1); filter: drop-shadow(0 6px 5px rgba(0, 0, 0, .25)); }
+@media (max-width: 760px) {
+  .cena-escada { height: 240px; }
+  .cena-predio .torre3d, .cena-predio .palanque3d { scale: .72; }
+}

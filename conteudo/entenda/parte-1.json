@@ -1,0 +1,544 @@
+{
+ "parte": 1,
+ "ic": "🤝",
+ "nome": "O que é política?",
+ "resumo": "O que é política e democracia, para que serve a Constituição e de onde vem o dinheiro de todos.",
+ "fontes": [
+  {
+   "id": "cf",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal de 1988",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art1",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 1º",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art5",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 5º",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art6",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 6º",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art14",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 14",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-mandatos",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, arts. 27, 28, 29, 44, 46 e 82 (tempo dos mandatos)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art30",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 30",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art60",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 60",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art165",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, arts. 165 e 166 (orçamento)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art208",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 208",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art227",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 227",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "eca-art16",
+   "veiculo": "Planalto",
+   "titulo": "Lei nº 8.069/1990 (Estatuto da Criança e do Adolescente), art. 16",
+   "url": "https://www.planalto.gov.br/ccivil_03/leis/l8069.htm",
+   "data": "1990-07-13"
+  },
+  {
+   "id": "ldb-art6",
+   "veiculo": "Planalto",
+   "titulo": "Lei nº 9.394/1996 (Lei de Diretrizes e Bases da Educação), art. 6º",
+   "url": "https://www.planalto.gov.br/ccivil_03/leis/l9394.htm",
+   "data": "1996-12-20"
+  },
+  {
+   "id": "lei-12741",
+   "veiculo": "Planalto",
+   "titulo": "Lei nº 12.741/2012 (impostos na nota fiscal), art. 1º",
+   "url": "https://www.planalto.gov.br/ccivil_03/_ato2011-2014/2012/lei/l12741.htm",
+   "data": "2012-12-08"
+  },
+  {
+   "id": "lei-6766",
+   "veiculo": "Planalto",
+   "titulo": "Lei nº 6.766/1979, art. 22 (ruas e praças passam a ser do município)",
+   "url": "https://www.planalto.gov.br/ccivil_03/leis/l6766.htm",
+   "data": "1979-12-19"
+  },
+  {
+   "id": "ms-sus",
+   "veiculo": "Ministério da Saúde",
+   "titulo": "Sistema Único de Saúde (SUS)",
+   "url": "https://www.gov.br/saude/pt-br/sus",
+   "data": "2026-10-15"
+  },
+  {
+   "id": "plen-politica",
+   "veiculo": "Plenarinho (Câmara dos Deputados)",
+   "titulo": "O que é Política?",
+   "url": "https://plenarinho.leg.br/index.php/2019/11/o-que-e-politica/",
+   "data": "2019-11-07"
+  },
+  {
+   "id": "plen-democracia",
+   "veiculo": "Plenarinho (Câmara dos Deputados)",
+   "titulo": "Democracia Direta X Indireta ou Representativa",
+   "url": "https://plenarinho.leg.br/index.php/2021/03/democracia-direta-x-indireta-ou-representativa/",
+   "data": "2021-03-04"
+  },
+  {
+   "id": "plen-constituicao",
+   "veiculo": "Plenarinho (Câmara dos Deputados)",
+   "titulo": "Constituição: o que é?",
+   "url": "https://plenarinho.leg.br/index.php/2017/09/constituicao-o-que-e/",
+   "data": "2017-09-15"
+  },
+  {
+   "id": "plen-republica",
+   "veiculo": "Plenarinho (Câmara dos Deputados)",
+   "titulo": "O que é a República Federativa do Brasil",
+   "url": "https://plenarinho.leg.br/index.php/2018/11/o-que-e-a-republica-federativa-do-brasil/",
+   "data": "2018-11-12"
+  },
+  {
+   "id": "plen-orcamento",
+   "veiculo": "Plenarinho (Câmara dos Deputados)",
+   "titulo": "O Orçamento é uma lei muito importante",
+   "url": "https://plenarinho.leg.br/index.php/2017/10/o-orcamento-e-uma-lei-muito-importante/",
+   "data": "2017-10-27"
+  },
+  {
+   "id": "plen-tributo",
+   "veiculo": "Plenarinho (Câmara dos Deputados)",
+   "titulo": "Turma do Tributo",
+   "url": "https://plenarinho.leg.br/index.php/2017/02/turma-do-tributo/",
+   "data": "2017-02-02"
+  },
+  {
+   "id": "plen-prefeito-vereador",
+   "veiculo": "Plenarinho (Câmara dos Deputados)",
+   "titulo": "Vereador e prefeito – quem faz o quê?",
+   "url": "https://plenarinho.leg.br/index.php/2024/03/eleicoes-municipais-vem-ai/",
+   "data": "2024-03-06"
+  },
+  {
+   "id": "plen-cidadania",
+   "veiculo": "Plenarinho (Câmara dos Deputados)",
+   "titulo": "A cidadania além das urnas",
+   "url": "https://plenarinho.leg.br/index.php/2024/06/cidadania-alem-das-urnas/",
+   "data": "2024-06-17"
+  }
+ ],
+ "glossario": [
+  {
+   "termo": "democracia",
+   "simples": "Jeito de governar em que o poder vem do povo, que escolhe seus representantes pelo voto."
+  },
+  {
+   "termo": "emanar",
+   "simples": "Vir de, sair de."
+  },
+  {
+   "termo": "mandato",
+   "simples": "O tempo que a pessoa eleita fica no cargo."
+  },
+  {
+   "termo": "representante",
+   "simples": "Pessoa escolhida para falar e decidir em nome de um grupo."
+  },
+  {
+   "termo": "eleição",
+   "simples": "Votação em que as pessoas escolhem seus representantes."
+  },
+  {
+   "termo": "Constituição",
+   "simples": "A lei maior do país; nenhuma outra lei pode ir contra ela."
+  },
+  {
+   "termo": "direitos sociais",
+   "simples": "Direitos que ajudam todos a viver bem, como educação, saúde, moradia e lazer."
+  },
+  {
+   "termo": "imposto",
+   "simples": "Dinheiro que pessoas e empresas pagam ao governo para pagar serviços de todos."
+  },
+  {
+   "termo": "nota fiscal",
+   "simples": "Comprovante da compra, que mostra o que foi comprado e quanto custou."
+  },
+  {
+   "termo": "orçamento",
+   "simples": "Plano que mostra quanto dinheiro o governo espera ter e como vai gastar no ano."
+  },
+  {
+   "termo": "pluralismo",
+   "simples": "Quando muitas ideias e partidos diferentes convivem e podem se expressar."
+  },
+  {
+   "termo": "partido",
+   "simples": "Grupo de pessoas com ideias parecidas que se organiza para disputar eleições."
+  },
+  {
+   "termo": "Estatuto da Criança e do Adolescente",
+   "simples": "Lei de 1990 que reúne os direitos de crianças e adolescentes, também chamada de ECA."
+  },
+  {
+   "termo": "SUS",
+   "simples": "Sistema Único de Saúde: atendimento público de saúde, de graça, no Brasil inteiro."
+  },
+  {
+   "termo": "matrícula",
+   "simples": "Inscrição do aluno na escola."
+  },
+  {
+   "termo": "público",
+   "simples": "Que é de todos, e não de uma pessoa só."
+  },
+  {
+   "termo": "direito",
+   "simples": "Algo que a lei garante a você."
+  },
+  {
+   "termo": "dever",
+   "simples": "Algo que você precisa cumprir."
+  },
+  {
+   "termo": "lei",
+   "simples": "Regra escrita que vale para todo mundo e precisa ser cumprida."
+  },
+  {
+   "termo": "política",
+   "simples": "Jeito de as pessoas decidirem juntas as regras e o uso do que é de todos."
+  }
+ ],
+ "slides": [
+  {
+   "tipo": "abertura",
+   "titulo": "Política é o jeito de decidir em grupo o que é de todos",
+   "texto": "A escola, a praça e o ônibus são de todo mundo. Na **política**, a gente combina as regras e como usar o dinheiro de todos.",
+   "ilustracao": "plenario"
+  },
+  {
+   "tipo": "historia",
+   "titulo": "Imagine a sua turma da escola...",
+   "quadros": [
+    {
+     "ic": "🚌",
+     "txt": "A turma vai fazer um passeio. Uns querem ir ao zoológico. Outros, ao museu."
+    },
+    {
+     "ic": "🙋",
+     "txt": "Cada um explica a sua ideia. Depois, todo mundo vota. Ganha a ideia com mais votos."
+    },
+    {
+     "ic": "📋",
+     "txt": "Vocês também combinam as regras da sala, como esperar a vez de falar."
+    },
+    {
+     "ic": "🎖️",
+     "txt": "E escolhem um **representante** de turma, que leva os pedidos de todos para a direção."
+    }
+   ],
+   "moral": "Conversar, votar, combinar regras e escolher quem fala por todos: isso já é política!",
+   "fontes": [
+    "plen-politica",
+    "plen-democracia"
+   ]
+  },
+  {
+   "tipo": "cards",
+   "etiqueta": "NO DIA A DIA",
+   "titulo": "A política está em quase tudo perto de você",
+   "texto": "Muitas coisas são **públicas**, ou seja, de todos. Elas seguem leis, que são regras para todo mundo, e usam dinheiro público.",
+   "cards": [
+    {
+     "ic": "🍎",
+     "titulo": "Merenda",
+     "txt": "A Constituição garante comida para quem estuda na escola pública.",
+     "mais": "A Constituição também fala em material escolar, transporte e atendimento de saúde para os alunos."
+    },
+    {
+     "ic": "🚌",
+     "titulo": "Ônibus",
+     "txt": "A cidade organiza o ônibus que passa no seu bairro.",
+     "mais": "Para a Constituição, o transporte coletivo é um serviço essencial, ou seja, que não pode faltar. Dentro da cidade, quem cuida dele é o município."
+    },
+    {
+     "ic": "🩺",
+     "titulo": "Posto de saúde",
+     "txt": "Atende de graça, pelo SUS, o sistema público de saúde.",
+     "mais": "O SUS funciona no Brasil inteiro e atende qualquer pessoa, sem cobrar."
+    },
+    {
+     "ic": "🛝",
+     "titulo": "Parquinho da praça",
+     "txt": "As praças são da cidade, que cuida delas.",
+     "mais": "Pela lei, quando um bairro novo é registrado, as ruas e as praças passam a ser do município."
+    },
+    {
+     "ic": "🏠",
+     "titulo": "A rua de casa",
+     "txt": "Asfalto, luz no poste e coleta de lixo são pagos com dinheiro público.",
+     "mais": "O prefeito tem uma equipe de secretários. Cada um cuida de uma área, como limpeza, iluminação ou transporte."
+    }
+   ],
+   "fontes": [
+    "cf-art208",
+    "cf-art30",
+    "ms-sus",
+    "lei-6766",
+    "plen-prefeito-vereador",
+    "plen-politica"
+   ]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "DEMOCRACIA",
+   "titulo": "No Brasil, o poder vem do povo",
+   "texto": "A Constituição diz: “Todo o poder emana do povo”. Emanar quer dizer vir de. Isso se chama **democracia**.",
+   "itens": [
+    {
+     "ic": "🗳️",
+     "txt": "Nas eleições, cada pessoa vota em segredo. Cada voto vale igual."
+    },
+    {
+     "ic": "🧑‍💼",
+     "txt": "Quem ganha vira representante e decide em nome de todos."
+    },
+    {
+     "ic": "⏳",
+     "txt": "O tempo no cargo é o **mandato**. Na maioria dos cargos, ele dura 4 anos."
+    },
+    {
+     "ic": "🔄",
+     "txt": "Na eleição seguinte, o povo escolhe de novo e pode trocar quem está lá."
+    }
+   ],
+   "ilustracao": "urna",
+   "coruja": "Juntar mais de 200 milhões de pessoas para votar cada lei não dá. Por isso, escolhemos representantes.",
+   "fontes": [
+    "cf-art1",
+    "cf-art14",
+    "cf-mandatos",
+    "plen-democracia"
+   ]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "CONSTITUIÇÃO",
+   "titulo": "A Constituição é a lei maior do Brasil",
+   "texto": "Ela é como o livro de regras do país. A que vale hoje é de **1988**.",
+   "itens": [
+    {
+     "ic": "🏗️",
+     "txt": "Ela diz como o país se organiza e quem cuida de quê."
+    },
+    {
+     "ic": "🚫",
+     "txt": "Nenhuma outra lei pode ir contra ela."
+    },
+    {
+     "ic": "⚖️",
+     "txt": "Ela vale para todos, inclusive para quem governa."
+    },
+    {
+     "ic": "🏫",
+     "txt": "Ela garante **direitos sociais**, como educação, saúde, alimentação, moradia e lazer."
+    },
+    {
+     "ic": "✏️",
+     "txt": "Ela pode mudar, mas isso é bem mais difícil do que mudar uma lei comum."
+    }
+   ],
+   "ilustracao": "constituicao",
+   "coruja": "Ela ganhou o apelido de Constituição Cidadã, porque aumentou os direitos das pessoas.",
+   "fontes": [
+    "cf",
+    "cf-art5",
+    "cf-art6",
+    "cf-art60",
+    "plen-constituicao",
+    "plen-republica"
+   ]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "DINHEIRO DE TODOS",
+   "titulo": "De onde vem o dinheiro que paga escolas e hospitais?",
+   "texto": "Boa parte vem dos **impostos**: dinheiro que pessoas e empresas pagam ao governo. Tem imposto até no lanche e no brinquedo.",
+   "itens": [
+    {
+     "ic": "🧾",
+     "txt": "A nota fiscal mostra, mais ou menos, quanto do preço foi imposto."
+    },
+    {
+     "ic": "🏥",
+     "txt": "Esse dinheiro paga escolas, hospitais, polícia, estradas e muito mais."
+    },
+    {
+     "ic": "📒",
+     "txt": "O **orçamento** é o plano que diz como o dinheiro vai ser gasto no ano."
+    },
+    {
+     "ic": "✅",
+     "txt": "O governo prepara o orçamento. Os representantes do povo analisam, podem mudar e votam."
+    }
+   ],
+   "ilustracao": "cofre",
+   "coruja": "Na cidade, quem vota o orçamento são os vereadores. No país, são os deputados e os senadores.",
+   "fontes": [
+    "lei-12741",
+    "plen-tributo",
+    "plen-orcamento",
+    "cf-art165",
+    "plen-prefeito-vereador"
+   ]
+  },
+  {
+   "tipo": "comparar",
+   "titulo": "Todo mundo tem direitos e deveres",
+   "texto": "**Direito** é o que a lei garante a você. **Dever** é o que você precisa cumprir.",
+   "colunas": [
+    {
+     "ic": "🎁",
+     "titulo": "Direitos",
+     "itens": [
+      "Saúde, comida, escola, lazer e respeito, para todas as crianças.",
+      "Brincar, dar opinião e participar da vida política, do jeito que a lei permite.",
+      "Ser tratado de forma igual pela lei.",
+      "Votar, a partir dos 16 anos."
+     ],
+     "exemplo": "Brincar é um direito: está escrito no Estatuto da Criança e do Adolescente."
+    },
+    {
+     "ic": "📋",
+     "titulo": "Deveres",
+     "itens": [
+      "Seguir as leis, inclusive quem governa.",
+      "Respeitar os direitos das outras pessoas.",
+      "Ir à escola dos 4 aos 17 anos. Os pais precisam fazer a matrícula.",
+      "Votar, para a maioria dos adultos entre 18 e 70 anos."
+     ],
+     "exemplo": "Votar é direito e dever ao mesmo tempo. A parte 7 explica as eleições."
+    }
+   ],
+   "fontes": [
+    "cf-art227",
+    "eca-art16",
+    "cf-art5",
+    "cf-art14",
+    "cf-art208",
+    "ldb-art6",
+    "plen-republica"
+   ]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "RESPEITO",
+   "titulo": "Política não é só briga na TV",
+   "texto": "As pessoas pensam diferente. A Constituição protege a liberdade de pensar e de falar.",
+   "itens": [
+    {
+     "ic": "💬",
+     "txt": "Dá para discordar com respeito: falar, ouvir e trocar ideias."
+    },
+    {
+     "ic": "🎨",
+     "txt": "O Brasil tem vários partidos e muitas ideias. Isso se chama **pluralismo**."
+    },
+    {
+     "ic": "🛡️",
+     "txt": "Ninguém pode perder direitos por causa da sua opinião política."
+    },
+    {
+     "ic": "🔎",
+     "txt": "Este site mostra fatos, sempre com fonte. Ele não diz em quem você deve votar."
+    }
+   ],
+   "ilustracao": "megafone",
+   "coruja": "Antes de espalhar uma notícia, confira de onde ela veio.",
+   "fontes": [
+    "cf-art1",
+    "cf-art5",
+    "plen-republica",
+    "plen-cidadania"
+   ]
+  },
+  {
+   "tipo": "quiz",
+   "pergunta": "O que é política?",
+   "opcoes": [
+    "Só as brigas entre políticos que aparecem na TV",
+    "O jeito de decidir em grupo o que é de todos",
+    "Um assunto que só interessa aos adultos"
+   ],
+   "certa": 1,
+   "explica": "Política é decidir em grupo o que é de todos: na turma, na cidade e no país. Criança também participa!",
+   "fontes": [
+    "plen-politica",
+    "eca-art16"
+   ]
+  },
+  {
+   "tipo": "quiz",
+   "pergunta": "De onde vem boa parte do dinheiro que paga as escolas públicas?",
+   "opcoes": [
+    "Do dinheiro pessoal do presidente",
+    "Dos impostos que pessoas e empresas pagam",
+    "Das mensalidades pagas pelos alunos"
+   ],
+   "certa": 1,
+   "explica": "A escola pública é gratuita para os alunos. Ela é paga com dinheiro público, que vem em boa parte dos impostos.",
+   "fontes": [
+    "cf-art208",
+    "lei-12741",
+    "plen-tributo",
+    "plen-orcamento"
+   ]
+  }
+ ]
+}

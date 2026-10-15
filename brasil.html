@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>A política do Brasil hoje: presidente, ministros, senadores e deputados federais | Entenda Política</title>
+  <meta name="description" content="Quem está no poder no Brasil hoje: presidente, vice, ministros, os 81 senadores e os 513 deputados federais. Veja o que cada um propôs, o que foi aprovado e o que virou lei. Tudo com fonte.">
+  <link rel="canonical" href="https://entendapolitica.vercel.app/brasil.html">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:site_name" content="Entenda Política">
+  <meta property="og:url" content="https://entendapolitica.vercel.app/brasil.html">
+  <meta property="og:title" content="A política do Brasil hoje, explicada de um jeito fácil">
+  <meta property="og:description" content="Presidente, ministros, senadores e deputados federais: o que cada um propôs e o que virou lei. Tudo com fonte.">
+  <meta name="theme-color" content="#1f3a5f">
+  <link rel="icon" href="img/icone.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/base.css?v=1">
+  <link rel="stylesheet" href="css/tres.css?v=1">
+  <link rel="stylesheet" href="css/tres-politica.css?v=1">
+  <link rel="stylesheet" href="css/paginas.css?v=1">
+</head>
+<body>
+<a class="pular" href="#conteudo">Pular para o conteúdo</a>
+<header class="topo">
+  <a href="./" title="Voltar para a página inicial">🏠 <span class="rotulo">Início</span></a>
+  <span class="onde">🏛️ A política do Brasil</span>
+  <button id="btn-libras" type="button" title="Traduzir para Libras">🤟 <span class="rotulo">Libras</span></button>
+  <button id="btn-ouvir" type="button" aria-pressed="false" title="Ler esta página em voz alta">🔊 <span class="rotulo">Ouvir</span></button>
+  <button id="btn-letra" type="button" title="Aumentar a letra">A+</button>
+</header>
+
+<main class="pagina" id="conteudo" data-ler>
+  <section class="miolo cab-pagina">
+    <div class="cab-txt rev">
+      <span class="selo-topo">Quem está no poder no país hoje</span>
+      <h1>A política do Brasil</h1>
+      <p class="lead">O país tem três Poderes. Aqui você conhece quem foi eleito para o <b>Executivo</b> (quem governa) e para o <b>Legislativo</b> (quem faz as leis). Toque em qualquer pessoa para ver o que ela propôs e o que virou lei.</p>
+    </div>
+    <div class="cab-3d rev pop" style="--i:1" id="ilu-poderes"></div>
+  </section>
+
+  <nav class="miolo atalhos rev" aria-label="Ir direto para">
+    <a class="chip" href="#executivo">🏢 Quem governa</a>
+    <a class="chip" href="#senado">🏛️ Senado</a>
+    <a class="chip" href="#camara">🏛️ Câmara</a>
+    <a class="chip" href="#judiciario">⚖️ E o Judiciário?</a>
+    <a class="chip" href="#procurar">🔎 Procurar</a>
+  </nav>
+
+  <section class="miolo bloco" id="executivo">
+    <div class="cab-bloco rev"><span class="ic-bloco" aria-hidden="true">🏢</span><div><h2>Quem governa o país</h2><p class="muted">O Poder Executivo: o presidente, o vice e os ministros. Eles cuidam de fazer as coisas funcionarem.</p></div></div>
+    <div class="exec-topo" id="exec-topo"><div class="carregando">Carregando…</div></div>
+    <h3 class="sub rev">👔 Os ministros <small id="qtd-min"></small></h3>
+    <p class="muted">Ministros não são eleitos: o presidente escolhe cada um para cuidar de uma área. Toque num ministério para saber mais.</p>
+    <div class="grade-min" id="ministros"><div class="carregando">Carregando…</div></div>
+    <p id="fonte-min"></p>
+  </section>
+
+  <section class="miolo bloco" id="senado" data-casa="senado">
+    <div class="cab-bloco rev"><span class="ic-bloco" aria-hidden="true">🏛️</span><div><h2>O Senado Federal</h2><p class="muted">81 senadores: 3 por estado e 3 pelo Distrito Federal. Eles representam os estados e ficam 8 anos no cargo.</p></div></div>
+    <div class="casa-corpo"><div class="carregando">Carregando…</div></div>
+  </section>
+
+  <section class="miolo bloco" id="camara" data-casa="camara">
+    <div class="cab-bloco rev"><span class="ic-bloco" aria-hidden="true">🏛️</span><div><h2>A Câmara dos Deputados</h2><p class="muted">513 deputados federais. Eles representam o povo, e estados com mais gente têm mais deputados. Ficam 4 anos no cargo.</p></div></div>
+    <div class="casa-corpo"><div class="carregando">Carregando…</div></div>
+  </section>
+
+  <section class="miolo bloco" id="judiciario">
+    <div class="cartao cartao-jud rev">
+      <span class="ic-grande" aria-hidden="true">⚖️</span>
+      <div>
+        <h2 style="font-size:1.3rem">E o Judiciário?</h2>
+        <p>Juízes e ministros dos tribunais <b>não são eleitos</b>: eles fazem concurso ou são indicados e aprovados por outros Poderes. Por isso eles não aparecem nesta lista. Veja como funciona na apresentação.</p>
+        <a class="btn peq claro" href="entenda.html#parte-8">Ver "Quem julga e quem fiscaliza" ▶</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="miolo bloco" id="procurar">
+    <div class="cab-bloco rev"><span class="ic-bloco" aria-hidden="true">🔎</span><div><h2>Procurar qualquer político</h2><p class="muted">Do presidente ao prefeito. Digite o nome, a cidade, o estado ou o partido.</p></div></div>
+    <div class="busca"><input id="busca" type="search" placeholder="Ex.: nome, cidade ou partido" autocomplete="off" aria-label="Procurar um político" aria-controls="resultados"></div>
+    <ul class="resultados" id="resultados" aria-live="polite"></ul>
+  </section>
+
+  <footer class="miolo rodape">
+    <p id="links-erro"></p>
+    <p>Os dados vêm da Câmara dos Deputados, do Senado Federal, do Tribunal Superior Eleitoral (TSE) e do governo federal. <a href="dados.html">Veja de onde vem cada informação</a> e <a href="imparcialidade.html">como cuidamos da imparcialidade</a>.</p>
+  </footer>
+</main>
+
+<script src="js/config.js?v=1"></script>
+<script src="js/comum.js?v=1"></script>
+<script src="js/tres.js?v=1"></script>
+<script src="js/tres-politica.js?v=1"></script>
+<script src="js/busca.js?v=1"></script>
+<script src="js/casa.js?v=1"></script>
+<script src="js/brasil.js?v=1"></script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <script>(function(d){try{var a=JSON.parse(localStorage.getItem("ep-a11y")||"{}");if(a.contraste)d.classList.add("alto-contraste");if(a.movimento)d.classList.add("sem-movimento");if(a.espaco)d.classList.add("espacado");if(a.escala)d.style.setProperty("--escala",a.escala);var q=/[?&]lang=(en|pt)\b/.exec(location.search),l=q?q[1]:localStorage.getItem("ep-lang");if(l==="en")d.lang="en";}catch(e){}})(document.documentElement)</script>
+  <title data-en="Politics Map: how politics works in Brazil, made easy | Understand Politics">Mapa da Política: como funciona a política no Brasil, de um jeito fácil | Entenda Política</title>
+  <meta name="description" content="Um mapa 3D para explorar: os Três Poderes, país, estado e cidade, cada cargo, o Congresso, como nasce uma lei, as eleições, quem julga e quem fiscaliza e como participar. Com animações e joguinhos. Tudo com fonte." data-en-content="A 3D map to explore how politics works in Brazil: the three branches, each office, Congress, how a law is made, elections and how to take part. With animations and games. Everything with sources.">
+  <link rel="canonical" href="https://entendapolitica.vercel.app/entenda.html">
+  <link rel="alternate" hreflang="pt-BR" href="https://entendapolitica.vercel.app/entenda.html">
+  <link rel="alternate" hreflang="en" href="https://entendapolitica.vercel.app/entenda.html?lang=en">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:site_name" content="Entenda Política">
+  <meta property="og:url" content="https://entendapolitica.vercel.app/entenda.html">
+  <meta property="og:title" content="Mapa da Política: como funciona a política no Brasil">
+  <meta property="og:description" content="Um mapa 3D para explorar, com animações e joguinhos. Tudo com fonte.">
+  <meta name="theme-color" content="#1f3a5f">
+  <link rel="icon" href="img/icone.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/base.css?v=2">
+  <link rel="stylesheet" href="css/tres.css?v=2">
+  <link rel="stylesheet" href="css/tres-politica.css?v=2">
+  <link rel="stylesheet" href="css/mapa.css?v=2">
+  <link rel="stylesheet" href="css/entenda.css?v=2">
+</head>
+<body class="mapa-pag">
+<a class="pular" href="#mapa-tela" data-en="Skip to the map">Pular para o mapa</a>
+<header class="topo">
+  <a href="./" class="so-mapa" title="Página inicial" data-en-title="Home page"><span aria-hidden="true">🏠 </span><span class="rotulo" data-en="Home">Início</span></a>
+  <button id="aula-mapa" type="button" class="so-aula" data-en-aria-label="Back to the map" aria-label="Voltar ao mapa"><span aria-hidden="true">🗺️ </span><span class="rotulo" data-en="Map">Mapa</span></button>
+  <button id="btn-menu" type="button" class="so-aula" aria-haspopup="dialog" data-en-aria-label="Pages in this stop" aria-label="Páginas desta parada"><span aria-hidden="true">☰ </span><span class="rotulo" data-en="Pages">Páginas</span></button>
+  <div class="onde">
+    <span class="nome-parte" id="nome-parte" data-en="🗺️ Politics Map">🗺️ Mapa da Política</span>
+    <div class="barra-prog so-aula" aria-hidden="true"><i id="progresso"></i></div>
+  </div>
+  <span class="progresso-topo so-mapa" id="progresso-mapa"></span>
+  <a id="btn-idioma" href="?lang=en">🌐 EN</a>
+  <button id="btn-a11y" type="button"><span aria-hidden="true">♿</span><span class="rotulo" data-en=" Accessibility"> Acessibilidade</span></button>
+  <button id="btn-ouvir" type="button" aria-pressed="false"><span aria-hidden="true">🔊</span><span class="rotulo" data-en=" Listen"> Ouvir</span></button>
+  <button id="btn-letra" type="button">A+</button>
+</header>
+
+<div class="area">
+  <main id="mapa-tela" class="mapa-tela" tabindex="0" aria-label="Mapa da política em 3D. Use Tab para escolher uma parada e Enter para abrir. As setas giram o mapa." data-en-aria-label="3D politics map. Use Tab to choose a stop and Enter to open it. Arrow keys turn the map.">
+    <div class="mapa-ui">
+      <div class="mapa-titulo">
+        <h1 data-en="🗺️ Politics Map">🗺️ Mapa da Política</h1>
+        <p data-en="Tap a place to learn about it. The yellow trail shows a suggested order, but you can choose any place.">Toque em um lugar para aprender. A trilha amarela mostra uma ordem sugerida, mas você pode escolher qualquer um.</p>
+      </div>
+      <div class="coruja-mapa" role="status" aria-live="polite"><span class="coruja-ic" aria-hidden="true">🦉</span><div class="bolha" id="bolha"></div></div>
+      <div class="controles-mapa">
+        <span class="dica-girar" aria-hidden="true" data-en="Drag to turn · scroll to zoom">Arraste para girar · role para aproximar</span>
+        <div class="linha">
+          <button id="girar-e" type="button" aria-label="Girar o mapa para a esquerda" data-en-aria-label="Turn the map left">⟲</button>
+          <button id="girar-d" type="button" aria-label="Girar o mapa para a direita" data-en-aria-label="Turn the map right">⟳</button>
+          <button id="centralizar" type="button" aria-label="Ver o mapa inteiro" data-en-aria-label="See the whole map">🎯</button>
+          <button id="ver-lista" type="button" class="lista-btn"><span aria-hidden="true">📋 </span><span data-en="List">Lista</span></button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <section class="aula" id="aula" hidden aria-labelledby="nome-parte">
+    <div id="palco" aria-live="polite"></div>
+    <footer class="nav">
+      <button id="btn-voltar" type="button" data-en="◀ Back">◀ Voltar</button>
+      <div class="nav-meio">
+        <button id="btn-mais" type="button" hidden aria-label="Tem mais conteúdo embaixo. Toque para descer." data-en-aria-label="There is more below. Tap to scroll down."><span class="pula" aria-hidden="true">⬇</span> <span data-en="More">Tem mais</span></button>
+        <span id="contador"></span>
+      </div>
+      <button id="btn-proximo" type="button">Próximo ▶</button>
+    </footer>
+  </section>
+</div>
+
+<noscript><p style="padding:20px">Esta página precisa de JavaScript ligado no navegador. / This page needs JavaScript.</p></noscript>
+<script src="js/config.js?v=2"></script>
+<script src="js/comum.js?v=2"></script>
+<script src="js/tres.js?v=2"></script>
+<script src="js/tres-politica.js?v=2"></script>
+<script src="js/mapa3d.js?v=2"></script>
+<script src="js/entenda.js?v=2"></script>
+</body>
+</html>

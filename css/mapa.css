@@ -1,0 +1,148 @@
+/* ====== Mapa da Política: o mundo 3D da página "Entenda a política" ======
+   Coordenadas do chão: 1000 x 1000. Os modelos ficam "de pé" (rotateX(-90deg)).
+   As placas ficam sempre de frente para a câmera (giram ao contrário do mundo). */
+@property --ax { syntax: "<angle>"; inherits: true; initial-value: 56deg; }
+@property --az { syntax: "<angle>"; inherits: true; initial-value: 42deg; }
+@property --z { syntax: "<number>"; inherits: true; initial-value: .8; }
+@property --cx { syntax: "<length>"; inherits: true; initial-value: 0px; }
+@property --cy { syntax: "<length>"; inherits: true; initial-value: 0px; }
+@property --lz { syntax: "<number>"; inherits: true; initial-value: 1; }
+
+body.mapa-pag { height: 100vh; height: 100dvh; overflow: hidden; display: grid; grid-template-rows: auto 1fr; grid-template-columns: minmax(0, 1fr); }
+.mapa-tela {
+  position: relative; overflow: hidden; perspective: 1800px; perspective-origin: 50% 35%; touch-action: none; user-select: none; -webkit-user-select: none; cursor: grab;
+  background: radial-gradient(ellipse at 50% 30%, #fffdf6 0%, #fdf8ef 50%, #efe3c8 100%);
+}
+.mapa-tela:focus-visible { outline: 4px solid var(--amarelo); outline-offset: -6px; }
+.mapa-tela.arrastando { cursor: grabbing; }
+.mundo {
+  position: absolute; left: var(--ox, 50%); top: var(--oy, 56%); width: 1000px; height: 1000px; margin: -500px 0 0 -500px; transform-style: preserve-3d;
+  transform: scale3d(var(--z), var(--z), var(--z)) rotateX(var(--ax)) rotateZ(var(--az)) translate3d(var(--cx), var(--cy), 0);
+  transition: --ax 1s cubic-bezier(.3, .8, .2, 1), --az 1s cubic-bezier(.3, .8, .2, 1), --z 1s cubic-bezier(.3, .8, .2, 1),
+    --cx 1s cubic-bezier(.3, .8, .2, 1), --cy 1s cubic-bezier(.3, .8, .2, 1), --lz 1s ease, left 1s ease, top 1s ease;
+}
+.mapa-tela.arrastando .mundo { transition: none; }
+
+/* ---------- chão ---------- */
+.chao { position: absolute; inset: 0; transform-style: preserve-3d; }
+.grama { position: absolute; inset: 0; border-radius: 26px;
+  background:
+    radial-gradient(circle at 18% 22%, rgba(255, 255, 255, .35) 0 2%, transparent 2.2%),
+    radial-gradient(circle at 72% 64%, rgba(255, 255, 255, .3) 0 1.6%, transparent 1.8%),
+    radial-gradient(circle at 40% 85%, rgba(255, 255, 255, .3) 0 1.4%, transparent 1.6%),
+    linear-gradient(135deg, #e2efcb, #d3e6b5);
+  box-shadow: inset 0 0 0 10px rgba(255, 255, 255, .35); }
+.rim { position: absolute; }
+.rim.s { left: 26px; top: 1000px; width: 948px; height: 54px; transform-origin: 50% 0; transform: rotateX(-90deg); background: linear-gradient(#c4d8a2 0 12px, #b49a6c 12px, #9d8358); }
+.rim.e { left: 1000px; top: 26px; width: 54px; height: 948px; transform-origin: 0 50%; transform: rotateY(90deg); background: linear-gradient(90deg, #b9cf96 0 12px, #a68b5f 12px, #8f7650); }
+.rim.n { left: 26px; top: -54px; width: 948px; height: 54px; transform-origin: 50% 100%; transform: rotateX(90deg); background: linear-gradient(0deg, #c4d8a2 0 12px, #b49a6c 12px); }
+.rim.w { left: -54px; top: 26px; width: 54px; height: 948px; transform-origin: 100% 50%; transform: rotateY(-90deg); background: linear-gradient(270deg, #b9cf96 0 12px, #a68b5f 12px); }
+.estrada { position: absolute; left: 0; top: 0; width: 1000px; height: 1000px; transform: translateZ(1px); pointer-events: none; overflow: visible; }
+.lagoa { position: absolute; left: 300px; top: 318px; width: 110px; height: 76px; border-radius: 50%; transform: translateZ(1px);
+  background: radial-gradient(ellipse at 40% 35%, #e3f3fb, #9fd0ea 70%); box-shadow: 0 0 0 6px #cfe6b4; }
+.sombra-mundo { position: absolute; left: 60px; top: 60px; width: 880px; height: 880px; border-radius: 50%; transform: translateZ(-60px); background: radial-gradient(rgba(60, 40, 0, .25), transparent 65%); filter: blur(6px); }
+
+/* ---------- placas e enfeites (sempre de frente para a câmera) ---------- */
+.cartaz, .placa, .seta-prox { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
+.enfeite, .andarilho, .nuvem { position: absolute; left: var(--x); top: var(--y); width: 0; height: 0; transform-style: preserve-3d; pointer-events: none; }
+.cartaz { line-height: 1; font-size: var(--t, 64px); transform: translateZ(var(--h, 0px)) rotateZ(calc(-1 * var(--az))) rotateX(calc(-1 * var(--ax))) translate(-50%, -100%);
+  filter: drop-shadow(0 6px 4px rgba(40, 60, 20, .2)); }
+.nuvem { animation: nuvemAnda var(--dur, 90s) linear infinite; animation-delay: var(--atraso, 0s); }
+@keyframes nuvemAnda { from { left: -150px; } to { left: 1150px; } }
+.andarilho .cartaz { font-size: 46px; }
+.andarilho.volta .cartaz span { display: inline-block; transform: scaleX(-1); }
+
+/* ---------- lugares ---------- */
+.lugar { position: absolute; left: var(--x); top: var(--y); width: 0; height: 0; transform-style: preserve-3d; cursor: pointer; outline: none; }
+.lote { position: absolute; left: -110px; top: -110px; width: 220px; height: 220px; transform-style: preserve-3d; }
+.lote i { position: absolute; display: block; }
+.lote .t { left: 0; top: 0; width: 220px; height: 220px; transform: translateZ(16px); border-radius: 8px; background: #fffaf0; box-shadow: inset 0 0 0 5px rgba(255, 255, 255, .9), inset 0 0 0 8px #e6dcc7; transition: background .3s; }
+.lote .s { left: 0; top: 204px; width: 220px; height: 16px; transform-origin: 50% 100%; transform: rotateX(-90deg); background: #e3d6b8; }
+.lote .e { left: 204px; top: 0; width: 16px; height: 220px; transform-origin: 100% 50%; transform: rotateY(90deg); background: #d2c39f; }
+.lote .n { left: 0; top: 0; width: 220px; height: 16px; transform-origin: 50% 0; transform: rotateX(90deg); background: #e3d6b8; }
+.lote .w { left: 0; top: 0; width: 16px; height: 220px; transform-origin: 0 50%; transform: rotateY(-90deg); background: #d2c39f; }
+.em-pe { position: absolute; left: 0; top: 0; transform-style: preserve-3d; transform-origin: 0 0;
+  transform: translateZ(calc(16px + var(--lift, 0px))) rotateX(-90deg) scale3d(var(--esc), var(--esc), var(--esc)) translateY(calc(-1 * var(--base)));
+  transition: transform .4s cubic-bezier(.3, 1.4, .5, 1); }
+.lugar:hover .em-pe, .lugar:focus-within .em-pe { --lift: 22px; }
+.lugar:hover .lote .t, .lugar:focus-within .lote .t { background: #fff3c4; }
+.placa {
+  display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; background: #fff; color: var(--ink); border: 3px solid #e6dcc7; border-radius: 999px;
+  padding: 6px 16px 6px 6px; font-weight: 900; font-size: 22px; line-height: 1.1; box-shadow: 0 6px 0 #e6dcc7, 0 12px 18px rgba(60, 40, 0, .14);
+  transform: translateZ(var(--hp)) rotateZ(calc(-1 * var(--az))) rotateX(calc(-1 * var(--ax))) scale(var(--lz)) translate(-50%, -100%);
+  transition: border-color .2s, background .2s;
+}
+.pl-num { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; background: var(--brand); color: #fff; font-size: 20px; flex-shrink: 0; }
+.pl-ic { font-size: 26px; line-height: 1; }
+.pl-estrela { display: none; font-size: 24px; }
+.lugar:hover .placa, .placa:focus-visible { border-color: var(--amarelo); background: #fffdf4; }
+.placa:focus-visible { outline: 4px solid var(--brand); outline-offset: 4px; }
+/* já aprendido */
+.lugar.feito .lote .t { background: #dff3e4; box-shadow: inset 0 0 0 5px rgba(255, 255, 255, .9), inset 0 0 0 8px #9fd3ae; }
+.lugar.feito .placa { border-color: #9fd3ae; }
+.lugar.feito .pl-num { background: var(--ok); }
+.lugar.feito .pl-estrela { display: inline; }
+/* próxima parada sugerida */
+.lugar.proximo .lote .t { background: #ffe9a8; animation: loteBrilha 1.8s ease-in-out infinite; }
+@keyframes loteBrilha { 50% { background: #fff6d6; } }
+.lugar.proximo .placa { border-color: var(--amarelo); }
+.seta-prox { display: none; font-size: 48px; line-height: 1;
+  transform: translateZ(calc(var(--hp) + 74px)) rotateZ(calc(-1 * var(--az))) rotateX(calc(-1 * var(--ax))) scale(var(--lz)) translate(-50%, -100%); }
+.seta-prox span { display: inline-block; animation: setaPula 1s ease-in-out infinite; }
+@keyframes setaPula { 50% { transform: translateY(-14px); } }
+.lugar.proximo .seta-prox { display: block; }
+.lugar.sem-conteudo .placa { opacity: .75; }
+
+/* ---------- interface por cima do mapa ---------- */
+.mapa-ui { position: absolute; inset: 0; pointer-events: none; z-index: 5; }
+.mapa-ui > * { pointer-events: auto; }
+.mapa-titulo { position: absolute; left: 16px; top: 14px; max-width: min(460px, calc(100% - 32px)); background: rgba(255, 255, 255, .92); border: 2px solid var(--line); border-radius: 20px; padding: 12px 16px; box-shadow: var(--sombra); }
+.mapa-titulo h1 { font-size: clamp(1.3rem, 3.4vw, 1.9rem); margin: 0 0 4px; }
+.mapa-titulo p { margin: 0; font-size: .92rem; color: #384150; }
+.coruja-mapa { position: absolute; left: 16px; bottom: 16px; max-width: min(430px, calc(100% - 32px)); display: flex; gap: 12px; align-items: flex-end; }
+.coruja-mapa .coruja-ic { font-size: 3.4rem; line-height: 1; animation: corujaBalanca 3s ease-in-out infinite; flex-shrink: 0; }
+@keyframes corujaBalanca { 50% { transform: rotate(-8deg) translateY(-3px); } }
+.coruja-mapa .bolha { position: relative; background: #fff; border: 3px solid var(--brand); border-radius: 20px 20px 20px 4px; padding: 10px 14px; font-weight: 700; font-size: .95rem; box-shadow: var(--sombra); }
+.coruja-mapa .bolha .btn { margin-top: 8px; }
+.controles-mapa { position: absolute; right: 16px; bottom: 16px; display: flex; flex-direction: column; gap: 8px; align-items: flex-end; }
+.controles-mapa .linha { display: flex; gap: 8px; }
+.controles-mapa button { min-width: 52px; min-height: 52px; border: 2px solid var(--line); background: #fff; border-radius: 16px; font-size: 1.3rem; font-weight: 900; box-shadow: 0 4px 0 #e6dcc7; }
+.controles-mapa button:hover { background: #f3f7fd; }
+.controles-mapa .lista-btn { font-size: .95rem; padding: 0 14px; }
+.dica-girar { font-size: .78rem; font-weight: 800; color: var(--muted); background: rgba(255, 255, 255, .9); border-radius: 999px; padding: 4px 10px; }
+.progresso-topo { font-weight: 900; color: var(--brand); white-space: nowrap; }
+.lista-lugares { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.lista-lugares button { display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; border: 2px solid var(--line); background: #fff; border-radius: 16px; padding: 10px 14px; min-height: 56px; }
+.lista-lugares button:hover { background: #f3f7fd; }
+.lista-lugares .ll-num { width: 34px; height: 34px; border-radius: 50%; background: var(--brand); color: #fff; display: grid; place-items: center; font-weight: 900; flex-shrink: 0; }
+.lista-lugares .feito .ll-num { background: var(--ok); }
+.lista-lugares .ll-ic { font-size: 1.6rem; }
+.lista-lugares b { display: block; }
+.lista-lugares small { color: var(--muted); }
+.trofeu-final { display: none; }
+.todos-feitos .trofeu-final { display: block; }
+
+@media (max-width: 760px) {
+  .mapa-titulo { padding: 6px 12px; border-radius: 14px; left: 10px; top: 10px; }
+  .mapa-titulo h1 { font-size: 1.15rem; margin: 0; }
+  .mapa-titulo p { display: none; }
+  .coruja-mapa { bottom: 76px; left: 10px; right: 10px; max-width: none; gap: 8px; }
+  .coruja-mapa .coruja-ic { font-size: 2.2rem; }
+  .coruja-mapa .bolha { font-size: .8rem; padding: 8px 10px; border-width: 2px; }
+  .coruja-mapa .bolha .btn { margin-top: 6px; font-size: .8rem; padding: 7px 12px; }
+  .controles-mapa { right: 10px; bottom: 10px; flex-direction: row; align-items: center; }
+  .controles-mapa button { min-width: 46px; min-height: 46px; font-size: 1.1rem; }
+  .dica-girar { display: none; }
+  .mapa-pag:not(.modo-aula) .topo .onde { visibility: hidden; }
+}
+.estreito .pl-nome { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.estreito .placa { padding: 5px; gap: 4px; font-size: 20px; }
+.estreito .placa .pl-ic { font-size: 22px; }
+@media (prefers-reduced-motion: reduce) {
+  .mundo { transition: none; }
+  .nuvem, .andarilho, .seta-prox span, .lugar.proximo .lote .t, .coruja-mapa .coruja-ic { animation: none; }
+}
+html.sem-movimento .mundo { transition: none; }
+html.sem-movimento .nuvem, html.sem-movimento .andarilho { display: none; }
+html.alto-contraste .placa { border-color: #000; box-shadow: none; }
+html.alto-contraste .mapa-titulo, html.alto-contraste .coruja-mapa .bolha, html.alto-contraste .controles-mapa button { border-color: #000; box-shadow: none; }

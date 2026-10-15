@@ -1,0 +1,183 @@
+/* ====== Páginas de dados: Brasil, meu estado e perfil ====== */
+.pagina { position: relative; z-index: 1; }
+.formas.fundo-fixo { position: fixed; z-index: 0; }
+.cab-pagina { display: flex; align-items: center; gap: 24px; padding-top: 28px; padding-bottom: 4px; }
+.cab-pagina .cab-txt { flex: 1.2; min-width: 0; }
+.cab-pagina h1 { margin-top: 14px; }
+.cab-pagina .cab-3d { flex: .8; min-width: 0; }
+.atalhos { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px auto 6px; }
+.atalhos a { text-decoration: none; font-size: .9rem; padding: 7px 14px; }
+.sub { margin: 26px 0 4px; font-size: 1.2rem; }
+.sub small { color: var(--muted); font-weight: 700; font-size: .8em; }
+
+/* ---------- executivo ---------- */
+.exec-topo { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.pessoa-grande {
+  display: flex; gap: 16px; align-items: center; text-decoration: none; color: var(--ink); background: #fff; border: 2px solid var(--line);
+  border-radius: 22px; padding: 18px; box-shadow: var(--sombra); transition: transform .2s;
+}
+.pessoa-grande:hover { transform: perspective(800px) rotateX(4deg) translateY(-3px); }
+.pessoa-grande .av { width: 110px; height: 110px; font-size: 2.4rem; }
+.pessoa-grande .cargo { display: block; font-size: .78rem; font-weight: 900; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
+.pessoa-grande b { display: block; font-size: 1.35rem; line-height: 1.2; }
+.pessoa-grande small { display: block; color: var(--muted); margin: 2px 0 6px; }
+.pessoa-grande .ver { display: inline-block; margin-top: 6px; font-weight: 900; color: var(--brand); font-size: .9rem; }
+.grade-min { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px; margin-top: 12px; }
+.min-card {
+  display: flex; gap: 12px; align-items: flex-start; text-align: left; background: #fff; border: 2px solid var(--line); border-radius: 18px;
+  padding: 12px 14px; box-shadow: 0 3px 0 #ece3d0; font: inherit; color: inherit; width: 100%;
+}
+.min-card:hover { background: #f3f7fd; }
+.min-card .m-ic { font-size: 2rem; line-height: 1; flex-shrink: 0; }
+.min-card b { display: block; font-size: .92rem; line-height: 1.25; }
+.min-card small { display: block; color: var(--muted); font-size: .82rem; margin-top: 2px; }
+.min-card .chip { margin-top: 6px; font-size: .66rem; }
+
+/* ---------- casas do Congresso ---------- */
+.casa-resumo { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; align-items: center; margin-bottom: 10px; }
+.casa-resumo .plen-box { text-align: center; }
+.casa-resumo .plen-box p { margin: 6px 0 0; font-weight: 800; color: var(--muted); font-size: .9rem; }
+.partidos { display: grid; gap: 6px; }
+.partidos .tit-p { font-weight: 900; margin-bottom: 2px; }
+.barra-partido {
+  display: grid; grid-template-columns: 7.5em minmax(0, 1fr) 2.6em; gap: 8px; align-items: center; border: 0; background: none; padding: 2px 4px;
+  border-radius: 10px; font: inherit; color: inherit; text-align: left; font-size: .86rem;
+}
+.barra-partido:hover, .barra-partido[aria-pressed="true"] { background: var(--creme-forte); }
+.barra-partido .nome-p { font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.barra-partido .trilho-p { height: 14px; background: #efe9dc; border-radius: 99px; overflow: hidden; }
+.barra-partido .trilho-p i { display: block; height: 100%; width: 0; background: var(--brand); border-radius: 99px; transition: width 1s cubic-bezier(.2, .8, .2, 1); }
+.barra-partido[aria-pressed="true"] .trilho-p i { background: var(--amarelo); }
+.barra-partido .n-p { font-weight: 900; text-align: right; font-variant-numeric: tabular-nums; }
+.partidos .mais-p { justify-self: start; border: 0; background: none; font-weight: 800; color: var(--brand); padding: 4px; }
+.explica-p { font-size: .82rem; color: var(--muted); margin-top: 6px; }
+.filtros-casa { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr) minmax(0, 1fr); gap: 10px; margin: 16px 0 4px; }
+.filtros-casa select { font: inherit; font-size: .95rem; padding: 12px 14px; border-radius: 16px; border: 3px solid var(--line); background: #fff; color: var(--ink); min-width: 0; }
+.filtros-casa .busca input { padding-top: 12px; padding-bottom: 12px; }
+.sabia { display: flex; gap: 10px; align-items: center; background: #f3f7fd; border: 2px solid #d6e2f1; border-radius: 14px; padding: 8px 12px; font-size: .88rem; margin: 6px 0 0; }
+.cartao-jud { display: flex; gap: 16px; align-items: center; }
+.cartao-jud .ic-grande { font-size: 3rem; }
+
+/* ---------- meu estado: mapa em quadradinhos ---------- */
+.mapa-uf { --t: 58px; display: grid; grid-template-columns: repeat(7, var(--t)); grid-auto-rows: var(--t); gap: 6px; justify-content: center; margin: 10px auto;
+  transform: perspective(1000px) rotateX(24deg); transform-style: preserve-3d; padding: 10px 0 30px; }
+.tile-uf {
+  position: relative; border: 0; border-radius: 12px; font: inherit; font-weight: 900; font-size: 1rem; color: #fff; cursor: pointer; text-decoration: none;
+  background: var(--cor, #1f3a5f); box-shadow: 0 6px 0 rgba(0, 0, 0, .28), 0 10px 14px rgba(0, 0, 0, .12); display: grid; place-items: center;
+  transition: transform .2s, box-shadow .2s; transform: translateZ(0);
+}
+.tile-uf:hover, .tile-uf:focus-visible { transform: translateY(-8px) translateZ(20px); box-shadow: 0 14px 0 rgba(0, 0, 0, .28), 0 22px 20px rgba(0, 0, 0, .14); }
+.tile-uf.atual { background: var(--amarelo); color: #2a1d00; }
+.rotulo-uf { text-align: center; font-weight: 900; font-size: 1.2rem; color: var(--brand); min-height: 1.6em; margin: 10px 0 0; }
+@media (hover: none) { .rotulo-uf { display: none; } }
+.regioes { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; font-size: .8rem; font-weight: 800; color: var(--muted); }
+.regioes i { display: inline-block; width: 14px; height: 14px; border-radius: 4px; vertical-align: -2px; margin-right: 4px; }
+.escolhe-uf { max-width: 420px; margin: 8px auto 0; }
+.escolhe-uf select { width: 100%; font: inherit; padding: 12px 14px; border-radius: 16px; border: 3px solid var(--line); background: #fff; }
+@media (max-width: 600px) { .mapa-uf { --t: 42px; gap: 4px; } .tile-uf { font-size: .8rem; border-radius: 9px; } }
+
+.cidade-busca { position: relative; max-width: 560px; }
+.sugestoes { list-style: none; margin: 6px 0 0; padding: 0; display: grid; gap: 6px; }
+.sugestoes button { width: 100%; text-align: left; border: 2px solid var(--line); background: #fff; border-radius: 14px; padding: 8px 12px; font: inherit; }
+.sugestoes button:hover, .sugestoes button:focus-visible { background: #f3f7fd; }
+.sugestoes small { color: var(--muted); }
+.cidade-caixa { margin-top: 16px; }
+
+/* ---------- perfil ---------- */
+.perfil-topo { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 24px; align-items: center; padding-top: 26px; }
+.moldura { perspective: 800px; }
+.moldura .av { width: 180px; height: 180px; border: 6px solid #fff; font-size: 4rem; transform: rotateY(-14deg) rotateX(6deg); box-shadow: 18px 24px 40px rgba(60, 40, 0, .18); animation: molduraBalanca 7s ease-in-out infinite; }
+@keyframes molduraBalanca { 0%, 100% { transform: rotateY(-14deg) rotateX(6deg); } 50% { transform: rotateY(12deg) rotateX(2deg); } }
+.perfil-topo .cargo-p { font-weight: 900; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; font-size: .85rem; }
+.perfil-topo h1 { margin: 4px 0 8px; font-size: clamp(1.9rem, 5vw, 2.8rem); }
+.perfil-topo .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.perfil-topo .chips .chip { font-size: .8rem; padding: 4px 12px; white-space: normal; }
+.fatos { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; margin-top: 20px; }
+.fato { background: #fff; border: 2px solid var(--line); border-radius: 18px; padding: 12px 14px; box-shadow: 0 3px 0 #ece3d0; }
+.fato .f-ic { font-size: 1.6rem; line-height: 1; }
+.fato .f-rot { display: block; font-size: .78rem; font-weight: 800; color: var(--muted); margin-top: 4px; }
+.fato .f-val { display: block; font-weight: 900; font-size: 1.05rem; line-height: 1.25; }
+.fato .fontes-btn { margin-top: 6px; font-size: .68rem; padding: 3px 10px; }
+.oque-faz { margin-top: 16px; }
+.secao-perfil { padding: 34px 0 10px; border-top: 2px dashed var(--line); margin-top: 30px; }
+.secao-perfil > h2 { display: flex; gap: 12px; align-items: center; }
+.secao-perfil > h2 .ic { font-size: 2.2rem; }
+.duas-p { display: grid; grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); gap: 24px; align-items: start; }
+.papeis { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-bottom: 14px; }
+.papel-btn { display: flex; flex-direction: column; gap: 2px; text-align: left; border: 3px solid var(--line); background: #fff; border-radius: 18px; padding: 10px 14px; font: inherit; color: inherit; }
+.papel-btn b { font-size: 1.8rem; line-height: 1; font-variant-numeric: tabular-nums; }
+.papel-btn span { font-weight: 800; }
+.papel-btn small { color: var(--muted); font-size: .78rem; line-height: 1.3; }
+.papel-btn[aria-pressed="true"] { border-color: var(--amarelo); background: var(--creme-forte); }
+.status-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+.status-chips button { border: 0; background: none; padding: 0; font: inherit; cursor: pointer; border-radius: 999px; }
+.status-chips button .carimbo { font-size: .74rem; padding: 4px 12px; }
+.status-chips button[aria-pressed="true"] .carimbo { outline: 3px solid var(--amarelo); outline-offset: 2px; }
+.status-chips button .q { margin-left: 4px; font-weight: 900; }
+.temas-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 10px; }
+.temas-chips button { border: 2px solid var(--line); background: #fff; border-radius: 999px; padding: 4px 12px; font-size: .8rem; font-weight: 800; }
+.temas-chips button[aria-pressed="true"] { background: var(--brand); color: #fff; border-color: var(--brand); }
+.lista-prop { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 12px; }
+.prop {
+  background: #fff; border: 2px solid var(--line); border-radius: 18px; padding: 14px 16px; box-shadow: 0 3px 0 #ece3d0; border-left: 8px solid var(--cor-s, #c9cfd8);
+}
+.prop.s-lei { --cor-s: #1f7a3d; }
+.prop.s-aprovada { --cor-s: #6cc08a; }
+.prop.s-andando { --cor-s: #8fb3d9; }
+.prop.s-junta { --cor-s: #b9a6e6; }
+.prop.s-rejeitada { --cor-s: #e7a59d; }
+.prop-cab { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; margin-bottom: 8px; }
+.prop-cab .sigla { font-weight: 900; }
+.prop-cab .data { color: var(--muted); font-size: .85rem; }
+.prop-cab .papel { font-size: .72rem; font-weight: 900; border-radius: 999px; padding: 2px 10px; background: #eef3fa; color: var(--brand); }
+.prop-cab .papel.coautor { background: #f3efe6; color: #4a4f57; }
+.prop .simples { font-size: 1.05rem; font-weight: 700; line-height: 1.4; margin: 0 0 6px; }
+.prop .simples small { display: block; font-size: .7rem; font-weight: 900; text-transform: uppercase; letter-spacing: .04em; color: #7a5200; margin-bottom: 2px; }
+.prop .oficial { font-size: .86rem; color: #4a5260; background: #f7f3ea; border-radius: 12px; padding: 8px 10px; margin: 6px 0; }
+.prop .oficial small { display: block; font-size: .68rem; font-weight: 900; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin-bottom: 2px; }
+.prop .rodape-prop { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; font-size: .85rem; }
+.prop .status-txt { font-weight: 800; }
+.prop .temas { color: var(--muted); }
+.mais-lista { display: flex; justify-content: center; margin: 16px 0; }
+.busca-prop { margin: 6px 0 4px; }
+.busca-prop input { font-size: .95rem; padding: 11px 14px 11px 46px; }
+.nota-contexto { font-size: .86rem; }
+.votos-barra { display: flex; height: 26px; border-radius: 99px; overflow: hidden; background: #efe9dc; margin: 10px 0 6px; }
+.votos-barra i { display: block; height: 100%; }
+.legenda-votos { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: .85rem; font-weight: 800; }
+.legenda-votos i { display: inline-block; width: 12px; height: 12px; border-radius: 4px; vertical-align: -1px; margin-right: 4px; }
+.lista-votos { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 8px; }
+.lista-votos li { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 12px; align-items: start; background: #fff; border: 2px solid var(--line); border-radius: 16px; padding: 10px 14px; }
+.voto-chip { min-width: 6.5em; text-align: center; font-weight: 900; font-size: .8rem; border-radius: 10px; padding: 6px 8px; color: #fff; background: var(--cv, #6b7480); }
+.lista-votos .v-txt { font-size: .9rem; line-height: 1.35; }
+.lista-votos .v-txt small { display: block; color: var(--muted); font-size: .8rem; }
+.gastos-lista { display: grid; gap: 8px; margin-top: 10px; }
+.gasto { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 10px; align-items: center; font-size: .9rem; }
+.gasto .tr { grid-column: 1 / -1; height: 10px; background: #efe9dc; border-radius: 99px; overflow: hidden; }
+.gasto .tr i { display: block; height: 100%; background: var(--laranja); border-radius: 99px; }
+.gasto b { font-variant-numeric: tabular-nums; }
+.grandes-n { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+.grande-n { background: #fff; border: 2px solid var(--line); border-radius: 18px; padding: 14px 16px; box-shadow: 0 3px 0 #ece3d0; }
+.grande-n b { display: block; font-size: 1.7rem; color: var(--brand); line-height: 1.1; font-variant-numeric: tabular-nums; }
+.grande-n span { font-size: .85rem; font-weight: 700; color: var(--muted); }
+.comissoes { display: flex; flex-wrap: wrap; gap: 8px; }
+.comissoes .chip { white-space: normal; text-align: left; }
+
+@media (max-width: 860px) {
+  .cab-pagina { flex-direction: column-reverse; align-items: stretch; gap: 0; padding-top: 10px; }
+  .exec-topo, .casa-resumo, .duas-p { grid-template-columns: minmax(0, 1fr); }
+  .filtros-casa { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .filtros-casa .busca { grid-column: 1 / -1; }
+}
+@media (max-width: 600px) {
+  .perfil-topo { grid-template-columns: minmax(0, 1fr); justify-items: center; text-align: center; gap: 10px; }
+  .perfil-topo .chips { justify-content: center; }
+  .moldura .av { width: 140px; height: 140px; }
+  .pessoa-grande { flex-direction: column; text-align: center; }
+  .papeis { grid-template-columns: minmax(0, 1fr); }
+  .lista-votos li { grid-template-columns: minmax(0, 1fr); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .moldura .av { animation: none; }
+  .tile-uf, .pessoa-grande { transition: none; }
+}

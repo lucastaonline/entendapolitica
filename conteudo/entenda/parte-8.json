@@ -1,0 +1,240 @@
+{
+ "parte": 8,
+ "ic": "⚖️",
+ "nome": "Quem julga e quem fiscaliza",
+ "resumo": "Quem julga, quem investiga e quem confere o trabalho de quem está no poder, e como todo mundo pode ajudar a fiscalizar.",
+ "fontes": [
+  { "id": "cf-art5", "veiculo": "Planalto", "titulo": "Constituição Federal, art. 5º, LVII (presunção de inocência)", "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm", "data": "1988-10-05" },
+  { "id": "cf-contas", "veiculo": "Planalto", "titulo": "Constituição Federal, arts. 31, 71 e 75 (Tribunais de Contas)", "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm", "data": "1988-10-05" },
+  { "id": "cf-art51-52", "veiculo": "Planalto", "titulo": "Constituição Federal, arts. 51 e 52", "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm", "data": "1988-10-05" },
+  { "id": "cf-art55", "veiculo": "Planalto", "titulo": "Constituição Federal, art. 55 (perda do mandato de deputados e senadores)", "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm", "data": "1988-10-05" },
+  { "id": "cf-art58", "veiculo": "Planalto", "titulo": "Constituição Federal, art. 58, § 3º (CPI)", "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm", "data": "1988-10-05" },
+  { "id": "cf-art79-85-86", "veiculo": "Planalto", "titulo": "Constituição Federal, arts. 79, 85 e 86", "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm", "data": "1988-10-05" },
+  { "id": "cf-stf", "veiculo": "Planalto", "titulo": "Constituição Federal, arts. 101 e 102 (STF)", "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm", "data": "1988-10-05" },
+  { "id": "cf-judiciario", "veiculo": "Planalto", "titulo": "Constituição Federal, arts. 92, 105, 109, 114, 121, 124 e 125 (órgãos do Judiciário)", "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm", "data": "1988-10-05" },
+  { "id": "cf-mp-def", "veiculo": "Planalto", "titulo": "Constituição Federal, arts. 127, 129 e 134 (Ministério Público e Defensoria Pública)", "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm", "data": "1988-10-05" },
+  { "id": "cf-art144", "veiculo": "Planalto", "titulo": "Constituição Federal, art. 144 (polícias)", "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm", "data": "1988-10-05" },
+  { "id": "cf-art220", "veiculo": "Planalto", "titulo": "Constituição Federal, art. 220 (liberdade de informação)", "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm", "data": "1988-10-05" },
+  { "id": "lcp152", "veiculo": "Planalto", "titulo": "Lei Complementar 152/2015 (aposentadoria obrigatória aos 75 anos)", "url": "https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp152.htm", "data": "2015-12-03" },
+  { "id": "lei1079", "veiculo": "Planalto", "titulo": "Lei 1.079/1950 (crimes de responsabilidade), art. 14", "url": "https://www.planalto.gov.br/ccivil_03/leis/l1079.htm", "data": "1950-04-10" },
+  { "id": "lei9504-41a", "veiculo": "Planalto", "titulo": "Lei 9.504/1997 (Lei das Eleições), art. 41-A (compra de votos)", "url": "https://www.planalto.gov.br/ccivil_03/leis/l9504.htm", "data": "1997-09-30" },
+  { "id": "lei12527", "veiculo": "Planalto", "titulo": "Lei 12.527/2011 (Lei de Acesso à Informação), arts. 10 e 11", "url": "https://www.planalto.gov.br/ccivil_03/_ato2011-2014/2011/lei/l12527.htm", "data": "2011-11-18" },
+  { "id": "ldb-art14", "veiculo": "Planalto", "titulo": "Lei 9.394/1996 (LDB), art. 14 (conselhos escolares), com redação da Lei 14.644/2023", "url": "https://www.planalto.gov.br/ccivil_03/leis/l9394.htm", "data": "2023-08-02" },
+  { "id": "cgu-institucional", "veiculo": "CGU", "titulo": "Controladoria-Geral da União: institucional", "url": "https://www.gov.br/cgu/pt-br/acesso-a-informacao/institucional", "data": "2026-10-15" },
+  { "id": "portal-transparencia", "veiculo": "CGU", "titulo": "Portal da Transparência: o que é e como funciona", "url": "https://portaldatransparencia.gov.br/sobre/o-que-e-e-como-funciona", "data": "2026-10-15" },
+  { "id": "senado-impeachment-2016-05", "veiculo": "Agência Senado", "titulo": "Senado julgará um presidente da República pela segunda vez", "url": "https://www12.senado.leg.br/noticias/materias/2016/05/12/senado-julgara-um-presidente-da-republica-pela-segunda-vez", "data": "2016-05-12" },
+  { "id": "senado-impeachment-2016-08", "veiculo": "Agência Senado", "titulo": "Dilma Rousseff perde o mandato de presidente da República, mas mantém direitos políticos", "url": "https://www12.senado.leg.br/noticias/materias/2016/08/31/dilma-rousseff-perde-o-mandato-de-presidente-da-republica-mas-mantem-direitos-politicos", "data": "2016-08-31" }
+ ],
+ "glossario": [
+  { "termo": "Judiciário", "simples": "O Poder que julga: juízes e tribunais." },
+  { "termo": "tribunal", "simples": "Grupo de juízes que julga casos, muitas vezes revendo decisões de outros juízes." },
+  { "termo": "STF (Supremo Tribunal Federal)", "simples": "O tribunal mais alto do Brasil. Sua tarefa principal é proteger a Constituição." },
+  { "termo": "ministro do STF", "simples": "Cada um dos 11 juízes do STF." },
+  { "termo": "Constituição", "simples": "A lei mais importante do país. Todas as outras leis precisam respeitá-la." },
+  { "termo": "STJ (Superior Tribunal de Justiça)", "simples": "Tribunal que ajuda a aplicar as leis federais do mesmo jeito em todo o país." },
+  { "termo": "Ministério Público", "simples": "Instituição que defende os interesses da sociedade e acusa, na Justiça, quem comete crimes." },
+  { "termo": "Defensoria Pública", "simples": "Advogados públicos que orientam e defendem, de graça, quem não pode pagar." },
+  { "termo": "Tribunal de Contas", "simples": "Órgão que confere como o dinheiro público foi gasto." },
+  { "termo": "TCU", "simples": "Tribunal de Contas da União: confere o uso do dinheiro federal e ajuda o Congresso a fiscalizar." },
+  { "termo": "CGU (Controladoria-Geral da União)", "simples": "Órgão que fiscaliza o governo federal por dentro." },
+  { "termo": "auditoria", "simples": "Uma conferência cuidadosa de contas e documentos." },
+  { "termo": "conselho escolar", "simples": "Grupo da escola pública com direção, professores, funcionários, pais, estudantes e comunidade." },
+  { "termo": "CPI", "simples": "Comissão Parlamentar de Inquérito: grupo de deputados ou senadores que investiga um assunto." },
+  { "termo": "fato determinado", "simples": "Um assunto específico e bem definido." },
+  { "termo": "crime de responsabilidade", "simples": "Ato grave de uma autoridade contra a Constituição, como os listados no art. 85." },
+  { "termo": "impeachment", "simples": "Processo que pode tirar o presidente do cargo por crime de responsabilidade." },
+  { "termo": "denúncia", "simples": "Pedido formal para que alguém seja investigado ou julgado." },
+  { "termo": "vice", "simples": "Quem substitui o titular do cargo quando ele precisa sair." },
+  { "termo": "renúncia", "simples": "Quando a pessoa deixa o cargo por decisão própria." },
+  { "termo": "função pública", "simples": "Trabalho em cargo do governo ou do Estado." },
+  { "termo": "mandato", "simples": "O tempo que a pessoa eleita fica no cargo." },
+  { "termo": "cassação", "simples": "Quando alguém perde o mandato por decisão de outros." },
+  { "termo": "decoro", "simples": "O comportamento esperado de quem ocupa um cargo, como deputado ou senador." },
+  { "termo": "maioria absoluta", "simples": "Mais da metade de todos os membros." },
+  { "termo": "presunção de inocência", "simples": "A regra de que ninguém é culpado antes do fim do processo." },
+  { "termo": "recorrer", "simples": "Pedir para outro juiz ou tribunal rever uma decisão." },
+  { "termo": "Lei de Acesso à Informação", "simples": "Lei que garante a qualquer pessoa o direito de pedir dados aos órgãos públicos." },
+  { "termo": "censura", "simples": "Quando alguém proíbe uma notícia ou opinião de ser publicada." },
+  { "termo": "União", "simples": "O governo federal, que cuida do país inteiro." },
+  { "termo": "patrimônio público", "simples": "O que pertence a todos, como escolas, praças e o dinheiro público." },
+  { "termo": "corrupção", "simples": "Quando alguém usa um cargo público para levar vantagem de forma ilegal." },
+  { "termo": "vantagem indevida", "simples": "Um benefício que a pessoa não tinha direito de receber." },
+  { "termo": "Casa", "simples": "Jeito de chamar a Câmara dos Deputados ou o Senado." }
+ ],
+ "slides": [
+  {
+   "tipo": "abertura",
+   "titulo": "Quem vigia se as regras são cumpridas?",
+   "texto": "No futebol, o juiz apita quando alguém sai da regra. Na política, várias instituições fazem esse papel de **julgar e fiscalizar**.",
+   "ilustracao": "balanca"
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "QUEM JULGA",
+   "titulo": "Juízes e tribunais",
+   "texto": "O Poder **Judiciário** resolve conflitos e decide casos usando as leis.",
+   "itens": [
+    { "ic": "🏛️", "txt": "O **STF** é o tribunal mais alto. Sua tarefa principal é proteger a Constituição." },
+    { "ic": "👩‍⚖️", "txt": "Tem 11 ministros. O presidente da República indica, e o Senado precisa aprovar." },
+    { "ic": "🎂", "txt": "Os ministros se aposentam, no máximo, aos 75 anos." },
+    { "ic": "🧭", "txt": "O STJ ajuda a aplicar as leis federais do mesmo jeito em todo o país." },
+    { "ic": "🗂️", "txt": "Há também a Justiça do Trabalho, a Eleitoral, a Militar, a Federal e a de cada estado." }
+   ],
+   "emoji": "👩‍⚖️",
+   "coruja": "Ministros do STF não são eleitos pelo voto do povo: são indicados e aprovados.",
+   "fontes": ["cf-stf", "cf-judiciario", "lcp152"]
+  },
+  {
+   "tipo": "cards",
+   "etiqueta": "QUEM FISCALIZA",
+   "titulo": "Os fiscais das leis e do dinheiro público",
+   "texto": "Cada instituição tem uma tarefa diferente.",
+   "cards": [
+    {
+     "ic": "📣",
+     "titulo": "Ministério Público",
+     "txt": "Defende os interesses da sociedade e acusa, na Justiça, quem comete crimes.",
+     "dados": [ { "rot": "Na Constituição", "val": "arts. 127 a 130" } ],
+     "mais": "Também pode agir na Justiça para proteger o patrimônio público e o meio ambiente."
+    },
+    {
+     "ic": "🛡️",
+     "titulo": "Defensoria Pública",
+     "txt": "Dá orientação e defesa para quem não pode pagar um advogado.",
+     "dados": [ { "rot": "Custo", "val": "gratuito" } ]
+    },
+    {
+     "ic": "🧮",
+     "titulo": "Tribunais de Contas",
+     "txt": "Conferem como o dinheiro público foi usado.",
+     "dados": [ { "rot": "Dinheiro federal", "val": "TCU" }, { "rot": "Nos estados", "val": "tribunais de contas dos estados" } ],
+     "mais": "O TCU ajuda o Congresso a fiscalizar o dinheiro federal. Os tribunais de contas dos estados fazem o mesmo nos estados e nas cidades. Alguns lugares têm um tribunal só para as cidades."
+    },
+    {
+     "ic": "🕵️",
+     "titulo": "Polícias Federal e Civil",
+     "txt": "Investigam crimes. A Federal cuida dos crimes contra a União. A Civil investiga crimes em cada estado.",
+     "mais": "A Polícia Federal também investiga crimes que passam por vários estados ou por outros países."
+    },
+    {
+     "ic": "🔎",
+     "titulo": "CGU",
+     "txt": "A Controladoria-Geral da União fiscaliza o governo federal por dentro, com **auditorias**.",
+     "mais": "Ela também recebe denúncias e trabalha para prevenir e combater a corrupção."
+    }
+   ],
+   "fontes": ["cf-mp-def", "cf-contas", "cf-art144", "cgu-institucional"]
+  },
+  {
+   "tipo": "historia",
+   "titulo": "Imagine que a merenda começou a sumir...",
+   "quadros": [
+    { "ic": "🍎", "txt": "Na cidade inventada de Vila Feliz, a merenda da escola começou a faltar." },
+    { "ic": "🙋", "txt": "O conselho escolar percebeu e avisou as autoridades." },
+    { "ic": "🧮", "txt": "O Tribunal de Contas conferiu as notas da compra da merenda." },
+    { "ic": "🕵️", "txt": "A polícia investigou. O Ministério Público levou o caso à Justiça." },
+    { "ic": "⚖️", "txt": "O juiz ouviu os dois lados. A Defensoria defendeu quem não tinha advogado." }
+   ],
+   "moral": "Cada instituição faz uma parte: umas vigiam, outras investigam, outras julgam. E ninguém é **culpado** antes do fim do processo.",
+   "fontes": ["ldb-art14", "cf-contas", "cf-art144", "cf-mp-def", "cf-art5"]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "INVESTIGAÇÃO",
+   "titulo": "CPI: o Congresso investiga",
+   "texto": "CPI quer dizer **Comissão Parlamentar de Inquérito**: um grupo de deputados ou senadores que investiga um assunto.",
+   "itens": [
+    { "ic": "✍️", "txt": "Para criar uma CPI, 1/3 da Casa precisa assinar: 171 deputados ou 27 senadores." },
+    { "ic": "🎯", "txt": "Ela investiga um **fato determinado** e tem prazo para terminar." },
+    { "ic": "🔍", "txt": "Tem poderes de investigação parecidos com os de um juiz." },
+    { "ic": "📨", "txt": "A CPI não condena ninguém. No fim, manda suas conclusões ao Ministério Público." }
+   ],
+   "ilustracao": "congresso",
+   "fontes": ["cf-art58"]
+  },
+  {
+   "tipo": "passos",
+   "titulo": "Impeachment, passo a passo",
+   "texto": "É o processo que pode tirar o presidente do cargo por **crime de responsabilidade**: atos graves contra a Constituição.",
+   "passos": [
+    { "ic": "📝", "titulo": "A denúncia", "txt": "Qualquer cidadão pode apresentar uma denúncia à Câmara dos Deputados." },
+    { "ic": "🗳️", "titulo": "A Câmara autoriza", "txt": "Para o processo seguir, 2/3 dos deputados precisam votar a favor: 342 de 513." },
+    { "ic": "⏸️", "titulo": "O afastamento", "txt": "Quando o Senado abre o processo, o presidente fica afastado por até 180 dias. O vice assume." },
+    { "ic": "⚖️", "titulo": "O Senado julga", "txt": "Quem comanda a sessão é o presidente do STF. Para condenar, são precisos 54 dos 81 senadores." },
+    { "ic": "🚪", "titulo": "A decisão", "txt": "Se condenado, perde o cargo e fica 8 anos sem poder exercer função pública." }
+   ],
+   "fontes": ["lei1079", "cf-art51-52", "cf-art79-85-86"]
+  },
+  {
+   "tipo": "comparar",
+   "titulo": "Isso já aconteceu duas vezes depois de 1988",
+   "texto": "Os dois casos, contados do **mesmo jeito**:",
+   "colunas": [
+    {
+     "ic": "📅",
+     "titulo": "1992",
+     "itens": [
+      "Presidente: Fernando Collor.",
+      "A Câmara autorizou o processo, por 441 votos a 38.",
+      "Ele foi afastado, e o vice, Itamar Franco, assumiu.",
+      "No dia do julgamento no Senado, ele renunciou ao cargo.",
+      "O Senado seguiu e decidiu, por 76 a 3: 8 anos sem função pública."
+     ]
+    },
+    {
+     "ic": "📅",
+     "titulo": "2016",
+     "itens": [
+      "Presidente: Dilma Rousseff.",
+      "A Câmara autorizou o processo, por 367 votos a 137.",
+      "Ela foi afastada, e o vice, Michel Temer, assumiu.",
+      "O Senado a condenou, por 61 a 20, e ela perdeu o cargo.",
+      "Numa votação separada, os 8 anos sem função pública não foram aplicados."
+     ]
+    }
+   ],
+   "fontes": ["senado-impeachment-2016-05", "senado-impeachment-2016-08", "cf-art79-85-86"]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "MANDATO",
+   "titulo": "Cassação e direito de defesa",
+   "itens": [
+    { "ic": "✂️", "txt": "Deputados e senadores podem perder o mandato. Isso se chama **cassação**." },
+    { "ic": "🙊", "txt": "Um motivo é a quebra de decoro: agir de forma incompatível com o cargo, como receber vantagens indevidas." },
+    { "ic": "🗳️", "txt": "Nesse caso, a própria Câmara ou o Senado decide, por maioria absoluta. A pessoa tem direito de se defender." },
+    { "ic": "🏛️", "txt": "A Justiça Eleitoral também pode cassar quem foi eleito comprando votos." },
+    { "ic": "⚖️", "txt": "Investigado **não é culpado**. Pela Constituição, só é culpado quem foi condenado e não pode mais recorrer." }
+   ],
+   "emoji": "✂️",
+   "coruja": "Ser investigado, ou até acusado, não é o mesmo que ser culpado.",
+   "fontes": ["cf-art55", "lei9504-41a", "cf-art5"]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "TRANSPARÊNCIA",
+   "titulo": "Todo mundo pode fiscalizar",
+   "texto": "Informação pública é de todos. Veja algumas ferramentas.",
+   "itens": [
+    { "ic": "💻", "txt": "O **Portal da Transparência** mostra como o governo federal usa o dinheiro. Não precisa de senha." },
+    { "ic": "📨", "txt": "Pela Lei de Acesso à Informação, qualquer pessoa pode pedir dados públicos, sem dizer o motivo." },
+    { "ic": "⏳", "txt": "O órgão tem até 20 dias para responder e pode pedir mais 10." },
+    { "ic": "📰", "txt": "A **imprensa livre** também fiscaliza. A Constituição proíbe a censura." }
+   ],
+   "ilustracao": "cofre",
+   "fontes": ["portal-transparencia", "lei12527", "cf-art220"]
+  },
+  {
+   "tipo": "quiz",
+   "pergunta": "Uma CPI terminou a investigação. Ela pode condenar alguém?",
+   "opcoes": [
+    "Sim, a CPI decide a pena",
+    "Não. Ela manda as conclusões ao Ministério Público",
+    "Só se o presidente da República deixar"
+   ],
+   "certa": 1,
+   "explica": "A CPI investiga, mas não julga. Ela envia o que descobriu ao Ministério Público, que pode levar o caso à Justiça.",
+   "fontes": ["cf-art58"]
+  }
+ ]
+}

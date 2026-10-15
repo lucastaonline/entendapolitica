@@ -1,0 +1,74 @@
+# Atualiza os dados todos os dias (6h de Brasília) e publica: cada commit na main faz a Vercel publicar sozinha.
+# Também dá para rodar à mão: aba Actions > "Atualizar dados" > Run workflow.
+name: Atualizar dados
+
+on:
+  schedule:
+    - cron: "0 9 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  models: read
+
+concurrency:
+  group: atualizar-dados
+  cancel-in-progress: false
+
+jobs:
+  atualizar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install pillow
+
+      # arquivos grandes e que não mudam (eleições de 2018, 2022 e 2024 do TSE)
+      - uses: actions/cache@v4
+        with:
+          path: .cache/tse
+          key: tse-v1
+
+      - name: Câmara dos Deputados
+        run: python scripts/camara.py
+        continue-on-error: true
+
+      - name: Senado Federal
+        run: python scripts/senado.py
+        continue-on-error: true
+
+      - name: Presidente e vice
+        run: python scripts/executivo.py
+        continue-on-error: true
+
+      - name: TSE e IBGE
+        run: python scripts/tse.py
+        continue-on-error: true
+
+      - name: Explicações simples (português e inglês)
+        run: python scripts/simplificar.py
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          LIMITE: "140"
+
+      - name: Juntar tudo
+        run: python scripts/montar.py
+
+      - name: Salvar no repositório
+        run: |
+          git config user.name "lucastaonline"
+          git config user.email "31556507+lucastaonline@users.noreply.github.com"
+          git add dados img/pessoas
+          if git diff --cached --quiet; then
+            echo "Nada mudou."
+          else
+            git commit -m "Dados atualizados em $(date -u +%Y-%m-%d)"
+            git push
+          fi

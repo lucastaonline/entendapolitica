@@ -1,0 +1,511 @@
+{
+ "parte": 2,
+ "ic": "🏛️",
+ "nome": "Os Três Poderes",
+ "resumo": "Como o poder é dividido em Legislativo, Executivo e Judiciário, e como um Poder controla o outro.",
+ "fontes": [
+  {
+   "id": "cf-art2",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 2º",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art18",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 18 (Brasília é a capital)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art44",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 44",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art60",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 60, § 4º",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art66",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 66 (sanção e veto)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art76",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 76",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art92",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 92",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art101",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 101",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art102",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 102",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art125",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 125",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-impeachment",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, arts. 51, 52, 85 e 86 (impeachment)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-estados-cidades",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, arts. 27, 28, 29 e 31 (estados e municípios)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "plen-tres-poderes",
+   "veiculo": "Plenarinho (Câmara dos Deputados)",
+   "titulo": "Os Três Poderes",
+   "url": "https://plenarinho.leg.br/index.php/2017/09/os-tres-poderes/",
+   "data": "2017-09-07"
+  },
+  {
+   "id": "plen-vogel",
+   "veiculo": "Plenarinho (Câmara dos Deputados)",
+   "titulo": "Os Três Poderes e suas atribuições, por Luiz Vogel",
+   "url": "https://plenarinho.leg.br/index.php/2020/09/os-tres-poderes-e-suas-atribuicoes-por-luiz-vogel/",
+   "data": "2020-09-08"
+  },
+  {
+   "id": "plen-3poderes-casa",
+   "veiculo": "Plenarinho (Câmara dos Deputados)",
+   "titulo": "Os 3 Poderes dentro de casa",
+   "url": "https://plenarinho.leg.br/index.php/2018/01/os-3-poderes-dentro-de-casa/",
+   "data": "2018-01-03"
+  },
+  {
+   "id": "plen-brasilia",
+   "veiculo": "Plenarinho (Câmara dos Deputados)",
+   "titulo": "Brasília: cidade planejada",
+   "url": "https://plenarinho.leg.br/index.php/2018/04/brasilia-cidade-planejada/",
+   "data": "2018-04-03"
+  },
+  {
+   "id": "plen-mudanca-capital",
+   "veiculo": "Plenarinho (Câmara dos Deputados)",
+   "titulo": "A mudança da capital para Brasília",
+   "url": "https://plenarinho.leg.br/index.php/2018/04/a-mudanca-da-capital-para-brasilia/",
+   "data": "2018-04-11"
+  },
+  {
+   "id": "plen-governador",
+   "veiculo": "Plenarinho (Câmara dos Deputados)",
+   "titulo": "A Turma explica as eleições – Governadores",
+   "url": "https://plenarinho.leg.br/index.php/2022/08/turma-explica-eleicoes-governadores/",
+   "data": "2022-08-29"
+  },
+  {
+   "id": "plen-prefeito-vereador",
+   "veiculo": "Plenarinho (Câmara dos Deputados)",
+   "titulo": "Vereador e prefeito – quem faz o quê?",
+   "url": "https://plenarinho.leg.br/index.php/2024/03/eleicoes-municipais-vem-ai/",
+   "data": "2024-03-06"
+  }
+ ],
+ "glossario": [
+  {
+   "termo": "freios e contrapesos",
+   "simples": "Jeito de organizar os Poderes para que um possa frear o outro."
+  },
+  {
+   "termo": "impeachment",
+   "simples": "Processo que pode tirar o presidente do cargo por uma falta grave contra a Constituição."
+  },
+  {
+   "termo": "veto",
+   "simples": "Quando o presidente, o governador ou o prefeito diz “não” a uma lei aprovada."
+  },
+  {
+   "termo": "fiscalizar",
+   "simples": "Acompanhar de perto para conferir se está tudo certo."
+  },
+  {
+   "termo": "Congresso Nacional",
+   "simples": "Onde trabalham os deputados federais e os senadores, que fazem as leis do país."
+  },
+  {
+   "termo": "Assembleia Legislativa",
+   "simples": "Onde trabalham os deputados estaduais, que fazem as leis do estado."
+  },
+  {
+   "termo": "Câmara Municipal",
+   "simples": "Onde trabalham os vereadores, que fazem as leis da cidade."
+  },
+  {
+   "termo": "Tribunal de Justiça",
+   "simples": "O tribunal mais alto da Justiça de cada estado."
+  },
+  {
+   "termo": "STF",
+   "simples": "Supremo Tribunal Federal, o tribunal mais alto do país, que protege a Constituição."
+  },
+  {
+   "termo": "ministro",
+   "simples": "No governo, é quem ajuda o presidente a cuidar de uma área; no STF, é o nome de cada juiz."
+  },
+  {
+   "termo": "regulamento",
+   "simples": "Conjunto de regras de um campeonato, de uma escola ou de um lugar."
+  },
+  {
+   "termo": "independente",
+   "simples": "Que não recebe ordens de outro."
+  },
+  {
+   "termo": "harmônico",
+   "simples": "Que trabalha em equilíbrio com os outros."
+  },
+  {
+   "termo": "capital",
+   "simples": "Cidade onde fica a sede do governo."
+  },
+  {
+   "termo": "Legislativo",
+   "simples": "Poder que faz as leis e fiscaliza quem governa."
+  },
+  {
+   "termo": "Executivo",
+   "simples": "Poder que governa: põe as leis em prática e cuida dos serviços públicos."
+  },
+  {
+   "termo": "Judiciário",
+   "simples": "Poder que julga e resolve conflitos usando as leis."
+  },
+  {
+   "termo": "Poder",
+   "simples": "Cada uma das três partes que dividem o comando do país: Legislativo, Executivo e Judiciário."
+  }
+ ],
+ "slides": [
+  {
+   "tipo": "abertura",
+   "titulo": "O poder do país é dividido em três",
+   "texto": "Assim, ninguém manda sozinho. Cada **Poder** tem uma tarefa, e um fica de olho no outro.",
+   "ilustracao": "tres-poderes"
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "A REGRA",
+   "titulo": "Por que dividir o poder?",
+   "texto": "A Constituição diz que os três Poderes são “independentes e harmônicos entre si”.",
+   "itens": [
+    {
+     "ic": "🙅",
+     "txt": "Se o mesmo grupo fizesse as leis, governasse e julgasse, teria poder demais."
+    },
+    {
+     "ic": "🧩",
+     "txt": "**Independentes**: um Poder não é chefe do outro."
+    },
+    {
+     "ic": "🤝",
+     "txt": "**Harmônicos**: os três trabalham em equilíbrio, cada um na sua tarefa."
+    },
+    {
+     "ic": "🔒",
+     "txt": "Nem mudando a Constituição dá para acabar com essa divisão."
+    }
+   ],
+   "ilustracao": "balanca",
+   "coruja": "Essa ideia ficou famosa com um pensador francês chamado Montesquieu.",
+   "fontes": [
+    "cf-art2",
+    "cf-art60",
+    "plen-tres-poderes",
+    "plen-vogel"
+   ]
+  },
+  {
+   "tipo": "cards",
+   "etiqueta": "OS TRÊS PODERES",
+   "titulo": "Cada Poder tem uma tarefa",
+   "texto": "Veja quem faz cada coisa no país, no estado e na cidade.",
+   "cards": [
+    {
+     "ic": "📜",
+     "titulo": "Legislativo",
+     "txt": "Faz as leis e tem a tarefa de **fiscalizar** quem governa.",
+     "dados": [
+      {
+       "rot": "No país",
+       "val": "Congresso Nacional"
+      },
+      {
+       "rot": "No estado",
+       "val": "Assembleia Legislativa"
+      },
+      {
+       "rot": "Na cidade",
+       "val": "Câmara Municipal"
+      }
+     ],
+     "mais": "No país, o Congresso Nacional tem duas partes: a Câmara dos Deputados e o Senado Federal. Na cidade, quem faz as leis são os vereadores."
+    },
+    {
+     "ic": "⚙️",
+     "titulo": "Executivo",
+     "txt": "Põe as leis em prática e cuida dos serviços públicos, como escolas e hospitais.",
+     "dados": [
+      {
+       "rot": "No país",
+       "val": "Presidente"
+      },
+      {
+       "rot": "No estado",
+       "val": "Governador(a)"
+      },
+      {
+       "rot": "Na cidade",
+       "val": "Prefeito(a)"
+      }
+     ],
+     "mais": "O presidente tem a ajuda dos ministros. Governadores e prefeitos têm a ajuda de secretários. Cada um cuida de uma área, como saúde ou educação."
+    },
+    {
+     "ic": "⚖️",
+     "titulo": "Judiciário",
+     "txt": "Julga, resolve conflitos e faz as leis serem cumpridas.",
+     "dados": [
+      {
+       "rot": "Quem trabalha",
+       "val": "Juízes e tribunais"
+      },
+      {
+       "rot": "Tribunal mais alto",
+       "val": "STF"
+      }
+     ],
+     "mais": "STF quer dizer Supremo Tribunal Federal. A principal tarefa dele é proteger a Constituição. Os 11 juízes do STF são chamados de ministros."
+    }
+   ],
+   "fontes": [
+    "cf-art44",
+    "cf-art76",
+    "cf-art92",
+    "cf-art101",
+    "cf-art102",
+    "plen-tres-poderes",
+    "plen-prefeito-vereador"
+   ]
+  },
+  {
+   "tipo": "historia",
+   "titulo": "Imagine o campeonato de futebol da escola",
+   "quadros": [
+    {
+     "ic": "📝",
+     "txt": "Representantes das turmas escrevem o **regulamento**: quanto dura o jogo, o que é falta..."
+    },
+    {
+     "ic": "📅",
+     "txt": "A organização marca os jogos, arruma a quadra e cuida das bolas."
+    },
+    {
+     "ic": "🟨",
+     "txt": "O juiz apita. Se houver briga sobre uma regra, ele decide, seguindo o regulamento."
+    },
+    {
+     "ic": "🤔",
+     "txt": "E se o mesmo time escrevesse as regras, organizasse e apitasse? Ficaria fácil puxar para o lado dele."
+    }
+   ],
+   "moral": "É só uma comparação! Quem escreve as regras lembra o Legislativo. Quem organiza, o Executivo. Quem apita, o Judiciário.",
+   "fontes": [
+    "plen-3poderes-casa",
+    "plen-tres-poderes"
+   ]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "FREIOS E CONTRAPESOS",
+   "titulo": "Um Poder fica de olho no outro",
+   "texto": "Isso se chama **freios e contrapesos**: cada Poder pode frear o outro, seguindo a Constituição.",
+   "itens": [
+    {
+     "ic": "✋",
+     "txt": "O presidente pode vetar uma lei aprovada pelo Congresso. Vetar é dizer “não”."
+    },
+    {
+     "ic": "🔁",
+     "txt": "O Congresso pode derrubar o veto. Para isso, precisa de mais da metade dos deputados e dos senadores."
+    },
+    {
+     "ic": "⚖️",
+     "txt": "O STF pode decidir que uma lei vai contra a Constituição. Aí, ela deixa de valer."
+    },
+    {
+     "ic": "🧑‍⚖️",
+     "txt": "O presidente escolhe os ministros do STF, mas o Senado precisa aprovar."
+    },
+    {
+     "ic": "🚨",
+     "txt": "Em casos muito graves, a Câmara e o Senado podem tirar o presidente do cargo. É o **impeachment**."
+    }
+   ],
+   "emoji": "👀",
+   "coruja": "Governadores e prefeitos também podem vetar leis do estado e da cidade.",
+   "fontes": [
+    "cf-art66",
+    "cf-art101",
+    "cf-art102",
+    "cf-impeachment",
+    "plen-vogel",
+    "plen-governador",
+    "plen-prefeito-vereador"
+   ]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "PRAÇA DOS TRÊS PODERES",
+   "titulo": "Em Brasília, os três Poderes ficam na mesma praça",
+   "texto": "Ela se chama **Praça dos Três Poderes**. Cada prédio é a casa de um Poder.",
+   "itens": [
+    {
+     "ic": "🏢",
+     "txt": "Palácio do Planalto: casa do Executivo, onde trabalha o presidente."
+    },
+    {
+     "ic": "🏛️",
+     "txt": "Congresso Nacional: casa do Legislativo, com deputados federais e senadores."
+    },
+    {
+     "ic": "⚖️",
+     "txt": "Supremo Tribunal Federal: casa do tribunal mais alto do Judiciário."
+    },
+    {
+     "ic": "🎂",
+     "txt": "Brasília foi inaugurada em 21 de abril de 1960. Antes, a capital era o Rio de Janeiro."
+    }
+   ],
+   "ilustracao": "congresso",
+   "coruja": "Capital é a cidade onde fica a sede do governo. Brasília é a capital do Brasil.",
+   "fontes": [
+    "plen-tres-poderes",
+    "plen-brasilia",
+    "plen-mudanca-capital",
+    "cf-art18"
+   ]
+  },
+  {
+   "tipo": "comparar",
+   "titulo": "Os três Poderes no país, no estado e na cidade",
+   "texto": "A divisão se repete no estado e na cidade. Mas a cidade não tem uma **Justiça só dela**.",
+   "colunas": [
+    {
+     "ic": "🇧🇷",
+     "titulo": "No país",
+     "itens": [
+      "Executivo: presidente",
+      "Legislativo: Congresso Nacional (deputados federais e senadores)",
+      "Judiciário: STF e outros tribunais"
+     ]
+    },
+    {
+     "ic": "🗺️",
+     "titulo": "No estado",
+     "itens": [
+      "Executivo: governador(a)",
+      "Legislativo: Assembleia Legislativa (deputados estaduais)",
+      "Judiciário: Tribunal de Justiça e juízes do estado"
+     ]
+    },
+    {
+     "ic": "🏘️",
+     "titulo": "Na cidade",
+     "itens": [
+      "Executivo: prefeito(a)",
+      "Legislativo: Câmara Municipal (vereadores)",
+      "Judiciário: a cidade não tem um próprio"
+     ],
+     "exemplo": "Na cidade, quem julga são juízes do estado ou juízes federais."
+    }
+   ],
+   "fontes": [
+    "cf-art92",
+    "cf-art125",
+    "cf-estados-cidades",
+    "plen-tres-poderes"
+   ]
+  },
+  {
+   "tipo": "quiz",
+   "pergunta": "Quem faz as leis?",
+   "opcoes": [
+    "O Poder Judiciário",
+    "O Poder Legislativo",
+    "O Poder Executivo"
+   ],
+   "certa": 1,
+   "explica": "O Legislativo faz as leis: Congresso no país, Assembleia no estado e Câmara Municipal na cidade.",
+   "fontes": [
+    "plen-tres-poderes",
+    "cf-art44"
+   ]
+  },
+  {
+   "tipo": "quiz",
+   "pergunta": "Quem decide se uma lei respeita a Constituição?",
+   "opcoes": [
+    "O presidente da República",
+    "A Câmara Municipal",
+    "O Supremo Tribunal Federal (STF)"
+   ],
+   "certa": 2,
+   "explica": "Proteger a Constituição é a principal tarefa do STF. Se uma lei vai contra ela, o STF pode dizer que ela não vale.",
+   "fontes": [
+    "cf-art102"
+   ]
+  },
+  {
+   "tipo": "quiz",
+   "pergunta": "Na sua cidade, quem comanda o Poder Executivo?",
+   "opcoes": [
+    "O vereador ou a vereadora",
+    "O prefeito ou a prefeita",
+    "O juiz ou a juíza"
+   ],
+   "certa": 1,
+   "explica": "O prefeito ou a prefeita comanda a prefeitura. Os vereadores fazem as leis da cidade e podem fiscalizar a prefeitura.",
+   "fontes": [
+    "plen-prefeito-vereador",
+    "plen-tres-poderes"
+   ]
+  }
+ ]
+}

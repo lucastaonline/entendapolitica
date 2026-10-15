@@ -1,0 +1,511 @@
+{
+ "parte": 2,
+ "ic": "🏛️",
+ "nome": "The Three Branches",
+ "resumo": "How power is divided into the Legislative, the Executive and the Judiciary, and how one branch keeps a check on another.",
+ "fontes": [
+  {
+   "id": "cf-art2",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 2 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art18",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 18 (Brasília is the capital) (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art44",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 44 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art60",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 60, § 4 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art66",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 66 (sanction and veto) (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art76",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 76 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art92",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 92 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art101",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 101 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art102",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 102 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art125",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 125 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-impeachment",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, arts. 51, 52, 85 and 86 (impeachment) (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-estados-cidades",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, arts. 27, 28, 29 and 31 (states and municipalities) (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "plen-tres-poderes",
+   "veiculo": "Plenarinho (Câmara dos Deputados)",
+   "titulo": "Os Três Poderes (in Portuguese)",
+   "url": "https://plenarinho.leg.br/index.php/2017/09/os-tres-poderes/",
+   "data": "2017-09-07"
+  },
+  {
+   "id": "plen-vogel",
+   "veiculo": "Plenarinho (Câmara dos Deputados)",
+   "titulo": "Os Três Poderes e suas atribuições, por Luiz Vogel (in Portuguese)",
+   "url": "https://plenarinho.leg.br/index.php/2020/09/os-tres-poderes-e-suas-atribuicoes-por-luiz-vogel/",
+   "data": "2020-09-08"
+  },
+  {
+   "id": "plen-3poderes-casa",
+   "veiculo": "Plenarinho (Câmara dos Deputados)",
+   "titulo": "Os 3 Poderes dentro de casa (in Portuguese)",
+   "url": "https://plenarinho.leg.br/index.php/2018/01/os-3-poderes-dentro-de-casa/",
+   "data": "2018-01-03"
+  },
+  {
+   "id": "plen-brasilia",
+   "veiculo": "Plenarinho (Câmara dos Deputados)",
+   "titulo": "Brasília: cidade planejada (in Portuguese)",
+   "url": "https://plenarinho.leg.br/index.php/2018/04/brasilia-cidade-planejada/",
+   "data": "2018-04-03"
+  },
+  {
+   "id": "plen-mudanca-capital",
+   "veiculo": "Plenarinho (Câmara dos Deputados)",
+   "titulo": "A mudança da capital para Brasília (in Portuguese)",
+   "url": "https://plenarinho.leg.br/index.php/2018/04/a-mudanca-da-capital-para-brasilia/",
+   "data": "2018-04-11"
+  },
+  {
+   "id": "plen-governador",
+   "veiculo": "Plenarinho (Câmara dos Deputados)",
+   "titulo": "A Turma explica as eleições – Governadores (in Portuguese)",
+   "url": "https://plenarinho.leg.br/index.php/2022/08/turma-explica-eleicoes-governadores/",
+   "data": "2022-08-29"
+  },
+  {
+   "id": "plen-prefeito-vereador",
+   "veiculo": "Plenarinho (Câmara dos Deputados)",
+   "titulo": "Vereador e prefeito – quem faz o quê? (in Portuguese)",
+   "url": "https://plenarinho.leg.br/index.php/2024/03/eleicoes-municipais-vem-ai/",
+   "data": "2024-03-06"
+  }
+ ],
+ "glossario": [
+  {
+   "termo": "checks and balances",
+   "simples": "A way of organizing the branches so that one can put the brakes on another."
+  },
+  {
+   "termo": "impeachment",
+   "simples": "A process that can remove the president from office for a serious offense against the Constitution."
+  },
+  {
+   "termo": "veto",
+   "simples": "When the president, the governor or the mayor says “no” to a law that was approved."
+  },
+  {
+   "termo": "oversee",
+   "simples": "To follow something closely to check that everything is right."
+  },
+  {
+   "termo": "National Congress",
+   "simples": "Where the federal deputies and the senators work. They make the country's laws."
+  },
+  {
+   "termo": "Legislative Assembly",
+   "simples": "Where the state deputies work. They make the state's laws. In Portuguese: Assembleia Legislativa."
+  },
+  {
+   "termo": "City Council",
+   "simples": "Where the city councilors work. They make the city's laws. In Portuguese: Câmara Municipal (and a city councilor is a vereador)."
+  },
+  {
+   "termo": "Court of Justice",
+   "simples": "The highest court of the Justice system in each state. In Portuguese: Tribunal de Justiça."
+  },
+  {
+   "termo": "STF",
+   "simples": "Supremo Tribunal Federal (Supreme Federal Court), the highest court in the country, which protects the Constitution."
+  },
+  {
+   "termo": "minister",
+   "simples": "In the government, a person who helps the president take care of an area; in the STF, the name given to each judge."
+  },
+  {
+   "termo": "rulebook",
+   "simples": "A set of rules for a tournament, a school or a place."
+  },
+  {
+   "termo": "independent",
+   "simples": "Not taking orders from anyone else."
+  },
+  {
+   "termo": "harmonious",
+   "simples": "Working in balance with the others."
+  },
+  {
+   "termo": "capital",
+   "simples": "The city where the seat of government is."
+  },
+  {
+   "termo": "Legislative",
+   "simples": "The branch that makes the laws and oversees the people who govern."
+  },
+  {
+   "termo": "Executive",
+   "simples": "The branch that governs: it puts the laws into practice and takes care of public services."
+  },
+  {
+   "termo": "Judiciary",
+   "simples": "The branch that judges and settles conflicts using the laws."
+  },
+  {
+   "termo": "branch",
+   "simples": "Each of the three parts that share the command of the country: Legislative, Executive and Judiciary. In Portuguese: Poder."
+  }
+ ],
+ "slides": [
+  {
+   "tipo": "abertura",
+   "titulo": "The country's power is divided into three",
+   "texto": "That way, no one is in charge alone. Each **branch** has a job, and each one keeps an eye on the others.",
+   "ilustracao": "tres-poderes"
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "THE RULE",
+   "titulo": "Why divide power?",
+   "texto": "The Constitution says that the three branches are “independent and harmonious with each other”.",
+   "itens": [
+    {
+     "ic": "🙅",
+     "txt": "If the same group made the laws, governed and judged, it would have too much power."
+    },
+    {
+     "ic": "🧩",
+     "txt": "**Independent**: no branch is the boss of another."
+    },
+    {
+     "ic": "🤝",
+     "txt": "**Harmonious**: the three work in balance, each one doing its own job."
+    },
+    {
+     "ic": "🔒",
+     "txt": "Not even a change to the Constitution can end this division."
+    }
+   ],
+   "ilustracao": "balanca",
+   "coruja": "This idea became famous through a French thinker named Montesquieu.",
+   "fontes": [
+    "cf-art2",
+    "cf-art60",
+    "plen-tres-poderes",
+    "plen-vogel"
+   ]
+  },
+  {
+   "tipo": "cards",
+   "etiqueta": "THE THREE BRANCHES",
+   "titulo": "Each branch has a job",
+   "texto": "See who does what in the country, in the state and in the city.",
+   "cards": [
+    {
+     "ic": "📜",
+     "titulo": "Legislative",
+     "txt": "It makes the laws and has the job to **oversee** the people who govern.",
+     "dados": [
+      {
+       "rot": "In the country",
+       "val": "National Congress"
+      },
+      {
+       "rot": "In the state",
+       "val": "Legislative Assembly"
+      },
+      {
+       "rot": "In the city",
+       "val": "City Council"
+      }
+     ],
+     "mais": "In the country, the National Congress has two parts: the Chamber of Deputies (Câmara dos Deputados) and the Federal Senate (Senado Federal). In the city, the laws are made by city councilors (vereadores)."
+    },
+    {
+     "ic": "⚙️",
+     "titulo": "Executive",
+     "txt": "It puts the laws into practice and takes care of public services, like schools and hospitals.",
+     "dados": [
+      {
+       "rot": "In the country",
+       "val": "President"
+      },
+      {
+       "rot": "In the state",
+       "val": "Governor"
+      },
+      {
+       "rot": "In the city",
+       "val": "Mayor"
+      }
+     ],
+     "mais": "The president gets help from ministers. Governors and mayors get help from secretaries. Each one takes care of an area, like health or education."
+    },
+    {
+     "ic": "⚖️",
+     "titulo": "Judiciary",
+     "txt": "It judges, settles conflicts and makes sure the laws are followed.",
+     "dados": [
+      {
+       "rot": "Who works there",
+       "val": "Judges and courts"
+      },
+      {
+       "rot": "Highest court",
+       "val": "STF"
+      }
+     ],
+     "mais": "STF stands for Supremo Tribunal Federal (Supreme Federal Court). Its main job is to protect the Constitution. The 11 judges of the STF are called ministers (ministros)."
+    }
+   ],
+   "fontes": [
+    "cf-art44",
+    "cf-art76",
+    "cf-art92",
+    "cf-art101",
+    "cf-art102",
+    "plen-tres-poderes",
+    "plen-prefeito-vereador"
+   ]
+  },
+  {
+   "tipo": "historia",
+   "titulo": "Imagine the school soccer tournament",
+   "quadros": [
+    {
+     "ic": "📝",
+     "txt": "Class representatives write the **rulebook**: how long a game lasts, what counts as a foul..."
+    },
+    {
+     "ic": "📅",
+     "txt": "The organizers schedule the games, get the court ready and look after the balls."
+    },
+    {
+     "ic": "🟨",
+     "txt": "The referee blows the whistle. If there is an argument about a rule, the referee decides, following the rulebook."
+    },
+    {
+     "ic": "🤔",
+     "txt": "What if the same team wrote the rules, organized the games and refereed them? It would be easy to favor their own side."
+    }
+   ],
+   "moral": "It's just a comparison! Whoever writes the rules is like the Legislative. Whoever organizes is like the Executive. Whoever referees is like the Judiciary.",
+   "fontes": [
+    "plen-3poderes-casa",
+    "plen-tres-poderes"
+   ]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "CHECKS AND BALANCES",
+   "titulo": "Each branch keeps an eye on the others",
+   "texto": "This is called **checks and balances**: each branch can put the brakes on another, following the Constitution.",
+   "itens": [
+    {
+     "ic": "✋",
+     "txt": "The president can veto a law passed by Congress. To veto means to say “no”."
+    },
+    {
+     "ic": "🔁",
+     "txt": "Congress can override the veto. For that, it needs more than half of all deputies and more than half of all senators."
+    },
+    {
+     "ic": "⚖️",
+     "txt": "The STF can decide that a law goes against the Constitution. Then the law stops being valid."
+    },
+    {
+     "ic": "🧑‍⚖️",
+     "txt": "The president chooses the STF ministers (its judges), but the Senate must approve them."
+    },
+    {
+     "ic": "🚨",
+     "txt": "In very serious cases, the Chamber of Deputies and the Senate can remove the president from office. This is **impeachment**."
+    }
+   ],
+   "emoji": "👀",
+   "coruja": "Governors and mayors can also veto state and city laws.",
+   "fontes": [
+    "cf-art66",
+    "cf-art101",
+    "cf-art102",
+    "cf-impeachment",
+    "plen-vogel",
+    "plen-governador",
+    "plen-prefeito-vereador"
+   ]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "THREE POWERS SQUARE",
+   "titulo": "In Brasília, the three branches are in the same square",
+   "texto": "It is called **Three Powers Square** (Praça dos Três Poderes). Each building is the home of one branch.",
+   "itens": [
+    {
+     "ic": "🏢",
+     "txt": "Planalto Palace (Palácio do Planalto): home of the Executive, where the president works."
+    },
+    {
+     "ic": "🏛️",
+     "txt": "National Congress: home of the Legislative, with the federal deputies and the senators."
+    },
+    {
+     "ic": "⚖️",
+     "txt": "Supreme Federal Court: home of the highest court of the Judiciary."
+    },
+    {
+     "ic": "🎂",
+     "txt": "Brasília was inaugurated on April 21, 1960. Before that, the capital was Rio de Janeiro."
+    }
+   ],
+   "ilustracao": "congresso",
+   "coruja": "The capital is the city where the seat of government is. Brasília is the capital of Brazil.",
+   "fontes": [
+    "plen-tres-poderes",
+    "plen-brasilia",
+    "plen-mudanca-capital",
+    "cf-art18"
+   ]
+  },
+  {
+   "tipo": "comparar",
+   "titulo": "The three branches in the country, the state and the city",
+   "texto": "The same division happens in the state and in the city. But the city does not have **its own courts**.",
+   "colunas": [
+    {
+     "ic": "🇧🇷",
+     "titulo": "In the country",
+     "itens": [
+      "Executive: president",
+      "Legislative: National Congress (federal deputies and senators)",
+      "Judiciary: STF and other courts"
+     ]
+    },
+    {
+     "ic": "🗺️",
+     "titulo": "In the state",
+     "itens": [
+      "Executive: governor",
+      "Legislative: Legislative Assembly (state deputies)",
+      "Judiciary: Court of Justice and state judges"
+     ]
+    },
+    {
+     "ic": "🏘️",
+     "titulo": "In the city",
+     "itens": [
+      "Executive: mayor",
+      "Legislative: City Council (city councilors)",
+      "Judiciary: the city does not have its own"
+     ],
+     "exemplo": "In the city, cases are judged by state judges or by federal judges."
+    }
+   ],
+   "fontes": [
+    "cf-art92",
+    "cf-art125",
+    "cf-estados-cidades",
+    "plen-tres-poderes"
+   ]
+  },
+  {
+   "tipo": "quiz",
+   "pergunta": "Who makes the laws?",
+   "opcoes": [
+    "The Judiciary",
+    "The Legislative",
+    "The Executive"
+   ],
+   "certa": 1,
+   "explica": "The Legislative makes the laws: Congress in the country, the Legislative Assembly in the state and the City Council in the city.",
+   "fontes": [
+    "plen-tres-poderes",
+    "cf-art44"
+   ]
+  },
+  {
+   "tipo": "quiz",
+   "pergunta": "Who decides whether a law respects the Constitution?",
+   "opcoes": [
+    "The President of the Republic",
+    "The City Council",
+    "The Supreme Federal Court (STF)"
+   ],
+   "certa": 2,
+   "explica": "Protecting the Constitution is the main job of the STF. If a law goes against it, the STF can say that the law is not valid.",
+   "fontes": [
+    "cf-art102"
+   ]
+  },
+  {
+   "tipo": "quiz",
+   "pergunta": "In your city, who heads the Executive branch?",
+   "opcoes": [
+    "The city councilor",
+    "The mayor",
+    "The judge"
+   ],
+   "certa": 1,
+   "explica": "The mayor heads the city government. City councilors make the city's laws and can oversee the city government.",
+   "fontes": [
+    "plen-prefeito-vereador",
+    "plen-tres-poderes"
+   ]
+  }
+ ]
+}

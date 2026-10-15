@@ -1,0 +1,630 @@
+{
+ "parte": 3,
+ "ic": "🧱",
+ "nome": "País, estado e cidade",
+ "resumo": "Como o Brasil se divide em União, estados e municípios, e quem cuida de cada coisa perto de você.",
+ "fontes": [
+  {
+   "id": "cf-art1",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 1º",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art18",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 18",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art21",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 21",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art23",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 23",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art25",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 25",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art29",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 29",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art30",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 30",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art32",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 32",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art142",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 142",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art144",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 144",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art145",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 145",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art149a",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 149-A",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art198",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 198",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art211",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 211",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "lei-8080",
+   "veiculo": "Planalto",
+   "titulo": "Lei nº 8.080/1990 (Lei do SUS), arts. 4º, 17 e 18",
+   "url": "https://www.planalto.gov.br/ccivil_03/leis/l8080.htm",
+   "data": "1990-09-19"
+  },
+  {
+   "id": "lei-11445",
+   "veiculo": "Planalto",
+   "titulo": "Lei nº 11.445/2007 (saneamento básico), arts. 3º e 8º",
+   "url": "https://www.planalto.gov.br/ccivil_03/_ato2007-2010/2007/lei/l11445.htm",
+   "data": "2007-01-05"
+  },
+  {
+   "id": "lei-6766",
+   "veiculo": "Planalto",
+   "titulo": "Lei nº 6.766/1979, art. 22 (ruas e praças passam a ser do município)",
+   "url": "https://www.planalto.gov.br/ccivil_03/leis/l6766.htm",
+   "data": "1979-12-19"
+  },
+  {
+   "id": "ldb",
+   "veiculo": "Planalto",
+   "titulo": "Lei nº 9.394/1996 (Lei de Diretrizes e Bases da Educação), arts. 10, 11 e 30",
+   "url": "https://www.planalto.gov.br/ccivil_03/leis/l9394.htm",
+   "data": "1996-12-20"
+  },
+  {
+   "id": "ms-sus",
+   "veiculo": "Ministério da Saúde",
+   "titulo": "Sistema Único de Saúde (SUS)",
+   "url": "https://www.gov.br/saude/pt-br/sus",
+   "data": "2026-10-15"
+  },
+  {
+   "id": "gov-passaporte",
+   "veiculo": "Polícia Federal (gov.br)",
+   "titulo": "Obter passaporte",
+   "url": "https://www.gov.br/pt-br/servicos/obter-passaporte-comum-para-brasileiro",
+   "data": "2026-10-07"
+  },
+  {
+   "id": "inss",
+   "veiculo": "INSS (gov.br)",
+   "titulo": "Institucional: histórico e competências do INSS",
+   "url": "https://www.gov.br/inss/pt-br/acesso-a-informacao/institucional/institucional",
+   "data": "2026-10-01"
+  },
+  {
+   "id": "ab-municipios",
+   "veiculo": "Agência Brasil",
+   "titulo": "IBGE atualiza limites territoriais do Brasil; veja o que mudou",
+   "url": "https://agenciabrasil.ebc.com.br/geral/noticia/2026-03/ibge-atualiza-limites-territoriais-do-brasil-veja-o-que-mudou",
+   "data": "2026-03-30"
+  },
+  {
+   "id": "ab-populacao",
+   "veiculo": "Agência Brasil",
+   "titulo": "Crescimento populacional caiu para 0,37% em 2026, estima IBGE",
+   "url": "https://agenciabrasil.ebc.com.br/economia/noticia/2026-08/crescimento-populacional-caiu-para-037-em-2026-estima-ibge",
+   "data": "2026-08-28"
+  },
+  {
+   "id": "plen-republica",
+   "veiculo": "Plenarinho (Câmara dos Deputados)",
+   "titulo": "O que é a República Federativa do Brasil",
+   "url": "https://plenarinho.leg.br/index.php/2018/11/o-que-e-a-republica-federativa-do-brasil/",
+   "data": "2018-11-12"
+  },
+  {
+   "id": "plen-governador",
+   "veiculo": "Plenarinho (Câmara dos Deputados)",
+   "titulo": "A Turma explica as eleições – Governadores",
+   "url": "https://plenarinho.leg.br/index.php/2022/08/turma-explica-eleicoes-governadores/",
+   "data": "2022-08-29"
+  },
+  {
+   "id": "plen-tres-poderes",
+   "veiculo": "Plenarinho (Câmara dos Deputados)",
+   "titulo": "Os Três Poderes",
+   "url": "https://plenarinho.leg.br/index.php/2017/09/os-tres-poderes/",
+   "data": "2017-09-07"
+  }
+ ],
+ "glossario": [
+  {
+   "termo": "federação",
+   "simples": "Jeito de organizar um país em partes com governo próprio, que continuam unidas."
+  },
+  {
+   "termo": "autônomo",
+   "simples": "Que tem suas próprias tarefas, leis e dinheiro."
+  },
+  {
+   "termo": "lei orgânica",
+   "simples": "A lei maior de um município ou do Distrito Federal."
+  },
+  {
+   "termo": "Câmara Legislativa",
+   "simples": "Onde trabalham os deputados distritais, que fazem as leis do Distrito Federal."
+  },
+  {
+   "termo": "deputados distritais",
+   "simples": "Pessoas eleitas para fazer as leis do Distrito Federal."
+  },
+  {
+   "termo": "IBGE",
+   "simples": "Instituto Brasileiro de Geografia e Estatística, o órgão que conta e estuda a população e o território do Brasil."
+  },
+  {
+   "termo": "INSS",
+   "simples": "Instituto Nacional do Seguro Social, o órgão federal que paga aposentadorias e outros benefícios."
+  },
+  {
+   "termo": "aposentadoria",
+   "simples": "Dinheiro pago todo mês a quem trabalhou e contribuiu por anos, por exemplo, ao chegar a certa idade."
+  },
+  {
+   "termo": "Polícia Federal",
+   "simples": "Polícia mantida pela União, que também cuida das fronteiras e faz o passaporte."
+  },
+  {
+   "termo": "passaporte",
+   "simples": "Documento usado para viajar para outros países."
+  },
+  {
+   "termo": "Forças Armadas",
+   "simples": "Marinha, Exército e Aeronáutica, que cuidam da defesa do país."
+  },
+  {
+   "termo": "SUS",
+   "simples": "Sistema Único de Saúde: atendimento público de saúde, de graça, no Brasil inteiro."
+  },
+  {
+   "termo": "prefeitura",
+   "simples": "O governo da cidade, comandado pelo prefeito ou pela prefeita."
+  },
+  {
+   "termo": "governador",
+   "simples": "Pessoa eleita para comandar o governo de um estado ou do Distrito Federal."
+  },
+  {
+   "termo": "Distrito Federal",
+   "simples": "Parte do Brasil onde fica Brasília; não é estado nem município."
+  },
+  {
+   "termo": "União",
+   "simples": "O governo do Brasil inteiro, também chamado de governo federal."
+  },
+  {
+   "termo": "município",
+   "simples": "Uma cidade, com seus bairros e o campo ao redor, e com governo próprio."
+  },
+  {
+   "termo": "estado",
+   "simples": "Cada uma das 26 grandes partes do Brasil, com governo próprio."
+  }
+ ],
+ "slides": [
+  {
+   "tipo": "abertura",
+   "titulo": "O Brasil é como um prédio de três andares",
+   "texto": "Os andares são a União (o país todo), os estados e os municípios (as cidades). Isso se chama **federação**.",
+   "ilustracao": "niveis"
+  },
+  {
+   "tipo": "cards",
+   "etiqueta": "FEDERAÇÃO",
+   "titulo": "Cada andar tem seu próprio governo",
+   "texto": "Os três são **autônomos**: cada um tem suas tarefas, suas leis e seu dinheiro.",
+   "cards": [
+    {
+     "ic": "🇧🇷",
+     "titulo": "União",
+     "txt": "É o governo do Brasil inteiro, também chamado de governo federal.",
+     "dados": [
+      {
+       "rot": "Quem governa",
+       "val": "Presidente"
+      },
+      {
+       "rot": "Quem faz as leis",
+       "val": "Congresso Nacional"
+      }
+     ],
+     "mais": "A Constituição diz que a união dos estados, dos municípios e do Distrito Federal não pode ser desfeita. Nenhum estado pode se separar do Brasil."
+    },
+    {
+     "ic": "🗺️",
+     "titulo": "Estados",
+     "txt": "Cada estado tem seu governo e até a sua própria Constituição.",
+     "dados": [
+      {
+       "rot": "Quem governa",
+       "val": "Governador(a)"
+      },
+      {
+       "rot": "Quem faz as leis",
+       "val": "Assembleia Legislativa"
+      }
+     ],
+     "mais": "A Constituição de cada estado precisa respeitar a Constituição do Brasil."
+    },
+    {
+     "ic": "🏘️",
+     "titulo": "Municípios",
+     "txt": "São as cidades, com seus bairros e o campo ao redor.",
+     "dados": [
+      {
+       "rot": "Quem governa",
+       "val": "Prefeito(a)"
+      },
+      {
+       "rot": "Quem faz as leis",
+       "val": "Câmara Municipal"
+      }
+     ],
+     "mais": "A lei maior de cada município se chama lei orgânica. Ela é aprovada pelos vereadores."
+    }
+   ],
+   "fontes": [
+    "cf-art1",
+    "cf-art18",
+    "cf-art25",
+    "cf-art29",
+    "cf-art145",
+    "plen-republica",
+    "plen-tres-poderes"
+   ]
+  },
+  {
+   "tipo": "numeros",
+   "titulo": "O Brasil em números",
+   "texto": "Veja em quantas partes o Brasil se divide e quanta gente mora aqui.",
+   "numeros": [
+    {
+     "val": "26",
+     "rot": "estados",
+     "ic": "🗺️"
+    },
+    {
+     "val": "1",
+     "rot": "Distrito Federal",
+     "ic": "⭐"
+    },
+    {
+     "val": "5.569",
+     "rot": "municípios",
+     "ic": "🏘️"
+    },
+    {
+     "val": "214,2",
+     "rot": "milhões de pessoas",
+     "ic": "👨‍👩‍👧‍👦"
+    }
+   ],
+   "nota": "Números do **IBGE**. Municípios: conta de março de 2026. Pessoas: cálculo para 1º de julho de 2026. Fernando de Noronha (PE) não é município: é um distrito do estado.",
+   "fontes": [
+    "plen-republica",
+    "ab-municipios",
+    "ab-populacao"
+   ]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "UNIÃO",
+   "titulo": "Do que a União cuida?",
+   "texto": "A **União** cuida do que vale para o Brasil inteiro.",
+   "itens": [
+    {
+     "ic": "💵",
+     "txt": "Faz o dinheiro do país: as notas e as moedas."
+    },
+    {
+     "ic": "🪖",
+     "txt": "Comanda as Forças Armadas: Marinha, Exército e Aeronáutica."
+    },
+    {
+     "ic": "🌎",
+     "txt": "Conversa e faz acordos com outros países."
+    },
+    {
+     "ic": "🛂",
+     "txt": "Mantém a Polícia Federal, que também faz o passaporte."
+    },
+    {
+     "ic": "👵",
+     "txt": "Paga as aposentadorias do INSS."
+    }
+   ],
+   "ilustracao": "palacio",
+   "coruja": "As universidades federais também são mantidas pela União.",
+   "fontes": [
+    "cf-art21",
+    "cf-art142",
+    "cf-art144",
+    "gov-passaporte",
+    "inss",
+    "cf-art211"
+   ]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "ESTADO",
+   "titulo": "Do que o estado cuida?",
+   "texto": "O governo do estado é comandado pelo **governador** ou pela governadora.",
+   "itens": [
+    {
+     "ic": "🚓",
+     "txt": "Das polícias Militar e Civil e do Corpo de Bombeiros."
+    },
+    {
+     "ic": "🏫",
+     "txt": "Das escolas estaduais, principalmente de ensino médio."
+    },
+    {
+     "ic": "🏥",
+     "txt": "Dos hospitais estaduais, que fazem parte do SUS."
+    },
+    {
+     "ic": "🔒",
+     "txt": "Da maior parte dos presídios."
+    }
+   ],
+   "ilustracao": "mapa",
+   "coruja": "O ensino fundamental é dividido: estado e cidade cuidam dele juntos.",
+   "fontes": [
+    "cf-art144",
+    "cf-art211",
+    "ldb",
+    "lei-8080",
+    "plen-governador"
+   ]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "CIDADE",
+   "titulo": "Do que a cidade cuida?",
+   "texto": "A **prefeitura** é comandada pelo prefeito ou pela prefeita. Ela cuida do que está mais perto de você.",
+   "itens": [
+    {
+     "ic": "🧸",
+     "txt": "Das creches, das pré-escolas e de escolas de ensino fundamental."
+    },
+    {
+     "ic": "🩺",
+     "txt": "Dos postos de saúde."
+    },
+    {
+     "ic": "🗑️",
+     "txt": "Da coleta de lixo e da limpeza das ruas."
+    },
+    {
+     "ic": "🚌",
+     "txt": "Dos ônibus que circulam dentro da cidade."
+    },
+    {
+     "ic": "💡",
+     "txt": "Das ruas, das praças e da luz dos postes."
+    }
+   ],
+   "ilustracao": "predio",
+   "coruja": "Em várias dessas tarefas, a cidade recebe ajuda do estado e da União.",
+   "fontes": [
+    "cf-art30",
+    "cf-art211",
+    "ldb",
+    "ms-sus",
+    "lei-11445",
+    "lei-6766",
+    "cf-art149a"
+   ]
+  },
+  {
+   "tipo": "simulador",
+   "id": "quem-cuida",
+   "titulo": "Quem cuida disso?",
+   "texto": "Para cada coisa, escolha: o país (União), o estado, a cidade ou todos juntos.",
+   "itens": [
+    {
+     "ic": "🕳️",
+     "txt": "Buraco na rua da sua casa",
+     "quem": "cidade",
+     "explica": "As ruas dos bairros são do município. Quem conserta é a prefeitura."
+    },
+    {
+     "ic": "🚓",
+     "txt": "Polícia Militar",
+     "quem": "estado",
+     "explica": "A PM fica sob o comando do governador do estado."
+    },
+    {
+     "ic": "🛂",
+     "txt": "Passaporte para viajar",
+     "quem": "pais",
+     "explica": "Quem faz o passaporte é a Polícia Federal, mantida pela União."
+    },
+    {
+     "ic": "🩺",
+     "txt": "Posto de saúde do bairro",
+     "quem": "cidade",
+     "explica": "Quem cuida é a cidade, com ajuda do estado e da União."
+    },
+    {
+     "ic": "🎓",
+     "txt": "Universidade federal",
+     "quem": "pais",
+     "explica": "As universidades federais são mantidas pela União."
+    },
+    {
+     "ic": "🏫",
+     "txt": "Ensino médio público",
+     "quem": "estado",
+     "explica": "O ensino médio público fica principalmente com os estados."
+    },
+    {
+     "ic": "🗑️",
+     "txt": "Coleta de lixo",
+     "quem": "cidade",
+     "explica": "Recolher o lixo das casas é tarefa do município."
+    },
+    {
+     "ic": "👵",
+     "txt": "Aposentadoria do INSS",
+     "quem": "pais",
+     "explica": "O INSS é um órgão federal: ele paga as aposentadorias."
+    },
+    {
+     "ic": "🏥",
+     "txt": "SUS, o sistema público de saúde",
+     "quem": "todos",
+     "explica": "O SUS é feito pela União, pelos estados e pelas cidades, juntos."
+    },
+    {
+     "ic": "🌳",
+     "txt": "Proteger florestas e animais",
+     "quem": "todos",
+     "explica": "A Constituição dá essa tarefa a todos: União, estados e cidades."
+    }
+   ],
+   "fontes": [
+    "lei-6766",
+    "cf-art30",
+    "cf-art144",
+    "gov-passaporte",
+    "cf-art211",
+    "lei-11445",
+    "inss",
+    "cf-art198",
+    "lei-8080",
+    "ms-sus",
+    "cf-art23"
+   ]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "DISTRITO FEDERAL",
+   "titulo": "O Distrito Federal é diferente",
+   "texto": "O **Distrito Federal** não é estado nem município. Ele tem um pouco dos dois.",
+   "itens": [
+    {
+     "ic": "🚫",
+     "txt": "Ele não pode ser dividido em municípios. Por isso, lá não tem prefeito nem vereador."
+    },
+    {
+     "ic": "🧑‍💼",
+     "txt": "Quem governa é o governador do DF, eleito junto com os governadores dos estados."
+    },
+    {
+     "ic": "📜",
+     "txt": "As leis do DF são feitas por deputados distritais, na Câmara Legislativa."
+    },
+    {
+     "ic": "🔁",
+     "txt": "O DF faz o trabalho de estado e de cidade ao mesmo tempo."
+    },
+    {
+     "ic": "⭐",
+     "txt": "É no DF que fica Brasília, a capital do Brasil."
+    }
+   ],
+   "emoji": "🏙️",
+   "coruja": "Curiosidade: é a União que organiza e paga a Justiça e as polícias do DF.",
+   "fontes": [
+    "cf-art32",
+    "cf-art18",
+    "cf-art21",
+    "lei-11445",
+    "plen-governador",
+    "plen-tres-poderes"
+   ]
+  },
+  {
+   "tipo": "quiz",
+   "pergunta": "Se a rua da sua casa tem um buraco, quem deve consertar?",
+   "opcoes": [
+    "O presidente da República",
+    "O governo do estado",
+    "A prefeitura da sua cidade"
+   ],
+   "certa": 2,
+   "explica": "As ruas dos bairros são do município, então quem conserta é a prefeitura. Já as estradas grandes (rodovias) podem ser do estado ou da União.",
+   "fontes": [
+    "lei-6766",
+    "cf-art30",
+    "cf-art144",
+    "plen-governador"
+   ]
+  },
+  {
+   "tipo": "quiz",
+   "pergunta": "O Distrito Federal tem prefeito?",
+   "opcoes": [
+    "Sim, um em cada bairro",
+    "Não, porque o DF não pode ser dividido em municípios",
+    "Sim, mas só em Brasília"
+   ],
+   "certa": 1,
+   "explica": "A Constituição proíbe dividir o DF em municípios. Quem governa lá é o governador do DF.",
+   "fontes": [
+    "cf-art32"
+   ]
+  }
+ ]
+}

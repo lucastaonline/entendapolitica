@@ -1,0 +1,1134 @@
+{
+ "atualizado": "2026-10-15",
+ "ministerios": [
+  {
+   "id": "min-advocacia-geral-da-uniao",
+   "ministerio": "Advocacia-Geral da União",
+   "ic": "⚖️",
+   "oQueFaz": "Defende o governo federal na Justiça e dá conselhos jurídicos ao presidente e aos ministérios.",
+   "nome": "Jorge Messias",
+   "genero": "M",
+   "partido": null,
+   "interino": false,
+   "desde": "2023-01-01",
+   "fonte": [
+    {
+     "veiculo": "Presidência da República (Planalto)",
+     "titulo": "Ministros e Ministras (lista oficial do 1º escalão; página atualizada em 05/05/2026)",
+     "url": "https://www.gov.br/planalto/pt-br/conheca-a-presidencia/ministros-e-ministras",
+     "data": "2026-05-05"
+    },
+    {
+     "veiculo": "Poder360",
+     "titulo": "TSE manda Messias apagar vídeo feito com IA a favor de Lula (\"o advogado-geral da União, Jorge Messias\")",
+     "url": "https://www.poder360.com.br/poder-eleicoes-2026/tse-manda-messias-apagar-video-feito-com-ia-a-favor-de-lula/",
+     "data": "2026-10-14"
+    }
+   ]
+  },
+  {
+   "id": "min-agricultura-e-pecuaria",
+   "ministerio": "Ministério da Agricultura e Pecuária",
+   "ic": "🌾",
+   "oQueFaz": "Cuida das regras e do apoio para quem planta e cria animais, e da qualidade dos alimentos que vêm do campo.",
+   "nome": "André de Paula",
+   "genero": "M",
+   "partido": "PSD",
+   "interino": false,
+   "desde": "2026-04-01",
+   "fonte": [
+    {
+     "veiculo": "Presidência da República (Planalto)",
+     "titulo": "Ministros e Ministras (lista oficial do 1º escalão; página atualizada em 05/05/2026)",
+     "url": "https://www.gov.br/planalto/pt-br/conheca-a-presidencia/ministros-e-ministras",
+     "data": "2026-05-05"
+    },
+    {
+     "veiculo": "Controladoria-Geral da União (e-Agendas)",
+     "titulo": "e-Agendas: autoridades em exercício no órgão MAPA, com cargo e data de início",
+     "url": "https://eagendas.cgu.gov.br/pesquisa/agentes-publicos-obrigados-por-orgao/orgao/1419/ativo/true",
+     "data": "2026-10-15"
+    },
+    {
+     "veiculo": "Poder360",
+     "titulo": "Tebet e outros 13 ministros deixam governo Lula; saiba quem assume",
+     "url": "https://www.poder360.com.br/poder-governo/lula-troca-14-ministros-e-promove-secretarios-saiba-quem-sao/",
+     "data": "2026-03-31"
+    },
+    {
+     "veiculo": "Poder360",
+     "titulo": "Ministro diz estar \"otimista\" com China apesar de tarifa sobre carne (\"André de Paula (PSD)\")",
+     "url": "https://www.poder360.com.br/poder-agro/ministro-diz-estar-otimista-com-china-apesar-de-tarifa-sobre-carne/",
+     "data": "2026-10-13"
+    }
+   ]
+  },
+  {
+   "id": "min-casa-civil",
+   "ministerio": "Casa Civil da Presidência da República",
+   "ic": "🏛️",
+   "oQueFaz": "Ajuda o presidente a organizar o trabalho de todos os ministérios e a acompanhar os projetos do governo.",
+   "nome": "Miriam Belchior",
+   "genero": "F",
+   "partido": "PT",
+   "interino": false,
+   "desde": "2026-04-02",
+   "fonte": [
+    {
+     "veiculo": "Casa Civil da Presidência da República",
+     "titulo": "Ministra: Miriam Belchior",
+     "url": "https://www.gov.br/casacivil/pt-br/composicao/ministra",
+     "data": "2026-10-15"
+    },
+    {
+     "veiculo": "Presidência da República (Planalto)",
+     "titulo": "Ministros e Ministras (lista oficial do 1º escalão; página atualizada em 05/05/2026)",
+     "url": "https://www.gov.br/planalto/pt-br/conheca-a-presidencia/ministros-e-ministras",
+     "data": "2026-05-05"
+    },
+    {
+     "veiculo": "Controladoria-Geral da União (e-Agendas)",
+     "titulo": "e-Agendas: autoridades em exercício no órgão Casa Civil, com cargo e data de início",
+     "url": "https://eagendas.cgu.gov.br/pesquisa/agentes-publicos-obrigados-por-orgao/orgao/659/ativo/true",
+     "data": "2026-10-15"
+    },
+    {
+     "veiculo": "CNN Brasil",
+     "titulo": "Quem é Miriam Belchior, que deve assumir Casa Civil de Lula (\"Miriam Belchior (PT-SP)\")",
+     "url": "https://www.cnnbrasil.com.br/blogs/pedro-venceslau/politica/quem-e-miriam-belchior-que-deve-assumir-casa-civil-de-lula/",
+     "data": "2026-01-20"
+    }
+   ]
+  },
+  {
+   "id": "min-cidades",
+   "ministerio": "Ministério das Cidades",
+   "ic": "🏙️",
+   "oQueFaz": "Cuida de moradia, saneamento (água e esgoto) e transporte dentro das cidades.",
+   "nome": "Vladimir Lima",
+   "genero": "M",
+   "partido": null,
+   "interino": false,
+   "desde": "2026-04-02",
+   "fonte": [
+    {
+     "veiculo": "Presidência da República (Planalto)",
+     "titulo": "Ministros e Ministras (lista oficial do 1º escalão; página atualizada em 05/05/2026)",
+     "url": "https://www.gov.br/planalto/pt-br/conheca-a-presidencia/ministros-e-ministras",
+     "data": "2026-05-05"
+    },
+    {
+     "veiculo": "Controladoria-Geral da União (e-Agendas)",
+     "titulo": "e-Agendas: autoridades em exercício no órgão MCID, com cargo e data de início",
+     "url": "https://eagendas.cgu.gov.br/pesquisa/agentes-publicos-obrigados-por-orgao/orgao/1395/ativo/true",
+     "data": "2026-10-15"
+    },
+    {
+     "veiculo": "Poder360",
+     "titulo": "Tebet e outros 13 ministros deixam governo Lula; saiba quem assume",
+     "url": "https://www.poder360.com.br/poder-governo/lula-troca-14-ministros-e-promove-secretarios-saiba-quem-sao/",
+     "data": "2026-03-31"
+    }
+   ]
+  },
+  {
+   "id": "min-ciencia-tecnologia-e-inovacao",
+   "ministerio": "Ministério da Ciência, Tecnologia e Inovação",
+   "ic": "🔬",
+   "oQueFaz": "Apoia a pesquisa científica, a tecnologia e as novas ideias criadas no Brasil.",
+   "nome": "Luciana Santos",
+   "genero": "F",
+   "partido": "PCdoB",
+   "interino": false,
+   "desde": "2023-01-01",
+   "fonte": [
+    {
+     "veiculo": "Presidência da República (Planalto)",
+     "titulo": "Ministros e Ministras (lista oficial do 1º escalão; página atualizada em 05/05/2026)",
+     "url": "https://www.gov.br/planalto/pt-br/conheca-a-presidencia/ministros-e-ministras",
+     "data": "2026-05-05"
+    },
+    {
+     "veiculo": "Controladoria-Geral da União (e-Agendas)",
+     "titulo": "e-Agendas: autoridades em exercício no órgão MCTI, com cargo e data de início",
+     "url": "https://eagendas.cgu.gov.br/pesquisa/agentes-publicos-obrigados-por-orgao/orgao/862/ativo/true",
+     "data": "2026-10-15"
+    },
+    {
+     "veiculo": "Vermelho",
+     "titulo": "Luciana Santos visita UFPE após incêndio e reforça apoio à reconstrução (\"Luciana Santos (PCdoB)\")",
+     "url": "https://vermelho.org.br/2026/10/08/luciana-santos-visita-ufpe-apos-incendio-e-reforca-apoio-a-reconstrucao/",
+     "data": "2026-10-08"
+    }
+   ]
+  },
+  {
+   "id": "min-comunicacoes",
+   "ministerio": "Ministério das Comunicações",
+   "ic": "📡",
+   "oQueFaz": "Cuida de internet, telefone, rádio, TV e Correios.",
+   "nome": "Frederico de Siqueira Filho",
+   "genero": "M",
+   "partido": null,
+   "interino": false,
+   "desde": "2025-04-24",
+   "fonte": [
+    {
+     "veiculo": "Presidência da República (Planalto)",
+     "titulo": "Ministros e Ministras (lista oficial do 1º escalão; página atualizada em 05/05/2026)",
+     "url": "https://www.gov.br/planalto/pt-br/conheca-a-presidencia/ministros-e-ministras",
+     "data": "2026-05-05"
+    },
+    {
+     "veiculo": "Controladoria-Geral da União (e-Agendas)",
+     "titulo": "e-Agendas: autoridades em exercício no órgão MCOM, com cargo e data de início",
+     "url": "https://eagendas.cgu.gov.br/pesquisa/agentes-publicos-obrigados-por-orgao/orgao/860/ativo/true",
+     "data": "2026-10-15"
+    }
+   ]
+  },
+  {
+   "id": "min-controladoria-geral-da-uniao",
+   "ministerio": "Controladoria-Geral da União",
+   "ic": "🔍",
+   "oQueFaz": "Fiscaliza como o dinheiro público é usado pelo governo federal e combate a corrupção.",
+   "nome": "Vinícius Marques de Carvalho",
+   "genero": "M",
+   "partido": null,
+   "interino": false,
+   "desde": "2023-01-01",
+   "fonte": [
+    {
+     "veiculo": "Presidência da República (Planalto)",
+     "titulo": "Ministros e Ministras (lista oficial do 1º escalão; página atualizada em 05/05/2026)",
+     "url": "https://www.gov.br/planalto/pt-br/conheca-a-presidencia/ministros-e-ministras",
+     "data": "2026-05-05"
+    },
+    {
+     "veiculo": "Controladoria-Geral da União (e-Agendas)",
+     "titulo": "e-Agendas: autoridades em exercício no órgão CGU, com cargo e data de início",
+     "url": "https://eagendas.cgu.gov.br/pesquisa/agentes-publicos-obrigados-por-orgao/orgao/832/ativo/true",
+     "data": "2026-10-15"
+    }
+   ]
+  },
+  {
+   "id": "min-cultura",
+   "ministerio": "Ministério da Cultura",
+   "ic": "🎭",
+   "oQueFaz": "Apoia a arte, a música, o cinema, os livros e o patrimônio histórico do Brasil.",
+   "nome": "Margareth Menezes",
+   "genero": "F",
+   "partido": null,
+   "interino": false,
+   "desde": "2023-01-01",
+   "fonte": [
+    {
+     "veiculo": "Presidência da República (Planalto)",
+     "titulo": "Ministros e Ministras (lista oficial do 1º escalão; página atualizada em 05/05/2026)",
+     "url": "https://www.gov.br/planalto/pt-br/conheca-a-presidencia/ministros-e-ministras",
+     "data": "2026-05-05"
+    },
+    {
+     "veiculo": "Controladoria-Geral da União (e-Agendas)",
+     "titulo": "e-Agendas: autoridades em exercício no órgão MinC, com cargo e data de início",
+     "url": "https://eagendas.cgu.gov.br/pesquisa/agentes-publicos-obrigados-por-orgao/orgao/1409/ativo/true",
+     "data": "2026-10-15"
+    }
+   ]
+  },
+  {
+   "id": "min-defesa",
+   "ministerio": "Ministério da Defesa",
+   "ic": "🛡️",
+   "oQueFaz": "Cuida da defesa do país e organiza o trabalho do Exército, da Marinha e da Aeronáutica.",
+   "nome": "José Múcio",
+   "genero": "M",
+   "partido": null,
+   "interino": false,
+   "desde": "2023-01-02",
+   "fonte": [
+    {
+     "veiculo": "Presidência da República (Planalto)",
+     "titulo": "Ministros e Ministras (lista oficial do 1º escalão; página atualizada em 05/05/2026)",
+     "url": "https://www.gov.br/planalto/pt-br/conheca-a-presidencia/ministros-e-ministras",
+     "data": "2026-05-05"
+    },
+    {
+     "veiculo": "Controladoria-Geral da União (e-Agendas)",
+     "titulo": "e-Agendas: autoridades em exercício no órgão MD, com cargo e data de início",
+     "url": "https://eagendas.cgu.gov.br/pesquisa/agentes-publicos-obrigados-por-orgao/orgao/679/ativo/true",
+     "data": "2026-10-15"
+    }
+   ]
+  },
+  {
+   "id": "min-desenvolvimento-agrario-e-agricultura-familiar",
+   "ministerio": "Ministério do Desenvolvimento Agrário e Agricultura Familiar",
+   "ic": "🚜",
+   "oQueFaz": "Ajuda as famílias que plantam em pequenas propriedades e cuida da reforma agrária.",
+   "nome": "Fernanda Machiaveli",
+   "genero": "F",
+   "partido": null,
+   "interino": false,
+   "desde": "2026-03-31",
+   "fonte": [
+    {
+     "veiculo": "Presidência da República (Planalto)",
+     "titulo": "Ministros e Ministras (lista oficial do 1º escalão; página atualizada em 05/05/2026)",
+     "url": "https://www.gov.br/planalto/pt-br/conheca-a-presidencia/ministros-e-ministras",
+     "data": "2026-05-05"
+    },
+    {
+     "veiculo": "Controladoria-Geral da União (e-Agendas)",
+     "titulo": "e-Agendas: autoridades em exercício no órgão MDA, com cargo e data de início",
+     "url": "https://eagendas.cgu.gov.br/pesquisa/agentes-publicos-obrigados-por-orgao/orgao/1407/ativo/true",
+     "data": "2026-10-15"
+    },
+    {
+     "veiculo": "Poder360",
+     "titulo": "Tebet e outros 13 ministros deixam governo Lula; saiba quem assume",
+     "url": "https://www.poder360.com.br/poder-governo/lula-troca-14-ministros-e-promove-secretarios-saiba-quem-sao/",
+     "data": "2026-03-31"
+    }
+   ]
+  },
+  {
+   "id": "min-desenvolvimento-e-assistencia-social-familia-e-combate-a-fome",
+   "ministerio": "Ministério do Desenvolvimento e Assistência Social, Família e Combate à Fome",
+   "ic": "🍽️",
+   "oQueFaz": "Cuida de programas que ajudam famílias com pouco dinheiro, como o Bolsa Família, e do combate à fome.",
+   "nome": "Wellington Dias",
+   "genero": "M",
+   "partido": "PT",
+   "interino": false,
+   "desde": "2023-01-01",
+   "fonte": [
+    {
+     "veiculo": "Presidência da República (Planalto)",
+     "titulo": "Ministros e Ministras (lista oficial do 1º escalão; página atualizada em 05/05/2026)",
+     "url": "https://www.gov.br/planalto/pt-br/conheca-a-presidencia/ministros-e-ministras",
+     "data": "2026-05-05"
+    },
+    {
+     "veiculo": "Controladoria-Geral da União (e-Agendas)",
+     "titulo": "e-Agendas: autoridades em exercício no órgão MDS, com cargo e data de início",
+     "url": "https://eagendas.cgu.gov.br/pesquisa/agentes-publicos-obrigados-por-orgao/orgao/1389/ativo/true",
+     "data": "2026-10-15"
+    },
+    {
+     "veiculo": "Senado Federal",
+     "titulo": "Senador Wellington Dias (licenciado) – PT",
+     "url": "https://www25.senado.leg.br/web/senadores/senador/-/perfil/5016",
+     "data": "2026-10-15"
+    }
+   ]
+  },
+  {
+   "id": "min-desenvolvimento-industria-comercio-e-servicos",
+   "ministerio": "Ministério do Desenvolvimento, Indústria, Comércio e Serviços",
+   "ic": "🏭",
+   "oQueFaz": "Cuida da indústria, do comércio, dos serviços e das vendas do Brasil para outros países.",
+   "nome": "Márcio Elias Rosa",
+   "genero": "M",
+   "partido": null,
+   "interino": false,
+   "desde": "2026-04-03",
+   "fonte": [
+    {
+     "veiculo": "Presidência da República (Planalto)",
+     "titulo": "Ministros e Ministras (lista oficial do 1º escalão; página atualizada em 05/05/2026)",
+     "url": "https://www.gov.br/planalto/pt-br/conheca-a-presidencia/ministros-e-ministras",
+     "data": "2026-05-05"
+    },
+    {
+     "veiculo": "Controladoria-Geral da União (e-Agendas)",
+     "titulo": "e-Agendas: autoridades em exercício no órgão MDIC, com cargo e data de início",
+     "url": "https://eagendas.cgu.gov.br/pesquisa/agentes-publicos-obrigados-por-orgao/orgao/1399/ativo/true",
+     "data": "2026-10-15"
+    }
+   ]
+  },
+  {
+   "id": "min-direitos-humanos-e-da-cidadania",
+   "ministerio": "Ministério dos Direitos Humanos e da Cidadania",
+   "ic": "🕊️",
+   "oQueFaz": "Cuida da proteção dos direitos de todas as pessoas, como crianças, idosos e pessoas com deficiência.",
+   "nome": "Janine Mello",
+   "genero": "F",
+   "partido": null,
+   "interino": false,
+   "desde": "2026-03-31",
+   "fonte": [
+    {
+     "veiculo": "Presidência da República (Planalto)",
+     "titulo": "Ministros e Ministras (lista oficial do 1º escalão; página atualizada em 05/05/2026)",
+     "url": "https://www.gov.br/planalto/pt-br/conheca-a-presidencia/ministros-e-ministras",
+     "data": "2026-05-05"
+    },
+    {
+     "veiculo": "Controladoria-Geral da União (e-Agendas)",
+     "titulo": "e-Agendas: autoridades em exercício no órgão MDHC, com cargo e data de início",
+     "url": "https://eagendas.cgu.gov.br/pesquisa/agentes-publicos-obrigados-por-orgao/orgao/1386/ativo/true",
+     "data": "2026-10-15"
+    },
+    {
+     "veiculo": "Poder360",
+     "titulo": "Tebet e outros 13 ministros deixam governo Lula; saiba quem assume",
+     "url": "https://www.poder360.com.br/poder-governo/lula-troca-14-ministros-e-promove-secretarios-saiba-quem-sao/",
+     "data": "2026-03-31"
+    }
+   ]
+  },
+  {
+   "id": "min-educacao",
+   "ministerio": "Ministério da Educação",
+   "ic": "📚",
+   "oQueFaz": "Cuida das regras e do apoio às escolas e universidades do país.",
+   "nome": "Leonardo Barchini",
+   "genero": "M",
+   "partido": null,
+   "interino": false,
+   "desde": "2026-04-02",
+   "fonte": [
+    {
+     "veiculo": "Presidência da República (Planalto)",
+     "titulo": "Ministros e Ministras (lista oficial do 1º escalão; página atualizada em 05/05/2026)",
+     "url": "https://www.gov.br/planalto/pt-br/conheca-a-presidencia/ministros-e-ministras",
+     "data": "2026-05-05"
+    },
+    {
+     "veiculo": "Controladoria-Geral da União (e-Agendas)",
+     "titulo": "e-Agendas: autoridades em exercício no órgão MEC, com cargo e data de início",
+     "url": "https://eagendas.cgu.gov.br/pesquisa/agentes-publicos-obrigados-por-orgao/orgao/549/ativo/true",
+     "data": "2026-10-15"
+    },
+    {
+     "veiculo": "Poder360",
+     "titulo": "Tebet e outros 13 ministros deixam governo Lula; saiba quem assume",
+     "url": "https://www.poder360.com.br/poder-governo/lula-troca-14-ministros-e-promove-secretarios-saiba-quem-sao/",
+     "data": "2026-03-31"
+    }
+   ]
+  },
+  {
+   "id": "min-empreendedorismo-da-microempresa-e-da-empresa-de-pequeno-porte",
+   "ministerio": "Ministério do Empreendedorismo, da Microempresa e da Empresa de Pequeno Porte",
+   "ic": "🏪",
+   "oQueFaz": "Apoia pequenos negócios, microempresas e quem trabalha por conta própria.",
+   "nome": "Paulo Henrique Rodrigues Pereira",
+   "genero": "M",
+   "partido": null,
+   "interino": false,
+   "desde": "2026-04-17",
+   "fonte": [
+    {
+     "veiculo": "Presidência da República (Planalto)",
+     "titulo": "Ministros e Ministras (lista oficial do 1º escalão; página atualizada em 05/05/2026)",
+     "url": "https://www.gov.br/planalto/pt-br/conheca-a-presidencia/ministros-e-ministras",
+     "data": "2026-05-05"
+    },
+    {
+     "veiculo": "Controladoria-Geral da União (e-Agendas)",
+     "titulo": "e-Agendas: autoridades em exercício no órgão MEMP, com cargo e data de início",
+     "url": "https://eagendas.cgu.gov.br/pesquisa/agentes-publicos-obrigados-por-orgao/orgao/1429/ativo/true",
+     "data": "2026-10-15"
+    }
+   ]
+  },
+  {
+   "id": "min-esporte",
+   "ministerio": "Ministério do Esporte",
+   "ic": "⚽",
+   "oQueFaz": "Apoia o esporte, dos atletas profissionais às atividades esportivas nas escolas e nos bairros.",
+   "nome": "Paulo Henrique Perna Cordeiro",
+   "genero": "M",
+   "partido": null,
+   "interino": false,
+   "desde": "2026-03-31",
+   "fonte": [
+    {
+     "veiculo": "Presidência da República (Planalto)",
+     "titulo": "Ministros e Ministras (lista oficial do 1º escalão; página atualizada em 05/05/2026)",
+     "url": "https://www.gov.br/planalto/pt-br/conheca-a-presidencia/ministros-e-ministras",
+     "data": "2026-05-05"
+    },
+    {
+     "veiculo": "Controladoria-Geral da União (e-Agendas)",
+     "titulo": "e-Agendas: autoridades em exercício no órgão MESP, com cargo e data de início",
+     "url": "https://eagendas.cgu.gov.br/pesquisa/agentes-publicos-obrigados-por-orgao/orgao/1403/ativo/true",
+     "data": "2026-10-15"
+    },
+    {
+     "veiculo": "Poder360",
+     "titulo": "Tebet e outros 13 ministros deixam governo Lula; saiba quem assume",
+     "url": "https://www.poder360.com.br/poder-governo/lula-troca-14-ministros-e-promove-secretarios-saiba-quem-sao/",
+     "data": "2026-03-31"
+    }
+   ]
+  },
+  {
+   "id": "min-fazenda",
+   "ministerio": "Ministério da Fazenda",
+   "ic": "💰",
+   "oQueFaz": "Cuida do dinheiro do país: impostos, gastos do governo e economia.",
+   "nome": "Dario Durigan",
+   "genero": "M",
+   "partido": null,
+   "interino": false,
+   "desde": "2026-03-19",
+   "fonte": [
+    {
+     "veiculo": "Presidência da República (Planalto)",
+     "titulo": "Ministros e Ministras (lista oficial do 1º escalão; página atualizada em 05/05/2026)",
+     "url": "https://www.gov.br/planalto/pt-br/conheca-a-presidencia/ministros-e-ministras",
+     "data": "2026-05-05"
+    },
+    {
+     "veiculo": "Controladoria-Geral da União (e-Agendas)",
+     "titulo": "e-Agendas: autoridades em exercício no órgão MF, com cargo e data de início",
+     "url": "https://eagendas.cgu.gov.br/pesquisa/agentes-publicos-obrigados-por-orgao/orgao/1384/ativo/true",
+     "data": "2026-10-15"
+    }
+   ]
+  },
+  {
+   "id": "min-gabinete-de-seguranca-institucional",
+   "ministerio": "Gabinete de Segurança Institucional da Presidência da República",
+   "ic": "🔒",
+   "oQueFaz": "Cuida da segurança do presidente e do vice-presidente e ajuda a proteger informações importantes do governo.",
+   "nome": "Marcos Antonio Amaro dos Santos",
+   "genero": "M",
+   "partido": null,
+   "interino": false,
+   "desde": "2023-05-04",
+   "fonte": [
+    {
+     "veiculo": "Presidência da República (Planalto)",
+     "titulo": "Ministros e Ministras (lista oficial do 1º escalão; página atualizada em 05/05/2026)",
+     "url": "https://www.gov.br/planalto/pt-br/conheca-a-presidencia/ministros-e-ministras",
+     "data": "2026-05-05"
+    },
+    {
+     "veiculo": "Controladoria-Geral da União (e-Agendas)",
+     "titulo": "e-Agendas: autoridades em exercício no órgão GSI, com cargo e data de início",
+     "url": "https://eagendas.cgu.gov.br/pesquisa/agentes-publicos-obrigados-por-orgao/orgao/512/ativo/true",
+     "data": "2026-10-15"
+    }
+   ]
+  },
+  {
+   "id": "min-gestao-e-da-inovacao-em-servicos-publicos",
+   "ministerio": "Ministério da Gestão e da Inovação em Serviços Públicos",
+   "ic": "🗂️",
+   "oQueFaz": "Cuida dos servidores públicos federais e de como funcionam os serviços do governo, inclusive pela internet.",
+   "nome": "Esther Dweck",
+   "genero": "F",
+   "partido": null,
+   "interino": false,
+   "desde": "2023-01-01",
+   "fonte": [
+    {
+     "veiculo": "Presidência da República (Planalto)",
+     "titulo": "Ministros e Ministras (lista oficial do 1º escalão; página atualizada em 05/05/2026)",
+     "url": "https://www.gov.br/planalto/pt-br/conheca-a-presidencia/ministros-e-ministras",
+     "data": "2026-05-05"
+    },
+    {
+     "veiculo": "Controladoria-Geral da União (e-Agendas)",
+     "titulo": "e-Agendas: autoridades em exercício no órgão MGI, com cargo e data de início",
+     "url": "https://eagendas.cgu.gov.br/pesquisa/agentes-publicos-obrigados-por-orgao/orgao/1391/ativo/true",
+     "data": "2026-10-15"
+    }
+   ]
+  },
+  {
+   "id": "min-igualdade-racial",
+   "ministerio": "Ministério da Igualdade Racial",
+   "ic": "👥",
+   "oQueFaz": "Cria ações para combater o racismo e diminuir as diferenças entre pessoas de cores e origens diferentes.",
+   "nome": "Rachel Barros",
+   "genero": "F",
+   "partido": null,
+   "interino": false,
+   "desde": "2026-03-31",
+   "fonte": [
+    {
+     "veiculo": "Presidência da República (Planalto)",
+     "titulo": "Ministros e Ministras (lista oficial do 1º escalão; página atualizada em 05/05/2026)",
+     "url": "https://www.gov.br/planalto/pt-br/conheca-a-presidencia/ministros-e-ministras",
+     "data": "2026-05-05"
+    },
+    {
+     "veiculo": "Controladoria-Geral da União (e-Agendas)",
+     "titulo": "e-Agendas: autoridades em exercício no órgão MIR, com cargo e data de início",
+     "url": "https://eagendas.cgu.gov.br/pesquisa/agentes-publicos-obrigados-por-orgao/orgao/1405/ativo/true",
+     "data": "2026-10-15"
+    },
+    {
+     "veiculo": "Poder360",
+     "titulo": "Tebet e outros 13 ministros deixam governo Lula; saiba quem assume",
+     "url": "https://www.poder360.com.br/poder-governo/lula-troca-14-ministros-e-promove-secretarios-saiba-quem-sao/",
+     "data": "2026-03-31"
+    }
+   ]
+  },
+  {
+   "id": "min-integracao-e-do-desenvolvimento-regional",
+   "ministerio": "Ministério da Integração e do Desenvolvimento Regional",
+   "ic": "🗺️",
+   "oQueFaz": "Cuida de obras e ações para diminuir as diferenças entre as regiões e ajuda cidades atingidas por desastres, como secas e enchentes.",
+   "nome": "Waldez Góes",
+   "genero": "M",
+   "partido": "PDT",
+   "interino": false,
+   "desde": "2023-01-01",
+   "fonte": [
+    {
+     "veiculo": "Presidência da República (Planalto)",
+     "titulo": "Ministros e Ministras (lista oficial do 1º escalão; página atualizada em 05/05/2026)",
+     "url": "https://www.gov.br/planalto/pt-br/conheca-a-presidencia/ministros-e-ministras",
+     "data": "2026-05-05"
+    },
+    {
+     "veiculo": "Controladoria-Geral da União (e-Agendas)",
+     "titulo": "e-Agendas: autoridades em exercício no órgão MIDR, com cargo e data de início",
+     "url": "https://eagendas.cgu.gov.br/pesquisa/agentes-publicos-obrigados-por-orgao/orgao/1393/ativo/true",
+     "data": "2026-10-15"
+    },
+    {
+     "veiculo": "Poder360",
+     "titulo": "Waldez Góes desiste de disputar vaga no Senado e fica no governo (\"Waldez Góes (PDT)\")",
+     "url": "https://www.poder360.com.br/poder-governo/waldez-goes-desiste-de-disputar-vaga-no-senado-e-fica-no-governo/",
+     "data": "2026-04-02"
+    }
+   ]
+  },
+  {
+   "id": "min-justica-e-seguranca-publica",
+   "ministerio": "Ministério da Justiça e Segurança Pública",
+   "ic": "🚔",
+   "oQueFaz": "Cuida da segurança pública, da Polícia Federal, de temas de justiça e dos direitos do consumidor.",
+   "nome": "Wellington César Lima e Silva",
+   "genero": "M",
+   "partido": null,
+   "interino": false,
+   "desde": "2026-01-15",
+   "fonte": [
+    {
+     "veiculo": "Presidência da República (Planalto)",
+     "titulo": "Ministros e Ministras (lista oficial do 1º escalão; página atualizada em 05/05/2026)",
+     "url": "https://www.gov.br/planalto/pt-br/conheca-a-presidencia/ministros-e-ministras",
+     "data": "2026-05-05"
+    },
+    {
+     "veiculo": "Controladoria-Geral da União (e-Agendas)",
+     "titulo": "e-Agendas: autoridades em exercício no órgão MJSP, com cargo e data de início",
+     "url": "https://eagendas.cgu.gov.br/pesquisa/agentes-publicos-obrigados-por-orgao/orgao/856/ativo/true",
+     "data": "2026-10-15"
+    }
+   ]
+  },
+  {
+   "id": "min-meio-ambiente-e-mudanca-do-clima",
+   "ministerio": "Ministério do Meio Ambiente e Mudança do Clima",
+   "ic": "🌳",
+   "oQueFaz": "Cuida da proteção da natureza, das florestas, dos rios e do clima.",
+   "nome": "João Paulo Capobianco",
+   "genero": "M",
+   "partido": null,
+   "interino": false,
+   "desde": "2026-04-01",
+   "fonte": [
+    {
+     "veiculo": "Presidência da República (Planalto)",
+     "titulo": "Ministros e Ministras (lista oficial do 1º escalão; página atualizada em 05/05/2026)",
+     "url": "https://www.gov.br/planalto/pt-br/conheca-a-presidencia/ministros-e-ministras",
+     "data": "2026-05-05"
+    },
+    {
+     "veiculo": "Controladoria-Geral da União (e-Agendas)",
+     "titulo": "e-Agendas: autoridades em exercício no órgão MMA, com cargo e data de início",
+     "url": "https://eagendas.cgu.gov.br/pesquisa/agentes-publicos-obrigados-por-orgao/orgao/647/ativo/true",
+     "data": "2026-10-15"
+    },
+    {
+     "veiculo": "Poder360",
+     "titulo": "Tebet e outros 13 ministros deixam governo Lula; saiba quem assume",
+     "url": "https://www.poder360.com.br/poder-governo/lula-troca-14-ministros-e-promove-secretarios-saiba-quem-sao/",
+     "data": "2026-03-31"
+    }
+   ]
+  },
+  {
+   "id": "min-minas-e-energia",
+   "ministerio": "Ministério de Minas e Energia",
+   "ic": "⚡",
+   "oQueFaz": "Cuida da energia (como eletricidade, petróleo e gás) e da mineração.",
+   "nome": "Alexandre Silveira",
+   "genero": "M",
+   "partido": "PSD",
+   "interino": false,
+   "desde": "2023-01-01",
+   "fonte": [
+    {
+     "veiculo": "Presidência da República (Planalto)",
+     "titulo": "Ministros e Ministras (lista oficial do 1º escalão; página atualizada em 05/05/2026)",
+     "url": "https://www.gov.br/planalto/pt-br/conheca-a-presidencia/ministros-e-ministras",
+     "data": "2026-05-05"
+    },
+    {
+     "veiculo": "Controladoria-Geral da União (e-Agendas)",
+     "titulo": "e-Agendas: autoridades em exercício no órgão MME, com cargo e data de início",
+     "url": "https://eagendas.cgu.gov.br/pesquisa/agentes-publicos-obrigados-por-orgao/orgao/661/ativo/true",
+     "data": "2026-10-15"
+    },
+    {
+     "veiculo": "SBT News",
+     "titulo": "Ministro pedirá para Raquel Lyra rever posição e apoiar Lula (\"Alexandre Silveira (PSD)\")",
+     "url": "https://sbtnews.sbt.com.br/noticia/eleicoes/ministro-pedira-para-raquel-lyra-rever-posicao-e-apoiar-lula",
+     "data": "2026-10-06"
+    }
+   ]
+  },
+  {
+   "id": "min-mulheres",
+   "ministerio": "Ministério das Mulheres",
+   "ic": "👩",
+   "oQueFaz": "Cria ações para proteger as mulheres e diminuir as diferenças entre mulheres e homens.",
+   "nome": "Márcia Lopes",
+   "genero": "F",
+   "partido": null,
+   "interino": false,
+   "desde": "2025-05-05",
+   "fonte": [
+    {
+     "veiculo": "Presidência da República (Planalto)",
+     "titulo": "Ministros e Ministras (lista oficial do 1º escalão; página atualizada em 05/05/2026)",
+     "url": "https://www.gov.br/planalto/pt-br/conheca-a-presidencia/ministros-e-ministras",
+     "data": "2026-05-05"
+    },
+    {
+     "veiculo": "Controladoria-Geral da União (e-Agendas)",
+     "titulo": "e-Agendas: autoridades em exercício no órgão Ministério das Mulheres, com cargo e data de início",
+     "url": "https://eagendas.cgu.gov.br/pesquisa/agentes-publicos-obrigados-por-orgao/orgao/1424/ativo/true",
+     "data": "2026-10-15"
+    }
+   ]
+  },
+  {
+   "id": "min-pesca-e-aquicultura",
+   "ministerio": "Ministério da Pesca e Aquicultura",
+   "ic": "🐟",
+   "oQueFaz": "Apoia quem vive da pesca e da criação de peixes e de outros animais da água.",
+   "nome": "Rivetla Edipo Araujo Cruz",
+   "genero": "M",
+   "partido": null,
+   "interino": false,
+   "desde": "2026-03-31",
+   "fonte": [
+    {
+     "veiculo": "Presidência da República (Planalto)",
+     "titulo": "Ministros e Ministras (lista oficial do 1º escalão; página atualizada em 05/05/2026)",
+     "url": "https://www.gov.br/planalto/pt-br/conheca-a-presidencia/ministros-e-ministras",
+     "data": "2026-05-05"
+    },
+    {
+     "veiculo": "Controladoria-Geral da União (e-Agendas)",
+     "titulo": "e-Agendas: autoridades em exercício no órgão MPA, com cargo e data de início",
+     "url": "https://eagendas.cgu.gov.br/pesquisa/agentes-publicos-obrigados-por-orgao/orgao/1413/ativo/true",
+     "data": "2026-10-15"
+    },
+    {
+     "veiculo": "Poder360",
+     "titulo": "Tebet e outros 13 ministros deixam governo Lula; saiba quem assume",
+     "url": "https://www.poder360.com.br/poder-governo/lula-troca-14-ministros-e-promove-secretarios-saiba-quem-sao/",
+     "data": "2026-03-31"
+    }
+   ]
+  },
+  {
+   "id": "min-planejamento-e-orcamento",
+   "ministerio": "Ministério do Planejamento e Orçamento",
+   "ic": "📊",
+   "oQueFaz": "Prepara a proposta de orçamento do governo, o plano de quanto dinheiro vai para cada área (quem aprova é o Congresso).",
+   "nome": "Bruno Moretti",
+   "genero": "M",
+   "partido": null,
+   "interino": false,
+   "desde": "2026-03-31",
+   "fonte": [
+    {
+     "veiculo": "Presidência da República (Planalto)",
+     "titulo": "Ministros e Ministras (lista oficial do 1º escalão; página atualizada em 05/05/2026)",
+     "url": "https://www.gov.br/planalto/pt-br/conheca-a-presidencia/ministros-e-ministras",
+     "data": "2026-05-05"
+    },
+    {
+     "veiculo": "Controladoria-Geral da União (e-Agendas)",
+     "titulo": "e-Agendas: autoridades em exercício no órgão MPO, com cargo e data de início",
+     "url": "https://eagendas.cgu.gov.br/pesquisa/agentes-publicos-obrigados-por-orgao/orgao/1401/ativo/true",
+     "data": "2026-10-15"
+    },
+    {
+     "veiculo": "Poder360",
+     "titulo": "Tebet e outros 13 ministros deixam governo Lula; saiba quem assume",
+     "url": "https://www.poder360.com.br/poder-governo/lula-troca-14-ministros-e-promove-secretarios-saiba-quem-sao/",
+     "data": "2026-03-31"
+    }
+   ]
+  },
+  {
+   "id": "min-portos-e-aeroportos",
+   "ministerio": "Ministério de Portos e Aeroportos",
+   "ic": "✈️",
+   "oQueFaz": "Cuida dos portos, onde chegam os navios, e dos aeroportos do país.",
+   "nome": "Tomé Franca",
+   "genero": "M",
+   "partido": null,
+   "interino": false,
+   "desde": "2026-03-31",
+   "fonte": [
+    {
+     "veiculo": "Presidência da República (Planalto)",
+     "titulo": "Ministros e Ministras (lista oficial do 1º escalão; página atualizada em 05/05/2026)",
+     "url": "https://www.gov.br/planalto/pt-br/conheca-a-presidencia/ministros-e-ministras",
+     "data": "2026-05-05"
+    },
+    {
+     "veiculo": "Controladoria-Geral da União (e-Agendas)",
+     "titulo": "e-Agendas: autoridades em exercício no órgão MPOR, com cargo e data de início",
+     "url": "https://eagendas.cgu.gov.br/pesquisa/agentes-publicos-obrigados-por-orgao/orgao/1415/ativo/true",
+     "data": "2026-10-15"
+    },
+    {
+     "veiculo": "Poder360",
+     "titulo": "Tebet e outros 13 ministros deixam governo Lula; saiba quem assume",
+     "url": "https://www.poder360.com.br/poder-governo/lula-troca-14-ministros-e-promove-secretarios-saiba-quem-sao/",
+     "data": "2026-03-31"
+    }
+   ]
+  },
+  {
+   "id": "min-povos-indigenas",
+   "ministerio": "Ministério dos Povos Indígenas",
+   "ic": "🪶",
+   "oQueFaz": "Cuida dos direitos dos povos indígenas e de suas terras.",
+   "nome": "Eloy Terena",
+   "genero": "M",
+   "partido": null,
+   "interino": false,
+   "desde": "2026-03-31",
+   "fonte": [
+    {
+     "veiculo": "Presidência da República (Planalto)",
+     "titulo": "Ministros e Ministras (lista oficial do 1º escalão; página atualizada em 05/05/2026)",
+     "url": "https://www.gov.br/planalto/pt-br/conheca-a-presidencia/ministros-e-ministras",
+     "data": "2026-05-05"
+    },
+    {
+     "veiculo": "Controladoria-Geral da União (e-Agendas)",
+     "titulo": "e-Agendas: autoridades em exercício no órgão MPI, com cargo e data de início",
+     "url": "https://eagendas.cgu.gov.br/pesquisa/agentes-publicos-obrigados-por-orgao/orgao/1397/ativo/true",
+     "data": "2026-10-15"
+    },
+    {
+     "veiculo": "Poder360",
+     "titulo": "Tebet e outros 13 ministros deixam governo Lula; saiba quem assume",
+     "url": "https://www.poder360.com.br/poder-governo/lula-troca-14-ministros-e-promove-secretarios-saiba-quem-sao/",
+     "data": "2026-03-31"
+    }
+   ],
+   "nota": "Nome civil: Luiz Henrique Eloy Amado."
+  },
+  {
+   "id": "min-previdencia-social",
+   "ministerio": "Ministério da Previdência Social",
+   "ic": "👵",
+   "oQueFaz": "Cuida das aposentadorias e pensões pagas pelo INSS.",
+   "nome": "Wolney Queiroz",
+   "genero": "M",
+   "partido": "PDT",
+   "interino": false,
+   "desde": "2025-05-02",
+   "fonte": [
+    {
+     "veiculo": "Presidência da República (Planalto)",
+     "titulo": "Ministros e Ministras (lista oficial do 1º escalão; página atualizada em 05/05/2026)",
+     "url": "https://www.gov.br/planalto/pt-br/conheca-a-presidencia/ministros-e-ministras",
+     "data": "2026-05-05"
+    },
+    {
+     "veiculo": "Controladoria-Geral da União (e-Agendas)",
+     "titulo": "e-Agendas: autoridades em exercício no órgão MPS, com cargo e data de início",
+     "url": "https://eagendas.cgu.gov.br/pesquisa/agentes-publicos-obrigados-por-orgao/orgao/1417/ativo/true",
+     "data": "2026-10-15"
+    },
+    {
+     "veiculo": "Poder360",
+     "titulo": "Reforma da Previdência é para ferrar o trabalhador, diz ministro (\"Wolney Queiroz (PDT)\")",
+     "url": "https://www.poder360.com.br/poder-economia/reforma-da-previdencia-e-para-ferrar-o-trabalhador-diz-ministro/",
+     "data": "2026-10-15"
+    }
+   ]
+  },
+  {
+   "id": "min-relacoes-exteriores",
+   "ministerio": "Ministério das Relações Exteriores",
+   "ic": "🌎",
+   "oQueFaz": "Cuida das relações do Brasil com outros países e das embaixadas.",
+   "nome": "Mauro Vieira",
+   "genero": "M",
+   "partido": null,
+   "interino": false,
+   "desde": "2023-01-01",
+   "fonte": [
+    {
+     "veiculo": "Presidência da República (Planalto)",
+     "titulo": "Ministros e Ministras (lista oficial do 1º escalão; página atualizada em 05/05/2026)",
+     "url": "https://www.gov.br/planalto/pt-br/conheca-a-presidencia/ministros-e-ministras",
+     "data": "2026-05-05"
+    },
+    {
+     "veiculo": "Controladoria-Geral da União (e-Agendas)",
+     "titulo": "e-Agendas: autoridades em exercício no órgão MRE, com cargo e data de início",
+     "url": "https://eagendas.cgu.gov.br/pesquisa/agentes-publicos-obrigados-por-orgao/orgao/560/ativo/true",
+     "data": "2026-10-15"
+    }
+   ]
+  },
+  {
+   "id": "min-saude",
+   "ministerio": "Ministério da Saúde",
+   "ic": "🏥",
+   "oQueFaz": "Cuida da saúde pública, como o SUS, os hospitais públicos e as vacinas.",
+   "nome": "Alexandre Padilha",
+   "genero": "M",
+   "partido": "PT",
+   "interino": false,
+   "desde": "2025-03-10",
+   "fonte": [
+    {
+     "veiculo": "Presidência da República (Planalto)",
+     "titulo": "Ministros e Ministras (lista oficial do 1º escalão; página atualizada em 05/05/2026)",
+     "url": "https://www.gov.br/planalto/pt-br/conheca-a-presidencia/ministros-e-ministras",
+     "data": "2026-05-05"
+    },
+    {
+     "veiculo": "Controladoria-Geral da União (e-Agendas)",
+     "titulo": "e-Agendas: autoridades em exercício no órgão MS, com cargo e data de início",
+     "url": "https://eagendas.cgu.gov.br/pesquisa/agentes-publicos-obrigados-por-orgao/orgao/563/ativo/true",
+     "data": "2026-10-15"
+    },
+    {
+     "veiculo": "Câmara dos Deputados",
+     "titulo": "Deputado federal Alexandre Padilha (licenciado) – Partido: PT-SP",
+     "url": "https://www.camara.leg.br/deputados/204503",
+     "data": "2026-10-15"
+    }
+   ]
+  },
+  {
+   "id": "min-secretaria-de-comunicacao-social",
+   "ministerio": "Secretaria de Comunicação Social da Presidência da República",
+   "ic": "📣",
+   "oQueFaz": "Cuida da comunicação do governo federal com a população.",
+   "nome": "Samara Castro",
+   "genero": "F",
+   "partido": null,
+   "interino": true,
+   "desde": "2026-10-13",
+   "fonte": [
+    {
+     "veiculo": "Controladoria-Geral da União (e-Agendas)",
+     "titulo": "e-Agendas: agenda de Sidônio Palmeira, ministro da Secom – afastamento registrado de 13/10/2026 a 24/10/2026, em substituição por Samara Mariana de Castro, secretária-executiva",
+     "url": "https://eagendas.cgu.gov.br/?filtro_orgaos_ativos=on&filtro_orgao=1381&filtro_cargos_ativos=on&filtro_cargo=MINISTRO+DE+ESTADO+DA+SECOM%2FPR&filtro_apos_ativos=on&filtro_servidor=39729&cargo_confianca_id=&is_cargo_vago=false",
+     "data": "2026-10-15"
+    },
+    {
+     "veiculo": "Secretaria de Comunicação Social da Presidência",
+     "titulo": "Samara Mariana de Castro – Secretária-Executiva",
+     "url": "https://www.gov.br/secom/pt-br/composicao/orgaos-de-assistencia-direta-e-imediata/secretaria-executiva/samara-mariana-de-castro",
+     "data": "2026-10-15"
+    },
+    {
+     "veiculo": "Poder360",
+     "titulo": "Sidônio Palmeira deixará Secom para ajudar na campanha de Lula (a secretária-executiva Samara Castro deve assumir interinamente)",
+     "url": "https://www.poder360.com.br/poder-eleicoes-2026/sidonio-palmeira-deixara-secom-para-ajudar-na-campanha-de-lula/",
+     "data": "2026-10-11"
+    },
+    {
+     "veiculo": "O Globo",
+     "titulo": "Sidônio entra de férias para se dedicar 100% à campanha de Lula",
+     "url": "https://oglobo.globo.com/blogs/lauro-jardim/post/2026/10/sidonio-entra-de-ferias-para-se-dedicar-100percent-a-campanha-de-lula.ghtml",
+     "data": "2026-10-15"
+    },
+    {
+     "veiculo": "Presidência da República (Planalto)",
+     "titulo": "Ministros e Ministras (lista oficial do 1º escalão; página atualizada em 05/05/2026)",
+     "url": "https://www.gov.br/planalto/pt-br/conheca-a-presidencia/ministros-e-ministras",
+     "data": "2026-05-05"
+    }
+   ],
+   "conferir": true,
+   "nota": "Ministra interina. O ministro titular, Sidônio Palmeira (no cargo desde 14/01/2025), está afastado: o e-Agendas registra o afastamento de 13/10/2026 a 24/10/2026, e a imprensa informa que ele tirou férias para se dedicar à campanha de reeleição do presidente Lula no 2º turno."
+  },
+  {
+   "id": "min-secretaria-de-relacoes-institucionais",
+   "ministerio": "Secretaria de Relações Institucionais da Presidência da República",
+   "ic": "🤝",
+   "oQueFaz": "Faz a conversa do governo com o Congresso, os estados e as cidades.",
+   "nome": "José Guimarães",
+   "genero": "M",
+   "partido": "PT",
+   "interino": false,
+   "desde": "2026-04-13",
+   "fonte": [
+    {
+     "veiculo": "Presidência da República (Planalto)",
+     "titulo": "Ministros e Ministras (lista oficial do 1º escalão; página atualizada em 05/05/2026)",
+     "url": "https://www.gov.br/planalto/pt-br/conheca-a-presidencia/ministros-e-ministras",
+     "data": "2026-05-05"
+    },
+    {
+     "veiculo": "Controladoria-Geral da União (e-Agendas)",
+     "titulo": "e-Agendas: autoridades em exercício no órgão SRI, com cargo e data de início",
+     "url": "https://eagendas.cgu.gov.br/pesquisa/agentes-publicos-obrigados-por-orgao/orgao/1387/ativo/true",
+     "data": "2026-10-15"
+    },
+    {
+     "veiculo": "Câmara dos Deputados",
+     "titulo": "Deputado federal José Guimarães (licenciado) – Partido: PT-CE",
+     "url": "https://www.camara.leg.br/deputados/141470",
+     "data": "2026-10-15"
+    }
+   ]
+  },
+  {
+   "id": "min-secretaria-geral",
+   "ministerio": "Secretaria-Geral da Presidência da República",
+   "ic": "📋",
+   "oQueFaz": "Faz a ponte entre o governo e as organizações da sociedade, como associações e movimentos sociais.",
+   "nome": "Guilherme Boulos",
+   "genero": "M",
+   "partido": "PSOL",
+   "interino": false,
+   "desde": "2025-10-29",
+   "fonte": [
+    {
+     "veiculo": "Presidência da República (Planalto)",
+     "titulo": "Ministros e Ministras (lista oficial do 1º escalão; página atualizada em 05/05/2026)",
+     "url": "https://www.gov.br/planalto/pt-br/conheca-a-presidencia/ministros-e-ministras",
+     "data": "2026-05-05"
+    },
+    {
+     "veiculo": "Controladoria-Geral da União (e-Agendas)",
+     "titulo": "e-Agendas: autoridades em exercício no órgão Secretaria-Geral, com cargo e data de início",
+     "url": "https://eagendas.cgu.gov.br/pesquisa/agentes-publicos-obrigados-por-orgao/orgao/1372/ativo/true",
+     "data": "2026-10-15"
+    },
+    {
+     "veiculo": "Câmara dos Deputados",
+     "titulo": "Deputado federal Guilherme Boulos (licenciado) – Partido: PSOL-SP",
+     "url": "https://www.camara.leg.br/deputados/220639",
+     "data": "2026-10-15"
+    }
+   ]
+  },
+  {
+   "id": "min-trabalho-e-emprego",
+   "ministerio": "Ministério do Trabalho e Emprego",
+   "ic": "👷",
+   "oQueFaz": "Cuida das regras do trabalho, da carteira de trabalho e de programas de emprego.",
+   "nome": "Francisco Macena da Silva",
+   "genero": "M",
+   "partido": null,
+   "interino": true,
+   "desde": "2026-10-13",
+   "fonte": [
+    {
+     "veiculo": "Controladoria-Geral da União (e-Agendas)",
+     "titulo": "e-Agendas: agenda de Luiz Marinho, ministro do Trabalho e Emprego – afastamento registrado de 13/10/2026 a 24/10/2026, em substituição por Francisco Macena da Silva, secretário-executivo",
+     "url": "https://eagendas.cgu.gov.br/?filtro_orgaos_ativos=on&filtro_orgao=1421&filtro_cargos_ativos=on&filtro_cargo=MINISTRO+DE+ESTADO+DO+TRABALHO+E+EMPREGO&filtro_apos_ativos=on&filtro_servidor=17900&cargo_confianca_id=&is_cargo_vago=false",
+     "data": "2026-10-15"
+    },
+    {
+     "veiculo": "Controladoria-Geral da União (e-Agendas)",
+     "titulo": "e-Agendas: autoridades em exercício no órgão MTE, com cargo e data de início",
+     "url": "https://eagendas.cgu.gov.br/pesquisa/agentes-publicos-obrigados-por-orgao/orgao/1421/ativo/true",
+     "data": "2026-10-15"
+    },
+    {
+     "veiculo": "Presidência da República (Planalto)",
+     "titulo": "Ministros e Ministras (lista oficial do 1º escalão; página atualizada em 05/05/2026)",
+     "url": "https://www.gov.br/planalto/pt-br/conheca-a-presidencia/ministros-e-ministras",
+     "data": "2026-05-05"
+    }
+   ],
+   "conferir": true,
+   "nota": "Ministro interino (é o secretário-executivo do ministério). O ministro titular, Luiz Marinho (no cargo desde 01/01/2023), está afastado: o e-Agendas registra o afastamento de 13/10/2026 a 24/10/2026. Não encontramos notícia sobre o motivo."
+  },
+  {
+   "id": "min-transportes",
+   "ministerio": "Ministério dos Transportes",
+   "ic": "🚌",
+   "oQueFaz": "Cuida das estradas, ferrovias e hidrovias federais do país.",
+   "nome": "George Santoro",
+   "genero": "M",
+   "partido": null,
+   "interino": false,
+   "desde": "2026-04-01",
+   "fonte": [
+    {
+     "veiculo": "Presidência da República (Planalto)",
+     "titulo": "Ministros e Ministras (lista oficial do 1º escalão; página atualizada em 05/05/2026)",
+     "url": "https://www.gov.br/planalto/pt-br/conheca-a-presidencia/ministros-e-ministras",
+     "data": "2026-05-05"
+    },
+    {
+     "veiculo": "Controladoria-Geral da União (e-Agendas)",
+     "titulo": "e-Agendas: autoridades em exercício no órgão MT, com cargo e data de início",
+     "url": "https://eagendas.cgu.gov.br/pesquisa/agentes-publicos-obrigados-por-orgao/orgao/1411/ativo/true",
+     "data": "2026-10-15"
+    },
+    {
+     "veiculo": "Poder360",
+     "titulo": "Tebet e outros 13 ministros deixam governo Lula; saiba quem assume",
+     "url": "https://www.poder360.com.br/poder-governo/lula-troca-14-ministros-e-promove-secretarios-saiba-quem-sao/",
+     "data": "2026-03-31"
+    }
+   ]
+  },
+  {
+   "id": "min-turismo",
+   "ministerio": "Ministério do Turismo",
+   "ic": "🧳",
+   "oQueFaz": "Incentiva as viagens e o turismo pelo Brasil.",
+   "nome": "Gustavo Feliciano",
+   "genero": "M",
+   "partido": null,
+   "interino": false,
+   "desde": "2025-12-23",
+   "fonte": [
+    {
+     "veiculo": "Presidência da República (Planalto)",
+     "titulo": "Ministros e Ministras (lista oficial do 1º escalão; página atualizada em 05/05/2026)",
+     "url": "https://www.gov.br/planalto/pt-br/conheca-a-presidencia/ministros-e-ministras",
+     "data": "2026-05-05"
+    },
+    {
+     "veiculo": "Controladoria-Geral da União (e-Agendas)",
+     "titulo": "e-Agendas: autoridades em exercício no órgão MTur, com cargo e data de início",
+     "url": "https://eagendas.cgu.gov.br/pesquisa/agentes-publicos-obrigados-por-orgao/orgao/714/ativo/true",
+     "data": "2026-10-15"
+    },
+    {
+     "veiculo": "g1",
+     "titulo": "Gustavo Feliciano assume comando do Ministério do Turismo",
+     "url": "https://g1.globo.com/politica/noticia/2025/12/23/gustavo-feliciano-assume-comando-do-ministerio-do-turismo.ghtml",
+     "data": "2025-12-23"
+    }
+   ]
+  }
+ ]
+}

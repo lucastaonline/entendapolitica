@@ -1,0 +1,59 @@
+/* ======================================================================
+   Entenda a política: motor dos slides.
+   Lê conteudo/entenda/parte-1.json ... parte-9.json e monta a apresentação.
+
+   FORMATO DE CADA PARTE (conteudo/entenda/parte-N.json)
+   {
+     "parte": 1, "ic": "🤝", "nome": "O que é política?",
+     "resumo": "Uma frase dizendo o que a parte ensina.",
+     "fontes": [ { "id": "cf-art1", "veiculo": "Planalto", "titulo": "Constituição Federal, art. 1º",
+                   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm", "data": "1988-10-05" } ],
+     "glossario": [ { "termo": "mandato", "simples": "O tempo que a pessoa eleita fica no cargo." } ],
+     "slides": [ ...um objeto por slide... ]
+   }
+
+   Em qualquer texto: **assim** vira negrito. Nada de HTML.
+   Todo slide (menos "abertura") deve ter "fontes": ["id", ...] apontando para a lista "fontes" da parte.
+
+   TIPOS DE SLIDE
+   abertura   { "tipo":"abertura", "titulo":"Frase-título da parte", "texto":"1 ou 2 frases", "ilustracao":"id" }
+              O cubo com o número da parte aparece sozinho.
+
+   explica    { "tipo":"explica", "etiqueta":"RÓTULO CURTO (opcional)", "titulo":"Uma ideia por slide",
+                "texto":"1 ou 2 frases (opcional)",
+                "itens":[ { "ic":"🏫", "txt":"frase curta" } ],        // 2 a 5 itens
+                "ilustracao":"id (opcional)", "emoji":"🏫 (opcional, se não houver ilustração)",
+                "coruja":"dica curtinha da coruja mascote (opcional)", "fontes":["id"] }
+
+   cards      { "tipo":"cards", "etiqueta":"...", "titulo":"...", "texto":"...",
+                "cards":[ { "ic":"👑", "titulo":"Presidente", "txt":"o que faz, em 1 frase",
+                            "dados":[ { "rot":"Mandato", "val":"4 anos" } ],      // 0 a 4
+                            "mais":"texto opcional que abre numa janela ao tocar" } ],   // 2 a 6 cards
+                "fontes":["id"] }
+
+   passos     { "tipo":"passos", "titulo":"...", "texto":"...",
+                "passos":[ { "ic":"💡", "titulo":"A ideia", "txt":"..." } ], "fontes":["id"] }   // 3 a 8, viram uma trilha animada
+
+   comparar   { "tipo":"comparar", "titulo":"...", "texto":"...",
+                "colunas":[ { "ic":"🥇", "titulo":"...", "itens":["...", "..."], "exemplo":"(opcional)" } ],  // 2 ou 3
+                "fontes":["id"] }
+
+   numeros    { "tipo":"numeros", "titulo":"...", "texto":"...",
+                "numeros":[ { "val":"513", "rot":"deputados federais", "ic":"🧑‍💼" } ],   // 1 a 4; val só com dígitos, ponto de milhar e vírgula
+                "nota":"(opcional)", "fontes":["id"] }
+
+   historia   { "tipo":"historia", "titulo":"Imagine que...", "quadros":[ { "ic":"🏫", "txt":"..." } ],   // 2 a 5 quadrinhos
+                "moral":"frase final que liga a história ao assunto", "fontes":["id"] }
+
+   quiz       { "tipo":"quiz", "pergunta":"...", "opcoes":["...", "...", "..."], "certa":0,
+                "explica":"por que essa é a resposta certa", "fontes":["id"] }
+
+   simulador  { "tipo":"simulador", "id":"quem-cuida" | "quociente" | "caminho-lei", "titulo":"...", "texto":"...", "fontes":["id"], ... }
+      quem-cuida:  "itens":[ { "ic":"🏫", "txt":"Creche", "quem":"cidade", "explica":"..." } ]   // quem: pais | estado | cidade | todos
+      quociente:   "cadeiras":10, "partidos":[ { "nome":"Partido Azul", "votos":420 } ], "passos":["explicação passo a passo"]  // exemplo fictício
+      caminho-lei: "passos":[ { "ic":"💡", "titulo":"...", "txt":"..." } ]
+
+   ILUSTRAÇÕES ("ilustracao"): congresso, tres-poderes, niveis, urna, constituicao, balanca, lei, cofre, mapa,
+   plenario, megafone, predio, palacio. Se precisar de outra coisa, use "emoji".
+   ====================================================================== */
+

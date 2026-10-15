@@ -1,0 +1,239 @@
+{
+ "parte": 9,
+ "ic": "🙋",
+ "nome": "Como você pode participar",
+ "resumo": "Os jeitos de participar da política além do voto, alguns desde criança.",
+ "fontes": [
+  { "id": "cf-art5-14", "veiculo": "Planalto", "titulo": "Constituição Federal, art. 5º, IV e VIII, e art. 14", "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm", "data": "1988-10-05" },
+  { "id": "cf-art58", "veiculo": "Planalto", "titulo": "Constituição Federal, art. 58, § 2º, II (audiências públicas)", "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm", "data": "1988-10-05" },
+  { "id": "cf-art61", "veiculo": "Planalto", "titulo": "Constituição Federal, art. 61, § 2º (iniciativa popular)", "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm", "data": "1988-10-05" },
+  { "id": "res-tse-23659", "veiculo": "TSE", "titulo": "Resolução TSE 23.659/2021, art. 30 (título de eleitor a partir dos 15 anos)", "url": "https://www.tse.jus.br/legislacao/compilada/res/2021/resolucao-no-23-659-de-26-de-outubro-de-2021", "data": "2021-10-26" },
+  { "id": "lei9504-91", "veiculo": "Planalto", "titulo": "Lei 9.504/1997 (Lei das Eleições), art. 91", "url": "https://www.planalto.gov.br/ccivil_03/leis/l9504.htm", "data": "1997-09-30" },
+  { "id": "ecidadania-sobre", "veiculo": "Senado Federal", "titulo": "e-Cidadania: o que é o portal e como participar", "url": "https://www12.senado.leg.br/ecidadania/sobre", "data": "2026-10-15" },
+  { "id": "camara-participe", "veiculo": "Câmara dos Deputados", "titulo": "Participe: debates interativos e enquetes", "url": "https://www.camara.leg.br/participe", "data": "2026-10-15" },
+  { "id": "camara-sugira", "veiculo": "Câmara dos Deputados", "titulo": "Sugira um projeto: iniciativa popular e sugestão legislativa", "url": "https://www2.camara.leg.br/atividade-legislativa/participe/sugira-um-projeto", "data": "2026-10-15" },
+  { "id": "cgu-ouvidoria", "veiculo": "CGU", "titulo": "Ouvidoria e Plataforma Fala.BR", "url": "https://www.gov.br/cgu/pt-br/assuntos/ouvidoria", "data": "2026-10-15" },
+  { "id": "falabr", "veiculo": "CGU", "titulo": "Fala.BR: Plataforma Integrada de Ouvidoria e Acesso à Informação", "url": "https://falabr.cgu.gov.br/web/home", "data": "2026-10-15" },
+  { "id": "lei12527", "veiculo": "Planalto", "titulo": "Lei 12.527/2011 (Lei de Acesso à Informação), arts. 10 e 11", "url": "https://www.planalto.gov.br/ccivil_03/_ato2011-2014/2011/lei/l12527.htm", "data": "2011-11-18" },
+  { "id": "ldb-art14", "veiculo": "Planalto", "titulo": "Lei 9.394/1996 (LDB), art. 14 (conselhos escolares), com redação da Lei 14.644/2023", "url": "https://www.planalto.gov.br/ccivil_03/leis/l9394.htm", "data": "2023-08-02" },
+  { "id": "lei8142", "veiculo": "Planalto", "titulo": "Lei 8.142/1990, art. 1º (conselhos de saúde)", "url": "https://www.planalto.gov.br/ccivil_03/leis/l8142.htm", "data": "1990-12-28" },
+  { "id": "lei7398", "veiculo": "Planalto", "titulo": "Lei 7.398/1985 (grêmios estudantis)", "url": "https://www.planalto.gov.br/ccivil_03/leis/l7398.htm", "data": "1985-11-04" },
+  { "id": "plenarinho", "veiculo": "Câmara dos Deputados (Plenarinho)", "titulo": "Plenarinho: o Legislativo para crianças", "url": "https://plenarinho.leg.br/", "data": "2026-10-15" },
+  { "id": "plenarinho-eleitor-mirim", "veiculo": "Câmara dos Deputados (Plenarinho)", "titulo": "Vote no Eleitor Mirim 2026!", "url": "https://plenarinho.leg.br/index.php/2026/07/vote-no-eleitor-mirim-2026/", "data": "2026-07-27" },
+  { "id": "plenarinho-camara-mirim", "veiculo": "Câmara dos Deputados (Plenarinho)", "titulo": "Câmara Mirim: quem pode participar", "url": "https://plenarinho.leg.br/index.php/camara-mirim/", "data": "2026-10-15" },
+  { "id": "plenarinho-camara-mirim-2026", "veiculo": "Câmara dos Deputados (Plenarinho)", "titulo": "Câmara Mirim 2026: edição especial", "url": "https://plenarinho.leg.br/index.php/2026/05/camara-mirim-2026-edicao-especial/", "data": "2026-05-06" },
+  { "id": "plenarinho-camara-mirim-2027", "veiculo": "Câmara dos Deputados (Plenarinho)", "titulo": "Câmara Mirim 2026: novidade para estudantes do 9º ano", "url": "https://plenarinho.leg.br/index.php/2026/08/camara-mirim-2026-novidade-para-estudantes-do-9o-ano/", "data": "2026-08-17" },
+  { "id": "jovem-senador", "veiculo": "Senado Federal", "titulo": "Programa Jovem Senador: apresentação", "url": "https://www12.senado.leg.br/jovemsenador/menu/quem-somos/apresentacao", "data": "2026-10-15" },
+  { "id": "jovem-senador-2026", "veiculo": "Agência Senado", "titulo": "Jovem Senador 2026 termina com projetos aprovados e relatos emocionantes", "url": "https://www12.senado.leg.br/jovemsenador/home/noticias-1/externas/2026/08/jovem-senador-2026-termina-com-projetos-aprovados-e-relatos-emocionantes", "data": "2026-08-21" },
+  { "id": "camara-comprove", "veiculo": "Câmara dos Deputados", "titulo": "Comprove: canal de checagem de notícias sobre a Câmara", "url": "https://www.camara.leg.br/comprove", "data": "2026-10-15" },
+  { "id": "camara-dicas", "veiculo": "Câmara dos Deputados", "titulo": "Comprove: dicas de checagem", "url": "https://www.camara.leg.br/comprove/dicas-de-checagem", "data": "2026-10-15" },
+  { "id": "plenarinho-fake", "veiculo": "Câmara dos Deputados (Plenarinho)", "titulo": "Fake News: como identificar notícias falsas na rede", "url": "https://plenarinho.leg.br/index.php/2018/03/fake-news-como-identificar-noticias-falsas-na-rede/", "data": "2018-03-20" },
+  { "id": "je-fato-boato", "veiculo": "Justiça Eleitoral (TSE)", "titulo": "Fato ou Boato: checagens sobre as eleições", "url": "https://www.justicaeleitoral.jus.br/fato-ou-boato/", "data": "2026-10-15" }
+ ],
+ "glossario": [
+  { "termo": "participação", "simples": "Tomar parte nas decisões, dando ideias, opiniões e acompanhando o que acontece." },
+  { "termo": "título de eleitor", "simples": "O documento de quem está registrado para votar." },
+  { "termo": "e-Cidadania", "simples": "Site do Senado onde as pessoas podem sugerir leis e dar opinião." },
+  { "termo": "Ideia Legislativa", "simples": "Sugestão de lei que qualquer pessoa cadastrada pode enviar pelo e-Cidadania." },
+  { "termo": "comissão", "simples": "Grupo menor de parlamentares que estuda um assunto antes da votação." },
+  { "termo": "parecer", "simples": "Opinião por escrito, com a análise de uma proposta." },
+  { "termo": "enquete", "simples": "Pergunta aberta para as pessoas darem opinião. Não é uma pesquisa científica." },
+  { "termo": "relator", "simples": "O parlamentar que estuda uma proposta e sugere mudanças no texto." },
+  { "termo": "audiência pública", "simples": "Reunião aberta para ouvir especialistas e a população sobre um assunto." },
+  { "termo": "iniciativa popular", "simples": "Projeto de lei apresentado pelo povo, com assinaturas de eleitores." },
+  { "termo": "ouvidoria", "simples": "Canal para reclamar, sugerir, elogiar, denunciar ou pedir algo a um órgão público." },
+  { "termo": "Lei de Acesso à Informação", "simples": "Lei que garante a qualquer pessoa o direito de pedir dados aos órgãos públicos." },
+  { "termo": "conselho escolar", "simples": "Grupo da escola pública com direção, professores, funcionários, pais, estudantes e comunidade." },
+  { "termo": "conselho de saúde", "simples": "Grupo que acompanha a saúde pública, com usuários do SUS, governo e trabalhadores." },
+  { "termo": "SUS", "simples": "Sistema Único de Saúde: a saúde pública do Brasil." },
+  { "termo": "grêmio estudantil", "simples": "Associação que representa os estudantes de uma escola." },
+  { "termo": "democracia", "simples": "Forma de governo em que o poder vem do povo, que escolhe seus representantes." },
+  { "termo": "notícia falsa", "simples": "Mentira que imita uma notícia de verdade. Também chamada de fake news." },
+  { "termo": "checagem", "simples": "Conferir se uma informação é verdadeira." },
+  { "termo": "alarmista", "simples": "Que tenta assustar, dizendo que algo terrível vai acontecer." },
+  { "termo": "chapa", "simples": "Grupo de candidatos que concorre junto numa eleição." },
+  { "termo": "conta gov.br", "simples": "Cadastro único para usar serviços do governo pela internet." }
+ ],
+ "slides": [
+  {
+   "tipo": "abertura",
+   "titulo": "Política não é só no dia da eleição",
+   "texto": "Dá para dar ideias, fazer perguntas, reclamar e acompanhar o trabalho de quem foi eleito. E dá para **começar cedo**!",
+   "ilustracao": "megafone"
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "O VOTO",
+   "titulo": "O voto começa antes da eleição",
+   "texto": "Antes de votar, vale **se informar** sobre quem está concorrendo.",
+   "itens": [
+    { "ic": "🔎", "txt": "Veja o que a pessoa já fez e o que ela propõe." },
+    { "ic": "📚", "txt": "Compare fontes diferentes. Este site mostra propostas e votações, sempre com o link da fonte." },
+    { "ic": "🪪", "txt": "Com **15 anos**, já dá para tirar o título. Mas só dá para votar a partir dos 16." },
+    { "ic": "🙋", "txt": "O jovem pode pedir o título sozinho, sem autorização dos pais." },
+    { "ic": "📅", "txt": "Em ano de eleição, os pedidos de título param 150 dias antes da votação." }
+   ],
+   "emoji": "🪪",
+   "fontes": ["res-tse-23659", "lei9504-91", "cf-art5-14"]
+  },
+  {
+   "tipo": "cards",
+   "etiqueta": "NO CONGRESSO",
+   "titulo": "Dê ideias e opine no Congresso",
+   "texto": "Senado e Câmara têm canais abertos para a população.",
+   "cards": [
+    {
+     "ic": "💡",
+     "titulo": "Ideia Legislativa",
+     "txt": "No e-Cidadania do Senado, quem tem mais de 12 anos pode sugerir uma lei.",
+     "dados": [ { "rot": "Apoios", "val": "20 mil" }, { "rot": "Prazo", "val": "4 meses" } ],
+     "mais": "Com 20 mil apoios em 4 meses, a ideia vai para uma comissão do Senado. Lá, ela recebe um parecer. É a Comissão de Direitos Humanos e Legislação Participativa. O cadastro é feito pela conta gov.br."
+    },
+    {
+     "ic": "📊",
+     "titulo": "Enquetes da Câmara",
+     "txt": "Você pode opinar sobre qualquer proposta e apontar pontos positivos e negativos.",
+     "mais": "A enquete não é uma pesquisa científica. Quem decide se vai usar as opiniões é o relator da proposta."
+    },
+    {
+     "ic": "🎤",
+     "titulo": "Audiências públicas",
+     "txt": "Reuniões em que deputados e senadores ouvem especialistas e a sociedade.",
+     "mais": "Muitas são interativas: dá para mandar perguntas pela internet, no site da Câmara ou no e-Cidadania."
+    },
+    {
+     "ic": "✍️",
+     "titulo": "Lei de iniciativa popular",
+     "txt": "O povo pode apresentar um projeto de lei à Câmara, com **assinaturas** de eleitores.",
+     "dados": [ { "rot": "Assinaturas", "val": "1% dos eleitores" }, { "rot": "Estados", "val": "pelo menos 5" }, { "rot": "Em cada estado", "val": "0,3% dos eleitores" } ],
+     "mais": "A Constituição pede “no mínimo, um por cento do eleitorado nacional, distribuído pelo menos por cinco Estados, com não menos de três décimos por cento dos eleitores de cada um deles”."
+    }
+   ],
+   "fontes": ["ecidadania-sobre", "camara-participe", "camara-sugira", "cf-art58", "cf-art61"]
+  },
+  {
+   "tipo": "cards",
+   "etiqueta": "PERTO DE VOCÊ",
+   "titulo": "Pergunte, reclame e participe",
+   "texto": "Também dá para participar perto de casa e da escola.",
+   "cards": [
+    {
+     "ic": "📣",
+     "titulo": "Fala.BR",
+     "txt": "Canal de **ouvidoria** para denúncias, reclamações, sugestões, elogios e pedidos.",
+     "mais": "É a Plataforma Integrada de Ouvidoria e Acesso à Informação, cuidada pela CGU. Ouvidorias de vários órgãos públicos usam a plataforma."
+    },
+    {
+     "ic": "📨",
+     "titulo": "Lei de Acesso à Informação",
+     "txt": "Qualquer pessoa pode pedir informações a órgãos públicos, sem dizer o motivo.",
+     "dados": [ { "rot": "Prazo de resposta", "val": "até 20 dias, mais 10 se preciso" } ]
+    },
+    {
+     "ic": "🏫",
+     "titulo": "Conselho escolar",
+     "txt": "Nas escolas públicas, reúne direção, professores, funcionários, pais, estudantes e gente do bairro.",
+     "dados": [ { "rot": "Tem vaga para estudantes?", "val": "sim" } ]
+    },
+    {
+     "ic": "🏥",
+     "titulo": "Conselho de saúde",
+     "txt": "Existe na cidade, no estado e no país. Acompanha e ajuda a planejar a saúde pública.",
+     "dados": [ { "rot": "Vagas de usuários do SUS", "val": "metade" } ]
+    }
+   ],
+   "fontes": ["cgu-ouvidoria", "falabr", "lei12527", "ldb-art14", "lei8142"]
+  },
+  {
+   "tipo": "cards",
+   "etiqueta": "CRIANÇAS E JOVENS",
+   "titulo": "Para crianças e jovens",
+   "texto": "Dá para **treinar** a participação desde cedo.",
+   "cards": [
+    {
+     "ic": "🏫",
+     "titulo": "Grêmio estudantil",
+     "txt": "Representa os estudantes da escola. A diretoria é eleita pelo voto direto e secreto dos alunos.",
+     "dados": [ { "rot": "Lei", "val": "7.398/1985" } ]
+    },
+    {
+     "ic": "🎮",
+     "titulo": "Plenarinho",
+     "txt": "Site da Câmara para crianças, com jogos, notícias e concursos."
+    },
+    {
+     "ic": "🗳️",
+     "titulo": "Eleitor Mirim",
+     "txt": "Eleição de mentirinha do Plenarinho, aberta a todas as idades.",
+     "dados": [ { "rot": "Em 2026", "val": "votação até 25 de outubro" } ]
+    },
+    {
+     "ic": "🏛️",
+     "titulo": "Câmara Mirim",
+     "txt": "Estudantes enviam projetos de lei. Os autores dos melhores vão defendê-los na Câmara.",
+     "dados": [ { "rot": "Quem", "val": "5º ao 9º ano" } ],
+     "mais": "Em 2026, houve uma edição especial, feita dentro das escolas. Em 2027, o programa volta ao formato de sempre."
+    },
+    {
+     "ic": "🎓",
+     "titulo": "Jovem Senador",
+     "txt": "Alunos do ensino médio de escola pública fazem uma redação. Os vencedores passam uma semana no Senado.",
+     "dados": [ { "rot": "Vagas", "val": "27, uma por estado e DF" } ],
+     "mais": "Em agosto de 2026, os jovens senadores aprovaram 3 propostas. Elas viram sugestões para uma comissão do Senado analisar."
+    }
+   ],
+   "fontes": ["lei7398", "plenarinho", "plenarinho-eleitor-mirim", "plenarinho-camara-mirim", "plenarinho-camara-mirim-2026", "plenarinho-camara-mirim-2027", "jovem-senador", "jovem-senador-2026"]
+  },
+  {
+   "tipo": "historia",
+   "titulo": "Imagine a eleição do grêmio...",
+   "quadros": [
+    { "ic": "🏫", "txt": "Na eleição do grêmio, Ana apoia a Chapa Azul. Léo apoia a Chapa Verde." },
+    { "ic": "👂", "txt": "Ana explica os motivos dela. Léo ouve até o fim, sem interromper." },
+    { "ic": "💬", "txt": "Léo discorda e explica os motivos dele. Ninguém xinga nem ri do outro." },
+    { "ic": "🤫", "txt": "Na votação, cada um vota em segredo. Ninguém é obrigado a contar o voto." },
+    { "ic": "🤝", "txt": "Sai o resultado. Os dois continuam amigos e jogam bola no recreio." }
+   ],
+   "moral": "Discordar faz parte da **democracia**. Ninguém pode perder direitos por causa da opinião política, e o voto é secreto.",
+   "fontes": ["cf-art5-14", "lei7398"]
+  },
+  {
+   "tipo": "passos",
+   "titulo": "Antes de compartilhar uma notícia",
+   "texto": "**Notícia falsa** se espalha rápido. Faça estas perguntas antes de passar adiante.",
+   "passos": [
+    { "ic": "🧐", "titulo": "Quem publicou?", "txt": "Veja se o site ou o perfil é conhecido e confiável." },
+    { "ic": "📖", "titulo": "Leia tudo", "txt": "Não fique só no título. Leia até o fim." },
+    { "ic": "🔁", "titulo": "Procure em outro lugar", "txt": "Veja se outros jornais e sites também deram a notícia." },
+    { "ic": "😱", "titulo": "Cuidado com o susto", "txt": "Desconfie de mensagem que tenta assustar, exagera nos adjetivos ou pede para mandar para todo mundo." },
+    { "ic": "✅", "titulo": "Use os checadores", "txt": "A Justiça Eleitoral tem o Fato ou Boato. A Câmara tem o Comprove." },
+    { "ic": "🛑", "titulo": "Na dúvida, não compartilhe", "txt": "Mesmo que você concorde com a mensagem." }
+   ],
+   "fontes": ["camara-dicas", "camara-comprove", "plenarinho-fake", "je-fato-boato"]
+  },
+  {
+   "tipo": "quiz",
+   "pergunta": "Com quantos anos já dá para tirar o título de eleitor?",
+   "opcoes": [
+    "15 anos",
+    "16 anos",
+    "18 anos"
+   ],
+   "certa": 0,
+   "explica": "Desde os 15 anos dá para tirar o título. Mas a pessoa só pode votar quando fizer 16.",
+   "fontes": ["res-tse-23659"]
+  },
+  {
+   "tipo": "quiz",
+   "pergunta": "Chegou uma mensagem assustadora dizendo: “mande para todo mundo!”. O que fazer?",
+   "opcoes": [
+    "Mandar logo, para avisar todos",
+    "Checar em outros lugares e, na dúvida, não compartilhar",
+    "Mandar só se você concordar com ela"
+   ],
+   "certa": 1,
+   "explica": "Mensagem alarmista que pede para ser espalhada merece desconfiança. Na dúvida, não compartilhe, mesmo se concordar.",
+   "fontes": ["camara-dicas", "plenarinho-fake"]
+  }
+ ]
+}

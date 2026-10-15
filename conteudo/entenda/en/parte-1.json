@@ -1,0 +1,544 @@
+{
+ "parte": 1,
+ "ic": "🤝",
+ "nome": "What is politics?",
+ "resumo": "What politics and democracy are, what the Constitution is for, and where everyone's money comes from.",
+ "fontes": [
+  {
+   "id": "cf",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution of 1988 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art1",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 1 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art5",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 5 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art6",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 6 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art14",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 14 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-mandatos",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, arts. 27, 28, 29, 44, 46 and 82 (length of terms of office) (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art30",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 30 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art60",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 60 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art165",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, arts. 165 and 166 (budget) (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art208",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 208 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art227",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 227 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "eca-art16",
+   "veiculo": "Planalto",
+   "titulo": "Law No. 8,069/1990 (Statute of the Child and Adolescent), art. 16 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/leis/l8069.htm",
+   "data": "1990-07-13"
+  },
+  {
+   "id": "ldb-art6",
+   "veiculo": "Planalto",
+   "titulo": "Law No. 9,394/1996 (National Education Guidelines and Bases Law), art. 6 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/leis/l9394.htm",
+   "data": "1996-12-20"
+  },
+  {
+   "id": "lei-12741",
+   "veiculo": "Planalto",
+   "titulo": "Law No. 12,741/2012 (taxes shown on receipts), art. 1 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/_ato2011-2014/2012/lei/l12741.htm",
+   "data": "2012-12-08"
+  },
+  {
+   "id": "lei-6766",
+   "veiculo": "Planalto",
+   "titulo": "Law No. 6,766/1979, art. 22 (streets and squares become property of the municipality) (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/leis/l6766.htm",
+   "data": "1979-12-19"
+  },
+  {
+   "id": "ms-sus",
+   "veiculo": "Ministério da Saúde",
+   "titulo": "Sistema Único de Saúde (SUS) (in Portuguese)",
+   "url": "https://www.gov.br/saude/pt-br/sus",
+   "data": "2026-10-15"
+  },
+  {
+   "id": "plen-politica",
+   "veiculo": "Plenarinho (Câmara dos Deputados)",
+   "titulo": "O que é Política? (in Portuguese)",
+   "url": "https://plenarinho.leg.br/index.php/2019/11/o-que-e-politica/",
+   "data": "2019-11-07"
+  },
+  {
+   "id": "plen-democracia",
+   "veiculo": "Plenarinho (Câmara dos Deputados)",
+   "titulo": "Democracia Direta X Indireta ou Representativa (in Portuguese)",
+   "url": "https://plenarinho.leg.br/index.php/2021/03/democracia-direta-x-indireta-ou-representativa/",
+   "data": "2021-03-04"
+  },
+  {
+   "id": "plen-constituicao",
+   "veiculo": "Plenarinho (Câmara dos Deputados)",
+   "titulo": "Constituição: o que é? (in Portuguese)",
+   "url": "https://plenarinho.leg.br/index.php/2017/09/constituicao-o-que-e/",
+   "data": "2017-09-15"
+  },
+  {
+   "id": "plen-republica",
+   "veiculo": "Plenarinho (Câmara dos Deputados)",
+   "titulo": "O que é a República Federativa do Brasil (in Portuguese)",
+   "url": "https://plenarinho.leg.br/index.php/2018/11/o-que-e-a-republica-federativa-do-brasil/",
+   "data": "2018-11-12"
+  },
+  {
+   "id": "plen-orcamento",
+   "veiculo": "Plenarinho (Câmara dos Deputados)",
+   "titulo": "O Orçamento é uma lei muito importante (in Portuguese)",
+   "url": "https://plenarinho.leg.br/index.php/2017/10/o-orcamento-e-uma-lei-muito-importante/",
+   "data": "2017-10-27"
+  },
+  {
+   "id": "plen-tributo",
+   "veiculo": "Plenarinho (Câmara dos Deputados)",
+   "titulo": "Turma do Tributo (in Portuguese)",
+   "url": "https://plenarinho.leg.br/index.php/2017/02/turma-do-tributo/",
+   "data": "2017-02-02"
+  },
+  {
+   "id": "plen-prefeito-vereador",
+   "veiculo": "Plenarinho (Câmara dos Deputados)",
+   "titulo": "Vereador e prefeito – quem faz o quê? (in Portuguese)",
+   "url": "https://plenarinho.leg.br/index.php/2024/03/eleicoes-municipais-vem-ai/",
+   "data": "2024-03-06"
+  },
+  {
+   "id": "plen-cidadania",
+   "veiculo": "Plenarinho (Câmara dos Deputados)",
+   "titulo": "A cidadania além das urnas (in Portuguese)",
+   "url": "https://plenarinho.leg.br/index.php/2024/06/cidadania-alem-das-urnas/",
+   "data": "2024-06-17"
+  }
+ ],
+ "glossario": [
+  {
+   "termo": "democracy",
+   "simples": "A way of governing in which power comes from the people, who choose their representatives by voting."
+  },
+  {
+   "termo": "emanate",
+   "simples": "To come from."
+  },
+  {
+   "termo": "term of office",
+   "simples": "The time an elected person stays in office. In Portuguese: mandato."
+  },
+  {
+   "termo": "representative",
+   "simples": "A person chosen to speak and decide on behalf of a group."
+  },
+  {
+   "termo": "election",
+   "simples": "A vote in which people choose their representatives."
+  },
+  {
+   "termo": "Constitution",
+   "simples": "The highest law of the country; no other law can go against it."
+  },
+  {
+   "termo": "social rights",
+   "simples": "Rights that help everyone live well, like education, health, housing and leisure."
+  },
+  {
+   "termo": "taxes",
+   "simples": "Money that people and companies pay to the government to pay for services for everyone."
+  },
+  {
+   "termo": "receipt",
+   "simples": "Proof of a purchase. It shows what was bought and how much it cost. In Portuguese: nota fiscal."
+  },
+  {
+   "termo": "budget",
+   "simples": "A plan that shows how much money the government expects to have and how it will spend it during the year."
+  },
+  {
+   "termo": "pluralism",
+   "simples": "When many different ideas and parties live side by side and can express themselves."
+  },
+  {
+   "termo": "parties",
+   "simples": "Groups of people with similar ideas who organize themselves to run in elections."
+  },
+  {
+   "termo": "Statute of the Child and Adolescent",
+   "simples": "A 1990 law that brings together the rights of children and teenagers. It is also called ECA, from its name in Portuguese (Estatuto da Criança e do Adolescente)."
+  },
+  {
+   "termo": "SUS",
+   "simples": "Sistema Único de Saúde (Unified Health System): free public health care all over Brazil."
+  },
+  {
+   "termo": "enrollment",
+   "simples": "Signing a student up at a school."
+  },
+  {
+   "termo": "public",
+   "simples": "Something that belongs to everyone, not to just one person."
+  },
+  {
+   "termo": "right",
+   "simples": "Something the law guarantees you."
+  },
+  {
+   "termo": "duty",
+   "simples": "Something you must do."
+  },
+  {
+   "termo": "law",
+   "simples": "A written rule that applies to everyone and must be followed."
+  },
+  {
+   "termo": "politics",
+   "simples": "The way people decide together on rules and on how to use what belongs to everyone."
+  }
+ ],
+ "slides": [
+  {
+   "tipo": "abertura",
+   "titulo": "Politics is how a group decides about what belongs to everyone",
+   "texto": "The school, the town square and the bus belong to everyone. In **politics**, we agree on the rules and on how to use everyone's money.",
+   "ilustracao": "plenario"
+  },
+  {
+   "tipo": "historia",
+   "titulo": "Imagine your class at school...",
+   "quadros": [
+    {
+     "ic": "🚌",
+     "txt": "The class is going on a field trip. Some want to go to the zoo. Others want to go to the museum."
+    },
+    {
+     "ic": "🙋",
+     "txt": "Each person explains their idea. Then everyone votes. The idea with the most votes wins."
+    },
+    {
+     "ic": "📋",
+     "txt": "You also agree on classroom rules, like waiting your turn to speak."
+    },
+    {
+     "ic": "🎖️",
+     "txt": "And you choose a class **representative**, who takes everyone's requests to the principal."
+    }
+   ],
+   "moral": "Talking, voting, agreeing on rules and choosing someone to speak for everyone: that is already politics!",
+   "fontes": [
+    "plen-politica",
+    "plen-democracia"
+   ]
+  },
+  {
+   "tipo": "cards",
+   "etiqueta": "IN EVERYDAY LIFE",
+   "titulo": "Politics is in almost everything around you",
+   "texto": "Many things are **public**, which means they belong to everyone. They follow laws, which are rules for everyone, and they use public money.",
+   "cards": [
+    {
+     "ic": "🍎",
+     "titulo": "School lunch",
+     "txt": "The Constitution guarantees food for students at public schools.",
+     "mais": "The Constitution also mentions school supplies, transportation and health care for students."
+    },
+    {
+     "ic": "🚌",
+     "titulo": "Bus",
+     "txt": "The city organizes the bus that runs in your neighborhood.",
+     "mais": "For the Constitution, public transportation is an essential service, which means it cannot be missing. Inside the city, the municipality is in charge of it."
+    },
+    {
+     "ic": "🩺",
+     "titulo": "Health clinic",
+     "txt": "It gives free care through the SUS, Brazil's public health system.",
+     "mais": "The SUS works all over Brazil and treats anyone, free of charge."
+    },
+    {
+     "ic": "🛝",
+     "titulo": "Playground in the square",
+     "txt": "Squares belong to the city, which takes care of them.",
+     "mais": "By law, when a new neighborhood is registered, its streets and squares become property of the municipality."
+    },
+    {
+     "ic": "🏠",
+     "titulo": "The street where you live",
+     "txt": "Paving, streetlights and garbage collection are paid for with public money.",
+     "mais": "The mayor has a team of secretaries, who head the city departments. Each one takes care of an area, like cleaning, lighting or transportation."
+    }
+   ],
+   "fontes": [
+    "cf-art208",
+    "cf-art30",
+    "ms-sus",
+    "lei-6766",
+    "plen-prefeito-vereador",
+    "plen-politica"
+   ]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "DEMOCRACY",
+   "titulo": "In Brazil, power comes from the people",
+   "texto": "The Constitution says: “All power emanates from the people”. To emanate means to come from. This is called **democracy**.",
+   "itens": [
+    {
+     "ic": "🗳️",
+     "txt": "In elections, each person votes in secret. Every vote counts the same."
+    },
+    {
+     "ic": "🧑‍💼",
+     "txt": "Whoever wins becomes a representative and decides on behalf of everyone."
+    },
+    {
+     "ic": "⏳",
+     "txt": "The time in office is the **term of office**. For most offices, it lasts 4 years."
+    },
+    {
+     "ic": "🔄",
+     "txt": "In the next election, the people choose again and can replace whoever is there."
+    }
+   ],
+   "ilustracao": "urna",
+   "coruja": "Getting more than 200 million people together to vote on every law is not possible. That is why we choose representatives.",
+   "fontes": [
+    "cf-art1",
+    "cf-art14",
+    "cf-mandatos",
+    "plen-democracia"
+   ]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "CONSTITUTION",
+   "titulo": "The Constitution is Brazil's highest law",
+   "texto": "It is like the country's rule book. The one in force today is from **1988**.",
+   "itens": [
+    {
+     "ic": "🏗️",
+     "txt": "It says how the country is organized and who takes care of what."
+    },
+    {
+     "ic": "🚫",
+     "txt": "No other law can go against it."
+    },
+    {
+     "ic": "⚖️",
+     "txt": "It applies to everyone, including the people who govern."
+    },
+    {
+     "ic": "🏫",
+     "txt": "It guarantees **social rights**, like education, health, food, housing and leisure."
+    },
+    {
+     "ic": "✏️",
+     "txt": "It can be changed, but that is much harder than changing an ordinary law."
+    }
+   ],
+   "ilustracao": "constituicao",
+   "coruja": "It got the nickname “Citizen Constitution”, because it expanded people's rights.",
+   "fontes": [
+    "cf",
+    "cf-art5",
+    "cf-art6",
+    "cf-art60",
+    "plen-constituicao",
+    "plen-republica"
+   ]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "EVERYONE'S MONEY",
+   "titulo": "Where does the money that pays for schools and hospitals come from?",
+   "texto": "A big part comes from **taxes**: money that people and companies pay to the government. There is tax even on snacks and toys.",
+   "itens": [
+    {
+     "ic": "🧾",
+     "txt": "The receipt shows, roughly, how much of the price was tax."
+    },
+    {
+     "ic": "🏥",
+     "txt": "This money pays for schools, hospitals, police, roads and much more."
+    },
+    {
+     "ic": "📒",
+     "txt": "The **budget** is the plan that says how the money will be spent during the year."
+    },
+    {
+     "ic": "✅",
+     "txt": "The government prepares the budget. The people's representatives review it, can change it and vote on it."
+    }
+   ],
+   "ilustracao": "cofre",
+   "coruja": "In the city, the budget is voted on by the city councilors (vereadores). In the country, by the deputies and senators.",
+   "fontes": [
+    "lei-12741",
+    "plen-tributo",
+    "plen-orcamento",
+    "cf-art165",
+    "plen-prefeito-vereador"
+   ]
+  },
+  {
+   "tipo": "comparar",
+   "titulo": "Everyone has rights and duties",
+   "texto": "A **right** is what the law guarantees you. A **duty** is what you must do.",
+   "colunas": [
+    {
+     "ic": "🎁",
+     "titulo": "Rights",
+     "itens": [
+      "Health, food, school, leisure and respect, for all children.",
+      "Playing, giving your opinion and taking part in political life, in the ways the law allows.",
+      "Being treated equally by the law.",
+      "Voting, from age 16."
+     ],
+     "exemplo": "Playing is a right: it is written in the Statute of the Child and Adolescent (ECA)."
+    },
+    {
+     "ic": "📋",
+     "titulo": "Duties",
+     "itens": [
+      "Following the laws, including the people who govern.",
+      "Respecting other people's rights.",
+      "Going to school from age 4 to 17. Parents must take care of the enrollment.",
+      "Voting, for most adults between 18 and 70."
+     ],
+     "exemplo": "Voting is a right and a duty at the same time. Stop 7 explains elections."
+    }
+   ],
+   "fontes": [
+    "cf-art227",
+    "eca-art16",
+    "cf-art5",
+    "cf-art14",
+    "cf-art208",
+    "ldb-art6",
+    "plen-republica"
+   ]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "RESPECT",
+   "titulo": "Politics is not just fighting on TV",
+   "texto": "People think differently. The Constitution protects the freedom to think and to speak.",
+   "itens": [
+    {
+     "ic": "💬",
+     "txt": "You can disagree with respect: speaking, listening and exchanging ideas."
+    },
+    {
+     "ic": "🎨",
+     "txt": "Brazil has many parties and many ideas. This is called **pluralism**."
+    },
+    {
+     "ic": "🛡️",
+     "txt": "No one can lose rights because of their political opinion."
+    },
+    {
+     "ic": "🔎",
+     "txt": "This site shows facts, always with a source. It does not tell you who to vote for."
+    }
+   ],
+   "ilustracao": "megafone",
+   "coruja": "Before you pass on a news story, check where it came from.",
+   "fontes": [
+    "cf-art1",
+    "cf-art5",
+    "plen-republica",
+    "plen-cidadania"
+   ]
+  },
+  {
+   "tipo": "quiz",
+   "pergunta": "What is politics?",
+   "opcoes": [
+    "Only the fights between politicians that you see on TV",
+    "The way a group decides about what belongs to everyone",
+    "A subject that only matters to adults"
+   ],
+   "certa": 1,
+   "explica": "Politics is deciding as a group about what belongs to everyone: in your class, in your city and in your country. Children take part too!",
+   "fontes": [
+    "plen-politica",
+    "eca-art16"
+   ]
+  },
+  {
+   "tipo": "quiz",
+   "pergunta": "Where does a big part of the money that pays for public schools come from?",
+   "opcoes": [
+    "From the president's personal money",
+    "From the taxes that people and companies pay",
+    "From monthly fees paid by the students"
+   ],
+   "certa": 1,
+   "explica": "Public school is free for students. It is paid for with public money, and a big part of that money comes from taxes.",
+   "fontes": [
+    "cf-art208",
+    "lei-12741",
+    "plen-tributo",
+    "plen-orcamento"
+   ]
+  }
+ ]
+}

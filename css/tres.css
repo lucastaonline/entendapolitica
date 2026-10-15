@@ -1,0 +1,185 @@
+/* ====== Peças 3D compartilhadas: página de entrada, versão rápida e apresentação ======
+   Só seletores de classe, sem regras globais. Montadas por js/tres.js. */
+
+/* ---------- formas 3D flutuantes (fundo) ---------- */
+.formas { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 0; }
+.forma {
+  position: absolute; left: var(--x); top: var(--y); width: var(--s); height: var(--s);
+  transform: translate3d(0, calc(var(--p, 0) * var(--d, 120) * -1px), 0); perspective: 600px;
+}
+.forma > i { position: absolute; inset: 0; transform-style: preserve-3d; animation: gira3d var(--t, 16s) linear infinite; }
+@keyframes gira3d { from { transform: rotateX(0) rotateY(0); } to { transform: rotateX(360deg) rotateY(720deg); } }
+.forma.cubo b { position: absolute; inset: 0; border-radius: 8px; background: var(--c); box-shadow: inset 0 0 0 2px rgba(255, 255, 255, .45); }
+.forma.cubo b:nth-child(1) { transform: translateZ(calc(var(--s) / 2)); }
+.forma.cubo b:nth-child(2) { transform: rotateY(180deg) translateZ(calc(var(--s) / 2)); filter: brightness(.8); }
+.forma.cubo b:nth-child(3) { transform: rotateY(90deg) translateZ(calc(var(--s) / 2)); filter: brightness(.9); }
+.forma.cubo b:nth-child(4) { transform: rotateY(-90deg) translateZ(calc(var(--s) / 2)); filter: brightness(.85); }
+.forma.cubo b:nth-child(5) { transform: rotateX(90deg) translateZ(calc(var(--s) / 2)); filter: brightness(1.1); }
+.forma.cubo b:nth-child(6) { transform: rotateX(-90deg) translateZ(calc(var(--s) / 2)); filter: brightness(.7); }
+.forma.esfera > i { animation: flutua3d var(--t, 7s) ease-in-out infinite; border-radius: 50%;
+  background: radial-gradient(circle at 32% 30%, rgba(255, 255, 255, .9), var(--c) 42%, rgba(0, 0, 0, .25) 100%); box-shadow: 0 18px 30px rgba(0, 0, 0, .12); }
+@keyframes flutua3d { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-18px); } }
+.forma.anel > i b { position: absolute; inset: 0; border-radius: 50%; border: calc(var(--s) / 7) solid var(--c); box-shadow: 0 0 0 1px rgba(255, 255, 255, .5) inset; }
+.forma.anel > i b:nth-child(2) { transform: rotateY(90deg); opacity: .55; }
+
+/* ---------- urna eletrônica em 3D ---------- */
+.cena-urna { position: relative; height: 360px; display: flex; align-items: center; justify-content: center; perspective: 1100px; }
+.urna3d {
+  --W: 320px; --H: 210px; --D: 70px;
+  position: relative; width: var(--W); height: var(--H); transform-style: preserve-3d;
+  transform: rotateX(calc(14deg - var(--p, 0) * 10deg)) rotateY(calc(-34deg + var(--p, 0) * 50deg)) rotateZ(calc(-4deg + var(--p, 0) * 4deg));
+  transition: transform .15s linear;
+}
+.urna3d.auto { animation: urnaBalanca 9s ease-in-out infinite; }
+@keyframes urnaBalanca {
+  0%, 100% { transform: rotateX(14deg) rotateY(-32deg) rotateZ(-4deg); }
+  50% { transform: rotateX(6deg) rotateY(14deg) rotateZ(0deg); }
+}
+.urna3d .f { position: absolute; background: #d9d1bf; border: 2px solid #b8ad96; }
+.urna3d .frente { inset: 0; transform: translateZ(calc(var(--D) / 2)); border-radius: 18px; background: linear-gradient(160deg, #ebe4d4, #d6ccb6); display: flex; gap: 12px; padding: 16px; box-shadow: inset 0 -6px 0 rgba(0, 0, 0, .06); }
+.urna3d .tras { inset: 0; transform: rotateY(180deg) translateZ(calc(var(--D) / 2)); border-radius: 18px; background: #c9bfa8; }
+.urna3d .ldd, .urna3d .lde { top: 0; height: var(--H); width: var(--D); left: calc(50% - var(--D) / 2); background: #c5baa2; border-radius: 10px; }
+.urna3d .ldd { transform: rotateY(90deg) translateZ(calc(var(--W) / 2)); }
+.urna3d .lde { transform: rotateY(-90deg) translateZ(calc(var(--W) / 2)); background: #b9ae95; }
+.urna3d .tp, .urna3d .bs { left: 0; width: var(--W); height: var(--D); top: calc(50% - var(--D) / 2); border-radius: 10px; }
+.urna3d .tp { transform: rotateX(90deg) translateZ(calc(var(--H) / 2)); background: #efe9db; }
+.urna3d .bs { transform: rotateX(-90deg) translateZ(calc(var(--H) / 2)); background: #a99e86; }
+.sombra-urna { position: absolute; width: 280px; height: 40px; border-radius: 50%; background: radial-gradient(rgba(0, 0, 0, .22), transparent 70%); transform: translateY(150px) rotateX(80deg); }
+.tela-urna { flex: 1.1; background: #eef6ee; border: 3px solid #6b7d6b; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: 900; color: #2c3b2c; font-size: 13px; position: relative; overflow: hidden; }
+.tela-urna .quadros { display: flex; gap: 6px; margin: 8px 0 4px; }
+.tela-urna .quadros i { width: 30px; height: 40px; border: 3px solid #2c3b2c; border-radius: 4px; }
+.tela-urna small { font-weight: 600; font-size: 10px; }
+.tela-urna .fim-urna { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 46px; letter-spacing: .1em; background: #eef6ee; opacity: 0; transition: opacity .3s; }
+.urna3d.confirmado .tela-urna .fim-urna { opacity: 1; }
+.teclado { flex: 1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; align-content: center; }
+.teclado i { background: #2b2b2b; color: #fff; border-radius: 5px; font-style: normal; font-weight: 800; font-size: 12px; text-align: center; padding: 4px 0; box-shadow: 0 3px 0 #111; }
+.teclado .zero { grid-column: 2; }
+.teclas-cor { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.25fr); gap: 4px; margin-top: 4px; }
+.teclas-cor i { font-size: 8px; padding: 6px 0; color: #111; white-space: nowrap; overflow: hidden; letter-spacing: -.02em; }
+.teclas-cor .br { background: #fff; box-shadow: 0 3px 0 #aaa; }
+.teclas-cor .co { background: #f0892a; box-shadow: 0 3px 0 #a85a12; }
+.teclas-cor .cfm { background: #2fa34f; color: #fff; box-shadow: 0 3px 0 #1c6b33; transition: transform .15s, box-shadow .15s; }
+.urna3d.confirmado .teclas-cor .cfm { transform: translateY(3px); box-shadow: 0 0 0 #1c6b33; }
+.dedo3d { position: absolute; font-size: 54px; right: -26px; bottom: -34px; opacity: 0; filter: drop-shadow(0 6px 6px rgba(0, 0, 0, .25));
+  transform: translateZ(80px) translate(60px, 70px); transition: transform .7s cubic-bezier(.2, .8, .2, 1), opacity .4s; }
+.urna3d.confirmado .dedo3d { opacity: 1; transform: translateZ(80px); }
+/* urna menor */
+.urna3d.peq { --W: 250px; --H: 165px; --D: 56px; }
+.urna3d.peq .frente { padding: 10px; gap: 8px; }
+.urna3d.peq .tela-urna { font-size: 10px; }
+.urna3d.peq .tela-urna .quadros i { width: 22px; height: 30px; }
+.urna3d.peq .tela-urna .fim-urna { font-size: 34px; }
+.urna3d.peq .teclado { gap: 3px; }
+.urna3d.peq .teclado i { font-size: 10px; padding: 2px 0; }
+.urna3d.peq .teclas-cor i { font-size: 7px; padding: 5px 0; }
+.urna3d.peq .dedo3d { font-size: 42px; }
+.cena-urna.peq { height: 260px; }
+.cena-urna.peq .sombra-urna { width: 220px; transform: translateY(118px) rotateX(80deg); }
+
+/* ---------- cubo com o número da parte ---------- */
+.cubo-num { --s: 110px; position: relative; width: var(--s); height: var(--s); flex-shrink: 0; perspective: 700px; }
+.cubo-num > i { position: absolute; width: var(--s); height: var(--s); transform-style: preserve-3d;
+  transform: rotateX(calc(-20deg + var(--p, 0) * 200deg)) rotateY(calc(30deg + var(--p, 0) * 300deg)); }
+.cubo-num b { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; border-radius: 16px; font-size: calc(var(--s) * .45); font-weight: 900; color: #fff; font-style: normal;
+  background: linear-gradient(145deg, #2a4c7a, #1f3a5f); box-shadow: inset 0 0 0 3px rgba(255, 255, 255, .25); backface-visibility: hidden; line-height: 1; }
+.cubo-num b:nth-child(2n) { background: linear-gradient(145deg, #ffd34d, #f2b705); color: #2a1d00; font-size: calc(var(--s) * .42); }
+.cubo-num b:nth-child(1) { transform: translateZ(calc(var(--s) / 2)); }
+.cubo-num b:nth-child(2) { transform: rotateY(90deg) translateZ(calc(var(--s) / 2)); }
+.cubo-num b:nth-child(3) { transform: rotateY(180deg) translateZ(calc(var(--s) / 2)); }
+.cubo-num b:nth-child(4) { transform: rotateY(-90deg) translateZ(calc(var(--s) / 2)); }
+.cubo-num b:nth-child(5) { transform: rotateX(90deg) translateZ(calc(var(--s) / 2)); background: linear-gradient(145deg, #ffe58a, #f2b705); }
+.cubo-num b:nth-child(6) { transform: rotateX(-90deg) translateZ(calc(var(--s) / 2)); background: #16304f; }
+/* cubo que entra girando e depois balança devagar (apresentação e entrada) */
+.cubo-num.entra > i { animation: cuboEntra 1.4s cubic-bezier(.2, .8, .2, 1) both, cuboGira 12s 1.4s linear infinite; }
+@keyframes cuboEntra { from { transform: rotateX(-200deg) rotateY(-330deg) scale(.3); } to { transform: rotateX(-22deg) rotateY(30deg); } }
+@keyframes cuboGira { from { transform: rotateX(-22deg) rotateY(30deg); } to { transform: rotateX(-22deg) rotateY(390deg); } }
+.cubo-num.lento > i { animation: cuboGira 12s linear infinite; }
+
+
+/* ---------- entradas em 3D (ao rolar) ---------- */
+.perspectiva { perspective: 1200px; }
+.r3d { opacity: 0; transform: rotateX(-55deg) translateY(50px); transform-origin: 50% 0; transition: opacity .7s ease, transform .9s cubic-bezier(.2, .8, .2, 1); transition-delay: calc(var(--i, 0) * 110ms); }
+.r3d.esq { transform: rotateY(55deg) translateX(-60px); transform-origin: 0 50%; }
+.r3d.dir { transform: rotateY(-55deg) translateX(60px); transform-origin: 100% 50%; }
+.r3d.fundo { transform: translateZ(-400px) rotateX(20deg); }
+.r3d.visivel { opacity: 1; transform: none; }
+
+/* ---------- colunas 3D ---------- */
+.colunas-cena { --alt: 280px; display: flex; justify-content: center; align-items: flex-end; height: calc(var(--alt) + 50px); padding-top: 20px; padding-bottom: 26px; perspective: 900px; position: relative; }
+/* giro moderado: com giro forte, a coluna da direita "chegava perto" e cobria a foto e o nome embaixo */
+.colunas-cena .mundo { display: flex; align-items: flex-end; gap: 90px; transform-style: preserve-3d; transform: rotateX(-10deg) rotateY(-16deg); position: relative; height: var(--alt); }
+/* a coluna já nasce com a altura final; quem cresce é o miolo (.cresce), com scaleY.
+   Animar a altura obrigava o navegador a refazer a página a cada quadro e travava em algumas máquinas. */
+.col3d { --L: 86px; position: relative; width: var(--L); height: calc(var(--h) * var(--alt, 280px)); transform-style: preserve-3d; }
+.col3d .cresce { position: absolute; inset: 0; transform-style: preserve-3d; transform-origin: 50% 100%; transform: scaleY(calc(var(--e, 0) * .999 + .001)); transition: transform var(--tcol, .1s) var(--tcurva, linear); will-change: transform; }
+.col3d .cf { position: absolute; }
+.col3d .frente { inset: 0; transform: translateZ(calc(var(--L) / 2)); background: var(--cor); }
+.col3d .ld { top: 0; bottom: 0; left: 0; width: var(--L); transform: translateX(calc(var(--L) / 2)) rotateY(90deg); background: var(--cor); filter: brightness(.72); }
+.col3d .tp { left: 0; top: 0; width: var(--L); height: var(--L); transform: translateY(calc(var(--L) / -2)) rotateX(90deg); background: var(--cor); filter: brightness(1.25); }
+.col3d .rot-col { position: absolute; left: 50%; bottom: calc(100% + 34px); transform: translateX(-50%) translateZ(calc(var(--L) / 2)) translateY(calc((1 - var(--e, 0)) * 24px)); opacity: var(--e, 0); transition: opacity var(--tcol, .1s) var(--tcurva, linear), transform var(--tcol, .1s) var(--tcurva, linear); font-weight: 900; font-size: 1.4rem; white-space: nowrap; }
+.linha50 { position: absolute; left: -40px; right: -40px; bottom: calc(var(--alt) / 2); border-top: 3px dashed #333; transform: translateZ(-50px); }
+/* o rótulo da linha fica fora do 3D, numa legenda embaixo (dentro do 3D ele batia nos percentuais) */
+.linha50 span { display: none; }
+.leg50 { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 2px 0 0; font-size: .82rem; font-weight: 800; color: #3a3f47; }
+.leg50 i { display: inline-block; width: 30px; border-top: 3px dashed #333; }
+.nomes-col { display: flex; justify-content: center; gap: 70px; margin-top: 18px; }
+.nomes-col > div { width: 170px; text-align: center; font-weight: 800; }
+
+/* ---------- cartas que viram ---------- */
+.num3d { perspective: 900px; }
+.num3d .giro { position: relative; transform-style: preserve-3d; transform: rotateY(180deg); transition: transform 1s cubic-bezier(.2, .8, .2, 1); transition-delay: calc(var(--i, 0) * 120ms); height: 100%; }
+.num3d.visivel .giro { transform: none; }
+.num3d .face-num, .num3d .verso { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.num3d .verso { position: absolute; inset: 0; transform: rotateY(180deg); display: flex; align-items: center; justify-content: center; font-size: 4rem; background: linear-gradient(145deg, #fff3d6, #ffe08a); border-radius: 20px; border: 2px solid #f2d48a; }
+
+/* ---------- selo 3D (esfera com ícone) ---------- */
+.selo3d { width: 210px; height: 210px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 7rem; line-height: 1;
+  background: radial-gradient(circle at 35% 30%, #fff, #ffd4d0 60%, #f2a59d); box-shadow: 0 30px 50px rgba(160, 40, 30, .2), inset 0 -10px 20px rgba(0, 0, 0, .08); animation: balanca3d 4s ease-in-out infinite; }
+.selo3d.ok { background: radial-gradient(circle at 35% 30%, #fff, #d6f5df 60%, #8fd3a3); box-shadow: 0 30px 50px rgba(30, 120, 60, .2), inset 0 -10px 20px rgba(0, 0, 0, .08); }
+.selo3d.neutro { background: radial-gradient(circle at 35% 30%, #fff, #fff1c9 60%, #f2cf6b); box-shadow: 0 24px 40px rgba(160, 110, 0, .2), inset 0 -10px 20px rgba(0, 0, 0, .08); }
+.selo3d.mini { width: 76px; height: 76px; font-size: 2.6rem; box-shadow: 0 12px 20px rgba(160, 110, 0, .18), inset 0 -6px 12px rgba(0, 0, 0, .08); }
+@keyframes balanca3d { 0%, 100% { transform: perspective(500px) rotateY(-20deg) rotateX(8deg); } 50% { transform: perspective(500px) rotateY(20deg) rotateX(-4deg); } }
+
+/* ---------- 100 eleitores ---------- */
+.urna100 { display: grid; grid-template-columns: repeat(20, 1fr); gap: 4px; max-width: 520px; margin: 6px 0 10px; }
+.urna100 i { aspect-ratio: 1; border-radius: 50%; background: #e8e2d6; transition: background .5s, opacity .6s, transform .6s; }
+.urna100 i.a { background: #2f6db5; }
+.urna100 i.b { background: #d0841f; }
+.urna100 i.n { background: #9aa1ab; }
+.urna100.sem-nulos i.n { opacity: .12; transform: scale(.6); }
+.urna100 i.vira { animation: vira3d .8s cubic-bezier(.3, 1.4, .5, 1) both; animation-delay: calc(var(--k, 0) * 120ms); }
+@keyframes vira3d { 0% { transform: rotateY(0) scale(1); } 50% { transform: rotateY(90deg) scale(1.3); } 100% { transform: rotateY(0) scale(1); } }
+.urna100.grande { grid-template-columns: repeat(10, 1fr); gap: 7px; max-width: 360px; width: 100%; }
+
+@media (max-width: 760px) {
+  .cena-urna { height: 250px; }
+  .urna3d { --W: 250px; --H: 165px; --D: 56px; }
+  .urna3d .frente { padding: 10px; gap: 8px; }
+  .tela-urna { font-size: 10px; }
+  .tela-urna .quadros i { width: 22px; height: 30px; }
+  .tela-urna .fim-urna { font-size: 34px; }
+  .teclado { gap: 3px; }
+  .teclado i { font-size: 10px; padding: 2px 0; }
+  .urna3d .tela-urna { flex: 1; }
+  .urna3d .teclado { flex: 1.25; }
+  .teclas-cor { gap: 3px; }
+  .teclas-cor i { font-size: 7px; padding: 5px 0; }
+  .dedo3d { font-size: 42px; }
+  .colunas-cena { --alt: 220px; }
+  .colunas-cena .mundo { gap: 60px; transform: rotateX(-10deg) rotateY(-14deg); }
+  .col3d { --L: 64px; }
+  .nomes-col { gap: 20px; }
+  .nomes-col > div { width: 140px; font-size: .9rem; }
+  .cubo-num { --s: 76px; }
+  .cubo-num b { border-radius: 12px; }
+  .selo3d { width: 140px; height: 140px; font-size: 4.6rem; }
+  .urna100 { gap: 3px; }
+  .urna100.grande { max-width: 250px; gap: 5px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .forma > i, .forma.esfera > i, .selo3d, .urna3d.auto, .cubo-num.entra > i, .cubo-num.lento > i { animation: none; }
+  .r3d, .r3d.esq, .r3d.dir, .r3d.fundo { opacity: 1; transform: none; transition: none; }
+  .num3d .giro { transform: none; transition: none; }
+  .urna3d, .urna3d.auto { transform: rotateX(8deg) rotateY(-14deg); }
+  .cubo-num > i { transform: rotateX(-22deg) rotateY(30deg); }
+}

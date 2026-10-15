@@ -1,0 +1,1589 @@
+{
+ "atualizado": "2026-10-15",
+ "estados": {
+  "AC": {
+   "governador": {
+    "nome": "Mailza Assis",
+    "nomeCivil": "Mailza Assis Cameli",
+    "partido": "PP",
+    "genero": "F",
+    "desde": "2026-04-02",
+    "comoAssumiu": "Era vice-governadora e assumiu em 2026-04-02 depois que Gladson Camelí renunciou para disputar o Senado",
+    "eleicao2026": "Disputa o 2º turno para governadora em 25/10/2026",
+    "nascimento": "1976-12-10",
+    "fonte": [
+     {
+      "veiculo": "g1",
+      "titulo": "Gladson Camelí deixa o cargo de governador do Acre para concorrer ao Senado; Mailza assume",
+      "url": "https://g1.globo.com/ac/acre/eleicoes/2026/noticia/2026/04/02/gladson-cameli-deixa-o-cargo-de-governador-do-acre-para-concorrer-ao-senado.ghtml",
+      "data": "2026-04-02"
+     },
+     {
+      "veiculo": "Tribunal Superior Eleitoral (TSE)",
+      "titulo": "Resultado oficial do 1º turno de 2026 – governador(a) e vice – Acre",
+      "url": "https://resultados.tse.jus.br/oficial/ele2026/6259/dados/ac/ac-c0003-e006259-u.json",
+      "data": "2026-10-04"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-governador está vago desde 2026-04-02, quando a vice Mailza Assis assumiu o governo.",
+    "fonte": [
+     {
+      "veiculo": "g1",
+      "titulo": "Gladson Camelí deixa o cargo de governador do Acre para concorrer ao Senado; Mailza assume",
+      "url": "https://g1.globo.com/ac/acre/eleicoes/2026/noticia/2026/04/02/gladson-cameli-deixa-o-cargo-de-governador-do-acre-para-concorrer-ao-senado.ghtml",
+      "data": "2026-04-02"
+     }
+    ]
+   }
+  },
+  "AL": {
+   "governador": {
+    "nome": "Fábio Bittencourt",
+    "nomeCivil": "Fábio José Bittencourt Araújo",
+    "partido": null,
+    "genero": "M",
+    "desde": "2026-10-14",
+    "comoAssumiu": "É presidente do Tribunal de Justiça de Alagoas e assumiu o governo de forma interina em 2026-10-14, durante as férias do governador Paulo Dantas (MDB); quem assumiria antes dele (o vice e o presidente da Assembleia Legislativa) não pôde: o cargo de vice está vago e o presidente da Assembleia estava em viagem",
+    "eleicao2026": "Não foi candidato em 2026",
+    "fonte": [
+     {
+      "veiculo": "Governo de Alagoas",
+      "titulo": "Fábio Bittencourt assume interinamente o Governo de Alagoas",
+      "url": "https://alagoas.al.gov.br/galeria/fabio-bittencourt-assume-interinamente-o-governo-de-alagoas-1",
+      "data": "2026-10-14"
+     },
+     {
+      "veiculo": "g1",
+      "titulo": "Presidente do Tribunal de Justiça assume interinamente o governo de Alagoas",
+      "url": "https://g1.globo.com/al/alagoas/noticia/2026/10/15/presidente-do-tribunal-de-justica-assume-interinamente-o-governo-de-alagoas.ghtml",
+      "data": "2026-10-15"
+     },
+     {
+      "veiculo": "Gazeta de Alagoas",
+      "titulo": "Presidente do TJAL assume governo durante licença de Paulo Dantas",
+      "url": "https://www.gazetadealagoas.com.br/politica/942465/presidente-do-tjal-assume-governo-durante-licenca-de-paulo-dantas?_=amp",
+      "data": "2026-10-14"
+     },
+     {
+      "veiculo": "Tribunal Superior Eleitoral (TSE)",
+      "titulo": "Dados abertos: Candidatos – 2026 (lista oficial de todas as candidaturas)",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2026",
+      "data": "2026-10-15"
+     }
+    ],
+    "conferir": true,
+    "nota": "Governo interino e por poucos dias. O governador eleito em 2022, Paulo Dantas (MDB), se afastou para tirar férias e coordenar a campanha de Lula em Alagoas no 2º turno. O g1 diz que Bittencourt fica até 30/10/2026; a Gazeta de Alagoas diz até 22/10/2026. Paulo Dantas não foi candidato em 2026."
+   },
+   "vice": {
+    "vago": true,
+    "nota": "Ronaldo Lessa (PDT), eleito vice em 2022, renunciou ao cargo em 2026-10-09, com efeito imediato. O cargo está vago.",
+    "fonte": [
+     {
+      "veiculo": "g1",
+      "titulo": "Ronaldo Lessa renuncia ao cargo de vice-governador de Alagoas",
+      "url": "https://g1.globo.com/al/alagoas/eleicoes/2026/noticia/2026/10/09/ronaldo-lessa-deixa-vice-governo-de-al-e-anuncia-participacao-no-governo-jhc.ghtml",
+      "data": "2026-10-09"
+     },
+     {
+      "veiculo": "Gazeta de Alagoas",
+      "titulo": "Presidente do TJAL assume governo durante licença de Paulo Dantas",
+      "url": "https://www.gazetadealagoas.com.br/politica/942465/presidente-do-tjal-assume-governo-durante-licenca-de-paulo-dantas?_=amp",
+      "data": "2026-10-14"
+     }
+    ]
+   }
+  },
+  "AM": {
+   "governador": {
+    "nome": "Roberto Cidade",
+    "nomeCivil": "Roberto Maia Cidade Filho",
+    "partido": "UNIÃO",
+    "genero": "M",
+    "desde": "2026-05-04",
+    "comoAssumiu": "Era presidente da Assembleia Legislativa e assumiu o governo de forma interina em abril de 2026, depois que o governador Wilson Lima e o vice Tadeu de Souza renunciaram para disputar a eleição; em 2026-05-04 foi eleito governador pelos deputados estaduais (eleição indireta) para completar o mandato",
+    "eleicao2026": "Disputou o governo do Amazonas e não foi eleito (1º turno, 04/10/2026)",
+    "nascimento": "1986-10-02",
+    "fonte": [
+     {
+      "veiculo": "Folha de S.Paulo",
+      "titulo": "Roberto Cidade, do União Brasil, é escolhido governador do Amazonas em eleição indireta",
+      "url": "https://www1.folha.uol.com.br/poder/2026/05/roberto-cidade-do-uniao-brasil-e-escolhido-governador-do-amazonas-em-eleicao-indireta.shtml",
+      "data": "2026-05-04"
+     },
+     {
+      "veiculo": "CartaCapital",
+      "titulo": "Assembleia do Amazonas elege Roberto Cidade (União) para governador-tampão",
+      "url": "https://www.cartacapital.com.br/politica/assembleia-do-amazonas-elege-roberto-cidade-uniao-para-governador-tampao/",
+      "data": "2026-05-04"
+     },
+     {
+      "veiculo": "Tribunal Superior Eleitoral (TSE)",
+      "titulo": "Resultado oficial do 1º turno de 2026 – governador(a) e vice – Amazonas",
+      "url": "https://resultados.tse.jus.br/oficial/ele2026/6259/dados/am/am-c0003-e006259-u.json",
+      "data": "2026-10-10"
+     }
+    ]
+   },
+   "vice": {
+    "nome": "Serafim Corrêa",
+    "nomeCivil": "Serafim Fernandes Corrêa",
+    "partido": "PSB",
+    "genero": "M",
+    "desde": "2026-05-04",
+    "comoAssumiu": "Eleito vice-governador pela Assembleia Legislativa em 2026-05-04 (eleição indireta), na chapa de Roberto Cidade",
+    "eleicao2026": "Foi candidato a vice-governador na chapa de Roberto Cidade e não foi eleito (1º turno, 04/10/2026)",
+    "nascimento": "1947-04-03",
+    "fonte": [
+     {
+      "veiculo": "Folha de S.Paulo",
+      "titulo": "Roberto Cidade, do União Brasil, é escolhido governador do Amazonas em eleição indireta",
+      "url": "https://www1.folha.uol.com.br/poder/2026/05/roberto-cidade-do-uniao-brasil-e-escolhido-governador-do-amazonas-em-eleicao-indireta.shtml",
+      "data": "2026-05-04"
+     },
+     {
+      "veiculo": "CartaCapital",
+      "titulo": "Assembleia do Amazonas elege Roberto Cidade (União) para governador-tampão",
+      "url": "https://www.cartacapital.com.br/politica/assembleia-do-amazonas-elege-roberto-cidade-uniao-para-governador-tampao/",
+      "data": "2026-05-04"
+     },
+     {
+      "veiculo": "Tribunal Superior Eleitoral (TSE)",
+      "titulo": "Resultado oficial do 1º turno de 2026 – governador(a) e vice – Amazonas",
+      "url": "https://resultados.tse.jus.br/oficial/ele2026/6259/dados/am/am-c0003-e006259-u.json",
+      "data": "2026-10-10"
+     }
+    ]
+   }
+  },
+  "AP": {
+   "governador": {
+    "nome": "Clécio Luís",
+    "nomeCivil": "Clécio Luís Vilhena Vieira",
+    "partido": "UNIÃO",
+    "genero": "M",
+    "desde": "2023-01-01",
+    "comoAssumiu": "Eleito em 2022",
+    "eleicao2026": "Disputou a reeleição e não foi eleito (1º turno, 04/10/2026)",
+    "nascimento": "1972-04-08",
+    "fonte": [
+     {
+      "veiculo": "g1",
+      "titulo": "Clécio Luís toma posse para o 1º mandato como governador do Amapá",
+      "url": "https://g1.globo.com/ap/amapa/noticia/2023/01/01/clecio-luis-toma-posse-para-o-1o-mandato-como-governador-do-amapa.ghtml",
+      "data": "2023-01-01"
+     },
+     {
+      "veiculo": "g1",
+      "titulo": "Teles Júnior deixa pré-candidatura ao Senado pelo Amapá e retorna como vice na chapa de Clécio",
+      "url": "https://g1.globo.com/politica/eleicoes/2026/noticia/2026/07/16/teles-junior-deixa-pre-candidatura-ao-senado-pelo-amapa-e-retorna-como-vice-na-chapa-de-clecio.ghtml",
+      "data": "2026-07-16"
+     },
+     {
+      "veiculo": "Agência Brasil",
+      "titulo": "Dr. Furlan é eleito governador do Amapá no primeiro turno",
+      "url": "https://agenciabrasil.ebc.com.br/politica/noticia/2026-10/dr-furlan-e-eleito-governador-do-amapa-no-primeiro-turno",
+      "data": "2026-10-04"
+     },
+     {
+      "veiculo": "Tribunal Superior Eleitoral (TSE)",
+      "titulo": "Resultado oficial do 1º turno de 2026 – governador(a) e vice – Amapá",
+      "url": "https://resultados.tse.jus.br/oficial/ele2026/6259/dados/ap/ap-c0003-e006259-u.json",
+      "data": "2026-10-04"
+     },
+     {
+      "veiculo": "Tribunal Superior Eleitoral (TSE)",
+      "titulo": "Dados abertos: Candidatos – 2022 (inclui governadores e vices eleitos, com nome completo e data de nascimento)",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2022",
+      "data": "2026-10-15"
+     }
+    ],
+    "nota": "Foi eleito em 2022 pelo Solidariedade; hoje é do União Brasil."
+   },
+   "vice": {
+    "nome": "Teles Júnior",
+    "nomeCivil": "Antonio Pinheiro Teles Junior",
+    "partido": "PDT",
+    "genero": "M",
+    "desde": "2023-01-01",
+    "comoAssumiu": "Eleito em 2022",
+    "eleicao2026": "Foi candidato a vice-governador na chapa de Clécio Luís e não foi eleito (1º turno, 04/10/2026)",
+    "nascimento": "1983-06-20",
+    "fonte": [
+     {
+      "veiculo": "g1",
+      "titulo": "Teles Júnior deixa pré-candidatura ao Senado pelo Amapá e retorna como vice na chapa de Clécio",
+      "url": "https://g1.globo.com/politica/eleicoes/2026/noticia/2026/07/16/teles-junior-deixa-pre-candidatura-ao-senado-pelo-amapa-e-retorna-como-vice-na-chapa-de-clecio.ghtml",
+      "data": "2026-07-16"
+     },
+     {
+      "veiculo": "Tribunal Superior Eleitoral (TSE)",
+      "titulo": "Resultado oficial do 1º turno de 2026 – governador(a) e vice – Amapá",
+      "url": "https://resultados.tse.jus.br/oficial/ele2026/6259/dados/ap/ap-c0003-e006259-u.json",
+      "data": "2026-10-04"
+     }
+    ]
+   }
+  },
+  "BA": {
+   "governador": {
+    "nome": "Jerônimo Rodrigues",
+    "nomeCivil": "Jerônimo Rodrigues Souza",
+    "partido": "PT",
+    "genero": "M",
+    "desde": "2023-01-01",
+    "comoAssumiu": "Eleito em 2022",
+    "eleicao2026": "Reeleito governador no 1º turno (04/10/2026)",
+    "nascimento": "1965-04-03",
+    "fonte": [
+     {
+      "veiculo": "g1",
+      "titulo": "Jerônimo Rodrigues toma posse como governador da Bahia",
+      "url": "https://g1.globo.com/ba/bahia/noticia/2023/01/01/jeronimo-rodrigues-toma-posse-como-governador-da-bahia.ghtml",
+      "data": "2023-01-01"
+     },
+     {
+      "veiculo": "Agência Brasil",
+      "titulo": "Jerônimo é reeleito governador no primeiro turno na Bahia",
+      "url": "https://agenciabrasil.ebc.com.br/politica/noticia/2026-10/jeronimo-e-reeleito-governador-no-primeiro-turno-na-bahia",
+      "data": "2026-10-05"
+     },
+     {
+      "veiculo": "Tribunal Superior Eleitoral (TSE)",
+      "titulo": "Resultado oficial do 1º turno de 2026 – governador(a) e vice – Bahia",
+      "url": "https://resultados.tse.jus.br/oficial/ele2026/6259/dados/ba/ba-c0003-e006259-u.json",
+      "data": "2026-10-05"
+     }
+    ]
+   },
+   "vice": {
+    "nome": "Geraldo Júnior",
+    "nomeCivil": "Geraldo Alves Ferreira Junior",
+    "partido": "MDB",
+    "genero": "M",
+    "desde": "2023-01-01",
+    "comoAssumiu": "Eleito em 2022",
+    "eleicao2026": "Reeleito vice-governador no 1º turno (04/10/2026), na chapa de Jerônimo Rodrigues",
+    "nascimento": "1969-05-07",
+    "fonte": [
+     {
+      "veiculo": "Política ao Ponto",
+      "titulo": "\"A Bahia é o maior canteiro de obras do Brasil\", afirma Geraldo Júnior ao exaltar pacto federativo com Lula",
+      "url": "https://politicaaoponto.com.br/a-bahia-e-o-maior-canteiro-de-obras-do-brasil-afirma-geraldo-junior-ao-exaltar-pacto-federativo-com-lula/",
+      "data": "2026-10-15"
+     },
+     {
+      "veiculo": "Tribunal Superior Eleitoral (TSE)",
+      "titulo": "Resultado oficial do 1º turno de 2026 – governador(a) e vice – Bahia",
+      "url": "https://resultados.tse.jus.br/oficial/ele2026/6259/dados/ba/ba-c0003-e006259-u.json",
+      "data": "2026-10-05"
+     }
+    ]
+   }
+  },
+  "CE": {
+   "governador": {
+    "nome": "Elmano de Freitas",
+    "nomeCivil": "Elmano de Freitas da Costa",
+    "partido": "PT",
+    "genero": "M",
+    "desde": "2023-01-01",
+    "comoAssumiu": "Eleito em 2022",
+    "eleicao2026": "Reeleito governador no 1º turno (04/10/2026)",
+    "nascimento": "1970-04-12",
+    "fonte": [
+     {
+      "veiculo": "Governo do Ceará",
+      "titulo": "Comitê estadual de monitoramento hídrico se reúne com o governador Elmano de Freitas",
+      "url": "https://www.ce.gov.br/2026/10/15/comite-estadual-de-monitoramento-hidrico-se-reune-com-o-governador-elmano-de-freitas/",
+      "data": "2026-10-15"
+     },
+     {
+      "veiculo": "Agência Brasil",
+      "titulo": "Ceará reelege Elmano governador no primeiro turno",
+      "url": "https://agenciabrasil.ebc.com.br/politica/noticia/2026-10/ceara-reelege-elmano-governador-no-primeiro-turno",
+      "data": "2026-10-05"
+     },
+     {
+      "veiculo": "g1",
+      "titulo": "Elmano de Freitas toma posse como governador do Ceará (com a vice-governadora Jade Romero)",
+      "url": "https://g1.globo.com/ce/ceara/noticia/2023/01/01/elmano-freitas-e-jade-romero-tomam-posse-como-governador-e-vice-governadora-do-ceara.ghtml",
+      "data": "2023-01-01"
+     },
+     {
+      "veiculo": "Tribunal Superior Eleitoral (TSE)",
+      "titulo": "Resultado oficial do 1º turno de 2026 – governador(a) e vice – Ceará",
+      "url": "https://resultados.tse.jus.br/oficial/ele2026/6259/dados/ce/ce-c0003-e006259-u.json",
+      "data": "2026-10-04"
+     }
+    ]
+   },
+   "vice": {
+    "nome": "Jade Romero",
+    "nomeCivil": "Jade Afonso Romero",
+    "partido": "PT",
+    "genero": "F",
+    "desde": "2023-01-01",
+    "comoAssumiu": "Eleita em 2022",
+    "eleicao2026": "Eleita deputada estadual em 2026 (o novo mandato começa em 2027)",
+    "nascimento": "1985-07-12",
+    "fonte": [
+     {
+      "veiculo": "g1",
+      "titulo": "Elmano de Freitas toma posse como governador do Ceará (com a vice-governadora Jade Romero)",
+      "url": "https://g1.globo.com/ce/ceara/noticia/2023/01/01/elmano-freitas-e-jade-romero-tomam-posse-como-governador-e-vice-governadora-do-ceara.ghtml",
+      "data": "2023-01-01"
+     },
+     {
+      "veiculo": "Diário do Nordeste",
+      "titulo": "Vice-governadora Jade Romero é eleita deputada estadual pelo PT",
+      "url": "https://diariodonordeste.verdesmares.com.br/pontopoder/vice-governadora-jade-romero-e-eleita-deputada-estadual-pelo-pt-1.3796365",
+      "data": "2026-10-04"
+     },
+     {
+      "veiculo": "Tribunal Superior Eleitoral (TSE)",
+      "titulo": "Resultado oficial do 1º turno de 2026 – deputado(a) estadual – Ceará",
+      "url": "https://resultados.tse.jus.br/oficial/ele2026/6259/dados/ce/ce-c0007-e006259-u.json",
+      "data": "2026-10-04"
+     }
+    ],
+    "nota": "Foi eleita vice em 2022 pelo MDB; em 2026 se candidatou pelo PT."
+   }
+  },
+  "DF": {
+   "governador": {
+    "nome": "Celina Leão",
+    "nomeCivil": "Celina Leão Hizim Ferreira",
+    "partido": "PP",
+    "genero": "F",
+    "desde": "2026-03-30",
+    "comoAssumiu": "Era vice-governadora e assumiu em 2026-03-30 depois que Ibaneis Rocha renunciou ao governo (ele anunciou que disputaria o Senado)",
+    "eleicao2026": "Disputa o 2º turno para governadora em 25/10/2026",
+    "nascimento": "1977-03-02",
+    "fonte": [
+     {
+      "veiculo": "O Globo",
+      "titulo": "Celina Leão assume governo no DF, afasta ligação com caso Master e promete 'respostas' sobre BRB",
+      "url": "https://oglobo.globo.com/politica/noticia/2026/03/30/celina-leao-assume-governo-no-df-afasta-ligacao-com-caso-master-e-promete-respostas-sobre-brb.ghtml",
+      "data": "2026-03-30"
+     },
+     {
+      "veiculo": "O Globo",
+      "titulo": "Saiba quais governadores e prefeitos de capitais renunciaram aos cargos para disputar eleições; veja lista",
+      "url": "https://oglobo.globo.com/politica/noticia/2026/04/07/saiba-quais-governadores-e-prefeitos-de-capitais-renunciaram-aos-cargos-para-disputar-eleicoes-veja-lista.ghtml",
+      "data": "2026-04-07"
+     },
+     {
+      "veiculo": "Agência Brasil (Radioagência Nacional)",
+      "titulo": "Celina Leão e Leandro Grass disputam segundo turno no Distrito Federal",
+      "url": "https://agenciabrasil.ebc.com.br/radioagencia-nacional/politica/audio/2026-10/celina-leao-e-leandro-grass-disputam-segundo-turno-no-distrito-federal",
+      "data": "2026-10-05"
+     },
+     {
+      "veiculo": "Tribunal Superior Eleitoral (TSE)",
+      "titulo": "Resultado oficial do 1º turno de 2026 – governador(a) e vice – Distrito Federal",
+      "url": "https://resultados.tse.jus.br/oficial/ele2026/6259/dados/df/df-c0003-e006259-u.json",
+      "data": "2026-10-15"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-governador está vago desde 2026-03-30, quando a vice Celina Leão assumiu o governo.",
+    "fonte": [
+     {
+      "veiculo": "O Globo",
+      "titulo": "Celina Leão assume governo no DF, afasta ligação com caso Master e promete 'respostas' sobre BRB",
+      "url": "https://oglobo.globo.com/politica/noticia/2026/03/30/celina-leao-assume-governo-no-df-afasta-ligacao-com-caso-master-e-promete-respostas-sobre-brb.ghtml",
+      "data": "2026-03-30"
+     }
+    ]
+   }
+  },
+  "ES": {
+   "governador": {
+    "nome": "Ricardo Ferraço",
+    "nomeCivil": "Ricardo de Rezende Ferraço",
+    "partido": "MDB",
+    "genero": "M",
+    "desde": "2026-04-02",
+    "comoAssumiu": "Era vice-governador e assumiu em 2026-04-02 depois que Renato Casagrande renunciou para disputar o Senado",
+    "eleicao2026": "Disputa o 2º turno para governador em 25/10/2026",
+    "nascimento": "1963-08-17",
+    "fonte": [
+     {
+      "veiculo": "A Gazeta",
+      "titulo": "Ricardo Ferraço toma posse como governador do Espírito Santo",
+      "url": "https://www.agazeta.com.br/es/politica/ricardo-ferraco-toma-posse-como-governador-do-espirito-santo-0426",
+      "data": "2026-04-02"
+     },
+     {
+      "veiculo": "Agência Brasil (Radioagência Nacional)",
+      "titulo": "ES: Lorenzo Pazolini e Ricardo Ferraço disputam segundo turno",
+      "url": "https://agenciabrasil.ebc.com.br/radioagencia-nacional/politica/audio/2026-10/es-lorenzo-pazolini-e-ricardo-ferraco-disputam-segundo-turno",
+      "data": "2026-10-05"
+     },
+     {
+      "veiculo": "Tribunal Superior Eleitoral (TSE)",
+      "titulo": "Resultado oficial do 1º turno de 2026 – governador(a) e vice – Espírito Santo",
+      "url": "https://resultados.tse.jus.br/oficial/ele2026/6259/dados/es/es-c0003-e006259-u.json",
+      "data": "2026-10-04"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-governador está vago desde 2026-04-02, quando o vice Ricardo Ferraço assumiu o governo.",
+    "fonte": [
+     {
+      "veiculo": "A Gazeta",
+      "titulo": "Ricardo Ferraço toma posse como governador do Espírito Santo",
+      "url": "https://www.agazeta.com.br/es/politica/ricardo-ferraco-toma-posse-como-governador-do-espirito-santo-0426",
+      "data": "2026-04-02"
+     }
+    ]
+   }
+  },
+  "GO": {
+   "governador": {
+    "nome": "Daniel Vilela",
+    "nomeCivil": "Daniel Elias Carvalho Vilela",
+    "partido": "MDB",
+    "genero": "M",
+    "desde": "2026-03-31",
+    "comoAssumiu": "Era vice-governador e assumiu em 2026-03-31 depois que Ronaldo Caiado renunciou para disputar a Presidência da República",
+    "eleicao2026": "Eleito governador no 1º turno (04/10/2026)",
+    "nascimento": "1983-10-23",
+    "fonte": [
+     {
+      "veiculo": "Governo de Goiás (Agência Brasil Central)",
+      "titulo": "Daniel Vilela toma posse como governador de Goiás",
+      "url": "https://goias.gov.br/abc/daniel-vilela-toma-posse-como-governador-de-goias/",
+      "data": "2026-04-01"
+     },
+     {
+      "veiculo": "O Globo",
+      "titulo": "Saiba quais governadores e prefeitos de capitais renunciaram aos cargos para disputar eleições; veja lista",
+      "url": "https://oglobo.globo.com/politica/noticia/2026/04/07/saiba-quais-governadores-e-prefeitos-de-capitais-renunciaram-aos-cargos-para-disputar-eleicoes-veja-lista.ghtml",
+      "data": "2026-04-07"
+     },
+     {
+      "veiculo": "Tribunal Superior Eleitoral (TSE)",
+      "titulo": "Resultado oficial do 1º turno de 2026 – governador(a) e vice – Goiás",
+      "url": "https://resultados.tse.jus.br/oficial/ele2026/6259/dados/go/go-c0003-e006259-u.json",
+      "data": "2026-10-04"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-governador está vago desde 2026-03-31, quando o vice Daniel Vilela assumiu o governo.",
+    "fonte": [
+     {
+      "veiculo": "Governo de Goiás (Agência Brasil Central)",
+      "titulo": "Daniel Vilela toma posse como governador de Goiás",
+      "url": "https://goias.gov.br/abc/daniel-vilela-toma-posse-como-governador-de-goias/",
+      "data": "2026-04-01"
+     }
+    ]
+   }
+  },
+  "MA": {
+   "governador": {
+    "nome": "Carlos Brandão",
+    "nomeCivil": "Carlos Orleans Brandão Júnior",
+    "partido": "MDB",
+    "genero": "M",
+    "desde": "2022-04-02",
+    "comoAssumiu": "Era vice-governador e assumiu em 2022-04-02 depois que Flávio Dino renunciou para disputar o Senado; foi eleito governador em 2022",
+    "eleicao2026": "Não foi candidato em 2026",
+    "nascimento": "1958-06-02",
+    "fonte": [
+     {
+      "veiculo": "g1",
+      "titulo": "Carlos Brandão toma posse como governador do Maranhão",
+      "url": "https://g1.globo.com/ma/maranhao/noticia/2022/04/02/carlos-brandao-toma-posse-como-governador-do-maranhao.ghtml",
+      "data": "2022-04-02"
+     },
+     {
+      "veiculo": "Brasil 247",
+      "titulo": "Maranhão: prefeitos pressionam Carlos Brandão por apoio a Flávio Bolsonaro",
+      "url": "https://www.brasil247.com/nordeste/maranhao-prefeitos-pressionam-carlos-brandao-por-apoio-a-flavio-bolsonaro/",
+      "data": "2026-10-08"
+     },
+     {
+      "veiculo": "O Globo",
+      "titulo": "Candidatos ao governo do Maranhão; veja lista e conheça perfil dos concorrentes",
+      "url": "https://oglobo.globo.com/politica/eleicoes-2026/guia/candidatos-ao-governo-do-maranhao-veja-lista-e-conheca-perfil-dos-concorrentes.ghtml",
+      "data": "2026-09-28"
+     },
+     {
+      "veiculo": "Tribunal Superior Eleitoral (TSE)",
+      "titulo": "Dados abertos: Candidatos – 2026 (lista oficial de todas as candidaturas)",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2026",
+      "data": "2026-10-15"
+     },
+     {
+      "veiculo": "Tribunal Superior Eleitoral (TSE)",
+      "titulo": "Dados abertos: Candidatos – 2022 (inclui governadores e vices eleitos, com nome completo e data de nascimento)",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2022",
+      "data": "2026-10-15"
+     }
+    ],
+    "nota": "Foi eleito em 2022 pelo PSB; hoje é do MDB."
+   },
+   "vice": {
+    "nome": "Felipe Camarão",
+    "nomeCivil": "Felipe Costa Camarão",
+    "partido": "PT",
+    "genero": "M",
+    "desde": "2023-01-01",
+    "comoAssumiu": "Eleito em 2022",
+    "eleicao2026": "Disputou o governo do Maranhão e não foi eleito (1º turno, 04/10/2026)",
+    "nascimento": "1981-12-31",
+    "fonte": [
+     {
+      "veiculo": "Imirante",
+      "titulo": "Lula em São Luís dia 20: Felipe Camarão detalha agenda",
+      "url": "https://imirante.com/noticias/sao-luis/amp/2026/10/14/ipolitica-lula-luis-dia-20-felipe-camarao-detalha-agenda",
+      "data": "2026-10-14"
+     },
+     {
+      "veiculo": "O Globo",
+      "titulo": "Candidatos ao governo do Maranhão; veja lista e conheça perfil dos concorrentes",
+      "url": "https://oglobo.globo.com/politica/eleicoes-2026/guia/candidatos-ao-governo-do-maranhao-veja-lista-e-conheca-perfil-dos-concorrentes.ghtml",
+      "data": "2026-09-28"
+     },
+     {
+      "veiculo": "Tribunal Superior Eleitoral (TSE)",
+      "titulo": "Resultado oficial do 1º turno de 2026 – governador(a) e vice – Maranhão",
+      "url": "https://resultados.tse.jus.br/oficial/ele2026/6259/dados/ma/ma-c0003-e006259-u.json",
+      "data": "2026-10-05"
+     }
+    ]
+   }
+  },
+  "MG": {
+   "governador": {
+    "nome": "Mateus Simões",
+    "nomeCivil": "Mateus Simões de Almeida",
+    "partido": "PSD",
+    "genero": "M",
+    "desde": "2026-03-22",
+    "comoAssumiu": "Era vice-governador e assumiu em 2026-03-22 depois que Romeu Zema renunciou para disputar a Presidência da República",
+    "eleicao2026": "Disputou o governo de Minas Gerais e não foi eleito (1º turno, 04/10/2026)",
+    "nascimento": "1981-03-09",
+    "fonte": [
+     {
+      "veiculo": "Assembleia Legislativa de Minas Gerais",
+      "titulo": "Assembleia dá posse a novo governador de Minas",
+      "url": "https://www.almg.gov.br/comunicacao/noticias/arquivos/Assembleia-da-posse-a-novo-governador-de-Minas-Gerais/",
+      "data": "2026-03-22"
+     },
+     {
+      "veiculo": "Poder360",
+      "titulo": "Zema renuncia ao governo de MG para disputar presidência; Simões assume",
+      "url": "https://www.poder360.com.br/poder-eleicoes/zema-deixa-o-governo-de-mg-para-disputar-a-presidencia/",
+      "data": "2026-03-22"
+     },
+     {
+      "veiculo": "Assembleia Legislativa de Minas Gerais",
+      "titulo": "Presidente da ALMG será governador interino de MG",
+      "url": "https://www.almg.gov.br/comunicacao/noticias/arquivos/Presidente-da-ALMG-sera-governador-interino-de-MG/",
+      "data": "2026-10-14"
+     },
+     {
+      "veiculo": "Tribunal Superior Eleitoral (TSE)",
+      "titulo": "Resultado oficial do 1º turno de 2026 – governador(a) e vice – Minas Gerais",
+      "url": "https://resultados.tse.jus.br/oficial/ele2026/6259/dados/mg/mg-c0003-e006259-u.json",
+      "data": "2026-10-05"
+     }
+    ],
+    "nota": "Segundo a ALMG, Mateus Simões vai se afastar entre 29/10 e 28/11/2026 (missão oficial à China, à Turquia e ao Reino Unido). Nesse período, o presidente da Assembleia, Tadeu Leite (MDB), assume o governo de forma interina."
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-governador está vago desde 2026-03-22, quando o vice Mateus Simões assumiu o governo.",
+    "fonte": [
+     {
+      "veiculo": "Assembleia Legislativa de Minas Gerais",
+      "titulo": "Assembleia dá posse a novo governador de Minas",
+      "url": "https://www.almg.gov.br/comunicacao/noticias/arquivos/Assembleia-da-posse-a-novo-governador-de-Minas-Gerais/",
+      "data": "2026-03-22"
+     }
+    ]
+   }
+  },
+  "MS": {
+   "governador": {
+    "nome": "Eduardo Riedel",
+    "nomeCivil": "Eduardo Correa Riedel",
+    "partido": "PP",
+    "genero": "M",
+    "desde": "2023-01-01",
+    "comoAssumiu": "Eleito em 2022",
+    "eleicao2026": "Reeleito governador no 1º turno (04/10/2026)",
+    "nascimento": "1969-07-05",
+    "fonte": [
+     {
+      "veiculo": "g1",
+      "titulo": "Eduardo Riedel toma posse como governador de MS",
+      "url": "https://g1.globo.com/ms/mato-grosso-do-sul/noticia/2023/01/01/eduardo-riedel-toma-posse-como-governador-de-ms-e-diz-e-hora-da-reconciliacao-do-nosso-povo.ghtml",
+      "data": "2023-01-01"
+     },
+     {
+      "veiculo": "g1",
+      "titulo": "Último governador tucano, Eduardo Riedel assina filiação ao PP",
+      "url": "https://g1.globo.com/politica/noticia/2025/08/19/ultimo-governador-tucano-eduardo-riedel-assina-filiacao-ao-pp.ghtml",
+      "data": "2025-08-19"
+     },
+     {
+      "veiculo": "Agência Brasil",
+      "titulo": "Eduardo Riedel é reeleito governador de MS no primeiro turno",
+      "url": "https://agenciabrasil.ebc.com.br/politica/noticia/2026-10/eduardo-riedel-e-reeleito-governador-de-ms-no-primeiro-turno",
+      "data": "2026-10-04"
+     },
+     {
+      "veiculo": "Tribunal Superior Eleitoral (TSE)",
+      "titulo": "Resultado oficial do 1º turno de 2026 – governador(a) e vice – Mato Grosso do Sul",
+      "url": "https://resultados.tse.jus.br/oficial/ele2026/6259/dados/ms/ms-c0003-e006259-u.json",
+      "data": "2026-10-04"
+     }
+    ],
+    "nota": "Foi eleito em 2022 pelo PSDB; desde 2025 é do PP."
+   },
+   "vice": {
+    "nome": "Barbosinha",
+    "nomeCivil": "José Carlos Barbosa",
+    "partido": "REPUBLICANOS",
+    "genero": "M",
+    "desde": "2023-01-01",
+    "comoAssumiu": "Eleito em 2022",
+    "eleicao2026": "Reeleito vice-governador no 1º turno (04/10/2026), na chapa de Eduardo Riedel",
+    "nascimento": "1964-10-26",
+    "fonte": [
+     {
+      "veiculo": "Tribunal Superior Eleitoral (TSE)",
+      "titulo": "Resultado oficial do 1º turno de 2026 – governador(a) e vice – Mato Grosso do Sul",
+      "url": "https://resultados.tse.jus.br/oficial/ele2026/6259/dados/ms/ms-c0003-e006259-u.json",
+      "data": "2026-10-04"
+     },
+     {
+      "veiculo": "Tribunal Superior Eleitoral (TSE)",
+      "titulo": "Dados abertos: Candidatos – 2022 (inclui governadores e vices eleitos, com nome completo e data de nascimento)",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2022",
+      "data": "2026-10-15"
+     }
+    ],
+    "nota": "Foi eleito vice em 2022 pelo PP; em 2026 se candidatou pelo Republicanos."
+   }
+  },
+  "MT": {
+   "governador": {
+    "nome": "Otaviano Pivetta",
+    "nomeCivil": "Otaviano Olavo Pivetta",
+    "partido": "REPUBLICANOS",
+    "genero": "M",
+    "desde": "2026-03-31",
+    "comoAssumiu": "Era vice-governador e assumiu em 2026-03-31 depois que Mauro Mendes renunciou para disputar o Senado",
+    "eleicao2026": "Eleito governador no 1º turno (04/10/2026)",
+    "nascimento": "1959-05-10",
+    "fonte": [
+     {
+      "veiculo": "g1",
+      "titulo": "Mauro Mendes renuncia ao governo de MT para disputar Senado; vice assume",
+      "url": "https://g1.globo.com/mt/mato-grosso/eleicoes/2026/noticia/2026/03/31/vice-assume-cargo-apos-renuncia-de-governador-de-mt.ghtml",
+      "data": "2026-03-31"
+     },
+     {
+      "veiculo": "Tribunal Superior Eleitoral (TSE)",
+      "titulo": "Resultado oficial do 1º turno de 2026 – governador(a) e vice – Mato Grosso",
+      "url": "https://resultados.tse.jus.br/oficial/ele2026/6259/dados/mt/mt-c0003-e006259-u.json",
+      "data": "2026-10-04"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-governador está vago desde 2026-03-31, quando o vice Otaviano Pivetta assumiu o governo.",
+    "fonte": [
+     {
+      "veiculo": "g1",
+      "titulo": "Mauro Mendes renuncia ao governo de MT para disputar Senado; vice assume",
+      "url": "https://g1.globo.com/mt/mato-grosso/eleicoes/2026/noticia/2026/03/31/vice-assume-cargo-apos-renuncia-de-governador-de-mt.ghtml",
+      "data": "2026-03-31"
+     }
+    ]
+   }
+  },
+  "PA": {
+   "governador": {
+    "nome": "Hana Ghassan",
+    "nomeCivil": "Hana Ghassan Tuma",
+    "partido": "MDB",
+    "genero": "F",
+    "desde": "2026-04-02",
+    "comoAssumiu": "Era vice-governadora e assumiu em 2026-04-02 depois que Helder Barbalho renunciou para disputar o Senado",
+    "eleicao2026": "Disputou o governo do Pará e não foi eleita (1º turno, 04/10/2026)",
+    "nascimento": "1968-01-16",
+    "fonte": [
+     {
+      "veiculo": "O Liberal",
+      "titulo": "Hana Ghassan é empossada Governadora do Pará nesta quinta-feira (2)",
+      "url": "https://www.oliberal.com/para/hana-ghassan-governo-do-para-1.1105157",
+      "data": "2026-04-02"
+     },
+     {
+      "veiculo": "CNN Brasil",
+      "titulo": "Governador deixa cargo no Pará e vice assume comando",
+      "url": "https://www.cnnbrasil.com.br/eleicoes/governador-deixa-cargo-no-para-e-vice-assume-comando",
+      "data": "2026-04-02"
+     },
+     {
+      "veiculo": "Tribunal Superior Eleitoral (TSE)",
+      "titulo": "Resultado oficial do 1º turno de 2026 – governador(a) e vice – Pará",
+      "url": "https://resultados.tse.jus.br/oficial/ele2026/6259/dados/pa/pa-c0003-e006259-u.json",
+      "data": "2026-10-05"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-governador está vago desde 2026-04-02, quando a vice Hana Ghassan assumiu o governo.",
+    "fonte": [
+     {
+      "veiculo": "O Liberal",
+      "titulo": "Hana Ghassan é empossada Governadora do Pará nesta quinta-feira (2)",
+      "url": "https://www.oliberal.com/para/hana-ghassan-governo-do-para-1.1105157",
+      "data": "2026-04-02"
+     }
+    ]
+   }
+  },
+  "PB": {
+   "governador": {
+    "nome": "Lucas Ribeiro",
+    "nomeCivil": "Lucas Ribeiro Novais de Araújo",
+    "partido": "PP",
+    "genero": "M",
+    "desde": "2026-04-02",
+    "comoAssumiu": "Era vice-governador e assumiu em 2026-04-02 depois que João Azevêdo renunciou para disputar o Senado",
+    "eleicao2026": "Eleito governador no 1º turno (04/10/2026)",
+    "nascimento": "1989-08-15",
+    "fonte": [
+     {
+      "veiculo": "g1",
+      "titulo": "João Azevêdo renuncia ao governo da Paraíba para disputar o Senado",
+      "url": "https://g1.globo.com/pb/paraiba/eleicoes/2026/noticia/2026/04/02/joao-azevedo-deixa-o-cargo-de-governador-da-paraiba-para-concorrer-ao-senado.ghtml",
+      "data": "2026-04-02"
+     },
+     {
+      "veiculo": "Agência Brasil",
+      "titulo": "Lucas Ribeiro é reeleito governador da Paraíba no primeiro turno",
+      "url": "https://agenciabrasil.ebc.com.br/politica/noticia/2026-10/lucas-ribeiro-e-reeleito-governador-da-paraiba-no-primeiro-turno",
+      "data": "2026-10-04"
+     },
+     {
+      "veiculo": "Tribunal Superior Eleitoral (TSE)",
+      "titulo": "Resultado oficial do 1º turno de 2026 – governador(a) e vice – Paraíba",
+      "url": "https://resultados.tse.jus.br/oficial/ele2026/6259/dados/pb/pb-c0003-e006259-u.json",
+      "data": "2026-10-04"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-governador está vago desde 2026-04-02, quando o vice Lucas Ribeiro assumiu o governo.",
+    "fonte": [
+     {
+      "veiculo": "g1",
+      "titulo": "João Azevêdo renuncia ao governo da Paraíba para disputar o Senado",
+      "url": "https://g1.globo.com/pb/paraiba/eleicoes/2026/noticia/2026/04/02/joao-azevedo-deixa-o-cargo-de-governador-da-paraiba-para-concorrer-ao-senado.ghtml",
+      "data": "2026-04-02"
+     }
+    ]
+   }
+  },
+  "PE": {
+   "governador": {
+    "nome": "Raquel Lyra",
+    "nomeCivil": "Raquel Teixeira Lyra Lucena",
+    "partido": "PSD",
+    "genero": "F",
+    "desde": "2023-01-01",
+    "comoAssumiu": "Eleita em 2022",
+    "eleicao2026": "Reeleita governadora no 1º turno (04/10/2026)",
+    "nascimento": "1978-12-02",
+    "fonte": [
+     {
+      "veiculo": "g1",
+      "titulo": "Raquel Lyra toma posse como primeira governadora de Pernambuco",
+      "url": "https://g1.globo.com/pe/pernambuco/noticia/2023/01/01/raquel-lyra-toma-posse-como-primeira-governadora-de-pernambuco-se-compromete-a-combater-a-fome-e-pede-uniao-em-prol-do-estado.ghtml",
+      "data": "2023-01-01"
+     },
+     {
+      "veiculo": "g1",
+      "titulo": "Raquel Lyra se filia ao PSD e vai dirigir partido em Pernambuco",
+      "url": "https://g1.globo.com/pe/pernambuco/noticia/2025/03/10/raquel-lyra-se-filia-ao-psd-e-vai-dirigir-partido-em-pernambuco-substituindo-andre-de-paula.ghtml",
+      "data": "2025-03-10"
+     },
+     {
+      "veiculo": "Agência Brasil",
+      "titulo": "Raquel Lyra é reeleita governadora em Pernambuco no primeiro turno",
+      "url": "https://agenciabrasil.ebc.com.br/politica/noticia/2026-10/raquel-lyra-e-reeleita-governadora-em-pernambuco-no-primeiro-turno",
+      "data": "2026-10-05"
+     },
+     {
+      "veiculo": "Tribunal Superior Eleitoral (TSE)",
+      "titulo": "Resultado oficial do 1º turno de 2026 – governador(a) e vice – Pernambuco",
+      "url": "https://resultados.tse.jus.br/oficial/ele2026/6259/dados/pe/pe-c0003-e006259-u.json",
+      "data": "2026-10-06"
+     }
+    ],
+    "nota": "Foi eleita em 2022 pelo PSDB; desde 2025 é do PSD."
+   },
+   "vice": {
+    "nome": "Priscila Krause",
+    "nomeCivil": "Priscila Krause Branco",
+    "partido": "PSD",
+    "genero": "F",
+    "desde": "2023-01-01",
+    "comoAssumiu": "Eleita em 2022",
+    "eleicao2026": "Reeleita vice-governadora no 1º turno (04/10/2026), na chapa de Raquel Lyra",
+    "nascimento": "1978-04-15",
+    "fonte": [
+     {
+      "veiculo": "Tribunal Superior Eleitoral (TSE)",
+      "titulo": "Resultado oficial do 1º turno de 2026 – governador(a) e vice – Pernambuco",
+      "url": "https://resultados.tse.jus.br/oficial/ele2026/6259/dados/pe/pe-c0003-e006259-u.json",
+      "data": "2026-10-06"
+     },
+     {
+      "veiculo": "Tribunal Superior Eleitoral (TSE)",
+      "titulo": "Dados abertos: Candidatos – 2022 (inclui governadores e vices eleitos, com nome completo e data de nascimento)",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2022",
+      "data": "2026-10-15"
+     }
+    ],
+    "nota": "Foi eleita vice em 2022 pelo Cidadania; em 2026 se candidatou pelo PSD."
+   }
+  },
+  "PI": {
+   "governador": {
+    "nome": "Rafael Fonteles",
+    "nomeCivil": "Rafael Tajra Fonteles",
+    "partido": "PT",
+    "genero": "M",
+    "desde": "2023-01-01",
+    "comoAssumiu": "Eleito em 2022",
+    "eleicao2026": "Reeleito governador no 1º turno (04/10/2026)",
+    "nascimento": "1985-05-06",
+    "fonte": [
+     {
+      "veiculo": "Valor Econômico",
+      "titulo": "Rafael Fonteles (PT) toma posse como governador do Piauí, em seu primeiro mandato",
+      "url": "https://valor.globo.com/politica/noticia/2023/01/01/rafael-fonteles-pt-toma-posse-como-governador-do-piau-em-seu-primeiro-mandato.ghtml",
+      "data": "2023-01-01"
+     },
+     {
+      "veiculo": "Agência Brasil",
+      "titulo": "Piauí reelege Rafael Fonteles como governador no primeiro turno",
+      "url": "https://agenciabrasil.ebc.com.br/politica/noticia/2026-10/piaui-reelege-rafael-fonteles-como-governador-no-primeiro-turno",
+      "data": "2026-10-04"
+     },
+     {
+      "veiculo": "Tribunal Superior Eleitoral (TSE)",
+      "titulo": "Resultado oficial do 1º turno de 2026 – governador(a) e vice – Piauí",
+      "url": "https://resultados.tse.jus.br/oficial/ele2026/6259/dados/pi/pi-c0003-e006259-u.json",
+      "data": "2026-10-14"
+     }
+    ]
+   },
+   "vice": {
+    "nome": "Themístocles Filho",
+    "nomeCivil": "Themístocles de Sampaio Pereira Filho",
+    "partido": "MDB",
+    "genero": "M",
+    "desde": "2023-01-01",
+    "comoAssumiu": "Eleito em 2022",
+    "eleicao2026": "Eleito deputado estadual em 2026 (o novo mandato começa em 2027)",
+    "nascimento": "1957-12-30",
+    "fonte": [
+     {
+      "veiculo": "Portal Lupa1",
+      "titulo": "Themístocles Filho retorna à Assembleia e prova que voto e história não se aposentam",
+      "url": "https://lupa1.com.br/noticias/politica/themistocles-filho-retorna-a-assembleia-e-prova-que-voto-e-historia-nao-se-aposentam-76781.html",
+      "data": "2026-10-05"
+     },
+     {
+      "veiculo": "Tribunal Superior Eleitoral (TSE)",
+      "titulo": "Resultado oficial do 1º turno de 2026 – deputado(a) estadual – Piauí",
+      "url": "https://resultados.tse.jus.br/oficial/ele2026/6259/dados/pi/pi-c0007-e006259-u.json",
+      "data": "2026-10-14"
+     }
+    ]
+   }
+  },
+  "PR": {
+   "governador": {
+    "nome": "Ratinho Junior",
+    "nomeCivil": "Carlos Roberto Massa Junior",
+    "partido": "PSD",
+    "genero": "M",
+    "desde": "2019-01-01",
+    "comoAssumiu": "Eleito em 2018 e reeleito em 2022",
+    "eleicao2026": "Não foi candidato em 2026",
+    "nascimento": "1981-04-19",
+    "fonte": [
+     {
+      "veiculo": "Blog do Doc",
+      "titulo": "Moro e Ratinho Junior se reúnem no Palácio Iguaçu para alinhar transição de governo",
+      "url": "https://blogdodoc.com/2026/10/15/moro-e-ratinho-junior-se-reunem-no-palacio-iguacu-para-alinhar-transicao-de-governo",
+      "data": "2026-10-15"
+     },
+     {
+      "veiculo": "g1",
+      "titulo": "Ratinho Junior (PSD) toma posse do segundo mandato como governador do Paraná",
+      "url": "https://g1.globo.com/pr/parana/noticia/2023/01/01/ratinho-junior-psd-toma-posse-do-segundo-mandato-como-governador-do-parana.ghtml",
+      "data": "2023-01-01"
+     },
+     {
+      "veiculo": "g1",
+      "titulo": "Ratinho Junior toma posse como governador do Paraná",
+      "url": "https://g1.globo.com/pr/parana/noticia/2019/01/01/ratinho-junior-toma-posse-como-governador-do-parana.ghtml",
+      "data": "2019-01-01"
+     },
+     {
+      "veiculo": "Gazeta de Toledo",
+      "titulo": "Ratinho Junior se licencia do Governo do Paraná na reta final das eleições",
+      "url": "https://gazetadetoledo.com.br/ratinho-junior-se-licencia-do-governo-do-parana-na-reta-final-das-eleicoes/",
+      "data": "2026-09-16"
+     },
+     {
+      "veiculo": "Tribunal Superior Eleitoral (TSE)",
+      "titulo": "Dados abertos: Candidatos – 2026 (lista oficial de todas as candidaturas)",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2026",
+      "data": "2026-10-15"
+     }
+    ]
+   },
+   "vice": {
+    "nome": "Darci Piana",
+    "nomeCivil": "Darci Piana",
+    "partido": "PSD",
+    "genero": "M",
+    "desde": "2019-01-01",
+    "comoAssumiu": "Eleito em 2018 e reeleito em 2022",
+    "eleicao2026": "Não foi candidato em 2026",
+    "nascimento": "1941-12-24",
+    "fonte": [
+     {
+      "veiculo": "Rede Brasil de Televisão",
+      "titulo": "Vice-governador recebe embaixador da Áustria em busca de novas cooperações para o Paraná",
+      "url": "https://rbtv.com.br/noticia/21613/vice-governador-recebe-embaixador-da-austria-em-busca-de-novas-cooperacoes-para-o-parana/amp",
+      "data": "2026-10-15"
+     },
+     {
+      "veiculo": "Gazeta de Toledo",
+      "titulo": "Ratinho Junior se licencia do Governo do Paraná na reta final das eleições",
+      "url": "https://gazetadetoledo.com.br/ratinho-junior-se-licencia-do-governo-do-parana-na-reta-final-das-eleicoes/",
+      "data": "2026-09-16"
+     },
+     {
+      "veiculo": "g1",
+      "titulo": "Ratinho Junior toma posse como governador do Paraná",
+      "url": "https://g1.globo.com/pr/parana/noticia/2019/01/01/ratinho-junior-toma-posse-como-governador-do-parana.ghtml",
+      "data": "2019-01-01"
+     },
+     {
+      "veiculo": "Tribunal Superior Eleitoral (TSE)",
+      "titulo": "Dados abertos: Candidatos – 2022 (inclui governadores e vices eleitos, com nome completo e data de nascimento)",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2022",
+      "data": "2026-10-15"
+     },
+     {
+      "veiculo": "Tribunal Superior Eleitoral (TSE)",
+      "titulo": "Dados abertos: Candidatos – 2026 (lista oficial de todas as candidaturas)",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2026",
+      "data": "2026-10-15"
+     }
+    ]
+   }
+  },
+  "RJ": {
+   "governador": {
+    "nome": "Ricardo Couto",
+    "nomeCivil": "Ricardo Couto de Castro",
+    "partido": null,
+    "genero": "M",
+    "desde": "2026-03-23",
+    "comoAssumiu": "É presidente do Tribunal de Justiça do Rio de Janeiro e assumiu o governo de forma interina em 2026-03-23, depois da renúncia de Cláudio Castro, porque o cargo de vice estava vago e o presidente da Assembleia Legislativa estava afastado",
+    "eleicao2026": "Não foi candidato em 2026",
+    "fonte": [
+     {
+      "veiculo": "g1",
+      "titulo": "Ricardo Couto oficializa transição para gestão de Douglas Ruas e define nomes do grupo de trabalho",
+      "url": "https://g1.globo.com/rj/rio-de-janeiro/noticia/2026/10/14/governo-do-rj-inicia-transicao-para-gestao-2027.ghtml",
+      "data": "2026-10-14"
+     },
+     {
+      "veiculo": "CNN Brasil",
+      "titulo": "Presidente do TJRJ assume cargo no lugar de Castro; entenda xadrez político",
+      "url": "https://www.cnnbrasil.com.br/politica/presidente-do-tjrj-assume-cargo-no-lugar-de-castro-entenda-xadrez-politico/",
+      "data": "2026-03-23"
+     },
+     {
+      "veiculo": "g1",
+      "titulo": "Após renúncia de Castro, presidente do TJRJ assume o governo e tem 48h para convocar eleição indireta; entenda",
+      "url": "https://g1.globo.com/rj/rio-de-janeiro/noticia/2026/03/23/apos-renuncia-de-castro-presidente-do-tjrj-assume-o-governo-e-tem-48h-para-convocar-eleicao-indireta-entenda.ghtml",
+      "data": "2026-03-23"
+     },
+     {
+      "veiculo": "Agência Brasil",
+      "titulo": "Entenda o que acontece no Rio com a renúncia de Cláudio Castro",
+      "url": "https://agenciabrasil.ebc.com.br/politica/noticia/2026-03/entenda-o-que-acontece-no-rio-com-renuncia-de-claudio-castro",
+      "data": "2026-03-24"
+     },
+     {
+      "veiculo": "Tribunal Superior Eleitoral (TSE)",
+      "titulo": "Dados abertos: Candidatos – 2026 (lista oficial de todas as candidaturas)",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2026",
+      "data": "2026-10-15"
+     }
+    ],
+    "nota": "Governo interino. Em outubro de 2026 ele oficializou a transição para o governador eleito em 2026, Douglas Ruas (PL), que toma posse em 2027."
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-governador está vago desde 2025, quando Thiago Pampolha deixou o cargo para ser conselheiro do Tribunal de Contas do Estado (TCE-RJ).",
+    "fonte": [
+     {
+      "veiculo": "CNN Brasil",
+      "titulo": "Presidente do TJRJ assume cargo no lugar de Castro; entenda xadrez político",
+      "url": "https://www.cnnbrasil.com.br/politica/presidente-do-tjrj-assume-cargo-no-lugar-de-castro-entenda-xadrez-politico/",
+      "data": "2026-03-23"
+     },
+     {
+      "veiculo": "Agência Brasil",
+      "titulo": "Entenda o que acontece no Rio com a renúncia de Cláudio Castro",
+      "url": "https://agenciabrasil.ebc.com.br/politica/noticia/2026-03/entenda-o-que-acontece-no-rio-com-renuncia-de-claudio-castro",
+      "data": "2026-03-24"
+     }
+    ]
+   }
+  },
+  "RN": {
+   "governador": {
+    "nome": "Fátima Bezerra",
+    "nomeCivil": "Maria de Fátima Bezerra",
+    "partido": "PT",
+    "genero": "F",
+    "desde": "2019-01-01",
+    "comoAssumiu": "Eleita em 2018 e reeleita em 2022",
+    "eleicao2026": "Não foi candidata em 2026",
+    "nascimento": "1955-05-19",
+    "fonte": [
+     {
+      "veiculo": "Governo do Rio Grande do Norte",
+      "titulo": "Governadora: Maria de Fátima Bezerra",
+      "url": "https://www.rn.gov.br/postagem/governadora/",
+      "data": "2026-10-15"
+     },
+     {
+      "veiculo": "g1",
+      "titulo": "Quaest no RN: 42% avaliam gestão Fátima Bezerra como negativa e 25%, como positiva",
+      "url": "https://g1.globo.com/rn/rio-grande-do-norte/eleicoes/2026/noticia/2026/10/13/quaest-rn-avaliacao-governo-fatima-bezerra-13-outubro.ghtml",
+      "data": "2026-10-13"
+     },
+     {
+      "veiculo": "g1",
+      "titulo": "Fátima Bezerra (PT) é empossada para segundo mandato como governadora do Rio Grande do Norte",
+      "url": "https://g1.globo.com/rn/rio-grande-do-norte/noticia/2023/01/01/fatima-bezerra-pt-e-empossada-para-segundo-mandato-como-governadora-do-rio-grande-do-norte.ghtml",
+      "data": "2023-01-01"
+     },
+     {
+      "veiculo": "Tribunal Superior Eleitoral (TSE)",
+      "titulo": "Dados abertos: Candidatos – 2026 (lista oficial de todas as candidaturas)",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2026",
+      "data": "2026-10-15"
+     }
+    ]
+   },
+   "vice": {
+    "nome": "Walter Alves",
+    "nomeCivil": "Walter Pereira Alves",
+    "partido": "MDB",
+    "genero": "M",
+    "desde": "2023-01-01",
+    "comoAssumiu": "Eleito em 2022",
+    "eleicao2026": "Foi candidato a deputado estadual em 2026 e ficou como suplente",
+    "nascimento": "1980-02-27",
+    "fonte": [
+     {
+      "veiculo": "Governo do Rio Grande do Norte",
+      "titulo": "Vice-governador: Walter Pereira Alves",
+      "url": "https://www.rn.gov.br/postagem/vice-governador/",
+      "data": "2026-10-15"
+     },
+     {
+      "veiculo": "Tribunal Superior Eleitoral (TSE)",
+      "titulo": "Resultado oficial do 1º turno de 2026 – deputado(a) estadual – Rio Grande do Norte",
+      "url": "https://resultados.tse.jus.br/oficial/ele2026/6259/dados/rn/rn-c0007-e006259-u.json",
+      "data": "2026-10-07"
+     }
+    ]
+   }
+  },
+  "RO": {
+   "governador": {
+    "nome": "Marcos Rocha",
+    "nomeCivil": "Marcos José Rocha dos Santos",
+    "partido": "PSD",
+    "genero": "M",
+    "desde": "2019-01-01",
+    "comoAssumiu": "Eleito em 2018 e reeleito em 2022",
+    "eleicao2026": "Não foi candidato em 2026",
+    "nascimento": "1968-08-03",
+    "fonte": [
+     {
+      "veiculo": "g1",
+      "titulo": "Cel. Marcos Rocha toma posse neste domingo como governador reeleito de Rondônia",
+      "url": "https://g1.globo.com/ro/rondonia/noticia/2023/01/01/cel-marcos-rocha-toma-posse-neste-domingo-como-governador-reeleito-de-rondonia.ghtml",
+      "data": "2023-01-01"
+     },
+     {
+      "veiculo": "Estadão",
+      "titulo": "Governador troca União pelo PSD, abre mão de disputar Senado e impede vice de assumir cargo",
+      "url": "https://www.estadao.com.br/politica/coluna-do-estadao/governador-troca-uniao-pelo-psd-abre-mao-de-disputar-senado-e-impede-vice-de-assumir-cargo/",
+      "data": "2026-02-01"
+     },
+     {
+      "veiculo": "Valor & Mercado RO",
+      "titulo": "Nova crise no CPA: TJRO manda Marcos Rocha reintegrar servidores demitidos da vice-governadoria",
+      "url": "https://www.valoremercadoro.com.br/nova-crise-no-cpa-tjro-manda-marcos-rocha-reintegrar-servidores-da-vice-governadoria/",
+      "data": "2026-08-06"
+     },
+     {
+      "veiculo": "Tribunal Superior Eleitoral (TSE)",
+      "titulo": "Dados abertos: Candidatos – 2026 (lista oficial de todas as candidaturas)",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2026",
+      "data": "2026-10-15"
+     }
+    ],
+    "nota": "Foi eleito em 2022 pelo União Brasil; em 2026 passou para o PSD."
+   },
+   "vice": {
+    "nome": "Sérgio Gonçalves",
+    "nomeCivil": "Sérgio Gonçalves da Silva",
+    "partido": null,
+    "genero": "M",
+    "desde": "2023-01-01",
+    "comoAssumiu": "Eleito em 2022",
+    "eleicao2026": "Não foi candidato em 2026",
+    "nascimento": "1974-05-28",
+    "fonte": [
+     {
+      "veiculo": "Tudo Rondônia (com informações do MPRO)",
+      "titulo": "Visita institucional fortalece diálogo (vice-governador Sérgio Gonçalves visita o MPRO)",
+      "url": "https://www.tudorondonia.com/noticias/visita-institucional-fortalece-dialogo,163804.shtml",
+      "data": "2026-10-15"
+     },
+     {
+      "veiculo": "Estadão",
+      "titulo": "Governador troca União pelo PSD, abre mão de disputar Senado e impede vice de assumir cargo",
+      "url": "https://www.estadao.com.br/politica/coluna-do-estadao/governador-troca-uniao-pelo-psd-abre-mao-de-disputar-senado-e-impede-vice-de-assumir-cargo/",
+      "data": "2026-02-01"
+     },
+     {
+      "veiculo": "Tribunal Superior Eleitoral (TSE)",
+      "titulo": "Dados abertos: Candidatos – 2022 (inclui governadores e vices eleitos, com nome completo e data de nascimento)",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2022",
+      "data": "2026-10-15"
+     },
+     {
+      "veiculo": "Tribunal Superior Eleitoral (TSE)",
+      "titulo": "Dados abertos: Candidatos – 2026 (lista oficial de todas as candidaturas)",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2026",
+      "data": "2026-10-15"
+     }
+    ],
+    "conferir": true,
+    "nota": "Foi eleito vice em 2022 pelo União Brasil; não encontramos fonte confiável sobre o partido atual."
+   }
+  },
+  "RR": {
+   "governador": {
+    "nome": "Soldado Sampaio",
+    "nomeCivil": "Francisco dos Santos Sampaio",
+    "partido": "REPUBLICANOS",
+    "genero": "M",
+    "desde": "2026-04-30",
+    "comoAssumiu": "Era presidente da Assembleia Legislativa e assumiu o governo de forma interina em 2026-04-30, depois que o TSE cassou o mandato do governador Edilson Damião (que tinha assumido com a renúncia de Antonio Denarium); continua no cargo porque o resultado da eleição suplementar de 21/06/2026 ainda depende de decisão da Justiça",
+    "eleicao2026": "Disputou o governo de Roraima e não foi eleito (1º turno, 04/10/2026)",
+    "nascimento": "1976-05-12",
+    "fonte": [
+     {
+      "veiculo": "Assembleia Legislativa de Roraima",
+      "titulo": "Após decisão do TSE, ALE-RR oficializa troca de comando interina nos Poderes Executivo e Legislativo",
+      "url": "https://al.rr.leg.br/2026/04/30/apos-decisao-do-tse-alerr-oficializa-troca-de-comando-interina-nos-poderes-executivo-e-legislativo/",
+      "data": "2026-04-30"
+     },
+     {
+      "veiculo": "g1",
+      "titulo": "TSE suspende julgamento de Arthur Henrique e adia diplomação da eleição suplementar em RR",
+      "url": "https://g1.globo.com/rr/roraima/noticia/2026/07/01/tse-suspende-julgamento-de-arthur-henrique-e-adia-diplomacao-em-roraima.ghtml",
+      "data": "2026-07-01"
+     },
+     {
+      "veiculo": "Governo de Roraima",
+      "titulo": "Decreto de fim de exercício garante salários e gastos com saúde e educação em Roraima (cita o governador Soldado Sampaio)",
+      "url": "https://portal.rr.gov.br/decreto-de-fim-de-exercicio-garante-salarios-e-gastos-com-saude-e-educacao-em-roraima/",
+      "data": "2026-10-15"
+     },
+     {
+      "veiculo": "Tribunal Superior Eleitoral (TSE)",
+      "titulo": "Resultado oficial do 1º turno de 2026 – governador(a) e vice – Roraima",
+      "url": "https://resultados.tse.jus.br/oficial/ele2026/6259/dados/rr/rr-c0003-e006259-u.json",
+      "data": "2026-10-04"
+     }
+    ],
+    "nota": "Governador interino. Na eleição suplementar de 21/06/2026, o mais votado foi Arthur Henrique (PL), mas a candidatura dele estava sub judice e o TSE suspendeu a diplomação até decisão do STF. Arthur Henrique foi eleito em 04/10/2026 para o mandato que começa em 2027."
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-governador está vago: o vice eleito em 2022, Edilson Damião, assumiu o governo em abril de 2026, depois da renúncia de Antonio Denarium, e teve o mandato cassado pelo TSE em 2026-04-30.",
+    "fonte": [
+     {
+      "veiculo": "g1 (Jornal Nacional)",
+      "titulo": "TSE cassa mandato do governador de Roraima, Edilson Damião, e declara inelegível o ex-governador Antonio Denarium",
+      "url": "https://g1.globo.com/jornal-nacional/noticia/2026/04/30/tse-cassa-mandato-do-governador-de-roraima-edilson-damiao-e-declara-inelegivel-o-ex-governador-antonio-denarium.ghtml",
+      "data": "2026-04-30"
+     },
+     {
+      "veiculo": "Assembleia Legislativa de Roraima",
+      "titulo": "Após decisão do TSE, ALE-RR oficializa troca de comando interina nos Poderes Executivo e Legislativo",
+      "url": "https://al.rr.leg.br/2026/04/30/apos-decisao-do-tse-alerr-oficializa-troca-de-comando-interina-nos-poderes-executivo-e-legislativo/",
+      "data": "2026-04-30"
+     },
+     {
+      "veiculo": "O Globo",
+      "titulo": "Saiba quais governadores e prefeitos de capitais renunciaram aos cargos para disputar eleições; veja lista",
+      "url": "https://oglobo.globo.com/politica/noticia/2026/04/07/saiba-quais-governadores-e-prefeitos-de-capitais-renunciaram-aos-cargos-para-disputar-eleicoes-veja-lista.ghtml",
+      "data": "2026-04-07"
+     }
+    ]
+   }
+  },
+  "RS": {
+   "governador": {
+    "nome": "Eduardo Leite",
+    "nomeCivil": "Eduardo Figueiredo Cavalheiro Leite",
+    "partido": "PSD",
+    "genero": "M",
+    "desde": "2023-01-01",
+    "comoAssumiu": "Reeleito em 2022",
+    "eleicao2026": "Não foi candidato em 2026",
+    "nascimento": "1985-03-10",
+    "fonte": [
+     {
+      "veiculo": "Governo do Rio Grande do Sul (Secretaria de Planejamento)",
+      "titulo": "Eduardo Leite recebe Luciano Zucco para iniciar transição de governo",
+      "url": "https://planejamento.rs.gov.br/eduardo-leite-recebe-luciano-zucco-para-iniciar-transicao-de-governo-6ac94a2579e39",
+      "data": "2026-10-09"
+     },
+     {
+      "veiculo": "O Globo",
+      "titulo": "Saiba quais governadores e prefeitos de capitais renunciaram aos cargos para disputar eleições; veja lista",
+      "url": "https://oglobo.globo.com/politica/noticia/2026/04/07/saiba-quais-governadores-e-prefeitos-de-capitais-renunciaram-aos-cargos-para-disputar-eleicoes-veja-lista.ghtml",
+      "data": "2026-04-07"
+     },
+     {
+      "veiculo": "g1",
+      "titulo": "Em discurso de posse no RS, Eduardo Leite fala sobre próximos anos e relação com governo federal",
+      "url": "https://g1.globo.com/rs/rio-grande-do-sul/noticia/2023/01/01/eduardo-leite-fala-sobre-proximos-anos-e-relacao-com-governo-federal-ao-tomar-posse-como-governador-do-rs.ghtml",
+      "data": "2023-01-01"
+     },
+     {
+      "veiculo": "Tribunal Superior Eleitoral (TSE)",
+      "titulo": "Dados abertos: Candidatos – 2022 (inclui governadores e vices eleitos, com nome completo e data de nascimento)",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2022",
+      "data": "2026-10-15"
+     },
+     {
+      "veiculo": "Tribunal Superior Eleitoral (TSE)",
+      "titulo": "Dados abertos: Candidatos – 2026 (lista oficial de todas as candidaturas)",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2026",
+      "data": "2026-10-15"
+     }
+    ],
+    "nota": "Foi reeleito em 2022 pelo PSDB, para o segundo mandato (o primeiro começou em 2019); hoje é do PSD."
+   },
+   "vice": {
+    "nome": "Gabriel Souza",
+    "nomeCivil": "Gabriel Vieira de Souza",
+    "partido": "MDB",
+    "genero": "M",
+    "desde": "2023-01-01",
+    "comoAssumiu": "Eleito em 2022",
+    "eleicao2026": "Disputou o governo do Rio Grande do Sul e não foi eleito (1º turno, 04/10/2026)",
+    "nascimento": "1984-01-02",
+    "fonte": [
+     {
+      "veiculo": "O Globo",
+      "titulo": "Saiba quais governadores e prefeitos de capitais renunciaram aos cargos para disputar eleições; veja lista",
+      "url": "https://oglobo.globo.com/politica/noticia/2026/04/07/saiba-quais-governadores-e-prefeitos-de-capitais-renunciaram-aos-cargos-para-disputar-eleicoes-veja-lista.ghtml",
+      "data": "2026-04-07"
+     },
+     {
+      "veiculo": "Tribunal Superior Eleitoral (TSE)",
+      "titulo": "Resultado oficial do 1º turno de 2026 – governador(a) e vice – Rio Grande do Sul",
+      "url": "https://resultados.tse.jus.br/oficial/ele2026/6259/dados/rs/rs-c0003-e006259-u.json",
+      "data": "2026-10-04"
+     }
+    ]
+   }
+  },
+  "SC": {
+   "governador": {
+    "nome": "Jorginho Mello",
+    "nomeCivil": "Jorginho dos Santos Mello",
+    "partido": "PL",
+    "genero": "M",
+    "desde": "2023-01-01",
+    "comoAssumiu": "Eleito em 2022",
+    "eleicao2026": "Reeleito governador no 1º turno (04/10/2026)",
+    "nascimento": "1956-07-15",
+    "fonte": [
+     {
+      "veiculo": "g1",
+      "titulo": "Reeleito, Jorginho promete manter secretariado e prevê mudança somente na Segurança Pública",
+      "url": "https://g1.globo.com/sc/santa-catarina/eleicoes/2026/noticia/2026/10/05/apos-eleito-jorginho-mello-promete-manter-secretariado-nsc-tv.ghtml",
+      "data": "2026-10-05"
+     },
+     {
+      "veiculo": "g1",
+      "titulo": "Jorginho Mello toma posse como governador de Santa Catarina",
+      "url": "https://g1.globo.com/sc/santa-catarina/noticia/2023/01/01/jorginho-mello-toma-posse-como-governador-de-santa-catarina-fotos.ghtml",
+      "data": "2023-01-01"
+     },
+     {
+      "veiculo": "Tribunal Superior Eleitoral (TSE)",
+      "titulo": "Resultado oficial do 1º turno de 2026 – governador(a) e vice – Santa Catarina",
+      "url": "https://resultados.tse.jus.br/oficial/ele2026/6259/dados/sc/sc-c0003-e006259-u.json",
+      "data": "2026-10-15"
+     }
+    ]
+   },
+   "vice": {
+    "nome": "Marilisa Boehm",
+    "nomeCivil": "Marilisa Boehm",
+    "partido": "PL",
+    "genero": "F",
+    "desde": "2023-01-01",
+    "comoAssumiu": "Eleita em 2022",
+    "eleicao2026": "Não foi candidata em 2026",
+    "nascimento": "1964-12-16",
+    "fonte": [
+     {
+      "veiculo": "4oito",
+      "titulo": "Marilisa Boehm será secretária de Segurança Pública no segundo governo de Jorginho Mello",
+      "url": "https://www.4oito.com.br/noticia/marilisa-boehm-sera-secretaria-de-seguranca-publica-no-segundo-governo-de-jorginho-mello-89353",
+      "data": "2026-10-05"
+     },
+     {
+      "veiculo": "g1",
+      "titulo": "Reeleito, Jorginho promete manter secretariado e prevê mudança somente na Segurança Pública",
+      "url": "https://g1.globo.com/sc/santa-catarina/eleicoes/2026/noticia/2026/10/05/apos-eleito-jorginho-mello-promete-manter-secretariado-nsc-tv.ghtml",
+      "data": "2026-10-05"
+     },
+     {
+      "veiculo": "Grupo Portal de Notícias",
+      "titulo": "Encontro entre a vice-governadora de SC e o embaixador da Áustria no Brasil aborda parcerias",
+      "url": "https://grupoportaldenoticias.com.br/encontro-entre-a-vice-governadora-de-sc-e-o-embaixador-da-austria-no-brasil-aborda-parcerias-e-instalacao-de-consulado-honorario-em-florianopolis/",
+      "data": "2026-10-12"
+     }
+    ]
+   }
+  },
+  "SE": {
+   "governador": {
+    "nome": "Fábio Mitidieri",
+    "nomeCivil": "Fábio Cruz Mitidieri",
+    "partido": "PSD",
+    "genero": "M",
+    "desde": "2023-01-01",
+    "comoAssumiu": "Eleito em 2022",
+    "eleicao2026": "Reeleito governador no 1º turno (04/10/2026)",
+    "nascimento": "1977-02-24",
+    "fonte": [
+     {
+      "veiculo": "Governo de Sergipe",
+      "titulo": "Governador Fábio Mitidieri recebe presidente da Associação Brasileira de Educação em Engenharia",
+      "url": "https://www.se.gov.br/agencia/noticias/Governo/governador_fabio_mitidieri_recebe_presidente_da_associacao_brasileira_de_educacao_em_engenharia",
+      "data": "2026-10-15"
+     },
+     {
+      "veiculo": "g1",
+      "titulo": "Fábio Mitidieri toma posse como governador de SE",
+      "url": "https://g1.globo.com/se/sergipe/noticia/2023/01/01/fabio-mitidieri-toma-posse-como-governador-de-se-e-diz-que-uma-das-principais-metas-e-a-geracao-de-emprego.ghtml",
+      "data": "2023-01-01"
+     },
+     {
+      "veiculo": "Tribunal Superior Eleitoral (TSE)",
+      "titulo": "Resultado oficial do 1º turno de 2026 – governador(a) e vice – Sergipe",
+      "url": "https://resultados.tse.jus.br/oficial/ele2026/6259/dados/se/se-c0003-e006259-u.json",
+      "data": "2026-10-04"
+     }
+    ]
+   },
+   "vice": {
+    "nome": "Zezinho Sobral",
+    "nomeCivil": "José Macedo Sobral",
+    "partido": "PSB",
+    "genero": "M",
+    "desde": "2023-01-01",
+    "comoAssumiu": "Eleito em 2022",
+    "eleicao2026": "Eleito deputado estadual em 2026 (o novo mandato começa em 2027)",
+    "nascimento": "1965-12-26",
+    "fonte": [
+     {
+      "veiculo": "A8 Sergipe",
+      "titulo": "Atual vice-governador, Zezinho Sobral é eleito deputado estadual com mais de 44 mil votos",
+      "url": "https://a8se.com/noticias/eleicoes/2026/10/07/245097-atual-vice-governador-zezinho-sobral-e-eleito-deputado-estadual-com-mais-de-44-mil-votos",
+      "data": "2026-10-07"
+     },
+     {
+      "veiculo": "Tribunal Superior Eleitoral (TSE)",
+      "titulo": "Resultado oficial do 1º turno de 2026 – deputado(a) estadual – Sergipe",
+      "url": "https://resultados.tse.jus.br/oficial/ele2026/6259/dados/se/se-c0007-e006259-u.json",
+      "data": "2026-10-04"
+     }
+    ],
+    "nota": "Foi eleito vice em 2022 pelo PDT; em 2026 se candidatou pelo PSB."
+   }
+  },
+  "SP": {
+   "governador": {
+    "nome": "Tarcísio de Freitas",
+    "nomeCivil": "Tarcísio Gomes de Freitas",
+    "partido": "REPUBLICANOS",
+    "genero": "M",
+    "desde": "2023-01-01",
+    "comoAssumiu": "Eleito em 2022",
+    "eleicao2026": "Reeleito governador no 1º turno (04/10/2026)",
+    "nascimento": "1975-06-19",
+    "fonte": [
+     {
+      "veiculo": "g1",
+      "titulo": "Tarcísio toma posse como governador de SP",
+      "url": "https://g1.globo.com/sp/sao-paulo/noticia/2023/01/01/tarcisio-e-empossado-como-novo-governador-de-sp.ghtml",
+      "data": "2023-01-01"
+     },
+     {
+      "veiculo": "Agência Brasil",
+      "titulo": "Tarcísio é reeleito governador de São Paulo",
+      "url": "https://agenciabrasil.ebc.com.br/politica/noticia/2026-10/tarcisio-e-reeleito-governador-de-sao-paulo",
+      "data": "2026-10-04"
+     },
+     {
+      "veiculo": "Tribunal Superior Eleitoral (TSE)",
+      "titulo": "Resultado oficial do 1º turno de 2026 – governador(a) e vice – São Paulo",
+      "url": "https://resultados.tse.jus.br/oficial/ele2026/6259/dados/sp/sp-c0003-e006259-u.json",
+      "data": "2026-10-05"
+     }
+    ]
+   },
+   "vice": {
+    "nome": "Felicio Ramuth",
+    "nomeCivil": "Felicio Ramuth",
+    "partido": "MDB",
+    "genero": "M",
+    "desde": "2023-01-01",
+    "comoAssumiu": "Eleito em 2022",
+    "eleicao2026": "Reeleito vice-governador no 1º turno (04/10/2026), na chapa de Tarcísio de Freitas",
+    "nascimento": "1968-11-11",
+    "fonte": [
+     {
+      "veiculo": "Tribunal Superior Eleitoral (TSE)",
+      "titulo": "Resultado oficial do 1º turno de 2026 – governador(a) e vice – São Paulo",
+      "url": "https://resultados.tse.jus.br/oficial/ele2026/6259/dados/sp/sp-c0003-e006259-u.json",
+      "data": "2026-10-05"
+     },
+     {
+      "veiculo": "Tribunal Superior Eleitoral (TSE)",
+      "titulo": "Dados abertos: Candidatos – 2022 (inclui governadores e vices eleitos, com nome completo e data de nascimento)",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2022",
+      "data": "2026-10-15"
+     }
+    ],
+    "nota": "Foi eleito vice em 2022 pelo PSD; em 2026 se candidatou pelo MDB."
+   }
+  },
+  "TO": {
+   "governador": {
+    "nome": "Wanderlei Barbosa",
+    "nomeCivil": "Wanderlei Barbosa Castro",
+    "partido": "REPUBLICANOS",
+    "genero": "M",
+    "desde": "2022-03-11",
+    "comoAssumiu": "Era vice-governador e assumiu em 2022-03-11 depois da renúncia de Mauro Carlesse; foi eleito governador em 2022",
+    "eleicao2026": "Não foi candidato em 2026",
+    "nascimento": "1964-03-12",
+    "fonte": [
+     {
+      "veiculo": "g1",
+      "titulo": "Quaest no TO: 58% aprovam e 26% desaprovam governo de Wanderlei Barbosa",
+      "url": "https://g1.globo.com/to/tocantins/eleicoes/2026/noticia/2026/10/14/quaest-to-avaliacao-governo-wanderlei-barbosa-14-outubro.ghtml",
+      "data": "2026-10-14"
+     },
+     {
+      "veiculo": "g1",
+      "titulo": "Wanderlei Barbosa toma posse como governador do Tocantins",
+      "url": "https://g1.globo.com/to/tocantins/noticia/2022/03/11/wanderlei-barbosa-toma-posse-como-governador-do-tocantins.ghtml",
+      "data": "2022-03-11"
+     },
+     {
+      "veiculo": "g1",
+      "titulo": "Wanderlei Barbosa retorna ao cargo de governador do Tocantins após três meses afastado",
+      "url": "https://g1.globo.com/to/tocantins/noticia/2025/12/05/wanderlei-barbosa-retorna-ao-cargo-de-governador-do-tocantins-apos-tres-meses-afastados.ghtml",
+      "data": "2025-12-05"
+     },
+     {
+      "veiculo": "Tribunal Superior Eleitoral (TSE)",
+      "titulo": "Dados abertos: Candidatos – 2026 (lista oficial de todas as candidaturas)",
+      "url": "https://dadosabertos.tse.jus.br/dataset/candidatos-2026",
+      "data": "2026-10-15"
+     }
+    ],
+    "nota": "Ficou afastado do cargo por decisão judicial entre setembro e dezembro de 2025 (nesse período, o vice Laurez Moreira governou) e voltou em 2025-12-05."
+   },
+   "vice": {
+    "nome": "Laurez Moreira",
+    "nomeCivil": "Laurez da Rocha Moreira",
+    "partido": "PSD",
+    "genero": "M",
+    "desde": "2023-01-01",
+    "comoAssumiu": "Eleito em 2022",
+    "eleicao2026": "Disputou o governo do Tocantins e não foi eleito (1º turno, 04/10/2026)",
+    "nascimento": "1957-07-03",
+    "fonte": [
+     {
+      "veiculo": "g1",
+      "titulo": "Laurez Moreira declara apoio a Vicentinho Júnior no 2º turno para governo do Tocantins",
+      "url": "https://g1.globo.com/to/tocantins/eleicoes/2026/noticia/2026/10/08/laurez-moreira-declara-apoio-a-vicentinho-junior-no-2o-turno-do-governo-do-tocantins.ghtml",
+      "data": "2026-10-08"
+     },
+     {
+      "veiculo": "Tribunal Superior Eleitoral (TSE)",
+      "titulo": "Resultado oficial do 1º turno de 2026 – governador(a) e vice – Tocantins",
+      "url": "https://resultados.tse.jus.br/oficial/ele2026/6259/dados/to/to-c0003-e006259-u.json",
+      "data": "2026-10-04"
+     }
+    ],
+    "nota": "Foi eleito vice em 2022 pelo PDT; hoje é do PSD."
+   }
+  }
+ }
+}

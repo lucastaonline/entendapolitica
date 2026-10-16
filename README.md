@@ -8,7 +8,7 @@ Mesma identidade visual do [Entenda o 2º turno](https://entendaosegundoturno.ve
 
 1. **Entenda a política** (`entenda.html`): um **mapa 3D** (tabuleiro) com 9 paradas: o que é política (escola), os Três Poderes, país/estado/cidade, os cargos (torre), o Congresso (no centro), como nasce uma lei, eleições (urna), quem julga e fiscaliza (tribunal) e como participar (palanque). Uma trilha amarela sugere a ordem, mas dá para clicar em qualquer lugar. Ao clicar, a câmera "mergulha" no lugar e abre a **aula daquela parada**: uma apresentação com muito 3D (escadas para processos, cartões que viram, quadrinhos que folheiam, quiz e simuladores). No fim: estrela no mapa e "próxima parada". O progresso fica salvo no aparelho.
 2. **A política do Brasil** (`brasil.html`): presidente, vice, ministros, os 81 senadores e os 513 deputados federais, com busca por qualquer político.
-3. **A política do meu estado** (`estado.html`): governador e vice, os senadores e deputados federais do estado e os deputados estaduais. No fim, um campo leva para a página da cidade.
+3. **A política do meu estado** (`estado.html`): a pessoa escolhe o estado num mapa 3D com o formato real de cada estado (malha do IBGE; os estados pequenos têm a sigla num selo fora deles, ligado por uma linha) ou digitando o nome. Mostra governador e vice, os senadores e deputados federais do estado e os deputados estaduais. No fim, um campo leva para a página da cidade.
 4. **A política da minha cidade** (`cidade.html`): a pessoa digita o nome da cidade (as 5.569 do Brasil, com o estado ao lado para desempatar) e vê prefeito, vice e vereadores, além do que cada um faz. Brasília e Fernando de Noronha têm explicação própria (não têm prefeitura comum). Endereço: `cidade.html?ibge=<código IBGE>`; os endereços antigos `estado.html?uf=XX&cidade=<IBGE>` levam para lá.
 
 Cada pessoa tem uma página (`pessoa.html?id=...`) com ficha, propostas (com explicação simples + texto oficial + link da fonte), situação de cada proposta, votações, gastos e eleições. O botão **Voltar** leva para a página de onde a pessoa veio (o Brasil, o estado, a cidade ou a busca), guardada nesta aba pelo `js/comum.js` (`EP.gravaVolta`/`EP.leVolta`); se ela veio direto de lá, usa o histórico do navegador, e a lista reaparece como estava. Aberto por link direto, vai para a lista do cargo.
@@ -57,7 +57,7 @@ Mandatos: o site mostra **quem está no cargo hoje** e marca quem foi **eleito/r
 index.html            página inicial (4 portas)
 entenda.html          mapa 3D da política + aulas de cada parada (lê conteudo/entenda/[en/]parte-N.json)
 brasil.html           política do Brasil (lê dados/executivo.json, dados/senado.json, dados/camara.json)
-estado.html           política do meu estado (lê dados/estados/UF.json e dados/cidades/UF.json)
+estado.html           política do meu estado (lê dados/mapa-brasil.json, dados/estados/UF.json e dados/cidades/UF.json)
 cidade.html           política da minha cidade (lê dados/cidades.json e dados/cidades/UF/IBGE.json)
 pessoa.html           perfil de uma pessoa (lê dados/pessoas/<id>.json e dados/votacoes/<casa>.json)
 imparcialidade.html   como cuidamos da imparcialidade
@@ -98,6 +98,8 @@ Para ver no computador: `python -m http.server 8770` dentro da pasta e abra http
 2. `scripts/simplificar.py`: escreve, com IA, a explicação simples (português e inglês) das propostas que ainda não têm, a partir da ementa oficial (o texto oficial aparece sempre ao lado). Usa o GitHub Models com o token do próprio Actions (grátis, cerca de 2.800 propostas por dia) ou uma chave da OpenAI no segredo `OPENAI_API_KEY` (mais rápido). Ordem: rodízio por pessoa (a cada rodada, cada político ganha a explicação da sua proposta mais nova que ainda falta), para todo mundo avançar no mesmo ritmo, sem prioridade para quem governa. Um programa confere cada explicação antes de publicar (no máximo 35 palavras em português e 45 em inglês, palavras de opinião proibidas, números e trechos entre aspas que precisam existir na ementa); a que for recusada 2 vezes fica só com o texto oficial (`dados/simples-recusadas.json`);
 3. `scripts/montar.py`: junta tudo (TSE nos perfis, explicações simples, textos em inglês da eleição de 2026);
 4. faz commit só do que mudou de verdade (datas de consulta não contam) e a Vercel publica sozinha.
+
+O mapa do Brasil da página do estado (`dados/mapa-brasil.json`: o contorno real de cada estado, da malha oficial do IBGE, já desenhado, e o lugar da sigla) é feito por `scripts/mapa.py`. O contorno dos estados quase nunca muda, então ele não roda todo dia: rode à mão se o IBGE mudar a malha.
 
 Correções à mão (sempre com fonte): `dados/manual/governadores.json`, `dados/manual/ministros.json`, `dados/manual/prefeitos.json` (quando quem está no cargo hoje não é quem o TSE mostra: morte, renúncia, cassação).
 
@@ -239,6 +241,7 @@ Chaves: Câmara = id da votação na Câmara (`2345678-123`); Senado = `senado-v
 - `dados/manual/ministros.json` e `dados/manual/governadores.json`: pesquisados à mão, **sempre com fonte** em cada item.
 - `dados/estados/<UF>.json`: `{ "uf", "nome", "capital": {"ibge","nome"}, "governador": {...}, "vice": {...}, "senadores": ["sen-..."], "deputadosFederais": ["dep-..."], "deputadosEstaduais": { "total", "aviso", "fonte", "membros": [ {"id","nome","partido","foto","genero","votos","situacao2022","eleicao2026"} ] }, "municipios": 417, "atualizado" }`
 - `dados/cidades.json`: todas as cidades do Brasil para a busca da página da cidade: `[[ibge, nome, UF], ...]` (feito por `scripts/montar.py`).
+- `dados/mapa-brasil.json`: o mapa da página do estado (feito por `scripts/mapa.py`): `{ "fonte", "largura", "altura", "sigla", "seloAltura", "ufs": { "BA": { "d": "caminho SVG", "x", "y" (lugar da sigla), "selo": { "x", "y" } (só nos estados pequenos: a sigla fica fora, ligada por uma linha) } } }`.
 - `dados/cidades/<UF>.json`: lista para escolher a cidade: `[ {"ibge","nome","prefeito":"Nome (PARTIDO)"} ]`.
 - `dados/cidades/<UF>/<IBGE>.json`: `{ "ibge","nome","uf","prefeito":{...},"vice":{...},"vereadores":{"total","aviso","fonte","membros":[...]},"atualizado" }`.
 - `dados/busca.json`: `[[id, nome, cargo curto, UF, partido, cidade ou null], ...]` (sem vereadores; eles aparecem na página da cidade).

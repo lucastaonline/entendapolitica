@@ -1,19 +1,16 @@
-/* A política do meu estado: mapa em quadradinhos, governador, bancada no Congresso, deputados estaduais e a cidade. */
+/* A política do meu estado: mapa do Brasil, governador, bancada no Congresso, deputados estaduais e a cidade. */
 (function () {
   "use strict";
   var EP = window.EP, D = EP.trd, esc = EP.esc;
-  // [linha, coluna, região] de cada UF no mapa em quadradinhos
-  var GRADE = {
-    RR: [0, 2, "N"], AP: [0, 4, "N"],
-    AM: [1, 1, "N"], PA: [1, 3, "N"], MA: [1, 4, "NE"], CE: [1, 5, "NE"], RN: [1, 6, "NE"],
-    AC: [2, 0, "N"], RO: [2, 1, "N"], MT: [2, 2, "CO"], TO: [2, 3, "N"], PI: [2, 4, "NE"], PE: [2, 5, "NE"], PB: [2, 6, "NE"],
-    MS: [3, 2, "CO"], GO: [3, 3, "CO"], DF: [3, 4, "CO"], BA: [3, 5, "NE"], AL: [3, 6, "NE"],
-    SP: [4, 3, "SE"], MG: [4, 4, "SE"], ES: [4, 5, "SE"], SE: [4, 6, "NE"],
-    PR: [5, 3, "S"], RJ: [5, 4, "SE"],
-    SC: [6, 3, "S"], RS: [7, 3, "S"]
+  // região de cada UF (as cores do mapa)
+  var REGIAO = {
+    AC: "N", AM: "N", AP: "N", PA: "N", RO: "N", RR: "N", TO: "N",
+    AL: "NE", BA: "NE", CE: "NE", MA: "NE", PB: "NE", PE: "NE", PI: "NE", RN: "NE", SE: "NE",
+    DF: "CO", GO: "CO", MS: "CO", MT: "CO", ES: "SE", MG: "SE", RJ: "SE", SP: "SE", PR: "S", RS: "S", SC: "S"
   };
-  // cores com contraste de pelo menos 4,5:1 com o texto branco
-  var REGIOES = { N: ["Norte", "North", "#0f766e"], NE: ["Nordeste", "Northeast", "#a15c00"], CO: ["Centro-Oeste", "Center-West", "#55689e"], SE: ["Sudeste", "Southeast", "#1f3a5f"], S: ["Sul", "South", "#7a6a55"] };
+  // [nome, nome em inglês, cor (contraste de pelo menos 4,5:1 com o texto branco), cor do "lado" (a espessura do estado no 3D)]
+  var REGIOES = { N: ["Norte", "North", "#0f766e", "#094b46"], NE: ["Nordeste", "Northeast", "#a15c00", "#673b00"], CO: ["Centro-Oeste", "Center-West", "#55689e", "#36436a"],
+    SE: ["Sudeste", "Southeast", "#1f3a5f", "#10203a"], S: ["Sul", "South", "#7a6a55", "#4f4537"] };
   var uf = (EP.param("uf") || "").toUpperCase();
   var cidade0 = EP.param("cidade");
 
@@ -38,23 +35,79 @@
   }
 
   // ---------------------------------------------------------------- escolher o estado
+  // Mapa com o formato real de cada estado (malha do IBGE, em dados/mapa-brasil.json, feita por scripts/mapa.py).
+  // Cada estado é um link. Passar o mouse ou chegar com o Tab "levanta" o estado (uma cópia desenhada por cima, no grupo
+  // .realce, para não mudar a ordem dos links). Nos estados pequenos, a sigla fica num selo fora dele, numa camada por cima
+  // de todos: tocar no selo também abre o estado (o selo fica fora do Tab e do leitor de tela, que já têm o link do estado).
+  function mapaSvg(m) {
+    // ordem dos links (Tab e leitor de tela): por região, na ordem da legenda, e por nome dentro de cada região
+    var ordemReg = Object.keys(REGIOES);
+    var ufs = Object.keys(m.ufs).sort(function (a, b) { return ordemReg.indexOf(REGIAO[a]) - ordemReg.indexOf(REGIAO[b]) || EP.norm(EP.UFS[a]).localeCompare(EP.norm(EP.UFS[b])); });
+    var lados = ufs.map(function (u) { return '<path d="' + m.ufs[u].d + '" fill="' + REGIOES[REGIAO[u]][3] + '"/>'; }).join("");
+    function href(u) { return "estado.html?uf=" + u + (EP.en ? "&amp;lang=en" : ""); }
+    function cores(u) { var r = REGIOES[REGIAO[u]]; return "--cor:" + r[2] + ";--lado:" + r[3]; }
+    var links = ufs.map(function (u) {
+      var e = m.ufs[u], nome = EP.UFS[u];
+      return '<a class="uf" href="' + href(u) + '" data-uf="' + u + '" data-nome="' + esc(nome) + '" aria-label="' + u + ", " + esc(nome) + '" style="' + cores(u) + '">' +
+        '<path class="topo" d="' + e.d + '"/>' + (e.selo ? "" : '<text class="sigla" x="' + e.x + '" y="' + e.y + '">' + u + "</text>") + "</a>";
+    }).join("");
+    var selos = ufs.filter(function (u) { return m.ufs[u].selo; }).map(function (u) {
+      var e = m.ufs[u], s = e.selo, w = 64, h = m.seloAltura;
+      return '<a class="selo-link" href="' + href(u) + '" data-uf="' + u + '" tabindex="-1" aria-hidden="true" style="' + cores(u) + '">' +
+        '<line class="fio" x1="' + e.x + '" y1="' + e.y + '" x2="' + s.x + '" y2="' + s.y + '"/><circle class="ponto" cx="' + e.x + '" cy="' + e.y + '" r="4.5"/>' +
+        '<rect class="selo" x="' + (s.x - w / 2) + '" y="' + (s.y - h / 2) + '" width="' + w + '" height="' + h + '" rx="10"/><text class="sigla" x="' + s.x + '" y="' + s.y + '">' + u + "</text></a>";
+    }).join("");
+    return '<svg class="mapa-br" viewBox="0 0 ' + m.largura + " " + (m.altura + 16) + '" style="--sigla:' + m.sigla + 'px" focusable="false">' +
+      '<g class="lados" aria-hidden="true" transform="translate(0 10)">' + lados + "</g>" +
+      '<g class="ufs">' + links + "</g>" + '<g class="selos">' + selos + "</g>" +
+      '<g class="realce" aria-hidden="true"><path class="r-lado"/><path class="r-anel"/><path class="r-topo"/><text class="sigla r-sigla"></text></g></svg>';
+  }
   function mostraMapa() {
     D.canonico();
     document.getElementById("escolher").hidden = false;
     var mapa = document.getElementById("mapa");
-    var ordem = Object.keys(GRADE).sort(function (a, b) { return GRADE[a][0] - GRADE[b][0] || GRADE[a][1] - GRADE[b][1]; });
-    mapa.innerHTML = ordem.map(function (u) {
-      var g = GRADE[u];
-      return '<a class="tile-uf" href="estado.html?uf=' + u + '" style="grid-row:' + (g[0] + 1) + ";grid-column:" + (g[1] + 1) + ";--cor:" + REGIOES[g[2]][2] +
-        '" aria-label="' + u + ", " + esc(EP.UFS[u]) + '" data-nome="' + esc(EP.UFS[u]) + '">' + u + "</a>";
-    }).join("");
     var rot = document.getElementById("rotulo-uf");
     var dica = "👆 " + EP.tr("Passe o mouse sobre um estado para ver o nome", "Point to a state to see its name");
     rot.textContent = dica;
-    function mostraNome(e) { var t = e.target.closest && e.target.closest(".tile-uf"); if (t) rot.textContent = "👆 " + t.getAttribute("data-nome"); }
-    mapa.addEventListener("mouseover", mostraNome);
-    mapa.addEventListener("focusin", mostraNome);
-    mapa.addEventListener("mouseleave", function () { rot.textContent = dica; });
+    EP.json("dados/mapa-brasil.json").then(function (m) {
+      mapa.innerHTML = mapaSvg(m);
+      var svg = mapa.querySelector("svg"), realce = svg.querySelector(".realce"), rSigla = realce.querySelector(".r-sigla");
+      var caminhos = [].slice.call(realce.querySelectorAll("path")), atual = null;
+      // levanta o estado (ou nenhum) e mostra o nome dele em cima do mapa
+      function levanta(a) {
+        [].forEach.call(svg.querySelectorAll(".ativo"), function (x) { if (x !== a) x.classList.remove("ativo"); });
+        if (!a) { realce.classList.remove("ligado"); atual = null; rot.textContent = dica; return; }
+        var u = a.getAttribute("data-uf"), e = m.ufs[u], selo = svg.querySelector('.selo-link[data-uf="' + u + '"]');
+        if (selo) selo.classList.add("ativo");
+        if (u === atual) return;
+        // o estado novo também "pula": volta a cópia para baixo sem animação e sobe de novo
+        realce.classList.add("sem-anim");
+        realce.classList.remove("ligado");
+        realce.getBoundingClientRect();
+        realce.classList.remove("sem-anim");
+        atual = u;
+        caminhos.forEach(function (p) { p.setAttribute("d", e.d); });
+        realce.style.setProperty("--cor", a.style.getPropertyValue("--cor"));
+        realce.style.setProperty("--lado", a.style.getPropertyValue("--lado"));
+        rSigla.textContent = e.selo ? "" : u;
+        rSigla.setAttribute("x", e.x);
+        rSigla.setAttribute("y", e.y);
+        a.classList.add("ativo");
+        realce.classList.add("ligado");
+        rot.textContent = "👆 " + a.getAttribute("data-nome");
+      }
+      function focado() { var f = document.activeElement; return f && svg.contains(f) && f.closest ? f.closest("a.uf") : null; }
+      // o selo de um estado pequeno vale pelo próprio estado
+      function doAlvo(t) {
+        var x = t && t.closest ? t.closest("a.uf, a.selo-link") : null;
+        return x && x.classList.contains("selo-link") ? svg.querySelector('a.uf[data-uf="' + x.getAttribute("data-uf") + '"]') : x;
+      }
+      svg.addEventListener("pointerover", function (e) { var a = doAlvo(e.target); if (a) levanta(a); });
+      svg.addEventListener("pointerleave", function () { levanta(focado()); });
+      svg.addEventListener("focusin", function (e) { levanta(e.target.closest("a.uf")); });
+      svg.addEventListener("focusout", function (e) { if (!svg.contains(e.relatedTarget)) levanta(null); });
+      document.getElementById("fonte-mapa").innerHTML = EP.botaoFontes([m.fonte], EP.tr("De onde vem este mapa?", "Where does this map come from?"));
+    }).catch(function () { falhou(mapa, "o mapa", "the map"); });
     document.getElementById("regioes").innerHTML = Object.keys(REGIOES).map(function (r) {
       return '<li><i style="background:' + REGIOES[r][2] + '" aria-hidden="true"></i>' + EP.tr(REGIOES[r][0], REGIOES[r][1]) + "</li>";
     }).join("");

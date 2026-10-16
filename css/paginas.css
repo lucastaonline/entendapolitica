@@ -107,16 +107,34 @@ html.alto-contraste .barra-partido.realce { outline: 3px solid #000; }
 .cartao-jud .ic-grande { font-size: 3rem; }
 .cartao-jud h2 { font-size: 1.3rem; }
 
-/* ---------- meu estado: mapa em quadradinhos ---------- */
-.mapa-uf { --t: 58px; display: grid; grid-template-columns: repeat(7, var(--t)); grid-auto-rows: var(--t); gap: 6px; justify-content: center; margin: 10px auto;
-  transform: perspective(1000px) rotateX(24deg); transform-style: preserve-3d; padding: 10px 0 30px; }
-.tile-uf {
-  position: relative; border: 0; border-radius: 12px; font: inherit; font-weight: 900; font-size: 1rem; color: #fff; cursor: pointer; text-decoration: none;
-  background: var(--cor, #1f3a5f); box-shadow: 0 6px 0 rgba(0, 0, 0, .28), 0 10px 14px rgba(0, 0, 0, .12); display: grid; place-items: center;
-  transition: transform .2s, box-shadow .2s; transform: translateZ(0);
-}
-.tile-uf:hover, .tile-uf:focus-visible { transform: translateY(-8px) translateZ(20px); box-shadow: 0 0 0 3px var(--ink), 0 14px 0 rgba(0, 0, 0, .28), 0 22px 20px rgba(0, 0, 0, .14); }
-.tile-uf.atual { background: var(--amarelo); color: #2a1d00; }
+/* ---------- meu estado: mapa do Brasil com o formato real dos estados (malha do IBGE) ---------- */
+.mapa-uf { margin: 6px auto 4px; padding: 0 0 10px; }
+.mapa-br { display: block; width: 100%; max-width: 640px; height: auto; margin: 0 auto; overflow: visible;
+  transform: perspective(1300px) rotateX(22deg); transform-origin: 50% 65%; }
+.mapa-br .lados { filter: drop-shadow(0 14px 12px rgba(31, 58, 95, .22)); }
+.mapa-br a { cursor: pointer; outline: none; }
+.mapa-br .topo { fill: var(--cor); stroke: #fbf7ee; stroke-width: 2; stroke-linejoin: round; }
+.mapa-br .sigla { fill: #fff; font-family: inherit; font-weight: 900; font-size: var(--sigla, 28px); text-anchor: middle; dominant-baseline: central; letter-spacing: .02em; pointer-events: none; }
+.mapa-br .selo { fill: var(--cor); stroke: #fff; stroke-width: 3; }
+.mapa-br .fio { stroke: var(--lado); stroke-width: 2.5; stroke-dasharray: 2 5; stroke-linecap: round; }
+.mapa-br .ponto { fill: #fff; stroke: var(--lado); stroke-width: 2.5; }
+.mapa-br .selo-link.ativo .selo { stroke: #f2b705; stroke-width: 6; }
+/* o estado "levantado" (mouse ou Tab): uma cópia desenhada por cima de todos, com borda amarela */
+.mapa-br .realce { pointer-events: none; visibility: hidden; }
+.mapa-br .realce.ligado { visibility: visible; }
+.mapa-br .r-lado { fill: var(--lado); }
+.mapa-br .r-anel { fill: none; stroke: #f2b705; stroke-width: 12; stroke-linejoin: round; }
+.mapa-br .r-topo { fill: var(--cor); stroke: #1b2430; stroke-width: 3; stroke-linejoin: round; }
+.mapa-br .r-anel, .mapa-br .r-topo, .mapa-br .r-sigla { transform: translateY(0); transition: transform .18s ease-out; }
+.mapa-br .realce.ligado .r-anel, .mapa-br .realce.ligado .r-topo, .mapa-br .realce.ligado .r-sigla { transform: translateY(-14px); }
+.mapa-br .realce.sem-anim * { transition: none !important; }
+html.alto-contraste .mapa-br .topo { stroke: #fff; stroke-width: 3; }
+html.alto-contraste .mapa-br .r-anel { stroke: #ffdd00; }
+html.alto-contraste .mapa-br .r-topo { stroke: #000; stroke-width: 4; }
+/* no mapa, o foco já aparece no estado levantado (borda amarela e preta): sem o retângulo e sem o sublinhado dos links */
+html.alto-contraste .mapa-br a { text-decoration: none; }
+html.alto-contraste .mapa-br a:focus-visible { outline: none !important; box-shadow: none !important; }
+.fonte-mapa { text-align: center; margin: 10px 0 0; }
 .rotulo-uf { text-align: center; font-weight: 900; font-size: 1.2rem; color: var(--brand); min-height: 1.6em; margin: 10px 0 0; }
 @media (hover: none) { .rotulo-uf { display: none; } }
 .regioes { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; font-size: .8rem; font-weight: 800; color: var(--muted); list-style: none; padding: 0; margin: 0; }
@@ -125,7 +143,6 @@ html.alto-contraste .barra-partido.realce { outline: 3px solid #000; }
 .escolhe-uf label { display: block; font-weight: 800; margin-bottom: 4px; text-align: center; }
 .escolhe-uf select { width: 100%; font: inherit; padding: 12px 14px; border-radius: 16px; border: 3px solid var(--line); background: #fff; color: var(--ink); min-height: 48px; }
 .escolhe-uf .ver-uf { width: 100%; margin-top: 12px; }
-@media (max-width: 600px) { .mapa-uf { --t: min(44px, calc((100vw - 64px) / 7)); gap: 4px; } .tile-uf { font-size: .8rem; border-radius: 9px; } }
 
 .cidade-busca { position: relative; max-width: 560px; }
 .cidade-busca label { display: block; font-weight: 800; margin-bottom: 6px; }
@@ -270,11 +287,11 @@ html.alto-contraste .papel-btn[aria-pressed="true"] small { color: #fff !importa
 }
 @media (prefers-reduced-motion: reduce) {
   .moldura .av { animation: none; transform: none; }
-  .tile-uf, .pessoa-grande, .barra-partido .trilho-p i { transition: none; }
-  a.pessoa-grande:hover, .tile-uf:hover, .tile-uf:focus-visible { transform: none; }
+  .pessoa-grande, .barra-partido .trilho-p i, .mapa-br .r-anel, .mapa-br .r-topo, .mapa-br .r-sigla { transition: none; }
+  a.pessoa-grande:hover { transform: none; }
 }
 html.sem-movimento .moldura .av { transform: none; }
-html.sem-movimento a.pessoa-grande:hover, html.sem-movimento .tile-uf:hover, html.sem-movimento .tile-uf:focus-visible { transform: none; }
+html.sem-movimento a.pessoa-grande:hover { transform: none; }
 
 /* ---------- imparcialidade.html e dados.html ---------- */
 /* o espaço da ilustração fica reservado antes de ela ser montada: assim a rolagem para #ia e #avisar não pula */

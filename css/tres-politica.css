@@ -154,6 +154,15 @@
 .plenario.cheio i.aceso { background: #f2b705; box-shadow: 0 2px 0 #b98a00; transform: translateY(-5px); transition-delay: 0s; }
 .plenario.tem-aceso.cheio i:not(.aceso) { background: #c9cfd8; box-shadow: 0 1px 0 #a9b1bd; transform: none; transition-delay: 0s; }
 .plenario .mesa { position: absolute; left: 41%; bottom: 0; width: 18%; height: 7%; border-radius: 8px 8px 0 0; background: #1f3a5f; }
+/* fatias por partido: nenhum partido tem cor própria; dois tons neutros, alternados, só separam uma fatia da vizinha */
+.plenario i.b { --cor: #6b7f96; }
+.plenario .marco { position: absolute; width: 0; height: 0; }
+.plenario.por-partido i { cursor: pointer; }
+.plenario.pronto i { transition-delay: 0s; }
+html.alto-contraste .plenario.cheio i { background: #000; box-shadow: none; }
+html.alto-contraste .plenario.cheio i.b { background: #6e6e6e; }
+html.alto-contraste .plenario.tem-aceso.cheio i:not(.aceso) { background: #d4d4d4; }
+html.alto-contraste .plenario.cheio i.aceso { background: #000; box-shadow: 0 0 0 2px #ffdd00; }
 
 /* ---------- megafone ---------- */
 .cena-megafone { height: 280px; }

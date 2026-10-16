@@ -39,6 +39,9 @@
 
    ILUSTRAÇÕES ("ilustracao"): congresso, tres-poderes, niveis, urna, constituicao, balanca, lei, cofre, mapa,
    plenario, megafone, predio, palacio, escola, tribunal, cargos, palanque. Se precisar de outra coisa, use "emoji".
+
+   LINK (qualquer slide, opcional): "link": { "url":"brasil.html#os-ministros", "ic":"👔", "txt":"Ver os ministérios de hoje" }
+   vira um botão no fim do slide. Só aceita páginas do próprio site (no inglês, o link já leva ?lang=en).
    ====================================================================== */
 (function () {
   "use strict";
@@ -125,6 +128,14 @@
   }
   var DET = [];
   function det(titulo, html) { DET.push({ t: titulo, h: html }); return DET.length - 1; }
+  var PAGINAS_SITE = /^(index|entenda|brasil|estado|cidade|dados|imparcialidade)\.html(\?[\w=&-]*)?(#[\w-]+)?$/;
+  function linkDoSlide(s) {
+    var l = s.link;
+    if (!l || !l.url || !PAGINAS_SITE.test(l.url)) return "";
+    var u = EP.en ? l.url.replace(/^([^?#]+)(\?[^#]*)?/, function (m, arq, q) { return arq + (q ? q + "&" : "?") + "lang=en"; }) : l.url;
+    return '<p class="link-slide anim" style="--i:9"><a class="btn peq claro" href="' + esc(u) + '">' + (l.ic ? '<span aria-hidden="true">' + esc(l.ic) + " </span>" : "") +
+      md(l.txt || "") + ' <span aria-hidden="true">›</span></a></p>';
+  }
 
   var R = {};
   R.abertura = function (s, P) {
@@ -301,7 +312,7 @@
         var html, cls = "";
         if (it.fim) html = fimHtml(P);
         else {
-          html = (R[it.s.tipo] || R.explica)(it.s, P, i);
+          html = (R[it.s.tipo] || R.explica)(it.s, P, i) + linkDoSlide(it.s);
           if (it.s.tipo === "quiz") QUIZ[i] = { primeira: null };
           cls = "t-" + it.s.tipo;
         }

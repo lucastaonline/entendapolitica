@@ -2,7 +2,7 @@
  "parte": 4,
  "ic": "👔",
  "nome": "Each office, one by one",
- "resumo": "Who does what: president, governor, mayor, senator, deputies and city councilor, with term of office, minimum age, salary and party.",
+ "resumo": "Who does what: president, governor, mayor, senator, deputies and city councilor, with term of office, minimum age, salary and party, and what the ministries are.",
  "fontes": [
   {
    "id": "cf-art14",
@@ -130,6 +130,54 @@
    "titulo": "Federal Constitution, arts. 76, 84 (I and XIII) and 87 (in Portuguese)",
    "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
    "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "cf-art88",
+   "veiculo": "Planalto",
+   "titulo": "Federal Constitution, art. 88 (a law creates and abolishes ministries) (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05",
+   "lang": "en"
+  },
+  {
+   "id": "lei-14600",
+   "veiculo": "Planalto",
+   "titulo": "Law 14,600/2023: how the ministries are organized (conversion of Provisional Measure 1,154/2023); what each ministry does is in arts. 29, 30, 36, 44 and 45 (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2023/lei/l14600.htm",
+   "data": "2023-06-19",
+   "lang": "en"
+  },
+  {
+   "id": "lei-13844",
+   "veiculo": "Planalto",
+   "titulo": "Law 13,844/2019: how the ministries are organized (conversion of Provisional Measure 870/2019) (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2019/lei/l13844.htm",
+   "data": "2019-06-18",
+   "lang": "en"
+  },
+  {
+   "id": "mp-870",
+   "veiculo": "Planalto",
+   "titulo": "Provisional Measure 870, of January 1, 2019: organization of the ministries (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2019/mpv/mpv870.htm",
+   "data": "2019-01-01",
+   "lang": "en"
+  },
+  {
+   "id": "mp-1154",
+   "veiculo": "Planalto",
+   "titulo": "Provisional Measure 1,154, of January 1, 2023: organization of the ministries (in Portuguese)",
+   "url": "https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2023/mpv/mpv1154.htm",
+   "data": "2023-01-01",
+   "lang": "en"
+  },
+  {
+   "id": "planalto-ministros",
+   "veiculo": "Presidência da República (Planalto)",
+   "titulo": "Ministers (official list of the top tier; page updated on May 5, 2026) (in Portuguese)",
+   "url": "https://www.gov.br/planalto/pt-br/conheca-a-presidencia/ministros-e-ministras",
+   "data": "2026-05-05",
    "lang": "en"
   },
   {
@@ -343,6 +391,18 @@
   {
    "termo": "minister",
    "simples": "A person chosen by the president to take care of an area of the government, like health or education."
+  },
+  {
+   "termo": "ministry",
+   "simples": "A part of the federal government that takes care of one subject, such as health or education. It is led by a minister. In Portuguese: {{ministério}}."
+  },
+  {
+   "termo": "provisional measure",
+   "simples": "A rule that the president creates in urgent cases. It applies right away, but only for a while. In Portuguese: {{medida provisória}} (MP)."
+  },
+  {
+   "termo": "SUS",
+   "simples": "{{Sistema Único de Saúde}} (Unified Health System): free public health care all over Brazil."
   },
   {
    "termo": "secretaries",
@@ -680,6 +740,64 @@
     "ce-sp",
     "lom-sp",
     "cf-art101"
+   ]
+  },
+  {
+   "tipo": "cards",
+   "etiqueta": "THE MINISTRIES",
+   "titulo": "What is a ministry?",
+   "texto": "It is a part of the federal government that takes care of one subject. Each ministry is led by a person chosen by the President: the **minister**. Flip the cards to meet some of them!",
+   "cards": [
+    {
+     "ic": "🩺",
+     "titulo": "Health",
+     "txt": "Takes care of the country's health policy and coordinates the **SUS**, Brazil's public health system.",
+     "mais": "It also keeps an eye on the quality of medicines and food and supports health research."
+    },
+    {
+     "ic": "📚",
+     "titulo": "Education",
+     "txt": "Takes care of the country's education policy, from daycare to university.",
+     "mais": "It also evaluates teaching and helps low-income families keep their children in school."
+    },
+    {
+     "ic": "💰",
+     "titulo": "Finance",
+     "txt": "Takes care of the federal government's money: federal taxes, accounts and debts.",
+     "mais": "It also keeps track of prices and of the country's economy."
+    },
+    {
+     "ic": "🌳",
+     "titulo": "Environment",
+     "txt": "Takes care of forests, nature and the policy on climate change.",
+     "mais": "It also runs programs for the Amazon and for Brazil's other large natural regions, the biomes."
+    },
+    {
+     "ic": "🌍",
+     "titulo": "Foreign Affairs",
+     "txt": "Takes care of Brazil's relations with other countries.",
+     "mais": "It also runs Brazil's embassies and consulates around the world and the negotiations with other countries."
+    },
+    {
+     "ic": "🔢",
+     "titulo": "How many are there?",
+     "txt": "It depends on the government: the list and the names change. A **law** decides.",
+     "mais": "In 2019 and in 2023, the government that was starting changed the list of ministries with a provisional measure, and Congress turned it into law."
+    }
+   ],
+   "link": {
+    "url": "brasil.html#os-ministros",
+    "ic": "👔",
+    "txt": "See today's ministries and who leads each one"
+   },
+   "fontes": [
+    "cf-art76-84-87",
+    "cf-art88",
+    "lei-14600",
+    "lei-13844",
+    "mp-870",
+    "mp-1154",
+    "planalto-ministros"
    ]
   },
   {

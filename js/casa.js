@@ -56,13 +56,22 @@
     var VIS = 999; // todos os partidos aparecem (esconder os menores daria destaque só aos maiores)
 
     var plen = T.plenario ? T.plenario({ total: total, grupos: porPartido.map(function (p) { return p.n; }), max: total > 300 ? 520 : total > 60 ? 440 : 380 }) : "";
+    // a sigla de cada partido em cima da sua fatia. Só aparece sozinha quando a fatia é larga e a sigla não encosta numa
+    // de partido maior; as outras aparecem ao passar o mouse ou tocar no partido
+    var minSigla = Math.max(2, total * 0.03);
+    // quando a sigla precisa ficar longe da fatia (por falta de espaço), uma linha fina liga as duas
+    var siglas = plen ? '<div class="plen-rotulos" aria-hidden="true"><svg class="plen-linhas">' +
+      porPartido.map(function (p, k) { return '<line class="lin-p" data-g="' + k + '"></line>'; }).join("") + "</svg>" + porPartido.map(function (p, k) {
+      return '<span class="rot-p' + (k % 2 ? " b" : "") + (p.n >= minSigla ? " grande" : "") + '" data-g="' + k + '"><b>' + esc(nomePartido(p.partido)) + "</b><small>" + EP.num(p.n) + "</small></span>";
+    }).join("") + "</div>" : "";
     var mulheres = membros.filter(function (m) { return m.genero === "F"; }).length;
     var homens = membros.filter(function (m) { return m.genero === "M"; }).length;
     var ufs = {};
     membros.forEach(function (m) { if (m.uf) ufs[m.uf] = 1; });
     var listaUF = Object.keys(ufs).sort(function (a, b) { return EP.norm(EP.UFS[a] || a).localeCompare(EP.norm(EP.UFS[b] || b)); });
     var h = "h" + nivel;
-    var cadeira = EP.en ? "Each seat is one " + nomes.um + "." : "Cada cadeira é " + (/^(pessoa|deputada|senadora|vereadora)/.test(nomes.um) ? "uma " : "um ") + nomes.um + ".";
+    var cadeira = EP.en ? "Each seat is one " + nomes.um + ". Each slice is one party." :
+      "Cada cadeira é " + (/^(pessoa|deputada|senadora|vereadora)/.test(nomes.um) ? "uma " : "um ") + nomes.um + ". Cada fatia é um partido.";
 
     function textoContagem(n) {
       return n === total ? EP.tr("Mostrando todos os " + EP.num(total) + " " + (o.coletivo || nomes.varios) + ", em ordem alfabética.",
@@ -71,7 +80,7 @@
     }
 
     el.innerHTML =
-      '<div class="casa-resumo"><div class="plen-box rev">' + plen + "<p>" + esc(cadeira) + (o.notaPlenario ? " " + esc(o.notaPlenario) : "") + "</p></div>" +
+      '<div class="casa-resumo"><div class="plen-box rev"><div class="plen-area">' + plen + siglas + "</div><p>" + esc(cadeira) + (o.notaPlenario ? " " + esc(o.notaPlenario) : "") + "</p></div>" +
       '<div class="partidos rev" style="--i:1"><' + h + ' class="tit-p" id="' + uid + '-tit">' + EP.tr("Quantos de cada partido", "Seats per party") + "</" + h + ">" +
       '<div class="barras-p" role="group" aria-labelledby="' + uid + '-tit">' +
       porPartido.map(function (p, k) {
@@ -80,8 +89,8 @@
           '<span class="n-p">' + EP.num(p.n) + '</span><span class="sr"> ' + esc(p.n === 1 ? nomes.um : nomes.varios) + "</span></button>";
       }).join("") + "</div>" +
       (porPartido.length > VIS ? '<button type="button" class="mais-p">' + EP.tr("Ver todos os " + porPartido.length + " partidos", "See all " + porPartido.length + " parties") + ' <span aria-hidden="true">▾</span></button>' : "") +
-      '<p class="explica-p">' + EP.tr("Partido é um grupo de pessoas que se juntam para disputar eleições e defender ideias parecidas. Toque num partido para ver só quem é dele. A ordem vai do partido com mais cadeiras para o com menos: é só uma contagem, não um ranking. Todos os partidos têm a mesma cor aqui, de propósito.",
-        "A party is a group of people who join together to run in elections and defend similar ideas. Tap a party to see only its members. The order goes from the party with the most seats to the one with the fewest: it is just a count, not a ranking. All parties have the same color here, on purpose.") + "</p></div></div>" +
+      '<p class="explica-p">' + EP.tr("Partido é um grupo de pessoas que se juntam para disputar eleições e defender ideias parecidas. No plenário, cada fatia é um partido: passe o mouse num partido (aqui na lista ou nas cadeiras) para acender as cadeiras dele, e toque ou clique para ver só quem é dele. As fatias e a lista vão do partido com mais cadeiras para o com menos: é só uma contagem, não um ranking. Nenhum partido tem cor própria, de propósito: os dois tons de azul só separam uma fatia da outra.",
+        "A party is a group of people who join together to run in elections and defend similar ideas. In the chamber, each slice is one party: hover over a party (here in the list or on the seats) to light up its seats, and tap or click it to see only its members. The slices and the list go from the party with the most seats to the one with the fewest: it is just a count, not a ranking. No party has its own color, on purpose: the two shades of blue only separate one slice from the next.") + "</p></div></div>" +
       (mulheres + homens ? '<p class="sabia rev"><span aria-hidden="true">💡</span><span>' +
         (EP.en ? "Did you know? Right now there are <b>" + EP.num(mulheres) + (mulheres === 1 ? " woman" : " women") + "</b> and <b>" + EP.num(homens) + (homens === 1 ? " man" : " men") + "</b> in this list."
           : "Você sabia? Hoje são <b>" + EP.plural(mulheres, nomes.uma, nomes.varias) + "</b> e <b>" + EP.plural(homens, nomes.um, nomes.varios) + "</b>.") + "</span></p>" : "") +
@@ -103,6 +112,117 @@
     EP.comboSelect(fPart, { placeholder: EP.tr("Digite o partido…", "Type a party…") });
     var grade = el.querySelector(".grade-pessoas"), contagem = el.querySelector(".contagem"), plenEl = el.querySelector(".plenario");
     var LOTE = 60, mostrando = LOTE;
+    var area = el.querySelector(".plen-area"), barrasEl = el.querySelector(".barras-p");
+    var siglasEls = [].slice.call(el.querySelectorAll(".rot-p")), linhasEls = [].slice.call(el.querySelectorAll(".lin-p"));
+    var barras = [].slice.call(el.querySelectorAll(".barra-partido"));
+    var cadeirasDe = {};
+    if (plenEl) [].forEach.call(plenEl.querySelectorAll("i[data-g]"), function (c) { var g = c.getAttribute("data-g"); (cadeirasDe[g] = cadeirasDe[g] || []).push(c); });
+
+    // partido aceso no plenário: o que está sob o mouse ou com o foco do teclado (só para olhar) ou, sem isso, o escolhido no filtro
+    var escolhido = null, espiando = null, origemEspia = null, aceso = null;
+    function acende() {
+      var g = espiando != null ? espiando : escolhido;
+      if (g !== aceso) {
+        (cadeirasDe[aceso] || []).forEach(function (c) { c.classList.remove("aceso"); });
+        (cadeirasDe[g] || []).forEach(function (c) { c.classList.add("aceso"); });
+        aceso = g;
+        if (plenEl) plenEl.classList.toggle("tem-aceso", g != null);
+        if (area) area.classList.toggle("tem-aceso", g != null);
+        siglasEls.concat(linhasEls).forEach(function (s) { s.classList.toggle("ativo", +s.getAttribute("data-g") === g); });
+      }
+      barras.forEach(function (b) { b.classList.toggle("realce", espiando != null && +b.getAttribute("data-g") === espiando); });
+    }
+    // origem: "mouse" ou "teclado". Quando um sai, o outro continua valendo (o mouse saiu, mas o foco ainda está num partido)
+    function espia(g, origem) {
+      if (g == null && origem !== origemEspia) return;
+      origemEspia = g == null ? null : origem;
+      if (g !== espiando) { espiando = g; acende(); }
+    }
+    function grupoDe(alvo) {
+      var x = alvo && alvo.closest ? alvo.closest(".barra-partido, .plenario i[data-g], .rot-p") : null;
+      return x && el.contains(x) ? +x.getAttribute("data-g") : null;
+    }
+    // no toque não existe "passar por cima": tocar já escolhe o partido (ver o clique, mais abaixo)
+    [barrasEl, area].forEach(function (zona) {
+      if (!zona) return;
+      zona.addEventListener("pointerover", function (e) {
+        if (e.pointerType === "touch") return;
+        var g = grupoDe(e.target);
+        if (g != null) espia(g, "mouse");
+      });
+      zona.addEventListener("pointerleave", function (e) { if (e.pointerType !== "touch") espia(null, "mouse"); });
+    });
+    if (barrasEl) {
+      barrasEl.addEventListener("focusin", function (e) {
+        var b = e.target.closest(".barra-partido"), teclado = true;
+        try { teclado = b.matches(":focus-visible"); } catch (x) {}
+        if (b && teclado) espia(+b.getAttribute("data-g"), "teclado");
+      });
+      barrasEl.addEventListener("focusout", function (e) { if (!barrasEl.contains(e.relatedTarget)) espia(null, "teclado"); });
+    }
+
+    // põe cada sigla do lado de fora da sua fatia, sem cobrir nenhuma cadeira. O plenário está inclinado em 3D: a posição vem do
+    // marco invisível de cada fatia. Se a borda da área não deixar ir para fora, a sigla sobe. Indo do maior partido para o menor,
+    // a sigla que encostaria numa já posta fica escondida (aparece ao passar o mouse ou tocar no partido).
+    function posSiglas() {
+      if (!area || !plenEl || !siglasEls.length) return;
+      var ra = area.getBoundingClientRect(), mc = plenEl.querySelector(".marco.centro");
+      if (!ra.width || !mc) return;
+      function relativa(el) { var b = el.getBoundingClientRect(); return { l: b.left - ra.left, r: b.right - ra.left, t: b.top - ra.top, b: b.bottom - ra.top }; }
+      function bate(c, lista) { return lista.some(function (q) { return c.l < q.r && c.r > q.l && c.t < q.b && c.b > q.t; }); }
+      var cads = [].map.call(plenEl.querySelectorAll("i"), relativa), postas = [];
+      var rc = relativa(mc), cx = rc.l, cy = rc.t;
+      siglasEls.forEach(function (s) {
+        var m = plenEl.querySelector('.marco[data-g="' + s.getAttribute("data-g") + '"]');
+        if (!m) return;
+        var rm = relativa(m), w = s.offsetWidth, h = s.offsetHeight, dx = rm.l - cx, dy = rm.t - cy, d = Math.sqrt(dx * dx + dy * dy) || 1;
+        dx /= d;
+        dy /= d;
+        // distância do centro da sigla até a borda dela, na direção de fora
+        var ate = Math.min(Math.abs(dx) > 0.01 ? w / 2 / Math.abs(dx) : 1e6, Math.abs(dy) > 0.01 ? h / 2 / Math.abs(dy) : 1e6) + 2;
+        var lugares = [], k;
+        for (k = 0; k <= 4; k++) lugares.push([rm.l + dx * (ate + 6 * k), rm.t + dy * (ate + 6 * k)]);
+        for (k = 1; k <= 16; k++) lugares.push([rm.l + dx * ate, rm.t + dy * ate - 6 * k]);
+        lugares = lugares.map(function (p) {
+          var x = Math.max(w / 2 + 2, Math.min(ra.width - w / 2 - 2, p[0])), y = Math.max(h / 2 + 2, Math.min(ra.height - h / 2, p[1]));
+          return { x: x, y: y, c: { l: x - w / 2 - 4, r: x + w / 2 + 4, t: y - h / 2 - 3, b: y + h / 2 + 3 } };
+        });
+        var livre = null, semCadeira = null;
+        lugares.some(function (p) {
+          if (bate(p.c, cads)) return false;
+          if (!semCadeira) semCadeira = p;
+          if (bate(p.c, postas)) return false;
+          livre = p;
+          return true;
+        });
+        var p = livre || semCadeira || lugares[0];
+        s.style.left = p.x.toFixed(1) + "px";
+        s.style.top = p.y.toFixed(1) + "px";
+        var cabe = !!livre && s.classList.contains("grande");
+        s.classList.toggle("cabe", cabe);
+        if (cabe) postas.push(p.c);
+        // a linha vai do marco da fatia até o ponto mais perto da sigla; só aparece se a sigla ficou longe
+        var lin = linhasEls[+s.getAttribute("data-g")];
+        if (lin) {
+          var qx = Math.max(p.x - w / 2, Math.min(p.x + w / 2, rm.l)), qy = Math.max(p.y - h / 2, Math.min(p.y + h / 2, rm.t));
+          lin.setAttribute("x1", rm.l.toFixed(1));
+          lin.setAttribute("y1", rm.t.toFixed(1));
+          lin.setAttribute("x2", qx.toFixed(1));
+          lin.setAttribute("y2", qy.toFixed(1));
+          lin.classList.toggle("longe", Math.sqrt((qx - rm.l) * (qx - rm.l) + (qy - rm.t) * (qy - rm.t)) > 12);
+          lin.classList.toggle("cabe", cabe);
+        }
+      });
+    }
+    var pedido = 0;
+    function pedeSiglas() { cancelAnimationFrame(pedido); pedido = requestAnimationFrame(posSiglas); }
+    if (area && siglasEls.length) {
+      if ("ResizeObserver" in window) new ResizeObserver(pedeSiglas).observe(area);
+      else window.addEventListener("resize", pedeSiglas);
+      window.addEventListener("ep-a11y", pedeSiglas);
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(pedeSiglas);
+      pedeSiglas();
+    }
 
     function filtrados() {
       var q = EP.norm(fNome.value), uf = fUF ? fUF.value : "", pa = fPart.value;
@@ -124,11 +244,8 @@
       if (contagem.textContent !== txt) contagem.textContent = txt;
       // acende as cadeiras do partido escolhido
       var pa = fPart.value;
-      if (plenEl) {
-        var g = pa ? idxPartido[pa] : null;
-        plenEl.classList.toggle("tem-aceso", g != null);
-        [].forEach.call(plenEl.querySelectorAll("i"), function (c) { c.classList.toggle("aceso", g != null && +c.getAttribute("data-g") === g); });
-      }
+      escolhido = pa && idxPartido[pa] != null ? idxPartido[pa] : null;
+      acende();
       [].forEach.call(el.querySelectorAll(".barra-partido"), function (b) {
         var on = pa !== "" && +b.getAttribute("data-g") === idxPartido[pa];
         b.setAttribute("aria-pressed", String(on));
@@ -145,7 +262,8 @@
     if (fUF) fUF.addEventListener("change", function () { mostrando = LOTE; desenha(); });
     fPart.addEventListener("change", function () { mostrando = LOTE; desenha(); });
     el.addEventListener("click", function (e) {
-      var b = e.target.closest(".barra-partido");
+      // tocar ou clicar num partido (na lista, numa cadeira ou na sigla) mostra só quem é dele; de novo, mostra todos
+      var b = e.target.closest(".barra-partido, .plenario i[data-g], .rot-p");
       if (b) {
         var p = porPartido[+b.getAttribute("data-g")].partido;
         fPart.value = fPart.value === p ? "" : p;
@@ -172,7 +290,12 @@
 
     // anima o plenário e as barras quando aparecem na tela
     function anima() {
-      if (plenEl) plenEl.classList.add("cheio");
+      if (plenEl) {
+        plenEl.classList.add("cheio");
+        // depois de encher, as cadeiras acendem e apagam juntas (sem a onda da entrada)
+        setTimeout(function () { plenEl.classList.add("pronto"); }, 1600);
+      }
+      if (area) area.classList.add("cheio");
       [].forEach.call(el.querySelectorAll(".trilho-p i"), function (i) { i.style.width = i.getAttribute("data-w"); });
     }
     if ("IntersectionObserver" in window && !EP.reduzido) {

@@ -11,7 +11,9 @@ Mesma identidade visual do [Entenda o 2º turno](https://entendaosegundoturno.ve
 3. **A política do meu estado** (`estado.html`): governador e vice, os senadores e deputados federais do estado e os deputados estaduais. No fim, um campo leva para a página da cidade.
 4. **A política da minha cidade** (`cidade.html`): a pessoa digita o nome da cidade (as 5.569 do Brasil, com o estado ao lado para desempatar) e vê prefeito, vice e vereadores, além do que cada um faz. Brasília e Fernando de Noronha têm explicação própria (não têm prefeitura comum). Endereço: `cidade.html?ibge=<código IBGE>`; os endereços antigos `estado.html?uf=XX&cidade=<IBGE>` levam para lá.
 
-Cada pessoa tem uma página (`pessoa.html?id=...`) com ficha, propostas (com explicação simples + texto oficial + link da fonte), situação de cada proposta, votações, gastos e eleições.
+Cada pessoa tem uma página (`pessoa.html?id=...`) com ficha, propostas (com explicação simples + texto oficial + link da fonte), situação de cada proposta, votações, gastos e eleições. O botão **Voltar** leva para a página de onde a pessoa veio (o Brasil, o estado, a cidade ou a busca), guardada nesta aba pelo `js/comum.js` (`EP.gravaVolta`/`EP.leVolta`); se ela veio direto de lá, usa o histórico do navegador, e a lista reaparece como estava. Aberto por link direto, vai para a lista do cargo.
+
+Cada Casa (Senado, Câmara, Assembleia, Câmara Municipal) tem um **plenário 3D por partido**: cada fatia é um partido, do maior para o menor, com a sigla em cima (as que não cabem aparecem ao passar o mouse). Passar o mouse num partido (na lista, numa cadeira ou na sigla), ou chegar nele com o Tab, acende as cadeiras dele em amarelo; tocar ou clicar mostra só quem é dele.
 
 ## Idiomas (português e inglês)
 
@@ -25,6 +27,7 @@ O site tem versão em inglês para quem é de fora do Brasil (`?lang=en`; a esco
 
 - Menu ♿ em todas as páginas: tamanho da letra (4 tamanhos), alto contraste, menos movimento, mais espaço no texto, ouvir a página (voz do aparelho), Libras (VLibras, do governo federal) e idioma. As escolhas ficam salvas e são aplicadas antes de a página aparecer (script curto no `<head>`).
 - Tudo funciona pelo teclado; janelas prendem o foco e fecham com Esc; o mapa 3D tem lista alternativa (📋) e cada parada é um botão com nome; as setas giram o mapa e trocam as páginas das aulas.
+- Ao voltar de um perfil para a lista, a página rola até quem foi aberto e põe o foco nele (quem usa teclado ou leitor de tela continua de onde parou). O plenário é só desenho (`aria-hidden`): tudo o que ele mostra está também na lista de partidos, que são botões.
 - Respeita "reduzir movimento" do aparelho. Textos oficiais e termos em português dentro da página em inglês têm `lang="pt-BR"`.
 - **Nenhum `<select>` comum:** toda lista de escolha é um campo com busca (`EP.combo` e `EP.comboSelect`, em `js/comum.js`, no padrão ARIA 1.2 de combobox com lista). A pessoa digita e as opções aparecem; vale sem acento e fora de ordem ("bom jesus pi"), e cada palavra digitada precisa ser o começo de uma palavra da opção (se assim não achar nada, vale qualquer pedaço). Setas, Enter e Esc funcionam; o leitor de tela ouve quantas opções há.
 - Auditoria automática: `python testes/acessibilidade.py pagina.html "pagina.html?lang=en" [--mobile]` (axe-core, WCAG 2.2 AA).
@@ -42,7 +45,7 @@ Mandatos: o site mostra **quem está no cargo hoje** e marca quem foi **eleito/r
 1. **Mesma régua para todos.** Os mesmos campos, calculados do mesmo jeito, para todo mundo.
 2. **Fonte em tudo.** Todo bloco de informação tem `fonte` (órgão oficial: Câmara, Senado, TSE, IBGE, Planalto, Diário Oficial; ou imprensa quando não houver fonte oficial).
 3. **Ordem neutra.** Listas em ordem alfabética. Nada de ranking de "melhor" ou "pior".
-4. **Sem cores de partido.** Partidos aparecem com a mesma cor neutra.
+4. **Sem cores de partido.** Nenhum partido tem cor própria. No plenário, cada fatia é um partido e as fatias alternam dois tons neutros de azul só para separar uma da vizinha (do maior partido para o menor); o partido em destaque acende em amarelo.
 5. **Linguagem neutra.** Sem adjetivos de valor ("bom", "ruim", "polêmico", "importante"). Explicações simples dizem **o que a proposta faz**, nunca se é boa.
 6. **Quem fez de verdade.** Separar **autor(a) principal** de **coautor(a)** (quem só assinou junto).
 7. **Contexto nos números.** Ex.: "propor muitos projetos não quer dizer trabalhar mais ou melhor".
@@ -65,7 +68,7 @@ css/tres-politica.css peças 3D novas (Congresso, Três Poderes, níveis, escola
 css/mapa.css          o mundo 3D do mapa (chão, lotes, placas, câmera)
 css/entenda.css       as aulas (slides em 3D)
 js/comum.js           idioma, acessibilidade, janela, fontes, ouvir, Libras, formatação, listas com busca (EP.combo), compartilhar
-js/casa.js            monta uma Casa (Senado, Câmara, Assembleia, Câmara Municipal): plenário 3D, filtros e lista de cartões
+js/casa.js            monta uma Casa (Senado, Câmara, Assembleia, Câmara Municipal): plenário 3D com fatias e siglas por partido, filtros e lista de cartões
 js/brasil.js, js/estado.js, js/cidade.js, js/pessoa.js   as páginas do Brasil, do estado, da cidade e de cada pessoa
 js/tres.js, js/tres-politica.js   montam as peças 3D (cada modelo tem modo "cena" e modo "mundo")
 js/mapa3d.js          monta o mapa 3D, câmera (voar até um lugar), girar, zoom, lista acessível
@@ -266,7 +269,7 @@ Cada parada do mapa é uma "parte". A versão em inglês tem exatamente os mesmo
 }
 ```
 
-Tipos de slide: `abertura`, `explica`, `cards` (cartões que viram), `passos` (escada 3D), `comparar` (portas que abrem), `numeros` (blocos que caem), `historia` (quadrinhos que folheiam), `quiz` (peças 3D), `simulador` (`quem-cuida`, `quociente`, `caminho-lei`). Os campos de cada tipo e as ilustrações disponíveis estão descritos no começo de `js/entenda.js`. Para testar uma parte nova sem mexer nas outras: `entenda.html?teste=1` carrega `testes/parte-teste.json` como parte 1.
+Tipos de slide: `abertura`, `explica`, `cards` (cartões que viram), `passos` (escada 3D), `comparar` (portas que abrem), `numeros` (blocos que caem), `historia` (quadrinhos que folheiam), `quiz` (peças 3D), `simulador` (`quem-cuida`, `quociente`, `caminho-lei`). Os campos de cada tipo e as ilustrações disponíveis estão descritos no começo de `js/entenda.js`. Qualquer slide pode ter um botão para outra página do próprio site: `"link": { "url": "brasil.html#os-ministros", "ic": "👔", "txt": "Ver os ministérios de hoje" }` (só aceita páginas do site; no inglês, o link já leva `?lang=en`). Para testar uma parte nova sem mexer nas outras: `entenda.html?teste=1` carrega `testes/parte-teste.json` como parte 1.
 
 ## Publicar
 

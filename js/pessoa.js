@@ -544,6 +544,55 @@
     return h;
   }
 
+  // ---------------------------------------------------------------- "Voltar"
+  // Volta para a página de onde a pessoa veio (o Brasil, um estado, uma cidade ou a busca da página inicial), e não sempre para a
+  // lista do cargo. Se veio direto de lá, usa o histórico do navegador: a lista reaparece como estava (filtros e rolagem).
+  // Sem pista de onde veio (link compartilhado, por exemplo), vai para a lista do cargo.
+  var LISTAS = /^(index|brasil|estado|cidade)\.html/;
+  function combina(pagina, p) {
+    var m = /^estado\.html\?uf=([a-z]{2})/i.exec(pagina);
+    if (m) return String(p.uf || "").toUpperCase() === m[1].toUpperCase();
+    m = /^cidade\.html\?ibge=(\d+)/.exec(pagina);
+    if (m) return !!p.municipio && String(p.municipio.ibge) === m[1];
+    return LISTAS.test(pagina);
+  }
+  function nomeVolta(pagina) {
+    var m = /^estado\.html\?uf=([a-z]{2})/i.exec(pagina);
+    if (m) return EP.tr("Voltar para a política " + EP.doEstado(m[1].toUpperCase()), "Back to the politics " + EP.doEstado(m[1].toUpperCase()));
+    if (/^cidade\.html/.test(pagina)) return EP.tr("Voltar para a política da cidade", "Back to the city's politics");
+    if (/^brasil\.html/.test(pagina)) return EP.tr("Voltar para a política do Brasil", "Back to Brazil's politics");
+    if (/^index\.html/.test(pagina)) return EP.tr("Voltar para a página inicial", "Back to the home page");
+    return EP.tr("Voltar para a lista", "Back to the list");
+  }
+  function ligaVoltar(p) {
+    var volta = document.getElementById("voltar-lista");
+    if (!volta) return;
+    var v = EP.leVolta(), ref = null, destino = null, peloHistorico = false, mexeu = false;
+    try { if (document.referrer && new URL(document.referrer).origin === location.origin) ref = EP.endereco(document.referrer); } catch (e) {}
+    if (ref && LISTAS.test(ref)) {
+      destino = v && v.pagina === ref ? v : { pagina: ref, secao: "", id: id };
+      peloHistorico = history.length > 1;
+    } else if (v && combina(v.pagina, p)) destino = v;
+    if (!destino) {
+      var federal = /^(dep|sen|pres|vp|min)$/.test(p.tipo);
+      destino = { pagina: federal ? "brasil.html" : p.municipio ? "cidade.html?ibge=" + p.municipio.ibge : "estado.html?uf=" + p.uf,
+        secao: federal ? { dep: "camara", sen: "senado" }[p.tipo] || "executivo" : "", id: id };
+    }
+    var nome = nomeVolta(destino.pagina);
+    volta.href = destino.pagina + (EP.en ? (destino.pagina.indexOf("?") > -1 ? "&" : "?") + "lang=en" : "") + (destino.secao ? "#" + destino.secao : "");
+    volta.removeAttribute("data-en-aria-label");
+    volta.removeAttribute("data-en-title");
+    volta.setAttribute("aria-label", nome);
+    volta.title = nome;
+    // um link para dentro da página (ex.: "Pular para o conteúdo") também entra no histórico: aí o "voltar" do navegador não serve
+    window.addEventListener("hashchange", function () { mexeu = true; });
+    volta.addEventListener("click", function (e) {
+      if (e.button || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
+      EP.gravaVolta({ pagina: destino.pagina, secao: destino.secao || "", id: destino.id || id, y: destino.y || 0, voltando: Date.now() });
+      if (peloHistorico && !mexeu) { e.preventDefault(); history.back(); }
+    });
+  }
+
   // ---------------------------------------------------------------- montar
   function render(p) {
     P = p;
@@ -561,10 +610,7 @@
     var o = document.getElementById("onde");
     o.removeAttribute("data-en");
     o.textContent = p.nome;
-    var volta = document.getElementById("voltar-lista");
-    if (/^(dep|sen|pres|vp|min)$/.test(p.tipo)) volta.href = "brasil.html#" + ({ dep: "camara", sen: "senado" }[p.tipo] || "executivo");
-    else if (p.municipio) volta.href = "cidade.html?ibge=" + p.municipio.ibge + (EP.en ? "&lang=en" : "");
-    else volta.href = "estado.html?uf=" + p.uf;
+    ligaVoltar(p);
 
     var todas = coletarFontes(p);
     raiz.innerHTML = topoHtml(p) + fatosHtml(p) + anterioresHtml(p) + contatosHtml(p) + oqueFazHtml(p) +

@@ -95,6 +95,8 @@
 
   // ---------------------------------------------------------------- plenário (cadeiras em semicírculo, responsivo)
   // o.total ou o.linhas; o.grupos = [n1, n2, ...] marca "fatias" (data-g) da esquerda para a direita; o.max = largura máxima em px.
+  // Com o.grupos, as fatias vizinhas alternam dois tons neutros (classe "b" nas fatias ímpares) e cada fatia ganha um marco
+  // invisível no meio da borda de fora (<b class="marco" data-g>), mais um no centro: servem para pôr a sigla em cima da fatia.
   T.plenario = function (o) {
     o = o || {};
     var W = 1000, H = 560, cx = 500, cy = 540, rMax = 480;
@@ -119,13 +121,24 @@
     var espaco = (Math.PI * somaR / Math.max(1, lugares.length)) * (max / W);
     var tam = Math.max(3, Math.min(16, Math.round(espaco * 0.72)));
     lugares.sort(function (a, b) { return b.a - a.a; });
-    var grupoDe = [];
+    var grupoDe = [], faixa = [];
     (o.grupos || []).forEach(function (n, g) { for (var k = 0; k < n; k++) grupoDe.push(g); });
+    function pos(x, y) { return "left:" + (100 * x / W).toFixed(2) + "%;top:" + (100 * y / H).toFixed(2) + "%"; }
     var h = lugares.map(function (l, k) {
-      return '<i style="left:' + (100 * l.x / W).toFixed(2) + "%;top:" + (100 * l.y / H).toFixed(2) + "%;--k:" + (k % 120) + '"' +
-        (grupoDe[k] != null ? ' data-g="' + grupoDe[k] + '"' : "") + "></i>";
+      var g = grupoDe[k];
+      if (g != null) {
+        var f = faixa[g] || (faixa[g] = { de: l.a, ate: l.a });
+        f.de = Math.max(f.de, l.a);
+        f.ate = Math.min(f.ate, l.a);
+      }
+      return '<i style="' + pos(l.x, l.y) + ";--k:" + (k % 120) + '"' + (g != null ? ' data-g="' + g + '"' + (g % 2 ? ' class="b"' : "") : "") + "></i>";
     }).join("");
-    return '<div class="plenario' + (o.cheio ? " cheio" : "") + '" style="--max:' + max + "px;--tam:" + tam + 'px" aria-hidden="true">' + h + '<span class="mesa"></span></div>';
+    var marcos = faixa.length ? '<b class="marco centro" style="' + pos(cx, cy) + '"></b>' + faixa.map(function (f, g) {
+      var a = (f.de + f.ate) / 2, r = rMax + 22;
+      return f ? '<b class="marco" data-g="' + g + '" style="' + pos(cx + r * Math.cos(a), cy - r * Math.sin(a)) + '"></b>' : "";
+    }).join("") : "";
+    return '<div class="plenario' + (o.cheio ? " cheio" : "") + (faixa.length ? " por-partido" : "") + '" style="--max:' + max + "px;--tam:" + tam + 'px" aria-hidden="true">' +
+      h + marcos + '<span class="mesa"></span></div>';
   };
 
   T.megafone = function () {

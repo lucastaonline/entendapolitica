@@ -2,7 +2,7 @@
  "parte": 4,
  "ic": "👔",
  "nome": "Os cargos, um por um",
- "resumo": "Quem faz o quê: presidente, governador, prefeito, senador, deputados e vereador, com mandato, idade mínima, salário e partido.",
+ "resumo": "Quem faz o quê: presidente, governador, prefeito, senador, deputados e vereador, com mandato, idade mínima, salário e partido, e o que são os ministérios.",
  "fontes": [
   {
    "id": "cf-art14",
@@ -115,6 +115,48 @@
    "titulo": "Constituição Federal, arts. 76, 84 (I e XIII) e 87",
    "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
    "data": "1988-10-05"
+  },
+  {
+   "id": "cf-art88",
+   "veiculo": "Planalto",
+   "titulo": "Constituição Federal, art. 88 (uma lei cria e extingue os ministérios)",
+   "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
+   "data": "1988-10-05"
+  },
+  {
+   "id": "lei-14600",
+   "veiculo": "Planalto",
+   "titulo": "Lei 14.600/2023: organização dos ministérios (conversão da Medida Provisória 1.154/2023); o que cada ministério faz está nos arts. 29, 30, 36, 44 e 45",
+   "url": "https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2023/lei/l14600.htm",
+   "data": "2023-06-19"
+  },
+  {
+   "id": "lei-13844",
+   "veiculo": "Planalto",
+   "titulo": "Lei 13.844/2019: organização dos ministérios (conversão da Medida Provisória 870/2019)",
+   "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2019/lei/l13844.htm",
+   "data": "2019-06-18"
+  },
+  {
+   "id": "mp-870",
+   "veiculo": "Planalto",
+   "titulo": "Medida Provisória 870, de 1º de janeiro de 2019: organização dos ministérios",
+   "url": "https://www.planalto.gov.br/ccivil_03/_ato2019-2022/2019/mpv/mpv870.htm",
+   "data": "2019-01-01"
+  },
+  {
+   "id": "mp-1154",
+   "veiculo": "Planalto",
+   "titulo": "Medida Provisória 1.154, de 1º de janeiro de 2023: organização dos ministérios",
+   "url": "https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2023/mpv/mpv1154.htm",
+   "data": "2023-01-01"
+  },
+  {
+   "id": "planalto-ministros",
+   "veiculo": "Presidência da República (Planalto)",
+   "titulo": "Ministros e Ministras (lista oficial do 1º escalão; página atualizada em 05/05/2026)",
+   "url": "https://www.gov.br/planalto/pt-br/conheca-a-presidencia/ministros-e-ministras",
+   "data": "2026-05-05"
   },
   {
    "id": "cf-art101",
@@ -313,6 +355,18 @@
   {
    "termo": "ministro",
    "simples": "Pessoa escolhida pelo presidente para cuidar de uma área do governo, como saúde ou educação."
+  },
+  {
+   "termo": "ministério",
+   "simples": "Parte do governo federal que cuida de um assunto, como saúde ou educação. Quem comanda é um ministro ou uma ministra."
+  },
+  {
+   "termo": "medida provisória",
+   "simples": "Norma que o presidente cria em casos urgentes. Vale na hora, mas só por um tempo."
+  },
+  {
+   "termo": "SUS",
+   "simples": "Sistema Único de Saúde: atendimento público de saúde, de graça, no Brasil inteiro."
   },
   {
    "termo": "secretário",
@@ -650,6 +704,64 @@
     "ce-sp",
     "lom-sp",
     "cf-art101"
+   ]
+  },
+  {
+   "tipo": "cards",
+   "etiqueta": "OS MINISTÉRIOS",
+   "titulo": "O que é um ministério?",
+   "texto": "É uma parte do governo federal que cuida de um assunto. Quem comanda cada ministério é uma pessoa escolhida pelo presidente: o **ministro** ou a **ministra**. Vire os cartões para conhecer alguns!",
+   "cards": [
+    {
+     "ic": "🩺",
+     "titulo": "Saúde",
+     "txt": "Cuida da política de saúde do país e coordena o **SUS**.",
+     "mais": "Também vigia a qualidade de remédios e alimentos e apoia pesquisas sobre saúde."
+    },
+    {
+     "ic": "📚",
+     "titulo": "Educação",
+     "txt": "Cuida da política de educação do país, da creche à universidade.",
+     "mais": "Também avalia o ensino e ajuda famílias de baixa renda a manter os filhos na escola."
+    },
+    {
+     "ic": "💰",
+     "titulo": "Fazenda",
+     "txt": "Cuida do dinheiro do governo federal: os impostos federais, as contas e as dívidas.",
+     "mais": "Também acompanha os preços e a economia do país."
+    },
+    {
+     "ic": "🌳",
+     "titulo": "Meio ambiente",
+     "txt": "Cuida das florestas, da natureza e da política sobre a mudança do clima.",
+     "mais": "Também cuida de programas para a Amazônia e para as outras grandes regiões naturais do Brasil, os biomas."
+    },
+    {
+     "ic": "🌍",
+     "titulo": "Relações Exteriores",
+     "txt": "Cuida da relação do Brasil com os outros países.",
+     "mais": "Também cuida das embaixadas e dos consulados do Brasil pelo mundo e das negociações com outros países."
+    },
+    {
+     "ic": "🔢",
+     "titulo": "Quantos são?",
+     "txt": "Depende do governo: a lista e os nomes mudam. Quem decide é uma **lei**.",
+     "mais": "Em 2019 e em 2023, o governo que começava mudou a lista de ministérios com uma medida provisória, e o Congresso a transformou em lei."
+    }
+   ],
+   "link": {
+    "url": "brasil.html#os-ministros",
+    "ic": "👔",
+    "txt": "Ver os ministérios de hoje e quem comanda cada um"
+   },
+   "fontes": [
+    "cf-art76-84-87",
+    "cf-art88",
+    "lei-14600",
+    "lei-13844",
+    "mp-870",
+    "mp-1154",
+    "planalto-ministros"
    ]
   },
   {

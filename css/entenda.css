@@ -27,6 +27,7 @@
 .slide .formas { z-index: 0; }
 .slide .miolo > * { position: relative; z-index: 1; }
 .pe-slide { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; align-items: center; }
+.link-slide { margin: 18px 0 0; text-align: center; }
 .chip-palavra { border: 2px solid #d6e2f1; background: #f3f7fd; color: var(--brand); border-radius: 999px; padding: 5px 12px; font-size: .74rem; font-weight: 800; }
 .chip-palavra:hover { background: #e6eef8; }
 
@@ -72,6 +73,8 @@
 
 /* ---------- cartões que viram ---------- */
 .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-top: 16px; perspective: 1200px; }
+/* 6 cartões: 3 + 3 no computador (e não 4 + 2) */
+.cards:has(> .card-3d:nth-child(6):last-child) { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
 .card-3d { position: relative; display: grid; transform-style: preserve-3d; transition: transform .7s cubic-bezier(.3, 1.2, .4, 1); }
 .slide.ativo .card-3d.anim { animation: viraCard .8s cubic-bezier(.2, .8, .2, 1) backwards; animation-delay: calc(var(--i, 0) * 130ms + 150ms); }
 /* entrada sem opacity: animar opacity num elemento preserve-3d faz o Chrome "achatar" o 3D, e o verso espelhado aparecia por cima

@@ -838,6 +838,69 @@
     });
   };
 
+  // ---------------------------------------------------------------- voltar para a lista de onde a pessoa veio
+  // Ao abrir o perfil de alguém (pessoa.html), esta aba guarda de onde veio: a página, a seção e quem foi aberto.
+  // O "Voltar" do perfil usa isso (e não manda sempre para o Brasil). Ao voltar, a lista rola até quem foi aberto e põe o foco
+  // nele: quem usa teclado ou leitor de tela continua de onde parou.
+  // "estado.html?uf=BA": arquivo e parâmetros do endereço, sem o idioma nem marcas de campanha (a página inicial vira "index.html")
+  EP.endereco = function (u) {
+    var x = new URL(u || location.href, location.href);
+    ["lang", "utm_source", "utm_medium", "utm_campaign"].forEach(function (k) { x.searchParams.delete(k); });
+    var q = x.searchParams.toString();
+    return (x.pathname.split("/").pop() || "index.html") + (q ? "?" + q : "");
+  };
+  EP.leVolta = function () { try { return JSON.parse(sessionStorage.getItem("ep-volta") || "null"); } catch (e) { return null; } };
+  EP.gravaVolta = function (v) {
+    try { if (v) sessionStorage.setItem("ep-volta", JSON.stringify(v)); else sessionStorage.removeItem("ep-volta"); } catch (e) {}
+  };
+  function voltaNaLista(daMemoria) {
+    var v = EP.leVolta();
+    if (!v || v.pagina !== EP.endereco()) return;
+    var nav = {};
+    try { nav = performance.getEntriesByType("navigation")[0] || {}; } catch (e) {}
+    EP.gravaVolta(null);
+    if (!daMemoria && nav.type !== "back_forward" && !(v.voltando && Date.now() - v.voltando < 120000)) return;
+    var sel = 'a[href="pessoa.html?id=' + encodeURIComponent(v.id || "") + '"]', obs = null, prazo = null, mexeu = false;
+    // se a pessoa já começou a rolar ou a usar o teclado, não mexe em nada
+    ["wheel", "touchstart", "keydown", "mousedown"].forEach(function (t) { window.addEventListener(t, function () { mexeu = true; }, { once: true, passive: true }); });
+    function acha() {
+      var s = v.secao && document.getElementById(v.secao);
+      var a = (s && s.querySelector(sel)) || document.querySelector(sel);
+      return a && a.getClientRects().length ? a : null;
+    }
+    function fim(a) {
+      if (obs) obs.disconnect();
+      clearTimeout(prazo);
+      if (mexeu) return;
+      if (a) {
+        var r = a.getBoundingClientRect();
+        // voltando da memória do navegador, a página já está onde estava: só devolve o foco
+        if (!daMemoria && (r.top < 70 || r.bottom > innerHeight)) a.scrollIntoView({ block: "center", behavior: "instant" });
+        a.focus({ preventScroll: true });
+      } else if (!daMemoria) {
+        var s = v.secao && document.getElementById(v.secao);
+        if (s) s.scrollIntoView({ behavior: "instant" });
+        else if (v.y) window.scrollTo({ top: v.y, behavior: "instant" });
+      }
+    }
+    var a0 = acha();
+    if (a0 || daMemoria) { fim(a0); return; }
+    // a lista é montada depois que os dados chegam: espera a pessoa aparecer (no máximo 6 s)
+    obs = new MutationObserver(function () { var a = acha(); if (a) fim(a); });
+    obs.observe(document.body, { childList: true, subtree: true });
+    prazo = setTimeout(function () { fim(acha()); }, 6000);
+  }
+  if (!/(^|\/)pessoa\.html$/.test(location.pathname)) {
+    document.addEventListener("click", function (e) {
+      var a = e.target.closest ? e.target.closest('a[href^="pessoa.html?"]') : null;
+      if (!a || e.button || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
+      var sec = a.closest("section[id]");
+      EP.gravaVolta({ pagina: EP.endereco(), secao: sec ? sec.id : "", id: new URLSearchParams(a.getAttribute("href").split("?")[1]).get("id") || "",
+        y: Math.round(window.scrollY) });
+    }, true);
+    window.addEventListener("pageshow", function (e) { voltaNaLista(e.persisted); });
+  }
+
   // ---------------------------------------------------------------- analytics (desligado até ter ID)
   EP.track = function (evento, params) {
     try { if (window.gtag) window.gtag("event", evento, params || {}); } catch (e) {}

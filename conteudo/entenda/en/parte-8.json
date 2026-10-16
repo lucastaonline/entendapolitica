@@ -181,7 +181,7 @@
   },
   {
    "termo": "STF",
-   "simples": "Supremo Tribunal Federal (Supreme Federal Court): the highest court in Brazil. Its main job is to protect the Constitution."
+   "simples": "{{Supremo Tribunal Federal}} (Supreme Federal Court): the highest court in Brazil. Its main job is to protect the Constitution."
   },
   {
    "termo": "STF minister",
@@ -193,27 +193,27 @@
   },
   {
    "termo": "STJ",
-   "simples": "Superior Tribunal de Justiça (Superior Court of Justice): a court that helps apply federal laws in the same way all over the country."
+   "simples": "{{Superior Tribunal de Justiça}} (Superior Court of Justice): a court that helps apply federal laws in the same way all over the country."
   },
   {
    "termo": "Public Prosecutor's Office",
-   "simples": "An institution that defends the interests of society and, in court, accuses people who commit crimes. In Portuguese: Ministério Público."
+   "simples": "An institution that defends the interests of society and, in court, accuses people who commit crimes. In Portuguese: {{Ministério Público}}."
   },
   {
    "termo": "Public Defender's Office",
-   "simples": "Public lawyers who advise and defend, for free, people who cannot pay. In Portuguese: Defensoria Pública."
+   "simples": "Public lawyers who advise and defend, for free, people who cannot pay. In Portuguese: {{Defensoria Pública}}."
   },
   {
    "termo": "Court of Accounts",
-   "simples": "An agency that checks how public money was spent. In Portuguese: Tribunal de Contas."
+   "simples": "An agency that checks how public money was spent. In Portuguese: {{Tribunal de Contas}}."
   },
   {
    "termo": "TCU",
-   "simples": "Tribunal de Contas da União (Federal Court of Accounts): it checks how federal money is used and helps Congress oversee it."
+   "simples": "{{Tribunal de Contas da União}} (Federal Court of Accounts): it checks how federal money is used and helps Congress oversee it."
   },
   {
    "termo": "CGU",
-   "simples": "Controladoria-Geral da União (Office of the Comptroller General): the agency that oversees the federal government from the inside."
+   "simples": "{{Controladoria-Geral da União}} (Office of the Comptroller General): the agency that oversees the federal government from the inside."
   },
   {
    "termo": "audit",
@@ -225,15 +225,15 @@
   },
   {
    "termo": "CPI",
-   "simples": "Comissão Parlamentar de Inquérito (Parliamentary Inquiry Committee): a group of deputies or senators that investigates a subject."
+   "simples": "{{Comissão Parlamentar de Inquérito}} (Parliamentary Inquiry Committee): a group of deputies or senators that investigates a subject."
   },
   {
    "termo": "specific fact",
-   "simples": "A specific, well-defined subject. In Portuguese: fato determinado."
+   "simples": "A specific, well-defined subject. In Portuguese: {{fato determinado}}."
   },
   {
    "termo": "crime of responsibility",
-   "simples": "A serious act by an authority against the Constitution, like the ones listed in art. 85. In Portuguese: crime de responsabilidade."
+   "simples": "A serious act by an authority against the Constitution, like the ones listed in art. 85. In Portuguese: {{crime de responsabilidade}}."
   },
   {
    "termo": "impeachment",
@@ -241,7 +241,7 @@
   },
   {
    "termo": "complaint",
-   "simples": "A formal request for someone to be investigated or put on trial. In Portuguese: denúncia."
+   "simples": "A formal request for someone to be investigated or put on trial. In Portuguese: {{denúncia}}."
   },
   {
    "termo": "vice",
@@ -257,11 +257,11 @@
   },
   {
    "termo": "term of office",
-   "simples": "The time an elected person stays in office. In Portuguese: mandato."
+   "simples": "The time an elected person stays in office. In Portuguese: {{mandato}}."
   },
   {
    "termo": "removal from office",
-   "simples": "When someone loses their term of office because of a decision by others. In Portuguese: cassação."
+   "simples": "When someone loses their term of office because of a decision by others. In Portuguese: {{cassação}}."
   },
   {
    "termo": "decorum",
@@ -281,7 +281,7 @@
   },
   {
    "termo": "Access to Information Law",
-   "simples": "A law that guarantees anyone the right to ask public agencies for data. In Portuguese: Lei de Acesso à Informação."
+   "simples": "A law that guarantees anyone the right to ask public agencies for data. In Portuguese: {{Lei de Acesso à Informação}}."
   },
   {
    "termo": "censorship",
@@ -404,7 +404,7 @@
     {
      "ic": "🔎",
      "titulo": "CGU",
-     "txt": "The Office of the Comptroller General (Controladoria-Geral da União) oversees the federal government from the inside, with **audits**.",
+     "txt": "The Office of the Comptroller General ({{Controladoria-Geral da União}}) oversees the federal government from the inside, with **audits**.",
      "mais": "It also receives complaints and works to prevent and fight corruption."
     }
    ],
@@ -453,7 +453,7 @@
    "tipo": "explica",
    "etiqueta": "INVESTIGATION",
    "titulo": "CPI: Congress investigates",
-   "texto": "CPI stands for **Parliamentary Inquiry Committee** (Comissão Parlamentar de Inquérito): a group of deputies or senators who investigate a subject.",
+   "texto": "CPI stands for **Parliamentary Inquiry Committee** ({{Comissão Parlamentar de Inquérito}}): a group of deputies or senators who investigate a subject.",
    "itens": [
     {
      "ic": "✍️",
@@ -556,7 +556,7 @@
    "itens": [
     {
      "ic": "✂️",
-     "txt": "Deputies and senators can lose their term of office. This is called **removal from office** (cassação)."
+     "txt": "Deputies and senators can lose their term of office. This is called **removal from office** ({{cassação}})."
     },
     {
      "ic": "🙊",
@@ -591,7 +591,7 @@
    "itens": [
     {
      "ic": "💻",
-     "txt": "The **Transparency Portal** (Portal da Transparência) shows how the federal government uses money. No password needed."
+     "txt": "The **Transparency Portal** ({{Portal da Transparência}}) shows how the federal government uses money. No password needed."
     },
     {
      "ic": "📨",

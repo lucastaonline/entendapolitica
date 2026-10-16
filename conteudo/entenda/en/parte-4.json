@@ -290,7 +290,7 @@
  "glossario": [
   {
    "termo": "term of office",
-   "simples": "The time an elected person stays in office. In Portuguese: mandato."
+   "simples": "The time an elected person stays in office. In Portuguese: {{mandato}}."
   },
   {
    "termo": "re-election",
@@ -302,7 +302,7 @@
   },
   {
    "termo": "runoff",
-   "simples": "A new vote between only the two candidates with the most votes, when no one got enough votes in the first round. In Portuguese: 2º turno."
+   "simples": "A new vote between only the two candidates with the most votes, when no one got enough votes in the first round. In Portuguese: {{2º turno}}."
   },
   {
    "termo": "vice",
@@ -310,11 +310,11 @@
   },
   {
    "termo": "alternate",
-   "simples": "The person in reserve who takes the seat when a senator, a deputy or a city councilor leaves. In Portuguese: suplente."
+   "simples": "The person in reserve who takes the seat when a senator, a deputy or a city councilor leaves. In Portuguese: {{suplente}}."
   },
   {
    "termo": "ticket",
-   "simples": "The group that runs together in an election, like the candidate for mayor and their vice. In Portuguese: chapa."
+   "simples": "The group that runs together in an election, like the candidate for mayor and their vice. In Portuguese: {{chapa}}."
   },
   {
    "termo": "proportional vote",
@@ -326,11 +326,11 @@
   },
   {
    "termo": "official salary",
-   "simples": "The name of the monthly salary of elected officials, ministers and judges. In Portuguese: subsídio."
+   "simples": "The name of the monthly salary of elected officials, ministers and judges. In Portuguese: {{subsídio}}."
   },
   {
    "termo": "salary cap",
-   "simples": "The highest salary anyone can receive in public service. In Portuguese: teto (“ceiling”)."
+   "simples": "The highest salary anyone can receive in public service. In Portuguese: {{teto}} (“ceiling”)."
   },
   {
    "termo": "legislative decree",
@@ -350,19 +350,19 @@
   },
   {
    "termo": "STF",
-   "simples": "Supremo Tribunal Federal (Supreme Federal Court): the highest court in the country, which takes care of the Constitution."
+   "simples": "{{Supremo Tribunal Federal}} (Supreme Federal Court): the highest court in the country, which takes care of the Constitution."
   },
   {
    "termo": "Legislative Assembly",
-   "simples": "The House where the state deputies make the state's laws. In Portuguese: Assembleia Legislativa."
+   "simples": "The House where the state deputies make the state's laws. In Portuguese: {{Assembleia Legislativa}}."
   },
   {
    "termo": "Legislative Chamber",
-   "simples": "The lawmaking House of the Federal District, where the district deputies work. In Portuguese: Câmara Legislativa."
+   "simples": "The lawmaking House of the Federal District, where the district deputies work. In Portuguese: {{Câmara Legislativa}}."
   },
   {
    "termo": "City Council",
-   "simples": "The House where the city councilors make the city's laws. In Portuguese: Câmara Municipal."
+   "simples": "The House where the city councilors make the city's laws. In Portuguese: {{Câmara Municipal}}."
   },
   {
    "termo": "party",
@@ -378,7 +378,7 @@
   },
   {
    "termo": "TSE",
-   "simples": "Tribunal Superior Eleitoral (Superior Electoral Court): the court that organizes and takes care of elections."
+   "simples": "{{Tribunal Superior Eleitoral}} (Superior Electoral Court): the court that organizes and takes care of elections."
   },
   {
    "termo": "oversee",
@@ -497,7 +497,7 @@
     {
      "ic": "🏛️",
      "titulo": "Senator",
-     "txt": "Makes laws for the country and represents their state in the Federal Senate (Senado Federal).",
+     "txt": "Makes laws for the country and represents their state in the Federal Senate ({{Senado Federal}}).",
      "dados": [
       {
        "rot": "Term of office",
@@ -516,12 +516,12 @@
        "val": "Whoever gets the most votes"
       }
      ],
-     "mais": "Each senator is elected with 2 alternates (suplentes). Every 4 years, the Senate renews 1/3 or 2/3 of its seats. In 2026, each state chose 2 senators."
+     "mais": "Each senator is elected with 2 alternates ({{suplentes}}). Every 4 years, the Senate renews 1/3 or 2/3 of its seats. In 2026, each state chose 2 senators."
     },
     {
      "ic": "🧑‍💼",
      "titulo": "Federal deputy",
-     "txt": "Makes laws for the country and represents the people in the Chamber of Deputies (Câmara dos Deputados).",
+     "txt": "Makes laws for the country and represents the people in the Chamber of Deputies ({{Câmara dos Deputados}}).",
      "dados": [
       {
        "rot": "Term of office",
@@ -569,7 +569,7 @@
     {
      "ic": "🏘️",
      "titulo": "City councilor",
-     "txt": "Makes the city's laws in the City Council (Câmara Municipal) and oversees the mayor.",
+     "txt": "Makes the city's laws in the City Council ({{Câmara Municipal}}) and oversees the mayor.",
      "dados": [
       {
        "rot": "Term of office",
@@ -588,7 +588,7 @@
        "val": "Proportional vote"
       }
      ],
-     "mais": "The number of city councilors (vereadores) in each city depends on its population. The largest City Council, in São Paulo, has 55."
+     "mais": "The number of city councilors ({{vereadores}}) in each city depends on its population. The largest City Council, in São Paulo, has 55."
     }
    ],
    "fontes": [
@@ -723,7 +723,7 @@
    "tipo": "explica",
    "etiqueta": "HOW MUCH THEY EARN",
    "titulo": "How much do elected officials earn?",
-   "texto": "The salary of the office is called the **official salary** (subsídio). The amounts are for 2026, before deductions, in reais (R$), Brazil's currency.",
+   "texto": "The salary of the office is called the **official salary** ({{subsídio}}). The amounts are for 2026, before deductions, in reais (R$), Brazil's currency.",
    "itens": [
     {
      "ic": "💰",

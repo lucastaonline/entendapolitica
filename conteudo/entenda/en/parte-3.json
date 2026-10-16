@@ -233,23 +233,23 @@
   },
   {
    "termo": "organic law",
-   "simples": "The highest law of a municipality or of the Federal District. In Portuguese: lei orgânica."
+   "simples": "The highest law of a municipality or of the Federal District. In Portuguese: {{lei orgânica}}."
   },
   {
    "termo": "Legislative Chamber",
-   "simples": "Where the district deputies work. They make the laws of the Federal District. In Portuguese: Câmara Legislativa."
+   "simples": "Where the district deputies work. They make the laws of the Federal District. In Portuguese: {{Câmara Legislativa}}."
   },
   {
    "termo": "district deputies",
-   "simples": "People elected to make the laws of the Federal District. In Portuguese: deputados distritais."
+   "simples": "People elected to make the laws of the Federal District. In Portuguese: {{deputados distritais}}."
   },
   {
    "termo": "IBGE",
-   "simples": "Instituto Brasileiro de Geografia e Estatística (Brazilian Institute of Geography and Statistics), the agency that counts and studies Brazil's population and territory."
+   "simples": "{{Instituto Brasileiro de Geografia e Estatística}} (Brazilian Institute of Geography and Statistics), the agency that counts and studies Brazil's population and territory."
   },
   {
    "termo": "INSS",
-   "simples": "Instituto Nacional do Seguro Social (National Social Security Institute), the federal agency that pays retirement pensions and other benefits."
+   "simples": "{{Instituto Nacional do Seguro Social}} (National Social Security Institute), the federal agency that pays retirement pensions and other benefits."
   },
   {
    "termo": "retirement pension",
@@ -269,11 +269,11 @@
   },
   {
    "termo": "SUS",
-   "simples": "Sistema Único de Saúde (Unified Health System): free public health care all over Brazil."
+   "simples": "{{Sistema Único de Saúde}} (Unified Health System): free public health care all over Brazil."
   },
   {
    "termo": "city government",
-   "simples": "The government of the city, headed by the mayor. In Portuguese: prefeitura."
+   "simples": "The government of the city, headed by the mayor. In Portuguese: {{prefeitura}}."
   },
   {
    "termo": "governor",
@@ -281,15 +281,15 @@
   },
   {
    "termo": "Federal District",
-   "simples": "The part of Brazil where Brasília is; it is neither a state nor a municipality. In Portuguese: Distrito Federal (DF)."
+   "simples": "The part of Brazil where Brasília is; it is neither a state nor a municipality. In Portuguese: {{Distrito Federal}} (DF)."
   },
   {
    "termo": "Union",
-   "simples": "The government of the whole of Brazil, also called the federal government. In Portuguese: União."
+   "simples": "The government of the whole of Brazil, also called the federal government. In Portuguese: {{União}}."
   },
   {
    "termo": "municipality",
-   "simples": "A city, with its neighborhoods and the countryside around it, and with its own government. In Portuguese: município."
+   "simples": "A city, with its neighborhoods and the countryside around it, and with its own government. In Portuguese: {{município}}."
   },
   {
    "termo": "state",
@@ -355,7 +355,7 @@
        "val": "City Council"
       }
      ],
-     "mais": "The highest law of each municipality is called the organic law (lei orgânica). It is approved by the city councilors (vereadores)."
+     "mais": "The highest law of each municipality is called the organic law ({{lei orgânica}}). It is approved by the city councilors ({{vereadores}})."
     }
    ],
    "fontes": [
@@ -478,7 +478,7 @@
    "tipo": "explica",
    "etiqueta": "CITY",
    "titulo": "What does the city take care of?",
-   "texto": "The **city government** (prefeitura) is headed by the mayor. It takes care of what is closest to you.",
+   "texto": "The **city government** ({{prefeitura}}) is headed by the mayor. It takes care of what is closest to you.",
    "itens": [
     {
      "ic": "🧸",
@@ -598,7 +598,7 @@
    "tipo": "explica",
    "etiqueta": "FEDERAL DISTRICT",
    "titulo": "The Federal District is different",
-   "texto": "The **Federal District** (Distrito Federal, DF) is neither a state nor a municipality. It has a bit of both.",
+   "texto": "The **Federal District** ({{Distrito Federal}}, DF) is neither a state nor a municipality. It has a bit of both.",
    "itens": [
     {
      "ic": "🚫",
@@ -610,7 +610,7 @@
     },
     {
      "ic": "📜",
-     "txt": "The DF's laws are made by district deputies, in the Legislative Chamber (Câmara Legislativa)."
+     "txt": "The DF's laws are made by district deputies, in the Legislative Chamber ({{Câmara Legislativa}})."
     },
     {
      "ic": "🔁",

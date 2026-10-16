@@ -85,8 +85,11 @@
       return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
     });
   };
-  // **negrito** -> <b>negrito</b> (o resto é escapado)
-  EP.md = function (s) { return EP.esc(s).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>"); };
+  // **negrito** -> <b>negrito</b>; {{termo}} -> termo em português no meio do texto em inglês, marcado com lang="pt-BR"
+  // para o leitor de tela pronunciar em português (o resto é escapado)
+  EP.md = function (s) {
+    return EP.esc(s).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>").replace(/\{\{(.+?)\}\}/g, '<span lang="pt-BR">$1</span>');
+  };
   EP.norm = function (s) {
     return String(s || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
   };
@@ -587,6 +590,210 @@
     aplicaA11y();
     avisoIdioma();
   }
+
+  // ---------------------------------------------------------------- campo de escolha com busca (no lugar de todo "select")
+  // A pessoa digita e as opções vão aparecendo (padrão ARIA 1.2: combobox com lista). Funciona com mouse, toque,
+  // teclado (setas, Enter, Esc) e leitor de tela.
+  //   EP.combo(onde, o)       cria o campo dentro de "onde". o = { id, rotulo (se não houver <label>), rotuloId (id do <label>),
+  //                           placeholder, itens: [{ v, t, sub, lang, busca }] ou function () -> Promise, valor, min (letras
+  //                           para começar a mostrar), max (opções mostradas), classe, dica, aoEscolher(item) }
+  //   EP.comboSelect(select)  troca um <select> por esse campo (o select fica escondido, guarda o valor e recebe "change").
+  //   EP.comboSync(select)    avisa o campo quando o código mudou select.value.
+  var nCombo = 0;
+  EP.combo = function (onde, o) {
+    o = o || {};
+    var id = o.id || "combo-" + (++nCombo), max = o.max || 80, min = o.min || 0;
+    var caixa = document.createElement("div");
+    caixa.className = "combo" + (o.classe ? " " + o.classe : "");
+    caixa.innerHTML = '<div class="combo-campo"><input type="text" id="' + id + '" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="' + id + '-lista"' +
+      ' autocomplete="off" autocapitalize="off" spellcheck="false"' + (o.rotulo ? ' aria-label="' + EP.esc(o.rotulo) + '"' : "") +
+      (o.descricao ? ' aria-describedby="' + EP.esc(o.descricao) + '"' : "") + (o.placeholder ? ' placeholder="' + EP.esc(o.placeholder) + '"' : "") +
+      '><span class="combo-seta" aria-hidden="true">▾</span></div>' +
+      '<ul class="combo-lista" id="' + id + '-lista" role="listbox"' + (o.rotuloId ? ' aria-labelledby="' + EP.esc(o.rotuloId) + '"' : o.rotulo ? ' aria-label="' + EP.esc(o.rotulo) + '"' : "") + " hidden></ul>" +
+      '<p class="combo-nada" hidden></p><p class="sr" role="status" aria-live="polite"></p>';
+    onde.appendChild(caixa);
+    var input = caixa.querySelector("input"), lista = caixa.querySelector(".combo-lista"), nada = caixa.querySelector(".combo-nada"), status = caixa.querySelector('[role="status"]');
+    var todos = null, carregando = null, atual = null, vis = [], ativo = -1, aberto = false, tAviso = null;
+
+    // sem acento, sem maiúscula e sem pontuação ("Santa Bárbara d'Oeste" -> "santa barbara d oeste")
+    function chave(s) { return EP.norm(s).replace(/[^a-z0-9]+/g, " ").trim(); }
+    function prepara(l) {
+      return (l || []).map(function (it) { it.v = String(it.v); it.n = chave(it.t); it.nb = " " + chave(it.t + " " + (it.busca || "")); return it; });
+    }
+    if (Array.isArray(o.itens)) todos = prepara(o.itens);
+    function carrega() {
+      if (todos) return Promise.resolve(todos);
+      if (!carregando) carregando = Promise.resolve(typeof o.itens === "function" ? o.itens() : []).then(function (l) { todos = prepara(l); return todos; });
+      return carregando;
+    }
+    // cada palavra digitada precisa ser o começo de uma palavra da opção ("bom jesus pi" acha Bom Jesus, Piauí, e não
+    // Bom Jesus do Norte, Espírito Santo); se assim não achar nada, vale a palavra em qualquer lugar.
+    // Ordem: primeiro o nome que começa igual, depois o nome com uma palavra que começa igual, depois o resto.
+    function filtra(q) {
+      var qn = chave(q);
+      if (!qn) return todos.slice();
+      var pal = qn.split(" ");
+      function junta(inicio) {
+        var r = [[], [], []];
+        todos.forEach(function (it) {
+          for (var i = 0; i < pal.length; i++) if (it.nb.indexOf(inicio ? " " + pal[i] : pal[i]) < 0) return;
+          r[it.n.indexOf(qn) === 0 ? 0 : (" " + it.n).indexOf(" " + pal[0]) > -1 ? 1 : 2].push(it);
+        });
+        return r[0].concat(r[1], r[2]);
+      }
+      var achou = junta(true);
+      return achou.length ? achou : junta(false);
+    }
+    function avisa(t) { clearTimeout(tAviso); tAviso = setTimeout(function () { if (status.textContent !== t) status.textContent = t; }, 450); }
+    function marca(k) {
+      var lis = lista.querySelectorAll('[role="option"]');
+      if (ativo > -1 && lis[ativo]) { lis[ativo].classList.remove("ativo"); lis[ativo].setAttribute("aria-selected", "false"); }
+      ativo = k;
+      if (k > -1 && lis[k]) {
+        lis[k].classList.add("ativo");
+        lis[k].setAttribute("aria-selected", "true");
+        input.setAttribute("aria-activedescendant", lis[k].id);
+        var topo = lis[k].offsetTop, base = topo + lis[k].offsetHeight;
+        if (topo < lista.scrollTop) lista.scrollTop = topo - 6;
+        else if (base > lista.scrollTop + lista.clientHeight) lista.scrollTop = base - lista.clientHeight + 6;
+      } else input.removeAttribute("aria-activedescendant");
+    }
+    function fecha(restaura) {
+      aberto = false;
+      lista.hidden = true;
+      nada.hidden = true;
+      ativo = -1;
+      input.setAttribute("aria-expanded", "false");
+      input.removeAttribute("aria-activedescendant");
+      if (restaura) input.value = atual ? atual.t : "";
+    }
+    function mostra(l) {
+      vis = l.slice(0, max);
+      ativo = -1;
+      if (!vis.length) {
+        fecha(false);
+        lista.innerHTML = "";
+        nada.hidden = false;
+        nada.textContent = o.nada || EP.tr("Nada encontrado com esse nome. Confira se está escrito certo.", "Nothing found with that name. Check the spelling.");
+        avisa(nada.textContent);
+        return;
+      }
+      nada.hidden = true;
+      lista.innerHTML = vis.map(function (it, k) {
+        var ja = atual && it.v === atual.v;
+        return '<li role="option" id="' + id + "-o" + k + '" data-k="' + k + '" aria-selected="false"' + (ja ? ' class="escolhido"' : "") + (it.lang ? ' lang="' + EP.esc(it.lang) + '"' : "") + ">" +
+          '<span class="combo-t">' + EP.esc(it.t) + "</span>" + (it.sub ? "<small>" + EP.esc(it.sub) + "</small>" : "") +
+          (ja ? '<span class="combo-ok" aria-hidden="true">✓</span>' : "") + "</li>";
+      }).join("");
+      lista.scrollTop = 0;
+      lista.hidden = false;
+      aberto = true;
+      input.setAttribute("aria-expanded", "true");
+      var n = l.length;
+      avisa((n > vis.length ? EP.tr(EP.num(n) + " opções. Mostrando as " + vis.length + " primeiras; continue digitando para achar mais rápido.",
+        EP.num(n) + " options. Showing the first " + vis.length + "; keep typing to narrow it down.") :
+        n === 1 ? EP.tr("1 opção.", "1 option.") : EP.tr(EP.num(n) + " opções.", EP.num(n) + " options.")) + " " + EP.tr("Use as setas para escolher.", "Use the arrow keys to choose."));
+    }
+    function abre(q, marcaPrimeiro) {
+      return carrega().then(function () {
+        if (chave(q || "").length < min) {
+          fecha(false);
+          if (o.dica) { nada.hidden = false; nada.textContent = o.dica; }
+          return;
+        }
+        mostra(filtra(q || ""));
+        if (!vis.length) return;
+        var k = marcaPrimeiro ? 0 : -1;
+        if (!marcaPrimeiro && atual) vis.forEach(function (it, j) { if (it.v === atual.v) k = j; });
+        marca(k);
+      });
+    }
+    function escolhe(it, silencioso) {
+      atual = it || null;
+      input.value = it ? it.t : "";
+      fecha(false);
+      if (!silencioso && it && o.aoEscolher) o.aoEscolher(it);
+    }
+    function acha(v) { return (todos || []).filter(function (it) { return it.v === String(v); })[0] || null; }
+    // ao sair do campo: aceita o texto se for igual a uma opção; campo vazio volta para a opção "todos" (valor vazio), se houver
+    function sai() {
+      if (!aberto && input.value === (atual ? atual.t : "")) return;
+      var qn = chave(input.value);
+      var igual = (todos || []).filter(function (it) { return qn ? it.n === qn : it.v === ""; });
+      if (igual.length === 1 && (!atual || igual[0].v !== atual.v)) escolhe(igual[0]);
+      else fecha(true);
+    }
+
+    input.addEventListener("input", function () { abre(input.value, true); });
+    input.addEventListener("focus", function () { if (atual && input.value === atual.t) input.select(); });
+    input.addEventListener("click", function () {
+      if (aberto) return;
+      if (atual && input.value === atual.t) { input.select(); abre("", false); } else abre(input.value, !!input.value);
+    });
+    input.addEventListener("keydown", function (e) {
+      var k = e.key;
+      if (k === "ArrowDown" || k === "ArrowUp") {
+        e.preventDefault();
+        if (!aberto) {
+          abre(atual && input.value === atual.t ? "" : input.value, false).then(function () { if (aberto && ativo < 0) marca(k === "ArrowDown" ? 0 : vis.length - 1); });
+          return;
+        }
+        if (vis.length) marca(ativo < 0 ? (k === "ArrowDown" ? 0 : vis.length - 1) : (ativo + (k === "ArrowDown" ? 1 : -1) + vis.length) % vis.length);
+      } else if (k === "Enter") {
+        if (!aberto) return;
+        e.preventDefault();
+        if (ativo > -1) escolhe(vis[ativo]);
+        else if (vis.length === 1) escolhe(vis[0]);
+      } else if (k === "Escape") {
+        if (aberto || input.value !== (atual ? atual.t : "")) { e.preventDefault(); e.stopPropagation(); fecha(true); }
+      } else if (k === "Tab") sai();
+    });
+    input.addEventListener("blur", function () { setTimeout(function () { if (document.activeElement !== input) sai(); }, 150); });
+    lista.addEventListener("mousedown", function (e) { e.preventDefault(); });
+    lista.addEventListener("click", function (e) {
+      var li = e.target.closest ? e.target.closest('[role="option"]') : null;
+      if (li) escolhe(vis[+li.getAttribute("data-k")]);
+    });
+
+    var api = {
+      input: input, caixa: caixa,
+      valor: function () { return atual ? atual.v : ""; },
+      escolhe: function (v, silencioso) { return carrega().then(function () { escolhe(acha(v), silencioso); }); },
+      foco: function () { input.focus(); }
+    };
+    if (o.valor != null && o.valor !== "") api.escolhe(o.valor, true);
+    else if (todos && acha("")) escolhe(acha(""), true);
+    return api;
+  };
+  EP.comboSelect = function (sel, o) {
+    if (!sel) return null;
+    if (sel._combo) return sel._combo;
+    o = o || {};
+    var itens = [].map.call(sel.options, function (op) {
+      return { v: op.value, t: (op.textContent || "").trim(), lang: op.getAttribute("lang"), sub: op.getAttribute("data-sub"), busca: op.getAttribute("data-busca") };
+    });
+    var onde = document.createElement("div");
+    onde.className = "combo-sel";
+    sel.parentNode.insertBefore(onde, sel);
+    var lbl = sel.id ? document.querySelector('label[for="' + sel.id + '"]') : null;
+    if (lbl && !lbl.id) lbl.id = sel.id + "-rotulo";
+    var c = EP.combo(onde, {
+      id: sel.id ? sel.id + "-campo" : null, rotulo: lbl ? null : sel.getAttribute("aria-label"), rotuloId: lbl ? lbl.id : null,
+      itens: itens, valor: sel.value, max: o.max || 100, placeholder: o.placeholder || EP.tr("Digite para procurar…", "Type to search…"),
+      aoEscolher: function (it) {
+        if (sel.value !== it.v) { sel.value = it.v; sel.dispatchEvent(new Event("change", { bubbles: true })); }
+        if (o.aoEscolher) o.aoEscolher(it);
+      }
+    });
+    if (lbl) lbl.htmlFor = c.input.id;
+    sel.hidden = true;
+    sel.style.display = "none";
+    sel.required = false;
+    sel.tabIndex = -1;
+    sel._combo = c;
+    return c;
+  };
+  EP.comboSync = function (sel) { if (sel && sel._combo) sel._combo.escolhe(sel.value, true); };
 
   // ---------------------------------------------------------------- compartilhar o site
   // Mesma janela na página inicial e no fim do mapa. No inglês, o texto e o link vão em inglês (?lang=en).

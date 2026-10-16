@@ -4,11 +4,12 @@ Site estático (HTML, CSS e JS puros, sem build no navegador) que explica como a
 
 Mesma identidade visual do [Entenda o 2º turno](https://entendaosegundoturno.vercel.app): fundo creme, azul `#1f3a5f`, amarelo `#f2b705`, letra do sistema bem grossa, emojis, botões "gordinhos" e peças 3D feitas só com CSS.
 
-## As 3 portas da página inicial
+## As 4 portas da página inicial
 
 1. **Entenda a política** (`entenda.html`): um **mapa 3D** (tabuleiro) com 9 paradas: o que é política (escola), os Três Poderes, país/estado/cidade, os cargos (torre), o Congresso (no centro), como nasce uma lei, eleições (urna), quem julga e fiscaliza (tribunal) e como participar (palanque). Uma trilha amarela sugere a ordem, mas dá para clicar em qualquer lugar. Ao clicar, a câmera "mergulha" no lugar e abre a **aula daquela parada**: uma apresentação com muito 3D (escadas para processos, cartões que viram, quadrinhos que folheiam, quiz e simuladores). No fim: estrela no mapa e "próxima parada". O progresso fica salvo no aparelho.
 2. **A política do Brasil** (`brasil.html`): presidente, vice, ministros, os 81 senadores e os 513 deputados federais, com busca por qualquer político.
-3. **A política do meu estado** (`estado.html`): governador e vice, os senadores e deputados federais do estado, os deputados estaduais e, escolhendo a cidade, prefeito, vice e vereadores.
+3. **A política do meu estado** (`estado.html`): governador e vice, os senadores e deputados federais do estado e os deputados estaduais. No fim, um campo leva para a página da cidade.
+4. **A política da minha cidade** (`cidade.html`): a pessoa digita o nome da cidade (as 5.569 do Brasil, com o estado ao lado para desempatar) e vê prefeito, vice e vereadores, além do que cada um faz. Brasília e Fernando de Noronha têm explicação própria (não têm prefeitura comum). Endereço: `cidade.html?ibge=<código IBGE>`; os endereços antigos `estado.html?uf=XX&cidade=<IBGE>` levam para lá.
 
 Cada pessoa tem uma página (`pessoa.html?id=...`) com ficha, propostas (com explicação simples + texto oficial + link da fonte), situação de cada proposta, votações, gastos e eleições.
 
@@ -17,14 +18,15 @@ Cada pessoa tem uma página (`pessoa.html?id=...`) com ficha, propostas (com exp
 O site tem versão em inglês para quem é de fora do Brasil (`?lang=en`; a escolha fica salva no aparelho; botão 🌐 no topo).
 - **HTML:** o português fica no HTML e o inglês ao lado, em atributos: `data-en`, `data-en-html`, `data-en-title`, `data-en-placeholder`, `data-en-aria-label`, `data-en-content` (meta). O `js/comum.js` troca tudo quando a página está em inglês.
 - **JavaScript:** `EP.tr("português", "English")`. Números, datas e dinheiro saem no formato do idioma (`EP.num`, `EP.data`, `EP.dinheiro`).
-- **Conteúdo do mapa:** `conteudo/entenda/en/parte-N.json` (mesma estrutura do português). Se faltar, a parada aparece em português com aviso.
+- **Conteúdo do mapa:** `conteudo/entenda/en/parte-N.json` (mesma estrutura do português). Se faltar, a parada aparece em português com aviso. Termos em português no meio do texto em inglês vão entre chaves duplas, `{{título de eleitor}}`, e viram `<span lang="pt-BR">` (o leitor de tela pronuncia em português). No HTML e no JavaScript, use o `<span lang="pt-BR">` direto (ou `EP.md`, que entende `**negrito**` e `{{termo}}`).
 - **Dados:** campos `*_en` quando existem (ex.: `txt_en` da eleição de 2026, `s_en` da explicação simples). Textos oficiais em português (ementas, nomes) aparecem marcados com `lang="pt-BR"`.
 
 ## Acessibilidade
 
 - Menu ♿ em todas as páginas: tamanho da letra (4 tamanhos), alto contraste, menos movimento, mais espaço no texto, ouvir a página (voz do aparelho), Libras (VLibras, do governo federal) e idioma. As escolhas ficam salvas e são aplicadas antes de a página aparecer (script curto no `<head>`).
 - Tudo funciona pelo teclado; janelas prendem o foco e fecham com Esc; o mapa 3D tem lista alternativa (📋) e cada parada é um botão com nome; as setas giram o mapa e trocam as páginas das aulas.
-- Respeita "reduzir movimento" do aparelho. Textos oficiais em português dentro da página em inglês têm `lang="pt-BR"`.
+- Respeita "reduzir movimento" do aparelho. Textos oficiais e termos em português dentro da página em inglês têm `lang="pt-BR"`.
+- **Nenhum `<select>` comum:** toda lista de escolha é um campo com busca (`EP.combo` e `EP.comboSelect`, em `js/comum.js`, no padrão ARIA 1.2 de combobox com lista). A pessoa digita e as opções aparecem; vale sem acento e fora de ordem ("bom jesus pi"), e cada palavra digitada precisa ser o começo de uma palavra da opção (se assim não achar nada, vale qualquer pedaço). Setas, Enter e Esc funcionam; o leitor de tela ouve quantas opções há.
 - Auditoria automática: `python testes/acessibilidade.py pagina.html "pagina.html?lang=en" [--mobile]` (axe-core, WCAG 2.2 AA).
 
 ## Fases combinadas
@@ -49,10 +51,11 @@ Mandatos: o site mostra **quem está no cargo hoje** e marca quem foi **eleito/r
 ## Estrutura
 
 ```
-index.html            página inicial (3 portas)
+index.html            página inicial (4 portas)
 entenda.html          mapa 3D da política + aulas de cada parada (lê conteudo/entenda/[en/]parte-N.json)
 brasil.html           política do Brasil (lê dados/executivo.json, dados/senado.json, dados/camara.json)
-estado.html           política do meu estado (lê dados/estados/UF.json e dados/cidades/...)
+estado.html           política do meu estado (lê dados/estados/UF.json e dados/cidades/UF.json)
+cidade.html           política da minha cidade (lê dados/cidades.json e dados/cidades/UF/IBGE.json)
 pessoa.html           perfil de uma pessoa (lê dados/pessoas/<id>.json e dados/votacoes/<casa>.json)
 imparcialidade.html   como cuidamos da imparcialidade
 dados.html            de onde vêm os dados, com que frequência são atualizados e os limites
@@ -61,7 +64,9 @@ css/tres.css          peças 3D que vieram do site do 2º turno (urna, cubos, fo
 css/tres-politica.css peças 3D novas (Congresso, Três Poderes, níveis, escola, torre, tribunal, palanque, escada...)
 css/mapa.css          o mundo 3D do mapa (chão, lotes, placas, câmera)
 css/entenda.css       as aulas (slides em 3D)
-js/comum.js           idioma, acessibilidade, janela, fontes, ouvir, Libras, formatação
+js/comum.js           idioma, acessibilidade, janela, fontes, ouvir, Libras, formatação, listas com busca (EP.combo), compartilhar
+js/casa.js            monta uma Casa (Senado, Câmara, Assembleia, Câmara Municipal): plenário 3D, filtros e lista de cartões
+js/brasil.js, js/estado.js, js/cidade.js, js/pessoa.js   as páginas do Brasil, do estado, da cidade e de cada pessoa
 js/tres.js, js/tres-politica.js   montam as peças 3D (cada modelo tem modo "cena" e modo "mundo")
 js/mapa3d.js          monta o mapa 3D, câmera (voar até um lugar), girar, zoom, lista acessível
 js/entenda.js         carrega o conteúdo, liga o mapa e as aulas (especificação dos slides no topo do arquivo)
@@ -79,7 +84,7 @@ Para ver no computador: `python -m http.server 8770` dentro da pasta e abra http
 - `python testes/captura.py index.html "pessoa.html?id=pres-lula&lang=en" --mobile --cheia`: capturas de tela em `testes/capturas/`, erros do console e rolagem para os lados.
 - `python testes/acessibilidade.py brasil.html "brasil.html?lang=en" [--mobile]` e `--aulas` (todos os slides das 9 paradas, nos 2 idiomas): auditoria axe-core (WCAG 2.2 AA). Meta: 0 problemas.
 - `python testes/verifica_texto.py "estado.html?uf=BA&lang=en" ...`: procura "undefined"/"null" e português solto na versão em inglês.
-- `python testes/interacao.py`: teclado, busca, escolha de cidade, filtros, mapa e menu de acessibilidade.
+- `python testes/interacao.py`: teclado, busca, listas com busca (estado, cidade, filtros), página da cidade, 4 portas, filtros, mapa e menu de acessibilidade.
 - `python testes/gerar_imagens.py`: gera os ícones e a imagem de compartilhamento (`testes/og.html` → `img/compartilhar.jpg`).
 - Observação: as fotos do TSE não carregam no navegador sem janela dos testes (o firewall do TSE barra); num navegador normal, carregam.
 
@@ -230,6 +235,7 @@ Chaves: Câmara = id da votação na Câmara (`2345678-123`); Senado = `senado-v
 - `dados/executivo.json`: `{ "presidente": {resumo}, "vice": {resumo}, "fontes": [], "atualizado" }` (resumo = `id, nome, cargo, partido, foto, genero, mandato, eleicao2026`).
 - `dados/manual/ministros.json` e `dados/manual/governadores.json`: pesquisados à mão, **sempre com fonte** em cada item.
 - `dados/estados/<UF>.json`: `{ "uf", "nome", "capital": {"ibge","nome"}, "governador": {...}, "vice": {...}, "senadores": ["sen-..."], "deputadosFederais": ["dep-..."], "deputadosEstaduais": { "total", "aviso", "fonte", "membros": [ {"id","nome","partido","foto","genero","votos","situacao2022","eleicao2026"} ] }, "municipios": 417, "atualizado" }`
+- `dados/cidades.json`: todas as cidades do Brasil para a busca da página da cidade: `[[ibge, nome, UF], ...]` (feito por `scripts/montar.py`).
 - `dados/cidades/<UF>.json`: lista para escolher a cidade: `[ {"ibge","nome","prefeito":"Nome (PARTIDO)"} ]`.
 - `dados/cidades/<UF>/<IBGE>.json`: `{ "ibge","nome","uf","prefeito":{...},"vice":{...},"vereadores":{"total","aviso","fonte","membros":[...]},"atualizado" }`.
 - `dados/busca.json`: `[[id, nome, cargo curto, UF, partido, cidade ou null], ...]` (sem vereadores; eles aparecem na página da cidade).
@@ -248,7 +254,7 @@ Campos extras de quem vem do TSE (estados e cidades): `aConfirmar` (o TSE ainda 
 
 ## Contrato das aulas (`conteudo/entenda/parte-N.json` e `conteudo/entenda/en/parte-N.json`)
 
-Cada parada do mapa é uma "parte". A versão em inglês tem exatamente os mesmos slides, na mesma ordem, com os mesmos ids de fonte (só os textos mudam; as fontes continuam sendo as oficiais brasileiras). No inglês, o título da fonte termina com " (in Portuguese)" e, quando foi traduzido, leva `"lang": "en"` (sem isso, o site marca o título como português para o leitor de tela). No glossário em inglês, o `termo` fica só em inglês (ex.: "alternate") e o nome em português vai no fim do `simples` ("In Portuguese: suplente."), porque o botão 📖 só aparece quando o termo inteiro está no texto do slide.
+Cada parada do mapa é uma "parte". A versão em inglês tem exatamente os mesmos slides, na mesma ordem, com os mesmos ids de fonte (só os textos mudam; as fontes continuam sendo as oficiais brasileiras). No inglês, o título da fonte termina com " (in Portuguese)" e, quando foi traduzido, leva `"lang": "en"` (sem isso, o site marca o título como português para o leitor de tela). No glossário em inglês, o `termo` fica só em inglês (ex.: "alternate") e o nome em português vai no fim do `simples` ("In Portuguese: {{suplente}}."), porque o botão 📖 só aparece quando o termo inteiro está no texto do slide. Nos textos, `**palavra**` vira negrito e `{{termo}}` marca um termo em português (só nos campos de texto: `titulo`, `texto`, `txt`, `mais`, `coruja`, `simples`, `exemplo`, `explica`, `moral`, `nota`, `pergunta`, `opcoes`, `itens`; nunca nas fontes).
 
 ```jsonc
 {

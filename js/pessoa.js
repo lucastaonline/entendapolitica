@@ -30,7 +30,7 @@
     vpref: ["O vice-prefeito substitui o prefeito quando ele viaja ou fica impedido, e assume o cargo se o prefeito sair de vez.",
       "The vice mayor stands in for the mayor during trips or when the mayor cannot serve, and takes over if the mayor leaves office for good."],
     ver: ["Vereadores fazem as leis da cidade, votam o orçamento da prefeitura e fiscalizam o prefeito.",
-      "City councilors (vereadores) make the city's laws, vote on the city budget and oversee the mayor."],
+      "City councilors ({{vereadores}}) make the city's laws, vote on the city budget and oversee the mayor."],
     min: ["Ministros são escolhidos pelo presidente para cuidar de uma área do governo federal. Eles não são eleitos.",
       "Ministers are chosen by the President to take care of one area of the federal government. They are not elected."]
   };
@@ -234,7 +234,7 @@
     var t = tipoCargo(p), o = OQUE[t], q = QUEM[t];
     if (!o || !q) return "";
     var pergunta = EP.en ? "What does " + q[2] + " do?" : "O que faz " + (p.genero === "F" ? q[1] : q[0]) + "?";
-    return '<div class="dica-coruja oque-faz"><span class="coruja" aria-hidden="true">🦉</span><div><p style="margin:0"><b>' + esc(pergunta) + "</b></p><p style=\"margin:4px 0 6px\">" + esc(EP.tr(o[0], o[1])) + "</p>" +
+    return '<div class="dica-coruja oque-faz"><span class="coruja" aria-hidden="true">🦉</span><div><p style="margin:0"><b>' + esc(pergunta) + "</b></p><p style=\"margin:4px 0 6px\">" + EP.md(EP.tr(o[0], o[1])) + "</p>" +
       '<a class="link-seta" href="entenda.html#parte-4">' + EP.tr("Entenda os cargos", "Learn about each office") + ' <span aria-hidden="true">›</span></a> ' + fonteBtn([CF], EP.tr("Fonte", "Source"), EP.tr("o que faz o cargo", "what the office does")) + "</div></div>";
   }
 
@@ -563,7 +563,7 @@
     o.textContent = p.nome;
     var volta = document.getElementById("voltar-lista");
     if (/^(dep|sen|pres|vp|min)$/.test(p.tipo)) volta.href = "brasil.html#" + ({ dep: "camara", sen: "senado" }[p.tipo] || "executivo");
-    else if (p.municipio) volta.href = "estado.html?uf=" + p.uf + "&cidade=" + p.municipio.ibge + "#cidade";
+    else if (p.municipio) volta.href = "cidade.html?ibge=" + p.municipio.ibge + (EP.en ? "&lang=en" : "");
     else volta.href = "estado.html?uf=" + p.uf;
 
     var todas = coletarFontes(p);

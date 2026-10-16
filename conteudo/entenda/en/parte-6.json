@@ -251,7 +251,7 @@
  "glossario": [
   {
    "termo": "bill",
-   "simples": "The text of a law that is still being discussed and voted on. In Portuguese: projeto de lei (PL)."
+   "simples": "The text of a law that is still being discussed and voted on. In Portuguese: {{projeto de lei}} (PL)."
   },
   {
    "termo": "popular initiative",
@@ -259,15 +259,15 @@
   },
   {
    "termo": "rapporteur",
-   "simples": "The lawmaker in charge of studying a bill and giving a report on it. In Portuguese: relator."
+   "simples": "The lawmaker in charge of studying a bill and giving a report on it. In Portuguese: {{relator}}."
   },
   {
    "termo": "report",
-   "simples": "The written opinion of the rapporteur or of the committee: approve, change or reject the bill. In Portuguese: parecer."
+   "simples": "The written opinion of the rapporteur or of the committee: approve, change or reject the bill. In Portuguese: {{parecer}}."
   },
   {
    "termo": "reviewing House",
-   "simples": "The House that checks and reviews a bill that the other House has already approved. In Portuguese: Casa revisora."
+   "simples": "The House that checks and reviews a bill that the other House has already approved. In Portuguese: {{Casa revisora}}."
   },
   {
    "termo": "sanction",
@@ -279,7 +279,7 @@
   },
   {
    "termo": "Official Gazette",
-   "simples": "The official newspaper of the federal government, where laws are published. In Portuguese: Diário Oficial da União."
+   "simples": "The official newspaper of the federal government, where laws are published. In Portuguese: {{Diário Oficial da União}}."
   },
   {
    "termo": "quorum",
@@ -299,11 +299,11 @@
   },
   {
    "termo": "PEC",
-   "simples": "Proposta de Emenda à Constituição (proposed constitutional amendment): a bill to change the Constitution."
+   "simples": "{{Proposta de Emenda à Constituição}} (proposed constitutional amendment): a bill to change the Constitution."
   },
   {
    "termo": "provisional measure",
-   "simples": "A rule that the president creates in urgent cases. It applies right away, but only for a while. In Portuguese: medida provisória (MP)."
+   "simples": "A rule that the president creates in urgent cases. It applies right away, but only for a while. In Portuguese: {{medida provisória}} (MP)."
   },
   {
    "termo": "legislative decree",
@@ -315,7 +315,7 @@
   },
   {
    "termo": "rounds",
-   "simples": "The rounds of voting on a proposal. In Portuguese: turnos."
+   "simples": "The rounds of voting on a proposal. In Portuguese: {{turnos}}."
   },
   {
    "termo": "promulgate",
@@ -323,7 +323,7 @@
   },
   {
    "termo": "entrenched clauses",
-   "simples": "The parts of the Constitution that not even an amendment can abolish. In Portuguese: cláusulas pétreas (“stone clauses”)."
+   "simples": "The parts of the Constitution that not even an amendment can abolish. In Portuguese: {{cláusulas pétreas}} (“stone clauses”)."
   },
   {
    "termo": "separation of powers",
@@ -343,15 +343,15 @@
   },
   {
    "termo": "LDO",
-   "simples": "Lei de Diretrizes Orçamentárias (Budget Guidelines Law): the rules and priorities for preparing the next year's budget."
+   "simples": "{{Lei de Diretrizes Orçamentárias}} (Budget Guidelines Law): the rules and priorities for preparing the next year's budget."
   },
   {
    "termo": "LOA",
-   "simples": "Lei Orçamentária Anual (Annual Budget Law): the budget for the year, with what the government expects to collect and can spend."
+   "simples": "{{Lei Orçamentária Anual}} (Annual Budget Law): the budget for the year, with what the government expects to collect and can spend."
   },
   {
    "termo": "parliamentary amendments",
-   "simples": "Choices made by deputies and senators about where to spend part of the budget money. In Portuguese: emendas parlamentares."
+   "simples": "Choices made by deputies and senators about where to spend part of the budget money. In Portuguese: {{emendas parlamentares}}."
   },
   {
    "termo": "collect",
@@ -359,7 +359,7 @@
   },
   {
    "termo": "state caucus",
-   "simples": "The federal deputies and the senators from the same state, together. In Portuguese: bancada estadual."
+   "simples": "The federal deputies and the senators from the same state, together. In Portuguese: {{bancada estadual}}."
   },
   {
    "termo": "recess",
@@ -371,7 +371,7 @@
   },
   {
    "termo": "Prosecutor General of the Republic",
-   "simples": "The head of the Federal Public Prosecutor's Office (Ministério Público da União), which defends society and demands that laws be followed."
+   "simples": "The head of the Federal Public Prosecutor's Office ({{Ministério Público da União}}), which defends society and demands that laws be followed."
   },
   {
    "termo": "superior courts",
@@ -379,7 +379,7 @@
   },
   {
    "termo": "STF",
-   "simples": "Supremo Tribunal Federal (Supreme Federal Court): the highest court in the country, which takes care of the Constitution."
+   "simples": "{{Supremo Tribunal Federal}} (Supreme Federal Court): the highest court in the country, which takes care of the Constitution."
   },
   {
    "termo": "Constitution",
@@ -437,7 +437,7 @@
     {
      "ic": "📰",
      "titulo": "Published: it's a law!",
-     "txt": "The law comes out in the Official Gazette (Diário Oficial da União). If it does not set a date, it takes effect 45 days later."
+     "txt": "The law comes out in the Official Gazette ({{Diário Oficial da União}}). If it does not set a date, it takes effect 45 days later."
     }
    ],
    "fontes": [
@@ -753,7 +753,7 @@
     },
     {
      "ic": "📜",
-     "txt": "On June 4, 2010, the president signed it. Complementary Law 135 was born: the **Clean Record Law** (Lei da Ficha Limpa)."
+     "txt": "On June 4, 2010, the president signed it. Complementary Law 135 was born: the **Clean Record Law** ({{Lei da Ficha Limpa}})."
     },
     {
      "ic": "🚫",
@@ -773,7 +773,7 @@
    "tipo": "explica",
    "etiqueta": "CANNOT BE CHANGED",
    "titulo": "What not even a PEC can take away",
-   "texto": "Some parts of the Constitution cannot be abolished. They are the **entrenched clauses** (cláusulas pétreas; pétrea means “made of stone”).",
+   "texto": "Some parts of the Constitution cannot be abolished. They are the **entrenched clauses** ({{cláusulas pétreas}}; {{pétrea}} means “made of stone”).",
    "itens": [
     {
      "ic": "🗳️",

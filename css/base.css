@@ -60,6 +60,11 @@ p { margin: 0 0 .7em; }
   .topo .marca { font-size: 15px; padding: 4px 2px; }
   .selo-topo { font-size: .66rem; letter-spacing: .03em; }
 }
+/* telas bem estreitas (320px, ou zoom de 400%): tudo cabe sem rolar para os lados */
+@media (max-width: 360px) {
+  .topo { gap: 4px; padding: 6px; }
+  .topo a, .topo button { padding: 7px 7px; }
+}
 
 /* ---------- selos e etiquetas ---------- */
 .selo-topo {
@@ -148,10 +153,38 @@ p { margin: 0 0 .7em; }
 /* ---------- busca e filtros ---------- */
 .busca { position: relative; }
 .busca input {
-  width: 100%; font: inherit; font-size: 1.05rem; padding: 14px 18px 14px 52px; border-radius: 18px; border: 3px solid var(--line);
+  width: 100%; font: inherit; font-size: 1.05rem; padding: 14px 18px 14px 52px; border-radius: 18px; border: 3px solid #9c8d6e;
   background: #fff; box-shadow: var(--sombra); color: var(--ink);
 }
 .busca input:focus { outline: none; border-color: var(--amarelo); }
+/* ---------- campo de escolha com busca (combobox): usado no lugar de todo "select" ---------- */
+/* borda com contraste de 3:1 com o fundo (WCAG 1.4.11), igual à das buscas */
+.combo { position: relative; min-width: 0; }
+.combo-campo { position: relative; }
+.combo-campo input {
+  width: 100%; font: inherit; font-size: 1rem; min-height: 48px; padding: 11px 40px 11px 14px; border-radius: 16px; border: 3px solid #9c8d6e;
+  background: #fff; color: var(--ink); text-overflow: ellipsis;
+}
+.combo-campo input::placeholder { color: var(--muted); opacity: 1; }
+.combo-campo input:focus { outline: none; border-color: var(--brand); }
+.combo-seta { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); pointer-events: none; color: var(--muted); font-size: .9rem; }
+.combo-lista {
+  position: absolute; left: 0; right: 0; top: calc(100% + 6px); z-index: 40; margin: 0; padding: 6px; list-style: none; max-height: min(330px, 55vh); overflow-y: auto;
+  background: #fff; border: 2px solid #9c8d6e; border-radius: 16px; box-shadow: 0 14px 30px rgba(31, 58, 95, .2); text-align: left; overscroll-behavior: contain;
+}
+.combo-lista li { display: flex; align-items: center; flex-wrap: wrap; gap: 2px 10px; min-height: 44px; padding: 8px 12px; border-radius: 10px; cursor: pointer; line-height: 1.25; }
+.combo-lista li:hover { background: #f3f7fd; }
+.combo-lista li.ativo { background: #e6eef8; box-shadow: inset 0 0 0 2px var(--brand); }
+.combo-lista .combo-t { font-weight: 700; }
+.combo-lista li.escolhido .combo-t { font-weight: 900; }
+.combo-lista small { color: var(--muted); font-size: .82rem; }
+.combo-lista .combo-ok { margin-left: auto; color: var(--brand); font-weight: 900; }
+.combo-nada { margin: 6px 2px 0; font-size: .9rem; color: var(--muted); }
+/* versão grande, com lupa (busca da cidade) */
+.combo.grande .combo-campo input { font-size: 1.1rem; min-height: 58px; padding: 14px 44px 14px 52px; border-radius: 18px; box-shadow: var(--sombra); }
+.combo.grande .combo-campo::before { content: "🔎"; position: absolute; left: 18px; top: 50%; transform: translateY(-50%); font-size: 1.2rem; pointer-events: none; z-index: 1; }
+html.alto-contraste .combo-campo input, html.alto-contraste .combo-lista { border-color: #000; }
+html.alto-contraste .combo-lista li.ativo { background: #ffdd00; color: #000; box-shadow: inset 0 0 0 3px #000; }
 .busca::before { content: "🔎"; position: absolute; left: 18px; top: 50%; transform: translateY(-50%); font-size: 1.2rem; pointer-events: none; }
 .filtros { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
 .filtro {
@@ -179,14 +212,14 @@ select.filtro { appearance: auto; }
 .carregando::before { content: "⏳"; display: block; font-size: 2.6rem; animation: pula 1.4s ease-in-out infinite; }
 
 /* ---------- seções ---------- */
-.bloco { padding: 40px 0; border-top: 2px dashed var(--line); position: relative; }
+.bloco { padding-top: 40px; padding-bottom: 40px; border-top: 2px dashed var(--line); position: relative; }
 .cab-bloco { display: flex; gap: 16px; align-items: center; margin-bottom: 20px; }
 .cab-bloco h2 { margin: 0; }
 .cab-bloco p { margin: 4px 0 0; }
 .ic-bloco { font-size: 2.8rem; line-height: 1; flex-shrink: 0; }
 .lead { font-size: 1.15rem; color: #384150; }
 .destaque { background: linear-gradient(transparent 60%, #ffe08a 60%); padding: 0 4px; }
-.rodape { padding: 30px 0 40px; font-size: .85rem; color: var(--muted); border-top: 2px dashed var(--line); margin-top: 30px; }
+.rodape { padding-top: 30px; padding-bottom: 40px; font-size: .85rem; color: var(--muted); border-top: 2px dashed var(--line); margin-top: 30px; }
 .rodape a { font-weight: 700; }
 
 /* ---------- animação ao rolar ---------- */
@@ -203,7 +236,7 @@ select.filtro { appearance: auto; }
   .janela-cab { margin: 0 -16px 12px; padding: 14px 16px 10px; }
   .grade-pessoas { grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); gap: 10px; }
   .pessoa-card .av { width: 72px; height: 72px; }
-  .bloco { padding: 30px 0; }
+  .bloco { padding-top: 30px; padding-bottom: 30px; }
   .ic-bloco { font-size: 2.2rem; }
 }
 @media (prefers-reduced-motion: reduce) {

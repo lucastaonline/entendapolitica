@@ -187,11 +187,11 @@
   },
   {
    "termo": "round",
-   "simples": "Each round of voting. Some elections have two rounds. In Portuguese: turno."
+   "simples": "Each round of voting. Some elections have two rounds. In Portuguese: {{turno}}."
   },
   {
    "termo": "voter card",
-   "simples": "The document of a person who is registered to vote. In Portuguese: título de eleitor."
+   "simples": "The document of a person who is registered to vote. In Portuguese: {{título de eleitor}}."
   },
   {
    "termo": "e-Título",
@@ -199,27 +199,27 @@
   },
   {
    "termo": "justification",
-   "simples": "A notice to the Electoral Justice explaining why the person did not vote. In Portuguese: justificativa."
+   "simples": "A notice to the Electoral Justice explaining why the person did not vote. In Portuguese: {{justificativa}}."
   },
   {
    "termo": "optional vote",
-   "simples": "A vote that the person can choose to cast or not. In Portuguese: voto facultativo."
+   "simples": "A vote that the person can choose to cast or not. In Portuguese: {{voto facultativo}}."
   },
   {
    "termo": "Electoral Justice",
-   "simples": "The part of the Justice system that organizes elections and takes care of their rules. The TSE is its highest court. In Portuguese: Justiça Eleitoral."
+   "simples": "The part of the Justice system that organizes elections and takes care of their rules. The TSE is its highest court. In Portuguese: {{Justiça Eleitoral}}."
   },
   {
    "termo": "electronic voting machine",
-   "simples": "The machine we vote on. In Portuguese: urna eletrônica."
+   "simples": "The machine we vote on. In Portuguese: {{urna eletrônica}}."
   },
   {
    "termo": "polling station",
-   "simples": "The place, usually a school classroom, where a group of voters votes. In Portuguese: seção eleitoral."
+   "simples": "The place, usually a school classroom, where a group of voters votes. In Portuguese: {{seção eleitoral}}."
   },
   {
    "termo": "voting machine report",
-   "simples": "A paper that the voting machine prints at the end of voting, with the votes from that polling station. In Portuguese: boletim de urna."
+   "simples": "A paper that the voting machine prints at the end of voting, with the votes from that polling station. In Portuguese: {{boletim de urna}}."
   },
   {
    "termo": "public security test",
@@ -235,7 +235,7 @@
   },
   {
    "termo": "party vote",
-   "simples": "A vote given only to the party's number, without choosing a candidate. In Portuguese: voto de legenda."
+   "simples": "A vote given only to the party's number, without choosing a candidate. In Portuguese: {{voto de legenda}}."
   },
   {
    "termo": "valid votes",
@@ -247,11 +247,11 @@
   },
   {
    "termo": "electoral quota",
-   "simples": "How many votes are worth one seat: the valid votes divided by the number of seats. In Portuguese: quociente eleitoral."
+   "simples": "How many votes are worth one seat: the valid votes divided by the number of seats. In Portuguese: {{quociente eleitoral}}."
   },
   {
    "termo": "leftover seats",
-   "simples": "Seats that are still free after the first division among the parties. In Portuguese: sobras."
+   "simples": "Seats that are still free after the first division among the parties. In Portuguese: {{sobras}}."
   },
   {
    "termo": "political party",
@@ -263,7 +263,7 @@
   },
   {
    "termo": "coalition",
-   "simples": "A union of parties for just one election. In Portuguese: coligação."
+   "simples": "A union of parties for just one election. In Portuguese: {{coligação}}."
   },
   {
    "termo": "ineligible",
@@ -345,7 +345,7 @@
    "tipo": "explica",
    "etiqueta": "WHO VOTES",
    "titulo": "Who votes?",
-   "texto": "To vote, a person needs a **voter card** (título de eleitor).",
+   "texto": "To vote, a person needs a **voter card** ({{título de eleitor}}).",
    "itens": [
     {
      "ic": "✅",
@@ -387,11 +387,11 @@
     },
     {
      "ic": "🗳️",
-     "txt": "The electronic voting machine (urna eletrônica) has been used in Brazil since 1996."
+     "txt": "The electronic voting machine ({{urna eletrônica}}) has been used in Brazil since 1996."
     },
     {
      "ic": "🧾",
-     "txt": "At the end of voting, each machine prints the **voting machine report** (boletim de urna), with the votes from that polling station."
+     "txt": "At the end of voting, each machine prints the **voting machine report** ({{boletim de urna}}), with the votes from that polling station."
     },
     {
      "ic": "🌐",
@@ -556,7 +556,7 @@
     {
      "ic": "📋",
      "titulo": "Candidacy",
-     "txt": "The parties ask the Electoral Justice (Justiça Eleitoral) to register their candidates.",
+     "txt": "The parties ask the Electoral Justice ({{Justiça Eleitoral}}) to register their candidates.",
      "dados": [
       {
        "rot": "Deadline",
@@ -566,7 +566,7 @@
     },
     {
      "ic": "🧼",
-     "titulo": "Clean Record (Ficha Limpa)",
+     "titulo": "Clean Record ({{Ficha Limpa}})",
      "txt": "People with certain convictions decided by a group of judges become **ineligible** for 8 years or more.",
      "dados": [
       {

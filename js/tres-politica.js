@@ -151,6 +151,16 @@
     }));
   };
 
+  // prefeitura (página "A política da minha cidade"): o prédio com placa, árvore e ônibus da cidade
+  T.prefeitura = function (o) {
+    o = o || {};
+    var en = window.EP && EP.en;
+    return modelo(o, "cena-predio", "predio3d prefeitura3d", predioMiolo(o, {
+      placa: en ? "CITY HALL" : "PREFEITURA",
+      mais: emoji("🌳", -150, 20, 70, 58) + emoji("🚌", 104, 44, 92, 44)
+    }));
+  };
+
   // ---------------------------------------------------------------- palácio (Planalto) e tribunal (STF)
   function palacioMiolo(o) {
     var cols = "";

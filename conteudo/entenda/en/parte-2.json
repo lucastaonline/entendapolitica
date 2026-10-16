@@ -181,19 +181,19 @@
   },
   {
    "termo": "Legislative Assembly",
-   "simples": "Where the state deputies work. They make the state's laws. In Portuguese: Assembleia Legislativa."
+   "simples": "Where the state deputies work. They make the state's laws. In Portuguese: {{Assembleia Legislativa}}."
   },
   {
    "termo": "City Council",
-   "simples": "Where the city councilors work. They make the city's laws. In Portuguese: Câmara Municipal (and a city councilor is a vereador)."
+   "simples": "Where the city councilors work. They make the city's laws. In Portuguese: {{Câmara Municipal}} (and a city councilor is a {{vereador}})."
   },
   {
    "termo": "Court of Justice",
-   "simples": "The highest court of the Justice system in each state. In Portuguese: Tribunal de Justiça."
+   "simples": "The highest court of the Justice system in each state. In Portuguese: {{Tribunal de Justiça}}."
   },
   {
    "termo": "STF",
-   "simples": "Supremo Tribunal Federal (Supreme Federal Court), the highest court in the country, which protects the Constitution."
+   "simples": "{{Supremo Tribunal Federal}} (Supreme Federal Court), the highest court in the country, which protects the Constitution."
   },
   {
    "termo": "minister",
@@ -229,7 +229,7 @@
   },
   {
    "termo": "branch",
-   "simples": "Each of the three parts that share the command of the country: Legislative, Executive and Judiciary. In Portuguese: Poder."
+   "simples": "Each of the three parts that share the command of the country: Legislative, Executive and Judiciary. In Portuguese: {{Poder}}."
   }
  ],
  "slides": [
@@ -295,7 +295,7 @@
        "val": "City Council"
       }
      ],
-     "mais": "In the country, the National Congress has two parts: the Chamber of Deputies (Câmara dos Deputados) and the Federal Senate (Senado Federal). In the city, the laws are made by city councilors (vereadores)."
+     "mais": "In the country, the National Congress has two parts: the Chamber of Deputies ({{Câmara dos Deputados}}) and the Federal Senate ({{Senado Federal}}). In the city, the laws are made by city councilors ({{vereadores}})."
     },
     {
      "ic": "⚙️",
@@ -331,7 +331,7 @@
        "val": "STF"
       }
      ],
-     "mais": "STF stands for Supremo Tribunal Federal (Supreme Federal Court). Its main job is to protect the Constitution. The 11 judges of the STF are called ministers (ministros)."
+     "mais": "STF stands for {{Supremo Tribunal Federal}} (Supreme Federal Court). Its main job is to protect the Constitution. The 11 judges of the STF are called ministers ({{ministros}})."
     }
    ],
    "fontes": [
@@ -419,11 +419,11 @@
    "tipo": "explica",
    "etiqueta": "THREE POWERS SQUARE",
    "titulo": "In Brasília, the three branches are in the same square",
-   "texto": "It is called **Three Powers Square** (Praça dos Três Poderes). Each building is the home of one branch.",
+   "texto": "It is called **Three Powers Square** ({{Praça dos Três Poderes}}). Each building is the home of one branch.",
    "itens": [
     {
      "ic": "🏢",
-     "txt": "Planalto Palace (Palácio do Planalto): home of the Executive, where the president works."
+     "txt": "Planalto Palace ({{Palácio do Planalto}}): home of the Executive, where the president works."
     },
     {
      "ic": "🏛️",

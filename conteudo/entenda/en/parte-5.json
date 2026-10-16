@@ -270,11 +270,11 @@
   },
   {
    "termo": "reviewing House",
-   "simples": "The House that checks and reviews a bill that the other House has already approved. In Portuguese: Casa revisora."
+   "simples": "The House that checks and reviews a bill that the other House has already approved. In Portuguese: {{Casa revisora}}."
   },
   {
    "termo": "term of office",
-   "simples": "The time an elected person stays in office. In Portuguese: mandato."
+   "simples": "The time an elected person stays in office. In Portuguese: {{mandato}}."
   },
   {
    "termo": "committees",
@@ -282,15 +282,15 @@
   },
   {
    "termo": "CCJ",
-   "simples": "Comissão de Constituição e Justiça (Constitution and Justice Committee): it checks whether a bill respects the Constitution."
+   "simples": "{{Comissão de Constituição e Justiça}} (Constitution and Justice Committee): it checks whether a bill respects the Constitution."
   },
   {
    "termo": "Plenary",
-   "simples": "The meeting with all the members of the House, where the big votes happen. In Portuguese: Plenário."
+   "simples": "The meeting with all the members of the House, where the big votes happen. In Portuguese: {{Plenário}}."
   },
   {
    "termo": "agenda",
-   "simples": "The list of what will be discussed and voted on. In Portuguese: pauta."
+   "simples": "The list of what will be discussed and voted on. In Portuguese: {{pauta}}."
   },
   {
    "termo": "oversee",
@@ -302,7 +302,7 @@
   },
   {
    "termo": "CPI",
-   "simples": "Comissão Parlamentar de Inquérito (Parliamentary Inquiry Committee): a group of lawmakers that investigates a fact."
+   "simples": "{{Comissão Parlamentar de Inquérito}} (Parliamentary Inquiry Committee): a group of lawmakers that investigates a fact."
   },
   {
    "termo": "impeachment",
@@ -310,15 +310,15 @@
   },
   {
    "termo": "caucus",
-   "simples": "A group of lawmakers from the same party, from the same state or with the same interest. In Portuguese: bancada."
+   "simples": "A group of lawmakers from the same party, from the same state or with the same interest. In Portuguese: {{bancada}}."
   },
   {
    "termo": "parliamentary front",
-   "simples": "A group of lawmakers from several parties who get together to debate a topic. In Portuguese: frente parlamentar."
+   "simples": "A group of lawmakers from several parties who get together to debate a topic. In Portuguese: {{frente parlamentar}}."
   },
   {
    "termo": "government's base",
-   "simples": "The parties and lawmakers who support the government. In Portuguese: base do governo."
+   "simples": "The parties and lawmakers who support the government. In Portuguese: {{base do governo}}."
   },
   {
    "termo": "opposition",
@@ -330,7 +330,7 @@
   },
   {
    "termo": "lawmakers",
-   "simples": "People who hold a term of office in a lawmaking House: deputies, senators and city councilors. In Portuguese: parlamentares."
+   "simples": "People who hold a term of office in a lawmaking House: deputies, senators and city councilors. In Portuguese: {{parlamentares}}."
   },
   {
    "termo": "sessions",
@@ -342,7 +342,7 @@
   },
   {
    "termo": "STF",
-   "simples": "Supremo Tribunal Federal (Supreme Federal Court): the highest court in the country, which takes care of the Constitution."
+   "simples": "{{Supremo Tribunal Federal}} (Supreme Federal Court): the highest court in the country, which takes care of the Constitution."
   },
   {
    "termo": "ministers",
@@ -350,15 +350,15 @@
   },
   {
    "termo": "Legislative Assembly",
-   "simples": "The House where the state deputies make the state's laws. In Portuguese: Assembleia Legislativa."
+   "simples": "The House where the state deputies make the state's laws. In Portuguese: {{Assembleia Legislativa}}."
   },
   {
    "termo": "Legislative Chamber",
-   "simples": "The lawmaking House of the Federal District, where the district deputies work. In Portuguese: Câmara Legislativa."
+   "simples": "The lawmaking House of the Federal District, where the district deputies work. In Portuguese: {{Câmara Legislativa}}."
   },
   {
    "termo": "City Council",
-   "simples": "The House where the city councilors make the city's laws. In Portuguese: Câmara Municipal."
+   "simples": "The House where the city councilors make the city's laws. In Portuguese: {{Câmara Municipal}}."
   },
   {
    "termo": "municipalities",
@@ -369,7 +369,7 @@
   {
    "tipo": "abertura",
    "titulo": "The National Congress",
-   "texto": "It is where the country's laws are made. It is in Brasília, the capital, and has two Houses: the Chamber of Deputies (Câmara dos Deputados) and the Federal Senate (Senado Federal).",
+   "texto": "It is where the country's laws are made. It is in Brasília, the capital, and has two Houses: the Chamber of Deputies ({{Câmara dos Deputados}}) and the Federal Senate ({{Senado Federal}}).",
    "ilustracao": "congresso"
   },
   {
@@ -458,7 +458,7 @@
     },
     {
      "ic": "🗳️",
-     "txt": "The **Plenary** (Plenário) is the meeting with everyone in the House. That is where the big votes happen."
+     "txt": "The **Plenary** ({{Plenário}}) is the meeting with everyone in the House. That is where the big votes happen."
     },
     {
      "ic": "⏩",
@@ -466,7 +466,7 @@
     }
    ],
    "ilustracao": "plenario",
-   "coruja": "In the Chamber, the full name of the CCJ is Comissão de Constituição e Justiça e de Cidadania (CCJC): Constitution, Justice and Citizenship Committee.",
+   "coruja": "In the Chamber, the full name of the CCJ is {{Comissão de Constituição e Justiça e de Cidadania}} (CCJC): Constitution, Justice and Citizenship Committee.",
    "fontes": [
     "cf-art58",
     "camara-processo",

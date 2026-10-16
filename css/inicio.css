@@ -8,7 +8,7 @@ body > .rodape { position: relative; z-index: 1; }
 .topo-txt h1 { margin-top: 16px; }
 .topo-3d { flex: .9; min-width: 0; }
 .escolha { font-size: 1.4rem; margin: 22px 0 18px; }
-.portas { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 18px; align-items: stretch; list-style: none; margin: 0; padding: 0; }
+.portas { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 18px; align-items: stretch; list-style: none; margin: 0; padding: 0; }
 .portas > li { display: flex; min-width: 0; }
 .porta {
   position: relative; display: flex; flex-direction: column; gap: 8px; text-decoration: none; color: var(--ink); width: 100%;
@@ -50,7 +50,7 @@ html :focus-visible { box-shadow: 0 0 0 3px var(--ink); }
 html.alto-contraste :focus-visible { box-shadow: 0 0 0 8px #ffdd00 !important; }
 main:focus { outline: none; }
 
-@media (max-width: 900px) {
+@media (max-width: 760px) {
   .portas { grid-template-columns: minmax(0, 1fr); gap: 24px; }
 }
 @media (max-width: 760px) {

@@ -58,30 +58,27 @@
     document.getElementById("regioes").innerHTML = Object.keys(REGIOES).map(function (r) {
       return '<li><i style="background:' + REGIOES[r][2] + '" aria-hidden="true"></i>' + EP.tr(REGIOES[r][0], REGIOES[r][1]) + "</li>";
     }).join("");
-    // lista: escolher e confirmar com o botão (trocar a opção sozinho não muda de página)
-    var sel = document.getElementById("sel-uf");
+    // lista de estados com busca: a pessoa digita e escolhe; escolher já abre o estado (o rótulo avisa isso)
+    var sel = document.getElementById("sel-uf"), form = document.getElementById("form-uf");
     sel.insertAdjacentHTML("beforeend", Object.keys(EP.UFS).sort(function (a, b) { return EP.norm(EP.UFS[a]).localeCompare(EP.norm(EP.UFS[b])); })
-      .map(function (u) { return '<option value="' + u + '">' + esc(EP.UFS[u]) + "</option>"; }).join(""));
-    if (EP.en) document.getElementById("form-uf").insertAdjacentHTML("afterbegin", '<input type="hidden" name="lang" value="en">');
+      .map(function (u) { return '<option value="' + u + '" data-busca="' + u + '">' + esc(EP.UFS[u]) + "</option>"; }).join(""));
+    if (EP.en) form.insertAdjacentHTML("afterbegin", '<input type="hidden" name="lang" value="en">');
+    var cUF = EP.comboSelect(sel, {
+      placeholder: EP.tr("Digite o nome do estado…", "Type the state's name…"),
+      aoEscolher: function (it) { if (it.v) location.href = "estado.html?uf=" + it.v + (EP.en ? "&lang=en" : ""); }
+    });
+    form.addEventListener("submit", function (e) {
+      if (sel.value) return;
+      e.preventDefault();
+      cUF.foco();
+      document.getElementById("aviso-uf").textContent = EP.tr("Escolha um estado na lista.", "Choose a state from the list.");
+    });
     if (window.TRES) EP.fundo3d([["cubo", "5%", "14%", 40, 0, 0, 18], ["esfera", "92%", "10%", 36, 3, 0, 7], ["anel", "90%", "60%", 56, 2, 0, 20], ["esfera", "4%", "72%", 30, 6, 0, 8]], document.body);
     EP.revelar();
   }
 
   // ---------------------------------------------------------------- página do estado
-  function cartaoGrande(p, cargo, extra) {
-    if (!p) return "";
-    if (p.vago) {
-      return '<div class="pessoa-grande"><span class="av av-letra" aria-hidden="true">–</span><span><span class="cargo">' + esc(cargo) + "</span><b>" + EP.tr("Cargo vago", "Vacant") + "</b>" +
-        (p.txt || p.nota ? "<small>" + D.traduz(p.txt || p.nota, null, p.txt_en || p.nota_en) + "</small>" : "") + "</span></div>";
-    }
-    var desde = p.desde ? EP.tr("No cargo desde ", "In office since ") + EP.data(p.desde) : "";
-    return '<a class="pessoa-grande rev" href="pessoa.html?id=' + encodeURIComponent(p.id) + '">' + EP.av(p.foto, p.nome, null, true) +
-      '<span><span class="cargo">' + esc(cargo) + "</span><b>" + esc(p.nome) + "</b><small>" + [p.partido ? EP.pt(esc(p.partido)) : "", esc(desde)].filter(Boolean).join(" · ") + "</small>" +
-      (extra || "") + EP.chip2026(p.eleicao2026, p.genero, true) +
-      (p.comoAssumiu && !/^eleit/i.test(p.comoAssumiu) ? '<small style="margin-top:6px"><span aria-hidden="true">🔑 </span>' + D.traduz(p.comoAssumiu, null, p.comoAssumiu_en) + "</small>" : "") +
-      (p.nota ? '<small style="margin-top:6px"><span aria-hidden="true">📝 </span>' + D.traduz(p.nota, null, p.nota_en) + "</small>" : "") +
-      '<span class="ver">' + EP.tr("Ver mais", "See more") + ' <span aria-hidden="true">›</span></span></span></a>';
-  }
+  var cartaoGrande = EP.cartaoGrande;  // em js/casa.js (também usado na página da cidade)
   function secao(id, ic, titulo, sub, corpo) {
     return '<section class="miolo bloco" id="' + id + '" aria-labelledby="t-' + id + '"><div class="cab-bloco rev"><span class="ic-bloco" aria-hidden="true">' + ic + "</span><div><h2 id=\"t-" + id + '">' + titulo + "</h2>" +
       (sub ? '<p class="muted">' + sub + "</p>" : "") + "</div></div>" + corpo + "</section>";
@@ -124,12 +121,11 @@
       (ehDF ? '<section class="miolo bloco" aria-label="' + EP.tr("Cidades", "Cities") + '"><div class="aviso azul" id="aviso-df"><span aria-hidden="true">ℹ️ </span>' +
         esc(EP.tr("O Distrito Federal não é dividido em cidades com prefeito e vereadores. Quem cuida dessas coisas é o próprio governo do DF, e as leis são feitas pela Câmara Legislativa.",
           "The Federal District is not divided into cities with mayors and city councilors. The Federal District's own government takes care of those things, and its laws are made by the Legislative Chamber.")) + "</div></section>" :
-        secao("cidade", "🏘️", esc(EP.tr("Minha cidade", "Cities")), esc(EP.tr("Escolha a sua cidade para ver o prefeito, o vice e os vereadores.", "Choose a city to see its mayor, vice mayor and city councilors (vereadores).")),
-          '<div id="aviso-cid"></div><div class="cidade-busca"><label for="busca-cidade">' + EP.tr("Digite o nome da sua cidade", "Type the name of a city") + "</label>" +
-          '<div class="busca"><input type="search" id="busca-cidade" autocomplete="off" aria-describedby="dica-cidade" aria-controls="sugestoes"></div>' +
-          '<p class="muted" id="dica-cidade" style="font-size:.85rem;margin:6px 0 0">' + EP.tr("Depois de digitar, use a seta para baixo para ir até as cidades encontradas.", "After typing, use the down arrow to move to the cities found.") + "</p>" +
-          '<p class="sr" id="status-cidade" role="status" aria-live="polite"></p><ul class="sugestoes" id="sugestoes" aria-label="' + EP.tr("Cidades encontradas", "Cities found") + '"></ul></div>' +
-          '<div class="cidade-caixa" id="cidade-caixa"></div>'));
+        secao("cidade", "🏘️", esc(EP.tr("Minha cidade", "Cities")), EP.tr("Escolha a sua cidade para ver o prefeito, o vice e os vereadores.", 'Choose a city to see its mayor, vice mayor and city councilors (<span lang="pt-BR">vereadores</span>).'),
+          '<div id="aviso-cid"></div><div class="cidade-busca"><label id="rotulo-cid" for="campo-cid">' + EP.tr("Digite o nome da sua cidade", "Type the name of a city") + "</label>" +
+          '<div id="busca-cid"></div>' +
+          '<p class="muted" id="dica-cidade" style="font-size:.85rem;margin:6px 0 0">' + EP.tr("Escolha na lista que aparece para abrir a página da cidade.", "Choose it from the list to open the city's page.") + "</p>" +
+          '<p id="capital-cid" class="links-cidade"></p></div>'));
     EP.revelar(el);
 
     // governo + Assembleia (arquivo do estado)
@@ -144,8 +140,10 @@
       document.getElementById("gov-nota").innerHTML = (notas.length ? '<p class="aviso"><span aria-hidden="true">⚠️ </span>' + esc(notas.join(" ")) + "</p>" : "") +
         (fg.length ? '<p style="margin-top:12px">' + EP.botaoFontes(fg) + "</p>" : "");
       if (e.capital || e.municipios) {
-        var bc = document.getElementById("busca-cidade");
+        var bc = document.getElementById("campo-cid"), cap = document.getElementById("capital-cid");
         if (bc && e.capital) bc.placeholder = EP.tr("Ex.: ", "E.g.: ") + e.capital.nome;
+        if (cap && e.capital) cap.innerHTML = '<a class="btn claro peq" href="cidade.html?ibge=' + e.capital.ibge + (EP.en ? "&lang=en" : "") + '"><span aria-hidden="true">🏙️ </span>' +
+          esc(EP.tr("Ver a capital, " + e.capital.nome, "See the capital, " + e.capital.nome)) + "</a>";
         document.getElementById("lead-uf").insertAdjacentHTML("afterend", '<p class="muted">' +
           (e.capital ? '<span aria-hidden="true">🏙️ </span>' + EP.tr("Capital: ", "Capital: ") + "<b>" + esc(e.capital.nome) + "</b>" : "") +
           (e.municipios ? (e.capital ? " · " : "") + '<span aria-hidden="true">🏘️ </span>' + EP.num(e.municipios) + " " + EP.tr(e.municipios === 1 ? "município" : "municípios", e.municipios === 1 ? "municipality" : "municipalities") : "") + "</p>");
@@ -184,97 +182,24 @@
     if (!ehDF) ligaCidade();
   }
 
-  // ---------------------------------------------------------------- cidade
+  // ---------------------------------------------------------------- cidade: campo com busca que leva para cidade.html
   function ligaCidade() {
-    var input = document.getElementById("busca-cidade"), sug = document.getElementById("sugestoes"), status = document.getElementById("status-cidade");
-    var lista = null;
-    function avisa(t) { if (status.textContent !== t) status.textContent = t; }
-    var pronto = EP.json("dados/cidades/" + uf + ".json").then(function (l) {
-      lista = l.map(function (c) { return { ibge: String(c.ibge), nome: c.nome, prefeito: c.prefeito, n: EP.norm(c.nome) }; });
-      return lista;
-    });
-    function sugere() {
-      var q = EP.norm(input.value);
-      if (!lista || q.length < 2) { sug.innerHTML = ""; avisa(""); return; }
-      var r = lista.filter(function (c) { return c.n.indexOf(q) > -1; }).sort(function (a, b) { return (a.n.indexOf(q) === 0 ? 0 : 1) - (b.n.indexOf(q) === 0 ? 0 : 1) || a.n.localeCompare(b.n); });
-      var vis = r.slice(0, 8);
-      sug.innerHTML = vis.length ? vis.map(function (c) {
-        return '<li><button type="button" data-ibge="' + c.ibge + '"><b>' + esc(c.nome) + "</b>" + (c.prefeito ? "<br><small>" + EP.tr("Prefeito(a): ", "Mayor: ") + esc(c.prefeito) + "</small>" : "") + "</button></li>";
-      }).join("") : '<li class="muted">' + esc(EP.tr("Nenhuma cidade com esse nome " + EP.noEstado(uf) + ".", "No city with that name " + EP.noEstado(uf) + ".")) + "</li>";
-      avisa(!r.length ? EP.tr("Nenhuma cidade encontrada.", "No city found.") : r.length === 1 ? EP.tr("1 cidade encontrada.", "1 city found.") :
-        r.length > vis.length ? EP.tr(EP.num(r.length) + " cidades encontradas. Mostrando as 8 primeiras.", EP.num(r.length) + " cities found. Showing the first 8.") :
-          EP.tr(EP.num(r.length) + " cidades encontradas.", EP.num(r.length) + " cities found."));
-    }
-    var t = null;
-    input.addEventListener("input", function () {
-      clearTimeout(t);
-      t = setTimeout(function () {
-        pronto.then(sugere).catch(function () {
-          sug.innerHTML = '<li class="muted">' + EP.tr("A lista de cidades ainda não está disponível.", "The list of cities is not available yet.") + "</li>";
-          avisa(EP.tr("A lista de cidades ainda não está disponível.", "The list of cities is not available yet."));
+    EP.combo(document.getElementById("busca-cid"), {
+      id: "campo-cid", rotuloId: "rotulo-cid", descricao: "dica-cidade", classe: "grande", min: 1, max: 8,
+      placeholder: EP.tr("Digite o nome da cidade…", "Type the city's name…"),
+      nada: EP.tr("Nenhuma cidade com esse nome " + EP.noEstado(uf) + ".", "No city with that name " + EP.noEstado(uf) + "."),
+      itens: function () {
+        return EP.json("dados/cidades/" + uf + ".json").then(function (l) {
+          return l.map(function (c) { return { v: c.ibge, t: c.nome, sub: c.prefeito ? EP.tr("Prefeito(a): ", "Mayor: ") + c.prefeito : null }; });
         });
-      }, 150);
+      },
+      aoEscolher: function (it) { location.href = "cidade.html?ibge=" + it.v + (EP.en ? "&lang=en" : ""); }
     });
-    input.addEventListener("keydown", function (e) {
-      if (e.key === "ArrowDown") { var b = sug.querySelector("button"); if (b) { e.preventDefault(); b.focus(); } }
-    });
-    sug.addEventListener("keydown", function (e) {
-      var bs = [].slice.call(sug.querySelectorAll("button")), i = bs.indexOf(document.activeElement);
-      if (i < 0) return;
-      if (e.key === "ArrowDown" && i < bs.length - 1) { e.preventDefault(); bs[i + 1].focus(); }
-      else if (e.key === "ArrowUp") { e.preventDefault(); (i > 0 ? bs[i - 1] : input).focus(); }
-      else if (e.key === "Escape") { e.preventDefault(); input.focus(); }
-    });
-    sug.addEventListener("click", function (e) {
-      var b = e.target.closest("[data-ibge]");
-      if (!b) return;
-      sug.innerHTML = "";
-      avisa("");
-      input.value = b.querySelector("b").textContent;
-      abreCidade(b.getAttribute("data-ibge"), true);
-    });
-    pronto.catch(function () {});
-    if (cidade0) pronto.then(function () {
-      var c = lista.filter(function (x) { return x.ibge === cidade0; })[0];
-      if (c) input.value = c.nome;
-      abreCidade(cidade0, false);
-      setTimeout(function () { document.getElementById("cidade").scrollIntoView({ behavior: EP.reduzido ? "auto" : "smooth" }); }, 400);
-    }).catch(function () {});
-  }
-
-  function abreCidade(ibge, focar) {
-    var caixa = document.getElementById("cidade-caixa");
-    caixa.innerHTML = '<div class="carregando">' + EP.tr("Carregando…", "Loading…") + "</div>";
-    try { history.replaceState(null, "", "estado.html?uf=" + uf + "&cidade=" + ibge + (EP.en ? "&lang=en" : "") + "#cidade"); } catch (e) {}
-    D.canonico({ uf: uf, cidade: ibge });
-    EP.json("dados/cidades/" + uf + "/" + ibge + ".json").then(function (c) {
-      var v = c.vereadores || {}, p = c.prefeito, vi = c.vice;
-      function sit(x) { return x && x.situacao ? "<small>" + D.situacao(x.situacao, x.situacao_en) + "</small>" : ""; }
-      var conferir = (p && p.aConfirmar) || (vi && vi.aConfirmar);
-      var fp = fontesDe(c, p, vi);
-      caixa.innerHTML = '<h3 class="sub" id="nome-cidade" tabindex="-1"><span aria-hidden="true">🏙️ </span>' + esc(c.nome) + "</h3>" + aviso(D.aviso(c.aviso, c.aviso_en)) +
-        (conferir ? '<p class="aviso"><span aria-hidden="true">⚠️ </span>' + EP.tr("Estamos conferindo se quem aparece aqui ainda está no cargo.", "We are checking whether the people shown here are still in office.") + "</p>" : "") +
-        '<div class="exec-topo">' + (cartaoGrande(p, EP.tr(EP.gen(p && p.genero, "Prefeito", "Prefeita"), "Mayor"), sit(p)) +
-          cartaoGrande(vi, EP.tr(EP.gen(vi && vi.genero, "Vice-prefeito", "Vice-prefeita"), "Vice Mayor"), sit(vi)) ||
-          '<div class="vazio">' + EP.tr("O TSE não mostra quem governa esta cidade.", "The TSE does not show who governs this city.") + "</div>") + "</div>" +
-        (fp.length ? '<p style="margin-top:8px">' + EP.botaoFontes(fp) + "</p>" : "") +
-        '<h4 class="sub"><span aria-hidden="true">🏛️ </span>' + EP.tr("A Câmara de Vereadores", "The City Council (Câmara de Vereadores)") + " <small>(" + EP.num((v.membros || []).length) + ")</small></h4>" +
-        '<p class="muted">' + EP.tr("Os vereadores fazem as leis da cidade e fiscalizam o prefeito.", "City councilors (vereadores) make the city's laws and oversee the mayor.") + "</p>" +
-        aviso(D.aviso(v.aviso, v.aviso_en)) + '<div id="casa-ver"></div>';
-      EP.montaCasa(document.getElementById("casa-ver"), { membros: v.membros || [], filtroUF: false, fonte: v.fonte, atualizado: c.atualizado, nivel: 5,
-        nomes: { um: EP.tr("vereador", "city councilor"), uma: EP.tr("vereadora", "city councilor"), varios: EP.tr("vereadores", "city councilors"), varias: EP.tr("vereadoras", "city councilors") },
-        extra: function (m) { return m.votos != null ? EP.tr(EP.num(m.votos) + " votos em 2024", EP.num(m.votos) + " votes in 2024") : ""; } });
-      EP.revelar(caixa);
-      if (focar) {
-        var h = document.getElementById("nome-cidade");
-        h.focus({ preventScroll: true });
-        h.scrollIntoView({ behavior: EP.reduzido ? "auto" : "smooth", block: "start" });
-      }
-    }).catch(function () { falhou(caixa, "os dados desta cidade", "the data for this city"); });
   }
 
   D.rodapeErros(document.getElementById("links-erro"));
-  if (uf && EP.UFS[uf]) mostraEstado();
+  if (cidade0 && /^\d{7}$/.test(cidade0)) location.replace("cidade.html?ibge=" + cidade0 + (EP.en ? "&lang=en" : ""));
+  else if (uf && EP.UFS[uf]) mostraEstado();
   else mostraMapa();
   EP.paralaxe();
 })();

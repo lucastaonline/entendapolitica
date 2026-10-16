@@ -86,7 +86,18 @@ def mesma_regua(p: dict, t: dict) -> None:
 
 
 SITE = "https://entendapolitica.vercel.app"  # endereço público (troque aqui e no robots.txt se mudar)
-PAGINAS = ("", "entenda.html", "brasil.html", "estado.html", "imparcialidade.html", "dados.html")
+PAGINAS = ("", "entenda.html", "brasil.html", "estado.html", "cidade.html", "imparcialidade.html", "dados.html")
+
+
+def indice_cidades() -> int:
+    """dados/cidades.json: as 5.569 cidades numa lista só ([código IBGE, nome, UF]), para a busca de cidade do site."""
+    l = []
+    for arq in sorted((DADOS / "cidades").glob("*.json")):
+        for c in ler_json(arq, []) or []:
+            l.append([str(c["ibge"]), c["nome"], arq.stem])
+    l.sort(key=lambda x: (sem_acento(x[1].lower()), x[2]))
+    salvar_json(DADOS / "cidades.json", l)
+    return len(l)
 
 
 def sitemap() -> int:
@@ -179,6 +190,7 @@ def main() -> None:
             if m.get("eleicao2026"):
                 m["eleicao2026"] = com_en(m["eleicao2026"])
         salvar_json(arq, sem_mudar_data(e, arq))
+    log(f"dados/cidades.json: {indice_cidades()} cidades")
     log(f"sitemap.xml: {sitemap()} endereços")
     log("pronto")
 

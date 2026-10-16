@@ -11,6 +11,23 @@
   function nomePartido(p) { return p === SEM ? EP.tr("Sem partido", "No party") : p; }
   function nomePartidoHtml(p) { return p === SEM ? esc(nomePartido(p)) : EP.pt(esc(p)); }
 
+  // cartão grande de quem governa (governador, prefeito e vices). Usado nas páginas do estado e da cidade.
+  EP.cartaoGrande = function (p, cargo, extra) {
+    var D = EP.trd;
+    if (!p) return "";
+    if (p.vago) {
+      return '<div class="pessoa-grande"><span class="av av-letra" aria-hidden="true">–</span><span><span class="cargo">' + esc(cargo) + "</span><b>" + EP.tr("Cargo vago", "Vacant") + "</b>" +
+        (p.txt || p.nota ? "<small>" + D.traduz(p.txt || p.nota, null, p.txt_en || p.nota_en) + "</small>" : "") + "</span></div>";
+    }
+    var desde = p.desde ? EP.tr("No cargo desde ", "In office since ") + EP.data(p.desde) : "";
+    return '<a class="pessoa-grande rev" href="pessoa.html?id=' + encodeURIComponent(p.id) + '">' + EP.av(p.foto, p.nome, null, true) +
+      '<span><span class="cargo">' + esc(cargo) + "</span><b>" + esc(p.nome) + "</b><small>" + [p.partido ? EP.pt(esc(p.partido)) : "", esc(desde)].filter(Boolean).join(" · ") + "</small>" +
+      (extra || "") + EP.chip2026(p.eleicao2026, p.genero, true) +
+      (p.comoAssumiu && !/^eleit/i.test(p.comoAssumiu) ? '<small style="margin-top:6px"><span aria-hidden="true">🔑 </span>' + D.traduz(p.comoAssumiu, null, p.comoAssumiu_en) + "</small>" : "") +
+      (p.nota ? '<small style="margin-top:6px"><span aria-hidden="true">📝 </span>' + D.traduz(p.nota, null, p.nota_en) + "</small>" : "") +
+      '<span class="ver">' + EP.tr("Ver mais", "See more") + ' <span aria-hidden="true">›</span></span></span></a>';
+  };
+
   EP.montaCasa = function (el, o) {
     var uid = "casa" + (++conta);
     var membros = EP.alfabetica(o.membros || []);
@@ -71,7 +88,7 @@
       '<div class="filtros-casa"><div class="busca"><input type="search" class="f-nome" placeholder="' + EP.tr("Procurar pelo nome", "Search by name") + '" aria-label="' +
       EP.tr("Procurar pelo nome", "Search by name") + '" autocomplete="off"></div>' +
       (o.filtroUF !== false && listaUF.length > 1 ? '<select class="f-uf" aria-label="' + EP.tr("Filtrar por estado", "Filter by state") + '"><option value="">' + EP.tr("Todos os estados", "All states") + "</option>" +
-        listaUF.map(function (u) { return '<option value="' + u + '">' + esc(EP.UFS[u] || u) + "</option>"; }).join("") + "</select>" : "<span></span>") +
+        listaUF.map(function (u) { return '<option value="' + u + '" data-busca="' + u + '">' + esc(EP.UFS[u] || u) + "</option>"; }).join("") + "</select>" : "<span></span>") +
       '<select class="f-partido" aria-label="' + EP.tr("Filtrar por partido", "Filter by party") + '"><option value="">' + EP.tr("Todos os partidos", "All parties") + "</option>" +
       EP.alfabetica(porPartido, "partido").map(function (p) {
         return '<option value="' + esc(p.partido) + '"' + (EP.en && p.partido !== SEM ? ' lang="pt-BR"' : "") + ">" + esc(nomePartido(p.partido)) + " (" + EP.num(p.n) + ")</option>";
@@ -81,6 +98,9 @@
         (o.atualizado ? ' <small class="muted">' + EP.tr("Atualizado em ", "Updated on ") + EP.data(o.atualizado) + "</small>" : "") + "</p>" : "");
 
     var fNome = el.querySelector(".f-nome"), fUF = el.querySelector(".f-uf"), fPart = el.querySelector(".f-partido");
+    // listas de escolha com busca: a pessoa digita e as opções vão aparecendo
+    if (fUF) EP.comboSelect(fUF, { placeholder: EP.tr("Digite o estado…", "Type a state…") });
+    EP.comboSelect(fPart, { placeholder: EP.tr("Digite o partido…", "Type a party…") });
     var grade = el.querySelector(".grade-pessoas"), contagem = el.querySelector(".contagem"), plenEl = el.querySelector(".plenario");
     var LOTE = 60, mostrando = LOTE;
 
@@ -129,6 +149,7 @@
       if (b) {
         var p = porPartido[+b.getAttribute("data-g")].partido;
         fPart.value = fPart.value === p ? "" : p;
+        EP.comboSync(fPart);
         mostrando = LOTE;
         desenha();
         return;

@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <script>(function(d){try{var a=JSON.parse(localStorage.getItem("ep-a11y")||"{}");if(a.contraste)d.classList.add("alto-contraste");if(a.movimento)d.classList.add("sem-movimento");if(a.espaco)d.classList.add("espacado");if(a.escala)d.style.setProperty("--escala",a.escala);var q=/[?&]lang=(en|pt)\b/.exec(location.search),l=q?q[1]:localStorage.getItem("ep-lang");if(l==="en")d.lang="en";}catch(e){}})(document.documentElement)</script>
-  <title data-en="Politics in each Brazilian state and city | Understand Politics">A política do meu estado e da minha cidade | Entenda Política</title>
+  <title data-en="Politics in each Brazilian state | Understand Politics">A política do meu estado | Entenda Política</title>
   <meta name="description" content="Escolha seu estado e sua cidade: governador, senadores, deputados federais e estaduais, prefeito e vereadores. Tudo com fonte." data-en-content="Choose a Brazilian state and city: governor, senators, federal and state deputies, mayor and city councilors. Everything with sources.">
   <link rel="canonical" href="https://entendapolitica.vercel.app/estado.html">
   <link rel="alternate" hreflang="pt-BR" href="https://entendapolitica.vercel.app/estado.html">
@@ -15,7 +15,7 @@
   <meta property="og:locale:alternate" content="en_US">
   <meta property="og:site_name" content="Entenda Política">
   <meta property="og:url" content="https://entendapolitica.vercel.app/estado.html">
-  <meta property="og:title" content="A política do meu estado e da minha cidade">
+  <meta property="og:title" content="A política do meu estado">
   <meta property="og:description" content="Governador, deputados, prefeito e vereadores. Tudo com fonte.">
   <meta property="og:image" content="https://entendapolitica.vercel.app/img/compartilhar.jpg">
   <meta property="og:image:type" content="image/jpeg">
@@ -58,9 +58,10 @@
       <p class="rotulo-uf" id="rotulo-uf" aria-hidden="true"></p>
       <nav class="mapa-uf rev pop" id="mapa" aria-label="Mapa do Brasil em quadradinhos: escolha um estado" data-en-aria-label="Map of Brazil in squares: choose a state"></nav>
       <ul class="regioes" id="regioes" aria-label="Regiões do Brasil (cores do mapa)" data-en-aria-label="Regions of Brazil (map colors)"></ul>
-      <form class="escolhe-uf" id="form-uf" action="estado.html" method="get"><label for="sel-uf" data-en="Or choose the state from the list">Ou escolha o estado na lista</label>
+      <form class="escolhe-uf" id="form-uf" action="estado.html" method="get"><label for="sel-uf" data-en="Or type the state's name and choose it from the list">Ou digite o nome do estado e escolha na lista</label>
         <select id="sel-uf" name="uf" required><option value="" data-en="Choose a state…">Escolha um estado…</option></select>
-        <button type="submit" class="btn azul ver-uf"><span data-en="See the state">Ver o estado</span> <span aria-hidden="true">▶</span></button></form>
+        <button type="submit" class="btn azul ver-uf"><span data-en="See the state">Ver o estado</span> <span aria-hidden="true">▶</span></button>
+        <p class="sr" id="aviso-uf" role="status" aria-live="polite"></p></form>
     </section>
   </div>
   <div id="estado" hidden></div>

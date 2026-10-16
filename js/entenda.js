@@ -334,7 +334,7 @@
     var s = it.s, t = s.titulo || s.pergunta || "";
     if (s.tipo === "quiz") t = tr("Pergunta: ", "Question: ") + t;
     if (s.tipo === "abertura") t = tr("Abertura: ", "Opening: ") + (s.titulo || it.P.nome);
-    t = t.replace(/\*\*/g, "");
+    t = t.replace(/\*\*|\{\{|\}\}/g, "");
     return t.length > 110 ? t.slice(0, 108).replace(/\s+\S*$/, "") + "…" : t;
   }
 

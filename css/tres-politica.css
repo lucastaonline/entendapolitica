@@ -175,6 +175,11 @@
 .predio3d .mastro { position: absolute; left: -2px; top: -170px; width: 4px; height: 70px; background: #8a94a3; transform: translateZ(10px); }
 .predio3d .bandeira { position: absolute; left: 2px; top: -170px; width: 46px; height: 30px; background: #0f766e; border-radius: 2px; transform: translateZ(10px); transform-origin: 0 50%; animation: bandeiraBalanca 2s ease-in-out infinite; }
 @keyframes bandeiraBalanca { 0%, 100% { transform: translateZ(10px) skewY(0); } 50% { transform: translateZ(10px) skewY(6deg); } }
+.prefeitura3d .corpo { --c2: #c9d8cf; --c3: #b8cbbf; --c4: #0f766e; }
+.prefeitura3d .corpo > .fr { background: #e7f0ea; }
+.prefeitura3d .placa-predio { grid-column: 1 / -1; font-style: normal; text-align: center; font-weight: 900; font-size: 13px; letter-spacing: .1em; color: #fff; background: #0f766e; border-radius: 6px; padding: 2px 0; }
+.prefeitura3d .frontao { background: #0f766e; }
+.prefeitura3d .bandeira { background: #f2b705; }
 .palacio3d .laje { --w: 330px; --h: 16px; --d: 130px; --c1: #f3efe6; --c2: #ddd5c4; --c4: #faf7f1; }
 .palacio3d .l1 { transform: translate3d(-165px, -40px, 0); }
 .palacio3d .l2 { transform: translate3d(-165px, 30px, 0); }

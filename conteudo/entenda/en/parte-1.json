@@ -207,7 +207,7 @@
   },
   {
    "termo": "term of office",
-   "simples": "The time an elected person stays in office. In Portuguese: mandato."
+   "simples": "The time an elected person stays in office. In Portuguese: {{mandato}}."
   },
   {
    "termo": "representative",
@@ -231,7 +231,7 @@
   },
   {
    "termo": "receipt",
-   "simples": "Proof of a purchase. It shows what was bought and how much it cost. In Portuguese: nota fiscal."
+   "simples": "Proof of a purchase. It shows what was bought and how much it cost. In Portuguese: {{nota fiscal}}."
   },
   {
    "termo": "budget",
@@ -247,11 +247,11 @@
   },
   {
    "termo": "Statute of the Child and Adolescent",
-   "simples": "A 1990 law that brings together the rights of children and teenagers. It is also called ECA, from its name in Portuguese (Estatuto da Criança e do Adolescente)."
+   "simples": "A 1990 law that brings together the rights of children and teenagers. It is also called ECA, from its name in Portuguese ({{Estatuto da Criança e do Adolescente}})."
   },
   {
    "termo": "SUS",
-   "simples": "Sistema Único de Saúde (Unified Health System): free public health care all over Brazil."
+   "simples": "{{Sistema Único de Saúde}} (Unified Health System): free public health care all over Brazil."
   },
   {
    "termo": "enrollment",
@@ -453,7 +453,7 @@
     }
    ],
    "ilustracao": "cofre",
-   "coruja": "In the city, the budget is voted on by the city councilors (vereadores). In the country, by the deputies and senators.",
+   "coruja": "In the city, the budget is voted on by the city councilors ({{vereadores}}). In the country, by the deputies and senators.",
    "fontes": [
     "lei-12741",
     "plen-tributo",

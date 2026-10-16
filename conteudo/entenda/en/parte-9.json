@@ -205,7 +205,7 @@
   },
   {
    "termo": "voter card",
-   "simples": "The document of a person who is registered to vote. In Portuguese: título de eleitor."
+   "simples": "The document of a person who is registered to vote. In Portuguese: {{título de eleitor}}."
   },
   {
    "termo": "e-Cidadania",
@@ -213,7 +213,7 @@
   },
   {
    "termo": "Legislative Idea",
-   "simples": "A suggestion for a law that any registered person can send through e-Cidadania. In Portuguese: Ideia Legislativa."
+   "simples": "A suggestion for a law that any registered person can send through e-Cidadania. In Portuguese: {{Ideia Legislativa}}."
   },
   {
    "termo": "committee",
@@ -221,15 +221,15 @@
   },
   {
    "termo": "report",
-   "simples": "A written opinion, with an analysis of a proposal. In Portuguese: parecer."
+   "simples": "A written opinion, with an analysis of a proposal. In Portuguese: {{parecer}}."
   },
   {
    "termo": "poll",
-   "simples": "A question open to everyone, so people can give their opinion. It is not a scientific survey. In Portuguese: enquete."
+   "simples": "A question open to everyone, so people can give their opinion. It is not a scientific survey. In Portuguese: {{enquete}}."
   },
   {
    "termo": "rapporteur",
-   "simples": "The lawmaker who studies a proposal and suggests changes to the text. In Portuguese: relator."
+   "simples": "The lawmaker who studies a proposal and suggests changes to the text. In Portuguese: {{relator}}."
   },
   {
    "termo": "public hearing",
@@ -241,11 +241,11 @@
   },
   {
    "termo": "ombudsman",
-   "simples": "A channel to complain, suggest, praise, point out wrongdoing or ask a public agency for something. In Portuguese: ouvidoria."
+   "simples": "A channel to complain, suggest, praise, point out wrongdoing or ask a public agency for something. In Portuguese: {{ouvidoria}}."
   },
   {
    "termo": "Access to Information Law",
-   "simples": "A law that guarantees anyone the right to ask public agencies for data. In Portuguese: Lei de Acesso à Informação."
+   "simples": "A law that guarantees anyone the right to ask public agencies for data. In Portuguese: {{Lei de Acesso à Informação}}."
   },
   {
    "termo": "school council",
@@ -257,11 +257,11 @@
   },
   {
    "termo": "SUS",
-   "simples": "Sistema Único de Saúde (Unified Health System): Brazil's public health system."
+   "simples": "{{Sistema Único de Saúde}} (Unified Health System): Brazil's public health system."
   },
   {
    "termo": "student council",
-   "simples": "An association that represents the students of a school. In Portuguese: grêmio estudantil."
+   "simples": "An association that represents the students of a school. In Portuguese: {{grêmio estudantil}}."
   },
   {
    "termo": "democracy",
@@ -269,7 +269,7 @@
   },
   {
    "termo": "fake news",
-   "simples": "A lie that imitates real news. In Portuguese: notícia falsa."
+   "simples": "A lie that imitates real news. In Portuguese: {{notícia falsa}}."
   },
   {
    "termo": "fact-checking",
@@ -281,7 +281,7 @@
   },
   {
    "termo": "ticket",
-   "simples": "A group of candidates who run together in an election. In Portuguese: chapa."
+   "simples": "A group of candidates who run together in an election. In Portuguese: {{chapa}}."
   },
   {
    "termo": "gov.br account",
@@ -311,7 +311,7 @@
     },
     {
      "ic": "🪪",
-     "txt": "At **age 15**, you can already get your voter card (título de eleitor). But you can only vote from age 16."
+     "txt": "At **age 15**, you can already get your voter card ({{título de eleitor}}). But you can only vote from age 16."
     },
     {
      "ic": "🙋",
@@ -465,13 +465,13 @@
     },
     {
      "ic": "🎮",
-     "titulo": "Plenarinho",
+     "titulo": "{{Plenarinho}}",
      "txt": "The Chamber of Deputies' website for children, with games, news and contests."
     },
     {
      "ic": "🗳️",
-     "titulo": "Eleitor Mirim (Kid Voter)",
-     "txt": "A make-believe election run by Plenarinho, open to all ages.",
+     "titulo": "{{Eleitor Mirim}} (Kid Voter)",
+     "txt": "A make-believe election run by {{Plenarinho}}, open to all ages.",
      "dados": [
       {
        "rot": "In 2026",
@@ -481,7 +481,7 @@
     },
     {
      "ic": "🏛️",
-     "titulo": "Câmara Mirim (Kids' Chamber)",
+     "titulo": "{{Câmara Mirim}} (Kids' Chamber)",
      "txt": "Students send in bills. The authors of the best ones go to the Chamber of Deputies to defend them.",
      "dados": [
       {
@@ -493,7 +493,7 @@
     },
     {
      "ic": "🎓",
-     "titulo": "Jovem Senador (Young Senator)",
+     "titulo": "{{Jovem Senador}} (Young Senator)",
      "txt": "Public high school students write an essay. The winners spend a week at the Senate.",
      "dados": [
       {
@@ -574,7 +574,7 @@
     {
      "ic": "✅",
      "titulo": "Use fact-checking sites",
-     "txt": "The Electoral Justice has Fato ou Boato (Fact or Rumor). The Chamber of Deputies has Comprove."
+     "txt": "The Electoral Justice has {{Fato ou Boato}} (Fact or Rumor). The Chamber of Deputies has {{Comprove}}."
     },
     {
      "ic": "🛑",

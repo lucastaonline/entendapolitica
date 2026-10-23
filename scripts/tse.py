@@ -209,6 +209,14 @@ def zip_tse(pasta: str, ano: int) -> Path:
     return baixar_arquivo(f"{CDN}{pasta}/{nome}", f"tse/{nome}", max_idade_h=idade)
 
 
+def chave_cache() -> str:
+    """Nome do cache de .cache/tse no GitHub Actions. Muda quando uma eleição fecha (1º de fevereiro do ano seguinte):
+    aí os arquivos dela, que não mudam mais, entram no cache novo (o nome antigo não seria salvo de novo)."""
+    h = hoje()
+    fechadas = [a for a in range(2018, int(h[:4]) + 1, 2) if h >= f"{a + 1}-02-01"]
+    return "tse-" + "-".join(map(str, fechadas[-2:]))
+
+
 def membros_csv(z: zipfile.ZipFile) -> list[str]:
     nomes = [n for n in z.namelist() if n.lower().endswith(".csv")]
     brasil = [n for n in nomes if n.upper().endswith("_BRASIL.CSV")]

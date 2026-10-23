@@ -28,11 +28,17 @@ jobs:
 
       - run: pip install pillow
 
-      # arquivos grandes e que não mudam (eleições de 2018, 2022 e 2024 do TSE)
+      # arquivos grandes do TSE: os de eleições encerradas não mudam mais. O nome do cache muda quando uma eleição
+      # fecha (1º de fevereiro do ano seguinte), para os arquivos dela entrarem no cache novo.
+      - name: Nome do cache do TSE
+        id: tse
+        run: echo "chave=$(python -c 'import sys; sys.path.insert(0, "scripts"); import tse; print(tse.chave_cache())')" >> "$GITHUB_OUTPUT"
+
       - uses: actions/cache@v4
         with:
           path: .cache/tse
-          key: tse-v1
+          key: ${{ steps.tse.outputs.chave }}
+          restore-keys: tse-
 
       # consultas do Senado e do Executivo (sem isso, cada rodada leva ~30 min)
       - uses: actions/cache@v4
@@ -54,6 +60,18 @@ jobs:
           key: camara-${{ github.run_id }}
           restore-keys: camara-
 
+      # o resto: IBGE, votações, Assembleias Legislativas e Câmaras Municipais (cada Casa na sua pasta)
+      - uses: actions/cache@v4
+        with:
+          path: |
+            .cache
+            !.cache/tse
+            !.cache/senado
+            !.cache/executivo
+            !.cache/camara
+          key: outros-${{ github.run_id }}
+          restore-keys: outros-
+
       - name: Câmara dos Deputados
         run: python scripts/camara.py
         continue-on-error: true
@@ -68,6 +86,12 @@ jobs:
 
       - name: TSE e IBGE
         run: python scripts/tse.py
+        continue-on-error: true
+
+      # cada Casa tem o seu coletor (scripts/assembleias/<uf>.py, scripts/camaras/c<IBGE>.py); se o site de uma
+      # Casa estiver fora do ar, fica a lista da última rodada que deu certo
+      - name: Assembleias Legislativas e Câmaras Municipais
+        run: python scripts/legislativos.py
         continue-on-error: true
 
       - name: Explicações simples (português e inglês)

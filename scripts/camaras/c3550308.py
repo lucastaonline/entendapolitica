@@ -231,7 +231,7 @@ def coletar() -> dict:
         x = {"propostas": bloco, "links": {"oficial": m["url"], "email": None, "redes": []}, "fontes": [fonte_lista, f_prop]}
         if m.get("foto"):
             x["fotoCredito"] = CASA
-        if (g.get("inicio") or "")[:10] > "2025-01-01":
+        if (g.get("inicio") or "")[:10] > regional.INICIO_MUNICIPAL:  # assumiu depois do começo da legislatura
             x["desde"] = g["inicio"][:10]
         extras[m["id"]] = x
     if tse.sem_ligacao:

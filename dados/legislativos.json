@@ -1,0 +1,904 @@
+{
+ "assembleias": {
+  "PR": {
+   "casa": "Alep",
+   "membros": 54,
+   "propostas": 4878,
+   "cobertura": {
+    "lista": true,
+    "propostas": true,
+    "votacoes": false,
+    "gastos": false
+   },
+   "fonte": {
+    "veiculo": "Assembleia Legislativa do Paraná (Alep)",
+    "titulo": "Deputados estaduais em exercício (página oficial)",
+    "url": "https://www.assembleia.pr.leg.br/deputados/conheca",
+    "data": "2026-10-23"
+   },
+   "ok": true
+  },
+  "AL": {
+   "casa": "ALE-AL",
+   "membros": 27,
+   "propostas": 2136,
+   "cobertura": {
+    "lista": true,
+    "propostas": true,
+    "votacoes": false,
+    "gastos": false
+   },
+   "fonte": {
+    "veiculo": "Assembleia Legislativa de Alagoas (ALE-AL)",
+    "titulo": "Parlamentares no exercício do mandato (20ª Legislatura, página oficial)",
+    "url": "https://www.al.al.leg.br/processo-legislativo/20-a-legislatura",
+    "data": "2026-10-23"
+   },
+   "ok": true
+  },
+  "BA": {
+   "casa": "Alba",
+   "membros": 63,
+   "propostas": 1359,
+   "cobertura": {
+    "lista": true,
+    "propostas": true,
+    "votacoes": false,
+    "gastos": false
+   },
+   "fonte": {
+    "veiculo": "Assembleia Legislativa da Bahia (Alba)",
+    "titulo": "Deputados em exercício (portal legislativo, dados abertos)",
+    "url": "https://albalegis.nopapercloud.com.br/spl/parlamentares.aspx",
+    "data": "2026-10-23"
+   },
+   "ok": true
+  },
+  "CE": {
+   "casa": "Alece",
+   "membros": 46,
+   "propostas": 3466,
+   "cobertura": {
+    "lista": true,
+    "propostas": true,
+    "votacoes": false,
+    "gastos": false
+   },
+   "fonte": {
+    "veiculo": "Assembleia Legislativa do Ceará (Alece)",
+    "titulo": "Deputados em exercício (página oficial)",
+    "url": "https://www.al.ce.gov.br/deputados",
+    "data": "2026-10-23"
+   },
+   "ok": true
+  },
+  "MA": {
+   "casa": "Alema",
+   "membros": 42,
+   "propostas": 2389,
+   "cobertura": {
+    "lista": true,
+    "propostas": true,
+    "votacoes": false,
+    "gastos": false
+   },
+   "fonte": {
+    "veiculo": "Assembleia Legislativa do Maranhão (Alema)",
+    "titulo": "Parlamentares em atividade na 20ª legislatura (AlemaLegis)",
+    "url": "https://alemalegis.al.ma.leg.br/sapl/protocol/parliamentary/research",
+    "data": "2026-10-23"
+   },
+   "ok": true
+  },
+  "PB": {
+   "casa": "ALPB",
+   "membros": 36,
+   "propostas": 7911,
+   "cobertura": {
+    "lista": true,
+    "propostas": true,
+    "votacoes": false,
+    "gastos": false
+   },
+   "fonte": {
+    "veiculo": "Assembleia Legislativa da Paraíba (ALPB)",
+    "titulo": "Deputados em exercício na 20ª legislatura (SAPL, dados abertos)",
+    "url": "https://sapl.al.pb.leg.br/parlamentar/",
+    "data": "2026-10-23"
+   },
+   "ok": true
+  },
+  "PE": {
+   "casa": "Alepe",
+   "membros": 49,
+   "propostas": 3912,
+   "cobertura": {
+    "lista": true,
+    "propostas": true,
+    "votacoes": false,
+    "gastos": false
+   },
+   "fonte": {
+    "veiculo": "Assembleia Legislativa de Pernambuco (Alepe)",
+    "titulo": "Parlamentares da legislatura atual (Portal de Dados Abertos)",
+    "url": "https://dadosabertos.alepe.pe.gov.br/api/v1/parlamentares?formato=json",
+    "data": "2026-10-23"
+   },
+   "ok": true
+  },
+  "PI": {
+   "casa": "Alepi",
+   "membros": 30,
+   "propostas": 1570,
+   "cobertura": {
+    "lista": true,
+    "propostas": true,
+    "votacoes": false,
+    "gastos": false
+   },
+   "fonte": {
+    "veiculo": "Assembleia Legislativa do Piauí (Alepi)",
+    "titulo": "Deputados em exercício na 20ª legislatura (SAPL, dados abertos)",
+    "url": "https://sapl.al.pi.leg.br/parlamentar/",
+    "data": "2026-10-23"
+   },
+   "ok": true
+  },
+  "RN": {
+   "casa": "ALRN",
+   "membros": 24,
+   "propostas": 2240,
+   "cobertura": {
+    "lista": true,
+    "propostas": true,
+    "votacoes": false,
+    "gastos": false
+   },
+   "fonte": {
+    "veiculo": "Assembleia Legislativa do Rio Grande do Norte (ALRN)",
+    "titulo": "Deputados com mandato em vigor (Transparência Legislativa, API)",
+    "url": "https://transparencialegislativa.al.rn.leg.br/",
+    "data": "2026-10-23"
+   },
+   "ok": true
+  },
+  "SE": {
+   "casa": "Alese",
+   "membros": 24,
+   "propostas": 1510,
+   "cobertura": {
+    "lista": true,
+    "propostas": true,
+    "votacoes": false,
+    "gastos": false
+   },
+   "fonte": {
+    "veiculo": "Assembleia Legislativa de Sergipe (Alese)",
+    "titulo": "Deputados em exercício (portal legislativo, dados abertos)",
+    "url": "https://aleselegis.al.se.leg.br/spl/parlamentares.aspx",
+    "data": "2026-10-23"
+   },
+   "ok": true
+  },
+  "DF": {
+   "casa": "CLDF",
+   "membros": 24,
+   "propostas": 3411,
+   "cobertura": {
+    "lista": true,
+    "propostas": true,
+    "votacoes": false,
+    "gastos": false
+   },
+   "fonte": {
+    "veiculo": "Câmara Legislativa do Distrito Federal (CLDF)",
+    "titulo": "Deputados distritais da legislatura atual (página oficial)",
+    "url": "https://www.cl.df.gov.br/deputados-2023-2026",
+    "data": "2026-10-23"
+   },
+   "ok": true
+  },
+  "ES": {
+   "casa": "Ales",
+   "membros": 30,
+   "propostas": 2770,
+   "cobertura": {
+    "lista": true,
+    "propostas": true,
+    "votacoes": false,
+    "gastos": false
+   },
+   "fonte": {
+    "veiculo": "Assembleia Legislativa do Estado do Espírito Santo (Ales)",
+    "titulo": "Dados Abertos: API pública de parlamentares (deputados ativos)",
+    "url": "https://www3.al.es.gov.br/dados-abertos.aspx",
+    "data": "2026-10-23"
+   },
+   "ok": true
+  },
+  "MG": {
+   "casa": "ALMG",
+   "membros": 77,
+   "propostas": 7682,
+   "cobertura": {
+    "lista": true,
+    "propostas": true,
+    "votacoes": false,
+    "gastos": true
+   },
+   "fonte": {
+    "veiculo": "Assembleia Legislativa de Minas Gerais (ALMG)",
+    "titulo": "Dados Abertos: deputados da atual legislatura e deputados em exercício",
+    "url": "https://dadosabertos.almg.gov.br/documentacao/arquivos/deputados-da-atual-legislatura",
+    "data": "2026-10-23"
+   },
+   "ok": true
+  },
+  "RJ": {
+   "casa": "Alerj",
+   "membros": 70,
+   "propostas": 0,
+   "cobertura": {
+    "lista": true,
+    "propostas": false,
+    "votacoes": false,
+    "gastos": false
+   },
+   "fonte": {
+    "veiculo": "Assembleia Legislativa do Estado do Rio de Janeiro (Alerj)",
+    "titulo": "Deputados da legislatura atual (página oficial \"Quem são\")",
+    "url": "https://www.alerj.rj.gov.br/Deputados/QuemSao",
+    "data": "2026-10-23"
+   },
+   "ok": true
+  },
+  "RS": {
+   "casa": "ALRS",
+   "membros": 55,
+   "propostas": 1590,
+   "cobertura": {
+    "lista": true,
+    "propostas": true,
+    "votacoes": false,
+    "gastos": false
+   },
+   "fonte": {
+    "veiculo": "Assembleia Legislativa do Estado do Rio Grande do Sul (ALRS)",
+    "titulo": "Deputados em exercício (serviço de dados da página oficial \"Deputados\")",
+    "url": "https://ww4.al.rs.gov.br/deputados",
+    "data": "2026-10-23"
+   },
+   "ok": true
+  },
+  "SC": {
+   "casa": "Alesc",
+   "membros": 40,
+   "propostas": 2038,
+   "cobertura": {
+    "lista": true,
+    "propostas": true,
+    "votacoes": false,
+    "gastos": true
+   },
+   "fonte": {
+    "veiculo": "Assembleia Legislativa do Estado de Santa Catarina (Alesc)",
+    "titulo": "Deputados da legislatura atual (página oficial)",
+    "url": "https://www.alesc.sc.gov.br/deputados/",
+    "data": "2026-10-23"
+   },
+   "ok": true
+  },
+  "SP": {
+   "casa": "Alesp",
+   "membros": 94,
+   "propostas": 13143,
+   "cobertura": {
+    "lista": true,
+    "propostas": true,
+    "votacoes": false,
+    "gastos": true
+   },
+   "fonte": {
+    "veiculo": "Assembleia Legislativa do Estado de São Paulo (Alesp)",
+    "titulo": "Dados Abertos: deputados em exercício (deputados.xml)",
+    "url": "https://www.al.sp.gov.br/dados-abertos/dataset/41",
+    "data": "2026-10-23"
+   },
+   "ok": true
+  },
+  "AC": {
+   "casa": "Aleac",
+   "membros": 24,
+   "propostas": 868,
+   "cobertura": {
+    "lista": true,
+    "propostas": true,
+    "votacoes": false,
+    "gastos": false
+   },
+   "fonte": {
+    "veiculo": "Assembleia Legislativa do Acre (Aleac)",
+    "titulo": "Deputados em exercício na 16ª legislatura (SAPL, dados abertos)",
+    "url": "https://sapl.al.ac.leg.br/parlamentar/",
+    "data": "2026-10-23"
+   },
+   "legislatura": {
+    "numero": 16,
+    "inicio": "2023-02-01",
+    "fim": "2027-01-31"
+   },
+   "ok": true
+  },
+  "AM": {
+   "casa": "Aleam",
+   "membros": 24,
+   "propostas": 5156,
+   "cobertura": {
+    "lista": true,
+    "propostas": true,
+    "votacoes": true,
+    "gastos": false
+   },
+   "fonte": {
+    "veiculo": "Assembleia Legislativa do Amazonas (Aleam)",
+    "titulo": "Deputados em exercício na 20ª legislatura (SAPL, dados abertos)",
+    "url": "https://sapl.al.am.leg.br/parlamentar/",
+    "data": "2026-10-23"
+   },
+   "legislatura": {
+    "numero": 20,
+    "inicio": "2023-02-01",
+    "fim": "2027-01-31"
+   },
+   "ok": true
+  },
+  "GO": {
+   "casa": "Alego",
+   "membros": 41,
+   "propostas": 0,
+   "cobertura": {
+    "lista": true,
+    "propostas": false,
+    "votacoes": true,
+    "gastos": true
+   },
+   "fonte": {
+    "veiculo": "Assembleia Legislativa de Goiás (Alego)",
+    "titulo": "Deputados em exercício (página oficial)",
+    "url": "https://portal.al.go.leg.br/deputados/em-exercicio",
+    "data": "2026-10-23"
+   },
+   "legislatura": {
+    "inicio": "2023-02-01",
+    "fim": "2027-01-31"
+   },
+   "ok": true
+  },
+  "MS": {
+   "casa": "Alems",
+   "membros": 24,
+   "propostas": 0,
+   "cobertura": {
+    "lista": true,
+    "propostas": false,
+    "votacoes": false,
+    "gastos": true
+   },
+   "fonte": {
+    "veiculo": "Assembleia Legislativa de Mato Grosso do Sul (Alems)",
+    "titulo": "Deputados em exercício (lista oficial do site da Alems)",
+    "url": "https://al.ms.gov.br/Partidos/Lista",
+    "data": "2026-10-23"
+   },
+   "legislatura": {
+    "inicio": "2023-02-01",
+    "fim": "2027-01-31"
+   },
+   "ok": true
+  },
+  "MT": {
+   "casa": "ALMT",
+   "membros": 24,
+   "propostas": 0,
+   "cobertura": {
+    "lista": true,
+    "propostas": false,
+    "votacoes": false,
+    "gastos": false
+   },
+   "fonte": {
+    "veiculo": "Assembleia Legislativa de Mato Grosso (ALMT)",
+    "titulo": "Deputados em exercício (página oficial)",
+    "url": "https://www.al.mt.gov.br/parlamento/deputados",
+    "data": "2026-10-23"
+   },
+   "legislatura": {
+    "inicio": "2023-02-01",
+    "fim": "2027-01-31"
+   },
+   "ok": true
+  },
+  "PA": {
+   "casa": "Alepa",
+   "membros": 41,
+   "propostas": 0,
+   "cobertura": {
+    "lista": true,
+    "propostas": false,
+    "votacoes": true,
+    "gastos": false
+   },
+   "fonte": {
+    "veiculo": "Assembleia Legislativa do Pará (Alepa)",
+    "titulo": "Deputados em exercício (página oficial)",
+    "url": "https://www.alepa.pa.gov.br/Home/Page/Deputados",
+    "data": "2026-10-23"
+   },
+   "legislatura": {
+    "inicio": "2023-02-01",
+    "fim": "2027-01-31"
+   },
+   "ok": true
+  },
+  "RO": {
+   "casa": "Ale-RO",
+   "membros": 24,
+   "propostas": 2481,
+   "cobertura": {
+    "lista": true,
+    "propostas": true,
+    "votacoes": true,
+    "gastos": false
+   },
+   "fonte": {
+    "veiculo": "Assembleia Legislativa de Rondônia (Ale-RO)",
+    "titulo": "Deputados em exercício na 11ª legislatura (SAPL, dados abertos)",
+    "url": "https://sapl.al.ro.leg.br/parlamentar/",
+    "data": "2026-10-23"
+   },
+   "legislatura": {
+    "numero": 11,
+    "inicio": "2023-02-01",
+    "fim": "2027-01-31"
+   },
+   "ok": true
+  },
+  "RR": {
+   "casa": "ALE-RR",
+   "membros": 24,
+   "propostas": 1330,
+   "cobertura": {
+    "lista": true,
+    "propostas": true,
+    "votacoes": false,
+    "gastos": false
+   },
+   "fonte": {
+    "veiculo": "Assembleia Legislativa de Roraima (ALE-RR)",
+    "titulo": "Deputados em exercício na 9ª legislatura (SAPL, dados abertos)",
+    "url": "https://sapl.al.rr.leg.br/parlamentar/",
+    "data": "2026-10-23"
+   },
+   "legislatura": {
+    "numero": 9,
+    "inicio": "2023-01-01",
+    "fim": "2026-12-31"
+   },
+   "ok": true
+  },
+  "TO": {
+   "casa": "Aleto",
+   "membros": 24,
+   "propostas": 1761,
+   "cobertura": {
+    "lista": true,
+    "propostas": true,
+    "votacoes": false,
+    "gastos": false
+   },
+   "fonte": {
+    "veiculo": "Assembleia Legislativa do Tocantins (Aleto)",
+    "titulo": "Perfil dos deputados em exercício (página oficial)",
+    "url": "https://www.al.to.leg.br/perfil",
+    "data": "2026-10-23"
+   },
+   "legislatura": {
+    "numero": 10,
+    "inicio": "2023-02-01",
+    "fim": "2027-01-31"
+   },
+   "ok": true
+  }
+ },
+ "camaras": {
+  "2408102": {
+   "casa": "CMN",
+   "nome": "Câmara Municipal de Natal",
+   "membros": 29,
+   "propostas": 1697,
+   "cobertura": {
+    "lista": true,
+    "propostas": true,
+    "votacoes": false,
+    "gastos": false
+   },
+   "fonte": {
+    "veiculo": "Câmara Municipal de Natal",
+    "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
+    "url": "https://sapl.natal.rn.leg.br/parlamentar/",
+    "data": "2026-10-23"
+   },
+   "requisicoes": 28,
+   "semTse": 0,
+   "ok": true
+  },
+  "1100205": {
+   "casa": "CMPV",
+   "nome": "Câmara Municipal de Porto Velho",
+   "membros": 23,
+   "propostas": 581,
+   "cobertura": {
+    "lista": true,
+    "propostas": true,
+    "votacoes": false,
+    "gastos": false
+   },
+   "fonte": {
+    "veiculo": "Câmara Municipal de Porto Velho",
+    "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
+    "url": "https://sapl.portovelho.ro.leg.br/parlamentar/",
+    "data": "2026-10-23"
+   },
+   "requisicoes": 16,
+   "semTse": 0,
+   "ok": true
+  },
+  "1200401": {
+   "casa": "CMRB",
+   "nome": "Câmara Municipal de Rio Branco",
+   "membros": 21,
+   "propostas": 529,
+   "cobertura": {
+    "lista": true,
+    "propostas": true,
+    "votacoes": false,
+    "gastos": false
+   },
+   "fonte": {
+    "veiculo": "Câmara Municipal de Rio Branco",
+    "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
+    "url": "https://sapl.riobranco.ac.leg.br/parlamentar/",
+    "data": "2026-10-23"
+   },
+   "requisicoes": 10,
+   "semTse": 0,
+   "ok": true
+  },
+  "1302603": {
+   "casa": "CMM",
+   "nome": "Câmara Municipal de Manaus",
+   "membros": 41,
+   "propostas": 1598,
+   "cobertura": {
+    "lista": true,
+    "propostas": true,
+    "votacoes": false,
+    "gastos": false
+   },
+   "fonte": {
+    "veiculo": "Câmara Municipal de Manaus",
+    "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
+    "url": "https://sapl.cmm.am.gov.br/parlamentar/",
+    "data": "2026-10-23"
+   },
+   "requisicoes": 25,
+   "semTse": 0,
+   "ok": true
+  },
+  "1400100": {
+   "casa": "CMBV",
+   "nome": "Câmara Municipal de Boa Vista",
+   "membros": 23,
+   "propostas": 1707,
+   "cobertura": {
+    "lista": true,
+    "propostas": true,
+    "votacoes": false,
+    "gastos": false
+   },
+   "fonte": {
+    "veiculo": "Câmara Municipal de Boa Vista",
+    "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
+    "url": "https://sapl.boavista.rr.leg.br/parlamentar/",
+    "data": "2026-10-23"
+   },
+   "requisicoes": 36,
+   "semTse": 0,
+   "ok": true
+  },
+  "2304400": {
+   "casa": "CMFor",
+   "nome": "Câmara Municipal de Fortaleza",
+   "membros": 43,
+   "propostas": 1075,
+   "cobertura": {
+    "lista": true,
+    "propostas": true,
+    "votacoes": false,
+    "gastos": false
+   },
+   "fonte": {
+    "veiculo": "Câmara Municipal de Fortaleza",
+    "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
+    "url": "https://sapl.fortaleza.ce.leg.br/parlamentar/",
+    "data": "2026-10-23"
+   },
+   "requisicoes": 27,
+   "semTse": 0,
+   "ok": true
+  },
+  "2507507": {
+   "casa": "CMJP",
+   "nome": "Câmara Municipal de João Pessoa",
+   "membros": 29,
+   "propostas": 1510,
+   "cobertura": {
+    "lista": true,
+    "propostas": true,
+    "votacoes": false,
+    "gastos": false
+   },
+   "fonte": {
+    "veiculo": "Câmara Municipal de João Pessoa",
+    "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
+    "url": "https://sapl.joaopessoa.pb.leg.br/parlamentar/",
+    "data": "2026-10-23"
+   },
+   "requisicoes": 35,
+   "semTse": 0,
+   "ok": true
+  },
+  "1501402": {
+   "casa": "CMB",
+   "nome": "Câmara Municipal de Belém",
+   "membros": 35,
+   "propostas": 0,
+   "cobertura": {
+    "lista": true,
+    "propostas": false,
+    "votacoes": false,
+    "gastos": false
+   },
+   "fonte": {
+    "veiculo": "Câmara Municipal de Belém",
+    "titulo": "Vereadores (portal oficial)",
+    "url": "https://www.cmb.pa.gov.br/vereadores",
+    "data": "2026-10-23"
+   },
+   "semTse": 0,
+   "ok": true
+  },
+  "2111300": {
+   "casa": "CMSL",
+   "nome": "Câmara Municipal de São Luís",
+   "membros": 31,
+   "propostas": 0,
+   "cobertura": {
+    "lista": true,
+    "propostas": false,
+    "votacoes": false,
+    "gastos": false
+   },
+   "fonte": {
+    "veiculo": "Câmara Municipal de São Luís",
+    "titulo": "Vereadores (portal oficial)",
+    "url": "https://www.cmsaoluis.ma.gov.br/vereadores",
+    "data": "2026-10-23"
+   },
+   "semTse": 0,
+   "ok": true
+  },
+  "2211001": {
+   "casa": "CMT",
+   "nome": "Câmara Municipal de Teresina",
+   "membros": 29,
+   "propostas": 0,
+   "cobertura": {
+    "lista": true,
+    "propostas": false,
+    "votacoes": false,
+    "gastos": false
+   },
+   "fonte": {
+    "veiculo": "Câmara Municipal de Teresina",
+    "titulo": "Vereadores ativos na legislatura atual (01/01/2025 a 31/12/2028)",
+    "url": "https://teresina.camarasempapel.com.br/spl/parlamentares.aspx",
+    "data": "2026-10-23"
+   },
+   "semTse": 0,
+   "ok": true
+  },
+  "2927408": {
+   "casa": "CMS",
+   "nome": "Câmara Municipal de Salvador",
+   "membros": 43,
+   "propostas": 0,
+   "cobertura": {
+    "lista": true,
+    "propostas": false,
+    "votacoes": false,
+    "gastos": false
+   },
+   "fonte": {
+    "veiculo": "Câmara Municipal de Salvador",
+    "titulo": "Vereadores - 20ª Legislatura (portal oficial)",
+    "url": "https://www.cms.ba.gov.br/vereadores",
+    "data": "2026-10-23"
+   },
+   "semTse": 0,
+   "ok": true
+  },
+  "3106200": {
+   "casa": "CMBH",
+   "nome": "Câmara Municipal de Belo Horizonte",
+   "membros": 41,
+   "propostas": 0,
+   "cobertura": {
+    "lista": true,
+    "propostas": false,
+    "votacoes": false,
+    "gastos": false
+   },
+   "fonte": {
+    "veiculo": "Câmara Municipal de Belo Horizonte",
+    "titulo": "Vereadores em exercício (portal oficial)",
+    "url": "https://www.cmbh.mg.gov.br/vereadores",
+    "data": "2026-10-23"
+   },
+   "semTse": 0,
+   "ok": true
+  },
+  "3205309": {
+   "casa": "CMV",
+   "nome": "Câmara Municipal de Vitória",
+   "membros": 21,
+   "propostas": 0,
+   "cobertura": {
+    "lista": true,
+    "propostas": false,
+    "votacoes": false,
+    "gastos": false
+   },
+   "fonte": {
+    "veiculo": "Câmara Municipal de Vitória",
+    "titulo": "Vereadores ativos na legislatura atual (01/01/2025 a 31/12/2028)",
+    "url": "https://camarasempapel.cmv.es.gov.br/spl/parlamentares.aspx",
+    "data": "2026-10-23"
+   },
+   "semTse": 0,
+   "ok": true
+  },
+  "3304557": {
+   "casa": "CMRJ",
+   "nome": "Câmara Municipal do Rio de Janeiro",
+   "membros": 51,
+   "propostas": 0,
+   "cobertura": {
+    "lista": true,
+    "propostas": false,
+    "votacoes": false,
+    "gastos": false
+   },
+   "fonte": {
+    "veiculo": "Câmara Municipal do Rio de Janeiro",
+    "titulo": "Vereadores atuais (portal oficial)",
+    "url": "https://www.camara.rio/vereadores/quem-sao",
+    "data": "2026-10-23"
+   },
+   "semTse": 0,
+   "ok": true
+  },
+  "3550308": {
+   "casa": "CMSP",
+   "nome": "Câmara Municipal de São Paulo",
+   "membros": 55,
+   "propostas": 2653,
+   "cobertura": {
+    "lista": true,
+    "propostas": true,
+    "votacoes": false,
+    "gastos": false
+   },
+   "fonte": {
+    "veiculo": "Câmara Municipal de São Paulo",
+    "titulo": "Vereadores em exercício (portal oficial; SPLegis: ocupação dos gabinetes)",
+    "url": "https://www.saopaulo.sp.leg.br/vereadores/membros/",
+    "data": "2026-10-23"
+   },
+   "requisicoes": 0,
+   "semTse": 0,
+   "ok": true
+  },
+  "4106902": {
+   "casa": "CMC",
+   "nome": "Câmara Municipal de Curitiba",
+   "membros": 38,
+   "propostas": 0,
+   "cobertura": {
+    "lista": true,
+    "propostas": false,
+    "votacoes": false,
+    "gastos": false
+   },
+   "fonte": {
+    "veiculo": "Câmara Municipal de Curitiba",
+    "titulo": "Conheça os vereadores (portal oficial)",
+    "url": "https://www.cmc.pr.gov.br/vereadores/conheca-os-vereadores",
+    "data": "2026-10-23"
+   },
+   "semTse": 0,
+   "ok": true
+  },
+  "4314902": {
+   "casa": "CMPA",
+   "nome": "Câmara Municipal de Porto Alegre",
+   "membros": 35,
+   "propostas": 0,
+   "cobertura": {
+    "lista": true,
+    "propostas": false,
+    "votacoes": false,
+    "gastos": false
+   },
+   "fonte": {
+    "veiculo": "Câmara Municipal de Porto Alegre",
+    "titulo": "Vereadores em exercício (portal oficial)",
+    "url": "https://www.camarapoa.rs.gov.br/vereadores",
+    "data": "2026-10-23"
+   },
+   "semTse": 0,
+   "ok": true
+  },
+  "5103403": {
+   "casa": "CMC-MT",
+   "nome": "Câmara Municipal de Cuiabá",
+   "membros": 27,
+   "propostas": 0,
+   "cobertura": {
+    "lista": true,
+    "propostas": false,
+    "votacoes": false,
+    "gastos": false
+   },
+   "fonte": {
+    "veiculo": "Câmara Municipal de Cuiabá",
+    "titulo": "Vereadores ativos na legislatura atual (01/01/2025 a 31/12/2028)",
+    "url": "https://legislativo.camaracuiaba.mt.gov.br/spl/parlamentares.aspx",
+    "data": "2026-10-23"
+   },
+   "semTse": 0,
+   "ok": true
+  },
+  "5208707": {
+   "casa": "CMG",
+   "nome": "Câmara Municipal de Goiânia",
+   "membros": 37,
+   "propostas": 0,
+   "cobertura": {
+    "lista": true,
+    "propostas": false,
+    "votacoes": false,
+    "gastos": false
+   },
+   "fonte": {
+    "veiculo": "Câmara Municipal de Goiânia",
+    "titulo": "Parlamentares da 20ª Legislatura em exercício (portal oficial)",
+    "url": "https://www.goiania.go.leg.br/institucional/parlamentares",
+    "data": "2026-10-23"
+   },
+   "semTse": 0,
+   "ok": true
+  }
+ },
+ "atualizado": "2026-10-23"
+}

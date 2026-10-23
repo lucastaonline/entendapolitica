@@ -11,6 +11,7 @@ Rode por último: python scripts/montar.py
 from __future__ import annotations
 
 from comum import *
+from mandatos import vigente
 import votacoes
 
 CARGOS_EN = {
@@ -167,6 +168,22 @@ def _junta_membros(oficiais: list[dict], do_tse: list[dict]) -> list[dict]:
     return sorted(out, key=lambda x: chave_nome(x.get("nome") or ""))
 
 
+def _info_casa(a: dict) -> dict:
+    """O que a página do estado ou da cidade mostra sobre a Casa: o que o site já tem dela (cobertura), as notas (o que falta
+    e por quê) e o site oficial."""
+    return {k: a[k] for k in ("casa", "casa_en", "sigla", "site", "cobertura", "notas", "notas_en") if a.get(k)}
+
+
+def _lista_velha(a: dict, inicio: str) -> bool:
+    """A lista oficial é de uma legislatura que já acabou? Acontece logo depois de uma posse, se o coletor falhou ou se a
+    Casa ainda não trocou a lista: aí fica a lista do TSE, que já é a de quem foi eleito para o mandato em curso.
+    "atualizado" só muda quando o conteúdo muda (comum.sem_mudar_data)."""
+    leg = a.get("legislatura") or {}
+    if leg.get("fim") and leg["fim"] < hoje():
+        return True
+    return (a.get("atualizado") or "") < inicio
+
+
 def juntar_legislativos() -> tuple[int, int]:
     """dados/assembleias/<UF>.json e dados/camaras/<IBGE>.json (scripts/legislativos.py) -> listas das páginas do estado e
     da cidade, no lugar da lista de eleitos do TSE. A busca (dados/busca.json) passa a ter quem está na lista oficial
@@ -179,6 +196,9 @@ def juntar_legislativos() -> tuple[int, int]:
         e = ler_json(e_arq)
         if not e or not a.get("membros"):
             continue
+        if _lista_velha(a, vigente("deputado_estadual", uf=e["uf"])["inicio"]):
+            log(f"  {arq.name}: lista de uma legislatura que já acabou; fica a lista do TSE")
+            continue
         de = e.get("deputadosEstaduais") or {}
         de["membros"] = _junta_membros(a["membros"], de.get("membros") or [])
         busca_uf[e["uf"]] = [[m["id"], m.get("nome"), ("Deputada" if m.get("genero") == "F" else "Deputado") +
@@ -190,6 +210,7 @@ def juntar_legislativos() -> tuple[int, int]:
         de["aviso_en"] = (f"Official list from the {a.get('casa_en') or 'Legislative Assembly'}: who is in office today, "
                           "including substitutes who took a seat.")
         de["fonte"] = a.get("fonte") or de.get("fonte")
+        de["infoCasa"] = _info_casa(a)
         e["deputadosEstaduais"] = de
         salvar_json(e_arq, sem_mudar_data(e, e_arq))
         na += 1
@@ -200,6 +221,9 @@ def juntar_legislativos() -> tuple[int, int]:
         c = ler_json(c_arq)
         if not c or not k.get("membros"):
             continue
+        if _lista_velha(k, vigente("vereador")["inicio"]):
+            log(f"  camaras/{arq.name}: lista de uma legislatura que já acabou; fica a lista do TSE")
+            continue
         v = c.get("vereadores") or {}
         v["membros"] = _junta_membros(k["membros"], v.get("membros") or [])
         v["total"] = len(v["membros"])
@@ -208,6 +232,7 @@ def juntar_legislativos() -> tuple[int, int]:
         v["aviso_en"] = (f"Official list from the {k.get('casa_en') or 'City Council'}: who is in office today, "
                          "including substitutes who took a seat.")
         v["fonte"] = k.get("fonte") or v.get("fonte")
+        v["infoCasa"] = _info_casa(k)
         c["vereadores"] = v
         salvar_json(c_arq, sem_mudar_data(c, c_arq))
         nc += 1

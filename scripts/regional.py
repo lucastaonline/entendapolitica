@@ -25,11 +25,19 @@ from pathlib import Path
 
 from comum import (CACHE, DADOS, PESSOAS, STATUS, STATUS_TXT, classificar_situacao, fonte, hoje, ler_json, log,
                    ordenar_propostas, resumo_propostas, salvar_json, sem_acento, sem_mudar_data, slug)
+from mandatos import vigente
 
 ASSEMBLEIAS = DADOS / "assembleias"
 CAMARAS = DADOS / "camaras"
-INICIO_ESTADUAL = "2023-02-01"   # começo da legislatura estadual atual
-INICIO_MUNICIPAL = "2025-01-01"  # começo da legislatura municipal atual
+# começo da legislatura em curso, pelas datas de posse (scripts/mandatos.py): hoje 2023-02-01 e 2025-01-01; na posse dos
+# eleitos em 2026 (1º/2/2027) e em 2028 (1º/1/2029), as propostas passam a contar do novo mandato
+INICIO_ESTADUAL = vigente("deputado_estadual")["inicio"]
+INICIO_MUNICIPAL = vigente("vereador")["inicio"]
+
+
+def inicio_estadual(uf: str) -> str:
+    """Começo da legislatura estadual em curso neste estado (a posse muda em RS, DF e, até 2023, SP: scripts/mandatos.py)."""
+    return vigente("deputado_estadual", uf=uf)["inicio"]
 
 # tipos de proposta que entram na lista, já com o nome comum do site. O "sigla" de cada proposta continua o oficial da Casa.
 TIPOS_REGIONAIS = {
@@ -44,6 +52,7 @@ _COMUNS = {"da", "de", "do", "das", "dos", "e", "d"}
 # ---------------------------------------------------------------- nomes e TSE
 def palavras(nome: str | None) -> list[str]:
     s = sem_acento(nome or "").lower()
+    # o apóstrofo vira espaço, como o TSE escreve ("D'Ávila" = "D ÁVILA")
     s = re.sub(r"\b(dr|dra|pr|pra|prof|profa|sgt|cel|cap|ten|del|delegad[oa]|pastor[a]?|vereador[a]?|deputad[oa]|irmao|irma|mestre)\b\.?", " ", s)
     return [p for p in re.sub(r"[^a-z0-9 ]", " ", s).split() if p not in _COMUNS]
 
@@ -206,6 +215,6 @@ def limpar_extras(prefixo: str, manter: set[str]) -> int:
     return n
 
 
-__all__ = ["ASSEMBLEIAS", "CAMARAS", "INICIO_ESTADUAL", "INICIO_MUNICIPAL", "TIPOS_REGIONAIS", "palavras", "candidatos_tse",
+__all__ = ["ASSEMBLEIAS", "CAMARAS", "INICIO_ESTADUAL", "INICIO_MUNICIPAL", "inicio_estadual", "TIPOS_REGIONAIS", "palavras", "candidatos_tse",
            "casar_tse", "id_pessoa", "tipo_comum", "situacao_para_status", "proposta", "bloco_propostas", "salvar_casa",
            "salvar_extras", "limpar_extras", "fonte", "hoje", "log", "ler_json"]

@@ -25,8 +25,18 @@ EC111 = {"veiculo": "Planalto", "titulo": "Emenda Constitucional nº 111/2021 (p
 
 GERAIS = "presidente vice-presidente governador vice-governador senador deputado_federal deputado_estadual".split()
 MUNICIPAIS = "prefeito vice-prefeito vereador".split()
-# deputados estaduais: data de posse ("MM-DD") quando não é 1º de fevereiro (Constituição de cada estado)
-POSSE_ESTADUAL: dict[str, str] = {}
+# deputados estaduais: data de posse ("MM-DD") quando não é 1º de fevereiro (Constituição ou Lei Orgânica de cada estado;
+# conferido nos textos oficiais em outubro de 2026)
+POSSE_ESTADUAL: dict[str, str] = {
+    "RS": "01-31",  # Constituição do RS, art. 49, § 3º: "a primeira sessão de cada legislatura realizar-se-á a trinta e um de janeiro"
+    "DF": "01-06",  # Lei Orgânica do DF, art. 66, I, "a" (Emenda à Lei Orgânica 131/2024): 6 de janeiro
+    "RR": "01-01",  # Constituição de Roraima, art. 30, § 4º (EC 75/2021): 1º de janeiro
+}
+# regra antiga, que valeu até os eleitos em 2022 (posse em 2023)
+POSSE_ESTADUAL_ATE_2022: dict[str, str] = {
+    "SP": "03-15",  # Constituição de SP, art. 9º; a EC 47/2019 trocou para 1º de fevereiro a partir de 2027 (a 20ª legislatura foi de 15/3/2023 a 31/1/2027)
+    "DF": "01-01",  # Lei Orgânica do DF antes da Emenda 131/2024
+}
 SINONIMOS = {"pres": "presidente", "vp": "vice-presidente", "gov": "governador", "vgov": "vice-governador",
              "sen": "senador", "dep": "deputado_federal", "dest": "deputado_estadual", "deputado_distrital": "deputado_estadual",
              "pref": "prefeito", "vpref": "vice-prefeito", "ver": "vereador"}
@@ -53,7 +63,9 @@ def posse(cargo: str, eleicao: int, uf: str | None = None) -> str:
     if c in ("senador", "deputado_federal"):
         return f"{a}-02-01"
     if c == "deputado_estadual":
-        return f"{a}-{POSSE_ESTADUAL.get((uf or '').upper(), '02-01')}"
+        u = (uf or "").upper()
+        dia = POSSE_ESTADUAL_ATE_2022.get(u) if eleicao <= 2022 else None
+        return f"{a}-{dia or POSSE_ESTADUAL.get(u, '02-01')}"
     return f"{a}-01-01"
 
 

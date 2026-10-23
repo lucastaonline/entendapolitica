@@ -61,10 +61,10 @@ LIMITE_PT, LIMITE_EN = 35, 45
 
 def coletar() -> tuple[dict, dict]:
     """Todas as propostas dos perfis, sem repetir (id -> {sigla, ementa, data}), e a fila de cada pessoa
-    (id da pessoa -> ids das propostas dela, da mais nova para a mais antiga)."""
+    (id da pessoa -> ids das propostas dela, da mais nova para a mais antiga). Inclui as pessoas dos arquivos por
+    cidade (dados/camaras/extras/<IBGE>.json)."""
     props, filas = {}, {}
-    for f in sorted(PESSOAS.glob("*.json")):
-        p = ler_json(f) or {}
+    for pessoa, p in perfis_com_extras():
         fila = []
         for x in (p.get("propostas") or {}).get("lista") or []:
             pid, ementa = x.get("id"), limpa(x.get("ementa"))
@@ -74,7 +74,7 @@ def coletar() -> tuple[dict, dict]:
             fila.append(pid)
         if fila:
             fila.sort(key=lambda i: props[i]["data"], reverse=True)
-            filas[p.get("id") or f.stem] = fila
+            filas[pessoa] = fila
     return props, filas
 
 

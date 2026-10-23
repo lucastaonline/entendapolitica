@@ -112,6 +112,9 @@ def sitemap() -> int:
         urls.append((f"estado.html?uf={arq.stem}", (ler_json(arq) or {}).get("atualizado")))
     for arq in sorted(PESSOAS.glob("*.json")):
         urls.append((f"pessoa.html?id={arq.stem}", (ler_json(arq) or {}).get("atualizado")))
+    for arq in sorted(EXTRAS_CIDADES.glob("*.json")):  # vereadores e prefeitos com dados no arquivo da cidade
+        b = ler_json(arq) or {}
+        urls += [(f"pessoa.html?id={pid}", b.get("atualizado")) for pid in sorted(b.get("pessoas") or {})]
     for casa in ("camara", "senado"):
         cat = (ler_json(DADOS / "votacoes" / f"{casa}.json") or {}).get("votacoes") or {}
         for chave, v in sorted(cat.items()):
@@ -131,8 +134,7 @@ def sitemap() -> int:
     def esc(u: str) -> str:
         return u.replace("&", "&amp;")
 
-    linhas = ['<?xml version="1.0" encoding="UTF-8"?>',
-              '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">']
+    linhas = []
     for c, data in urls:
         pt, ing = f"{SITE}/{c}", f"{SITE}/{en(c)}"
         alt = (f'<xhtml:link rel="alternate" hreflang="pt-BR" href="{esc(pt)}"/>'
@@ -141,12 +143,29 @@ def sitemap() -> int:
         lm = f"<lastmod>{data}</lastmod>" if data else ""
         for u in (pt, ing):
             linhas.append(f"<url><loc>{esc(u)}</loc>{lm}{alt}</url>")
-    linhas.append("</urlset>")
-    txt = "\n".join(linhas) + "\n"
-    arq = RAIZ / "sitemap.xml"
-    if not arq.exists() or arq.read_text(encoding="utf-8") != txt:
-        arq.write_text(txt, encoding="utf-8")
-    return len(urls) * 2
+
+    def grava(nome: str, txt: str) -> None:
+        arq = RAIZ / nome
+        if not arq.exists() or arq.read_text(encoding="utf-8") != txt:
+            arq.write_text(txt, encoding="utf-8")
+
+    cab = ('<?xml version="1.0" encoding="UTF-8"?>\n'
+           '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n')
+    # um arquivo aceita até 50 mil endereços: acima de 40 mil, sitemap.xml vira um índice de sitemap-1.xml, sitemap-2.xml...
+    POR_ARQ = 40000
+    partes = [linhas[i:i + POR_ARQ] for i in range(0, len(linhas), POR_ARQ)] or [[]]
+    velhas = set(p.name for p in RAIZ.glob("sitemap-*.xml"))
+    if len(partes) == 1:
+        grava("sitemap.xml", cab + "\n".join(partes[0]) + "\n</urlset>\n")
+    else:
+        for k, parte in enumerate(partes, 1):
+            grava(f"sitemap-{k}.xml", cab + "\n".join(parte) + "\n</urlset>\n")
+            velhas.discard(f"sitemap-{k}.xml")
+        grava("sitemap.xml", '<?xml version="1.0" encoding="UTF-8"?>\n<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
+              "\n".join(f"<sitemap><loc>{SITE}/sitemap-{k}.xml</loc></sitemap>" for k in range(1, len(partes) + 1)) + "\n</sitemapindex>\n")
+    for nome in velhas:
+        (RAIZ / nome).unlink()
+    return len(linhas)
 
 
 def _junta_membros(oficiais: list[dict], do_tse: list[dict]) -> list[dict]:
@@ -172,6 +191,27 @@ def _info_casa(a: dict) -> dict:
     """O que a página do estado ou da cidade mostra sobre a Casa: o que o site já tem dela (cobertura), as notas (o que falta
     e por quê) e o site oficial."""
     return {k: a[k] for k in ("casa", "casa_en", "sigla", "site", "cobertura", "notas", "notas_en") if a.get(k)}
+
+
+def _marcar_extras_cidades() -> int:
+    """Marca "extras": "cidade" em quem tem dados no arquivo da cidade (dados/camaras/extras/<IBGE>.json): vereadores,
+    prefeito e vice. Quem tem arquivo próprio (dados/pessoas/<id>.json) continua com "extras": true."""
+    n = 0
+    for f in sorted(EXTRAS_CIDADES.glob("*.json")):
+        ids = set(((ler_json(f) or {}).get("pessoas") or {}))
+        achados = list((DADOS / "cidades").glob(f"*/{f.stem}.json"))
+        c = ler_json(achados[0]) if achados else None
+        if not ids or not isinstance(c, dict):
+            continue
+        mudou = False
+        for p in [c.get("prefeito"), c.get("vice")] + list((c.get("vereadores") or {}).get("membros") or []):
+            if isinstance(p, dict) and p.get("id") in ids and p.get("extras") is not True and p.get("extras") != "cidade":
+                p["extras"] = "cidade"
+                mudou = True
+        if mudou:
+            salvar_json(achados[0], sem_mudar_data(c, achados[0]))
+            n += 1
+    return n
 
 
 def _lista_velha(a: dict, inicio: str) -> bool:
@@ -273,6 +313,19 @@ def main() -> None:
         aplicar_simples(lista, cache)
         if salvar_json(f, sem_mudar_data(p, f)):
             escritos += 1
+    # as pessoas dos arquivos por cidade (Câmaras Municipais e prefeituras): o mesmo cuidado com as propostas
+    for f in sorted(EXTRAS_CIDADES.glob("*.json")):
+        b = ler_json(f)
+        if not isinstance(b, dict):
+            continue
+        for p in (b.get("pessoas") or {}).values():
+            lista = (p.get("propostas") or {}).get("lista") or []
+            for x in lista:
+                if x.get("ementa"):
+                    x["ementa"] = sem_documentos(x["ementa"])
+            aplicar_simples(lista, cache)
+        if salvar_json(f, sem_mudar_data(b, f)):
+            escritos += 1
     log(f"perfis reescritos: {escritos}")
     log(f"votações com a explicação simples atualizada: {votacoes.atualizar_simples(cache)}")
 
@@ -306,12 +359,21 @@ def main() -> None:
         for k in ("governador", "vice"):
             if isinstance(e.get(k), dict) and e[k].get("eleicao2026"):
                 e[k]["eleicao2026"] = com_en(e[k]["eleicao2026"])
+        # o que o governo do estado fez (projetos enviados à Assembleia, leis e vetos) fica em dados/pessoas/gov-<UF>.json
+        for k, pre in (("governador", "gov"), ("vice", "vgov")):
+            p = e.get(k)
+            if isinstance(p, dict):
+                if (PESSOAS / f"{pre}-{e.get('uf') or arq.stem}.json").exists():
+                    p["extras"] = True
+                else:
+                    p.pop("extras", None)
         for m in (e.get("deputadosEstaduais") or {}).get("membros", []):
             if m.get("eleicao2026"):
                 m["eleicao2026"] = com_en(m["eleicao2026"])
         salvar_json(arq, sem_mudar_data(e, arq))
     a, c = juntar_legislativos()
     log(f"listas oficiais: {a} Assembleias e {c} Câmaras Municipais")
+    log(f"cidades com dados a mais num arquivo por cidade: {_marcar_extras_cidades()} atualizadas")
     log(f"dados/cidades.json: {indice_cidades()} cidades")
     log(f"sitemap.xml: {sitemap()} endereços")
     log("pronto")

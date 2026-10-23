@@ -23,7 +23,7 @@ import re
 import zipfile
 from pathlib import Path
 
-from comum import (CACHE, DADOS, PESSOAS, STATUS, STATUS_TXT, classificar_situacao, fonte, hoje, ler_json, log,
+from comum import (CACHE, DADOS, EXTRAS_CIDADES, PESSOAS, STATUS, STATUS_TXT, classificar_situacao, fonte, hoje, ler_json, log,
                    ordenar_propostas, resumo_propostas, salvar_json, sem_acento, sem_mudar_data, slug)
 from mandatos import vigente
 
@@ -205,6 +205,20 @@ def salvar_extras(pid: str, dados: dict) -> bool:
     return salvar_json(caminho, sem_mudar_data(dados, caminho))
 
 
+def salvar_extras_cidade(ibge: str, pessoas: dict[str, dict], fontes: list | None = None) -> bool:
+    """dados/camaras/extras/<IBGE>.json: o que a Câmara Municipal e a prefeitura publicam a mais sobre as pessoas da
+    cidade, num arquivo só (vereadores: propostas, votações, gastos, links; prefeito: "propostas" que mandou à Câmara e
+    "executivo" com leis e vetos). pessoas = {id: dados no mesmo formato de dados/pessoas/<id>.json}. O arquivo é
+    regravado inteiro a cada rodada: quem saiu da lista sai do arquivo. O montar.py marca "extras": "cidade" nas listas
+    e o perfil busca este arquivo."""
+    caminho = EXTRAS_CIDADES / f"{ibge}.json"
+    caminho.parent.mkdir(parents=True, exist_ok=True)
+    dados = {"ibge": str(ibge), "pessoas": {pid: dict(d, id=pid) for pid, d in sorted(pessoas.items())}, "atualizado": hoje()}
+    if fontes:
+        dados["fontes"] = fontes
+    return salvar_json(caminho, sem_mudar_data(dados, caminho))
+
+
 def limpar_extras(prefixo: str, manter: set[str]) -> int:
     """Apaga arquivos de pessoas desta Casa que saíram da lista (ex.: prefixo "dest-SP-")."""
     n = 0
@@ -217,4 +231,4 @@ def limpar_extras(prefixo: str, manter: set[str]) -> int:
 
 __all__ = ["ASSEMBLEIAS", "CAMARAS", "INICIO_ESTADUAL", "INICIO_MUNICIPAL", "inicio_estadual", "TIPOS_REGIONAIS", "palavras", "candidatos_tse",
            "casar_tse", "id_pessoa", "tipo_comum", "situacao_para_status", "proposta", "bloco_propostas", "salvar_casa",
-           "salvar_extras", "limpar_extras", "fonte", "hoje", "log", "ler_json"]
+           "salvar_extras", "salvar_extras_cidade", "limpar_extras", "fonte", "hoje", "log", "ler_json"]

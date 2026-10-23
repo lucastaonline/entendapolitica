@@ -117,7 +117,7 @@ jobs:
         run: |
           git config user.name "lucastaonline"
           git config user.email "31556507+lucastaonline@users.noreply.github.com"
-          git add dados img/pessoas sitemap.xml
+          git add -A dados img/pessoas 'sitemap*.xml'
           if git diff --cached --quiet; then
             echo "Nada mudou."
           else

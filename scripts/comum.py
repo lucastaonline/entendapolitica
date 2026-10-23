@@ -28,6 +28,10 @@ from pathlib import Path
 RAIZ = Path(__file__).resolve().parent.parent
 DADOS = RAIZ / "dados"
 PESSOAS = DADOS / "pessoas"
+# Câmaras Municipais e prefeituras: o que publicam a mais sobre cada pessoa da cidade fica num arquivo só por cidade
+# (dados/camaras/extras/<IBGE>.json). Com milhares de cidades, um arquivo por pessoa passaria do limite de arquivos
+# de uma publicação na Vercel (cerca de 15 mil).
+EXTRAS_CIDADES = DADOS / "camaras" / "extras"
 SIMPLES = DADOS / "simples"
 FOTOS = RAIZ / "img" / "pessoas"
 CACHE = RAIZ / ".cache"
@@ -107,6 +111,19 @@ def sem_documentos(s):
     """Tira números de CPF de textos oficiais (algumas ementas citam o CPF de quem é preso ou processado). O site não
     precisa deles; o resto do texto continua igual ao oficial."""
     return _CPF.sub("[CPF omitido]", s) if isinstance(s, str) else s
+
+
+def perfis_com_extras():
+    """(id, perfil) de cada pessoa com dados a mais: os arquivos dados/pessoas/<id>.json e as pessoas dos arquivos
+    por cidade (dados/camaras/extras/<IBGE>.json, campo "pessoas")."""
+    for f in sorted(PESSOAS.glob("*.json")):
+        p = ler_json(f)
+        if isinstance(p, dict):
+            yield p.get("id") or f.stem, p
+    for f in sorted(EXTRAS_CIDADES.glob("*.json")):
+        for pid, p in ((ler_json(f) or {}).get("pessoas") or {}).items():
+            if isinstance(p, dict):
+                yield pid, p
 
 
 def nome_proprio(s: str | None) -> str | None:

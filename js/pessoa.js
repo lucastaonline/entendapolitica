@@ -72,12 +72,17 @@
     return carregarBase().then(comExtras);
   }
   // Estaduais e municipais: a ficha vem da lista do estado ou da cidade (TSE ou lista oficial da Casa). Quando a Assembleia,
-  // a Câmara Municipal ou o governo publicam mais dados (propostas, votações, gastos), eles ficam em dados/pessoas/<id>.json,
-  // com os mesmos campos dos perfis federais, e entram por cima da ficha. A ficha avisa que esse arquivo existe ("extras": true),
-  // para a página não pedir arquivos que não existem.
+  // a Câmara Municipal ou o governo publicam mais dados (propostas, votações, gastos), eles entram por cima da ficha, com os
+  // mesmos campos dos perfis federais. A ficha avisa onde estão, para a página não pedir arquivos que não existem:
+  // "extras": true = dados/pessoas/<id>.json; "extras": "cidade" = dados/camaras/extras/<IBGE>.json (um arquivo por cidade,
+  // com todos os vereadores e o prefeito dela).
   function comExtras(base) {
     if (!base || !base.extras) return base;
-    return EP.json("dados/pessoas/" + id + ".json").then(function (x) {
+    var cid = /^(?:ver|pref|vpref)-(\d{7})/.exec(id);
+    var porCidade = base.extras === "cidade" && cid;
+    return EP.json(porCidade ? "dados/camaras/extras/" + cid[1] + ".json" : "dados/pessoas/" + id + ".json").then(function (x) {
+      if (porCidade) x = ((x && x.pessoas) || {})[id];
+      if (!x) return base;
       var p = Object.assign({}, base, x);
       p.id = base.id || id;
       p.tipo = base.tipo;
@@ -620,14 +625,26 @@
     var e = p.executivo;
     if (!e || (e.leisSancionadas == null && e.vetos == null)) return "";
     var desde = ((e.periodo && e.periodo.inicio) || "2023").slice(0, 4);
+    // quem aprova as leis e quem as assina: Congresso e presidente; Assembleia e governador; Câmara Municipal e prefeito
+    var f = p.genero === "F";
+    var casa = p.tipo === "gov" ? (p.uf === "DF" ? ["A Câmara Legislativa", "pela Câmara Legislativa", "a Câmara Legislativa", "the Legislative Chamber"] :
+        ["A Assembleia Legislativa", "pela Assembleia Legislativa", "a Assembleia Legislativa", "the state legislature"]) :
+      p.tipo === "pref" ? ["A Câmara Municipal", "pela Câmara Municipal", "a Câmara Municipal", "the city council"] :
+      ["O Congresso", "pelo Congresso", "o Congresso", "Congress"];
+    var chefe = p.tipo === "gov" ? (f ? ["a governadora", "pela governadora"] : ["o governador", "pelo governador"]).concat(["the governor"]) :
+      p.tipo === "pref" ? (f ? ["a prefeita", "pela prefeita"] : ["o prefeito", "pelo prefeito"]).concat(["the mayor"]) :
+      ["o presidente", "pelo presidente", "the President"];
+    function mai(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+    var regra = p.tipo === "gov" ? (p.uf === "DF" ? ["na Lei Orgânica do Distrito Federal", "the Federal District's Organic Law"] : ["na Constituição do estado", "the state Constitution"]) :
+      p.tipo === "pref" ? ["na Lei Orgânica do município", "the city's Organic Law"] : ["na Constituição", "the Constitution"];
     return '<section class="secao-perfil" aria-labelledby="t-exec"><h2 id="t-exec"><span class="ic" aria-hidden="true">✍️</span>' + EP.tr("Leis sancionadas e vetos", "Laws signed and vetoes") + "</h2>" +
-      '<p class="muted">' + EP.tr("O Congresso aprova as leis; o presidente assina (sanciona) ou recusa (veta), no todo ou em parte. O Congresso pode derrubar o veto.",
-        "Congress passes laws; the President signs them (sanction) or rejects them (veto), in whole or in part. Congress can override a veto.") + '</p><div class="grandes-n">' +
+      '<p class="muted">' + EP.tr(casa[0] + " aprova as leis; " + chefe[0] + " assina (sanciona) ou recusa (veta), no todo ou em parte. " + casa[0] + " pode derrubar o veto.",
+        mai(casa[3]) + " passes laws; " + chefe[2] + " signs them (sanction) or rejects them (veto), in whole or in part. " + mai(casa[3]) + " can override a veto.") + '</p><div class="grandes-n">' +
       (e.leisSancionadas != null ? '<div class="grande-n"><b>' + EP.num(e.leisSancionadas) + "</b><span>" + EP.tr("leis sancionadas desde " + desde, "laws signed since " + desde) + "</span></div>" : "") +
       (e.vetos != null ? '<div class="grande-n"><b>' + EP.num(e.vetos) + "</b><span>" + EP.tr("vetos (totais ou parciais) desde " + desde, "vetoes (full or partial) since " + desde) + "</span></div>" : "") +
       "</div>" + '<p class="muted nota-contexto" style="margin-top:10px"><span aria-hidden="true">🦉 </span>' + EP.tr(
-        "Quase todo projeto aprovado pelo Congresso passa pelo presidente, venha de quem vier. Por isso, este número mostra o que o Congresso aprovou e o presidente assinou, e não o que o presidente propôs (isso está em \"O que " + ele(p) + " propôs\"). Vetar também é uma tarefa prevista na Constituição: o número, sozinho, não diz se as decisões foram boas ou ruins.",
-        "Almost every bill passed by Congress goes to the President, no matter who proposed it. So this number shows what Congress passed and the President signed, not what the President proposed (that is under \"What " + ele(p) + " proposed\"). Vetoing is also a task set by the Constitution: the number alone does not say whether the decisions were good or bad.") + "</p>" +
+        "Quase todo projeto aprovado " + casa[1] + " passa " + chefe[1] + ", venha de quem vier. Por isso, este número mostra o que " + casa[2] + " aprovou e " + chefe[0] + " assinou, e não o que " + chefe[0] + " propôs (isso está em \"O que " + ele(p) + " propôs\"). Vetar também é uma tarefa prevista " + regra[0] + ": o número, sozinho, não diz se as decisões foram boas ou ruins.",
+        "Almost every bill passed by " + casa[3] + " goes to " + chefe[2] + ", no matter who proposed it. So this number shows what " + casa[3] + " passed and " + chefe[2] + " signed, not what " + chefe[2] + " proposed (that is under \"What " + ele(p) + " proposed\"). Vetoing is also a task set by " + regra[1] + ": the number alone does not say whether the decisions were good or bad.") + "</p>" +
       (e.fonte ? '<p style="margin-top:10px">' + fonteBtn(e.fonte, null, EP.tr("leis e vetos", "laws and vetoes")) + "</p>" : "") + "</section>";
   }
   function emBreveHtml(p) {

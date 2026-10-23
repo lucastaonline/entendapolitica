@@ -15,8 +15,8 @@
   var cidade0 = EP.param("cidade");
 
   function falhou(el, pt, en) {
-    el.innerHTML = '<div class="vazio"><span class="grande" aria-hidden="true">🛠️</span>' +
-      EP.tr("Ainda estamos juntando " + pt + ". Volte daqui a pouco.", "We are still gathering " + en + ". Please come back in a little while.") + "</div>";
+    el.innerHTML = '<div class="vazio"><span class="grande" aria-hidden="true">⚠️</span>' +
+      EP.tr("Não foi possível carregar " + pt + " agora. Tente de novo daqui a pouco.", "Could not load " + en + " right now. Please try again in a little while.") + "</div>";
   }
   // troca um texto que tinha tradução fixa no HTML (data-en) por um texto montado aqui
   function poeTexto(el, txt) { if (el) { el.removeAttribute("data-en"); el.textContent = txt; } }
@@ -190,10 +190,10 @@
         v = e.vice && (e.vice.nome || e.vice.vago) ? e.vice : null, anoG = e.eleicaoGoverno || 2022;
       document.getElementById("gov").innerHTML = (cartaoGrande(g, EP.tr(EP.gen(g && g.genero, "Governador", "Governadora"), "Governor")) +
         cartaoGrande(v, EP.tr(EP.gen(v && v.genero, "Vice-governador", "Vice-governadora"), "Vice Governor"))) ||
-        '<div class="vazio">' + EP.tr("Ainda não temos os dados de quem governa este estado.", "We do not have data on who governs this state yet.") + "</div>";
+        '<div class="vazio">' + EP.tr("O TSE não mostra quem ganhou a última eleição para governador deste estado.", "The TSE (Brazil's Superior Electoral Court) does not show who won the last election for governor in this state.") + "</div>";
       var notas = [];
-      if ((g && g.aConfirmar) || (v && v.aConfirmar)) notas.push(EP.tr("Aqui aparece quem ganhou a eleição de " + anoG + ", segundo o TSE. Estamos conferindo se a mesma pessoa ainda está no cargo.",
-        "This shows who won the " + anoG + " election, according to the TSE (Brazil's Superior Electoral Court). We are checking whether the same person is still in office."));
+      if ((g && g.aConfirmar) || (v && v.aConfirmar)) notas.push(EP.tr("Aqui aparece quem ganhou a eleição de " + anoG + ", segundo o TSE. Se alguém deixou o cargo depois (por renúncia, cassação ou morte), isso pode não aparecer aqui.",
+        "This shows who won the " + anoG + " election, according to the TSE (Brazil's Superior Electoral Court). If someone left office afterwards (by resigning, being removed or dying), that may not show here."));
       var fg = fontesDe(g, v);
       document.getElementById("gov-nota").innerHTML = (notas.length ? '<p class="aviso"><span aria-hidden="true">⚠️ </span>' + esc(notas.join(" ")) + "</p>" : "") +
         (fg.length ? '<p style="margin-top:12px">' + EP.botaoFontes(fg) + "</p>" : "");

@@ -104,20 +104,20 @@ SUPLENTES_SENADO = ("1º SUPLENTE", "2º SUPLENTE")
 PRIORIDADE_SIT = {"ELEITO": 0, "ELEITO POR QP": 0, "ELEITO POR MÉDIA": 0, "2º TURNO": 1, "SUPLENTE": 2, "NÃO ELEITO": 3}
 
 AVISO_DEST = ("Lista de quem foi eleito em {ano}, segundo o TSE. Alguns podem ter saído e suplentes podem ter "
-              "assumido. Em breve: a lista oficial da Assembleia.")
+              "assumido: quem está no cargo hoje aparece no site oficial da Assembleia.")
 AVISO_DIST = ("Lista de quem foi eleito em {ano}, segundo o TSE. Alguns podem ter saído e suplentes podem ter "
-              "assumido. Em breve: a lista oficial da Câmara Legislativa.")
+              "assumido: quem está no cargo hoje aparece no site oficial da Câmara Legislativa.")
 AVISO_PREF = ("Prefeito(a) e vice eleitos em 2024, segundo o TSE. Pode ter havido mudanças depois "
               "(cassação, renúncia, morte ou eleição suplementar).")
 AVISO_VER = ("Lista de quem foi eleito em 2024, segundo o TSE. Alguns podem ter saído (cassação, renúncia, "
              "licença) e suplentes podem ter assumido.")
 # os mesmos avisos em inglês (o site tem versão em inglês)
 AVISO_DEST_EN = ("List of the people elected in {ano}, according to the TSE (Superior Electoral Court). Some may have "
-                 "left and substitutes may have taken their seats. Coming soon: the official list from the Legislative "
-                 "Assembly (state parliament).")
+                 "left and substitutes may have taken their seats: who is in office today is shown on the official "
+                 "website of the Legislative Assembly (state parliament).")
 AVISO_DIST_EN = ("List of the people elected in {ano}, according to the TSE (Superior Electoral Court). Some may have "
-                 "left and substitutes may have taken their seats. Coming soon: the official list from the Legislative "
-                 "Chamber of the Federal District.")
+                 "left and substitutes may have taken their seats: who is in office today is shown on the official "
+                 "website of the Legislative Chamber of the Federal District.")
 AVISO_PREF_EN = ("Mayor and vice mayor elected in 2024, according to the TSE (Superior Electoral Court). There may "
                  "have been changes since then (removal from office, resignation, death or a special election).")
 AVISO_VER_EN = ("List of the people elected in 2024, according to the TSE (Superior Electoral Court). Some may have "

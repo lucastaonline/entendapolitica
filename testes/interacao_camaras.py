@@ -92,7 +92,7 @@ async def main():
         await pg.wait_for_timeout(1000)
         ok("São Paulo: a nota também em inglês", "co-signed" in await pg.locator("#propostas").inner_text())
 
-        # 5. cidade só com a lista oficial (sem propostas): perfil com link oficial e "Em breve"
+        # 5. cidade só com a lista oficial (sem propostas): perfil com link oficial e "Onde ver mais" (sem "Em breve")
         k = casa("3106200")
         await pg.goto(BASE + "cidade.html?ibge=3106200&lang=pt", wait_until="networkidle")
         await pg.wait_for_timeout(1200)
@@ -102,8 +102,8 @@ async def main():
         await pg.goto(BASE + f"pessoa.html?id={sup['id']}&lang=pt", wait_until="networkidle")
         await pg.wait_for_timeout(1000)
         corpo = await pg.locator("#perfil").inner_text()
-        ok("perfil só com a lista: link oficial e aviso de que as propostas ainda não estão aqui",
-           await pg.locator('.contatos a[href*="cmbh.mg.gov.br"]').count() == 1 and "Em breve" in corpo)
+        ok("perfil só com a lista: link oficial e o quadro \"Onde ver mais\" (sem \"Em breve\")",
+           await pg.locator('.contatos a[href*="cmbh.mg.gov.br"]').count() == 1 and "Em breve" not in corpo and "Onde ver mais" in corpo)
 
         # 6. todas as capitais com coletor: a página da cidade abre e usa a lista oficial
         falhas = []

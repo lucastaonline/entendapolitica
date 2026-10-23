@@ -65,7 +65,9 @@
   function deEstado(e, quem, chave) {
     var p = e[chave];
     if (!p) throw new Error("sem " + chave);
-    return Object.assign({ id: id, tipo: quem, uf: e.uf, cargo: quem === "gov" ? EP.gen(p.genero, "Governador", "Governadora") : EP.gen(p.genero, "Vice-governador", "Vice-governadora") }, p);
+    // infoCasa: a Assembleia do estado (o site oficial dela), para o quadro "Onde ver mais"
+    return Object.assign({ id: id, tipo: quem, uf: e.uf, cargo: quem === "gov" ? EP.gen(p.genero, "Governador", "Governadora") : EP.gen(p.genero, "Vice-governador", "Vice-governadora"),
+      infoCasa: (e.deputadosEstaduais || {}).infoCasa || null }, p);
   }
   function carregar() {
     if (/^(dep|sen|pres|vp)-[\w-]+$/.test(id)) return EP.json("dados/pessoas/" + id + ".json");
@@ -101,7 +103,7 @@
         var de = e.deputadosEstaduais || {}, p = (de.membros || []).filter(function (x) { return x.id === id; })[0];
         if (!p) throw new Error("não achei");
         return Object.assign({ tipo: "dest", uf: e.uf, cargo: e.uf === "DF" ? EP.gen(p.genero, "Deputado distrital", "Deputada distrital") : EP.gen(p.genero, "Deputado estadual", "Deputada estadual"),
-          avisoLista: de.aviso, avisoLista_en: de.aviso_en, fonte: p.fonte || de.fonte }, p);
+          avisoLista: de.aviso, avisoLista_en: de.aviso_en, fonte: p.fonte || de.fonte, infoCasa: de.infoCasa || null }, p);
       });
     }
     if ((m = /^(pref|vpref|ver)-(\d{7})(?:-[\w-]+)?$/.exec(id))) {
@@ -116,7 +118,7 @@
         var v = c.vereadores || {};
         return Object.assign({ tipo: tipo, uf: uf, municipio: { ibge: c.ibge, nome: c.nome }, cargo: cargo,
           avisoLista: tipo === "ver" ? v.aviso : c.aviso, avisoLista_en: tipo === "ver" ? v.aviso_en : c.aviso_en,
-          fonte: p.fonte || (tipo === "ver" ? v.fonte : null) }, p);
+          fonte: p.fonte || (tipo === "ver" ? v.fonte : null), onde: c.onde || null, infoCasa: v.infoCasa || null }, p);
       });
     }
     if (/^min-/.test(id)) {
@@ -540,7 +542,7 @@
     if (!el) return;
     function vai() {
       listaVotos(P.votacoes).then(function (l) { VOTOS = l; desenhaFiltroVotos(); desenhaVotos(); }).catch(function () {
-        el.innerHTML = '<li class="vazio">' + EP.tr("As votações ainda não estão disponíveis. Volte daqui a pouco.", "The votes are not available yet. Please come back in a little while.") + "</li>";
+        el.innerHTML = '<li class="vazio">' + EP.tr("Não foi possível carregar as votações agora. Tente de novo daqui a pouco.", "The votes could not be loaded right now. Please try again in a little while.") + "</li>";
       });
     }
     // o arquivo central é grande: só carrega quando a seção chega perto da tela
@@ -647,20 +649,103 @@
         "Almost every bill passed by " + casa[3] + " goes to " + chefe[2] + ", no matter who proposed it. So this number shows what " + casa[3] + " passed and " + chefe[2] + " signed, not what " + chefe[2] + " proposed (that is under \"What " + ele(p) + " proposed\"). Vetoing is also a task set by " + regra[1] + ": the number alone does not say whether the decisions were good or bad.") + "</p>" +
       (e.fonte ? '<p style="margin-top:10px">' + fonteBtn(e.fonte, null, EP.tr("leis e vetos", "laws and vetoes")) + "</p>" : "") + "</section>";
   }
-  function emBreveHtml(p) {
+  // ---------------------------------------------------------------- onde ver mais
+  // Quando a Assembleia, a Câmara Municipal ou o governo não publicam um dado de um jeito que o site consiga ler, o perfil
+  // não promete nada: diz o que não está aqui e por quê (as notas da Casa e o mapa das cidades, dados/municipios), onde ver
+  // nos sites oficiais e como pedir pela Lei de Acesso à Informação, que vale para todo órgão público.
+  var LAI_URL = "https://www.planalto.gov.br/ccivil_03/_ato2011-2014/2011/lei/l12527.htm";
+  function urlBoa(u) { return typeof u === "string" && /^https?:\/\/[^\s"'<>]+$/i.test(u) ? u : ""; }
+  function nomeAssembleia(p) {
+    var i = p.infoCasa || {};
+    if (i.casa) return EP.en && i.casa_en ? esc(i.casa_en) : EP.pt(esc(i.casa));
+    if (p.uf === "DF") return EP.tr("Câmara Legislativa do Distrito Federal", "Legislative Chamber of the Federal District");
+    return EP.en ? "Legislative Assembly " + esc(EP.doEstado(p.uf)) : "Assembleia Legislativa " + esc(EP.doEstado(p.uf));
+  }
+  // as notas da Casa que falam de um assunto (ex.: só as que explicam por que as propostas não entram)
+  function notasCasa(p, re) {
+    var i = p.infoCasa || {}, pt = i.notas || [], en = i.notas_en || [], par = EP.en && en.length === pt.length;
+    return pt.map(function (n, k) { return re.test(n) ? (par ? esc(en[k]) : EP.en ? EP.pt(esc(n)) : esc(n)) : null; }).filter(Boolean);
+  }
+  // a página de proposições do sistema da Câmara: a que o mapa das cidades achou, ou a busca padrão do SAPL
+  function urlPropostasCamara(c) {
+    if (urlBoa(c.propostas)) return c.propostas;
+    if (c.sistema === "sapl" && urlBoa(c.api)) return c.api.replace(/\/api\/?$/, "") + "/materia/pesquisar-materia";
+    return "";
+  }
+  function itemOnde(ic, url, txt, desc) {
+    return '<li><span class="ic-onde" aria-hidden="true">' + ic + "</span><span>" + linkFora(url, txt, true) + (desc ? "<small>" + desc + "</small>" : "") + "</span></li>";
+  }
+  function ondeVerHtml(p) {
+    var t = p.tipo, ex = p.executivo || {};
+    var semProp = !p.propostas, semExec = ex.leisSancionadas == null && ex.vetos == null;
+    if (!((t === "dest" || t === "ver") && semProp) && !((t === "gov" || t === "pref") && (semProp || semExec))) return "";
+    var i = p.infoCasa || {}, o = p.onde || {}, cam = o.camara || {}, pre = o.prefeitura || {};
+    var f = p.genero === "F", txt = "", notas = [], links = [], conferido = cam.conferido || pre.conferido || "";
+    var urlProp = urlPropostasCamara(cam);
+    var sicCasa = urlBoa(i.sic) || urlBoa(cam.sic);
+    var pedir = EP.tr("Pedir a informação pela Lei de Acesso à Informação", "Ask for the information under the Access to Information Law");
+
+    if (t === "dest") {
+      var casa = nomeAssembleia(p);
+      txt = EP.tr("As propostas de cada " + (p.uf === "DF" ? "deputado distrital" : "deputado estadual") + " não estão neste site.",
+        "Each " + (p.uf === "DF" ? "district" : "state") + " deputy's bills are not on this site.");
+      notas = notasCasa(p, /propost|proposi/i);
+      if (!notas.length) txt += EP.tr(" Não achamos essas informações publicadas num formato que o site consiga ler sozinho.",
+        " We could not find this information published in a format this site can read on its own.");
+      if (urlBoa(i.site)) links.push(itemOnde("🏛️", i.site, EP.tr("Site oficial da ", "Official website of the ") + casa,
+        EP.tr("Lá dá para procurar as propostas de cada deputado.", "You can look up each deputy's bills there.")));
+      if (sicCasa) links.push(itemOnde("✉️", sicCasa, pedir, EP.tr("Canal oficial da ", "Official channel of the ") + casa + "."));
+    } else if (t === "ver") {
+      txt = EP.tr("As propostas de cada vereador não estão neste site.", "Each city councilor's bills are not on this site.");
+      notas = notasCasa(p, /propost|proposi/i);
+      if (cam.propostasOnline === false) {
+        txt += EP.tr(" Não achamos as propostas dos vereadores publicadas no site oficial da Câmara Municipal.",
+          " We did not find the councilors' bills published on the City Council's official website.");
+        if (cam.motivo) notas.push(EP.en && cam.motivo_en ? esc(cam.motivo_en) : EP.en ? EP.pt(esc(cam.motivo)) : esc(cam.motivo));
+      }
+      if (urlProp && cam.propostasOnline !== false) links.push(itemOnde("📜", urlProp, EP.tr("Propostas no sistema oficial da Câmara Municipal", "Bills on the City Council's official system"),
+        EP.tr("A Câmara mostra lá as propostas de cada vereador.", "The City Council shows each councilor's bills there.")));
+      if (urlBoa(i.site) || urlBoa(cam.site)) links.push(itemOnde("🏛️", urlBoa(i.site) || cam.site, EP.tr("Site oficial da Câmara Municipal", "Official website of the City Council"), ""));
+      if (sicCasa) links.push(itemOnde("✉️", sicCasa, pedir, EP.tr("Canal oficial da Câmara Municipal.", "The City Council's official channel.")));
+    } else {
+      // governador(a) ou prefeito(a): o que assinou e vetou (Diário Oficial) e o que mandou para a Casa
+      var gov = t === "gov", chefe = gov ? EP.gen(p.genero, "o governador", "a governadora") : EP.gen(p.genero, "o prefeito", "a prefeita");
+      var casaPt = gov ? (p.uf === "DF" ? "a Câmara Legislativa" : "a Assembleia Legislativa") : "a Câmara Municipal";
+      var casaEn = gov ? (p.uf === "DF" ? "the Legislative Chamber" : "the state legislature") : "the City Council";
+      var chefeEn = gov ? "the governor" : "the mayor";
+      var oQue = semProp && semExec ? [
+          "As leis que " + chefe + " assinou, os vetos e os projetos que mandou para " + casaPt + " não estão neste site.",
+          "The laws " + chefeEn + " signed, the vetoes and the bills sent to " + casaEn + " are not on this site."] :
+        semExec ? ["As leis que " + chefe + " assinou e os vetos não estão neste site.", "The laws " + chefeEn + " signed and the vetoes are not on this site."] :
+        ["Os projetos que " + chefe + " mandou para " + casaPt + " não estão neste site.", "The bills " + chefeEn + " sent to " + casaEn + " are not on this site."];
+      txt = EP.tr(oQue[0], oQue[1]);
+      if (!gov) notas = notasCasa(p, /prefeit|executivo/i);
+      var dio = pre.diarioOficial || p.diarioOficial || {};
+      if (semExec && urlBoa(dio.url)) links.push(itemOnde("📰", dio.url, dio.nome ? (EP.en ? EP.pt(esc(dio.nome)) : esc(dio.nome)) : EP.tr("Diário Oficial", "Official Gazette"),
+        gov ? EP.tr("É onde saem as leis, os vetos e os decretos do governo do estado.", "Where the state government's laws, vetoes and decrees are published.") :
+          EP.tr("É onde saem as leis, os vetos e os decretos da prefeitura.", "Where the city government's laws, vetoes and decrees are published.")));
+      if (gov && urlBoa(i.site)) links.push(itemOnde("🏛️", i.site, EP.tr("Site oficial da ", "Official website of the ") + nomeAssembleia(p),
+        EP.tr("Os projetos do governo e as leis do estado passam por lá.", "The government's bills and the state's laws go through there.")));
+      if (!gov && urlProp) links.push(itemOnde("📜", urlProp, EP.tr("Projetos no sistema oficial da Câmara Municipal", "Bills on the City Council's official system"),
+        EP.tr("Os projetos que a prefeitura manda passam pela Câmara.", "The bills the city government sends go through the City Council.")));
+      if (!gov && urlBoa(pre.transparencia)) links.push(itemOnde("💰", pre.transparencia, EP.tr("Portal da Transparência da prefeitura", "City government's transparency portal"),
+        EP.tr("Mostra quanto a prefeitura recebe e gasta.", "Shows how much the city government receives and spends.")));
+      if (!gov && urlBoa(pre.site)) links.push(itemOnde("🏢", pre.site, EP.tr("Site oficial da prefeitura", "Official website of the city government"), ""));
+      if (!gov && urlBoa(pre.sic)) links.push(itemOnde("✉️", pre.sic, pedir, EP.tr("Canal oficial da prefeitura.", "The city government's official channel.")));
+    }
+    return '<section class="secao-perfil onde-ver" aria-labelledby="t-onde"><h2 id="t-onde"><span class="ic" aria-hidden="true">🔎</span>' + EP.tr("Onde ver mais", "Where to find more") + "</h2>" +
+      "<p>" + txt + "</p>" + (notas.length ? '<ul class="notas-casa">' + notas.map(function (n) { return "<li>" + n + "</li>"; }).join("") + "</ul>" : "") +
+      (links.length ? '<ul class="links-onde">' + links.join("") + "</ul>" : "") +
+      (links.length && conferido ? '<p class="muted" style="margin-top:8px;font-size:.88rem">' + EP.tr("Endereços oficiais conferidos em ", "Official addresses checked on ") + EP.data(conferido) + ".</p>" : "") +
+      '<details class="lai"><summary>' + EP.tr("Como pedir uma informação que não está na internet?", "How to ask for information that is not online?") + "</summary><p>" + EP.tr(
+        "Pela <b>Lei de Acesso à Informação</b>, qualquer pessoa pode pedir informações a um órgão público, como uma Câmara, uma Assembleia, uma prefeitura ou um governo, sem precisar dizer por quê. O pedido é de graça, e a resposta tem que sair em até 20 dias (que podem virar 30, se o órgão explicar o motivo). Procure \"Acesso à Informação\" ou \"e-SIC\" no site oficial do órgão.",
+        "Under the <b>Access to Information Law</b>, anyone can ask public bodies (such as city councils, state legislatures, city governments and state governments) for information, without having to say why. The request is free, and the answer must come within 20 days (which can become 30 if the body explains why). Look for \"<span lang=\"pt-BR\">Acesso à Informação</span>\" or \"e-SIC\" on the body's official website.") +
+      " " + linkFora(LAI_URL, EP.tr("Lei nº 12.527/2011", "Law No. 12,527/2011"), true) + "</p></details></section>";
+  }
+  function avisoEMinisterio(p) {
     var h = "";
     if (p.avisoLista) h += '<p class="aviso"><span aria-hidden="true">ℹ️ </span>' + D.aviso(p.avisoLista, p.avisoLista_en) + "</p>";
-    if (!p.propostas) {
-      var oque = {
-        dest: ["As propostas dos deputados estaduais ainda não estão aqui.", "State deputies' bills are not here yet."],
-        ver: ["As propostas dos vereadores ainda não estão aqui.", "City councilors' bills are not here yet."],
-        gov: ["O que o governo do estado fez ainda não está aqui.", "What the state government did is not here yet."],
-        pref: ["O que a prefeitura fez ainda não está aqui.", "What the city government did is not here yet."]
-      }[p.tipo];
-      if (oque) h += '<section class="secao-perfil" aria-labelledby="t-embreve"><h2 id="t-embreve"><span class="ic" aria-hidden="true">🛠️</span>' + EP.tr("Em breve", "Coming soon") + "</h2><p>" +
-        esc(EP.tr(oque[0] + " Cada Assembleia, Câmara de Vereadores e governo publica os dados de um jeito diferente, e estamos juntando um por um, sempre com fonte.",
-          oque[1] + " Each state assembly, city council and government publishes its data in a different way, and we are gathering them one by one, always with sources.")) + "</p></section>";
-    }
+    h += ondeVerHtml(p);
     if (p.tipo === "min") {
       var f = [].concat(p.fontes || p.fonte || []);
       if (p.oQueFaz) h = '<section class="secao-perfil" aria-labelledby="t-area"><h2 id="t-area"><span class="ic" aria-hidden="true">' + esc(p.ic || "🏢") + "</span>" + EP.tr("O que o ministério faz", "What the ministry does") + "</h2><p>" +
@@ -743,7 +828,7 @@
 
     var todas = coletarFontes(p);
     raiz.innerHTML = topoHtml(p) + fatosHtml(p) + anterioresHtml(p) + contatosHtml(p) + oqueFazHtml(p) +
-      (p.propostas ? propostasHtml(p) : "") + executivoHtml(p) + votacoesHtml(p) + gastosHtml(p) + comissoesHtml(p) + emBreveHtml(p) +
+      (p.propostas ? propostasHtml(p) : "") + executivoHtml(p) + votacoesHtml(p) + gastosHtml(p) + comissoesHtml(p) + avisoEMinisterio(p) +
       (todas.length && p.tipo !== "min" ? '<section class="secao-perfil" aria-labelledby="t-fontes"><h2 id="t-fontes"><span class="ic" aria-hidden="true">📚</span>' + EP.tr("Todas as fontes desta página", "All the sources on this page") + "</h2>" + EP.fontesHtml(todas) +
         (p.atualizado ? '<p class="muted" style="margin-top:10px">' + EP.tr("Dados atualizados em ", "Data updated on ") + EP.data(p.atualizado) + ".</p>" : "") + "</section>" : "");
     if (p.propostas && (p.propostas.lista || []).length) redesenhaTudo();

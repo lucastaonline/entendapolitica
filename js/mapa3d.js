@@ -47,7 +47,6 @@
     var s = ". " + EP.tr("Parada ", "Stop ") + L.n + EP.tr(" de 9", " of 9");
     if (L.feito) s += EP.tr(". Você já aprendeu.", ". Already learned.");
     else if (L.proximo) s += EP.tr(". Próxima parada sugerida.", ". Suggested next stop.");
-    if (!L.temConteudo) s += EP.tr(". Em breve.", ". Coming soon.");
     return s;
   }
 
@@ -249,8 +248,7 @@
     EP.abrir("📋 " + EP.tr("As 9 paradas", "The 9 stops"), '<p class="muted">' + EP.tr("A ordem é só uma sugestão: escolha qualquer uma.", "The order is just a suggestion: pick any stop.") + '</p><ol class="lista-lugares">' +
       lugares.map(function (L) {
         return '<li class="' + (L.feito ? "feito" : "") + '"><button type="button" data-abrir-parada="' + L.n + '"><span class="ll-num">' + L.n + '</span><span class="ll-ic" aria-hidden="true">' + esc(L.ic) + "</span>" +
-          "<span><b>" + esc(L.nome) + "</b><small>" + (L.feito ? "⭐ " + EP.tr("Você já aprendeu", "Already learned") : L.proximo ? "👉 " + EP.tr("Próxima sugerida", "Suggested next") : "") +
-          (!L.temConteudo ? EP.tr(" Em breve", " Coming soon") : "") + "</small></span></button></li>";
+          "<span><b>" + esc(L.nome) + "</b><small>" + (L.feito ? "⭐ " + EP.tr("Você já aprendeu", "Already learned") : L.proximo ? "👉 " + EP.tr("Próxima sugerida", "Suggested next") : "") + "</small></span></button></li>";
       }).join("") + "</ol>");
   };
 })();

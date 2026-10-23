@@ -462,7 +462,7 @@
   function abrirParte(n, slide0, semVoo) {
     n = +n;
     if (!PARTES[n]) {
-      EP.abrir("🛠️ " + tr("Em breve", "Coming soon"), "<p>" + tr("Esta parada ainda está sendo preparada. Escolha outra no mapa!", "This stop is still being prepared. Pick another one on the map!") + "</p>");
+      EP.abrir("🗺️ " + tr("Parada não encontrada", "Stop not found"), "<p>" + tr("Essa parada não existe. Escolha uma das 9 paradas do mapa!", "That stop does not exist. Pick one of the 9 stops on the map!") + "</p>");
       return;
     }
     function abre() {

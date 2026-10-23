@@ -364,7 +364,8 @@ Na Câmara, a lista de votos traz só quem registrou voto (os ausentes não apar
 - `dados/cidades.json`: todas as cidades do Brasil para a busca da página da cidade: `[[ibge, nome, UF], ...]` (feito por `scripts/montar.py`).
 - `dados/mapa-brasil.json`: o mapa da página do estado (feito por `scripts/mapa.py`): `{ "fonte", "largura", "altura", "sigla", "seloAltura", "ufs": { "BA": { "d": "caminho SVG", "x", "y" (lugar da sigla), "selo": { "x", "y" } (só nos estados pequenos: a sigla fica fora, ligada por uma linha) } } }`.
 - `dados/cidades/<UF>.json`: lista para escolher a cidade: `[ {"ibge","nome","prefeito":"Nome (PARTIDO)"} ]`.
-- `dados/cidades/<UF>/<IBGE>.json`: `{ "ibge","nome","uf","prefeito":{...},"vice":{...},"vereadores":{"total","aviso","fonte","membros":[...]},"atualizado" }`.
+- `dados/cidades/<UF>/<IBGE>.json`: `{ "ibge","nome","uf","prefeito":{...},"vice":{...},"vereadores":{"total","aviso","fonte","membros":[...]},"onde"?: {"camara":{...},"prefeitura":{...}},"atualizado" }`. `onde` vem do mapa das Câmaras e prefeituras (`dados/municipios/<UF>.json`, abaixo).
+- `dados/municipios/<UF>.json` (mapa das Câmaras Municipais e prefeituras, feito por `scripts/municipios/mapear.py`): `{ "uf", "atualizado", "fontes", "cidades": { "<IBGE>": { "camara": { "site", "sistema" (sapl | sagl | nopaper | outro | null), "api", "propostas" (página pública das proposições), "propostasOnline" (true | false | null), "sic" (pedido de informação), "conferido", "motivo"/"motivo_en" (por que não dá, quando não publica) }, "prefeitura": { "site", "transparencia", "sic", "diarioOficial": { "nome", "url", "plataforma" } } } } }`. Só endereços oficiais. É o que o perfil mostra no quadro **"Onde ver mais"** quando falta um dado.
 - `dados/busca.json`: `[[id, nome, cargo curto, UF, partido, cidade ou null], ...]` (sem vereadores; eles aparecem na página da cidade).
 - `dados/simples/<00-99>.json`: cache das explicações simples: `{ "camara:2345678": { "pt": "Explicação simples", "en": "Simple explanation" }, ... }` (arquivo = 2 últimos dígitos do número). Escritas por `scripts/simplificar.py` só a partir da ementa oficial: no máximo 35 palavras, começando por um verbo (cria, muda, proíbe...), sem palavras de opinião. Quem quiser corrigir uma explicação edita o cache e roda `scripts/montar.py`.
 - `dados/tse/federais.json`: o que o TSE diz de cada pessoa do Congresso e do Executivo (eleição de 2022, bens declarados, resultado de 2026), juntado aos perfis por `scripts/montar.py`.
@@ -385,7 +386,7 @@ Cada Casa tem um coletor com a função `coletar() -> dict` (`scripts/assembleia
 {
   "uf": "SP", "ibge": null,                       // Câmara Municipal: "ibge": "3550308"
   "casa": "Assembleia Legislativa do Estado de São Paulo", "casa_en": "Legislative Assembly of the State of São Paulo",
-  "sigla": "Alesp", "site": "https://www.al.sp.gov.br", "fonte": {},
+  "sigla": "Alesp", "site": "https://www.al.sp.gov.br", "sic": "https://... (pedido de informação, se houver)", "fonte": {},
   "cobertura": { "lista": true, "propostas": true, "votacoes": false, "gastos": true },
   "escopoPropostas": "Projetos apresentados desde ...", "escopoPropostas_en": "...",
   "legislatura": { "numero": 20, "inicio": "2023-03-15", "fim": "2027-01-31" },   // nem toda Casa tem
@@ -397,7 +398,8 @@ Cada Casa tem um coletor com a função `coletar() -> dict` (`scripts/assembleia
 
 - Ids: os mesmos da lista do TSE (`dest-<UF>-<SQ_CANDIDATO>` da eleição da legislatura; `ver-<IBGE>-<SQ_CANDIDATO de 2024>`), achados pelo nome com `regional.candidatos_tse` + `regional.casar_tse` (na dúvida, não liga: o id vira `dest-<UF>-x<nome>`).
 - Quem tem algo a mais (propostas, votações, gastos, links) ganha `dados/pessoas/<id>.json`, com os mesmos campos dos perfis federais; `gastos` traz também `nome`/`nome_en` (o nome da verba naquela Casa) e `meses` (o primeiro e o último mês do ano mostrado). Ids das propostas: `<sigla da Casa>:<id oficial>` (ex.: `alesp:1000473`).
-- `scripts/montar.py` põe a lista oficial no lugar da lista do TSE em `dados/estados/<UF>.json` (`deputadosEstaduais`) e em `dados/cidades/<UF>/<IBGE>.json` (`vereadores`), com `oficial: true`, `infoCasa` (cobertura, notas e site, para o quadro "O que o site já tem da Casa") e `extras: true` em quem tem o arquivo a mais; e troca os deputados estaduais da busca. Não usa a lista de uma legislatura que já acabou.
+- `scripts/montar.py` põe a lista oficial no lugar da lista do TSE em `dados/estados/<UF>.json` (`deputadosEstaduais`) e em `dados/cidades/<UF>/<IBGE>.json` (`vereadores`), com `oficial: true`, `infoCasa` (cobertura, notas, site e `sic`, para o quadro "O que o site já tem da Casa") e `extras: true` em quem tem o arquivo a mais; e troca os deputados estaduais da busca. Não usa a lista de uma legislatura que já acabou.
+- Sem promessas: em `notas`, avisos e escopos, nada de "ainda não" ou "em breve". Diga o que não entra, por quê e onde ver. Quando falta um dado no perfil, ele mostra o quadro "Onde ver mais" (`ondeVerHtml` em `js/pessoa.js`): as notas da Casa sobre propostas, os links oficiais e como pedir pela Lei de Acesso à Informação.
 
 ### Mandatos anteriores (`dados/historico/`, feitos por `scripts/historico.py`)
 

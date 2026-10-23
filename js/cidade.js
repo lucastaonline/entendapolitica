@@ -29,8 +29,8 @@
   };
 
   function falhou(el, pt, en) {
-    el.innerHTML = '<div class="miolo"><div class="vazio"><span class="grande" aria-hidden="true">🛠️</span>' +
-      EP.tr("Ainda estamos juntando " + pt + ". Volte daqui a pouco.", "We are still gathering " + en + ". Please come back in a little while.") + "</div></div>";
+    el.innerHTML = '<div class="miolo"><div class="vazio"><span class="grande" aria-hidden="true">⚠️</span>' +
+      EP.tr("Não foi possível carregar " + pt + " agora. Tente de novo daqui a pouco.", "Could not load " + en + " right now. Please try again in a little while.") + "</div></div>";
   }
   function aviso(html) { return html ? '<p class="aviso"><span aria-hidden="true">ℹ️ </span>' + html + "</p>" : ""; }
   function fontesDe() {

@@ -187,10 +187,51 @@ def _junta_membros(oficiais: list[dict], do_tse: list[dict]) -> list[dict]:
     return sorted(out, key=lambda x: chave_nome(x.get("nome") or ""))
 
 
-def _info_casa(a: dict) -> dict:
+def _canais_lai() -> tuple[dict, dict]:
+    """dados/manual/canais-lai.json: o canal oficial de pedido de informação (Lei de Acesso à Informação) de Casas que o
+    coletor não traz, conferido à mão: {"assembleias": {"RJ": {"sic", "conferido"}}, "camaras": {"<IBGE>": {...}}}."""
+    c = ler_json(DADOS / "manual" / "canais-lai.json") or {}
+    return c.get("assembleias") or {}, c.get("camaras") or {}
+
+
+def _info_casa(a: dict, canal: dict | None = None) -> dict:
     """O que a página do estado ou da cidade mostra sobre a Casa: o que o site já tem dela (cobertura), as notas (o que falta
-    e por quê) e o site oficial."""
-    return {k: a[k] for k in ("casa", "casa_en", "sigla", "site", "cobertura", "notas", "notas_en") if a.get(k)}
+    e por quê), o site oficial e o canal oficial de pedido de informação (Lei de Acesso à Informação), se houver."""
+    d = {k: a[k] for k in ("casa", "casa_en", "sigla", "site", "sic", "cobertura", "notas", "notas_en") if a.get(k)}
+    if not d.get("sic") and (canal or {}).get("sic"):
+        d["sic"] = canal["sic"]
+    return d
+
+
+def _onde_ver_cidades() -> int:
+    """dados/municipios/<UF>.json (scripts/municipios/mapear.py: site oficial da Câmara e da prefeitura, sistema de
+    propostas, pedido de informação, Diário Oficial) e os canais conferidos à mão (dados/manual/canais-lai.json) -> campo
+    "onde" de cada dados/cidades/<UF>/<IBGE>.json. É o que o perfil mostra quando a Câmara ou a prefeitura não publica um
+    dado num formato que o site consiga ler: onde ver e como pedir, em vez de "Em breve"."""
+    ondes: dict[str, dict] = {}
+    for arq in sorted((DADOS / "municipios").glob("*.json")):
+        for ibge, o in (((ler_json(arq) or {}).get("cidades")) or {}).items():
+            if isinstance(o, dict):
+                ondes[str(ibge)] = {k: dict(o[k]) for k in ("camara", "prefeitura") if isinstance(o.get(k), dict) and o[k]}
+    for ibge, canal in _canais_lai()[1].items():
+        cam = ondes.setdefault(str(ibge), {}).setdefault("camara", {})
+        if canal.get("sic") and not cam.get("sic"):
+            cam["sic"] = canal["sic"]
+            cam.setdefault("conferido", canal.get("conferido"))
+    n = 0
+    for c_arq in sorted((DADOS / "cidades").glob("*/*.json")):
+        c = ler_json(c_arq)
+        if not isinstance(c, dict):
+            continue
+        onde = ondes.get(c_arq.stem)
+        if c.get("onde") != onde:
+            if onde:
+                c["onde"] = onde
+            else:
+                c.pop("onde", None)
+            salvar_json(c_arq, sem_mudar_data(c, c_arq))
+            n += 1
+    return n
 
 
 def _marcar_extras_cidades() -> int:
@@ -230,6 +271,7 @@ def juntar_legislativos() -> tuple[int, int]:
     (inclusive suplentes que assumiram); vereadores não entram na busca (aparecem na página da cidade)."""
     na = nc = 0
     busca_uf: dict[str, list] = {}
+    canais_ale, canais_cam = _canais_lai()
     for arq in sorted((DADOS / "assembleias").glob("*.json")):
         a = ler_json(arq) or {}
         e_arq = DADOS / "estados" / f"{a.get('uf') or arq.stem}.json"
@@ -250,7 +292,7 @@ def juntar_legislativos() -> tuple[int, int]:
         de["aviso_en"] = (f"Official list from the {a.get('casa_en') or 'Legislative Assembly'}: who is in office today, "
                           "including substitutes who took a seat.")
         de["fonte"] = a.get("fonte") or de.get("fonte")
-        de["infoCasa"] = _info_casa(a)
+        de["infoCasa"] = _info_casa(a, canais_ale.get(e["uf"]))
         e["deputadosEstaduais"] = de
         salvar_json(e_arq, sem_mudar_data(e, e_arq))
         na += 1
@@ -272,7 +314,7 @@ def juntar_legislativos() -> tuple[int, int]:
         v["aviso_en"] = (f"Official list from the {k.get('casa_en') or 'City Council'}: who is in office today, "
                          "including substitutes who took a seat.")
         v["fonte"] = k.get("fonte") or v.get("fonte")
-        v["infoCasa"] = _info_casa(k)
+        v["infoCasa"] = _info_casa(k, canais_cam.get(ibge))
         c["vereadores"] = v
         salvar_json(c_arq, sem_mudar_data(c, c_arq))
         nc += 1
@@ -374,6 +416,7 @@ def main() -> None:
     a, c = juntar_legislativos()
     log(f"listas oficiais: {a} Assembleias e {c} Câmaras Municipais")
     log(f"cidades com dados a mais num arquivo por cidade: {_marcar_extras_cidades()} atualizadas")
+    log(f"cidades com \"onde ver\" (site oficial, pedido de informação, Diário Oficial) atualizado: {_onde_ver_cidades()}")
     log(f"dados/cidades.json: {indice_cidades()} cidades")
     log(f"sitemap.xml: {sitemap()} endereços")
     log("pronto")

@@ -86,7 +86,7 @@ async def main():
             await pg.wait_for_timeout(1000)
             ok(f"{uf}: gastos aparecem no perfil", await pg.locator("#gastos .gasto").count() > 0, m["nome"])
 
-        # 5. em inglês: o escopo das propostas vem traduzido e o perfil sem propostas mostra "Coming soon"
+        # 5. em inglês: o escopo das propostas vem traduzido e o perfil sem propostas mostra onde ver (sem "Coming soon")
         m = com_extra("RO", "propostas")
         await pg.goto(BASE + f"pessoa.html?id={m['id']}&lang=en", wait_until="networkidle")
         await pg.wait_for_timeout(1000)
@@ -95,7 +95,9 @@ async def main():
         m = casa("MT")["membros"][0]
         await pg.goto(BASE + f"pessoa.html?id={m['id']}&lang=en", wait_until="networkidle")
         await pg.wait_for_timeout(1000)
-        ok("MT em inglês: sem propostas, aparece 'Coming soon' e o link oficial", "Coming soon" in await pg.locator("#perfil").inner_text()
+        corpo = await pg.locator("#perfil").inner_text()
+        ok("MT em inglês: sem propostas, aparece 'Where to find more' (sem 'Coming soon') e o link oficial",
+           "Coming soon" not in corpo and "Where to find more" in corpo
            and await pg.locator('#perfil a[href^="https://www.al.mt.gov.br/parlamento/deputados/"]').count() > 0)
 
         ok("sem erros de JavaScript", not erros, "; ".join(erros[:3]))

@@ -154,8 +154,8 @@
       if (!l.length) throw new Error("vazio");
       el.innerHTML = '<ul class="lista-vot">' + l.map(function (v) { return V.cartao(v, { nivel: 3 }); }).join("") + "</ul>";
     }).catch(function () {
-      el.innerHTML = '<div class="vazio"><span class="grande" aria-hidden="true">🛠️</span>' +
-        EP.tr("Ainda estamos juntando as votações. Volte daqui a pouco.", "We are still gathering the votes. Please come back in a little while.") + "</div>";
+      el.innerHTML = '<div class="vazio"><span class="grande" aria-hidden="true">⚠️</span>' +
+        EP.tr("Não foi possível carregar as votações agora. Tente de novo daqui a pouco.", "The votes could not be loaded right now. Please try again in a little while.") + "</div>";
     });
   };
   function ligaRecentes() {
@@ -257,8 +257,8 @@
       if (fl) fl.innerHTML = EP.fontesHtml([r.camara && r.camara.fonte, r.senado && r.senado.fonte].filter(Boolean));
       desenha();
     }).catch(function () {
-      lista.innerHTML = '<li class="vazio" style="grid-column:1/-1"><span class="grande" aria-hidden="true">🛠️</span>' +
-        EP.tr("Ainda estamos juntando as votações. Volte daqui a pouco.", "We are still gathering the votes. Please come back in a little while.") + "</li>";
+      lista.innerHTML = '<li class="vazio" style="grid-column:1/-1"><span class="grande" aria-hidden="true">⚠️</span>' +
+        EP.tr("Não foi possível carregar as votações agora. Tente de novo daqui a pouco.", "The votes could not be loaded right now. Please try again in a little while.") + "</li>";
     });
 
     busca.addEventListener("input", function () {

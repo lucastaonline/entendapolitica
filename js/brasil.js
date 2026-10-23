@@ -12,8 +12,8 @@
   if (EP.hist) EP.hist.seletor(document.getElementById("mandato-lugar"), "brasil");
 
   function falhou(el, pt, en) {
-    el.innerHTML = '<div class="vazio"><span class="grande" aria-hidden="true">🛠️</span>' +
-      EP.tr("Ainda estamos juntando " + pt + ". Volte daqui a pouco.", "We are still gathering " + en + ". Please come back in a little while.") + "</div>";
+    el.innerHTML = '<div class="vazio"><span class="grande" aria-hidden="true">⚠️</span>' +
+      EP.tr("Não foi possível carregar " + pt + " agora. Tente de novo daqui a pouco.", "Could not load " + en + " right now. Please try again in a little while.") + "</div>";
   }
   function anos(m) {
     if (!m) return "";

@@ -119,14 +119,16 @@ async def main():
             esc = await pg.locator("#propostas > p.muted").first.inner_text()
             ok(f"{uf}: escopo das propostas em inglês", "filed since" in esc, esc[:70])
 
-        # 4. Rio de Janeiro: só a lista oficial; o perfil leva à página oficial e diz que as propostas ainda não estão aqui
+        # 4. Rio de Janeiro: só a lista oficial; o perfil leva à página oficial e diz onde ver as propostas (sem "Em breve")
         k = casa("RJ")
         sup = next((x for x in k["membros"] if x.get("exercicio")), k["membros"][0])
         await pg.goto(BASE + f"pessoa.html?id={sup['id']}&lang=pt", wait_until="networkidle")
         await pg.wait_for_timeout(900)
         corpo = await pg.locator("#perfil").inner_text()
-        ok("RJ: perfil com link oficial e o aviso de que as propostas ainda não estão aqui",
-           await pg.locator('.contatos a[href*="alerj.rj.gov.br"]').count() >= 1 and "Em breve" in corpo)
+        ok("RJ: perfil com link oficial e o quadro \"Onde ver mais\" com o motivo e o site da Alerj",
+           await pg.locator('.contatos a[href*="alerj.rj.gov.br"]').count() >= 1 and "Em breve" not in corpo
+           and "Onde ver mais" in corpo and "Alerj" in await pg.locator(".onde-ver .notas-casa").inner_text()
+           and await pg.locator('.onde-ver a[href*="alerj.rj.gov.br"]').count() >= 1)
         ok("RJ: suplente em exercício marcado no perfil", sup.get("exercicio") in corpo, sup["nome"])
 
         ok("nenhum erro de JavaScript", not erros, "; ".join(erros[:3]))

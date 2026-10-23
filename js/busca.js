@@ -78,8 +78,8 @@
           r.length > LIMITE ? EP.tr(EP.num(r.length) + " pessoas encontradas. Mostrando as " + LIMITE + " primeiras.", EP.num(r.length) + " people found. Showing the first " + LIMITE + ".") :
             EP.tr(EP.num(r.length) + " pessoas encontradas.", EP.num(r.length) + " people found."));
       }).catch(function () {
-        saida.innerHTML = '<li class="mais-res">' + EP.tr("A lista de nomes ainda não está disponível. Tente de novo daqui a pouco.", "The list of names is not available yet. Please try again in a little while.") + "</li>";
-        avisa(EP.tr("A lista de nomes ainda não está disponível.", "The list of names is not available yet."));
+        saida.innerHTML = '<li class="mais-res">' + EP.tr("Não foi possível carregar a lista de nomes agora. Tente de novo daqui a pouco.", "The list of names could not be loaded right now. Please try again in a little while.") + "</li>";
+        avisa(EP.tr("Não foi possível carregar a lista de nomes.", "The list of names could not be loaded."));
       });
     }
     input.addEventListener("input", function () { clearTimeout(t); t = setTimeout(roda, 180); });

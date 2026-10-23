@@ -42,17 +42,26 @@
     var nomeHtml = EP.en && info.casa_en ? esc(info.casa_en) : EP.pt(esc(info.casa || ""));
     var notasEn = EP.en && (info.notas_en || []).length === (info.notas || []).length && (info.notas_en || []).length;
     var notas = notasEn ? info.notas_en : (info.notas || []);
+    var falta = COBERTURA.some(function (c) { return !info.cobertura[c[0]]; });
     return '<div class="info-casa rev"><h3>' + EP.tr("O que o site já tem da ", "What this site has from the ") + nomeHtml + "</h3>" +
       '<ul class="cobertura-casa">' + COBERTURA.map(function (c) {
         var tem = !!info.cobertura[c[0]];
-        return '<li class="' + (tem ? "tem" : "falta") + '"><span aria-hidden="true">' + (tem ? "✔️ " : "⏳ ") + "</span>" +
-          (tem ? '<span class="sr">' + EP.tr("Tem: ", "Available: ") + "</span>" : "") + esc(EP.tr(c[2], c[3])) +
-          (tem ? "" : " <small>(" + EP.tr("ainda não", "not yet") + ")</small>") + "</li>";
+        return '<li class="' + (tem ? "tem" : "falta") + '"><span aria-hidden="true">' + (tem ? "✔️ " : "➖ ") + "</span>" +
+          '<span class="sr">' + (tem ? EP.tr("Tem: ", "Available: ") : EP.tr("Não tem: ", "Not available: ")) + "</span>" + esc(EP.tr(c[2], c[3])) +
+          (tem ? "" : " <small>(" + EP.tr("não está neste site", "not on this site") + ")</small>") + "</li>";
       }).join("") + "</ul>" +
       (notas.length ? '<ul class="notas-casa">' + notas.map(function (n) { return "<li>" + (EP.en && !notasEn ? EP.pt(esc(n)) : esc(n)) + "</li>"; }).join("") + "</ul>" : "") +
       (/^https:\/\//.test(info.site || "") ? '<p class="site-casa"><a href="' + esc(info.site) + '" target="_blank" rel="noopener" hreflang="pt-BR">' +
         EP.tr("Site oficial da ", "Official website of the ") + nomeHtml + ' <span aria-hidden="true">↗</span><span class="sr"> ' +
-        EP.tr("(abre em outra aba)", "(opens in a new tab)") + "</span></a></p>" : "") + "</div>";
+        EP.tr("(abre em outra aba)", "(opens in a new tab)") + "</span></a></p>" : "") +
+      (/^https?:\/\//.test(info.sic || "") ? '<p class="site-casa"><a href="' + esc(info.sic) + '" target="_blank" rel="noopener" hreflang="pt-BR">' +
+        EP.tr("Pedir uma informação à ", "Ask the ") + nomeHtml + EP.tr(" (Lei de Acesso à Informação)", " for information (Access to Information Law)") +
+        ' <span aria-hidden="true">↗</span><span class="sr"> ' + EP.tr("(abre em outra aba)", "(opens in a new tab)") + "</span></a></p>" : "") +
+      (falta ? '<p class="notas-casa" style="padding-left:0">' + EP.tr(
+        "O que não está aqui pode ser pedido à Casa pela Lei de Acesso à Informação: qualquer pessoa pode pedir, de graça e sem dizer por quê. ",
+        "Anything that is not here can be requested from the legislature under the Access to Information Law: anyone can ask, for free and without saying why. ") +
+        '<a href="https://www.planalto.gov.br/ccivil_03/_ato2011-2014/2011/lei/l12527.htm" target="_blank" rel="noopener" hreflang="pt-BR">' + EP.tr("Lei nº 12.527/2011", "Law No. 12,527/2011") +
+        ' <span aria-hidden="true">↗</span><span class="sr"> ' + EP.tr("(abre em outra aba)", "(opens in a new tab)") + "</span></a></p>" : "") + "</div>";
   };
 
   EP.montaCasa = function (el, o) {
@@ -63,8 +72,8 @@
     var total = membros.length;
 
     if (!total) {
-      el.innerHTML = '<div class="vazio"><span class="grande" aria-hidden="true">🛠️</span>' +
-        (o.vazio || EP.tr("Esta lista ainda não está disponível. Estamos juntando os dados, sempre com fonte.", "This list is not available yet. We are gathering the data, always with sources.")) + "</div>" +
+      el.innerHTML = '<div class="vazio"><span class="grande" aria-hidden="true">📭</span>' +
+        (o.vazio || EP.tr("A fonte oficial não mostra ninguém nesta lista agora.", "The official source does not show anyone on this list right now.")) + "</div>" +
         (o.fonte ? "<p>" + EP.botaoFontes(o.fonte, EP.tr("De onde vem esta lista?", "Where does this list come from?")) + "</p>" : "");
       return;
     }

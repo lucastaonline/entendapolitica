@@ -153,8 +153,10 @@ def _junta_membros(oficiais: list[dict], do_tse: list[dict]) -> list[dict]:
 
 def juntar_legislativos() -> tuple[int, int]:
     """dados/assembleias/<UF>.json e dados/camaras/<IBGE>.json (scripts/legislativos.py) -> listas das páginas do estado e
-    da cidade, no lugar da lista de eleitos do TSE."""
+    da cidade, no lugar da lista de eleitos do TSE. A busca (dados/busca.json) passa a ter quem está na lista oficial
+    (inclusive suplentes que assumiram); vereadores não entram na busca (aparecem na página da cidade)."""
     na = nc = 0
+    busca_uf: dict[str, list] = {}
     for arq in sorted((DADOS / "assembleias").glob("*.json")):
         a = ler_json(arq) or {}
         e_arq = DADOS / "estados" / f"{a.get('uf') or arq.stem}.json"
@@ -163,6 +165,9 @@ def juntar_legislativos() -> tuple[int, int]:
             continue
         de = e.get("deputadosEstaduais") or {}
         de["membros"] = _junta_membros(a["membros"], de.get("membros") or [])
+        busca_uf[e["uf"]] = [[m["id"], m.get("nome"), ("Deputada" if m.get("genero") == "F" else "Deputado") +
+                              (" distrital" if e["uf"] == "DF" else " estadual"), e["uf"], m.get("partido"), None]
+                             for m in de["membros"]]
         de["total"] = len(de["membros"])
         de["oficial"] = True
         de["aviso"] = f"Lista oficial da {a.get('casa') or 'Assembleia Legislativa'}: quem está no cargo hoje, inclusive suplentes que assumiram."
@@ -190,6 +195,14 @@ def juntar_legislativos() -> tuple[int, int]:
         c["vereadores"] = v
         salvar_json(c_arq, sem_mudar_data(c, c_arq))
         nc += 1
+    if busca_uf:
+        b_arq = DADOS / "busca.json"
+        busca = [x for x in (ler_json(b_arq, []) or [])
+                 if not any(x[0].startswith(f"dest-{uf}-") for uf in busca_uf)]
+        for itens in busca_uf.values():
+            busca += itens
+        busca.sort(key=lambda x: (chave_nome(x[1] or ""), x[0]))
+        salvar_json(b_arq, busca)
     return na, nc
 
 

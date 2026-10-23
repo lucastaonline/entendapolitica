@@ -163,14 +163,26 @@
     if (!a || !b) return false;
     return EP.norm(a.nomeCivil || a.nome) === EP.norm(b.nomeCivil || b.nome) || EP.norm(a.nome) === EP.norm(b.nome);
   }
+  // a ficha de quem foi eleito para o cargo vem com o ano da eleição na chave ("eleito2022", "eleito2026", "eleito2024"...)
+  function eleitoNoCargo(p) {
+    var ano = null;
+    Object.keys(p || {}).forEach(function (k) { var m = /^eleito(\d{4})$/.exec(k); if (m && p[k] && (!ano || +m[1] > ano)) ano = +m[1]; });
+    return ano ? { ano: ano, e: p["eleito" + ano] } : null;
+  }
+  function situacaoNaEleicao(p) {
+    var ano = null;
+    Object.keys(p || {}).forEach(function (k) { var m = /^situacao(\d{4})$/.exec(k); if (m && p[k] && (!ano || +m[1] > ano)) ano = +m[1]; });
+    return ano ? { ano: ano, txt: p["situacao" + ano], en: p["situacao" + ano + "_en"] } : null;
+  }
   // eleição que levou a pessoa ao cargo, no formato comum: { ano, votos, situacao, situacao_en, cargo, chapa, fonte }
   function eleicaoDe(p) {
     if (p.eleicao) return { ano: p.eleicao.ano, votos: p.eleicao.votos, situacao: p.eleicao.situacao, situacao_en: p.eleicao.situacao_en, cargo: p.eleicao.cargo, fonte: p.eleicao.fonte || p.eleicao.fontes };
-    var e = p.eleito2022 || p.eleito2024;
-    if (e && mesmaPessoa(e, p)) return { ano: p.eleito2022 ? 2022 : 2024, votos: e.votos, situacao: e.situacao, situacao_en: e.situacao_en, chapa: e.votosDaChapa, fonte: e.fontes || e.fonte };
-    if (p.votos != null || p.situacao || p.situacao2022) {
-      return { ano: p.tipo === "dest" ? 2022 : /^(pref|vpref|ver)$/.test(p.tipo) ? 2024 : null, votos: p.votos, situacao: p.situacao || p.situacao2022,
-        situacao_en: p.situacao_en || p.situacao2022_en, chapa: p.votosDaChapa, fonte: null };
+    var el = eleitoNoCargo(p), e = el && el.e;
+    if (e && mesmaPessoa(e, p)) return { ano: el.ano, votos: e.votos, situacao: e.situacao, situacao_en: e.situacao_en, chapa: e.votosDaChapa, fonte: e.fontes || e.fonte };
+    var sit = situacaoNaEleicao(p);
+    if (p.votos != null || p.situacao || sit) {
+      return { ano: sit ? sit.ano : p.tipo === "dest" ? 2022 : /^(pref|vpref|ver)$/.test(p.tipo) ? 2024 : null, votos: p.votos, situacao: p.situacao || (sit && sit.txt),
+        situacao_en: p.situacao_en || (sit && sit.en), chapa: p.votosDaChapa, fonte: null };
     }
     return null;
   }
@@ -203,7 +215,8 @@
         (el.situacao ? (el.votos != null ? "<br><small>" : "") + D.situacao(el.situacao, el.situacao_en) + (el.votos != null ? "</small>" : "") : "") +
         (el.cargo && /suplente/i.test(el.cargo) ? "<br><small>" + EP.tr("Concorreu como ", "Ran as ") + esc(D.cargo(el.cargo).toLowerCase()) + "</small>" : "");
     }
-    var outroEleito = (p.eleito2022 && !mesmaPessoa(p.eleito2022, p)) ? p.eleito2022 : (p.eleito2024 && !mesmaPessoa(p.eleito2024, p)) ? p.eleito2024 : null;
+    var noCargo = eleitoNoCargo(p);
+    var outroEleito = noCargo && noCargo.e && !mesmaPessoa(noCargo.e, p) ? noCargo.e : null;
     var oc = p.ocupacao;
     var h = fato("🎂", EP.tr("Idade", "Age"), idade != null ? EP.tr(idade + " anos", idade + " years old") + (p.nascimento ? "<br><small>" + EP.tr("nasceu em ", "born on ") + EP.dataLonga(p.nascimento) + "</small>" : "") : null) +
       fato("📍", EP.tr("Nasceu em", "Born in"), p.naturalidade ? esc(p.naturalidade) : null) +
@@ -211,7 +224,7 @@
       fato("💼", oc && oc.ano ? EP.tr("Ocupação declarada ao TSE (" + oc.ano + ")", "Occupation declared to the TSE (" + oc.ano + ")") : EP.tr("Ocupação", "Occupation"),
         oc && oc.txt ? D.profissao(oc.txt) : null, oc && oc.fonte) +
       fato("🗳️", el && el.ano ? EP.tr("Na eleição de " + el.ano, "In the " + el.ano + " election") : EP.tr("Na eleição", "In the election"), votoHtml, el && el.fonte) +
-      (outroEleito ? fato("🗳️", EP.tr("Eleito(a) para este cargo em " + (p.eleito2022 ? 2022 : 2024), "Elected to this office in " + (p.eleito2022 ? 2022 : 2024)),
+      (outroEleito ? fato("🗳️", EP.tr("Eleito(a) para este cargo em " + noCargo.ano, "Elected to this office in " + noCargo.ano),
         esc(outroEleito.nome) + (outroEleito.partido ? " (" + EP.pt(esc(outroEleito.partido)) + ")" : ""), outroEleito.fontes || outroEleito.fonte) : "") +
       fato("🏠", EP.tr("Bens declarados à Justiça Eleitoral", "Assets declared to the electoral courts"), p.bens && p.bens.total != null ? EP.dinheiroCurto(p.bens.total) +
         (p.bens.ano ? " <small>(" + EP.tr("em ", "in ") + esc(p.bens.ano) + ")</small>" : "") +
@@ -502,6 +515,14 @@
   }
 
   // ---------------------------------------------------------------- gastos, comissões, executivo
+  // "desde fevereiro de 2023" / "since February 2023": começo do período que os dados cobrem (muda a cada mandato)
+  var MESES_PT = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"];
+  var MESES_EN = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  function desdeMes(iso) {
+    var m = /^(\d{4})-(\d{2})/.exec(iso || "");
+    if (!m) return "";
+    return EP.tr("desde " + MESES_PT[+m[2] - 1] + " de " + m[1], "since " + MESES_EN[+m[2] - 1] + " " + m[1]);
+  }
   function gastosHtml(p) {
     var g = p.gastos;
     if (!g || g.total == null) return "";
@@ -512,7 +533,7 @@
         quem + " tem uma verba por mês para pagar despesas do trabalho, como passagens, escritório, combustível e divulgação. <b>Não é salário.</b> O limite muda de estado para estado. Gastar mais ou menos não quer dizer, sozinho, trabalhar mais ou menos.",
         quem + " has a monthly allowance (the cota) to pay for work expenses, such as flights, offices, fuel and publicity. <b>It is not a salary.</b> The limit is different for each state. Spending more or less does not, on its own, mean working more or less.") + "</p></div>" +
       '<div class="grandes-n" style="margin-top:14px"><div class="grande-n"><b>' + EP.dinheiroCurto(g.total) + "</b><span>" + EP.tr("gastos em ", "spent in ") + esc(g.ano) + "</span></div>" +
-      (g.mandatoTotal != null ? '<div class="grande-n"><b>' + EP.dinheiroCurto(g.mandatoTotal) + "</b><span>" + EP.tr("desde fevereiro de 2023", "since February 2023") + "</span></div>" : "") + "</div>" +
+      (g.mandatoTotal != null ? '<div class="grande-n"><b>' + EP.dinheiroCurto(g.mandatoTotal) + "</b><span>" + desdeMes(g.desde || "2023-02") + "</span></div>" : "") + "</div>" +
       ((g.porTipo || []).length ? '<h3 style="margin-top:16px">' + EP.tr("Com o que gastou em ", "What the money was spent on in ") + esc(g.ano) + '</h3><ul class="gastos-lista" style="list-style:none;padding:0">' + g.porTipo.slice(0, 8).map(function (x) {
         return '<li class="gasto"><span>' + D.gasto(x.tipo) + "</span><b>" + EP.dinheiro(x.valor) + '</b><span class="tr" aria-hidden="true"><i style="width:' + (100 * x.valor / max).toFixed(1) + '%"></i></span></li>';
       }).join("") + "</ul>" : "") + (g.fonte ? '<p style="margin-top:10px">' + fonteBtn(g.fonte, null, EP.tr("gastos", "spending")) + "</p>" : "") + "</section>";
@@ -527,11 +548,12 @@
   function executivoHtml(p) {
     var e = p.executivo;
     if (!e || (e.leisSancionadas == null && e.vetos == null)) return "";
+    var desde = ((e.periodo && e.periodo.inicio) || "2023").slice(0, 4);
     return '<section class="secao-perfil" aria-labelledby="t-exec"><h2 id="t-exec"><span class="ic" aria-hidden="true">✍️</span>' + EP.tr("Leis sancionadas e vetos", "Laws signed and vetoes") + "</h2>" +
       '<p class="muted">' + EP.tr("O Congresso aprova as leis; o presidente assina (sanciona) ou recusa (veta), no todo ou em parte. O Congresso pode derrubar o veto.",
         "Congress passes laws; the President signs them (sanction) or rejects them (veto), in whole or in part. Congress can override a veto.") + '</p><div class="grandes-n">' +
-      (e.leisSancionadas != null ? '<div class="grande-n"><b>' + EP.num(e.leisSancionadas) + "</b><span>" + EP.tr("leis sancionadas desde 2023", "laws signed since 2023") + "</span></div>" : "") +
-      (e.vetos != null ? '<div class="grande-n"><b>' + EP.num(e.vetos) + "</b><span>" + EP.tr("vetos (totais ou parciais) desde 2023", "vetoes (full or partial) since 2023") + "</span></div>" : "") +
+      (e.leisSancionadas != null ? '<div class="grande-n"><b>' + EP.num(e.leisSancionadas) + "</b><span>" + EP.tr("leis sancionadas desde " + desde, "laws signed since " + desde) + "</span></div>" : "") +
+      (e.vetos != null ? '<div class="grande-n"><b>' + EP.num(e.vetos) + "</b><span>" + EP.tr("vetos (totais ou parciais) desde " + desde, "vetoes (full or partial) since " + desde) + "</span></div>" : "") +
       "</div>" + '<p class="muted nota-contexto" style="margin-top:10px"><span aria-hidden="true">🦉 </span>' + EP.tr(
         "Quase todo projeto aprovado pelo Congresso passa pelo presidente, venha de quem vier. Por isso, este número mostra o que o Congresso aprovou e o presidente assinou, e não o que o presidente propôs (isso está em \"O que " + ele(p) + " propôs\"). Vetar também é uma tarefa prevista na Constituição: o número, sozinho, não diz se as decisões foram boas ou ruins.",
         "Almost every bill passed by Congress goes to the President, no matter who proposed it. So this number shows what Congress passed and the President signed, not what the President proposed (that is under \"What " + ele(p) + " proposed\"). Vetoing is also a task set by the Constitution: the number alone does not say whether the decisions were good or bad.") + "</p>" +

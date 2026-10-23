@@ -1,10 +1,12 @@
 """Presidente e vice-presidente da República.
 
-Gera dados/pessoas/pres-lula.json, dados/pessoas/vp-alckmin.json e dados/executivo.json (contrato no README).
+Gera dados/pessoas/pres-<slug>.json, dados/pessoas/vp-<slug>.json e dados/executivo.json (contrato no README).
+Quem está no cargo depende da data (scripts/mandatos.py): até 4/1/2027, a chapa eleita em 2022 (fichas pesquisadas à mão,
+abaixo); a partir de 5/1/2027, a chapa eleita em 2026, montada sozinha com os dados do TSE (mesmo id se for a mesma pessoa).
 
 Fontes:
 - Propostas do presidente = proposições de autoria do Poder Executivo (tipo de autor 30000, "Órgão do Poder
-  Executivo") apresentadas desde 01/01/2023: MPV, PL, PLP, PLN e PEC. Arquivos em lote da Câmara dos Deputados
+  Executivo") apresentadas desde o começo do mandato atual: MPV, PL, PLP, PLN e PEC. Arquivos em lote da Câmara dos Deputados
   (proposicoes-{ano}, proposicoesAutores-{ano}, proposicoesTemas-{ano}). id = "camara:{id}" (o mesmo da Câmara).
 - Situação: PL, PLP e PEC = situação na Câmara (ultimoStatus). MPV e PLN são decididas pelo Congresso
   Nacional; a situação na Câmara delas é incompleta, então usamos a do Congresso (Dados Abertos do Senado,
@@ -12,9 +14,10 @@ Fontes:
   lei ou estão no Senado, o número da lei vem do Senado (/dadosabertos/processo?sigla&numero&ano).
 - Leis sancionadas: normas federais (Lei e Lei Complementar) por ano no Senado (/dadosabertos/legislacao/lista),
   menos as leis promulgadas depois de o Congresso derrubar um veto total (/dadosabertos/materia/vetos/{ano}).
-- Vetos: /dadosabertos/materia/vetos/{ano} (vetos totais e parciais publicados desde 01/01/2023).
+- Vetos: /dadosabertos/materia/vetos/{ano} (vetos totais e parciais publicados desde o começo do mandato atual).
 - Fichas: biografias oficiais (Presidência/Vice-Presidência), Câmara dos Deputados (mandatos de deputado),
-  fotos do Palácio do Planalto e da Vice-Presidência no Wikimedia Commons (licença CC BY 2.0).
+  fotos do Palácio do Planalto e da Vice-Presidência no Wikimedia Commons (licença CC BY 2.0); a partir de 2027,
+  candidatura no TSE (DivulgaCandContas: nome, partido, nascimento, foto).
 
 Uso:  python scripts/executivo.py
 """
@@ -32,13 +35,15 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from comum import (CACHE, DADOS, PESSOAS, STATUS_TXT, aplicar_simples, baixar_arquivo, baixar_json,  # noqa: E402
                    carregar_simples, chave_nome, classificar_situacao, data_iso, foto_local, fonte, hoje, ler_json, limpa,
-                   log, ordenar_propostas, resumo_propostas, salvar_json, sem_acento, sem_mudar_data)
+                   log, ordenar_propostas, resumo_propostas, salvar_json, sem_acento, sem_mudar_data, slug)
+from mandatos import CF, EC111, data_br as data_br_curta, extenso, vigente  # noqa: E402
 
 CE = CACHE / "executivo"
 CE.mkdir(parents=True, exist_ok=True)
 SENADO = "https://legis.senado.leg.br/dadosabertos"
 CAMARA_ARQ = "https://dadosabertos.camara.leg.br/arquivos"
-INICIO = "2023-01-01"
+VIG = vigente("presidente")  # mandato em curso hoje (eleição, início, fim)
+INICIO = VIG["inicio"]
 TIPOS_EXEC = ("MPV", "PL", "PLP", "PLN", "PEC")
 csv.field_size_limit(10 ** 9)
 
@@ -287,7 +292,7 @@ def leis_e_vetos() -> dict:
         "vetosTotais": vetos["total"],
         "vetosParciais": vetos["parcial"],
         "periodo": {"inicio": INICIO, "ultimaLei": ult["lei"] or None, "ultimoVeto": ult["veto"] or None},
-        "obs": (f"Leis ordinárias e complementares assinadas pela Presidência da República desde 1º/1/2023 "
+        "obs": (f"Leis ordinárias e complementares assinadas pela Presidência da República desde {data_br_curta(INICIO)} "
                 f"({leis['LEI']} ordinárias + {leis['LCP']} complementares = {n_leis}), sem contar as "
                 f"{len(promulgadas)} leis promulgadas depois de o Congresso derrubar um veto total. Inclui as poucas "
                 "leis e vetos assinados pelo vice-presidente quando estava no exercício da Presidência. "
@@ -380,39 +385,92 @@ def montar_lista(props, temas, simples):
     return ordenar_propostas(lista), regs
 
 
-def main():
-    t0 = time.time()
-    log("Executivo: propostas do Poder Executivo (arquivos da Câmara)")
-    props, outros, temas = propostas_do_executivo()
-    log(f"  {len(props)} propostas (MPV/PL/PLP/PLN/PEC) desde {INICIO}; outros documentos: {sum(outros.values())}")
-    lista, regs = montar_lista(props, temas, carregar_simples())
-    linhas = ["fonte da situação | tipo | situação oficial | quantidade | status"]
-    linhas += [f"{f} | {t} | {s} | {n} | {st}" for (f, t, s, st), n in sorted(regs.items(), key=lambda kv: (-kv[1], kv[0]))]
-    (CE / "situacoes.txt").write_text("\n".join(linhas) + "\n", encoding="utf-8")
+# presidentes desde 1995 (Biblioteca da Presidência: galeria dos ex-presidentes): mandatos no mesmo cargo, para quem
+# voltar ao cargo. Dilma Rousseff foi afastada em 12/5/2016 e teve o mandato encerrado pelo Senado em 31/8/2016 (impeachment);
+# Michel Temer, vice, assumiu a Presidência nessa data.
+GALERIA = {"veiculo": "Presidência da República", "titulo": "Galeria dos ex-presidentes (Biblioteca da Presidência)",
+           "url": "https://www.gov.br/secretariageral/pt-br/centrais-de-conteudo/biblioteca-da-pr/galeria-dos-ex-presidentes",
+           "data": "2026-10-23"}
+MANDATOS_PRESIDENTE = {
+    "LUIZ INACIO LULA DA SILVA": [("2023-01-01", "2027-01-05"), ("2007-01-01", "2010-12-31"), ("2003-01-01", "2006-12-31")],
+    "JAIR MESSIAS BOLSONARO": [("2019-01-01", "2022-12-31")],
+    "MICHEL MIGUEL ELIAS TEMER LULIA": [("2016-08-31", "2018-12-31")],
+    "DILMA VANA ROUSSEFF": [("2015-01-01", "2016-08-31"), ("2011-01-01", "2014-12-31")],
+    "FERNANDO HENRIQUE CARDOSO": [("1999-01-01", "2002-12-31"), ("1995-01-01", "1998-12-31")],
+}
+MANDATOS_VICE = {
+    "GERALDO JOSE RODRIGUES ALCKMIN FILHO": [("2023-01-01", "2027-01-05")],
+    "ANTONIO HAMILTON MARTINS MOURAO": [("2019-01-01", "2022-12-31")],
+    "MICHEL MIGUEL ELIAS TEMER LULIA": [("2015-01-01", "2016-08-31"), ("2011-01-01", "2014-12-31")],
+}
 
-    log("Leis sancionadas e vetos desde 01/01/2023")
-    exe = leis_e_vetos()
-    log(f"  leis sancionadas: {exe['leisSancionadas']}; vetos: {exe['vetos']} ({exe['vetosTotais']} totais, {exe['vetosParciais']} parciais)")
 
-    por_tema = collections.Counter(t for p in lista for t in p["temas"])
-    fonte_cam = fonte("Câmara dos Deputados", "Dados Abertos: proposições e autores (arquivos por ano)",
-                      "https://dadosabertos.camara.leg.br/swagger/api.html#staticfile")
-    propostas = {
-        "escopo": "Propostas enviadas pelo presidente ao Congresso no mandato atual (desde 1º de janeiro de 2023)",
-        "resumo": resumo_propostas(lista),
-        "porTipo": dict(sorted(collections.Counter(p["tipo"] for p in lista).items())),
-        "porTema": [{"tema": t, "n": n} for t, n in sorted(por_tema.items(), key=lambda kv: chave_nome(kv[0]))],
-        "outros": {"total": sum(outros.values()), "porTipo": dict(sorted(outros.items())),
-                   "url": "https://dadosabertos.camara.leg.br/swagger/api.html#staticfile",
-                   "txt": "Mensagens (como indicações de autoridades e acordos com outros países), renovações de "
-                          "rádio e TV e outros documentos enviados ao Congresso"},
-        "nota": ("Medidas provisórias (MPV) já valem como lei assim que o presidente as publica, mas perdem a validade se o "
-                 "Congresso não as aprovar em até 120 dias. A situação das MPV e dos PLN (orçamento) é a do Congresso Nacional; "
-                 "a das demais propostas é a da Câmara, onde elas começam."),
-        "fonte": fonte_cam,
-        "lista": lista,
-    }
+def chapa_eleita(ano: int, propostas: dict, exe: dict, fonte_cam: dict) -> tuple[dict, dict, list]:
+    """Chapa eleita no ano (a partir de 2026), com os dados do TSE. Se for a mesma pessoa da chapa anterior, mantém o id
+    (os links continuam funcionando) e a ficha pesquisada à mão (nascimento, naturalidade, foto)."""
+    import tse  # noqa: PLC0415 (só aqui: leitura grande)
+    rows = [tse.cand(r, ano) for r in tse.ler_csv(tse.zip_tse("consulta_cand", ano))
+            if r["DS_CARGO"].upper() in ("PRESIDENTE", "VICE-PRESIDENTE") and r["CD_ELEICAO"] in tse.ORDINARIAS[ano]]
+    eleitos = [c for c in rows if c["cargo"] == "PRESIDENTE" and tse.eleito(c["sit"])]
+    if not eleitos:
+        raise RuntimeError(f"o TSE ainda não mostra a chapa eleita em {ano}: as fichas de ontem ficam como estão")
+    pc = max(eleitos, key=lambda c: c["turno"])
+    vices = [c for c in rows if c["cargo"] == "VICE-PRESIDENTE" and c["num"] == pc["num"] and c["turno"] == pc["turno"]]
+    vc = vices[0] if vices else None
+    pres_ant, vice_ant, _ = chapa_2022(propostas, exe, fonte_cam)
+    ini_pt, ini_en = extenso(VIG["inicio"])
+    fim_pt, fim_en = extenso(VIG["fim"])
+    turno = f"{pc['turno']}º turno" if pc["turno"] == 2 else "1º turno"
 
+    def ficha(c: dict, tipo: str, anterior: dict, mandatos_conhecidos: dict) -> dict:
+        g = c["genero"]
+        a = "a" if g == "F" else "o"
+        civil = tse.nome_tse(c["civil"]) or tse.nome_tse(c["nome"])
+        mesma = chave_nome(anterior.get("nomeCivil") or "") == chave_nome(civil or "")
+        fc = tse.fonte_cand(c, None)
+        cargo = "Presidente da República" if tipo == "pres" else "Vice-presidente da República"
+        if mesma:
+            ant = [{"cargo": cargo, "inicio": anterior["mandato"]["inicio"], "fim": anterior["mandato"]["fim"]}] + anterior.get("mandatosAnteriores", [])
+        else:
+            ant = [{"cargo": cargo, "inicio": i, "fim": f} for i, f in mandatos_conhecidos.get(chave_nome(civil or ""), [])]
+        quem = "presidente" if tipo == "pres" else "vice-presidente"
+        return {
+            "id": anterior["id"] if mesma else f"{tipo}-{slug(tse.nome_tse(c['urna']) or civil)}",
+            "tipo": tipo, "nome": tse.nome_tse(c["urna"]), "nomeCivil": civil, "cargo": cargo, "genero": g,
+            "uf": None, "municipio": None, "partido": c["partido"],
+            "foto": anterior.get("foto") if mesma else tse.url_foto(ano, c["sq"], "BR"),
+            "fotoCredito": anterior.get("fotoCredito") if mesma else "Foto da candidatura no TSE (DivulgaCandContas)",
+            "nascimento": (anterior.get("nascimento") or c["nasc"]) if mesma else c["nasc"],
+            "naturalidade": anterior.get("naturalidade") if mesma else None,
+            "mandato": {"inicio": VIG["inicio"], "fim": VIG["fim"], "situacao": "Em exercício",
+                        "obs": f"Eleit{a} em {ano}, no {turno}. O mandato começou em {ini_pt} e vai até a posse da próxima chapa eleita, em {fim_pt}.",
+                        "obs_en": f"Elected in {ano} ({'runoff' if pc['turno'] == 2 else 'first round'}). The term began on {ini_en} and lasts until the next elected ticket takes office, on {fim_en}.",
+                        "fonte": [fc, EC111]},
+            "mandatosAnteriores": ant,
+            "eleicao": {"ano": ano, "cargo": cargo, "votos": None, "situacao": f"Eleit{a} no {turno}", "fonte": fc},
+            "eleicao2026": None, "bens": None,
+            "links": {"oficial": "https://www.gov.br/planalto/pt-br" if tipo == "pres" else "https://www.gov.br/planalto/pt-br/vice-presidencia",
+                      "email": None, "redes": []},
+            "comissoes": [], "gastos": None, "votacoes": None,
+            "fontes": [fc, EC111, CF] + ([GALERIA] if ant and not mesma else []),
+            "atualizado": hoje(),
+            "_quem": quem,
+        }
+
+    pres = ficha(pc, "pres", pres_ant, MANDATOS_PRESIDENTE)
+    pres.update({"propostas": propostas, "executivo": exe})
+    pres["fontes"].append(fonte_cam)
+    vice = ficha(vc, "vp", vice_ant, MANDATOS_VICE) if vc else {"id": "vp-vago", "tipo": "vp", "vago": True}
+    if vc:
+        vice["propostas"] = vice_ant["propostas"]  # o vice não apresenta projetos (mesmo texto e fonte para qualquer vice)
+        vice["executivo"] = None
+    for p in (pres, vice):
+        p.pop("_quem", None)
+    return pres, vice, [EC111, CF]
+
+
+def chapa_2022(propostas: dict, exe: dict, fonte_cam: dict) -> tuple[dict, dict, list]:
+    """Chapa eleita em 2022 (mandato de 1º/1/2023 a 5/1/2027): fichas pesquisadas à mão, com fonte."""
     # ----- presidente
     foto_p, cred_p, fonte_foto_p = foto_commons("pres-lula")
     bio_p = fonte("Presidência da República", "Biografia de Luiz Inácio Lula da Silva (Biblioteca da Presidência)",
@@ -488,6 +546,51 @@ def main():
         "fontes": [bio_v, cf61, ec111] + saida_mdic + ([fonte_foto_v] if fonte_foto_v else []),
         "atualizado": hoje(),
     }
+    return pres, vice, [bio_p, bio_v, ec111]
+
+
+def main():
+    t0 = time.time()
+    log("Executivo: propostas do Poder Executivo (arquivos da Câmara)")
+    props, outros, temas = propostas_do_executivo()
+    log(f"  {len(props)} propostas (MPV/PL/PLP/PLN/PEC) desde {INICIO}; outros documentos: {sum(outros.values())}")
+    lista, regs = montar_lista(props, temas, carregar_simples())
+    linhas = ["fonte da situação | tipo | situação oficial | quantidade | status"]
+    linhas += [f"{f} | {t} | {s} | {n} | {st}" for (f, t, s, st), n in sorted(regs.items(), key=lambda kv: (-kv[1], kv[0]))]
+    (CE / "situacoes.txt").write_text("\n".join(linhas) + "\n", encoding="utf-8")
+
+    log(f"Leis sancionadas e vetos desde {data_br_curta(INICIO)}")
+    exe = leis_e_vetos()
+    log(f"  leis sancionadas: {exe['leisSancionadas']}; vetos: {exe['vetos']} ({exe['vetosTotais']} totais, {exe['vetosParciais']} parciais)")
+
+    por_tema = collections.Counter(t for p in lista for t in p["temas"])
+    fonte_cam = fonte("Câmara dos Deputados", "Dados Abertos: proposições e autores (arquivos por ano)",
+                      "https://dadosabertos.camara.leg.br/swagger/api.html#staticfile")
+    propostas = {
+        "escopo": f"Propostas enviadas pelo presidente ao Congresso no mandato atual (desde {extenso(INICIO)[0]})",
+        "escopo_en": f"Proposals sent by the President to Congress in the current term (since {extenso(INICIO)[1]})",
+        "resumo": resumo_propostas(lista),
+        "porTipo": dict(sorted(collections.Counter(p["tipo"] for p in lista).items())),
+        "porTema": [{"tema": t, "n": n} for t, n in sorted(por_tema.items(), key=lambda kv: chave_nome(kv[0]))],
+        "outros": {"total": sum(outros.values()), "porTipo": dict(sorted(outros.items())),
+                   "url": "https://dadosabertos.camara.leg.br/swagger/api.html#staticfile",
+                   "txt": "Mensagens (como indicações de autoridades e acordos com outros países), renovações de "
+                          "rádio e TV e outros documentos enviados ao Congresso"},
+        "nota": ("Medidas provisórias (MPV) já valem como lei assim que o presidente as publica, mas perdem a validade se o "
+                 "Congresso não as aprovar em até 120 dias. A situação das MPV e dos PLN (orçamento) é a do Congresso Nacional; "
+                 "a das demais propostas é a da Câmara, onde elas começam."),
+        "fonte": fonte_cam,
+        "lista": lista,
+    }
+
+    if VIG["eleicao"] == 2022:
+        pres, vice, fontes_chapa = chapa_2022(propostas, exe, fonte_cam)
+    else:
+        pres, vice, fontes_chapa = chapa_eleita(VIG["eleicao"], propostas, exe, fonte_cam)
+    # fichas de quem saiu do cargo (outra pessoa assumiu): o site não mostra mais
+    for arq in list(PESSOAS.glob("pres-*.json")) + list(PESSOAS.glob("vp-*.json")):
+        if arq.stem not in (pres["id"], vice["id"]):
+            arq.unlink()
 
     for pessoa in (pres, vice):
         arq = PESSOAS / f"{pessoa['id']}.json"
@@ -498,7 +601,7 @@ def main():
     geral = {
         "presidente": resumo(pres),
         "vice": resumo(vice),
-        "fontes": [bio_p, bio_v, ec111, fonte_cam] + exe["fonte"][:3],
+        "fontes": fontes_chapa + [fonte_cam] + exe["fonte"][:3],
         "atualizado": hoje(),
     }
     arq = DADOS / "executivo.json"

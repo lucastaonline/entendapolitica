@@ -183,12 +183,15 @@
 
     // governo + Assembleia (arquivo do estado)
     EP.json("dados/estados/" + uf + ".json").then(function (e) {
-      var g = e.governador, v = e.vice;
+      // sem nome e sem "vago" = o TSE ainda não mostra quem ganhou (ex.: segundo turno por fazer)
+      var g = e.governador && (e.governador.nome || e.governador.vago) ? e.governador : null,
+        v = e.vice && (e.vice.nome || e.vice.vago) ? e.vice : null, anoG = e.eleicaoGoverno || 2022;
       document.getElementById("gov").innerHTML = (cartaoGrande(g, EP.tr(EP.gen(g && g.genero, "Governador", "Governadora"), "Governor")) +
         cartaoGrande(v, EP.tr(EP.gen(v && v.genero, "Vice-governador", "Vice-governadora"), "Vice Governor"))) ||
         '<div class="vazio">' + EP.tr("Ainda não temos os dados de quem governa este estado.", "We do not have data on who governs this state yet.") + "</div>";
       var notas = [];
-      if ((g && g.aConfirmar) || (v && v.aConfirmar)) notas.push(EP.tr("Estamos conferindo se quem foi eleito em 2022 ainda está no cargo.", "We are checking whether the people elected in 2022 are still in office."));
+      if ((g && g.aConfirmar) || (v && v.aConfirmar)) notas.push(EP.tr("Aqui aparece quem ganhou a eleição de " + anoG + ", segundo o TSE. Estamos conferindo se a mesma pessoa ainda está no cargo.",
+        "This shows who won the " + anoG + " election, according to the TSE (Brazil's Superior Electoral Court). We are checking whether the same person is still in office."));
       var fg = fontesDe(g, v);
       document.getElementById("gov-nota").innerHTML = (notas.length ? '<p class="aviso"><span aria-hidden="true">⚠️ </span>' + esc(notas.join(" ")) + "</p>" : "") +
         (fg.length ? '<p style="margin-top:12px">' + EP.botaoFontes(fg) + "</p>" : "");
@@ -211,7 +214,7 @@
       var nomesE = uf === "DF" ? { um: EP.tr("deputado distrital", "district deputy"), uma: EP.tr("deputada distrital", "district deputy"), varios: EP.tr("deputados distritais", "district deputies"), varias: EP.tr("deputadas distritais", "district deputies") } :
         { um: EP.tr("deputado estadual", "state deputy"), uma: EP.tr("deputada estadual", "state deputy"), varios: EP.tr("deputados estaduais", "state deputies"), varias: EP.tr("deputadas estaduais", "state deputies") };
       EP.montaCasa(document.getElementById("casa-est"), { membros: de2.membros || [], nomes: nomesE, filtroUF: false, fonte: de2.fonte, atualizado: e.atualizado,
-        extra: function (m) { return m.votos != null ? EP.tr(EP.num(m.votos) + " votos em 2022", EP.num(m.votos) + " votes in 2022") : ""; } });
+        extra: function (m) { var a = de2.eleicao || 2022; return m.votos != null ? EP.tr(EP.num(m.votos) + " votos em " + a, EP.num(m.votos) + " votes in " + a) : ""; } });
       EP.revelar(el);
     }).catch(function () {
       falhou(document.getElementById("gov"), "os dados deste estado", "the data for this state");

@@ -49,6 +49,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from comum import *  # noqa: E402
 import ibge  # noqa: E402
+from mandatos import antes_da_posse, vigente  # noqa: E402
 
 CDN = "https://cdn.tse.jus.br/estatistica/sead/odsele/"
 PORTAL = "https://dadosabertos.tse.jus.br/dataset/"
@@ -102,19 +103,19 @@ CARGOS = {  # DS_CARGO do TSE -> (masculino, feminino)
 SUPLENTES_SENADO = ("1º SUPLENTE", "2º SUPLENTE")
 PRIORIDADE_SIT = {"ELEITO": 0, "ELEITO POR QP": 0, "ELEITO POR MÉDIA": 0, "2º TURNO": 1, "SUPLENTE": 2, "NÃO ELEITO": 3}
 
-AVISO_DEST = ("Lista de quem foi eleito em 2022, segundo o TSE. Alguns podem ter saído e suplentes podem ter "
+AVISO_DEST = ("Lista de quem foi eleito em {ano}, segundo o TSE. Alguns podem ter saído e suplentes podem ter "
               "assumido. Em breve: a lista oficial da Assembleia.")
-AVISO_DIST = ("Lista de quem foi eleito em 2022, segundo o TSE. Alguns podem ter saído e suplentes podem ter "
+AVISO_DIST = ("Lista de quem foi eleito em {ano}, segundo o TSE. Alguns podem ter saído e suplentes podem ter "
               "assumido. Em breve: a lista oficial da Câmara Legislativa.")
 AVISO_PREF = ("Prefeito(a) e vice eleitos em 2024, segundo o TSE. Pode ter havido mudanças depois "
               "(cassação, renúncia, morte ou eleição suplementar).")
 AVISO_VER = ("Lista de quem foi eleito em 2024, segundo o TSE. Alguns podem ter saído (cassação, renúncia, "
              "licença) e suplentes podem ter assumido.")
 # os mesmos avisos em inglês (o site tem versão em inglês)
-AVISO_DEST_EN = ("List of the people elected in 2022, according to the TSE (Superior Electoral Court). Some may have "
+AVISO_DEST_EN = ("List of the people elected in {ano}, according to the TSE (Superior Electoral Court). Some may have "
                  "left and substitutes may have taken their seats. Coming soon: the official list from the Legislative "
                  "Assembly (state parliament).")
-AVISO_DIST_EN = ("List of the people elected in 2022, according to the TSE (Superior Electoral Court). Some may have "
+AVISO_DIST_EN = ("List of the people elected in {ano}, according to the TSE (Superior Electoral Court). Some may have "
                  "left and substitutes may have taken their seats. Coming soon: the official list from the Legislative "
                  "Chamber of the Federal District.")
 AVISO_PREF_EN = ("Mayor and vice mayor elected in 2024, according to the TSE (Superior Electoral Court). There may "
@@ -202,7 +203,10 @@ def chave_ord(nome: str | None, extra: str = "") -> tuple:
 # ---------------------------------------------------------------- arquivos do TSE
 def zip_tse(pasta: str, ano: int) -> Path:
     nome = f"{pasta}_{ano}.zip"
-    return baixar_arquivo(f"{CDN}{pasta}/{nome}", f"tse/{nome}", max_idade_h=IDADE_H[ano])
+    idade = IDADE_H.get(ano, 20)
+    if hoje() >= f"{ano + 1}-02-01":
+        idade = None  # eleição encerrada há meses (os eleitos já tomaram posse): baixa uma vez só
+    return baixar_arquivo(f"{CDN}{pasta}/{nome}", f"tse/{nome}", max_idade_h=idade)
 
 
 def membros_csv(z: zipfile.ZipFile) -> list[str]:
@@ -273,6 +277,15 @@ def votos(ano: int) -> dict:
         return {"data": data, "votos": dict(soma)}
 
     return _cache_derivado(f"votos_{ano}.json", z, calcular)
+
+
+def votos_ou_nada(ano: int) -> dict:
+    """votos(ano), ou nenhum voto se o arquivo ainda não existir (eleição recém-terminada): a ficha sai sem o número."""
+    try:
+        return votos(ano)
+    except Exception as e:  # noqa: BLE001
+        log(f"  [aviso] votos de {ano} indisponíveis ({e}); as fichas saem sem o número de votos")
+        return {"votos": {}, "data": None}
 
 
 def bens(ano: int) -> dict:
@@ -551,22 +564,25 @@ def _mesmo_nome(a: str, b: str) -> bool:
 
 
 def executivo_atual(b22: Base) -> list[dict]:
+    """Presidente e vice em exercício (dados/executivo.json) casados com a eleição do mandato em curso (b22.ano)."""
     ex = ler_json(DADOS / "executivo.json") or {}
     out = []
+    ano = b22.ano
     for chave, cargo, tipo, padrao in (("presidente", "PRESIDENTE", "pres", "pres-lula"), ("vice", "VICE-PRESIDENTE", "vp", "vp-alckmin")):
-        el = [c for c in b22.rows if c["cargo"] == cargo and c["el"] in ORDINARIAS[2022] and eleito(c["sit"])]
+        el = [c for c in b22.rows if c["cargo"] == cargo and c["el"] in ORDINARIAS[ano] and eleito(c["sit"])]
+        el = [c for c in el if c["turno"] == max(x["turno"] for x in el)] if el else el
         if len(el) != 1:
-            log(f"  [aviso] {cargo} eleito em 2022 não encontrado no TSE")
+            log(f"  [aviso] {cargo} eleito em {ano} não encontrado no TSE")
             continue
         c = el[0]
         p = ex.get(chave) or {}
         if p.get("nome") and not _mesmo_nome(p["nome"], f"{c['urna']} {c['nome']}"):
-            log(f"  [aviso] {chave} em executivo.json ({p['nome']}) não é quem foi eleito em 2022 ({c['urna']}); sem dados do TSE")
+            log(f"  [aviso] {chave} em executivo.json ({p['nome']}) não é quem foi eleito em {ano} ({c['urna']}); sem dados do TSE")
             continue
         out.append({
             "id": p.get("id") or padrao, "tipo": tipo, "cargo": cargo, "nome": p.get("nome") or nome_tse(c["urna"]),
             "partido": p.get("partido") or c["partido"], "uf": "BR", "genero": p.get("genero") or c["genero"],
-            "cpf": c["cpf"], "nomeCivil": c["civil"], "nasc": c["nasc"], "tse2022": c,
+            "cpf": c["cpf"], "nomeCivil": c["civil"], "nasc": c["nasc"], "tseExec": c,
         })
     return out
 
@@ -577,11 +593,11 @@ def casar_federais(fed: list[dict], b18: Base, b22: Base) -> None:
     for f in fed:
         f["tse"] = None
         if f["tipo"] in ("pres", "vp"):
-            f["tse"] = f.pop("tse2022")
+            f["tse"] = f.pop("tseExec")
             continue
         if f["tipo"] == "dep":
             cands = [b22.linha(sq) for sq in b22.achar(f["cpf"], f["nomeCivil"], f["nasc"])]
-            cands = [c for c in cands if c and c["cargo"] == "DEPUTADO FEDERAL" and c["el"] in ORDINARIAS[2022]]
+            cands = [c for c in cands if c and c["cargo"] == "DEPUTADO FEDERAL" and c["el"] in ORDINARIAS[b22.ano]]
             if len(cands) == 1:
                 f["tse"] = cands[0]
                 f["cpf"] = f["cpf"] or cands[0]["cpf"]
@@ -789,22 +805,24 @@ def aplicar_manual_cidade(pid: str, m, bloco: dict | None, candidatos: list) -> 
 
 
 def pessoa_executivo_estadual(uf: str, papel: str, eleito22: dict | None, outro22: dict | None,
-                              man: dict, bloco22: dict | None, bloco_outro22: dict | None) -> dict:
-    """Governador(a) ou vice hoje. papel = 'governador' | 'vice'."""
+                              man: dict, bloco22: dict | None, bloco_outro22: dict | None, ano: int = 2022) -> dict:
+    """Governador(a) ou vice hoje. papel = 'governador' | 'vice'. ano = eleição do mandato em curso (as chaves
+    "eleito<ano>" e "sq<ano>" levam o ano: o site sabe de qual eleição é a ficha)."""
     pid = f"{'gov' if papel == 'governador' else 'vgov'}-{uf}"
+    k_el, k_sq = f"eleito{ano}", f"sq{ano}"
     m = man.get(papel)
     if not isinstance(m, dict) or not m:
-        # sem pesquisa à mão para este cargo: mostra quem foi eleito em 2022, com "aConfirmar"
+        # sem pesquisa à mão para este cargo: mostra quem foi eleito, com "aConfirmar"
         if not eleito22:
-            return {"id": pid, "aConfirmar": True, "eleito2022": None, "eleicao2026": None}
+            return {"id": pid, "aConfirmar": True, k_el: None, "eleicao2026": None}
         b = bloco22
         out = {"id": pid}
         out.update({k: b[k] for k in CAMPOS_PESSOA})
-        out.update({"aConfirmar": True, "sq2022": eleito22["sq"], "fontes": b["fontes"], "eleito2022": bloco22,
+        out.update({"aConfirmar": True, k_sq: eleito22["sq"], "fontes": b["fontes"], k_el: bloco22,
                     "eleicao2026": None})
         return out
     if m.get("vago") or chave_nome(m.get("nome") or "") in ("VAGO", "CARGO VAGO") or not (m.get("nome") or m.get("nomeCivil")):
-        return _vago_manual(pid, m, {"eleito2022": bloco22}, ("eleito2022",))
+        return _vago_manual(pid, m, {k_el: bloco22}, (k_el,))
     # quem está no cargo é o eleito de 2022 para este cargo, o eleito para o outro cargo (vice que assumiu) ou outra pessoa
     sq, foto, g = None, None, None
     for c, b in ((eleito22, bloco22), (outro22, bloco_outro22)):
@@ -815,9 +833,9 @@ def pessoa_executivo_estadual(uf: str, papel: str, eleito22: dict | None, outro2
          "genero": m.get("genero") or g, "foto": m.get("foto") or foto, "desde": m.get("desde"),
          "comoAssumiu": m.get("comoAssumiu")}
     d.update(_textos_manual(m))
-    d.update({"nascimento": m.get("nascimento"), "sq2022": sq, "fontes": _fontes_manual(m), "eleito2022": bloco22,
+    d.update({"nascimento": m.get("nascimento"), k_sq: sq, "fontes": _fontes_manual(m), k_el: bloco22,
               "eleicao2026": None})
-    return limpar(d, manter=CAMPOS_PESSOA + ("desde", "comoAssumiu", "eleito2022", "eleicao2026"))
+    return limpar(d, manter=CAMPOS_PESSOA + ("desde", "comoAssumiu", k_el, "eleicao2026"))
 
 
 def _fontes_manual(m: dict | None) -> list | None:
@@ -840,8 +858,8 @@ def _mesma_pessoa(m: dict, c: dict) -> bool:
 
 def chaves_executivo_estadual(p: dict, b22: Base) -> tuple:
     """(cpf, nome civil, nascimento) de quem está no cargo, para casar com 2026."""
-    if p.get("sq2022"):
-        c = b22.linha(p["sq2022"])
+    if p.get(f"sq{b22.ano}"):
+        c = b22.linha(p[f"sq{b22.ano}"])
         if c:
             return c["cpf"], c["nome"], c["nasc"]
     if p.get("nomeCivil") and p.get("nascimento"):
@@ -850,9 +868,16 @@ def chaves_executivo_estadual(p: dict, b22: Base) -> tuple:
 
 
 def aplicar_2026_estado(est: dict, b22: Base, b26: Base2026) -> None:
+    """Selos "Eleito/Reeleito em 2026": só até a posse de quem foi eleito em 2026 (governador: 6/1/2027; deputados: posse
+    da Assembleia). Depois, quem aparece já é quem foi eleito, e o selo sai."""
+    gov_antes = antes_da_posse("governador", 2026)
+    dest_antes = antes_da_posse("deputado_estadual", 2026, uf=est["uf"])
     for papel, cargo in (("governador", "GOVERNADOR"), ("vice", "VICE-GOVERNADOR")):
         p = est.get(papel) or {}
         if not p or p.get("vago"):
+            continue
+        if not gov_antes:
+            p["eleicao2026"] = None
             continue
         cpf, nome, nasc = chaves_executivo_estadual(p, b22)
         if cpf or (nome and nasc):
@@ -862,43 +887,48 @@ def aplicar_2026_estado(est: dict, b22: Base, b26: Base2026) -> None:
         else:
             p["eleicao2026"] = None
     for m in est["deputadosEstaduais"]["membros"]:
-        c = b22.linha(m["id"].rsplit("-", 1)[1])
+        c = b22.linha(m["id"].rsplit("-", 1)[1]) if dest_antes else None
         m["eleicao2026"] = b26.situacao(c["cpf"], c["nome"], c["nasc"], c["cargo"], m.get("genero")) if c else None
 
 
-def montar_estado(uf: str, b22: Base, vot22: dict, man: dict, fed: list[dict], n_mun: int) -> dict:
+def montar_estado(uf: str, b22: Base, vot22: dict, man: dict, fed: list[dict], n_mun: int,
+                  bdest: Base | None = None, votdest: dict | None = None) -> dict:
+    """b22/vot22: eleição do governador em exercício; bdest/votdest: eleição da legislatura estadual em curso (é a mesma,
+    menos entre a posse do governador, em janeiro, e a da Assembleia, em fevereiro)."""
+    bdest, votdest = bdest or b22, votdest or vot22
+    ag, ad = b22.ano, bdest.ano
     rows = [c for c in b22.rows if c["uf"] == uf]
-    gov22 = eleito_exec(rows, "GOVERNADOR", ORDINARIAS[2022])
-    vice22 = eleito_exec(rows, "VICE-GOVERNADOR", ORDINARIAS[2022])
+    gov22 = eleito_exec(rows, "GOVERNADOR", ORDINARIAS[ag])
+    vice22 = eleito_exec(rows, "VICE-GOVERNADOR", ORDINARIAS[ag])
     if gov22 and vice22 and gov22["turno"] != vice22["turno"]:
         log(f"  [aviso] {uf}: governador e vice eleitos em turnos diferentes?")
-    bg = bloco_eleito_exec(gov22, gov22, vot22, b22.data, 2022, uf) if gov22 else None
-    bv = bloco_eleito_exec(vice22, gov22, vot22, b22.data, 2022, uf) if vice22 else None
+    bg = bloco_eleito_exec(gov22, gov22, vot22, b22.data, ag, uf) if gov22 else None
+    bv = bloco_eleito_exec(vice22, gov22, vot22, b22.data, ag, uf) if vice22 else None
     m = man.get(uf) or {}
-    governador = pessoa_executivo_estadual(uf, "governador", gov22, vice22, m, bg, bv)
-    vice = pessoa_executivo_estadual(uf, "vice", vice22, gov22, m, bv, bg)
+    governador = pessoa_executivo_estadual(uf, "governador", gov22, vice22, m, bg, bv, ag)
+    vice = pessoa_executivo_estadual(uf, "vice", vice22, gov22, m, bv, bg, ag)
 
     cargo_leg = "DEPUTADO DISTRITAL" if uf == "DF" else "DEPUTADO ESTADUAL"
     membros = []
-    for c in rows:
-        if c["cargo"] != cargo_leg or c["el"] not in ORDINARIAS[2022] or not eleito(c["sit"]):
+    for c in (x for x in bdest.rows if x["uf"] == uf):
+        if c["cargo"] != cargo_leg or c["el"] not in ORDINARIAS[ad] or not eleito(c["sit"]):
             continue
         membros.append({
             "id": f"dest-{uf}-{c['sq']}", "nome": nome_tse(c["urna"]), "nomeCivil": nome_tse(c["civil"]),
-            "partido": c["partido"], "foto": url_foto(2022, c["sq"], uf), "genero": c["genero"],
-            "votos": vot22["votos"].get(f"{c['sq']}|1"), "situacao2022": sit_txt(c["sit"], c["genero"]), "eleicao2026": None,
+            "partido": c["partido"], "foto": url_foto(ad, c["sq"], uf), "genero": c["genero"],
+            "votos": votdest["votos"].get(f"{c['sq']}|1"), f"situacao{ad}": sit_txt(c["sit"], c["genero"]), "eleicao2026": None,
         })
     membros.sort(key=lambda x: chave_ord(x["nome"], x["id"]))
     casa = "Câmara Legislativa do DF" if uf == "DF" else "Assembleia Legislativa"
     est = {
         "uf": uf, "nome": ibge.estados()[uf], "capital": ibge.capital(uf), "municipios": n_mun,
-        "governador": governador, "vice": vice,
+        "governador": governador, "vice": vice, "eleicaoGoverno": ag,
         "senadores": [f["id"] for f in sorted((f for f in fed if f["tipo"] == "sen" and f["uf"] == uf), key=lambda f: chave_ord(f["nome"], f["id"]))],
         "deputadosFederais": [f["id"] for f in sorted((f for f in fed if f["tipo"] == "dep" and f["uf"] == uf), key=lambda f: chave_ord(f["nome"], f["id"]))],
         "deputadosEstaduais": {
-            "total": len(membros), "casa": casa, "aviso": AVISO_DIST if uf == "DF" else AVISO_DEST,
-            "aviso_en": AVISO_DIST_EN if uf == "DF" else AVISO_DEST_EN,
-            "fonte": fonte_resultados(2022, vot22["data"], f"Dados Abertos: eleitos para {'deputado distrital' if uf == 'DF' else 'deputado estadual'} em 2022 ({uf}) e votos"),
+            "total": len(membros), "casa": casa, "eleicao": ad, "aviso": (AVISO_DIST if uf == "DF" else AVISO_DEST).format(ano=ad),
+            "aviso_en": (AVISO_DIST_EN if uf == "DF" else AVISO_DEST_EN).format(ano=ad),
+            "fonte": fonte_resultados(ad, votdest["data"], f"Dados Abertos: eleitos para {'deputado distrital' if uf == 'DF' else 'deputado estadual'} em {ad} ({uf}) e votos"),
             "membros": membros,
         },
         "fonteMunicipios": ibge.fonte_ibge(),
@@ -1091,6 +1121,8 @@ def montar_cidade(ue: str, cod: str, nome: str, uf: str, rows: list[dict], vot24
 
 # ---------------------------------------------------------------- busca
 def item_busca(pid: str, nome: str, cargo: str, g, uf, partido, cidade=None) -> list:
+    if partido and re.sub(r"\s+", "", partido.upper()) in ("S/PARTIDO", "SEMPARTIDO"):
+        partido = "Sem partido"  # o mesmo texto das listas da Câmara e do Senado
     return [pid, nome, cargo_txt(cargo, g), uf, partido, cidade]
 
 
@@ -1123,9 +1155,9 @@ def salvar(caminho: Path, obj) -> bool:
     return salvar_json(caminho, obj)
 
 
-def carregar_federais(b18: Base, b22: Base) -> list[dict]:
+def carregar_federais(b18: Base, b22: Base, bpres: Base | None = None) -> list[dict]:
     log("Federais: quem está no mandato hoje (Câmara, Senado, executivo)...")
-    fed = deputados_atuais() + senadores_atuais() + executivo_atual(b22)
+    fed = deputados_atuais() + senadores_atuais() + executivo_atual(bpres or b22)
     casar_federais(fed, b18, b22)
     sem = [f["id"] for f in fed if not f["tse"]]
     log(f"  {sum(f['tipo'] == 'dep' for f in fed)} deputados, {sum(f['tipo'] == 'sen' for f in fed)} senadores, "
@@ -1138,7 +1170,8 @@ def so_2026(b22: Base, b26: Base2026, fed: list[dict]) -> None:
     fj = ler_json(caminho, {}) or {}
     for f in fed:
         d = fj.setdefault(f["id"], {"eleicao": None, "eleicao2026": None, "bens": None})
-        d["eleicao2026"] = b26.situacao(f["cpf"], f["nomeCivil"], f["nasc"], f["cargo"], f["genero"])
+        d["eleicao2026"] = (b26.situacao(f["cpf"], f["nomeCivil"], f["nasc"], f["cargo"], f["genero"])
+                            if antes_da_posse(f["tipo"], 2026) else None)
     salvar(caminho, dict(sorted(fj.items())))
     n = 0
     for uf in UFS:
@@ -1164,9 +1197,16 @@ def main():
     for p in (CACHE_TSE, SAIDA_TSE, ESTADOS, CIDADES):
         p.mkdir(parents=True, exist_ok=True)
 
-    log("TSE: candidaturas de 2018, 2022 e 2026...")
-    b22, b18, b26 = Base(2022), Base(2018), Base2026()
-    fed = carregar_federais(b18, b22)
+    # cada cargo usa a eleição do mandato em curso hoje (scripts/mandatos.py): até as posses de 2027, a de 2022
+    a_cong = vigente("deputado_federal")["eleicao"]      # Câmara e Senado (posse em 1º/2)
+    a_pres = vigente("presidente")["eleicao"]            # presidente e vice (posse em 5/1 a partir de 2027)
+    a_gov = vigente("governador")["eleicao"]             # governador e vice (posse em 6/1 a partir de 2027)
+    a_dest = {uf: vigente("deputado_estadual", uf=uf)["eleicao"] for uf in UFS}
+    anos = sorted({a_cong - 4, a_cong, a_pres, a_gov} | set(a_dest.values()))
+    log(f"TSE: candidaturas de {', '.join(map(str, anos))} e 2026...")
+    bs = {a: Base(a) for a in anos}
+    b22, b18, b26 = bs[a_cong], bs[a_cong - 4], Base2026()
+    fed = carregar_federais(b18, b22, bs[a_pres])
     if args.so_2026:
         so_2026(b22, b26, fed)
         log(f"Pronto em {time.time() - t0:.0f}s")
@@ -1176,7 +1216,7 @@ def main():
     chaves_fed = {(chave_nome(f["nomeCivil"] or ""), f["nasc"]) for f in fed if f["nomeCivil"] and f["nasc"]}
     rows24, ues24, fed24, data24 = ler_2024(chaves_fed)
     log("TSE: votos (votação nominal por município e zona)...")
-    vot = {ano: votos(ano) for ano in (2018, 2022, 2024)}
+    vot = {ano: votos_ou_nada(ano) for ano in sorted(set(anos) | {2024})}
     bens_cache = {}
 
     def bens_ano(ano):
@@ -1185,12 +1225,14 @@ def main():
         return bens_cache[ano]
 
     # ---- federais
-    bases = {2018: b18, 2022: b22}
+    bases = bs
     federais = {}
     for f in fed:
         federais[f["id"]] = {
             "eleicao": bloco_eleicao_federal(f, bases, vot),
-            "eleicao2026": b26.situacao(f["cpf"], f["nomeCivil"], f["nasc"], f["cargo"], f["genero"]),
+            # selo "Eleito/Reeleito em 2026": só até a posse de quem foi eleito em 2026 naquele cargo
+            "eleicao2026": (b26.situacao(f["cpf"], f["nomeCivil"], f["nasc"], f["cargo"], f["genero"])
+                            if antes_da_posse(f["tipo"], 2026) else None),
             "bens": bloco_bens(f, b26, b22, b18, fed24, bens_ano),
             "ficha": bloco_ficha(f, b26, b22, b18, fed24),
         }
@@ -1198,14 +1240,14 @@ def main():
     log(f"dados/tse/federais.json: {len(federais)} pessoas")
 
     # ---- estados
-    man = manual_governadores()
-    log(f"Governadores: {'dados/manual/governadores.json com ' + str(len(man)) + ' estados' if man else 'sem arquivo manual (aConfirmar)'}")
+    man = manual_governadores() if a_gov == 2022 else {}  # a pesquisa à mão é do mandato 2023-2026
+    log(f"Governadores (eleição de {a_gov}): {'dados/manual/governadores.json com ' + str(len(man)) + ' estados' if man else 'sem arquivo manual (aConfirmar)'}")
     municipios = ibge.municipios()
     n_mun = collections.Counter(m["uf"] for m in municipios.values())
     estados = {}
     for uf in UFS:
-        est = montar_estado(uf, b22, vot[2022], man, fed, n_mun.get(uf, 0))
-        aplicar_2026_estado(est, b22, b26)
+        est = montar_estado(uf, bs[a_gov], vot[a_gov], man, fed, n_mun.get(uf, 0), bs[a_dest[uf]], vot[a_dest[uf]])
+        aplicar_2026_estado(est, bs[a_gov], b26)
         estados[uf] = est
         salvar(ESTADOS / f"{uf}.json", est)
     total_dest = sum(e["deputadosEstaduais"]["total"] for e in estados.values())

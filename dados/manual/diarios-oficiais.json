@@ -1,0 +1,7 @@
+{
+ "sobre": "Diário Oficial de cada estado, onde saem as leis, os vetos e os decretos do governo. scripts/montar.py põe o endereço na ficha do governador (dados/estados/<UF>.json, campo governador.diarioOficial), para o quadro \"Onde ver mais\" do perfil quando o site não tem as leis e os vetos daquele governo. Só estados em que a ficha precisa dele; cada endereço foi aberto num navegador.",
+ "atualizado": "2026-10-23",
+ "estados": {
+  "AP": {"nome": "Diário Oficial do Estado do Amapá", "url": "https://diofe.portal.ap.gov.br/", "conferido": "2026-10-23"}
+ }
+}

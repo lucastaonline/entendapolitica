@@ -213,7 +213,7 @@
     if (p.exercicio) chips.push('<span class="chip amarelo"><span aria-hidden="true">🔑 </span>' + esc(EP.tr(p.exercicio, p.exercicio_en || p.exercicio)) + "</span>");
     return '<section class="perfil-topo" aria-labelledby="nome-pessoa"><div class="moldura">' + EP.av(p.foto, p.nome, null, true) + "</div><div>" +
       '<span class="cargo-p">' + cargoHtml(p) + (onde(p) ? " · " + esc(onde(p)) : "") + '</span><h1 id="nome-pessoa">' + EP.pt(esc(p.nome)) + "</h1>" +
-      (p.nomeCivil && EP.norm(p.nomeCivil) !== EP.norm(p.nome) ? '<p class="muted" style="margin:-4px 0 8px">' + EP.tr("Nome completo: ", "Full name: ") + esc(p.nomeCivil) + "</p>" : "") +
+      (p.nomeCivil && EP.norm(p.nomeCivil) !== EP.norm(p.nome) ? '<p class="muted" style="margin:-4px 0 8px">' + EP.tr("Nome completo: ", "Full name: ") + EP.pt(esc(p.nomeCivil)) + "</p>" : "") +
       (chips.length ? '<div class="chips">' + chips.join("") + "</div>" : "") +
       (p.fotoCredito ? '<p class="muted credito">' + EP.tr("Foto: ", "Photo: ") + (/licença/.test(p.fotoCredito) ? esc(EP.en ? p.fotoCredito.replace("licença", "license") : p.fotoCredito) : EP.pt(esc(p.fotoCredito))) + "</p>" : "") + "</div></section>";
   }
@@ -338,14 +338,14 @@
     var lista = pr.lista || [];
     var nAutor = lista.filter(function (x) { return x.papel === "autor"; }).length, nCo = lista.length - nAutor;
     if (!nAutor && nCo) filtro.papel = "coautor";
-    if (!lista.length || (p.tipo === "pres")) filtro.papel = "todas";
+    if (!lista.length || /^(pres|gov|pref)$/.test(p.tipo)) filtro.papel = "todas";
     var h = '<section class="secao-perfil" id="propostas" aria-labelledby="t-propostas"><h2 id="t-propostas"><span class="ic" aria-hidden="true">📜</span>' +
       EP.tr("O que " + ele(p) + " propôs", "What " + ele(p) + " proposed") + "</h2>" +
       '<p class="muted">' + escopoHtml(p, pr) + " " + (pr.fonte ? fonteBtn(pr.fonte, null, EP.tr("propostas", "proposals")) : "") + "</p>" + notaPresHtml(pr);
     if (!lista.length) {
       if (p.tipo !== "vp") h += '<div class="vazio"><span class="grande" aria-hidden="true">📭</span>' + EP.tr("Não encontramos propostas apresentadas nesse período.", "We found no proposals filed in this period.") + "</div>";
     } else {
-      var temPapel = p.tipo !== "pres";
+      var temPapel = !/^(pres|gov|pref)$/.test(p.tipo);  // o Executivo é sempre o autor das propostas que manda
       var nS = lista.filter(function (x) { return EP.en ? x.s_en : x.s; }).length;
       h += '<div class="nota-ia"><span aria-hidden="true">🤖</span><p>' + EP.tr(
         'As explicações em palavras simples são escritas por <b>inteligência artificial</b> a partir do texto oficial (a ementa), com regras para não puxar para nenhum lado. Como a IA pode errar, o texto oficial aparece sempre embaixo, com o link. <a href="imparcialidade.html#ia">Saiba mais</a>.',
@@ -623,10 +623,22 @@
       (EP.en ? " Committee names are official names in Portuguese." : "") + "</p>" +
       '<ul class="comissoes">' + p.comissoes.map(function (c) { return '<li class="chip neutro">' + EP.pt(esc(c.nome || c.sigla)) + (c.papel ? " · " + D.papel(c.papel) : "") + "</li>"; }).join("") + "</ul></section>";
   }
+  // texto em inglês que cita, entre aspas, nomes oficiais em português ("Veto a Projeto de Lei"): as citações ficam
+  // marcadas como português (leitor de tela e conferência de idioma)
+  function citacoesPt(txt) {
+    return String(txt).split(/("[^"]+"|“[^”]+”)/).map(function (s, k) {
+      return k % 2 && /[ãõçáéíóúâêôà]|\b(de|do|da|dos|das|ao|projeto|lei|veto|mensagem)\b/i.test(s) ?
+        esc(s.charAt(0)) + EP.pt(esc(s.slice(1, -1))) + esc(s.charAt(s.length - 1)) : esc(s);
+    }).join("");
+  }
   function executivoHtml(p) {
     var e = p.executivo;
     if (!e || (e.leisSancionadas == null && e.vetos == null)) return "";
-    var desde = ((e.periodo && e.periodo.inicio) || "2023").slice(0, 4);
+    var ini = (e.periodo && e.periodo.inicio) || "2023";
+    // começo do mandato (1º de janeiro): só o ano; quem assumiu depois: a data ("desde 4 de maio de 2026")
+    var desde = /^\d{4}(-01-01)?$/.test(ini) ? ini.slice(0, 4) : EP.dataLonga(ini);
+    var ultima = e.periodo && e.periodo.ultimaLei;
+    var comoContou = EP.en ? e.nota_en || e.obs_en : e.nota || e.obs;
     // quem aprova as leis e quem as assina: Congresso e presidente; Assembleia e governador; Câmara Municipal e prefeito
     var f = p.genero === "F";
     var casa = p.tipo === "gov" ? (p.uf === "DF" ? ["A Câmara Legislativa", "pela Câmara Legislativa", "a Câmara Legislativa", "the Legislative Chamber"] :
@@ -644,9 +656,13 @@
         mai(casa[3]) + " passes laws; " + chefe[2] + " signs them (sanction) or rejects them (veto), in whole or in part. " + mai(casa[3]) + " can override a veto.") + '</p><div class="grandes-n">' +
       (e.leisSancionadas != null ? '<div class="grande-n"><b>' + EP.num(e.leisSancionadas) + "</b><span>" + EP.tr("leis sancionadas desde " + desde, "laws signed since " + desde) + "</span></div>" : "") +
       (e.vetos != null ? '<div class="grande-n"><b>' + EP.num(e.vetos) + "</b><span>" + EP.tr("vetos (totais ou parciais) desde " + desde, "vetoes (full or partial) since " + desde) + "</span></div>" : "") +
-      "</div>" + '<p class="muted nota-contexto" style="margin-top:10px"><span aria-hidden="true">🦉 </span>' + EP.tr(
-        "Quase todo projeto aprovado " + casa[1] + " passa " + chefe[1] + ", venha de quem vier. Por isso, este número mostra o que " + casa[2] + " aprovou e " + chefe[0] + " assinou, e não o que " + chefe[0] + " propôs (isso está em \"O que " + ele(p) + " propôs\"). Vetar também é uma tarefa prevista " + regra[0] + ": o número, sozinho, não diz se as decisões foram boas ou ruins.",
-        "Almost every bill passed by " + casa[3] + " goes to " + chefe[2] + ", no matter who proposed it. So this number shows what " + casa[3] + " passed and " + chefe[2] + " signed, not what " + chefe[2] + " proposed (that is under \"What " + ele(p) + " proposed\"). Vetoing is also a task set by " + regra[1] + ": the number alone does not say whether the decisions were good or bad.") + "</p>" +
+      "</div>" + (e.leisSancionadas != null && ultima ? '<p class="muted" style="margin-top:8px">' + esc(EP.tr("A lei mais recente na fonte é de " + EP.dataLonga(ultima) + ".", "The most recent law in the source is from " + EP.dataLonga(ultima) + ".")) + "</p>" : "") +
+      '<p class="muted nota-contexto" style="margin-top:10px"><span aria-hidden="true">🦉 </span>' + (e.leisSancionadas != null ? EP.tr(
+        "Quase todo projeto aprovado " + casa[1] + " passa " + chefe[1] + ", venha de quem vier. Por isso, este número mostra o que " + casa[2] + " aprovou e " + chefe[0] + " assinou, e não o que " + chefe[0] + " propôs (isso está em \"O que " + ele(p) + " propôs\"). ",
+        "Almost every bill passed by " + casa[3] + " goes to " + chefe[2] + ", no matter who proposed it. So this number shows what " + casa[3] + " passed and " + chefe[2] + " signed, not what " + chefe[2] + " proposed (that is under \"What " + ele(p) + " proposed\"). ") : "") + EP.tr(
+        "Vetar também é uma tarefa prevista " + regra[0] + ": o número, sozinho, não diz se as decisões foram boas ou ruins.",
+        "Vetoing is also a task set by " + regra[1] + ": the number alone does not say whether the decisions were good or bad.") + "</p>" +
+      (comoContou ? '<details class="como-contou"><summary>' + EP.tr("Como contamos", "How we counted") + "</summary><p>" + (EP.en && !(e.nota_en || e.obs_en) ? D.ptHtml(comoContou) : EP.en ? citacoesPt(comoContou) : esc(comoContou)) + "</p></details>" : "") +
       (e.fonte ? '<p style="margin-top:10px">' + fonteBtn(e.fonte, null, EP.tr("leis e vetos", "laws and vetoes")) + "</p>" : "") + "</section>";
   }
   // ---------------------------------------------------------------- onde ver mais
@@ -824,6 +840,7 @@
     var o = document.getElementById("onde");
     o.removeAttribute("data-en");
     o.textContent = p.nome;
+    if (EP.en) o.setAttribute("lang", "pt-BR");
     ligaVoltar(p);
 
     var todas = coletarFontes(p);

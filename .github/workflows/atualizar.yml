@@ -34,14 +34,16 @@ jobs:
         id: tse
         run: echo "chave=$(python -c 'import sys; sys.path.insert(0, "scripts"); import tse; print(tse.chave_cache())')" >> "$GITHUB_OUTPUT"
 
-      - uses: actions/cache@v4
+      # os caches são lidos aqui e salvos no fim, mesmo se alguma etapa falhar ou o tempo acabar ("if: always()"):
+      # assim o que já foi baixado não se perde
+      - uses: actions/cache/restore@v4
         with:
           path: .cache/tse
           key: ${{ steps.tse.outputs.chave }}
           restore-keys: tse-
 
       # consultas do Senado e do Executivo (sem isso, cada rodada leva ~30 min)
-      - uses: actions/cache@v4
+      - uses: actions/cache/restore@v4
         with:
           path: |
             .cache/senado
@@ -51,7 +53,7 @@ jobs:
 
       # Câmara: histórico das leis (não muda), gastos e consultas por deputado (~70 MB).
       # Os arquivos anuais grandes (~1,5 GB) baixam em ~2 min e não entram no cache.
-      - uses: actions/cache@v4
+      - uses: actions/cache/restore@v4
         with:
           path: |
             .cache/camara/tramitacoes
@@ -61,7 +63,7 @@ jobs:
           restore-keys: camara-
 
       # o resto: IBGE, votações, Assembleias Legislativas e Câmaras Municipais (cada Casa na sua pasta)
-      - uses: actions/cache@v4
+      - uses: actions/cache/restore@v4
         with:
           path: |
             .cache
@@ -102,13 +104,16 @@ jobs:
         continue-on-error: true
         timeout-minutes: 40
 
+      # a IA responde devagar: no máximo 60 min por dia (o que faltar fica para o dia seguinte)
       - name: Explicações simples (português e inglês)
         run: python scripts/simplificar.py
         continue-on-error: true
+        timeout-minutes: 70
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           LIMITE: "140"
+          MINUTOS: "60"
 
       - name: Juntar tudo
         run: python scripts/montar.py
@@ -130,3 +135,41 @@ jobs:
             done
             exit 1
           fi
+
+      - name: Guardar o cache do TSE
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: .cache/tse
+          key: ${{ steps.tse.outputs.chave }}
+
+      - name: Guardar o cache do Senado e do Executivo
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            .cache/senado
+            .cache/executivo
+          key: senado-${{ github.run_id }}
+
+      - name: Guardar o cache da Câmara
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            .cache/camara/tramitacoes
+            .cache/camara/cota
+            .cache/camara/api
+          key: camara-${{ github.run_id }}
+
+      - name: Guardar o resto do cache
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            .cache
+            !.cache/tse
+            !.cache/senado
+            !.cache/executivo
+            !.cache/camara
+          key: outros-${{ github.run_id }}

@@ -394,6 +394,7 @@ def main() -> None:
         salvar_json(ex_arq, sem_mudar_data(ex, ex_arq))
 
     # ---------- estados: txt_en na eleição de 2026
+    diarios = ((ler_json(DADOS / "manual" / "diarios-oficiais.json") or {}).get("estados")) or {}
     for arq in sorted((DADOS / "estados").glob("*.json")):
         e = ler_json(arq)
         if not e:
@@ -409,6 +410,13 @@ def main() -> None:
                     p["extras"] = True
                 else:
                     p.pop("extras", None)
+        # Diário Oficial do estado (dados/manual/diarios-oficiais.json): o quadro "Onde ver mais" do perfil do governador
+        g, dio = e.get("governador"), diarios.get(e.get("uf") or arq.stem)
+        if isinstance(g, dict):
+            if dio and dio.get("url"):
+                g["diarioOficial"] = {k: dio[k] for k in ("nome", "url") if dio.get(k)}
+            else:
+                g.pop("diarioOficial", None)
         for m in (e.get("deputadosEstaduais") or {}).get("membros", []):
             if m.get("eleicao2026"):
                 m["eleicao2026"] = com_en(m["eleicao2026"])

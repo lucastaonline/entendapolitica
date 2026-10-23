@@ -287,9 +287,9 @@ kbd { display: inline-block; min-width: 1.6em; text-align: center; border: 2px s
 .links-onde .ic-onde { font-size: 1.3rem; line-height: 1.3; flex-shrink: 0; }
 .links-onde a { font-weight: 800; overflow-wrap: anywhere; }
 .links-onde small { display: block; color: var(--muted); font-size: .86rem; margin-top: 2px; }
-.lai { margin-top: 12px; }
-.lai summary { cursor: pointer; font-weight: 800; padding: 6px 2px; }
-.lai p { margin: 6px 0 0; font-size: .92rem; }
+.lai, .como-contou { margin-top: 12px; }
+.lai summary, .como-contou summary { cursor: pointer; font-weight: 800; padding: 6px 2px; }
+.lai p, .como-contou p { margin: 6px 0 0; font-size: .92rem; }
 
 /* alto contraste */
 html.alto-contraste { --bg: #fff; --card: #fff; --ink: #000; --muted: #1a1a1a; --line: #000; --brand: #002a6b; --creme-forte: #fff; --sombra: none; }

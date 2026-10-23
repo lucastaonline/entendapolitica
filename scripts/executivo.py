@@ -297,6 +297,11 @@ def leis_e_vetos() -> dict:
                 f"{len(promulgadas)} leis promulgadas depois de o Congresso derrubar um veto total. Inclui as poucas "
                 "leis e vetos assinados pelo vice-presidente quando estava no exercício da Presidência. "
                 "Veto parcial = só uma parte da lei foi barrada; veto total = a lei inteira foi barrada."),
+        "obs_en": (f"Ordinary and complementary laws signed by the Presidency since {extenso(INICIO)[1]} "
+                   f"({leis['LEI']} ordinary + {leis['LCP']} complementary = {n_leis}), not counting the "
+                   f"{len(promulgadas)} laws promulgated after Congress overrode a full veto. This includes the few "
+                   "laws and vetoes signed by the Vice President while acting as President. "
+                   "Partial veto = only part of the law was blocked; full veto = the whole law was blocked."),
         "leisPromulgadasAposVetoTotal": promulgadas,
         "fonte": [
             fonte("Senado Federal", "Dados Abertos: legislação federal por ano (leis ordinárias)",

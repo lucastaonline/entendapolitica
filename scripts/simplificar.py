@@ -7,6 +7,7 @@ Provedor (o primeiro disponível):
 Variáveis opcionais:
   SIMPLIFICAR_MODELO  (padrão: openai/gpt-4.1-mini no GitHub Models; gpt-4.1-mini na OpenAI)
   LIMITE              máximo de pedidos nesta execução (padrão 140, a cota diária grátis do GitHub Models)
+  MINUTOS             tempo máximo desta execução, em minutos (padrão 0 = sem limite): o que faltar fica para a próxima
   LOTE                propostas por pedido (padrão 20)
   PAUSA               segundos entre pedidos (padrão 4)
 
@@ -219,6 +220,8 @@ def main() -> None:
     lote_n = int(os.environ.get("LOTE", "20"))
     limite = int(os.environ.get("LIMITE", "140"))
     pausa = float(os.environ.get("PAUSA", "4"))
+    prazo = float(os.environ.get("MINUTOS", "0")) * 60
+    t0 = time.monotonic()
     if a.ids:
         ordem = [i for i in a.ids.split(",") if i in props]
     else:
@@ -233,6 +236,9 @@ def main() -> None:
         for i in range(0, len(faltam), lote_n):
             if pedidos >= limite:
                 log("limite de pedidos desta execução atingido")
+                break
+            if prazo and time.monotonic() - t0 > prazo:
+                log("limite de tempo desta execução atingido: o resto fica para a próxima")
                 break
             lote = faltam[i: i + lote_n]
             itens = pedir(url, cab, modelo, lote)

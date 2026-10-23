@@ -1,20 +1,20 @@
 {
  "sobre": "Canal oficial de pedido de informação (Lei de Acesso à Informação, Lei nº 12.527/2011) de Casas cujo coletor não traz esse endereço. Cada endereço foi aberto num navegador e conferido na página oficial da própria Casa. scripts/montar.py leva o 'sic' para o infoCasa (Assembleias e Câmaras com lista oficial) e para o 'onde' da cidade (dados/cidades/<UF>/<IBGE>.json).",
- "atualizado": "2026-10-24",
+ "atualizado": "2026-10-23",
  "assembleias": {
-  "RJ": {"casa": "Alerj", "sic": "https://transparencia.alerj.rj.gov.br/section/report/57", "conferido": "2026-10-24", "nota": "Pedido pelo Alô Alerj (0800-022-0008 ou chat no site), segundo a página de acesso à informação do Portal da Transparência da Alerj."},
-  "PA": {"casa": "Alepa", "sic": "https://ouvidoria.alepa.pa.gov.br/", "conferido": "2026-10-24"},
-  "GO": {"casa": "Alego", "sic": "https://transparencia.al.go.leg.br/ouvidoria", "conferido": "2026-10-24"},
-  "MS": {"casa": "Alems", "sic": "https://transparencia2.al.ms.gov.br/home/sic", "conferido": "2026-10-24"},
-  "MT": {"casa": "ALMT", "sic": "https://www.al.mt.gov.br/transparencia/pedido-informacao/", "conferido": "2026-10-24", "nota": "Pede o login na Conta ALMT."}
+  "RJ": {"casa": "Alerj", "sic": "https://transparencia.alerj.rj.gov.br/section/report/57", "conferido": "2026-10-23", "nota": "Pedido pelo Alô Alerj (0800-022-0008 ou chat no site), segundo a página de acesso à informação do Portal da Transparência da Alerj."},
+  "PA": {"casa": "Alepa", "sic": "https://ouvidoria.alepa.pa.gov.br/", "conferido": "2026-10-23"},
+  "GO": {"casa": "Alego", "sic": "https://transparencia.al.go.leg.br/ouvidoria", "conferido": "2026-10-23"},
+  "MS": {"casa": "Alems", "sic": "https://transparencia2.al.ms.gov.br/home/sic", "conferido": "2026-10-23"},
+  "MT": {"casa": "ALMT", "sic": "https://www.al.mt.gov.br/transparencia/pedido-informacao/", "conferido": "2026-10-23", "nota": "Pede o login na Conta ALMT."}
  },
  "camaras": {
-  "2611606": {"casa": "Câmara Municipal do Recife", "sic": "https://e-sic.recife.pe.leg.br/e-sic/view/publico/inicio.xhtml", "conferido": "2026-10-24"},
-  "2704302": {"casa": "Câmara Municipal de Maceió", "sic": "https://www.maceio.al.leg.br/transparencia/esic/", "conferido": "2026-10-24"},
-  "5002704": {"casa": "Câmara Municipal de Campo Grande", "sic": "https://ouvidoria.camara.ms.gov.br/", "conferido": "2026-10-24"},
-  "4205407": {"casa": "Câmara Municipal de Florianópolis", "sic": "https://www.cmf.sc.gov.br/sic/formulario", "conferido": "2026-10-24"},
-  "1600303": {"casa": "Câmara Municipal de Macapá", "sic": "https://www.macapa.ap.leg.br/transparencia/sic", "conferido": "2026-10-24"},
-  "2800308": {"casa": "Câmara Municipal de Aracaju", "sic": "https://falabr.cgu.gov.br/web/SE/Aracaju", "conferido": "2026-10-24", "nota": "A página de Ouvidoria da Câmara (aracaju.se.leg.br/ouvidoria) manda para o Fala.BR, a plataforma oficial da CGU."},
-  "1721000": {"casa": "Câmara Municipal de Palmas", "sic": "https://acessoainformacao.palmas.to.leg.br/cidadao/informacao/sic", "conferido": "2026-10-24"}
+  "2611606": {"casa": "Câmara Municipal do Recife", "sic": "https://e-sic.recife.pe.leg.br/e-sic/view/publico/inicio.xhtml", "conferido": "2026-10-23"},
+  "2704302": {"casa": "Câmara Municipal de Maceió", "sic": "https://www.maceio.al.leg.br/transparencia/esic/", "conferido": "2026-10-23"},
+  "5002704": {"casa": "Câmara Municipal de Campo Grande", "sic": "https://ouvidoria.camara.ms.gov.br/", "conferido": "2026-10-23"},
+  "4205407": {"casa": "Câmara Municipal de Florianópolis", "sic": "https://www.cmf.sc.gov.br/sic/formulario", "conferido": "2026-10-23"},
+  "1600303": {"casa": "Câmara Municipal de Macapá", "sic": "https://www.macapa.ap.leg.br/transparencia/sic", "conferido": "2026-10-23"},
+  "2800308": {"casa": "Câmara Municipal de Aracaju", "sic": "https://falabr.cgu.gov.br/web/SE/Aracaju", "conferido": "2026-10-23", "nota": "A página de Ouvidoria da Câmara (aracaju.se.leg.br/ouvidoria) manda para o Fala.BR, a plataforma oficial da CGU."},
+  "1721000": {"casa": "Câmara Municipal de Palmas", "sic": "https://acessoainformacao.palmas.to.leg.br/cidadao/informacao/sic", "conferido": "2026-10-23"}
  }
 }

@@ -11,7 +11,11 @@ Mesma identidade visual do [Entenda o 2º turno](https://entendaosegundoturno.ve
 3. **A política do meu estado** (`estado.html`): a pessoa escolhe o estado num mapa 3D com o formato real de cada estado (malha do IBGE; os estados pequenos têm a sigla num selo fora deles, ligado por uma linha) ou digitando o nome. Mostra governador e vice, os senadores e deputados federais do estado e os deputados estaduais. No fim, um campo leva para a página da cidade.
 4. **A política da minha cidade** (`cidade.html`): a pessoa digita o nome da cidade (as 5.569 do Brasil, com o estado ao lado para desempatar) e vê prefeito, vice e vereadores, além do que cada um faz. Brasília e Fernando de Noronha têm explicação própria (não têm prefeitura comum). Endereço: `cidade.html?ibge=<código IBGE>`; os endereços antigos `estado.html?uf=XX&cidade=<IBGE>` levam para lá.
 
-Cada pessoa tem uma página (`pessoa.html?id=...`) com ficha, propostas (com explicação simples + texto oficial + link da fonte), situação de cada proposta, votações, gastos e eleições. O botão **Voltar** leva para a página de onde a pessoa veio (o Brasil, o estado, a cidade ou a busca), guardada nesta aba pelo `js/comum.js` (`EP.gravaVolta`/`EP.leVolta`); se ela veio direto de lá, usa o histórico do navegador, e a lista reaparece como estava. Aberto por link direto, vai para a lista do cargo.
+Nas páginas do Brasil, do estado e da cidade, o campo **Ver outro mandato** mostra quem foi **eleito** em cada mandato anterior, segundo o TSE: desde 1995 no Brasil e nos estados, desde 1997 nas cidades. O padrão continua sendo o mandato de hoje; o passado tem endereço próprio (`brasil.html?mandato=2019`, `estado.html?uf=BA&mandato=2019`, `cidade.html?ibge=2927408&mandato=2021`) e uma faixa avisando, em texto, que é o passado.
+
+Cada pessoa tem uma página (`pessoa.html?id=...`) com ficha, propostas (com explicação simples + texto oficial + link da fonte), situação de cada proposta, votações, gastos e eleições. O botão **Voltar** leva para a página de onde a pessoa veio (o Brasil, o estado, a cidade, uma votação ou a busca), guardada nesta aba pelo `js/comum.js` (`EP.gravaVolta`/`EP.leVolta`); se ela veio direto de lá, usa o histórico do navegador, e a lista reaparece como estava. Aberto por link direto, vai para a lista do cargo.
+
+**Votações** (`votacoes.html`): todas as votações do Plenário em que o voto de cada um fica registrado (nominais), na Câmara e no Senado, desde o começo da legislatura (fevereiro de 2023), da mais nova para a mais antiga, com filtros (Casa, ano, tipo, resultado) e busca. Cada votação tem a sua página (`votacao.html?casa=camara&id=<id da Câmara>` ou `?casa=senado&id=<código do Senado>`): o que foi votado (descrição oficial e a ementa da proposta), o resultado com o placar e um plenário 3D em que cada cadeira é uma pessoa (pintada pelo voto), a regra para aprovar quando ela é clara (PEC, lei complementar, lei comum, urgência do art. 155 da Câmara), como cada partido votou (do partido com mais gente para o com menos, só contagem) com a orientação que a liderança publicou, a lista completa de orientações e quem votou o quê (filtros por voto, partido, estado e nome). Na página do Brasil, o bloco "Como o Congresso votou" mostra as votações mais recentes do texto principal (uma por proposta). No perfil, "Como votou" tem filtro por tipo e cada votação leva para a página dela.
 
 Cada Casa (Senado, Câmara, Assembleia, Câmara Municipal) tem um **plenário 3D por partido**: cada fatia é um partido, do maior para o menor, com a sigla em cima (as que não cabem aparecem ao passar o mouse). Passar o mouse num partido (na lista, numa cadeira ou na sigla), ou chegar nele com o Tab, acende as cadeiras dele em amarelo; tocar ou clicar mostra só quem é dele.
 
@@ -38,7 +42,7 @@ O site tem versão em inglês para quem é de fora do Brasil (`?lang=en`; a esco
 2. **Fase 2:** propostas dos deputados estaduais, Assembleia por Assembleia.
 3. **Fase 3:** vereadores das capitais e das Câmaras com dados abertos (ex.: SAPL/Interlegis).
 
-Mandatos: o site mostra **quem está no cargo hoje** e marca quem foi **eleito/reeleito em 2026**. Quando os novos tomarem posse (jan./fev. de 2027), as listas trocam.
+Mandatos: o site mostra **quem está no cargo hoje** e marca quem foi **eleito/reeleito em 2026**. As listas trocam sozinhas no dia da posse de quem foi eleito (presidente em 5/1/2027 e governadores em 6/1/2027, pela Emenda Constitucional 111/2021; Congresso em 1º/2/2027; prefeitos e vereadores em 1º/1/2029). Qual é o mandato de hoje sai das datas de posse (`scripts/mandatos.py`, a mesma regra para os coletores e para o navegador), nunca de um ano escrito no código. Os mandatos anteriores (quem foi eleito em cada um, segundo o TSE) ficam no campo **Ver outro mandato**.
 
 ## Regras de imparcialidade (valem para tudo)
 
@@ -60,6 +64,9 @@ brasil.html           política do Brasil (lê dados/executivo.json, dados/senad
 estado.html           política do meu estado (lê dados/mapa-brasil.json, dados/estados/UF.json e dados/cidades/UF.json)
 cidade.html           política da minha cidade (lê dados/cidades.json e dados/cidades/UF/IBGE.json)
 pessoa.html           perfil de uma pessoa (lê dados/pessoas/<id>.json e dados/votacoes/<casa>.json)
+votacoes.html         todas as votações nominais da Câmara e do Senado (filtros por Casa, ano, tipo e resultado; busca)
+votacao.html          uma votação: o que foi votado, resultado com plenário 3D, como cada partido votou, orientações e quem votou o quê
+404.html              endereço não encontrado (a Vercel usa sozinha), com as 4 portas
 imparcialidade.html   como cuidamos da imparcialidade
 dados.html            de onde vêm os dados, com que frequência são atualizados e os limites
 css/base.css          visual comum (cores, botões, cartões, janela) + acessibilidade (contraste, movimento, espaçamento)
@@ -67,15 +74,27 @@ css/tres.css          peças 3D que vieram do site do 2º turno (urna, cubos, fo
 css/tres-politica.css peças 3D novas (Congresso, Três Poderes, níveis, escola, torre, tribunal, palanque, escada...)
 css/mapa.css          o mundo 3D do mapa (chão, lotes, placas, câmera)
 css/entenda.css       as aulas (slides em 3D)
+css/votacoes.css      as duas páginas de votações e o bloco "Como o Congresso votou" do Brasil
+css/historico.css     a faixa "Você está vendo o passado" e o campo de mandatos
 js/comum.js           idioma, acessibilidade, janela, fontes, ouvir, Libras, formatação, listas com busca (EP.combo), compartilhar
 js/casa.js            monta uma Casa (Senado, Câmara, Assembleia, Câmara Municipal): plenário 3D com fatias e siglas por partido, filtros e lista de cartões
 js/brasil.js, js/estado.js, js/cidade.js, js/pessoa.js   as páginas do Brasil, do estado, da cidade e de cada pessoa
+js/votacoes.js        ajudas comuns das votações (EP.VOT), a lista de votações e o bloco do Brasil (#votos-recentes)
+js/votacao.js         a página de uma votação
+js/historico.js       mandatos anteriores: o campo "Ver outro mandato" e a página do passado (Brasil, estado e cidade)
 js/tres.js, js/tres-politica.js   montam as peças 3D (cada modelo tem modo "cena" e modo "mundo")
 js/mapa3d.js          monta o mapa 3D, câmera (voar até um lugar), girar, zoom, lista acessível
 js/entenda.js         carrega o conteúdo, liga o mapa e as aulas (especificação dos slides no topo do arquivo)
 conteudo/entenda/     texto das 9 paradas em português; conteudo/entenda/en/ em inglês
-dados/                tudo o que os scripts geram (JSON); não edite à mão, exceto dados/manual/
-scripts/              coletores em Python (só biblioteca padrão + Pillow)
+dados/                tudo o que os scripts geram (JSON); não edite à mão, exceto dados/manual/. dados/historico/ é feito por scripts/historico.py, que roda à mão
+scripts/              coletores em Python (só biblioteca padrão + Pillow):
+  camara.py, senado.py, executivo.py, tse.py   Câmara, Senado, presidente e vice, TSE e IBGE (todo dia)
+  votacoes.py         categoria, placar, quórum e orientações de cada votação; grava dados/votacoes/<casa>/<id>.json (chamado pelo camara.py e pelo senado.py)
+  legislativos.py     roda os coletores das Assembleias (scripts/assembleias/<uf>.py) e das Câmaras Municipais (scripts/camaras/c<IBGE>.py)
+  regional.py         ajudas comuns desses coletores (formato dos arquivos, casar cada pessoa com o TSE)
+  mandatos.py         datas de posse e qual mandato está em curso em cada data (a regra da "virada" de mandato)
+  simplificar.py, montar.py   explicações simples (IA) e a junção final (todo dia)
+  historico.py, mapa.py       mandatos anteriores e mapa do Brasil (à mão)
 .github/workflows/    atualização automática diária
 testes/               capturas de tela, auditoria de acessibilidade e amostras
 ```
@@ -88,20 +107,26 @@ Para ver no computador: `python -m http.server 8770` dentro da pasta e abra http
 - `python testes/acessibilidade.py brasil.html "brasil.html?lang=en" [--mobile]` e `--aulas` (todos os slides das 9 paradas, nos 2 idiomas): auditoria axe-core (WCAG 2.2 AA). Meta: 0 problemas.
 - `python testes/verifica_texto.py "estado.html?uf=BA&lang=en" ...`: procura "undefined"/"null" e português solto na versão em inglês.
 - `python testes/interacao.py`: teclado, busca, listas com busca (estado, cidade, filtros), página da cidade, 4 portas, filtros, mapa e menu de acessibilidade.
+- `python testes/interacao_votacoes.py`: votações (lista, uma votação, bloco do Brasil e "Como votou" do perfil): teclado, filtros, "Mostrar mais" com o foco, números que batem com os dados, inglês, 320 px e axe-core depois de rolar e clicar.
+- `python testes/interacao_historico.py`: mandatos anteriores (campo pelo teclado, páginas do passado no Brasil, estado e cidade, "Voltar para hoje", cidade que ainda não existia, virada de mandato com o relógio adiantado).
 - `python testes/gerar_imagens.py`: gera os ícones e a imagem de compartilhamento (`testes/og.html` → `img/compartilhar.jpg`).
 - Observação: as fotos do TSE não carregam no navegador sem janela dos testes (o firewall do TSE barra); num navegador normal, carregam.
 
 ## Como os dados são atualizados
 
 `.github/workflows/atualizar.yml` roda todo dia às 6h (Brasília), nesta ordem:
-1. `scripts/camara.py` (Câmara), `scripts/senado.py` (Senado), `scripts/executivo.py` (presidente e vice), `scripts/tse.py` (TSE e IBGE: estados, cidades, eleições, bens, busca);
+1. `scripts/camara.py` (Câmara), `scripts/senado.py` (Senado), `scripts/executivo.py` (presidente e vice), `scripts/tse.py` (TSE e IBGE: estados, cidades, eleições, bens, busca) e `scripts/legislativos.py` (Assembleias Legislativas e Câmaras Municipais com dados abertos; se o site de uma Casa estiver fora do ar, fica a lista da última rodada que deu certo). O `camara.py` e o `senado.py` também gravam um arquivo por votação em `dados/votacoes/<casa>/` (com `scripts/votacoes.py`; para refazer só as votações a partir do que já foi baixado: `python scripts/votacoes.py --cache` e depois `python scripts/montar.py`);
 2. `scripts/simplificar.py`: escreve, com IA, a explicação simples (português e inglês) das propostas que ainda não têm, a partir da ementa oficial (o texto oficial aparece sempre ao lado). Usa o GitHub Models com o token do próprio Actions (grátis, cerca de 2.800 propostas por dia) ou uma chave da OpenAI no segredo `OPENAI_API_KEY` (mais rápido). Ordem: rodízio por pessoa (a cada rodada, cada político ganha a explicação da sua proposta mais nova que ainda falta), para todo mundo avançar no mesmo ritmo, sem prioridade para quem governa. Um programa confere cada explicação antes de publicar (no máximo 35 palavras em português e 45 em inglês, palavras de opinião proibidas, números e trechos entre aspas que precisam existir na ementa); a que for recusada 2 vezes fica só com o texto oficial (`dados/simples-recusadas.json`);
-3. `scripts/montar.py`: junta tudo (TSE nos perfis, explicações simples, textos em inglês da eleição de 2026);
+3. `scripts/montar.py`: junta tudo (TSE nos perfis, explicações simples nos perfis e nas votações, textos em inglês da eleição de 2026, listas oficiais das Assembleias e Câmaras nas páginas do estado e da cidade, sitemap);
 4. faz commit só do que mudou de verdade (datas de consulta não contam) e a Vercel publica sozinha.
+
+**Troca de mandato.** Ninguém precisa mexer no código quando um mandato acaba: `scripts/mandatos.py` sabe a data de posse de cada cargo (presidente em 5/1 e governadores em 6/1 a partir de 2027, pela EC 111/2021; Congresso em 1º/2; prefeitos e vereadores em 1º/1) e os coletores perguntam a ele qual mandato está em curso. No dia da posse, presidente, vice, governadores, deputados estaduais e as legislaturas da Câmara e do Senado trocam sozinhos, e os selos "Eleito em 2026" saem. As pesquisas à mão dizem de qual mandato são (`"eleicao": 2022` em `governadores.json`, `"eleicao": 2024` em `prefeitos.json`, `"mandatoInicio"` em `ministros.json`): quando um mandato novo começa, a de governadores deixa de valer (o site mostra quem ganhou, com "aConfirmar") e a de ministros ganha um aviso, até serem refeitas. Para as eleições municipais de 2028, `tse.py` ainda precisa aprender o ano novo (`ORDINARIAS`, `ID_DIVULGA` e a leitura de 2024).
 
 O mapa do Brasil da página do estado (`dados/mapa-brasil.json`: o contorno real de cada estado, da malha oficial do IBGE, já desenhado, e o lugar da sigla) é feito por `scripts/mapa.py`. O contorno dos estados quase nunca muda, então ele não roda todo dia: rode à mão se o IBGE mudar a malha.
 
-Correções à mão (sempre com fonte): `dados/manual/governadores.json`, `dados/manual/ministros.json`, `dados/manual/prefeitos.json` (quando quem está no cargo hoje não é quem o TSE mostra: morte, renúncia, cassação).
+Os mandatos anteriores (`dados/historico/`) são feitos por `scripts/historico.py`, a partir dos dados abertos do TSE (candidaturas de 1994 a 2026 e o resultado de 1990, para o Senado de 1995 a 1998). O passado não muda, então ele **não roda todo dia**: rode à mão (`python scripts/historico.py`, uns 40 s com o cache; na primeira vez baixa uns 650 MB para `.cache/tse/`). Rode de novo quando o resultado de uma eleição fechar (ex.: depois do 2º turno de 2026): o mandato novo entra sozinho no índice e, no dia da posse, o de antes vira passado.
+
+Correções à mão (sempre com fonte): `dados/manual/governadores.json`, `dados/manual/ministros.json`, `dados/manual/prefeitos.json` (quando quem está no cargo hoje não é quem o TSE mostra: morte, renúncia, cassação) e `dados/manual/presidentes.json` (presidente e vice dos mandatos anteriores: só o que o TSE não tem, como o vice de 1994 e 1998 e o 2º turno de 2006, e o que mudou durante um mandato, como em 2016).
 
 ---
 
@@ -187,13 +212,16 @@ Todo bloco de informação leva uma `fonte` (ou uma lista `fontes`):
       }
     ]
   },
-  "gastos": { "ano": 2025, "total": 412345.67, "porTipo": [ { "tipo": "Passagens aéreas", "valor": 123.4 } ], "mandatoTotal": 1234567.89, "fonte": {} },
+  "gastos": { "ano": 2025, "total": 412345.67, "porTipo": [ { "tipo": "Passagens aéreas", "valor": 123.4 } ], "mandatoTotal": 1234567.89, "desde": "2023-02", "fonte": {} },
   "votacoes": {
     "escopo": "Votações com voto de cada um (nominais) no Plenário da Câmara desde fevereiro de 2023",
+    "escopo_en": "Roll-call votes (where each member's vote is recorded) in the full Chamber of Deputies since February 2023.",
     "resumo": { "total": 300, "Sim": 150, "Não": 120, "Abstenção": 5, "Obstrução": 20, "Outro": 5 },
     "fonte": {},
     "arquivo": "dados/votacoes/camara.json",   // onde estão os detalhes de cada votação (compartilhados por todos)
-    "votos": [ ["2345678-123", "Sim"], ["2345678-120", "Não"] ]   // [chave no arquivo, voto], da mais nova para a mais antiga
+    "votos": [ ["2345678-123", "Sim", "Não", "f"], ["2345678-120", "Não"] ]   // [chave no arquivo, voto, orientação, de quem]: os 2 últimos
+                                                                            // só quando o partido da pessoa na época recebeu orientação publicada
+                                                                            // (p = do partido, f = da federação, b = do bloco); da mais nova para a mais antiga
   },
   "fontes": [],
   "atualizado": "2026-10-15"
@@ -202,13 +230,18 @@ Todo bloco de informação leva uma `fonte` (ou uma lista `fontes`):
 
 Campos sem informação: `null` (nunca invente). A lista de propostas vem **da mais nova para a mais antiga**.
 
-**Votações (`dados/votacoes/camara.json` e `dados/votacoes/senado.json`).** O que foi votado é igual para todos os 513 (ou 81), então fica num arquivo só e o perfil guarda apenas a chave e o voto da pessoa:
+**Votações.** O que foi votado é igual para todos os 513 (ou 81), então fica num catálogo por Casa, e o perfil guarda só a chave e o voto da pessoa. Cada votação tem também um arquivo próprio, com o voto de todos.
+
+`dados/votacoes/camara.json` e `dados/votacoes/senado.json` (catálogo, da mais nova para a mais antiga):
 
 ```jsonc
 {
   "votacoes": {
-    "2345678-123": { "data": "2024-05-02", "propostaId": "camara:2345678", "proposta": "PL 1234/2023",
-                     "descricao": "Descrição oficial do que foi votado", "resultado": "Aprovado", "url": "https://..." }
+    "2345678-123": { "data": "2024-05-02", "hora": "20:56", "propostaId": "camara:2345678", "proposta": "PL 1234/2023",
+                     "descricao": "Descrição oficial do que foi votado", "resultado": "Aprovado",   // "Aprovado" | "Rejeitado" | null
+                     "categoria": "principal",                                                      // principal | mudanca | procedimento | outra
+                     "placar": { "Sim": 300, "Não": 120, "Abstenção": 2, "Obstrução": 0, "Outro": 1, "total": 423 },
+                     "url": "https://..." }   // página da proposta (Câmara) ou das votações da matéria (Senado)
   },
   "legenda": { "NCom": "Não Compareceu" },   // só no Senado: o que quer dizer cada código de voto
   "fonte": {}, "atualizado": "2026-10-15"
@@ -216,6 +249,40 @@ Campos sem informação: `null` (nunca invente). A lista de propostas vem **da m
 ```
 
 Chaves: Câmara = id da votação na Câmara (`2345678-123`); Senado = `senado-vot:<código>`. Votações secretas do Senado (escolha de autoridades) não entram, porque o voto de cada um não é divulgado.
+
+`dados/votacoes/<casa>/<id>.json` (uma votação; `id` = id da Câmara, ex. `2236186-60`, ou o código do Senado, ex. `7107`). É o que `votacao.html?casa=<casa>&id=<id>` abre:
+
+```jsonc
+{
+  "id": "2236186-60", "chave": "2236186-60", "casa": "camara",
+  "data": "2026-10-14", "hora": "20:56",       // Câmara: hora do registro do resultado; Senado: fim da votação (null se não publicada)
+  "proposta": { "sigla": "PLP 281/2019", "propostaId": "camara:2236186", "url": "https://www.camara.leg.br/propostas-legislativas/2236186",
+                "ementa": "Texto oficial", "s": "Explicação simples", "s_en": "..." },   // s/s_en só se existirem em dados/simples/
+  "descricao": "Rejeitada a Subemenda Substitutiva...", "resultado": "Rejeitado", "categoria": "principal",
+  "placar": { "Sim": 252, "Não": 176, "Abstenção": 0, "Obstrução": 0, "Outro": 1, "total": 429 },   // contado a partir de "votos"
+  "quorum": { "regra": "plp", "minimoSim": 257 },    // pec | plp | urgencia155 (com minimoSim) | maioria (com presentes) | null
+  "orientacoes": [ { "lideranca": "Bl UniPpPsd...", "orientacao": "Sim", "tipo": "bloco", "partidos": ["PP", "PSD", "UNIÃO"] } ],
+     // orientacao: Sim | Não | Abstenção | Obstrução | Liberado (o Senado escreve "LIVRE") | null (não orientou)
+     // tipo: partido | federacao | bloco | governo | maioria | minoria | oposicao | bancada (Bancada Feminina do Senado)
+     // partidos (só partido/federação/bloco): os partidos desta votação que dá para saber pelo nome publicado
+  "orientacaoPartidos": { "PL": { "orientacao": "Sim", "lideranca": "PL", "tipo": "partido" } },  // a que vale para cada partido
+  "votos": [ ["dep-204379", "Nome", "MDB", "AP", "Sim"] ],   // [pessoaId, nome, partido na época, UF, voto], em ordem alfabética;
+                                                              // inclui quem não está mais no mandato
+  "legenda": { "NCom": "Não Compareceu" },    // Senado: os códigos de voto usados nesta votação (Câmara: null)
+  "presidente": "Davi Alcolumbre",            // Senado: quem presidia a sessão (Câmara: null; lá quem preside aparece com "Artigo 17")
+  "aviso": { "oficial": { "Sim": 35, "Não": 375 }, "contado": { "Sim": 315, "Não": 87 } },   // placar publicado ≠ soma dos votos (raro)
+  "url": "https://...",                       // Câmara: a sessão no portal (lá se escolhe a votação na lista); Senado: votações da matéria
+  "fontes": [], "atualizado": "2026-10-23"
+}
+```
+
+Na Câmara, a lista de votos traz só quem registrou voto (os ausentes não aparecem: "não registraram voto" = 513 − total). No Senado, traz os 81 da época, com códigos para quem não votou (NCom, MIS, LS, AP, P-NRV, Presidente...).
+
+**Categoria** (regra fixa, `scripts/votacoes.py`, a partir da descrição oficial; olha o que vem depois de "Aprovado(a)", "Rejeitado(a)", "Mantido", "Votação nominal do(a)"): `procedimento` = requerimentos (urgência, adiamento, retirada de pauta, encerramento da discussão, preferência, quebra de interstício, calendário especial, inclusão) e recursos para levar ao Plenário (RICD arts. 117, 132 § 2º, 154, 155; RISF arts. 279 e 336); `outra` = parecer sobre os pressupostos de medida provisória (CF art. 62 § 5º), casos sobre o mandato de um parlamentar (sustação de ação penal, medida cautelar, representação) e questões de ordem; `mudanca` = emendas, subemendas, destaques, "mantido/suprimido o texto", artigos, parágrafos e expressões (RICD arts. 118 e 161; RISF art. 312); `principal` = o projeto, a PEC (cada turno), a medida provisória, o projeto de lei de conversão, o substitutivo (RICD art. 118 § 4º) e a redação final (RICD art. 195 § 1º). O resto fica em `outra`. Conferir: `python scripts/votacoes.py --cache --revisar` (grava `.cache/votacoes/categorias.txt`).
+
+**Quórum** (só quando a regra é clara): `pec` = 3/5 em dois turnos (CF art. 60 § 2º: 308 deputados, 49 senadores); `plp` = maioria absoluta (CF art. 69: 257 / 41); `urgencia155` = urgência do art. 155 do Regimento da Câmara (257); `maioria` = projeto de lei, medida provisória ou lei de conversão: maioria dos votos, com a maioria absoluta presente (CF art. 47; RICD art. 183; RISF art. 288). Só para o texto principal (e para a urgência do art. 155); nunca para a redação final.
+
+**Orientação de cada partido** (`orientacaoPartidos` e os pares do perfil): vale a orientação publicada mais específica do partido da pessoa NA ÉPOCA: a do próprio partido; senão a da federação (o nome traz os partidos: "Fdr PT-PCdoB-PV"); senão a do bloco, quando o partido aparece no nome abreviado do bloco ("Bl UniPpPsd..." = União, PP, PSD e outros que o nome cortado não mostra). Governo, Maioria, Minoria, Oposição e Bancada Feminina aparecem na lista, mas não contam como orientação de partido. Sem orientação identificável, nada é mostrado (nunca se deduz a orientação pelos votos).
 
 **Situação das propostas (`status`)**, igual para Câmara, Senado e Assembleias:
 
@@ -250,11 +317,21 @@ Chaves: Câmara = id da votação na Câmara (`2345678-123`); Senado = `senado-v
 
 `eleicao2026.situacao`: `eleito` | `reeleito` | `segundo-turno` | `nao-eleito` | `suplente` | `candidato` | `nao-concorreu` | `null` (não sabemos). `eleicao2026.txt` e `txt_en`: a frase pronta para mostrar.
 
-Campos extras de quem vem do TSE (estados e cidades): `aConfirmar` (o TSE ainda não fechou o resultado), `sq2022`, `eleito2022`/`eleito2024`, `vago` (com `txt`/`txt_en`), `votosDaChapa`, `desde` e `comoAssumiu`/`comoAssumiu_en` (quando quem está no cargo não é quem foi eleito, ex.: vice que assumiu), `nota`/`nota_en` (observação da pesquisa à mão), `casa`, `aviso`/`aviso_en` e `fonteMunicipios`.
+Campos extras de quem vem do TSE (estados e cidades): `aConfirmar` (o TSE ainda não fechou o resultado, ou a pesquisa à mão ainda não é do mandato em curso), `sq<ano>` e `eleito<ano>` (a ficha de quem foi eleito para o cargo, com o ano da eleição na chave: `eleito2022`, `eleito2024`, `eleito2026`...), `situacao<ano>` dos deputados estaduais, `vago` (com `txt`/`txt_en`), `votosDaChapa`, `desde` e `comoAssumiu`/`comoAssumiu_en` (quando quem está no cargo não é quem foi eleito, ex.: vice que assumiu), `nota`/`nota_en` (observação da pesquisa à mão), `casa`, `aviso`/`aviso_en` e `fonteMunicipios`. Nos estados, `eleicaoGoverno` (ano da eleição do governador em exercício) e `deputadosEstaduais.eleicao` (ano da eleição da Assembleia em curso).
 
 **Gastos (Câmara):** valores líquidos da cota parlamentar, iguais aos da página oficial de cada deputado, incluindo o que a página oficial mostra (passagens compradas pelo sistema da Câmara, o SIGEPA, e a complementação do auxílio-moradia). Não entram o salário nem a verba de gabinete (salários de assessores); por isso o site diz "gastos da cota" e não "tudo o que custou".
 
 **Mesma régua nos perfis federais (`scripts/montar.py`):** ocupação e escolaridade vêm, para todo mundo, da candidatura mais recente no TSE (`ocupacao`, `escolaridade`, `escolaridadeFonte`); as Casas e o Planalto descrevem isso de jeitos diferentes, ou não descrevem. "Mandatos anteriores" mostra só mandatos no mesmo cargo/Casa (deputado: Câmara; senador: Senado; presidente: Presidência), também para todo mundo.
+
+### Mandatos anteriores (`dados/historico/`, feitos por `scripts/historico.py`)
+
+Quem foi **eleito** para cada mandato, segundo o TSE, com o **partido da eleição** (sem votos; eleições suplementares não entram).
+
+- `dados/historico/indice.json`: `{ "brasil": [mandato], "estados": [mandato], "cidades": [mandato], "fontes", "aviso", "aviso_en", "atualizado" }`, do mais novo para o mais velho. Mandato = `{ "id": "2019", "eleicao": 2018, "inicio": "2019-01-01", "fim": "2023-01-01", "rotulo": "2019 a 2022", "rotulo_en": "2019–2022", "aviso"?, "aviso_en"? }` (`fim` = dia da posse dos próximos; no Brasil também `"congresso": {"legislatura", "inicio", "fim"}`). O site calcula o mandato de hoje com `inicio <= hoje < fim`.
+- `dados/historico/brasil/<id>.json`: `{ "id", "eleicao", "inicio", "fim", "legislatura", "presidente", "vice", "mudancas"?, "nota"?, "senado": {"total", "membros", "fontes", "aviso", "aviso_en", "suplementar"?}, "camara": {"total", "membros", "fonte", "aviso", "aviso_en"} }`. Pessoa = `{ "nome", "nomeCivil"?, "partido", "genero", "situacao", "situacao_en", "fontes" }`; membro = `{ "nome", "nomeCivil"?, "partido", "genero", "uf", "eleito"? (senado: ano da eleição) }`; `mudancas` = `[{ "data", "txt", "txt_en", "fontes" }]`; `suplementar` = `[{ "uf", "data", "txt", "txt_en" }]`.
+- `dados/historico/estados/<UF>.json`: `{ "uf", "mandatos": { "<id>": { "eleicao", "governador", "vice", "avisoVice"?, "suplementar"? (datas), "deputados": {"total", "cadeiras", "membros", "fonte", "aviso", "aviso_en"} } } }`. Senadores e deputados federais do estado saem do arquivo do Brasil do mesmo mandato.
+- `dados/historico/cidades/<UF>/<id>.json`: `{ "uf", "id", "eleicao", "inicio", "fim", "fonte", "aviso", "aviso_en", "avisoVice"?, "avisoPartidoVice"?, "cidades": { "<IBGE>": cidade }, "depois"?: { "<IBGE>": ano da 1ª eleição (a cidade ainda não existia) } }`. Cidade (compacta, para caber): `{ "p": [nome, nomeCivil, partido, genero, turno], "v": [nome, nomeCivil, partido, genero], "ver": [[nome, partido, genero]], "vagas"? (cadeiras, quando o TSE lista menos eleitos), "exc"? (eleitos tirados por renúncia/registro negado), "supP"?/"supV"? (datas de eleições suplementares), "nm"? (nome da cidade no TSE naquela eleição) }`.
+- Limites combinados: até ~40 MB, ~400 arquivos e ~600 KB por arquivo (hoje: 244 arquivos, 20 MB, o maior com 407 KB). Por isso os vereadores vão sem o nome civil.
 
 ---
 

@@ -2,13 +2,16 @@
 - dados/tse/federais.json -> eleicao, eleicao2026 e bens nos perfis federais (dados/pessoas/*.json)
   e eleicao2026 nas listas (camara.json, senado.json, executivo.json);
 - textos em inglês da eleição de 2026 (txt_en) também nos estados;
-- explicações simples (dados/simples/*.json) -> campos "s" e "s_en" das propostas.
+- explicações simples (dados/simples/*.json) -> campos "s" e "s_en" das propostas (perfis e páginas das votações);
+- listas oficiais das Assembleias e Câmaras Municipais (dados/assembleias, dados/camaras) nas páginas do estado e da cidade;
+- dados/cidades.json e sitemap.xml.
 
 Rode por último: python scripts/montar.py
 """
 from __future__ import annotations
 
 from comum import *
+import votacoes
 
 CARGOS_EN = {
     "presidente": "president", "vice-presidente": "vice president", "senador": "senator", "senadora": "senator",
@@ -86,7 +89,7 @@ def mesma_regua(p: dict, t: dict) -> None:
 
 
 SITE = "https://entendapolitica.vercel.app"  # endereço público (troque aqui e no robots.txt se mudar)
-PAGINAS = ("", "entenda.html", "brasil.html", "estado.html", "cidade.html", "imparcialidade.html", "dados.html")
+PAGINAS = ("", "entenda.html", "brasil.html", "estado.html", "cidade.html", "votacoes.html", "imparcialidade.html", "dados.html")
 
 
 def indice_cidades() -> int:
@@ -101,12 +104,25 @@ def indice_cidades() -> int:
 
 
 def sitemap() -> int:
-    """sitemap.xml com as páginas, os 27 estados e todos os perfis federais, em português e em inglês (?lang=en)."""
+    """sitemap.xml com as páginas, os 27 estados, os perfis, as votações do texto principal (as outras ficam a um
+    clique, na lista e nos perfis) e os mandatos anteriores do Brasil e dos estados, em português e em inglês."""
     urls = [(p, None) for p in PAGINAS if p == "" or (RAIZ / p).exists()]
     for arq in sorted((DADOS / "estados").glob("*.json")):
         urls.append((f"estado.html?uf={arq.stem}", (ler_json(arq) or {}).get("atualizado")))
     for arq in sorted(PESSOAS.glob("*.json")):
         urls.append((f"pessoa.html?id={arq.stem}", (ler_json(arq) or {}).get("atualizado")))
+    for casa in ("camara", "senado"):
+        cat = (ler_json(DADOS / "votacoes" / f"{casa}.json") or {}).get("votacoes") or {}
+        for chave, v in sorted(cat.items()):
+            if v.get("categoria") == "principal":
+                urls.append((f"votacao.html?casa={casa}&id={chave.split(':')[-1]}", v.get("data")))
+    # mandatos que já acabaram (o de hoje é a página sem ?mandato); as cidades dariam ~44 mil endereços e ficam de fora
+    ind = ler_json(DADOS / "historico" / "indice.json") or {}
+    ufs = sorted(a.stem for a in (DADOS / "estados").glob("*.json"))
+    for nivel, bases in (("brasil", ["brasil.html?"]), ("estados", [f"estado.html?uf={uf}&" for uf in ufs])):
+        for m in ind.get(nivel) or []:
+            if m.get("fim") and m["fim"] <= hoje():
+                urls += [(f"{b}mandato={m['id']}", ind.get("atualizado")) for b in bases]
 
     def en(c: str) -> str:
         return c + ("&" if "?" in c else "?") + "lang=en"
@@ -230,6 +246,7 @@ def main() -> None:
         if salvar_json(f, sem_mudar_data(p, f)):
             escritos += 1
     log(f"perfis reescritos: {escritos}")
+    log(f"votações com a explicação simples atualizada: {votacoes.atualizar_simples(cache)}")
 
     # ---------- listas da Câmara e do Senado
     for nome in ("camara.json", "senado.json"):

@@ -63,7 +63,17 @@
     "senado-votacoes": fonte("Senado Federal", "Votações nominais do Plenário do Senado", "Roll-call votes in the full Senate",
       "https://www25.senado.leg.br/web/atividade/votacoes-nominais"),
     "senado-dados": fonte("Senado Federal", "Dados Abertos do Senado: gastos da cota dos senadores (CEAPS)", "Senate open data: senators' office allowance spending (CEAPS)",
-      "https://www12.senado.leg.br/dados-abertos")
+      "https://www12.senado.leg.br/dados-abertos"),
+    "camara-orientacoes": fonte("Câmara dos Deputados", "Dados Abertos: arquivos votacoesOrientacoes (a orientação de cada liderança em cada votação)",
+      "Open data: votacoesOrientacoes files (the orientation of each party leadership in each vote)", "https://dadosabertos.camara.leg.br/swagger/api.html#staticfile"),
+    "senado-orientacoes": fonte("Senado Federal", "Dados Abertos Legislativos: orientação das lideranças nas votações do Plenário",
+      "Legislative open data: party leaderships' orientations in votes in the full Senate", "https://legis.senado.leg.br/dadosabertos/docs/"),
+    "tse-candidatos": fonte("TSE", "Dados Abertos: candidatos (um conjunto por eleição, de 1994 a 2026; o de 1994 é o primeiro)",
+      "Open data: candidates (one dataset per election, from 1994 to 2026; 1994 is the first)", "https://dadosabertos.tse.jus.br/dataset/candidatos-1994"),
+    "tse-1990": fonte("TSE", "Dados Abertos: resultados da eleição de 1990 (senadores eleitos em 1990, no Senado de 1995 a 1998)",
+      "Open data: 1990 election results (senators elected in 1990, who served in the Senate from 1995 to 1998)", "https://dadosabertos.tse.jus.br/dataset/resultados-1990"),
+    "senado-leg50": fonte("Senado Federal", "Dados Abertos: senadores da 50ª legislatura (1995 a 1999)", "Open data: senators of the 50th legislative term (1995 to 1999)",
+      "https://legis.senado.leg.br/dadosabertos/senador/lista/legislatura/50")
   };
   // botão "De onde veio isso?" com o assunto escondido para quem usa leitor de tela
   function fonteBtn(lista, assunto) {

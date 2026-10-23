@@ -151,6 +151,16 @@
     }
     return cacheJson[url];
   };
+  // dados/manual/ministros.json é pesquisado à mão para um mandato de presidente ("mandatoInicio"). Se um mandato novo
+  // já começou e a lista ainda não foi refeita, o site avisa. Devolve o texto do aviso (no idioma da página) ou null.
+  EP.avisoMinistros = function (d) {
+    return EP.json("dados/executivo.json").then(function (ex) {
+      var ini = ex && ex.presidente && ex.presidente.mandato && ex.presidente.mandato.inicio;
+      if (!ini || !d || !d.mandatoInicio || d.mandatoInicio >= ini) return null;
+      return EP.tr("Um novo mandato de presidente começou em " + EP.dataLonga(ini) + ". Esta lista de ministros é do mandato anterior e está sendo atualizada: alguns ministros podem ter mudado.",
+        "A new presidential term began on " + EP.dataLonga(ini) + ". This list of ministers is from the previous term and is being updated: some ministers may have changed.");
+    }).catch(function () { return null; });
+  };
   EP.param = function (nome) {
     try { return new URLSearchParams(location.search).get(nome); } catch (e) { return null; }
   };

@@ -117,7 +117,7 @@
       return EP.json("dados/manual/ministros.json").then(function (d) {
         var p = (d.ministerios || []).filter(function (x) { return x.id === id; })[0];
         if (!p) throw new Error("não achei");
-        return Object.assign({ tipo: "min" }, p);
+        return EP.avisoMinistros(d).then(function (t) { return Object.assign({ tipo: "min", avisoLista: t, avisoLista_en: t }, p); });
       });
     }
     return Promise.reject(new Error("id inválido"));

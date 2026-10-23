@@ -62,6 +62,7 @@
     }).join("");
     if (d.atualizado) document.getElementById("fonte-min").innerHTML = '<small class="muted">' +
       EP.tr("Lista conferida em " + EP.data(d.atualizado) + ". Cada ministério tem a sua fonte (toque nele).", "List checked on " + EP.data(d.atualizado) + ". Each ministry has its own source (tap it).") + "</small>";
+    EP.avisoMinistros(d).then(function (t) { if (t) el.insertAdjacentHTML("beforebegin", '<p class="aviso"><span aria-hidden="true">⚠️ </span>' + esc(t) + "</p>"); });
   }).catch(function () { falhou(document.getElementById("ministros"), "a lista de ministros", "the list of ministers"); });
 
   document.addEventListener("click", function (e) {

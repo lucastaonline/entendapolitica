@@ -759,16 +759,19 @@ def limpar(d: dict, manter=()) -> dict:
 CAMPOS_PESSOA = ("nome", "nomeCivil", "partido", "genero", "foto")
 
 
-def manual_governadores() -> dict:
-    m = ler_json(MANUAL_GOV)
-    return (m or {}).get("estados") or {}
+def manual_governadores(ano: int) -> dict:
+    """dados/manual/governadores.json: quem governa hoje, pesquisado à mão. "eleicao" diz de qual mandato é a pesquisa
+    (2022 = mandato 2023-2026): depois da posse de quem foi eleito em outra eleição, o arquivo deixa de valer (o site
+    mostra quem ganhou, com "aConfirmar") até a pesquisa ser refeita com o novo "eleicao"."""
+    m = ler_json(MANUAL_GOV) or {}
+    return (m.get("estados") or {}) if m.get("eleicao", 2022) == ano else {}
 
 
-def manual_prefeitos() -> dict:
-    """dados/manual/prefeitos.json (opcional): {"cidades": {"<IBGE>": {"prefeito": {...}, "vice": {...}}}},
+def manual_prefeitos(ano: int = 2024) -> dict:
+    """dados/manual/prefeitos.json (opcional): {"eleicao": 2024, "cidades": {"<IBGE>": {"prefeito": {...}, "vice": {...}}}},
     no mesmo formato de governadores.json, para quem está no cargo hoje quando não é quem o TSE mostra."""
-    m = ler_json(MANUAL_PREF)
-    return (m or {}).get("cidades") or {}
+    m = ler_json(MANUAL_PREF) or {}
+    return (m.get("cidades") or {}) if m.get("eleicao", 2024) == ano else {}
 
 
 def _textos_manual(m: dict) -> dict:
@@ -1240,8 +1243,8 @@ def main():
     log(f"dados/tse/federais.json: {len(federais)} pessoas")
 
     # ---- estados
-    man = manual_governadores() if a_gov == 2022 else {}  # a pesquisa à mão é do mandato 2023-2026
-    log(f"Governadores (eleição de {a_gov}): {'dados/manual/governadores.json com ' + str(len(man)) + ' estados' if man else 'sem arquivo manual (aConfirmar)'}")
+    man = manual_governadores(a_gov)  # só vale se a pesquisa à mão for do mandato em curso
+    log(f"Governadores (eleição de {a_gov}): {'dados/manual/governadores.json com ' + str(len(man)) + ' estados' if man else 'sem pesquisa à mão deste mandato (aConfirmar)'}")
     municipios = ibge.municipios()
     n_mun = collections.Counter(m["uf"] for m in municipios.values())
     estados = {}

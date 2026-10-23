@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <script>(function(d){try{var a=JSON.parse(localStorage.getItem("ep-a11y")||"{}");if(a.contraste)d.classList.add("alto-contraste");if(a.movimento)d.classList.add("sem-movimento");if(a.espaco)d.classList.add("espacado");if(a.escala)d.style.setProperty("--escala",a.escala);var q=/[?&]lang=(en|pt)\b/.exec(location.search),l=q?q[1]:localStorage.getItem("ep-lang");if(l==="en")d.lang="en";}catch(e){}})(document.documentElement)</script>
+  <title data-en="How Congress voted: every roll-call vote in the Chamber and the Senate | Understand Politics">Como o Congresso votou: todas as votações nominais da Câmara e do Senado | Entenda Política</title>
+  <meta name="description" content="Todas as votações com o voto de cada um no Plenário da Câmara dos Deputados e do Senado desde fevereiro de 2023: o que foi votado, o resultado e como cada deputado e senador votou. Tudo com fonte." data-en-content="Every roll-call vote in the full Chamber of Deputies and the full Senate since February 2023: what was voted on, the result and how each deputy and senator voted. Everything with sources.">
+  <link rel="canonical" href="https://entendapolitica.vercel.app/votacoes.html">
+  <link rel="alternate" hreflang="pt-BR" href="https://entendapolitica.vercel.app/votacoes.html">
+  <link rel="alternate" hreflang="en" href="https://entendapolitica.vercel.app/votacoes.html?lang=en">
+  <link rel="alternate" hreflang="x-default" href="https://entendapolitica.vercel.app/votacoes.html">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:site_name" content="Entenda Política">
+  <meta property="og:url" content="https://entendapolitica.vercel.app/votacoes.html">
+  <meta property="og:title" content="Como o Congresso votou, explicado de um jeito fácil">
+  <meta property="og:description" content="Todas as votações nominais da Câmara e do Senado: o que foi votado, o resultado e o voto de cada um. Tudo com fonte.">
+  <meta property="og:image" content="https://entendapolitica.vercel.app/img/compartilhar.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Desenho do Congresso Nacional em 3D com o texto: A política do Brasil, explicada de um jeito simples">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#1f3a5f">
+  <link rel="icon" href="favicon.ico" sizes="48x48">
+  <link rel="icon" href="img/icone.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="stylesheet" href="css/base.css?v=4">
+  <link rel="stylesheet" href="css/tres.css?v=4">
+  <link rel="stylesheet" href="css/tres-politica.css?v=4">
+  <link rel="stylesheet" href="css/paginas.css?v=4">
+  <link rel="stylesheet" href="css/votacoes.css?v=4">
+</head>
+<body>
+<a class="pular" href="#conteudo" data-en="Skip to content">Pular para o conteúdo</a>
+<header class="topo">
+  <a href="./" aria-label="Início" data-en-aria-label="Home" title="Página inicial" data-en-title="Home page"><span aria-hidden="true">🏠 </span><span class="rotulo" data-en="Home">Início</span></a>
+  <span class="onde"><span aria-hidden="true">🗳️ </span><span data-en="Votes in Congress">Votações do Congresso</span></span>
+  <a id="btn-idioma" href="?lang=en">🌐 EN</a>
+  <button id="btn-a11y" type="button" aria-haspopup="dialog"><span aria-hidden="true">♿</span><span class="rotulo" data-en=" Accessibility"> Acessibilidade</span></button>
+  <button id="btn-ouvir" type="button" aria-pressed="false"><span aria-hidden="true">🔊</span><span class="rotulo" data-en=" Listen"> Ouvir</span></button>
+  <button id="btn-letra" type="button">A+</button>
+</header>
+
+<main class="pagina" id="conteudo" data-ler>
+  <section class="miolo cab-pagina" aria-labelledby="titulo-pagina">
+    <div class="cab-txt rev">
+      <span class="selo-topo" data-en="Chamber of Deputies and Federal Senate">Câmara dos Deputados e Senado Federal</span>
+      <h1 id="titulo-pagina" data-en="How Congress voted">Como o Congresso votou</h1>
+      <p class="lead" data-en-html="Here are <b>all the votes in which each member's vote is recorded</b> in the full Chamber of Deputies and the full Senate, since February 2023. Open any vote to see what was decided, the result, how each party voted and how each deputy or senator voted.">Aqui estão <b>todas as votações em que o voto de cada um fica registrado</b> no Plenário da Câmara dos Deputados e do Senado, desde fevereiro de 2023. Abra qualquer votação para ver o que foi decidido, o resultado, como cada partido votou e como votou cada deputado ou senador.</p>
+      <p><a class="btn" href="#todas"><span data-en="See the votes">Ver as votações</span> <span aria-hidden="true">▾</span></a></p>
+    </div>
+    <div class="cab-3d rev pop" style="--i:1" id="ilu-congresso" aria-hidden="true"></div>
+  </section>
+
+  <section class="miolo bloco" id="nominal" aria-labelledby="t-nominal">
+    <div class="cab-bloco rev"><span class="ic-bloco" aria-hidden="true">🖐️</span><div><h2 id="t-nominal" data-en="What is a roll-call vote?">O que é uma votação nominal?</h2><p class="muted" data-en="There are three ways of voting in the Chamber and in the Senate. Only in one of them is each member's vote recorded.">Na Câmara e no Senado, existem três jeitos de votar. Só em um deles fica registrado o voto de cada um.</p></div></div>
+    <div class="nominal-explica rev">
+      <div><b><span aria-hidden="true">🖲️ </span><span data-en="Roll-call vote (nominal)">Votação nominal</span></b><p data-en="Each deputy or senator presses a button on the electronic panel: Yes, No or Abstain (in the Chamber, also “Obstruction”). Everyone can see who voted for what. These are the votes on this page.">Cada deputado ou senador aperta um botão no painel eletrônico: Sim, Não ou Abstenção (na Câmara, também “Obstrução”). Todo mundo fica sabendo quem votou o quê. São as votações desta página.</p></div>
+      <div><b><span aria-hidden="true">🙋 </span><span data-en="Voice vote (symbolic)">Votação simbólica</span></b><p data-en="The president of the session asks who agrees and announces the result. It is quick, but each member's vote is not recorded, so it does not appear here.">O presidente da sessão pergunta quem concorda e anuncia o resultado. É rápida, mas o voto de cada um não fica registrado. Por isso ela não aparece aqui.</p></div>
+      <div><b><span aria-hidden="true">🤫 </span><span data-en="Secret vote">Votação secreta</span></b><p data-en="Used in a few cases set by the rules, such as when the Senate chooses some authorities. Only the result is announced, so these votes are not on this page either.">Usada em poucos casos que as regras dizem, como quando o Senado escolhe algumas autoridades. Só o resultado é divulgado. Essas também não estão aqui.</p></div>
+    </div>
+    <p id="fontes-nominal"></p>
+  </section>
+
+  <section class="miolo bloco" id="categorias" aria-labelledby="t-categorias">
+    <div class="cab-bloco rev"><span class="ic-bloco" aria-hidden="true">🧩</span><div><h2 id="t-categorias" data-en="What each vote is about">Sobre o que é cada votação</h2><p class="muted" data-en="A bill usually goes through several votes on the same day. To make the list easier to read, each vote gets one of these four labels, based on its official description.">Uma proposta costuma passar por várias votações no mesmo dia. Para a lista ficar mais fácil de entender, cada votação ganha uma destas quatro etiquetas, a partir da descrição oficial.</p></div></div>
+    <ul class="cats-vot rev">
+      <li><span class="c-ic" aria-hidden="true">📜</span><b data-en="Main text">Texto principal</b><p data-en="A vote on the whole text: the bill, the constitutional amendment (which is voted twice, in two “rounds”), the provisional measure, or a new text that replaces the whole original one (the “substitute”).">Votação do texto inteiro: o projeto, a PEC (que tem duas votações, os “turnos”), a medida provisória ou um texto novo que troca o original inteiro (o “substitutivo”).</p></li>
+      <li><span class="c-ic" aria-hidden="true">✏️</span><b data-en="Change to the text">Mudança no texto</b><p data-en="A vote on changing one part of the text: an amendment (a suggested change) or a separate vote on one piece of the text, to decide whether it stays or goes.">Votação de uma mudança numa parte do texto: uma emenda (uma sugestão de mudança) ou um destaque (um pedaço do texto votado sozinho, para decidir se fica ou sai).</p></li>
+      <li><span class="c-ic" aria-hidden="true">⏱️</span><b data-en="Procedure">Procedimento</b><p data-en="A vote on the process, not on the text: requests to vote urgently, postpone, take the item off the agenda, end the debate or change the voting order.">Votação sobre o caminho, e não sobre o texto: pedidos para votar com urgência, adiar, tirar da pauta, encerrar a discussão ou mudar a ordem da votação.</p></li>
+      <li><span class="c-ic" aria-hidden="true">🗂️</span><b data-en="Other decision">Outra decisão</b><p data-en="Other decisions, such as whether a provisional measure really is urgent and important enough to be considered, or cases about a member's term in office.">Outras decisões, como dizer se uma medida provisória é mesmo urgente e importante para ser analisada, ou casos sobre o mandato de um parlamentar.</p></li>
+    </ul>
+    <p class="muted nota-lista" data-en="The label is given by a fixed rule, the same for every vote, that reads the official description. The description always appears next to it.">A etiqueta é dada por uma regra fixa, igual para todas as votações, que lê a descrição oficial. A descrição aparece sempre junto.</p>
+    <p id="fontes-categorias"></p>
+  </section>
+
+  <section class="miolo bloco" id="todas" aria-labelledby="t-todas">
+    <div class="cab-bloco rev"><span class="ic-bloco" aria-hidden="true">🗳️</span><div><h2 id="t-todas" data-en="All the votes">Todas as votações</h2><p class="muted" data-en="Use the filters or search for a bill (e.g. “PEC 45”) or for words in the description.">Use os filtros ou procure pela proposta (ex.: “PEC 45”) ou por palavras da descrição.</p></div></div>
+    <div class="dica-coruja nota-contexto rev"><span class="coruja" aria-hidden="true">🦉</span><p data-en-html="Voting “Yes” is not good and voting “No” is not bad: it depends on what was being voted on. Also, a “Yes” on a request or on a change is not the same as a “Yes” on the whole bill. Open each vote to understand it.">Votar “Sim” não é bom e votar “Não” não é ruim: depende do que estava sendo votado. E um “Sim” num pedido ou numa mudança não é o mesmo que um “Sim” no texto inteiro. Abra cada votação para entender.</p></div>
+    <div class="filtros-vot" role="search" aria-label="Filtrar as votações" data-en-aria-label="Filter the votes">
+      <div class="f-busca"><label for="f-q" data-en="Search">Procurar</label><div class="busca"><input type="search" id="f-q" placeholder="Ex.: PEC 45, urgência" data-en-placeholder="E.g. PEC 45, urgência" autocomplete="off" aria-controls="lista-votacoes"></div></div>
+      <div><label for="f-casa" data-en="House">Casa</label><select id="f-casa"></select></div>
+      <div><label for="f-ano" data-en="Year">Ano</label><select id="f-ano"></select></div>
+      <div><label for="f-cat" data-en="Type of vote">Tipo de votação</label><select id="f-cat"></select></div>
+      <div><label for="f-res" data-en="Result">Resultado</label><select id="f-res"></select></div>
+    </div>
+    <p class="contagem" id="contagem-vot" aria-live="polite"></p>
+    <ul class="lista-vot" id="lista-votacoes"><li class="carregando" style="grid-column:1/-1" data-en="Loading…">Carregando…</li></ul>
+    <div class="mais-lista" id="mais-vot"></div>
+    <p class="nota-lista" data-en-html="“Other”: was presiding over the session, was absent, on leave or on an official mission. In the Senate, the list has all the senators; in the Chamber, only those who registered a vote. The descriptions are official texts in Portuguese.">“Outro”: presidia a sessão, estava ausente, de licença ou em missão oficial. No Senado, a lista traz todos os senadores; na Câmara, só quem registrou voto.</p>
+  </section>
+
+  <section class="miolo bloco" id="fontes" aria-labelledby="t-fontes">
+    <div class="cab-bloco"><span class="ic-bloco" aria-hidden="true">📚</span><div><h2 id="t-fontes" data-en="Where this comes from">De onde vem isso</h2><p class="muted" id="atualizado-vot"></p></div></div>
+    <div id="fontes-lista"></div>
+  </section>
+</main>
+
+<footer class="miolo rodape">
+  <p id="links-erro"></p>
+  <p data-en-html="The votes come from the open data of the Chamber of Deputies and the Federal Senate. <a href=&quot;dados.html&quot;>See where each piece of information comes from</a> and <a href=&quot;imparcialidade.html&quot;>how we stay impartial</a>.">As votações vêm dos dados abertos da Câmara dos Deputados e do Senado Federal. <a href="dados.html">Veja de onde vem cada informação</a> e <a href="imparcialidade.html">como cuidamos da imparcialidade</a>.</p>
+</footer>
+
+<noscript><p style="padding:20px">Esta página precisa de JavaScript ligado no navegador. / This page needs JavaScript.</p></noscript>
+<script src="js/config.js?v=4"></script>
+<script src="js/comum.js?v=4"></script>
+<script src="js/traducoes.js?v=4"></script>
+<script src="js/tres.js?v=4"></script>
+<script src="js/tres-politica.js?v=4"></script>
+<script src="js/votacoes.js?v=4"></script>
+</body>
+</html>

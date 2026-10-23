@@ -3,6 +3,8 @@
 Gera dados/senado.json, dados/pessoas/sen-<código>.json e dados/votacoes/senado.json (contrato no README;
 as votações ficam normalizadas: cada votação aparece uma vez em dados/votacoes/senado.json, com chave
 "senado-vot:<codigoSessaoVotacao>", e o perfil guarda só "votos": [["senado-vot:7107", "Sim"], ...]).
+Cada votação também ganha um arquivo com o voto de todos e as orientações: dados/votacoes/senado/<código>.json
+(feito com scripts/votacoes.py, que também refaz só as votações a partir do cache).
 
 Fontes oficiais (todas do Senado Federal):
 - Ficha: Dados Abertos Legislativos /dadosabertos/senador/lista/atual, /senador/{código} (+ /mandatos,
@@ -13,7 +15,8 @@ Fontes oficiais (todas do Senado Federal):
   id das propostas = "senado:<codigoMateria>" (o "código da matéria", o mesmo da página
   https://www25.senado.leg.br/web/atividade/materias/-/materia/<codigoMateria>).
 - Votações: /dadosabertos/votacao?dataInicio&dataFim (todas as votações do Plenário com o voto de cada um,
-  em janelas de até 1 ano).
+  em janelas de até 1 ano) e /dadosabertos/plenario/votacao/orientacaoBancada/{início}/{fim} (orientação das
+  lideranças, hora e quem presidia).
 - Gastos (CEAPS): Dados Abertos Administrativos, adm.senado.gov.br/adm-dadosabertos/api/v1/senadores/
   despesas_ceaps/{ano} (mesmos dados dos arquivos despesa_ceaps_{ano}.csv, mas com o código do senador).
 - Situação na Câmara (só para propostas aprovadas no Senado cujo processo na Câmara já foi encerrado):
@@ -44,6 +47,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from comum import (CACHE, DADOS, PESSOAS, STATUS_TXT, TIPOS_PROPOSTA, aplicar_simples, baixar, carregar_simples,  # noqa: E402
                    chave_nome, classificar_situacao, data_iso, foto_local, fonte, hoje, ler_json, limpa, log,
                    ordenar_propostas, resumo_propostas, salvar_json, sem_acento, sem_mudar_data)
+import votacoes as V  # noqa: E402  (categoria, placar, orientações e arquivos de cada votação)
+from mandatos import mes_ano, vigente  # noqa: E402
 
 API = "https://legis.senado.leg.br/dadosabertos"
 ADM = "https://adm.senado.gov.br/adm-dadosabertos/api/v1"
@@ -51,7 +56,8 @@ SITE = "https://www25.senado.leg.br/web"
 CAMARA_API = "https://dadosabertos.camara.leg.br/api/v2"
 CS = CACHE / "senado"
 DET = CS / "processo"
-INICIO_LEG = "2023-02-01"          # início da legislatura atual (57ª): régua de votações e gastos
+INICIO_LEG = vigente("senador")["inicio"]   # início da legislatura em curso (scripts/mandatos.py): régua de votações e gastos
+DESDE_PT, DESDE_EN = mes_ano(INICIO_LEG)   # "fevereiro de 2023", "February 2023"
 TIPOS = set(TIPOS_PROPOSTA) | {"PRN"}  # PRN = projeto de resolução do Congresso (equivalente ao PRS/PRC)
 VEICULO = "Senado Federal"
 
@@ -719,28 +725,112 @@ def janelas_votacao() -> list[tuple[str, str, bool]]:
     return out
 
 
-def votacoes_plenario() -> tuple[dict, dict]:
-    """Votações abertas do Plenário do Senado desde 01/02/2023.
-    Devolve ({"senado-vot:<codigoSessaoVotacao>": detalhes}, {codigoParlamentar: [(idVotacao, voto)]})."""
+def _idade(atual: bool, idade: float | None) -> float | None:
+    """Horas até baixar de novo: a janela de agora vale 20 h, as antigas 30 dias (idade=None: usa o cache como está)."""
+    return None if idade is None else (idade if atual else max(idade, 24 * 30))
+
+
+def orientacoes_plenario(idade: float | None = 20) -> list[dict]:
+    """Orientação das lideranças em cada votação nominal do Plenário (/plenario/votacao/orientacaoBancada/{início}/{fim},
+    em janelas de 1 ano). Cada item traz também a hora, quem presidia e o placar publicado."""
+    out = []
+    for a, b, atual in janelas_votacao():
+        cache = f"orientacoes/{a}_atual.json" if atual else f"orientacoes/{a}_{b}.json"
+        try:
+            d = api(f"/plenario/votacao/orientacaoBancada/{a.replace('-', '')}/{b.replace('-', '')}", cache,
+                    _idade(atual, idade), timeout=900)
+        except Exception as e:  # noqa: BLE001 - sem orientações a votação continua valendo
+            log(f"  orientações {a} a {b}: {e}")
+            continue
+        out += [v for v in L((d or {}).get("votacoes")) if isinstance(v, dict)]
+    return out
+
+
+_LEGENDA: dict = {}
+
+
+def legenda_votos() -> dict:
+    """O que quer dizer cada código de voto do Senado (lista oficial de tipos de comparecimento)."""
+    if not _LEGENDA:
+        try:
+            tc = api("/plenario/lista/tiposComparecimento.json", "tipos_comparecimento.json", 24 * 30)
+            for t in L(((tc.get("ListaTiposComparecimento") or {}).get("TiposComparecimento") or {}).get("TipoComparecimento")):
+                _LEGENDA[t.get("Sigla")] = limpa(t.get("Descricao"))
+        except Exception as e:  # noqa: BLE001
+            log(f"  tipos de comparecimento: {e}")
+    return _LEGENDA
+
+
+def _texto_legenda(cod: str, oficiais: dict) -> str | None:
+    if cod in oficiais:
+        return oficiais[cod]
+    return "Presidia a sessão (art. 51 do Regimento Interno do Senado)" if cod.startswith("Presidente") else None
+
+
+def votacoes_plenario(idade: float | None = 20) -> tuple[dict, dict]:
+    """Votações abertas do Plenário do Senado desde o início da legislatura em curso (INICIO_LEG).
+    Devolve ({"senado-vot:<codigoSessaoVotacao>": detalhes}, {codigoParlamentar: {idVotacao: voto}}).
+    Além dos campos do catálogo, cada item leva o que scripts/votacoes.py precisa para o arquivo de detalhes
+    (_votos de todos os senadores da época, _orient, _ementa, _fontes...)."""
     detalhes, por_sen = {}, collections.defaultdict(dict)
+    ori = orientacoes_plenario(idade)
+    por_seq = {o.get("sequencialVotacao"): o for o in ori if o.get("sequencialVotacao") is not None}
+    usados = set()
+    oficiais = legenda_votos()
+    leg = {}
     for a, b, atual in janelas_votacao():
         cache = f"votacoes/{a}_atual.json" if atual else f"votacoes/{a}_{b}.json"
-        d = L(api(f"/votacao.json?dataInicio={a}&dataFim={b}", cache, 20 if atual else 24 * 30, timeout=900))
+        d = L(api(f"/votacao.json?dataInicio={a}&dataFim={b}", cache, _idade(atual, idade), timeout=900))
         for v in d:
             if v.get("casaSessao") != "SF" or v.get("votacaoSecreta") != "N":
                 continue  # só o Plenário do Senado e só votações abertas (nas secretas o voto não é divulgado)
             vid = f"senado-vot:{v.get('codigoSessaoVotacao')}"
             cm = v.get("codigoMateria")
+            data = data_iso(v.get("dataSessao"))
+            lista = []
+            for x in L(v.get("votos")):
+                voto = limpa(x.get("siglaVotoParlamentar"))
+                por_sen[x.get("codigoParlamentar")].setdefault(vid, voto)
+                if voto:
+                    lista.append((f"sen-{x.get('codigoParlamentar')}", limpa(x.get("nomeParlamentar")),
+                                  V.nome_partido(x.get("siglaPartidoParlamentar")), limpa(x.get("siglaUFParlamentar")), voto))
+                    if voto not in ("Sim", "Não", "Abstenção") and voto not in leg and _texto_legenda(voto, oficiais):
+                        leg[voto] = _texto_legenda(voto, oficiais)
+            # liga à orientação pelo número sequencial da votação; sem ele, pelo dia e pelo placar (se só uma bater)
+            o = por_seq.get(v.get("sequencialVotacao"))
+            if o is None:
+                pl = V.placar(lista)
+                cands = [c for c in ori if id(c) not in usados and (c.get("dataInicioVotacao") or "")[:10] == data
+                         and c.get("qtdVotosSim") == pl["Sim"] and c.get("qtdVotosNao") == pl["Não"]]
+                o = cands[0] if len(cands) == 1 else None
+            if o is not None:
+                usados.add(id(o))
+            dia, ident = data_br(data), limpa(v.get("identificacao"))
+            fontes = [fonte(VEICULO, f"Votações da matéria {ident}: o voto de cada senador", f"{url_materia(cm)}/votacoes") if cm
+                      else fonte(VEICULO, "Votações nominais do Plenário", f"{SITE}/atividade/votacoes-nominais"),
+                      fonte(VEICULO, f"Dados Abertos: votações nominais do Plenário em {dia}",
+                            f"{API}/votacao.json?dataInicio={data}&dataFim={data}")]
+            if o is not None:
+                fontes.append(fonte(VEICULO, f"Dados Abertos: orientação das lideranças nas votações de {dia}",
+                                    f"{API}/plenario/votacao/orientacaoBancada/{(data or '').replace('-', '')}"))
             detalhes[vid] = {
-                "data": data_iso(v.get("dataSessao")),
+                "data": data,
+                "hora": ((o.get("dataTerminoVotacao") or o.get("dataInicioVotacao") or "")[11:16] or None) if o else None,
                 "propostaId": f"senado:{cm}" if cm else None,
-                "proposta": limpa(v.get("identificacao")),
+                "proposta": ident,
                 "descricao": limpa(v.get("descricaoVotacao")),
                 "resultado": RESULTADO.get(v.get("resultadoVotacao")),
                 "url": f"{url_materia(cm)}/votacoes" if cm else f"{SITE}/atividade/votacoes-nominais",
+                "_votos": lista,
+                "_orient": [(x.get("partido"), x.get("voto")) for x in L(o.get("orientacoesLideranca"))] if o else [],
+                "_ementa": limpa(v.get("ementa")),
+                "_propUrl": url_materia(cm) if cm else None,
+                "_portal": f"{url_materia(cm)}/votacoes" if cm else f"{SITE}/atividade/votacoes-nominais",
+                "_oficial": {"Sim": o.get("qtdVotosSim"), "Não": o.get("qtdVotosNao")} if o else None,
+                "_presidente": limpa(o.get("presidenteSessao")) if o else None,
+                "_legenda": leg,
+                "_fontes": fontes,
             }
-            for voto in L(v.get("votos")):
-                por_sen[voto.get("codigoParlamentar")].setdefault(vid, limpa(voto.get("siglaVotoParlamentar")))
     return detalhes, por_sen
 
 
@@ -748,33 +838,33 @@ def _chave_vot(vid: str, detalhes: dict):
     return (detalhes[vid]["data"] or "", int(re.sub(r"\D", "", vid) or 0))
 
 
+# "hora", "categoria" e "placar" vêm de scripts/votacoes.py (preparar); os outros campos são os de antes
+CAMPOS_VOTACAO = ("data", "hora", "propostaId", "proposta", "descricao", "resultado", "categoria", "placar", "url")
+
+
 def arquivo_votacoes(detalhes: dict, por_sen: dict) -> dict:
-    """dados/votacoes/senado.json: cada votação uma vez só (os perfis guardam só [idVotacao, voto])."""
+    """dados/votacoes/senado.json: cada votação uma vez só (os perfis guardam só [idVotacao, voto]). Os detalhes de
+    cada uma (quem votou o quê, orientações) ficam em dados/votacoes/senado/<código>.json."""
     ids = sorted(detalhes, key=lambda vid: _chave_vot(vid, detalhes), reverse=True)
-    oficiais = {}
-    try:
-        tc = api("/plenario/lista/tiposComparecimento.json", "tipos_comparecimento.json", 24 * 30)
-        for t in L(((tc.get("ListaTiposComparecimento") or {}).get("TiposComparecimento") or {}).get("TipoComparecimento")):
-            oficiais[t.get("Sigla")] = limpa(t.get("Descricao"))
-    except Exception as e:  # noqa: BLE001
-        log(f"  tipos de comparecimento: {e}")
+    oficiais = legenda_votos()
     usados = {voto for vs in por_sen.values() for voto in vs.values()} - {"Sim", "Não", "Abstenção", None}
     legenda = {}
     for cod in sorted(usados, key=chave_nome):
-        if cod in oficiais:
-            legenda[cod] = oficiais[cod]
-        elif cod.startswith("Presidente"):
-            legenda[cod] = "Presidia a sessão (art. 51 do Regimento Interno do Senado)"
+        if _texto_legenda(cod, oficiais):
+            legenda[cod] = _texto_legenda(cod, oficiais)
     return {
         "atualizado": hoje(),
-        "fonte": fonte(VEICULO, "Votações nominais do Plenário do Senado (Dados Abertos: /dadosabertos/votacao)",
+        "fonte": fonte(VEICULO, "Votações nominais do Plenário do Senado (Dados Abertos: /dadosabertos/votacao e "
+                                "/dadosabertos/plenario/votacao/orientacaoBancada)",
                        f"{SITE}/atividade/votacoes-nominais"),
         "legenda": legenda,
-        "votacoes": {vid: detalhes[vid] for vid in ids},
+        "votacoes": {vid: {k: detalhes[vid].get(k) for k in CAMPOS_VOTACAO} for vid in ids},
     }
 
 
-def bloco_votacoes(votos: dict, detalhes: dict, nome_civil: str) -> dict:
+def bloco_votacoes(votos: dict, detalhes: dict, nome_civil: str, cod=None) -> dict:
+    """[["senado-vot:7107", "Sim"], ...]; com cod (código do senador), quando o partido dele NA ÉPOCA recebeu orientação
+    publicada, o par ganha mais dois elementos: [..., "Sim", "p"] (orientação; p = do partido)."""
     ids = sorted(votos, key=lambda vid: _chave_vot(vid, detalhes), reverse=True)
     resumo = {"total": len(ids), "Sim": 0, "Não": 0, "Abstenção": 0, "Obstrução": 0, "Outro": 0}
     for vid in ids:
@@ -782,13 +872,16 @@ def bloco_votacoes(votos: dict, detalhes: dict, nome_civil: str) -> dict:
         k = v if v in ("Sim", "Não", "Abstenção") else ("Obstrução" if v in ("P-OD", "OB", "Obstrução") else "Outro")
         resumo[k] += 1
     return {
-        "escopo": "Votações abertas (com o voto de cada um) no Plenário do Senado desde fevereiro de 2023. "
+        "escopo": f"Votações abertas (com o voto de cada um) no Plenário do Senado desde {DESDE_PT}. "
                   "As votações secretas, como a escolha de autoridades, não entram: nelas o voto de cada um não é divulgado.",
+        "escopo_en": f"Open votes (with each senator's vote recorded) in the full Senate since {DESDE_EN}. Secret votes, such as "
+                     "choosing authorities, are not included: in those, individual votes are not published.",
         "resumo": resumo,
         "fonte": fonte(VEICULO, f"Votações nominais de {nome_civil}",
                        f"{SITE}/atividade/votacoes-nominais/-/v/parlamentar/{urllib.parse.quote(nome_civil)}"),
         "arquivo": "dados/votacoes/senado.json",
-        "votos": [[vid, votos[vid]] for vid in ids],
+        "votos": [[vid, votos[vid]] + ((V.orientacao_da_pessoa(detalhes[vid], f"sen-{cod}") or []) if cod else [])
+                  for vid in ids],
     }
 
 
@@ -831,9 +924,10 @@ def bloco_gastos(cod: str, nome: str, por: dict, meta: dict) -> dict:
         "total": round(g["ano"], 2),
         "porTipo": [{"tipo": t, "valor": round(v, 2)} for t, v in sorted(g["tipos"].items(), key=lambda kv: chave_nome(kv[0]))],
         "mandatoTotal": round(g["mandato"], 2),
+        "desde": INICIO_LEG[:7],
         "obs": (f"Cota para o exercício da atividade parlamentar (CEAPS): dinheiro devolvido ao senador por gastos do "
                 f"mandato. {ano}: de janeiro a {MESES[um]} (último mês publicado). "
-                f"\"mandatoTotal\": tudo desde fevereiro de {INICIO_LEG[:4]}, para todos do mesmo jeito.") if um else None,
+                f"\"mandatoTotal\": tudo desde {DESDE_PT}, para todos do mesmo jeito.") if um else None,
         "fonte": fonte(VEICULO, f"Transparência: recursos utilizados por {nome} (CEAPS)",
                        f"https://www6g.senado.leg.br/transparencia/sen/{cod}/?ano={ano}"),
     }
@@ -873,11 +967,17 @@ def main():
     salvar_json(_IDX_ARQ, _idx)
     log(f"  detalhes prontos ({_baixados[0]} baixados agora)")
 
-    log("Votações do Plenário (desde 01/02/2023)")
+    log(f"Votações do Plenário (desde {INICIO_LEG})")
     det_vot, votos = votacoes_plenario()
+    V.preparar("senado", det_vot)   # categoria, placar, quórum e orientações ligadas aos partidos
     arq_vot = DADOS / "votacoes" / "senado.json"
-    salvar_json(arq_vot, sem_mudar_datas(arquivo_votacoes(det_vot, votos), arq_vot))
-    log(f"  {len(det_vot)} votações abertas -> {arq_vot.relative_to(DADOS.parent)}")
+    if len(det_vot) >= 50:
+        salvar_json(arq_vot, sem_mudar_datas(arquivo_votacoes(det_vot, votos), arq_vot))
+        g, a_ = V.salvar_detalhes("senado", det_vot)
+        log(f"  {len(det_vot)} votações abertas -> {arq_vot.relative_to(DADOS.parent)} e dados/votacoes/senado/ "
+            f"({g} arquivos gravados, {a_} apagados)")
+    else:
+        log(f"  AVISO: poucas votações ({len(det_vot)}); {arq_vot.relative_to(DADOS.parent)} não foi reescrito")
 
     log("Gastos (CEAPS)")
     gastos, meta_g = ceaps()
@@ -934,7 +1034,7 @@ def main():
             "comissoes": comissoes_atuais(fic),
             "propostas": propostas,
             "gastos": bloco_gastos(cod, nome, gastos, meta_g),
-            "votacoes": bloco_votacoes(votos.get(int(cod), {}), det_vot, nome_civil or nome),
+            "votacoes": bloco_votacoes(votos.get(int(cod), {}), det_vot, nome_civil or nome, cod),
             "fontes": [
                 fonte(VEICULO, f"Página oficial de {nome}", url_senador(cod)),
                 fonte(VEICULO, "Dados Abertos Legislativos: senador", f"{API}/senador/{cod}.json"),

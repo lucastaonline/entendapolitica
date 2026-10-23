@@ -97,6 +97,12 @@ def extenso(iso: str) -> tuple[str, str]:
     return f"{'1º' if d == 1 else d} de {MESES[m - 1]} de {iso[:4]}", f"{MONTHS[m - 1]} {d}, {iso[:4]}"
 
 
+def mes_ano(iso: str) -> tuple[str, str]:
+    """'2023-02-01' -> ('fevereiro de 2023', 'February 2023') (ex.: "votações desde fevereiro de 2023")."""
+    m = int(iso[5:7])
+    return f"{MESES[m - 1]} de {iso[:4]}", f"{MONTHS[m - 1]} {iso[:4]}"
+
+
 if __name__ == "__main__":
     import sys
     sys.stdout.reconfigure(encoding="utf-8")

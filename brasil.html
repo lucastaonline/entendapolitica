@@ -32,6 +32,7 @@
   <link rel="stylesheet" href="css/tres.css?v=4">
   <link rel="stylesheet" href="css/tres-politica.css?v=4">
   <link rel="stylesheet" href="css/paginas.css?v=4">
+  <link rel="stylesheet" href="css/votacoes.css?v=4">
 </head>
 <body>
 <a class="pular" href="#conteudo" data-en="Skip to content">Pular para o conteúdo</a>
@@ -58,6 +59,7 @@
     <a class="chip" href="#executivo"><span aria-hidden="true">🏢</span><span data-en="Who governs">Quem governa</span></a>
     <a class="chip" href="#senado"><span aria-hidden="true">🏛️</span><span data-en="Senate">Senado</span></a>
     <a class="chip" href="#camara"><span aria-hidden="true">🏛️</span><span data-en="Chamber of Deputies">Câmara</span></a>
+    <a class="chip" href="#votacoes"><span aria-hidden="true">🗳️</span><span data-en="How Congress voted">Como votaram</span></a>
     <a class="chip" href="#judiciario"><span aria-hidden="true">⚖️</span><span data-en="What about the courts?">E o Judiciário?</span></a>
     <a class="chip" href="#procurar"><span aria-hidden="true">🔎</span><span data-en="Search">Procurar</span></a>
   </nav>
@@ -79,6 +81,12 @@
   <section class="miolo bloco" id="camara" aria-labelledby="t-camara">
     <div class="cab-bloco rev"><span class="ic-bloco" aria-hidden="true">🏛️</span><div><h2 id="t-camara" data-en-html="The Chamber of Deputies (&lt;span lang=&quot;pt-BR&quot;&gt;Câmara dos Deputados&lt;/span&gt;)">A Câmara dos Deputados</h2><p class="muted" data-en="513 federal deputies. They represent the people, and states with more people have more deputies. They serve 4-year terms.">513 deputados federais. Eles representam o povo, e estados com mais gente têm mais deputados. Ficam 4 anos no cargo.</p></div></div>
     <div class="casa-corpo"><div class="carregando" data-en="Loading…">Carregando…</div></div>
+  </section>
+
+  <section class="miolo bloco" id="votacoes" aria-labelledby="t-votacoes">
+    <div class="cab-bloco rev"><span class="ic-bloco" aria-hidden="true">🗳️</span><div><h2 id="t-votacoes" data-en="How Congress voted">Como o Congresso votou</h2><p class="muted" data-en="The most recent votes on the whole text of a proposal (one per proposal), in the Chamber and in the Senate. Open one to see how each party and each member voted.">As votações mais recentes sobre o texto inteiro de uma proposta (uma de cada proposta), na Câmara e no Senado. Abra uma para ver como votou cada partido e cada pessoa.</p></div></div>
+    <div class="recentes-vot" id="votos-recentes"><div class="carregando" data-en="Loading…">Carregando…</div></div>
+    <p><a class="btn" href="votacoes.html"><span data-en="See all the votes">Ver todas as votações</span> <span aria-hidden="true">▶</span></a></p>
   </section>
 
   <section class="miolo bloco" id="judiciario" aria-labelledby="t-jud">
@@ -114,5 +122,6 @@
 <script src="js/busca.js?v=4"></script>
 <script src="js/casa.js?v=4"></script>
 <script src="js/brasil.js?v=4"></script>
+<script src="js/votacoes.js?v=4"></script>
 </body>
 </html>

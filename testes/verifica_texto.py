@@ -32,7 +32,8 @@ JS = r"""() => {
     if (en) {
       const l = el.closest("[lang]");
       if (l && /^pt/i.test(l.getAttribute("lang"))) continue;
-      const m = PT.exec(t);
+      // endereços de sites ("facebook.com/...") não são texto em português
+      const m = PT.exec(t.replace(/(?:https?:\/\/)?[\w-]+(?:\.[\w-]+)+(?:\/\S*)?/g, " "));
       if (m) achados.push(["PT", t.slice(0, 160)]);
     }
   }

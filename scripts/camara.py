@@ -7,6 +7,8 @@ Gera, para os 513 deputados federais EM EXERCÍCIO hoje:
                                   [id da votação, voto] ("votos") e o caminho do catálogo ("arquivo")
   dados/votacoes/camara.json      catálogo das votações nominais do Plenário (cada uma uma única vez;
                                   chave = id da votação na Câmara, ex. "2236186-60", sem prefixo)
+  dados/votacoes/camara/<id>.json uma votação por arquivo: placar, orientações e o voto de cada deputado
+                                  (feito com scripts/votacoes.py, que também refaz só as votações a partir do cache)
   img/pessoas/dep-<id>.jpg        foto oficial (240 px)
   .cache/camara/situacoes.txt     situação oficial -> status do site (para conferir as regras)
 
@@ -47,6 +49,9 @@ from comum import (CACHE, FOTOS, PESSOAS, DADOS, RAIZ, STATUS_TXT, TIPOS_PROPOST
                    baixar, baixar_json, carregar_simples, chave_nome, classificar_situacao, fonte, foto_local,
                    hoje, limpa, log, ler_json, nome_proprio, ordenar_propostas, resumo_propostas, salvar_json,
                    sem_acento, sem_mudar_data)
+import votacoes as V  # noqa: E402  (categoria, placar, orientações e arquivos de cada votação)
+import datetime  # noqa: E402
+from mandatos import mes_ano, vigente  # noqa: E402
 
 API = "https://dadosabertos.camara.leg.br/api/v2"
 ARQ = "https://dadosabertos.camara.leg.br/arquivos"
@@ -54,9 +59,12 @@ PORTAL = "https://www.camara.leg.br"
 DOC_ARQUIVOS = "https://dadosabertos.camara.leg.br/swagger/api.html#staticfile"
 CC = CACHE / "camara"
 VEIC = "Câmara dos Deputados"
-LEG_ATUAL = 57
-INICIO_LEG = "2023-02-01"
-FIM_LEG = "2027-01-31"
+# legislatura em curso, pelas datas de posse (scripts/mandatos.py): 57ª de 1º/2/2023 a 31/1/2027, 58ª depois
+_VIG = vigente("deputado_federal")
+LEG_ATUAL = _VIG["legislatura"]
+INICIO_LEG = _VIG["inicio"]
+FIM_LEG = (datetime.date.fromisoformat(_VIG["fim"]) - datetime.timedelta(days=1)).isoformat()
+DESDE_PT, DESDE_EN = mes_ano(INICIO_LEG)   # "fevereiro de 2023", "February 2023"
 HOJE = hoje()
 ANO = int(HOJE[:4])
 ANO_VOT = int(INICIO_LEG[:4])
@@ -593,28 +601,48 @@ def txt_lei(lei: dict | None, tipo: str) -> str:
 
 
 # =================================================================== votações
-def ler_votacoes(ids: set[str]) -> tuple[dict, dict]:
+def lote_vot(nome: str, ano: int, idade: float | None = 20) -> Path:
+    """Arquivo anual de votações (idade = horas até baixar de novo; None = usa o cache como estiver)."""
+    arq = f"{nome}-{ano}.csv"
+    return baixar_lote(f"{ARQ}/{nome}/csv/{arq}", arq, max_idade_h=idade)
+
+
+def ler_votacoes(ids: set[str], idade: float | None = 20) -> tuple[dict, dict]:
+    """Votações nominais do Plenário desde o início da legislatura (arquivos votacoes, votacoesProposicoes,
+    votacoesVotos e votacoesOrientacoes). Devolve (itens, {"votos": {deputado: [(id da votação, voto)]}, "secretas"}).
+    Além dos campos do catálogo, cada item leva o que scripts/votacoes.py precisa para o arquivo de detalhes:
+    _votos (todos que votaram, inclusive quem não está mais no mandato), _orient, _ementa, _portal, _fontes..."""
     vot = {}
     for ano in range(ANO_VOT, ANO + 1):
-        for r in ler_csv(lote("votacoes", ano)):
+        for r in ler_csv(lote_vot("votacoes", ano, idade)):
             if r["siglaOrgao"] == "PLEN" and r["data"] >= INICIO_LEG:
                 vot[r["id"]] = {"data": r["data"][:10], "dh": r["dataHoraRegistro"] or r["data"],
-                                "descricao": limpa(r["descricao"]), "aprovacao": r["aprovacao"]}
+                                "descricao": limpa(r["descricao"]), "aprovacao": r["aprovacao"],
+                                "evento": (r.get("idEvento") or "").strip()}
     objs = defaultdict(list)
     for ano in range(ANO_VOT, ANO + 1):
-        for r in ler_csv(lote("votacoesProposicoes", ano)):
+        for r in ler_csv(lote_vot("votacoesProposicoes", ano, idade)):
             if r["idVotacao"] in vot:
                 objs[r["idVotacao"]].append(r)
     votos = defaultdict(list)
+    todos = defaultdict(list)
     com_voto = Counter()
     for ano in range(ANO_VOT, ANO + 1):
-        for r in ler_csv(lote("votacoesVotos", ano)):
+        for r in ler_csv(lote_vot("votacoesVotos", ano, idade)):
             if r["idVotacao"] not in vot:
                 continue
-            if limpa(r["voto"]):
+            voto = limpa(r["voto"])
+            if voto:
                 com_voto[r["idVotacao"]] += 1
+                todos[r["idVotacao"]].append((f"dep-{r['deputado_id']}", limpa(r["deputado_nome"]),
+                                              V.nome_partido(r["deputado_siglaPartido"]), limpa(r["deputado_siglaUf"]), voto))
             if r["deputado_id"] in ids:
-                votos[r["deputado_id"]].append((r["idVotacao"], limpa(r["voto"])))
+                votos[r["deputado_id"]].append((r["idVotacao"], voto))
+    orient = defaultdict(list)
+    for ano in range(ANO_VOT, ANO + 1):
+        for r in ler_csv(lote_vot("votacoesOrientacoes", ano, idade)):
+            if r["idVotacao"] in vot:
+                orient[r["idVotacao"]].append((r["siglaBancada"], r["orientacao"]))
     # votações secretas: a Câmara registra a presença, mas nenhum voto (não mostram o voto de cada um)
     secretas = {v for v in {i for lst in votos.values() for i, _ in lst} if not com_voto[v]}
     itens = {}
@@ -635,18 +663,32 @@ def ler_votacoes(ids: set[str]) -> tuple[dict, dict]:
                 sig = f"{principal['proposicao_siglaTipo']} {principal['proposicao_numero']}/{principal['proposicao_ano']}"
             else:
                 sig = limpa(principal["proposicao_titulo"])
+        ev = v["evento"] if v["evento"] not in ("", "0") else None
+        dia = f"{v['data'][8:10]}/{v['data'][5:7]}/{v['data'][:4]}"
+        portal = f"{PORTAL}/presenca-comissoes/votacao-portal?reuniao={ev}" if ev else None
+        prop_url = f"{PORTAL}/propostas-legislativas/{pid}" if pid else None
         itens[vid] = {
-            "data": v["data"], "propostaId": f"camara:{pid}" if pid else None,
+            "data": v["data"], "hora": v["dh"][11:16] or None, "propostaId": f"camara:{pid}" if pid else None,
             "proposta": sig, "descricao": v["descricao"],
             "resultado": {"1": "Aprovado", "0": "Rejeitado"}.get(v["aprovacao"]),
-            "url": f"{PORTAL}/propostas-legislativas/{pid}" if pid else f"{API}/votacoes/{vid}",
+            "url": prop_url or f"{API}/votacoes/{vid}",
             "_dh": v["dh"],
+            "_votos": todos.get(vid, []), "_orient": orient.get(vid, []),
+            "_ementa": limpa(principal["proposicao_ementa"]) if principal else None,
+            "_propUrl": prop_url, "_portal": portal,
+            "_oficial": V.placar_da_descricao(v["descricao"]),
+            "_fontes": ([fonte(VEIC, f"Votação nominal no portal da Câmara (sessão de {dia}: escolha a votação na lista)", portal, HOJE)]
+                        if portal else []) +
+                       [fonte(VEIC, f"Dados Abertos: votação {vid} (o que foi votado, votos de cada deputado e orientações)",
+                              f"{API}/votacoes/{vid}", HOJE)] +
+                       ([fonte(VEIC, f"Página da proposta {sig}", prop_url, HOJE)] if prop_url else []),
         }
     return itens, {"votos": votos, "secretas": secretas}
 
 
 ARQ_VOTACOES = "dados/votacoes/camara.json"   # caminho relativo ao site (vai em votacoes.arquivo)
-CAMPOS_VOTACAO = ("data", "propostaId", "proposta", "descricao", "resultado", "url")
+# "hora", "categoria" e "placar" vêm de scripts/votacoes.py (preparar); os outros campos são os de antes
+CAMPOS_VOTACAO = ("data", "hora", "propostaId", "proposta", "descricao", "resultado", "categoria", "placar", "url")
 
 
 def _ordem_votacao(itens: dict):
@@ -656,31 +698,37 @@ def _ordem_votacao(itens: dict):
 
 def catalogo_votacoes(itens: dict) -> dict:
     """dados/votacoes/camara.json: cada votação uma única vez. Chave = id da votação na Câmara
-    (ex.: "2236186-60", o mesmo de /api/v2/votacoes/{id}), sem prefixo."""
+    (ex.: "2236186-60", o mesmo de /api/v2/votacoes/{id}), sem prefixo. Os detalhes de cada uma (quem votou o quê,
+    orientações) ficam em dados/votacoes/camara/<id>.json. Precisa de votacoes.preparar() antes."""
     return {
         "atualizado": HOJE,
         "fonte": fonte(VEIC, f"Dados Abertos: votações nominais do Plenário de fevereiro de {ANO_VOT} a "
-                             f"{HOJE[8:10]}/{HOJE[5:7]}/{ANO} (arquivos votacoes, votacoesProposicoes e votacoesVotos)",
+                             f"{HOJE[8:10]}/{HOJE[5:7]}/{ANO} (arquivos votacoes, votacoesProposicoes, votacoesVotos e "
+                             "votacoesOrientacoes)",
                        DOC_ARQUIVOS, HOJE),
-        "votacoes": {vid: {k: itens[vid][k] for k in CAMPOS_VOTACAO}
+        "votacoes": {vid: {k: itens[vid].get(k) for k in CAMPOS_VOTACAO}
                      for vid in sorted(itens, key=_ordem_votacao(itens), reverse=True)},
     }
 
 
 def bloco_votacoes(dep: str, itens: dict, votos: dict) -> dict:
-    """Só o voto de cada um: [["<id da votação>", "Sim"], ...]. Os detalhes ficam em dados/votacoes/camara.json."""
+    """Só o voto de cada um: [["<id da votação>", "Sim"], ...]. Os detalhes ficam em dados/votacoes/camara.json.
+    Quando o partido do deputado NA ÉPOCA recebeu orientação publicada, o par ganha mais dois elementos:
+    ["<id>", "Sim", "Não", "b"] = orientação e de quem veio (p = do partido, f = da federação, b = do bloco)."""
     pares, vistos = [], set()
     for vid, voto in votos.get(dep, []):
         if vid in itens and vid not in vistos:
             vistos.add(vid)
-            pares.append([vid, voto])
+            pares.append([vid, voto] + (V.orientacao_da_pessoa(itens[vid], f"dep-{dep}") or []))
     ordem = _ordem_votacao(itens)
     pares.sort(key=lambda p: ordem(p[0]), reverse=True)
     resumo = {"total": len(pares), "Sim": 0, "Não": 0, "Abstenção": 0, "Obstrução": 0, "Outro": 0}
-    for _, voto in pares:
+    for par in pares:
+        voto = par[1]
         resumo[voto if voto in ("Sim", "Não", "Abstenção", "Obstrução") else "Outro"] += 1
     return {
-        "escopo": "Votações com voto de cada um (nominais) no Plenário da Câmara desde fevereiro de 2023",
+        "escopo": f"Votações com voto de cada um (nominais) no Plenário da Câmara desde {DESDE_PT}",
+        "escopo_en": f"Roll-call votes (where each member's vote is recorded) in the full Chamber of Deputies since {DESDE_EN}.",
         "resumo": resumo,
         "fonte": fonte(VEIC, f"Dados Abertos: votações nominais do Plenário de fevereiro de {ANO_VOT} a {HOJE[8:10]}/{HOJE[5:7]}/{ANO} (votos de cada deputado)",
                        f"{PORTAL}/deputados/{dep}/votacoes-nominais-plenario/{ANO}", HOJE),
@@ -810,7 +858,7 @@ def bloco_gastos(dep: str, cota: dict, conferencia: Counter) -> dict:
                   f"(a consulta do portal falhou; o arquivo não traz passagens aéreas do sistema da Câmara, o SIGEPA)")
     lista = [{"tipo": nome_despesa(t), "valor": round(v, 2)} for t, v in por_tipo.items() if abs(v) >= 0.005]
     lista.sort(key=lambda x: (-x["valor"], chave_nome(x["tipo"])))
-    return {"ano": ANO, "total": round(total, 2), "porTipo": lista, "mandatoTotal": round(total_m, 2),
+    return {"ano": ANO, "total": round(total, 2), "porTipo": lista, "mandatoTotal": round(total_m, 2), "desde": INICIO_LEG[:7],
             "fonte": fonte(VEIC, titulo, url, HOJE)}
 
 
@@ -934,7 +982,8 @@ def main():
     anos = range(ano_ini, ANO + 1)
     log(f"Arquivos em lote: proposições de {ano_ini} a {ANO} (1º mandato mais antigo: {leg_ini}ª legislatura), votações e cota")
     tarefas = [(n, ano) for ano in reversed(anos) for n in ("proposicoesAutores", "proposicoes", "proposicoesTemas")]
-    tarefas += [(n, ano) for ano in range(ANO_VOT, ANO + 1) for n in ("votacoes", "votacoesVotos", "votacoesProposicoes")]
+    tarefas += [(n, ano) for ano in range(ANO_VOT, ANO + 1)
+                for n in ("votacoes", "votacoesVotos", "votacoesProposicoes", "votacoesOrientacoes")]
     tarefas += [(n, None) for n in ("orgaos", "deputadosProfissoes")] + [("orgaosDeputados", f"L{LEG_ATUAL}")]
     em_paralelo(lambda t: lote(*t), tarefas)
     em_paralelo(cota_zip, list(range(ANO_VOT, ANO + 1)))
@@ -993,13 +1042,16 @@ def main():
 
     log("Votações nominais do Plenário")
     itens_vot, vv = ler_votacoes(ids)
+    V.preparar("camara", itens_vot)   # categoria, placar, quórum e orientações ligadas aos partidos
     log(f"  {len(itens_vot)} votações nominais com votos abertos; {len(vv['secretas'])} secretas fora ({time.time() - t0:.0f}s)")
     if len(itens_vot) >= 100:  # o catálogo não depende de quais deputados foram processados
         caminho_vot = RAIZ / ARQ_VOTACOES
         mudou = salvar_sem_ruido(caminho_vot, catalogo_votacoes(itens_vot))
         log(f"  {ARQ_VOTACOES}: {len(itens_vot)} votações, {caminho_vot.stat().st_size / 1024:.0f} KB ({'reescrito' if mudou else 'sem mudança'})")
+        g, a_ = V.salvar_detalhes("camara", itens_vot)
+        log(f"  dados/votacoes/camara/: um arquivo por votação ({g} gravados, {a_} apagados)")
     else:
-        log(f"  AVISO: poucas votações ({len(itens_vot)}); {ARQ_VOTACOES} não foi reescrito")
+        log(f"  AVISO: poucas votações ({len(itens_vot)}); {ARQ_VOTACOES} e dados/votacoes/camara/ não foram reescritos")
 
     log("Cota parlamentar")
     cota = ler_cota_csv(ids)

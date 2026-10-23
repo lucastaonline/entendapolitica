@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <script>(function(d){try{var a=JSON.parse(localStorage.getItem("ep-a11y")||"{}");if(a.contraste)d.classList.add("alto-contraste");if(a.movimento)d.classList.add("sem-movimento");if(a.espaco)d.classList.add("espacado");if(a.escala)d.style.setProperty("--escala",a.escala);var q=/[?&]lang=(en|pt)\b/.exec(location.search),l=q?q[1]:localStorage.getItem("ep-lang");if(l==="en")d.lang="en";}catch(e){}})(document.documentElement)</script>
+  <title data-en="Vote in Congress | Understand Politics">Votação no Congresso | Entenda Política</title>
+  <meta name="description" content="Uma votação do Plenário da Câmara ou do Senado: o que foi votado, o resultado, como cada partido votou e o voto de cada um. Tudo com fonte." data-en-content="A vote in the full Chamber of Deputies or the full Senate: what was voted on, the result, how each party voted and each member's vote. Everything with sources.">
+  <link rel="canonical" href="https://entendapolitica.vercel.app/votacao.html">
+  <link rel="alternate" hreflang="pt-BR" href="https://entendapolitica.vercel.app/votacao.html">
+  <link rel="alternate" hreflang="en" href="https://entendapolitica.vercel.app/votacao.html?lang=en">
+  <link rel="alternate" hreflang="x-default" href="https://entendapolitica.vercel.app/votacao.html">
+  <meta property="og:type" content="article">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:site_name" content="Entenda Política">
+  <meta property="og:title" content="Como cada um votou, explicado de um jeito fácil">
+  <meta property="og:description" content="O que foi votado na Câmara ou no Senado, o resultado e o voto de cada deputado ou senador. Tudo com fonte.">
+  <meta property="og:image" content="https://entendapolitica.vercel.app/img/compartilhar.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Desenho do Congresso Nacional em 3D com o texto: A política do Brasil, explicada de um jeito simples">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#1f3a5f">
+  <link rel="icon" href="favicon.ico" sizes="48x48">
+  <link rel="icon" href="img/icone.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="stylesheet" href="css/base.css?v=4">
+  <link rel="stylesheet" href="css/tres.css?v=4">
+  <link rel="stylesheet" href="css/tres-politica.css?v=4">
+  <link rel="stylesheet" href="css/paginas.css?v=4">
+  <link rel="stylesheet" href="css/votacoes.css?v=4">
+</head>
+<body>
+<a class="pular" href="#conteudo" data-en="Skip to content">Pular para o conteúdo</a>
+<header class="topo">
+  <a href="./" aria-label="Início" data-en-aria-label="Home" title="Página inicial" data-en-title="Home page"><span aria-hidden="true">🏠 </span><span class="rotulo" data-en="Home">Início</span></a>
+  <a href="votacoes.html" aria-label="Todas as votações" data-en-aria-label="All the votes" title="Todas as votações" data-en-title="All the votes"><span aria-hidden="true">◀ </span><span class="rotulo" data-en="Votes">Votações</span></a>
+  <span class="onde"><span aria-hidden="true">🗳️ </span><span id="onde" data-en="Vote">Votação</span></span>
+  <a id="btn-idioma" href="?lang=en">🌐 EN</a>
+  <button id="btn-a11y" type="button" aria-haspopup="dialog"><span aria-hidden="true">♿</span><span class="rotulo" data-en=" Accessibility"> Acessibilidade</span></button>
+  <button id="btn-ouvir" type="button" aria-pressed="false"><span aria-hidden="true">🔊</span><span class="rotulo" data-en=" Listen"> Ouvir</span></button>
+  <button id="btn-letra" type="button">A+</button>
+</header>
+
+<main class="pagina" id="conteudo" data-ler>
+  <div id="votacao"><div class="miolo carregando" data-en="Loading…">Carregando…</div></div>
+</main>
+
+<footer class="miolo rodape">
+  <p id="links-erro"></p>
+  <p data-en-html="The votes come from the open data of the Chamber of Deputies and the Federal Senate, with the source next to each item. <a href=&quot;dados.html&quot;>Where the data comes from</a> · <a href=&quot;imparcialidade.html&quot;>How we stay impartial</a>">As votações vêm dos dados abertos da Câmara dos Deputados e do Senado Federal, com a fonte ao lado de cada informação. <a href="dados.html">De onde vêm os dados</a> · <a href="imparcialidade.html">Como cuidamos da imparcialidade</a></p>
+</footer>
+
+<noscript><p style="padding:20px">Esta página precisa de JavaScript ligado no navegador. / This page needs JavaScript.</p></noscript>
+<script src="js/config.js?v=4"></script>
+<script src="js/comum.js?v=4"></script>
+<script src="js/traducoes.js?v=4"></script>
+<script src="js/tres.js?v=4"></script>
+<script src="js/tres-politica.js?v=4"></script>
+<script src="js/votacoes.js?v=4"></script>
+<script src="js/votacao.js?v=4"></script>
+</body>
+</html>

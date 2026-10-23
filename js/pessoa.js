@@ -467,9 +467,47 @@
         'Votar "Sim" não é bom e votar "Não" não é ruim: depende do que estava sendo votado. Leia cada votação para entender. "Obstrução" é um recurso previsto nas regras da Casa: o líder anuncia que o partido está em obstrução, e os parlamentares dele deixam de contar para o número mínimo de presentes, para adiar ou evitar aquela votação.',
         'Voting "Yes" is not good and voting "No" is not bad: it depends on what was being voted on. Read each vote to understand it. "Obstruction" is a tool allowed by the rules: the party leader announces it, and the party\'s members stop counting toward the minimum number of members present, in order to delay or prevent that vote.') + "</p></div>" +
       (EP.en ? '<p class="muted" style="font-size:.85rem;margin:10px 0 0">The descriptions of each vote are official texts in Portuguese.</p>' : "") +
+      '<div class="temas-chips" id="filtro-votos" role="group" aria-label="' + EP.tr("Filtrar as votações pelo tipo", "Filter the votes by type") + '" style="margin-top:14px" hidden></div>' +
+      '<p class="muted nota-contexto" id="nota-tipos-votos" style="margin:0" hidden><span aria-hidden="true">💬 </span>' + EP.tr(
+        "Quando foi publicada, aparece também a orientação do partido " + EP.gen(p.genero, "dele", "dela") + " na época (ou do bloco ou da federação de que o partido fazia parte): o voto que o líder pediu. É só um pedido: cada um decide o próprio voto. Toque numa votação para ver como todos votaram.",
+        "When it was published, the orientation of " + (EP.en && p.genero === "F" ? "her" : EP.en && p.genero === "M" ? "his" : "their") + " party at the time (or of the bloc or federation the party belonged to) also appears: the vote the leader asked for. It is only a request: each member decides their own vote. Tap a vote to see how everyone voted.") + "</p>" +
+      '<p class="contagem" id="contagem-votos" aria-live="polite"></p>' +
       '<ul class="lista-votos" id="lista-votos"><li class="carregando">' + EP.tr("Carregando as votações…", "Loading the votes…") + '</li></ul><div class="mais-lista" id="mais-votos"></div></section>';
   }
-  var VOTOS = null, mostrandoV = 15;
+  var VOTOS = null, mostrandoV = 15, filtroV = "";
+  // tipos de votação (classificados por scripts/votacoes.py a partir da descrição oficial; mais em votacoes.html)
+  // [ícone, nome no filtro (pt, en), nome na etiqueta (pt, en)]
+  var CAT_VOTO = { principal: ["📜", "Texto principal", "Main text", "Texto principal", "Main text"],
+    mudanca: ["✏️", "Mudanças no texto", "Changes to the text", "Mudança no texto", "Change to the text"],
+    procedimento: ["⏱️", "Procedimentos", "Procedures", "Procedimento", "Procedure"], outra: ["🗂️", "Outras decisões", "Other decisions", "Outra decisão", "Other decision"] };
+  var ORI_VOTO = { "Sim": ["Sim", "Yes"], "Não": ["Não", "No"], "Abstenção": ["Abstenção", "Abstain"], "Obstrução": ["Obstrução", "Obstruction"], "Liberado": ["Liberado", "Free vote"] };
+  // página da votação (só Câmara e Senado: "2236186-60" e "senado-vot:7107"); outras Casas ainda não têm
+  function urlVotacao(k) {
+    var m = /^senado-vot:(\d+)$/.exec(k), c = /^(?:camara-vot:)?(\d+-\d+)$/.exec(k);
+    return m ? "votacao.html?casa=senado&id=" + m[1] : c ? "votacao.html?casa=camara&id=" + c[1] : null;
+  }
+  // orientação do partido da pessoa NA ÉPOCA (3º e 4º elementos do par: p = do partido, f = da federação, b = do bloco)
+  function oriVotoHtml(x) {
+    if (!x.ori) return "";
+    var de = x.oriDe === "f" ? EP.tr("Orientação da federação do partido", "Orientation of the party's federation") :
+      x.oriDe === "b" ? EP.tr("Orientação do bloco do partido", "Orientation of the party's bloc") : EP.tr("Orientação do partido", "Party's orientation");
+    var val = ORI_VOTO[x.ori];
+    return '<small><span aria-hidden="true">💬 </span>' + de + ": <b>" + (val ? esc(EP.tr(val[0], val[1])) : D.ptHtml(x.ori, true)) + "</b></small>";
+  }
+  function desenhaFiltroVotos() {
+    var box = document.getElementById("filtro-votos");
+    if (!box || !VOTOS || !VOTOS.some(function (x) { return x.categoria; })) return;
+    var c = {};
+    VOTOS.forEach(function (x) { c[x.categoria] = (c[x.categoria] || 0) + 1; });
+    box.innerHTML = '<span class="rot-filtro" aria-hidden="true">' + EP.tr("Tipo de votação:", "Type of vote:") + "</span>" +
+      '<button type="button" data-vcat="" aria-pressed="' + (filtroV === "") + '">' + EP.tr("Todas", "All") + " (" + EP.num(VOTOS.length) + ")</button>" +
+      ["principal", "mudanca", "procedimento"].filter(function (k) { return c[k]; }).map(function (k) {
+        return '<button type="button" data-vcat="' + k + '" aria-pressed="' + (filtroV === k) + '"><span aria-hidden="true">' + CAT_VOTO[k][0] + " </span>" +
+          esc(EP.tr(CAT_VOTO[k][1], CAT_VOTO[k][2])) + " (" + EP.num(c[k]) + ")</button>";
+      }).join("");
+    box.hidden = false;
+    document.getElementById("nota-tipos-votos").hidden = false;
+  }
   function listaVotos(v) {
     if ((v.lista || []).length) return Promise.resolve(v.lista);
     if (!(v.votos || []).length || !v.arquivo) return Promise.resolve([]);
@@ -478,7 +516,7 @@
       return v.votos.map(function (par) {
         var k = String(par[0]);
         var info = tab[k] || tab["camara-vot:" + k] || tab["senado-vot:" + k] || tab[k.replace(/^(camara|senado)-vot:/, "")] || {};
-        return Object.assign({ id: k, voto: par[1] }, info);
+        return Object.assign({ id: k, voto: par[1], ori: par[2] || null, oriDe: par[3] || null }, info);
       }).sort(function (a, b) { return (b.data || "").localeCompare(a.data || ""); });
     });
   }
@@ -486,7 +524,7 @@
     var el = document.getElementById("lista-votos");
     if (!el) return;
     function vai() {
-      listaVotos(P.votacoes).then(function (l) { VOTOS = l; desenhaVotos(); }).catch(function () {
+      listaVotos(P.votacoes).then(function (l) { VOTOS = l; desenhaFiltroVotos(); desenhaVotos(); }).catch(function () {
         el.innerHTML = '<li class="vazio">' + EP.tr("As votações ainda não estão disponíveis. Volte daqui a pouco.", "The votes are not available yet. Please come back in a little while.") + "</li>";
       });
     }
@@ -499,17 +537,28 @@
   function desenhaVotos(focarDe) {
     var el = document.getElementById("lista-votos");
     if (!el || !VOTOS) return;
-    var vis = VOTOS.slice(0, mostrandoV);
+    var lista = filtroV ? VOTOS.filter(function (x) { return x.categoria === filtroV; }) : VOTOS;
+    var vis = lista.slice(0, mostrandoV);
     el.innerHTML = vis.map(function (x, k) {
       var vt = D.voto(x.voto);
       var res = x.resultado ? " · " + EP.tr("Resultado: ", "Result: ") + D.resultado(x.resultado) : "";
+      var cat = CAT_VOTO[x.categoria], u = urlVotacao(x.id);
+      var tit = "<b>" + esc(x.proposta || EP.tr("Votação", "Vote")) + "</b>" + (x.data ? "\u00a0·\u00a0" + EP.data(x.data) : "");
       return "<li" + (focarDe != null && k === focarDe ? ' tabindex="-1"' : "") + '><span class="voto-chip" style="--cv:' + (COR_VOTO[vt.cat] || COR_VOTO.Outro) + '"><span class="sr">' + EP.tr("Voto: ", "Vote: ") + "</span>" + esc(vt.curto) + "</span>" +
-        '<span class="v-txt"><b>' + esc(x.proposta || EP.tr("Votação", "Vote")) + "</b>" + (x.data ? " · " + EP.data(x.data) : "") + res +
-        (vt.longo ? "<small>" + esc(vt.longo) + "</small>" : "") +
+        '<span class="v-txt">' + (u ? '<a href="' + u + '">' + tit + '<span class="sr"> (' + EP.tr("ver como todos votaram", "see how everyone voted") + ")</span></a>" : tit) + res +
+        (cat ? ' <span class="chip neutro" style="font-size:.7rem;padding:1px 8px;white-space:normal"><span aria-hidden="true">' + cat[0] + " </span>" +
+          esc(EP.tr(cat[3], cat[4])) + "</span>" : "") +
+        (vt.longo ? "<small>" + esc(vt.longo) + "</small>" : "") + oriVotoHtml(x) +
         (x.descricao ? '<span class="desc-voto" style="display:block">' + EP.pt(esc(x.descricao)) + "</span>" : "") +
         (x.url ? linkFora(x.url, EP.tr("Ver no site oficial", "See it on the official website") + '<span class="sr"> (' + esc(x.proposta || "") + ")</span>", true) : "") + "</span></li>";
     }).join("") || '<li class="vazio">' + EP.tr("Nenhuma votação encontrada.", "No votes found.") + "</li>";
-    document.getElementById("mais-votos").innerHTML = VOTOS.length > vis.length ? '<button type="button" class="btn claro" id="ver-mais-votos">' +
+    var c = document.getElementById("contagem-votos");
+    if (c) {
+      var txt = EP.tr("Mostrando " + EP.num(vis.length) + " de " + EP.num(lista.length) + (lista.length === 1 ? " votação" : " votações") + ", da mais nova para a mais antiga.",
+        "Showing " + EP.num(vis.length) + " of " + EP.num(lista.length) + (lista.length === 1 ? " vote" : " votes") + ", newest first.");
+      if (c.textContent !== txt) c.textContent = txt;
+    }
+    document.getElementById("mais-votos").innerHTML = lista.length > vis.length ? '<button type="button" class="btn claro" id="ver-mais-votos">' +
       EP.tr("Mostrar mais votações", "Show more votes") + ' <span aria-hidden="true">▾</span></button>' : "";
     if (focarDe != null && el.children[focarDe]) el.children[focarDe].focus();
   }
@@ -584,10 +633,10 @@
   }
 
   // ---------------------------------------------------------------- "Voltar"
-  // Volta para a página de onde a pessoa veio (o Brasil, um estado, uma cidade ou a busca da página inicial), e não sempre para a
-  // lista do cargo. Se veio direto de lá, usa o histórico do navegador: a lista reaparece como estava (filtros e rolagem).
+  // Volta para a página de onde a pessoa veio (o Brasil, um estado, uma cidade, uma votação ou a busca da página inicial), e não
+  // sempre para a lista do cargo. Se veio direto de lá, usa o histórico do navegador: a lista reaparece como estava (filtros e rolagem).
   // Sem pista de onde veio (link compartilhado, por exemplo), vai para a lista do cargo.
-  var LISTAS = /^(index|brasil|estado|cidade)\.html/;
+  var LISTAS = /^(index|brasil|estado|cidade|votacoes|votacao)\.html/;
   function combina(pagina, p) {
     var m = /^estado\.html\?uf=([a-z]{2})/i.exec(pagina);
     if (m) return String(p.uf || "").toUpperCase() === m[1].toUpperCase();
@@ -601,6 +650,8 @@
     if (/^cidade\.html/.test(pagina)) return EP.tr("Voltar para a política da cidade", "Back to the city's politics");
     if (/^brasil\.html/.test(pagina)) return EP.tr("Voltar para a política do Brasil", "Back to Brazil's politics");
     if (/^index\.html/.test(pagina)) return EP.tr("Voltar para a página inicial", "Back to the home page");
+    if (/^votacao\.html/.test(pagina)) return EP.tr("Voltar para a votação", "Back to the vote");
+    if (/^votacoes\.html/.test(pagina)) return EP.tr("Voltar para as votações", "Back to the votes");
     return EP.tr("Voltar para a lista", "Back to the list");
   }
   function ligaVoltar(p) {
@@ -661,10 +712,18 @@
   }
 
   raiz.addEventListener("click", function (e) {
-    var t = e.target.closest("[data-papel],[data-status],[data-tema],#ver-mais-prop,#ver-mais-votos");
+    var t = e.target.closest("[data-papel],[data-status],[data-tema],[data-vcat],#ver-mais-prop,#ver-mais-votos");
     if (!t) return;
     if (t.id === "ver-mais-prop") { var de = mostrando; mostrando += 20; desenhaLista(de); return; }
     if (t.id === "ver-mais-votos") { var dv = mostrandoV; mostrandoV += 15; desenhaVotos(dv); return; }
+    // tipo de votação: o botão continua no lugar (só muda o aria-pressed), então o foco fica nele
+    if (t.hasAttribute("data-vcat")) {
+      filtroV = t.getAttribute("data-vcat");
+      [].forEach.call(raiz.querySelectorAll("[data-vcat]"), function (b) { b.setAttribute("aria-pressed", String(b.getAttribute("data-vcat") === filtroV)); });
+      mostrandoV = 15;
+      desenhaVotos();
+      return;
+    }
     if (t.hasAttribute("data-papel")) {
       var novo = t.getAttribute("data-papel");
       filtro.papel = filtro.papel === novo ? "todas" : novo;

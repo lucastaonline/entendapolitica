@@ -1,0 +1,180 @@
+/* ====== Votações nominais (votacao.html, votacoes.html e o bloco "Como o Congresso votou" da página do Brasil) ======
+   Cores dos votos (as mesmas do perfil): Sim #1f3a5f, Não #9a4f00, Abstenção #5b6573, Obstrução #6a3fb0, Outro #6b5a33.
+   Resultado: só tons neutros (nada de verde/vermelho de "vitória" ou "derrota"). */
+
+/* ---------- etiquetas ---------- */
+.chip-cat { display: inline-flex; align-items: center; gap: 6px; border-radius: 999px; padding: 3px 12px; font-size: .78rem; font-weight: 800;
+  background: #fff3d6; color: #5c4100; border: 2px solid #f2d48a; white-space: normal; text-align: left; }
+.chip-casa { white-space: nowrap; }
+.vot-q { display: inline-block; width: 12px; height: 12px; border-radius: 4px; vertical-align: -1px; margin-right: 4px; flex-shrink: 0; }
+
+/* ---------- lista de votações (cartões) ---------- */
+.lista-vot { list-style: none; margin: 12px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
+.vot-card { position: relative; display: flex; flex-direction: column; gap: 6px; background: #fff; border: 2px solid var(--line); border-radius: 18px;
+  padding: 14px 16px; box-shadow: 0 3px 0 #ece3d0; overflow-wrap: anywhere; transition: transform .2s, box-shadow .2s; }
+.vot-card:hover { transform: perspective(700px) rotateX(4deg) translateY(-3px); box-shadow: 0 8px 18px rgba(60, 40, 0, .12); }
+.vot-card:focus-within { box-shadow: 0 0 0 3px var(--ink); }
+.vot-topo { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; margin: 0; font-size: .85rem; color: var(--muted); font-weight: 700; }
+.vot-tit { font-size: 1.15rem; margin: 2px 0 0; }
+.vot-tit a { color: var(--ink); text-decoration: none; }
+.vot-tit a::after { content: ""; position: absolute; inset: 0; border-radius: 18px; }
+.vot-tit a:hover { text-decoration: underline; }
+.vot-tit a:focus-visible { outline: none; box-shadow: none; text-decoration: underline; }
+.vot-chips { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 0; }
+.vot-desc { font-size: .86rem; color: #4a5260; margin: 2px 0 0; line-height: 1.4; }
+.vot-ver { margin-top: auto; padding-top: 4px; font-weight: 900; color: var(--brand); font-size: .88rem; }
+
+/* placar pequeno (barra + números) */
+.mini-placar { display: grid; gap: 5px; margin-top: 4px; }
+.mp-barra { display: flex; height: 12px; border-radius: 99px; overflow: hidden; background: #efe9dc; }
+.mp-barra i { display: block; height: 100%; }
+.mp-barra i + i { border-left: 2px solid #fff; }
+.mp-txt { display: flex; flex-wrap: wrap; gap: 2px 12px; font-size: .8rem; font-weight: 800; color: var(--ink); }
+.mp-txt b { font-variant-numeric: tabular-nums; }
+
+/* filtros (lista e "quem votou o quê") */
+.filtros-vot { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin: 16px 0 4px; align-items: end; }
+.filtros-vot.quatro { grid-template-columns: minmax(0, 1.3fr) repeat(3, minmax(0, 1fr)); }
+.filtros-vot .f-busca { grid-column: 1 / -1; }
+.filtros-vot.quatro .f-busca { grid-column: auto; }
+.filtros-vot label, .filtros-vot .rot { display: block; font-size: .8rem; font-weight: 900; color: var(--muted); margin: 0 0 4px 4px; }
+.filtros-vot .busca input { padding-top: 11px; padding-bottom: 11px; font-size: 1rem; min-height: 48px; }
+.filtros-vot .combo-sel, .filtros-vot > div { min-width: 0; }
+.nota-lista { font-size: .82rem; color: var(--muted); margin: 6px 0 0; }
+
+/* explicações (o que é votação nominal; as categorias) */
+.cats-vot { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin: 12px 0 6px; padding: 0; list-style: none; }
+.cats-vot li { background: #fff; border: 2px solid var(--line); border-radius: 18px; padding: 12px 14px; box-shadow: 0 3px 0 #ece3d0; }
+.cats-vot .c-ic { font-size: 1.8rem; line-height: 1; display: block; }
+.cats-vot b { display: block; margin: 4px 0 2px; }
+.cats-vot p { font-size: .88rem; margin: 0; }
+.nominal-explica { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; margin: 10px 0; }
+.nominal-explica > div { background: #fff; border: 2px solid var(--line); border-radius: 18px; padding: 12px 14px; }
+.nominal-explica b { display: block; margin-bottom: 2px; }
+.nominal-explica p { margin: 0; font-size: .9rem; }
+
+/* ---------- página de uma votação ---------- */
+.vot-hero .cab-3d { display: flex; justify-content: center; }
+.vot-quando { font-weight: 800; color: var(--muted); margin: 0 0 10px; }
+.cat-explica { display: flex; flex-wrap: wrap; gap: 8px 10px; align-items: flex-start; background: #fff; border: 2px dashed #e6d6ad; border-radius: 18px; padding: 10px 14px; margin: 8px 0 12px; }
+.cat-explica p { margin: 0; font-size: .95rem; flex: 1 1 260px; }
+.cat-explica .fontes-btn { margin-top: 6px; }
+.voltar-vot { display: inline-block; padding: 10px 0; }
+
+.vot-oficial { font-size: .92rem; color: var(--ink); background: #f7f3ea; border-radius: 14px; padding: 10px 14px; margin: 8px 0; overflow-wrap: anywhere; }
+.rot-texto { display: block; font-size: .7rem; font-weight: 900; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin-bottom: 2px; }
+.vot-simples { font-size: 1.05rem; font-weight: 700; line-height: 1.4; margin: 6px 0; }
+.vot-simples .rot-texto { color: #7a5200; }
+.vot-links { display: flex; flex-wrap: wrap; gap: 0 18px; align-items: center; margin: 6px 0 0; font-size: .9rem; }
+.vot-links a { display: inline-flex; align-items: center; min-height: 44px; font-weight: 700; }
+.vot-prop h3 { margin: 14px 0 4px; }
+
+.res-grade { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 22px; align-items: center; }
+.plen-voto { text-align: center; }
+.plen-voto .plenario { max-width: var(--max, 520px); }
+.plen-voto > p { margin: 8px 0 0; font-weight: 800; color: var(--muted); font-size: .88rem; }
+/* cada fatia é um tipo de voto (ordem: Sim, Abstenção, Obstrução, Outro, não registrou voto, Não) */
+.plen-voto .plenario i[data-g="0"] { --cor: #1f3a5f; }
+.plen-voto .plenario i[data-g="1"] { --cor: #5b6573; }
+.plen-voto .plenario i[data-g="2"] { --cor: #6a3fb0; }
+.plen-voto .plenario i[data-g="3"] { --cor: #6b5a33; }
+.plen-voto .plenario i[data-g="4"] { --cor: #ddd3bf; }
+.plen-voto .plenario i[data-g="5"] { --cor: #9a4f00; }
+.plen-voto .plenario.cheio i[data-g="4"] { box-shadow: 0 1px 0 #b8ad96; transform: none; }
+.plen-voto .plenario i { cursor: default; }
+
+.res-linha { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; margin: 0 0 12px; font-weight: 800; }
+.res-linha .carimbo { font-size: .9rem; padding: 4px 14px; }
+.placar-grande { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(118px, 1fr)); gap: 10px; }
+.placar-grande li { display: flex; flex-direction: column-reverse; justify-content: flex-end; gap: 2px; background: #fff; border: 2px solid var(--line);
+  border-top: 8px solid var(--cv, #6b5a33); border-radius: 16px; padding: 10px 12px; box-shadow: 0 3px 0 #ece3d0; }
+.placar-grande b { font-size: 2.1rem; line-height: 1; font-variant-numeric: tabular-nums; color: var(--ink); }
+.placar-grande .pg-rot { font-size: .85rem; font-weight: 800; color: var(--muted); }
+.placar-grande li.sem-reg { border-top-color: #ddd3bf; border-top-style: dashed; }
+.outros-vot { font-size: .85rem; color: var(--muted); margin: 10px 0 0; }
+.quorum-vot { display: flex; gap: 10px; align-items: flex-start; background: #f3f7fd; border: 2px solid #d6e2f1; border-radius: 14px; padding: 10px 14px; margin: 12px 0 0; font-size: .92rem; }
+.quorum-vot > span:first-child { font-size: 1.3rem; line-height: 1.2; }
+.quorum-vot p { margin: 0; }
+.quorum-vot .fontes-btn { margin-top: 6px; }
+
+/* como cada partido votou */
+.explica-orient { display: flex; gap: 10px; align-items: flex-start; font-size: .9rem; background: #fff; border: 2px dashed #e6d6ad; border-radius: 16px; padding: 10px 14px; margin: 0 0 12px; }
+.explica-orient > span:first-child { font-size: 1.3rem; line-height: 1.2; }
+.explica-orient p { margin: 0; }
+.partidos-vot { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; }
+.pv { background: #fff; border: 2px solid var(--line); border-radius: 16px; padding: 10px 14px; display: grid; gap: 5px; overflow-wrap: anywhere; }
+.pv-cab { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+.pv-nome { font-size: 1.05rem; }
+.pv-n { font-size: .82rem; font-weight: 800; color: var(--muted); white-space: nowrap; }
+.pv-trilho { display: block; height: 14px; background: #efe9dc; border-radius: 99px; overflow: hidden; }
+.pv-barra { display: flex; height: 100%; border-radius: 99px; overflow: hidden; }
+.pv-barra i { display: block; height: 100%; }
+.pv-barra i + i { border-left: 2px solid #fff; }
+.pv-txt { margin: 0; font-size: .84rem; font-weight: 800; display: flex; flex-wrap: wrap; gap: 0 10px; }
+.pv-ori { margin: 0; font-size: .84rem; color: var(--muted); }
+.pv-ori b { color: var(--ink); }
+
+/* o que cada liderança orientou */
+.lid-grupo { margin: 16px 0 6px; font-size: 1.05rem; }
+.lid-lista { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 8px; }
+.lid-lista li { background: #fff; border: 2px solid var(--line); border-radius: 14px; padding: 8px 12px; display: grid; gap: 2px; overflow-wrap: anywhere; }
+.lid-topo { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+.lid-nome { font-weight: 900; }
+.lid-val { font-weight: 900; white-space: nowrap; }
+.lid-val.sem { font-weight: 700; color: var(--muted); white-space: normal; text-align: right; }
+.lid-lista small { color: var(--muted); font-size: .8rem; line-height: 1.3; }
+.abrev { font-size: .86rem; color: var(--muted); margin: 6px 0 0; }
+
+/* quem votou o quê */
+.voto-card .voto-chip { margin-top: 4px; }
+.voto-card.fora { box-shadow: none; border-style: dashed; }
+.voto-card.fora:hover { transform: none; box-shadow: none; }
+.voto-card .fora-txt { font-style: italic; }
+.aviso-dados { display: flex; gap: 10px; align-items: flex-start; }
+.aviso-dados > span:first-child { font-size: 1.2rem; line-height: 1.3; }
+.aviso-dados p { margin: 0; }
+
+/* bloco "Como o Congresso votou" na página do Brasil */
+.recentes-vot { margin-top: 4px; }
+.recentes-vot + p { margin-top: 18px; }
+
+/* ---------- alto contraste ---------- */
+html.alto-contraste .vot-card, html.alto-contraste .pv, html.alto-contraste .lid-lista li, html.alto-contraste .placar-grande li,
+html.alto-contraste .cats-vot li, html.alto-contraste .nominal-explica > div, html.alto-contraste .cat-explica, html.alto-contraste .explica-orient,
+html.alto-contraste .quorum-vot, html.alto-contraste .vot-oficial {
+  border-color: #000 !important; box-shadow: none !important; background: #fff !important; color: #000 !important;
+}
+html.alto-contraste .chip-cat { border-color: #000 !important; color: #000 !important; background: #fff !important; }
+html.alto-contraste .placar-grande li { border-top-width: 8px !important; }
+html.alto-contraste .placar-grande li.sem-reg { border-top-color: #000 !important; }
+html.alto-contraste .plen-voto .plenario.cheio i[data-g="0"] { background: #000; }
+html.alto-contraste .plen-voto .plenario.cheio i[data-g="1"],
+html.alto-contraste .plen-voto .plenario.cheio i[data-g="2"],
+html.alto-contraste .plen-voto .plenario.cheio i[data-g="3"] { background: #6e6e6e; }
+html.alto-contraste .plen-voto .plenario.cheio i[data-g="4"] { background: #fff; box-shadow: inset 0 0 0 1px #9a9a9a; }
+html.alto-contraste .plen-voto .plenario.cheio i[data-g="5"] { background: #fff; box-shadow: inset 0 0 0 1.5px #000; }
+/* no placar, a borda de cima imita as cadeiras: Sim preto, Não branco com borda, os outros cinza */
+html.alto-contraste .placar-grande li[data-v="Sim"] { border-top-color: #000 !important; }
+html.alto-contraste .placar-grande li[data-v="Não"] { border-top: 8px double #000 !important; }
+html.alto-contraste .placar-grande li[data-v="Abstenção"], html.alto-contraste .placar-grande li[data-v="Obstrução"],
+html.alto-contraste .placar-grande li[data-v="Outro"] { border-top-color: #6e6e6e !important; }
+
+/* ---------- celular ---------- */
+@media (max-width: 860px) {
+  .res-grade { grid-template-columns: minmax(0, 1fr); }
+  .filtros-vot, .filtros-vot.quatro { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .filtros-vot .f-busca, .filtros-vot.quatro .f-busca { grid-column: 1 / -1; }
+}
+@media (max-width: 520px) {
+  .filtros-vot, .filtros-vot.quatro { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+}
+@media (max-width: 600px) {
+  .lista-vot { grid-template-columns: minmax(0, 1fr); }
+  .placar-grande { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .placar-grande b { font-size: 1.8rem; }
+  .partidos-vot, .lid-lista { grid-template-columns: minmax(0, 1fr); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .vot-card, .vot-card:hover { transition: none; transform: none; }
+}
+html.sem-movimento .vot-card:hover { transform: none; }

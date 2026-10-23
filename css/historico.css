@@ -38,6 +38,38 @@ h2 .h1-periodo { font-size: .6em; }
   .mandato-box { padding: 10px 12px; }
 }
 
+/* ministros dos governos anteriores: cartões sem link, um por pasta, com a fonte de cada um */
+.min-hist { margin-top: 22px; }
+.min-gov { margin-top: 18px; }
+.min-gov h4 { font-size: 1.05rem; line-height: 1.3; margin: 0 0 6px; }
+.min-gov h4 small { font-size: .8em; font-weight: 700; color: var(--muted); }
+.min-gov .min-gov-per { display: block; margin-top: 2px; font-size: .84rem; font-weight: 700; color: var(--muted); }
+.nota-min { margin: 0 0 10px; font-size: .86rem; color: var(--muted); }
+.grade-min-hist { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+.min-hist-card {
+  min-width: 0; background: #fff; border: 2px solid var(--line); border-radius: 18px; padding: 12px 14px; box-shadow: 0 3px 0 #ece3d0;
+}
+.min-hist-card h5 { margin: 0 0 8px; font-size: .95rem; line-height: 1.25; overflow-wrap: anywhere; }
+.mh-lista { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+.mh-lista li { display: grid; gap: 1px; min-width: 0; }
+.mh-lista b { font-size: .92rem; overflow-wrap: anywhere; }
+.mh-lista .mh-per { font-size: .84rem; }
+.mh-lista small { font-size: .8rem; color: var(--muted); }
+.mh-lacuna { margin: 8px 0 0; padding: 6px 10px; border-radius: 10px; background: var(--creme-forte); color: #6b4a00; font-size: .82rem; }
+.mh-anulada { margin: 8px 0 0; padding: 4px 0 4px 10px; border-left: 3px solid var(--line); color: var(--muted); font-size: .82rem; }
+.mh-mais { margin-top: 8px; padding-top: 4px; border-top: 1px dashed var(--line); }
+.mh-mais summary { cursor: pointer; padding: 6px 0; font-size: .86rem; font-weight: 800; }
+.mh-expl { margin: 4px 0 8px; font-size: .8rem; color: var(--muted); }
+.mh-fonte { margin: 10px 0 0; }
+
+@media (max-width: 600px) {
+  .grade-min-hist { grid-template-columns: 1fr; }
+}
+
 html.alto-contraste .faixa-passado { background: #fff !important; color: #000 !important; border: 3px solid #000 !important; box-shadow: none !important; }
 html.alto-contraste .mandato-box, html.alto-contraste .mudancas li { border-color: #000 !important; background: #fff !important; }
 html.alto-contraste .h1-periodo { color: #000 !important; }
+html.alto-contraste .min-hist-card { border-color: #000 !important; background: #fff !important; box-shadow: none !important; }
+html.alto-contraste .mh-lacuna { border: 2px solid #000; background: #fff !important; color: #000 !important; }
+html.alto-contraste .mh-mais { border-top-color: #000 !important; }
+html.alto-contraste .mh-anulada { border-left-color: #000 !important; color: #000 !important; }

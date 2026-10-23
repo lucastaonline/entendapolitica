@@ -9,6 +9,8 @@ O site mostra, por padrão, quem está no cargo hoje. Nas páginas do Brasil, do
 - dados/historico/estados/<UF>.json ........ governador(a), vice e deputados estaduais/distritais de cada mandato
 - dados/historico/cidades/<UF>/<ano>.json .. prefeito(a), vice e vereadores de cada cidade do estado no mandato que
                                               começou em <ano> (1997, 2001, ..., 2025)
+- dados/historico/ministros/<ano>.json ..... os ministros de cada governo do mandato federal que começou em <ano>
+                                              (1995 a 2019), a partir de dados/manual/ministros-anteriores.json
 
 A mesma régua para todos os anos e cargos:
 - Eleito = situação do TSE depois da totalização começando com "ELEITO" ("MÉDIA", em 1998, é o nome antigo de
@@ -26,6 +28,13 @@ A mesma régua para todos os anos e cargos:
   dados abertos do Senado mostra qual deles continuou no Senado depois de 1995.
 - Presidente e vice: o que o TSE não tem (o vice de 1994 e de 1998 e o 2º turno de 2006) e o que mudou durante o
   mandato (2016) vêm de dados/manual/presidentes.json, sempre com fonte oficial.
+- Ministros (não são eleitos, então não vêm do TSE): dados/manual/ministros-anteriores.json, transcrito uma vez das
+  listas "Ministérios" e "Órgãos da Presidência" da Biblioteca da Presidência da República (FHC, Lula e Dilma) e dos
+  decretos de nomeação e exoneração do Diário Oficial da União (órgãos da Presidência no governo Dilma, o que falta nas
+  listas, Temer e Bolsonaro), cada pessoa com a sua fonte. Em 2015 a 2018 há duas partes: Dilma Rousseff (até
+  12/5/2016) e Michel Temer (desde 12/5/2016). O cartão avisa quando a fonte não traz ninguém por mais de 15 dias.
+  Nomeação tornada sem efeito por outro decreto ("semEfeito") não conta como período de ninguém: fica na pasta, com a
+  data dos dois decretos e as duas fontes.
 - Municípios: o código do TSE (SG_UE) é ligado ao código do IBGE pelo mesmo casamento de scripts/ibge.py
   (casar_tse e EXCECOES_TSE). Cidade que ainda não existia numa eleição aparece em "depois" (ano da 1ª eleição dela).
 
@@ -35,6 +44,7 @@ Dados Abertos (senadores da 50ª legislatura); IBGE (códigos dos municípios); 
 Uso (à mão: o passado não muda, então não precisa rodar todo dia):
     python scripts/historico.py              # gera tudo (baixa o que faltar para .cache/tse/)
     python scripts/historico.py --so 2018    # só uma eleição (para conferir)
+    python scripts/historico.py --ministros  # só os ministros (lê o arquivo manual; não baixa nada)
 Depois do resultado final de 2026 (sem 2º turno pendente), rode de novo: o mandato que começa em 2027 entra sozinho.
 """
 from __future__ import annotations
@@ -42,6 +52,7 @@ from __future__ import annotations
 import argparse
 import collections
 import csv
+import datetime
 import io
 import json
 import os
@@ -62,6 +73,7 @@ SENADO_API = "https://legis.senado.leg.br/dadosabertos/"
 HIST = DADOS / "historico"
 CACHE_TSE = CACHE / "tse"
 MANUAL_PRES = DADOS / "manual" / "presidentes.json"
+MANUAL_MIN = DADOS / "manual" / "ministros-anteriores.json"
 
 GERAIS = [1994, 1998, 2002, 2006, 2010, 2014, 2018, 2022, 2026]
 MUNICIPAIS = [1996, 2000, 2004, 2008, 2012, 2016, 2020, 2024]
@@ -676,6 +688,112 @@ def gerar_municipal(ano: int, base: dict, mapa: dict, primeira: dict) -> dict:
     return out
 
 
+# ---------------------------------------------------------------- ministros dos governos anteriores
+# dados/manual/ministros-anteriores.json (transcrito uma vez das listas da Biblioteca da Presidência e dos decretos do
+# Diário Oficial, cada pessoa com a sua fonte) -> dados/historico/ministros/<mandato>.json, só com o que cabe no mandato
+LACUNA_DIAS = 15  # intervalo sem ninguém na fonte que vale um aviso no cartão
+
+
+def conta_no_periodo(ini: str | None, fim: str | None, j_ini: str, j_fim: str) -> bool:
+    """O período [ini, fim] (fim incluído; None = sem data de saída na fonte) conta para a janela [j_ini, j_fim)?
+    Quem sai no dia da posse do governo seguinte (ex.: "a 1º/1/1999") não entra no mandato que começa nesse dia."""
+    if ini is None:
+        return fim is not None and j_ini < fim <= j_fim
+    if ini >= j_fim:
+        return False
+    if fim is None:
+        return True
+    if ini == fim:
+        return ini >= j_ini
+    return fim > j_ini
+
+
+def lacunas(pessoas: list[dict], j_ini: str, j_fim: str) -> list[list[str]]:
+    """Intervalos de mais de LACUNA_DIAS dias, dentro da janela, entre um titular/interino e o seguinte."""
+    per = sorted((max(a, j_ini), min(b or j_fim, j_fim)) for p in pessoas if p["tipo"] != "substituto"
+                 for a, b in p["periodos"] if a and conta_no_periodo(a, b, j_ini, j_fim))
+    out, ate = [], None
+    for a, b in per:
+        if ate and a > ate:
+            d = (datetime.date.fromisoformat(a) - datetime.date.fromisoformat(ate)).days
+            if d > LACUNA_DIAS:
+                out.append([ate, a])
+        ate = max(ate or b, b)
+    return out
+
+
+def ministros_anteriores(brasil: list[dict]) -> list[Path]:
+    mestre = ler_json(MANUAL_MIN) or {}
+    govs = mestre.get("governos") or []
+    escritos = []
+    for m in brasil:
+        t_ini, t_fim = m["inicio"], m["fim"]
+        partes = []
+        for g in govs:
+            j_ini, j_fim = max(t_ini, g["inicio"]), min(t_fim, g["fim"])
+            if j_ini >= j_fim:
+                continue
+            usadas, fontes, pastas = {}, [], []
+
+            def ref(i):
+                if i not in usadas:
+                    usadas[i] = len(fontes)
+                    fontes.append(g["fontes"][i])
+                return usadas[i]
+            for pa in g["pastas"]:
+                pessoas = []
+                for p in pa["pessoas"]:
+                    per = [x for x in p["periodos"] if conta_no_periodo(x[0], x[1], j_ini, j_fim)]
+                    if not per:
+                        continue
+                    pessoas.append(dict(p, periodos=per, f=[ref(i) for i in p["f"]]))
+                # nomeação tornada sem efeito: não é período de ninguém; entra no mandato da data do decreto de nomeação
+                anuladas = [dict(s, f=[ref(i) for i in s["f"]]) for s in pa.get("semEfeito") or [] if j_ini <= s["nomeacao"] < j_fim]
+                if not any(p["tipo"] != "substituto" for p in pessoas) and not anuladas:
+                    continue
+                x = {k: pa[k] for k in ("nome", "nome_en", "grupo")}
+                x["pessoas"] = pessoas
+                if anuladas:
+                    x["semEfeito"] = anuladas
+                buracos = lacunas(pessoas, j_ini, j_fim)
+                if buracos:
+                    so_dou = all(fontes[i]["veiculo"].startswith("Diário Oficial") for p in pessoas for i in p["f"])
+                    x["lacunas"] = buracos
+                    x["lacunaFonte"] = "dou" if so_dou else "lista"
+                pastas.append(x)
+            if pastas:
+                partes.append({"presidente": g["presidente"], "inicio": j_ini, "fim": j_fim, "inicioGoverno": g["inicio"],
+                               "fimGoverno": g["fim"], "nota": g["nota"], "nota_en": g["nota_en"], "pastas": pastas, "fontes": fontes})
+        if not partes:
+            continue
+        cam = HIST / "ministros" / f"{m['id']}.json"
+        gravar(cam, {"id": m["id"], "inicio": t_ini, "fim": t_fim, "governos": partes, "atualizado": hoje()})
+        escritos.append(cam)
+        log(f"  ministros {m['id']}: " + "; ".join(f"{p['presidente']} {len(p['pastas'])} pastas, "
+                                                    f"{sum(len(x['pessoas']) for x in p['pastas'])} pessoas" for p in partes))
+    return escritos
+
+
+def marca_ministros(indice: dict, feitos: list[Path]) -> None:
+    """No índice, "ministros": true nos mandatos federais que têm a lista (a página só busca o arquivo quando ele existe)."""
+    ids = {f.stem for f in feitos}
+    for m in indice.get("brasil") or []:
+        if m["id"] in ids:
+            m["ministros"] = True
+        else:
+            m.pop("ministros", None)
+
+
+AVISO_INDICE = ("Para os mandatos anteriores, o site mostra quem foi eleito, segundo o TSE, com o partido da eleição. "
+                "Durante um mandato, pessoas podem ter saído e vices ou suplentes podem ter assumido. Eleições "
+                "suplementares não entram. Os ministros de cada governo vêm das listas da Biblioteca da Presidência e do "
+                "Diário Oficial da União.")
+AVISO_INDICE_EN = ("For earlier terms, the site shows who was elected, according to the TSE (Superior Electoral Court), with "
+                   "the party they had in the election. During a term, people may have left and vices or alternates may "
+                   "have taken over. Special elections are not included. The ministers of each government come from the "
+                   "Presidency Library lists and from the Official Gazette (Diário Oficial da União).")
+
+
 # ---------------------------------------------------------------- gravar
 def gravar(caminho: Path, obj) -> bool:
     obj = sem_mudar_data(obj, caminho)
@@ -685,10 +803,29 @@ def gravar(caminho: Path, obj) -> bool:
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--so", type=int, nargs="*", help="só estas eleições (ex.: --so 2018 2020); não apaga nada")
+    ap.add_argument("--ministros", action="store_true",
+                    help="só os ministros dos governos anteriores (de dados/manual/ministros-anteriores.json); não baixa nada")
     args = ap.parse_args()
     t0 = time.time()
+    if args.ministros:
+        indice = ler_json(HIST / "indice.json") or {}
+        (HIST / "ministros").mkdir(parents=True, exist_ok=True)
+        log("Ministros dos governos anteriores...")
+        feitos = ministros_anteriores(indice.get("brasil") or [])
+        for f in (HIST / "ministros").glob("*.json"):
+            if f not in feitos:
+                log(f"  apagando {f.relative_to(RAIZ)} (não foi gerado nesta rodada)")
+                f.unlink()
+        if indice:
+            antes = json.dumps(indice, sort_keys=True, ensure_ascii=False)
+            marca_ministros(indice, feitos)
+            indice.update({"aviso": AVISO_INDICE, "aviso_en": AVISO_INDICE_EN})
+            if json.dumps(indice, sort_keys=True, ensure_ascii=False) != antes:
+                gravar(HIST / "indice.json", indice)
+        log(f"Pronto em {time.time() - t0:.0f}s")
+        return
     so = set(args.so or [])
-    for p in (HIST / "brasil", HIST / "estados", HIST / "cidades"):
+    for p in (HIST / "brasil", HIST / "estados", HIST / "cidades", HIST / "ministros"):
         p.mkdir(parents=True, exist_ok=True)
     escritos = set()
     indice_ant = ler_json(HIST / "indice.json") or {}
@@ -777,15 +914,16 @@ def main():
             indice[nivel] += [x for x in indice_ant.get(nivel) or [] if x["id"] not in ids]
     for nivel in indice:
         indice[nivel].sort(key=lambda x: x["id"], reverse=True)
+    # ---- ministros dos governos anteriores (arquivo manual; não baixa nada); o índice marca os mandatos que têm a lista
+    log("Ministros dos governos anteriores...")
+    feitos = ministros_anteriores(indice["brasil"])
+    escritos.update(feitos)
+    marca_ministros(indice, feitos)
     indice.update({
         "fontes": [fonte("TSE", "Portal de Dados Abertos: candidaturas de cada eleição desde 1994", f"{PORTAL}?q=candidatos", hoje()),
                    F_CF, F_EC111],
-        "aviso": ("Para os mandatos anteriores, o site mostra quem foi eleito, segundo o TSE, com o partido da eleição. "
-                  "Durante um mandato, pessoas podem ter saído e vices ou suplentes podem ter assumido. Eleições "
-                  "suplementares não entram. Ministros de governos anteriores ainda não aparecem."),
-        "aviso_en": ("For earlier terms, the site shows who was elected, according to the TSE (Superior Electoral Court), with "
-                     "the party they had in the election. During a term, people may have left and vices or alternates may "
-                     "have taken over. Special elections are not included. Ministers of earlier governments are not shown yet."),
+        "aviso": AVISO_INDICE,
+        "aviso_en": AVISO_INDICE_EN,
         "atualizado": hoje(),
     })
     cam = HIST / "indice.json"

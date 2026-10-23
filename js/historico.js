@@ -6,7 +6,8 @@
 
    EP.hist.param()                              "2019" ou null
    EP.hist.seletor(lugar, nivel, escolhido)     monta o campo dentro de "lugar" (nivel: "brasil" | "estados" | "cidades")
-   EP.hist.brasil(id)                           a página do Brasil no passado (js/brasil.js chama quando há ?mandato=)
+   EP.hist.brasil(id)                           a página do Brasil no passado (js/brasil.js chama quando há ?mandato=), com os
+                                                ministros de cada governo (dados/historico/ministros/<id>.json)
    EP.hist.estado(uf, id)                       a página do estado no passado (js/estado.js)
    EP.hist.cidade(caixa, ibge, uf, id, pronto)  a cidade no passado (js/cidade.js); "pronto" roda depois de desenhar
    Se o mandato pedido não é do passado (é o de hoje, ainda não começou ou não existe), a página volta para hoje. */
@@ -181,27 +182,121 @@
   }
   function rev(raiz) { EP.revelar(raiz); }
 
+  // ---------------------------------------------------------------- ministros dos governos anteriores
+  // dados/historico/ministros/<id>.json (feito por scripts/historico.py a partir de dados/manual/ministros-anteriores.json):
+  // { governos: [{ presidente, inicio, fim, nota, pastas: [{ nome, nome_en, pessoas: [{ nome, tipo, periodos, f }],
+  //   semEfeito?: [{ nome, tipo, nomeacao, anulacao, f }], lacunas?, lacunaFonte? }], fontes }] }.
+  // Cartões sem link, em ordem alfabética, cada um com a sua fonte.
+  function diaAntes(iso) { var d = new Date(iso + "T12:00:00Z"); d.setUTCDate(d.getUTCDate() - 1); return d.toISOString().slice(0, 10); }
+  function diaDepois(iso) { var d = new Date(iso + "T12:00:00Z"); d.setUTCDate(d.getUTCDate() + 1); return d.toISOString().slice(0, 10); }
+  // "21/09 e 22/09" vira "21/09 a 22/09" (só quando um dos dois é um dia só; saídas e voltas de um dia continuam separadas)
+  function juntaDias(l) {
+    var out = [];
+    l.forEach(function (p) {
+      var u = out[out.length - 1];
+      if (u && u[1] && p[0] && diaDepois(u[1]) === p[0] && (u[0] === u[1] || p[0] === p[1])) u[1] = p[1];
+      else out.push([p[0], p[1]]);
+    });
+    return out;
+  }
+  function periodoMin(p) {
+    var a = p[0], b = p[1];
+    if (!a) return EP.tr("até " + EP.data(b), "until " + EP.data(b));
+    if (!b) return EP.tr("desde " + EP.data(a) + " (a fonte não traz a data de saída)", "from " + EP.data(a) + " (the source gives no end date)");
+    if (a === b) return EP.data(a);
+    return EP.tr(EP.data(a) + " a " + EP.data(b), EP.data(a) + " – " + EP.data(b));
+  }
+  function nomePasta(pa) { return EP.en ? pa.nome_en || D.ministerio(pa.nome) || null : pa.nome; }
+  function nomePastaHtml(pa) { var n = nomePasta(pa); return n ? esc(n) : EP.pt(esc(pa.nome)); }
+  function pessoaMin(x) {
+    return "<li><b>" + esc(x.nome) + "</b>" + (x.conhecido ? " <span>(" + esc(x.conhecido) + ")</span>" : "") +
+      '<span class="mh-per">' + esc(juntaDias(x.periodos).map(periodoMin).join("; ")) + "</span>" +
+      (x.posto ? "<small>" + EP.pt(esc(x.posto)) + "</small>" : "") +
+      (x.cargoNoAto ? "<small>" + esc(EP.tr("No decreto, o cargo aparece como ", "In the decree, the office appears as ")) + "“" + EP.pt(esc(x.cargoNoAto)) + "”.</small>" : "") +
+      (x.obs ? "<small>" + (EP.en && x.obs_en ? esc(x.obs_en) : EP.pt(esc(x.obs))) + "</small>" : "") + "</li>";
+  }
+  // nomeação tornada sem efeito (anulada) por outro decreto: uma linha neutra, sem contar como período de ninguém
+  function anuladaMin(s) {
+    var n = esc(s.nome), d1 = EP.data(s.nomeacao), d2 = EP.data(s.anulacao), outras = (s.outrasAnulacoes || []).map(EP.data);
+    var txt = s.tipo === "interino"
+      ? EP.tr("A nomeação interina de " + n + ", em " + d1 + ", foi tornada sem efeito (anulada) por um decreto de " + d2 + ".",
+        "The acting appointment of " + n + " on " + d1 + " was made void by a decree of " + d2 + ".")
+      : EP.tr("A nomeação de " + n + ", em " + d1 + ", foi tornada sem efeito (anulada) por um decreto de " + d2 + ".",
+        "The appointment of " + n + " on " + d1 + " was made void by a decree of " + d2 + ".");
+    if (outras.length) txt += outras.length === 1 ? EP.tr(" Outro decreto, de " + outras[0] + ", diz o mesmo.", " Another decree, of " + outras[0] + ", says the same.")
+      : EP.tr(" Outros decretos, de " + outras.join(" e ") + ", dizem o mesmo.", " Other decrees, of " + outras.join(" and ") + ", say the same.");
+    return '<p class="mh-anulada"><span aria-hidden="true">📄 </span>' + txt + "</p>";
+  }
+  function cartaoMin(pa, g) {
+    var por = function (t) { return pa.pessoas.filter(function (x) { return x.tipo === t; }); };
+    var tit = por("titular"), inter = por("interino"), sub = por("substituto"), anul = pa.semEfeito || [], f = [];
+    pa.pessoas.concat(anul).forEach(function (x) { x.f.forEach(function (i) { if (g.fontes[i] && f.indexOf(g.fontes[i]) < 0) f.push(g.fontes[i]); }); });
+    var lista = function (l) { return '<ul class="mh-lista">' + l.map(pessoaMin).join("") + "</ul>"; };
+    return '<div class="min-hist-card"><h5>' + nomePastaHtml(pa) + "</h5>" +
+      (tit.length ? lista(tit) : '<p class="mh-expl">' + (inter.length ? EP.tr("Neste período, só aparecem interinos.", "In this period, only acting ministers appear.")
+        : EP.tr("Neste período, a fonte não traz ministro nesta pasta.", "In this period, the source shows no minister for this office.")) + "</p>") +
+      anul.map(anuladaMin).join("") +
+      (pa.lacunas || []).map(function (l) {
+        var a = EP.data(l[0]), b = EP.data(l[1]);
+        // uma nomeação tornada sem efeito dentro do intervalo não valeu: o aviso fala de nomeação válida, para não contradizer a linha acima
+        var comAnulada = anul.some(function (s) { return s.nomeacao >= l[0] && s.nomeacao <= l[1]; });
+        return '<p class="mh-lacuna"><span aria-hidden="true">⏸️ </span>' + esc(pa.lacunaFonte !== "dou"
+          ? EP.tr("A lista oficial não traz ninguém à frente desta pasta de " + a + " a " + b + ".", "The official list shows no one heading this office from " + a + " to " + b + ".")
+          : comAnulada ? EP.tr("O Diário Oficial não traz nomeação válida de ministro de " + a + " a " + b + ".", "The Official Gazette shows no valid minister appointment from " + a + " to " + b + ".")
+            : EP.tr("O Diário Oficial não traz nomeação de ministro de " + a + " a " + b + ".", "The Official Gazette shows no minister appointed from " + a + " to " + b + ".")) + "</p>";
+      }).join("") +
+      (inter.length ? '<details class="mh-mais"><summary>' + EP.tr("Interinos", "Acting ministers") + " (" + inter.length + ")</summary>" + lista(inter) + "</details>" : "") +
+      (sub.length ? '<details class="mh-mais"><summary>' + EP.tr("Quadro “Interino” da lista oficial", "The list's “" + EP.pt("Interino") + "” table") + " (" + sub.length + ")</summary>" +
+        '<p class="mh-expl">' + EP.tr("A lista da Biblioteca da Presidência também tem um quadro chamado “Interino”, com estas pessoas e estes períodos (em geral, longos). Ele aparece aqui como está na lista.",
+          "The Presidency Library list also has a table called “" + EP.pt("Interino") + "” (acting), with these people and periods (usually long ones). It is shown here as it appears in the list.") + "</p>" + lista(sub) + "</details>" : "") +
+      '<p class="mh-fonte">' + EP.botaoFontes(f) + "</p></div>";
+  }
+  function governoMin(g, i, termoFim) {
+    var fim = g.fim === termoFim ? diaAntes(g.fim) : g.fim;
+    var pastas = EP.alfabetica(g.pastas.map(function (pa) { return Object.assign({ _nome: nomePasta(pa) || pa.nome }, pa); }), "_nome");
+    return '<section class="min-gov" aria-labelledby="t-min-gov-' + i + '"><h4 id="t-min-gov-' + i + '">' + esc(EP.tr("Ministros de ", "Ministers of ") + g.presidente) +
+      " <small>(" + pastas.length + " " + EP.tr(pastas.length === 1 ? "pasta" : "pastas", pastas.length === 1 ? "office" : "offices") + ")</small>" +
+      '<span class="min-gov-per">' + esc(EP.tr("De " + EP.dataLonga(g.inicio) + " a " + EP.dataLonga(fim), "From " + EP.dataLonga(g.inicio) + " to " + EP.dataLonga(fim))) + "</span></h4>" +
+      '<p class="nota-min">' + D.aviso(g.nota, g.nota_en) + "</p>" +
+      '<div class="grade-min-hist">' + pastas.map(function (pa) { return cartaoMin(pa, g); }).join("") + "</div></section>";
+  }
+  function ministrosHtml(mins) {
+    var gs = (mins && mins.governos) || [];
+    var h = '<div class="min-hist" id="min-hist"><h3 class="sub" id="t-min-hist"><span aria-hidden="true">👔 </span>' + EP.tr("Os ministros", "The ministers") + "</h3>" +
+      '<p class="muted">' + esc(EP.tr("Ministros não são eleitos: o presidente escolhe cada um para cuidar de uma área, como a saúde ou a educação. Aqui está quem chefiou cada ministério neste mandato, com as datas da fonte oficial. Interino é quem respondeu pelo ministério por um tempo, no lugar do ministro.",
+        "Ministers are not elected: the President chooses each one to take care of an area, such as health or education. Here is who headed each ministry in this term, with the dates from the official source. An acting minister is someone who ran the ministry for a while, in the minister's place.")) + "</p>";
+    if (!mins) return h + aviso(esc(EP.tr("Não conseguimos abrir a lista de ministros agora. Tente de novo daqui a pouco.", "We could not open the list of ministers right now. Please try again in a little while.")), "🛠️") + "</div>";
+    if (!gs.length) return h + aviso(esc(EP.tr("Esta página não tem a lista de ministros deste mandato.", "This page does not have the list of ministers for this term.")), "👔") + "</div>";
+    if (gs.length > 1) h += aviso(esc(EP.tr("O governo mudou em " + EP.dataLonga(gs[1].inicio) + ", quando " + gs[1].presidente + " passou a exercer a Presidência (veja “O que mudou durante o mandato”, acima). Por isso a lista tem duas partes.",
+      "The government changed on " + EP.dataLonga(gs[1].inicio) + ", when " + gs[1].presidente + " became acting President (see “What changed during the term”, above). That is why the list has two parts.")), "🔁");
+    return h + gs.map(function (g, i) { return governoMin(g, i, mins.fim); }).join("") +
+      aviso(esc(EP.tr("As datas são as da fonte oficial, da nomeação até a saída. Uma pessoa pode ter mais de um período, quando saiu e voltou ao cargo. Quando a fonte não traz ninguém à frente de uma pasta por mais de 15 dias, o cartão avisa.",
+        "The dates are those in the official source, from appointment to departure. A person may have more than one period, when they left and came back. When the source shows no one heading an office for more than 15 days, the card says so."))) + "</div>";
+  }
+
   // ---------------------------------------------------------------- Brasil (brasil.html?mandato=2019)
   H.brasil = function (id) {
     document.documentElement.classList.add("modo-passado");
     return H.mandatos("brasil").then(function (r) {
       var m = doPassado(r, id);
       if (!m) return paraHoje();
-      return EP.json(BASE + "brasil/" + m.id + ".json").then(function (d) { brasil(m, d); });
+      return Promise.all([EP.json(BASE + "brasil/" + m.id + ".json"),
+        m.ministros ? EP.json(BASE + "ministros/" + m.id + ".json").catch(function () { return null; }) : { governos: [] }])
+        .then(function (x) { brasil(m, x[0], x[1]); });
     }).catch(function () { falhou(document.getElementById("exec-topo")); });
   };
-  function brasil(m, d) {
+  function brasil(m, d, mins) {
     var main = document.getElementById("conteudo"), cab = main.querySelector(".cab-pagina");
     D.canonico({ mandato: m.id });
-    poeTitulo(EP.tr("A política do Brasil de " + m.rotulo + ": presidente, senadores e deputados federais eleitos | Entenda Política",
-      "Brazil's politics, " + m.rotulo_en + ": the elected President, senators and federal deputies | Understand Politics"),
-    EP.tr("Quem foi eleito no Brasil para o mandato de " + m.rotulo + ": presidente, vice, os senadores e os deputados federais. Segundo o TSE, com fonte.",
-      "Who was elected in Brazil for the " + m.rotulo_en + " term: the President, the Vice President, the senators and the federal deputies. According to the TSE, with sources."));
+    poeTitulo(EP.tr("A política do Brasil de " + m.rotulo + ": presidente, ministros, senadores e deputados federais | Entenda Política",
+      "Brazil's politics, " + m.rotulo_en + ": the President, ministers, senators and federal deputies | Understand Politics"),
+    EP.tr("Quem governou o Brasil no mandato de " + m.rotulo + ": o presidente e o vice eleitos, os ministros de cada pasta, os senadores e os deputados federais eleitos. Com fonte oficial.",
+      "Who governed Brazil in the " + m.rotulo_en + " term: the elected President and Vice President, the ministers of each office, and the elected senators and federal deputies. With official sources."));
     poeOnde(EP.tr("A política do Brasil (" + m.rotulo + ")", "Brazil's politics (" + m.rotulo_en + ")"));
-    poeTexto(cab.querySelector(".selo-topo"), EP.tr("Quem foi eleito no mandato de " + m.rotulo, "Who was elected for the " + m.rotulo_en + " term"));
+    poeTexto(cab.querySelector(".selo-topo"), EP.tr("Quem governou e quem foi eleito no mandato de " + m.rotulo, "Who governed and who was elected in the " + m.rotulo_en + " term"));
     poeTexto(cab.querySelector("h1"), esc(EP.tr("A política do Brasil", "Brazil's politics")) + ' <span class="h1-periodo">' + esc(periodo(m)) + "</span>", true);
-    poeTexto(cab.querySelector(".lead"), EP.tr("Aqui você vê quem foi eleito para governar e para fazer as leis do país no mandato de " + m.rotulo + ": o presidente, o vice, os senadores e os deputados federais.",
-      "Here you can see who was elected to govern and to make the country's laws in the " + m.rotulo_en + " term: the President, the Vice President, the senators and the federal deputies."));
+    poeTexto(cab.querySelector(".lead"), EP.tr("Aqui você vê quem governou e quem fez as leis do país no mandato de " + m.rotulo + ": o presidente e o vice eleitos, os ministros, os senadores e os deputados federais.",
+      "Here you can see who governed and who made the country's laws in the " + m.rotulo_en + " term: the elected President and Vice President, the ministers, the senators and the federal deputies."));
     var lugar = document.getElementById("mandato-lugar");
     if (!lugar) { cab.insertAdjacentHTML("afterend", '<div class="miolo mandato-lugar" id="mandato-lugar"></div>'); lugar = document.getElementById("mandato-lugar"); }
     lugar.insertAdjacentHTML("beforebegin", '<div class="miolo passado-faixa">' + H.faixa(m) + "</div>");
@@ -218,8 +313,8 @@
     // quem governou
     var ex = document.getElementById("executivo");
     poeTexto(ex.querySelector("#t-exec"), EP.tr("Quem governou o país", "Who governed the country"));
-    poeTexto(ex.querySelector(".cab-bloco p"), EP.tr("O Poder Executivo: o presidente e o vice eleitos para o mandato de " + m.rotulo + ".",
-      "The executive branch: the President and the Vice President elected for the " + m.rotulo_en + " term."));
+    poeTexto(ex.querySelector(".cab-bloco p"), EP.tr("O Poder Executivo: o presidente e o vice eleitos para o mandato de " + m.rotulo + " e os ministros de cada governo.",
+      "The executive branch: the President and the Vice President elected for the " + m.rotulo_en + " term, and the ministers of each government."));
     var p = d.presidente, v = d.vice, f = fontes(p, v);
     document.getElementById("exec-topo").innerHTML = (cartaoGrande(p, EP.tr("Presidente", "President")) + cartaoGrande(v, EP.tr("Vice-presidente", "Vice President")) ||
       '<div class="vazio">' + EP.tr("O TSE não mostra quem foi eleito presidente.", "The TSE does not show who was elected President.") + "</div>") +
@@ -231,9 +326,7 @@
       esconde(x);
       if (i === "os-ministros" && x.nextElementSibling && x.nextElementSibling.tagName === "P") esconde(x.nextElementSibling);
     });
-    document.getElementById("exec-topo").insertAdjacentHTML("afterend", mudancasHtml(d) +
-      aviso(esc(EP.tr("Os ministros de governos anteriores ainda não aparecem aqui. Os ministros de hoje estão na página do mandato atual.",
-        "Ministers of earlier governments are not shown here yet. Today's ministers are on the current term's page.")), "👔"));
+    document.getElementById("exec-topo").insertAdjacentHTML("afterend", mudancasHtml(d) + ministrosHtml(mins));
     // Senado e Câmara
     [["senado", d.senado, NOMES.sen(), eleitoEm], ["camara", d.camara, NOMES.dep(), null]].forEach(function (c) {
       var el = document.querySelector("#" + c[0] + " .casa-corpo"), b = c[1] || {};

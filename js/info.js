@@ -84,7 +84,15 @@
     "tse-1990": fonte("TSE", "Dados Abertos: resultados da eleição de 1990 (senadores eleitos em 1990, no Senado de 1995 a 1998)",
       "Open data: 1990 election results (senators elected in 1990, who served in the Senate from 1995 to 1998)", "https://dadosabertos.tse.jus.br/dataset/resultados-1990"),
     "senado-leg50": fonte("Senado Federal", "Dados Abertos: senadores da 50ª legislatura (1995 a 1999)", "Open data: senators of the 50th legislative term (1995 to 1999)",
-      "https://legis.senado.leg.br/dadosabertos/senador/lista/legislatura/50")
+      "https://legis.senado.leg.br/dadosabertos/senador/lista/legislatura/50"),
+    "biblioteca-fhc": fonte("Biblioteca da Presidência da República", "Galeria dos ex-presidentes: ministérios do governo Fernando Henrique Cardoso (lista em PDF)",
+      "Gallery of former presidents: ministries of the Fernando Henrique Cardoso government (PDF list)", "https://www.gov.br/secretariageral/pt-br/centrais-de-conteudo/biblioteca-da-pr/galeria-dos-ex-presidentes/fernando-henrique-cardoso/ministerios-fhc"),
+    "biblioteca-lula": fonte("Biblioteca da Presidência da República", "Galeria dos ex-presidentes: ministérios do governo Luiz Inácio Lula da Silva, de 2003 a 2010 (lista em PDF)",
+      "Gallery of former presidents: ministries of the Luiz Inácio Lula da Silva government, 2003 to 2010 (PDF list)", "https://www.gov.br/secretariageral/pt-br/centrais-de-conteudo/biblioteca-da-pr/galeria-dos-ex-presidentes/luiz-inacio-lula-da-silva/ministerios-lula.pdf"),
+    "biblioteca-dilma": fonte("Biblioteca da Presidência da República", "Galeria dos ex-presidentes: ministérios do governo Dilma Rousseff (lista em PDF)",
+      "Gallery of former presidents: ministries of the Dilma Rousseff government (PDF list)", "https://www.gov.br/secretariageral/pt-br/centrais-de-conteudo/biblioteca-da-pr/galeria-dos-ex-presidentes/dilma-vana-rousseff/ministerios-dilma.pdf"),
+    "dou": fonte("Diário Oficial da União (Imprensa Nacional)", "Busca do Diário Oficial: decretos de nomeação e de exoneração de ministros de Estado",
+      "Official Gazette search: appointment and dismissal decrees of ministers of State", "https://www.in.gov.br/consulta/-/buscar/dou")
   };
   // botão "De onde veio isso?" com o assunto escondido para quem usa leitor de tela
   function fonteBtn(lista, assunto) {

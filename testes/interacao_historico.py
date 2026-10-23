@@ -66,8 +66,10 @@ async def main():
         cards = await pg.locator("#exec-topo .pessoa-grande").all_inner_texts()
         ok("presidente e vice eleitos em 2018 (sem link para perfil)", len(cards) == 2 and "Jair Bolsonaro" in cards[0] and "Mourão" in cards[1]
            and await pg.locator("#exec-topo a.pessoa-grande").count() == 0, " / ".join(c.split("\n")[1] for c in cards if "\n" in c))
-        ok("ministros e busca ficam escondidos, com aviso", not await pg.locator("#ministros").is_visible() and not await pg.locator("#procurar").is_visible()
-           and "ministros de governos anteriores" in await pg.locator("#executivo").inner_text())
+        ok("ministros e busca de hoje ficam escondidos; aparecem os ministros do governo Bolsonaro", not await pg.locator("#ministros").is_visible()
+           and not await pg.locator("#procurar").is_visible() and await pg.locator("#min-hist").is_visible()
+           and "Ministros de Jair Messias Bolsonaro" in await pg.locator("#min-hist").inner_text()
+           and "ainda não aparecem" not in await pg.locator("#executivo").inner_text())
         sen = await pg.locator("#senado .contagem").inner_text()
         cam = await pg.locator("#camara .contagem").inner_text()
         ok("Senado de 2019 a 2022: 80 eleitos + aviso da eleição suplementar de MT; Câmara: 513", "80" in sen and "513" in cam
@@ -100,6 +102,113 @@ async def main():
         mud = await pg.locator(".mudancas").inner_text() if await pg.locator(".mudancas").count() else ""
         ok("2015 a 2018: as mudanças de 2016 aparecem com data e fonte", "12 de maio de 2016" in mud and "31 de agosto de 2016" in mud
            and await pg.locator(".mudancas .fontes-btn").count() == 2)
+
+        # 3b. ministros dos governos anteriores (Biblioteca da Presidência e Diário Oficial)
+        gov = pg.locator("#min-hist .min-gov")
+        cab = [t.replace("\n", " ") for t in await gov.locator("h4").all_inner_texts()]
+        ok("2015 a 2018: duas listas de ministros (Dilma até 12/5/2016, Temer desde 12/5/2016)", len(cab) == 2
+           and "Dilma Rousseff" in cab[0] and "De 1º de janeiro de 2015 a 12 de maio de 2016" in cab[0]
+           and "Michel Temer" in cab[1] and "De 12 de maio de 2016 a 31 de dezembro de 2018" in cab[1]
+           and "O governo mudou em 12 de maio de 2016" in await pg.locator("#min-hist").inner_text(), " | ".join(cab))
+
+        async def cartao(g, nome):
+            for c in await pg.locator("#min-hist .min-gov").nth(g).locator(".min-hist-card").all():
+                if (await c.locator("h5").inner_text()).strip() == nome:
+                    return c
+            return None
+        faz = await cartao(1, "Ministério da Fazenda")
+        txt = await faz.inner_text() if faz else ""
+        ok("Temer: Fazenda com Henrique Meirelles (12/05/2016 a 06/04/2018) e Eduardo Guardia", "Henrique de Campos Meirelles" in txt
+           and "12/05/2016 a 06/04/2018" in txt and "Eduardo Refinetti Guardia" in txt, txt.replace("\n", " ")[:160])
+        cc = await cartao(0, "Casa Civil da Presidência da República")
+        txt = await cc.inner_text() if cc else ""
+        ok("Dilma: Casa Civil com Lula (16/03 a 11/05/2016) e a nota do STF sobre a nomeação", "Luiz Inácio Lula da Silva" in txt
+           and "Supremo Tribunal Federal" in txt, txt.replace("\n", " ")[:160])
+        nomes = [t.strip() for t in await pg.locator("#min-hist .min-gov").nth(1).locator(".min-hist-card h5").all_inner_texts()]
+        ordem = await pg.evaluate("l => l.slice().sort((a, b) => a.localeCompare(b, 'pt', {sensitivity: 'base'}))", nomes)
+        ok("cartões em ordem alfabética do ministério", nomes == ordem and len(nomes) > 20, " / ".join(nomes[:4]))
+        n_cart = await pg.locator(".min-hist-card").count()
+        ok("cartões sem link, cada um com a sua fonte", n_cart > 50 and await pg.locator(".min-hist-card a").count() == 0
+           and await pg.locator(".min-hist-card .fontes-btn").count() == n_cart, f"{n_cart} cartões")
+        # interinos pelo teclado (detalhes fechados que abrem com Enter)
+        resumo = faz.locator("summary").first if faz and await faz.locator("summary").count() else pg.locator(".min-hist-card summary").first
+        await resumo.focus()
+        await pg.keyboard.press("Enter")
+        await pg.wait_for_timeout(300)
+        aberto = await resumo.evaluate("s => s.parentElement.open")
+        ok("“Interinos” abre pelo teclado", aberto and await resumo.evaluate("s => document.activeElement === s"))
+        # fonte do cartão: decretos do Diário Oficial
+        await faz.locator(".fontes-btn").click()
+        await pg.wait_for_timeout(500)
+        dlg = pg.locator("dialog[open], [role=dialog]").last
+        txt = await dlg.inner_text()
+        ok("a fonte do cartão abre com os decretos do Diário Oficial", "Diário Oficial da União" in txt and await dlg.locator("a[href*='in.gov.br']").count() >= 2, txt.replace("\n", " ")[:120])
+        await pg.keyboard.press("Escape")
+        await pg.wait_for_timeout(300)
+        # nomeação tornada sem efeito: linha no cartão, as duas fontes no botão e o aviso de intervalo sem contradição
+        async def fontes_do(c):
+            await c.locator(".fontes-btn").click()
+            await pg.wait_for_timeout(500)
+            d = pg.locator("[role=dialog]").last
+            t = await d.inner_text()
+            await pg.keyboard.press("Escape")
+            await pg.wait_for_timeout(300)
+            return t
+        trab = await cartao(1, "Ministério do Trabalho")
+        txt = await trab.inner_text() if trab else ""
+        ok("Temer, Trabalho: a nomeação de Cristiane Brasil (3/1/2018), tornada sem efeito em 22/2/2018, aparece numa linha",
+           "A nomeação de Cristiane Brasil Francisco, em 03/01/2018, foi tornada sem efeito (anulada) por um decreto de 22/02/2018." in txt,
+           txt.replace("\n", " ")[:200])
+        ok("Temer, Trabalho: o aviso de intervalo fala de nomeação válida (não contradiz a linha)",
+           "O Diário Oficial não traz nomeação válida de ministro de 28/12/2017 a 09/04/2018." in txt
+           and "não traz nomeação de ministro de 28/12/2017" not in txt)
+        f = await fontes_do(trab) if trab else ""
+        ok("Temer, Trabalho: as fontes têm os dois decretos (nomeação de 3/1/2018 e o que a tornou sem efeito, de 22/2/2018)",
+           "Decreto de 03/01/2018: nomeação de Cristiane Brasil Francisco" in f and "Decreto de 22/02/2018: torna sem efeito a nomeação de Cristiane Brasil Francisco" in f,
+           f.replace("\n", " ")[:160])
+        ok("Cristiane Brasil não aparece como ministra (sem período)", "Cristiane Brasil Francisco" not in (await trab.locator(".mh-lista").all_inner_texts() if trab else [""])[0])
+        mh = await pg.locator("#min-hist .min-gov").nth(0).inner_text()
+        ok("Dilma, Integração Nacional: nomeação interina anulada (13/4/2016), com o outro decreto igual de 15/4/2016",
+           "A nomeação interina de José Rodrigues Pinheiro Dória, em 13/04/2016, foi tornada sem efeito (anulada) por um decreto de 14/04/2016. Outro decreto, de 15/04/2016, diz o mesmo." in mh)
+        # 1995: o que falta na lista da Biblioteca veio do Diário Oficial, com nota
+        await pg.goto(BASE + "brasil.html?mandato=1995&lang=pt", wait_until="networkidle")
+        await pg.wait_for_timeout(1200)
+        mh = await pg.locator("#min-hist").inner_text()
+        ok("1995 a 1998: ministros de FHC (Malan na Fazenda, com a nota de onde veio) e a fonte da Biblioteca", "Ministros de Fernando Henrique Cardoso" in mh
+           and "Pedro Sampaio Malan" in mh and "não traz o Ministério da Fazenda no 1º mandato" in mh and "Biblioteca da Presidência" in mh)
+        ok("1995 a 1998: cartão avisa quando a lista não traz ninguém (Justiça, abril e maio de 1997)", "não traz ninguém à frente desta pasta de 08/04/1997 a 22/05/1997" in mh)
+        # 320 px: sem rolar para os lados
+        await pg.set_viewport_size({"width": 320, "height": 800})
+        await pg.goto(BASE + "brasil.html?mandato=2015&lang=pt", wait_until="networkidle")
+        await pg.wait_for_timeout(1200)
+        larg = await pg.evaluate("[document.documentElement.scrollWidth, window.innerWidth]")
+        ok("celular de 320 px: os ministros cabem sem rolar para os lados", larg[0] <= larg[1], f"{larg[0]} <= {larg[1]}")
+        await pg.set_viewport_size({"width": 1280, "height": 860})
+        # inglês: nomes de ministério traduzidos; sem tradução segura, o nome fica marcado como português
+        await pg.goto(BASE + "brasil.html?mandato=2019&lang=en", wait_until="networkidle")
+        await pg.wait_for_timeout(1200)
+        mh = await pg.locator("#min-hist").inner_text()
+        ok("2019–2022 (inglês): “The ministers”, Ministry of the Economy com Paulo Guedes e datas em inglês", "The ministers" in mh
+           and "Ministers of Jair Messias Bolsonaro" in mh and "Ministry of the Economy" in mh and "Paulo Roberto Nunes Guedes" in mh and "Jan 1, 2019" in mh)
+        ok("2019–2022 (inglês): Decotelli na Educação, nomeação de 25/6/2020 tornada sem efeito em 30/6/2020, e intervalo sem nomeação válida",
+           "The appointment of Carlos Alberto Decotelli da Silva on Jun 25, 2020 was made void by a decree of Jun 30, 2020." in mh
+           and "The Official Gazette shows no valid minister appointment from Jun 20, 2020 to Jul 10, 2020." in mh)
+        await pg.goto(BASE + "brasil.html?mandato=2019&lang=pt", wait_until="networkidle")
+        await pg.wait_for_timeout(1200)
+        edu = None
+        for c in await pg.locator("#min-hist .min-hist-card").all():
+            if (await c.locator("h5").inner_text()).strip() == "Ministério da Educação":
+                edu = c
+        txt = await edu.inner_text() if edu else ""
+        f = await fontes_do(edu) if edu else ""
+        ok("2019 a 2022: Decotelli na Educação, com a linha e as duas fontes (25/6/2020 e 30/6/2020)",
+           "A nomeação de Carlos Alberto Decotelli da Silva, em 25/06/2020, foi tornada sem efeito (anulada) por um decreto de 30/06/2020." in txt
+           and "Decreto de 25/06/2020: nomeação de Carlos Alberto Decotelli da Silva" in f
+           and "Decreto de 30/06/2020: torna sem efeito a nomeação de Carlos Alberto Decotelli da Silva" in f, f.replace("\n", " ")[:160])
+        await pg.goto(BASE + "brasil.html?mandato=1999&lang=en", wait_until="networkidle")
+        await pg.wait_for_timeout(1200)
+        ok("1999–2002 (inglês): ministério sem tradução segura aparece em português, marcado com lang=pt-BR",
+           await pg.locator(".min-hist-card h5 [lang='pt-BR']", has_text="Ministério da Política e do Desenvolvimento Agrário").count() == 1)
         await pg.goto(BASE + "brasil.html?mandato=1995&lang=en", wait_until="networkidle")
         await pg.wait_for_timeout(1200)
         txt = await pg.locator("#exec-topo").inner_text()
@@ -174,6 +283,7 @@ async def main():
         await pg.wait_for_timeout(1200)
         ok("em 2027, brasil.html?mandato=2023 mostra o passado (Lula e Alckmin)", "mandato=2023" in pg.url and "Lula" in await pg.locator("#exec-topo").inner_text()
            and await pg.locator(".faixa-passado").count() == 1)
+        ok("em 2027, o mandato de 2023 sem lista de ministros diz isso (sem prometer)", "não tem a lista de ministros deste mandato" in await pg.locator("#min-hist").inner_text())
 
         ok("sem erros de JavaScript", not erros, "; ".join(erros)[:300])
         await nav.close()

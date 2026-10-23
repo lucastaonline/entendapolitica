@@ -151,7 +151,8 @@
       '<section class="miolo cab-pagina" aria-labelledby="titulo-uf"><div class="cab-txt rev"><span class="selo-topo">' + esc(EP.tr("A política " + de, "Politics " + de)) + '</span><h1 id="titulo-uf">' + esc(nome) + "</h1>" +
       '<p class="lead" id="lead-uf">' + esc(EP.tr("Quem governa, quem representa " + (ehDF ? "o Distrito Federal" : "o estado") + " no Congresso e quem faz as leis " + de + ".",
         "Who governs, who represents " + (ehDF ? "the Federal District" : "the state") + " in the National Congress and who makes the laws " + de + ".")) + "</p>" +
-      '<p><a class="btn peq bege" href="estado.html"><span aria-hidden="true">🗺️ </span>' + EP.tr("Trocar de estado", "Choose another state") + "</a></p></div>" +
+      '<p><a class="btn peq bege" href="estado.html"><span aria-hidden="true">🗺️ </span>' + EP.tr("Trocar de estado", "Choose another state") + "</a></p>" +
+      '<div class="mandato-lugar" id="mandato-lugar"></div></div>' +
       '<div class="cab-3d rev pop" style="--i:1" aria-hidden="true">' + (window.TRES ? TRES.predio() : "") + "</div></section>" +
       '<nav class="miolo atalhos rev" aria-label="' + EP.tr("Ir direto para", "Jump to") + '">' +
       chipAtalho("#governo", "🏢", EP.tr("Quem governa", "Who governs")) + chipAtalho("#senadores", "🏛️", EP.tr("Senadores", "Senators")) +
@@ -180,6 +181,7 @@
           '<p class="muted" id="dica-cidade" style="font-size:.85rem;margin:6px 0 0">' + EP.tr("Escolha na lista que aparece para abrir a página da cidade.", "Choose it from the list to open the city's page.") + "</p>" +
           '<p id="capital-cid" class="links-cidade"></p></div>'));
     EP.revelar(el);
+    if (EP.hist) EP.hist.seletor(document.getElementById("mandato-lugar"), "estados");  // "Ver outro mandato" (js/historico.js)
 
     // governo + Assembleia (arquivo do estado)
     EP.json("dados/estados/" + uf + ".json").then(function (e) {
@@ -255,7 +257,11 @@
 
   D.rodapeErros(document.getElementById("links-erro"));
   if (cidade0 && /^\d{7}$/.test(cidade0)) location.replace("cidade.html?ibge=" + cidade0 + (EP.en ? "&lang=en" : ""));
-  else if (uf && EP.UFS[uf]) mostraEstado();
+  else if (uf && EP.UFS[uf]) {
+    // mandato anterior (estado.html?uf=BA&mandato=2019): quem monta a página do passado é o js/historico.js
+    if (EP.hist && EP.hist.param()) EP.hist.estado(uf, EP.hist.param());
+    else mostraEstado();
+  }
   else mostraMapa();
   EP.paralaxe();
 })();

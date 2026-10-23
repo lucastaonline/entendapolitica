@@ -7,6 +7,9 @@
   D.canonico();
   if (T.tresPoderes) document.getElementById("ilu-poderes").innerHTML = T.tresPoderes();
   EP.fundo3d([["cubo", "4%", "12%", 40, 0, 0, 18], ["esfera", "93%", "8%", 36, 3, 0, 7], ["anel", "90%", "50%", 56, 2, 0, 20], ["esfera", "3%", "70%", 30, 6, 0, 8]], document.body);
+  // mandato anterior (brasil.html?mandato=2019): quem monta a página do passado é o js/historico.js
+  if (EP.hist && EP.hist.param()) { EP.hist.brasil(EP.hist.param()); return; }
+  if (EP.hist) EP.hist.seletor(document.getElementById("mandato-lugar"), "brasil");
 
   function falhou(el, pt, en) {
     el.innerHTML = '<div class="vazio"><span class="grande" aria-hidden="true">🛠️</span>' +

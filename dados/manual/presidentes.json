@@ -1,0 +1,48 @@
+{
+ "sobre": "Presidente e vice dos mandatos anteriores: só o que o TSE não tem nos dados abertos (o vice de 1994 e de 1998 e o resultado do 2º turno de 2006) e o que mudou durante um mandato (2016). Lido por scripts/historico.py. Sempre com fonte oficial; texto neutro.",
+ "mandatos": {
+  "1995": {
+   "vice": {
+    "nome": "Marco Maciel", "nomeCivil": "Marco Antônio de Oliveira Maciel", "partido": "PFL", "genero": "M",
+    "situacao": "Eleito na chapa de Fernando Henrique Cardoso", "situacao_en": "Elected on Fernando Henrique Cardoso's ticket",
+    "fontes": [{"veiculo": "Vice-Presidência da República (Planalto)", "titulo": "Galeria da Vice-Presidência: Marco Maciel (candidato a vice pelo PFL, eleito em 1994 e reeleito em 1998 na chapa de Fernando Henrique Cardoso)", "url": "https://www.gov.br/planalto/pt-br/vice-presidencia/acesso-a-informacao/institucional/galeria-da-vice-presidencia/perfis-vice-presidentes/marco-maciel", "data": "2026-10-23"}]
+   },
+   "nota": "Nos dados de 1994, o TSE não liga o vice à chapa. O vice vem da galeria oficial da Vice-Presidência.",
+   "nota_en": "In the 1994 data, the TSE does not link the vice to the ticket. The Vice President comes from the official Vice Presidency gallery."
+  },
+  "1999": {
+   "vice": {
+    "nome": "Marco Maciel", "nomeCivil": "Marco Antônio de Oliveira Maciel", "partido": "PFL", "genero": "M",
+    "situacao": "Eleito na chapa de Fernando Henrique", "situacao_en": "Elected on Fernando Henrique's ticket",
+    "fontes": [{"veiculo": "Vice-Presidência da República (Planalto)", "titulo": "Galeria da Vice-Presidência: Marco Maciel (candidato a vice pelo PFL, eleito em 1994 e reeleito em 1998 na chapa de Fernando Henrique Cardoso)", "url": "https://www.gov.br/planalto/pt-br/vice-presidencia/acesso-a-informacao/institucional/galeria-da-vice-presidencia/perfis-vice-presidentes/marco-maciel", "data": "2026-10-23"}]
+   },
+   "nota": "Nos dados de 1998, o TSE não publica o nome dos vices. O vice vem da galeria oficial da Vice-Presidência.",
+   "nota_en": "In the 1998 data, the TSE does not publish the names of the vices. The Vice President comes from the official Vice Presidency gallery."
+  },
+  "2007": {
+   "vencedor": {"numero": "13", "turno": 2, "data": "2006-10-29"},
+   "fontes": [
+    {"veiculo": "Presidência da República (Biblioteca da Presidência)", "titulo": "Biografia de Luiz Inácio Lula da Silva: reeleito presidente em 29 de outubro de 2006, com o vice José Alencar", "url": "https://www.gov.br/secretariageral/pt-br/centrais-de-conteudo/biblioteca-da-pr/galeria-dos-ex-presidentes/luiz-inacio-lula-da-silva/biografia-completa", "data": "2026-10-23"},
+    {"veiculo": "Vice-Presidência da República (Planalto)", "titulo": "Galeria da Vice-Presidência: José Alencar (vice-presidente de 2003 a 2010)", "url": "https://www.gov.br/planalto/pt-br/vice-presidencia/acesso-a-informacao/institucional/galeria-da-vice-presidencia/perfis-vice-presidentes/jose-alencar", "data": "2026-10-23"}
+   ],
+   "nota": "Nos dados abertos de 2006, o TSE não marca quem venceu o 2º turno para presidente. Os nomes e partidos vêm do TSE; o resultado vem da Biblioteca da Presidência.",
+   "nota_en": "In the 2006 open data, the TSE does not mark who won the presidential runoff. The names and parties come from the TSE; the result comes from the Presidency Library."
+  },
+  "2015": {
+   "mudancas": [
+    {
+     "data": "2016-05-12",
+     "txt": "Em 12 de maio de 2016, o Senado decidiu abrir o processo de impeachment (o processo em que o Congresso pode tirar um presidente do cargo) contra Dilma Rousseff, e ela foi afastada enquanto o processo era julgado. O vice, Michel Temer, passou a exercer a Presidência.",
+     "txt_en": "On May 12, 2016, the Senate decided to open the impeachment trial (the process in which Congress can remove a president from office) against Dilma Rousseff, and she was suspended while the trial took place. The Vice President, Michel Temer, became acting President.",
+     "fontes": [{"veiculo": "Agência Senado", "titulo": "Senado abre processo de impeachment contra Dilma Rousseff", "url": "https://www12.senado.leg.br/noticias/materias/2016/05/12/senado-abre-processo-de-impeachment-contra-dilma-rousseff", "data": "2016-05-12"}]
+    },
+    {
+     "data": "2016-08-31",
+     "txt": "Em 31 de agosto de 2016, o Senado terminou o julgamento do impeachment e decidiu que Dilma Rousseff perdia o mandato. No mesmo dia, Michel Temer tomou posse como presidente, até o fim do mandato, em 31 de dezembro de 2018.",
+     "txt_en": "On August 31, 2016, the Senate finished the impeachment trial and decided that Dilma Rousseff would lose her term. On the same day, Michel Temer was sworn in as President until the end of the term, on December 31, 2018.",
+     "fontes": [{"veiculo": "Agência Senado", "titulo": "Dilma Rousseff perde o mandato e Temer é confirmado presidente", "url": "https://www12.senado.leg.br/noticias/materias/2016/08/31/dilma-rousseff-perde-o-mandato-e-temer-e-confirmado-presidente", "data": "2016-08-31"}]
+    }
+   ]
+  }
+ }
+}

@@ -69,11 +69,14 @@
   });
 
   // ---------------------------------------------------------------- uma cidade
+  // mandato anterior (cidade.html?ibge=...&mandato=2021): a cidade aparece como era nele (js/historico.js); trocar de cidade mantém o mandato
+  var mandato = EP.hist ? EP.hist.param() : null;
   function abre(ibge, focar) {
     var caixa = document.getElementById("cidade");
     caixa.hidden = false;
-    try { history.replaceState(null, "", "cidade.html?ibge=" + ibge + (EP.en ? "&lang=en" : "")); } catch (e) {}
-    D.canonico({ ibge: ibge });
+    var mand = ibge === BRASILIA || ibge === NORONHA ? null : mandato;
+    try { history.replaceState(null, "", "cidade.html?ibge=" + ibge + (mand ? "&mandato=" + mand : "") + (EP.en ? "&lang=en" : "")); } catch (e) {}
+    D.canonico({ ibge: ibge, mandato: mand });
     if (ibge === BRASILIA) return especial(caixa, "DF", focar);
     if (ibge === NORONHA) return especial(caixa, "PE", focar);
     var uf = EP.UF_IBGE[String(ibge).slice(0, 2)];
@@ -83,6 +86,7 @@
       return;
     }
     caixa.innerHTML = '<div class="miolo"><div class="carregando">' + EP.tr("Carregando…", "Loading…") + "</div></div>";
+    if (mand) return EP.hist.cidade(caixa, ibge, uf, mand, function () { depois(caixa, focar); });
     EP.json("dados/cidades/" + uf + "/" + ibge + ".json").then(function (c) { desenha(caixa, c, uf, focar); })
       .catch(function () { falhou(caixa, "os dados desta cidade", "the data for this city"); });
   }
@@ -100,6 +104,7 @@
       '<section class="miolo bloco" aria-labelledby="nome-cidade"><div class="cab-bloco rev"><span class="ic-bloco" aria-hidden="true">🏙️</span><div>' +
         '<h2 id="nome-cidade" tabindex="-1">' + esc(c.nome) + "</h2>" +
         '<p class="muted">' + esc(EP.tr("Uma cidade " + EP.doEstado(uf) + " (" + uf + ")", "A city in " + (EP.UFS[uf] || uf) + " (" + uf + "), Brazil")) + "</p></div></div>" +
+        '<div class="mandato-lugar" id="mandato-lugar"></div>' +
         aviso(D.aviso(c.aviso, c.aviso_en)) +
         (conferir ? '<p class="aviso"><span aria-hidden="true">⚠️ </span>' + EP.tr("Estamos conferindo se quem aparece aqui ainda está no cargo.", "We are checking whether the people shown here are still in office.") + "</p>" : "") +
         '<h3 class="sub"><span aria-hidden="true">🏢 </span>' + EP.tr("Quem governa a cidade", "Who governs the city") + "</h3>" +
@@ -118,6 +123,7 @@
     EP.montaCasa(document.getElementById("casa-ver"), { membros: v.membros || [], filtroUF: false, fonte: v.fonte, atualizado: c.atualizado, nivel: 3,
       nomes: { um: EP.tr("vereador", "city councilor"), uma: EP.tr("vereadora", "city councilor"), varios: EP.tr("vereadores", "city councilors"), varias: EP.tr("vereadoras", "city councilors") },
       extra: function (m) { return m.votos != null ? EP.tr(EP.num(m.votos) + " votos em 2024", EP.num(m.votos) + " votes in 2024") : ""; } });
+    if (EP.hist) EP.hist.seletor(document.getElementById("mandato-lugar"), "cidades");  // "Ver outro mandato" (js/historico.js)
     depois(caixa, focar);
   }
 

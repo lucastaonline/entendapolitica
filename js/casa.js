@@ -1,6 +1,9 @@
 /* Bloco de uma casa legislativa: plenário 3D, quantos de cada partido, filtros e a grade de pessoas.
    Usado para Senado, Câmara, Assembleias (deputados estaduais) e Câmaras Municipais (vereadores).
-   o.nomes = { um, uma, varios, varias } já no idioma da página (use EP.tr); o.nivel = nível do título "Quantos de cada partido" (3). */
+   o.nomes = { um, uma, varios, varias } já no idioma da página (use EP.tr); o.nivel = nível do título "Quantos de cada partido" (3).
+   Opcionais (mandatos anteriores, js/historico.js): o.cartao(m, extra) monta o cartão no lugar de EP.cartaoPessoa (ex.: sem link
+   para perfil); o.sabia(mulheres, homens) devolve o HTML do "Você sabia?"; o.vazio = HTML de quando a lista não tem ninguém;
+   o.titPartidos = texto do título "Quantos de cada partido". */
 (function () {
   "use strict";
   var EP = window.EP, T = window.TRES || {};
@@ -37,7 +40,7 @@
 
     if (!total) {
       el.innerHTML = '<div class="vazio"><span class="grande" aria-hidden="true">🛠️</span>' +
-        EP.tr("Esta lista ainda não está disponível. Estamos juntando os dados, sempre com fonte.", "This list is not available yet. We are gathering the data, always with sources.") + "</div>" +
+        (o.vazio || EP.tr("Esta lista ainda não está disponível. Estamos juntando os dados, sempre com fonte.", "This list is not available yet. We are gathering the data, always with sources.")) + "</div>" +
         (o.fonte ? "<p>" + EP.botaoFontes(o.fonte, EP.tr("De onde vem esta lista?", "Where does this list come from?")) + "</p>" : "");
       return;
     }
@@ -81,7 +84,7 @@
 
     el.innerHTML =
       '<div class="casa-resumo"><div class="plen-box rev"><div class="plen-area">' + plen + siglas + "</div><p>" + esc(cadeira) + (o.notaPlenario ? " " + esc(o.notaPlenario) : "") + "</p></div>" +
-      '<div class="partidos rev" style="--i:1"><' + h + ' class="tit-p" id="' + uid + '-tit">' + EP.tr("Quantos de cada partido", "Seats per party") + "</" + h + ">" +
+      '<div class="partidos rev" style="--i:1"><' + h + ' class="tit-p" id="' + uid + '-tit">' + esc(o.titPartidos || EP.tr("Quantos de cada partido", "Seats per party")) + "</" + h + ">" +
       '<div class="barras-p" role="group" aria-labelledby="' + uid + '-tit">' +
       porPartido.map(function (p, k) {
         return '<button type="button" class="barra-partido" data-g="' + k + '"' + (k >= VIS ? " hidden" : "") + ' aria-pressed="false">' +
@@ -91,9 +94,9 @@
       (porPartido.length > VIS ? '<button type="button" class="mais-p">' + EP.tr("Ver todos os " + porPartido.length + " partidos", "See all " + porPartido.length + " parties") + ' <span aria-hidden="true">▾</span></button>' : "") +
       '<p class="explica-p">' + EP.tr("Partido é um grupo de pessoas que se juntam para disputar eleições e defender ideias parecidas. No plenário, cada fatia é um partido: passe o mouse num partido (aqui na lista ou nas cadeiras) para acender as cadeiras dele, e toque ou clique para ver só quem é dele. As fatias e a lista vão do partido com mais cadeiras para o com menos: é só uma contagem, não um ranking. Nenhum partido tem cor própria, de propósito: os dois tons de azul só separam uma fatia da outra.",
         "A party is a group of people who join together to run in elections and defend similar ideas. In the chamber, each slice is one party: hover over a party (here in the list or on the seats) to light up its seats, and tap or click it to see only its members. The slices and the list go from the party with the most seats to the one with the fewest: it is just a count, not a ranking. No party has its own color, on purpose: the two shades of blue only separate one slice from the next.") + "</p></div></div>" +
-      (mulheres + homens ? '<p class="sabia rev"><span aria-hidden="true">💡</span><span>' +
+      (mulheres + homens ? '<p class="sabia rev"><span aria-hidden="true">💡</span><span>' + (o.sabia ? o.sabia(mulheres, homens) :
         (EP.en ? "Did you know? Right now there are <b>" + EP.num(mulheres) + (mulheres === 1 ? " woman" : " women") + "</b> and <b>" + EP.num(homens) + (homens === 1 ? " man" : " men") + "</b> in this list."
-          : "Você sabia? Hoje são <b>" + EP.plural(mulheres, nomes.uma, nomes.varias) + "</b> e <b>" + EP.plural(homens, nomes.um, nomes.varios) + "</b>.") + "</span></p>" : "") +
+          : "Você sabia? Hoje são <b>" + EP.plural(mulheres, nomes.uma, nomes.varias) + "</b> e <b>" + EP.plural(homens, nomes.um, nomes.varios) + "</b>.")) + "</span></p>" : "") +
       '<div class="filtros-casa"><div class="busca"><input type="search" class="f-nome" placeholder="' + EP.tr("Procurar pelo nome", "Search by name") + '" aria-label="' +
       EP.tr("Procurar pelo nome", "Search by name") + '" autocomplete="off"></div>' +
       (o.filtroUF !== false && listaUF.length > 1 ? '<select class="f-uf" aria-label="' + EP.tr("Filtrar por estado", "Filter by state") + '"><option value="">' + EP.tr("Todos os estados", "All states") + "</option>" +
@@ -233,7 +236,7 @@
     function desenha(focarDe) {
       var l = filtrados();
       var vis = l.slice(0, mostrando);
-      grade.innerHTML = vis.length ? vis.map(function (m) { return EP.cartaoPessoa(m, o.extra ? o.extra(m) : ""); }).join("") :
+      grade.innerHTML = vis.length ? vis.map(function (m) { return (o.cartao || EP.cartaoPessoa)(m, o.extra ? o.extra(m) : ""); }).join("") :
         '<div class="vazio"><span class="grande" aria-hidden="true">🤷</span>' + EP.tr("Ninguém encontrado com esses filtros.", "No one found with these filters.") + "</div>";
       if (l.length > vis.length) {
         var n = Math.min(LOTE, l.length - vis.length);

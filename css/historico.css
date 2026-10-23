@@ -1,0 +1,43 @@
+/* ====== Mandatos anteriores (js/historico.js): campo "Ver outro mandato" e a página do passado ====== */
+.mandato-lugar[hidden], .mandato-lugar:empty { display: none; }
+.mandato-box {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; max-width: 680px; margin: 14px 0 4px;
+  background: #fff; border: 2px dashed #cdbf9f; border-radius: 18px; padding: 10px 14px; text-align: left;
+}
+.mandato-box label { font-weight: 900; color: var(--brand); }
+.mandato-box .mandato-campo { flex: 1 1 220px; min-width: 0; }
+.mandato-box .mandato-dica { flex: 1 1 100%; margin: 0; font-size: .82rem; color: var(--muted); }
+.mandato-box .mandato-fontes { flex: 1 1 100%; margin: 0; }
+.cab-pagina .mandato-box { margin-top: 18px; }
+
+/* a faixa que diz, em texto, que a página mostra o passado */
+.faixa-passado {
+  margin: 18px 0 6px; padding: 16px 20px; border-radius: 20px; background: var(--brand); color: #fff;
+  border: 3px solid var(--amarelo); box-shadow: var(--sombra);
+}
+.faixa-passado p { margin: 0 0 .55em; }
+.faixa-passado .faixa-tit { font-size: 1.15rem; line-height: 1.3; }
+.faixa-passado .faixa-acoes { margin: 10px 0 0; }
+.faixa-passado .btn { box-shadow: 0 3px 0 #8a6800; }
+.h1-periodo { display: block; font-size: .5em; margin-top: 6px; color: var(--muted); }
+h2 .h1-periodo { font-size: .6em; }
+
+/* cartões de quem foi eleito (sem link: o perfil do site é de quem está no cargo hoje) */
+.pessoa-grande.passado, .pessoa-card.passado { cursor: default; }
+.pessoa-card.passado:hover { transform: none; box-shadow: 0 3px 0 #e6dcc7; }
+.pessoa-grande.passado small + small { margin-top: 0; }
+.nota-hist { grid-column: 1 / -1; margin: 0; font-size: .88rem; color: var(--muted); }
+.mudancas { margin-top: 18px; }
+.mudancas ol { list-style: none; padding: 0; margin: 8px 0 0; display: grid; gap: 10px; }
+.mudancas li { display: grid; gap: 4px; background: #fff; border: 2px solid var(--line); border-left: 6px solid var(--brand); border-radius: 14px; padding: 10px 14px; }
+.mudancas li .fontes-btn { justify-self: start; }
+
+@media (max-width: 600px) {
+  .faixa-passado { padding: 14px; }
+  .faixa-passado .faixa-tit { font-size: 1.05rem; }
+  .mandato-box { padding: 10px 12px; }
+}
+
+html.alto-contraste .faixa-passado { background: #fff !important; color: #000 !important; border: 3px solid #000 !important; box-shadow: none !important; }
+html.alto-contraste .mandato-box, html.alto-contraste .mudancas li { border-color: #000 !important; background: #fff !important; }
+html.alto-contraste .h1-periodo { color: #000 !important; }

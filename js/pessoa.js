@@ -68,8 +68,25 @@
     return Object.assign({ id: id, tipo: quem, uf: e.uf, cargo: quem === "gov" ? EP.gen(p.genero, "Governador", "Governadora") : EP.gen(p.genero, "Vice-governador", "Vice-governadora") }, p);
   }
   function carregar() {
-    var m;
     if (/^(dep|sen|pres|vp)-[\w-]+$/.test(id)) return EP.json("dados/pessoas/" + id + ".json");
+    return carregarBase().then(comExtras);
+  }
+  // Estaduais e municipais: a ficha vem da lista do estado ou da cidade (TSE ou lista oficial da Casa). Quando a Assembleia,
+  // a Câmara Municipal ou o governo publicam mais dados (propostas, votações, gastos), eles ficam em dados/pessoas/<id>.json,
+  // com os mesmos campos dos perfis federais, e entram por cima da ficha. A ficha avisa que esse arquivo existe ("extras": true),
+  // para a página não pedir arquivos que não existem.
+  function comExtras(base) {
+    if (!base || !base.extras) return base;
+    return EP.json("dados/pessoas/" + id + ".json").then(function (x) {
+      var p = Object.assign({}, base, x);
+      p.id = base.id || id;
+      p.tipo = base.tipo;
+      ["uf", "municipio", "cargo", "avisoLista", "avisoLista_en"].forEach(function (k) { if (base[k] != null && x[k] == null) p[k] = base[k]; });
+      return p;
+    }, function () { return base; });
+  }
+  function carregarBase() {
+    var m;
     if ((m = /^(gov|vgov)-([A-Z]{2})$/.exec(id))) {
       return EP.json("dados/estados/" + m[2] + ".json").then(function (e) { return deEstado(e, m[1], m[1] === "gov" ? "governador" : "vice"); });
     }

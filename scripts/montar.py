@@ -132,25 +132,87 @@ def sitemap() -> int:
     return len(urls) * 2
 
 
+def _junta_membros(oficiais: list[dict], do_tse: list[dict]) -> list[dict]:
+    """Lista oficial da Casa por cima da lista do TSE. Quem é a mesma pessoa (mesmo id) mantém o que veio do TSE (votos,
+    situação na eleição, eleição de 2026); nome, partido e foto passam a ser os da Casa, que são os de hoje. "extras": true
+    marca quem tem dados/pessoas/<id>.json (propostas, votações, gastos), para a página do perfil buscar esse arquivo."""
+    tse = {m["id"]: m for m in do_tse}
+    out = []
+    for m in oficiais:
+        p = dict(tse.get(m["id"], {}))
+        for k in ("id", "nome", "nomeCivil", "partido", "genero", "foto", "url", "exercicio", "exercicio_en"):
+            if m.get(k) not in (None, ""):
+                p[k] = m[k]
+        if (PESSOAS / f"{m['id']}.json").exists():
+            p["extras"] = True
+        else:
+            p.pop("extras", None)
+        out.append(p)
+    return sorted(out, key=lambda x: chave_nome(x.get("nome") or ""))
+
+
+def juntar_legislativos() -> tuple[int, int]:
+    """dados/assembleias/<UF>.json e dados/camaras/<IBGE>.json (scripts/legislativos.py) -> listas das páginas do estado e
+    da cidade, no lugar da lista de eleitos do TSE."""
+    na = nc = 0
+    for arq in sorted((DADOS / "assembleias").glob("*.json")):
+        a = ler_json(arq) or {}
+        e_arq = DADOS / "estados" / f"{a.get('uf') or arq.stem}.json"
+        e = ler_json(e_arq)
+        if not e or not a.get("membros"):
+            continue
+        de = e.get("deputadosEstaduais") or {}
+        de["membros"] = _junta_membros(a["membros"], de.get("membros") or [])
+        de["total"] = len(de["membros"])
+        de["oficial"] = True
+        de["aviso"] = f"Lista oficial da {a.get('casa') or 'Assembleia Legislativa'}: quem está no cargo hoje, inclusive suplentes que assumiram."
+        de["aviso_en"] = (f"Official list from the {a.get('casa_en') or 'Legislative Assembly'}: who is in office today, "
+                          "including substitutes who took a seat.")
+        de["fonte"] = a.get("fonte") or de.get("fonte")
+        e["deputadosEstaduais"] = de
+        salvar_json(e_arq, sem_mudar_data(e, e_arq))
+        na += 1
+    for arq in sorted((DADOS / "camaras").glob("*.json")):
+        k = ler_json(arq) or {}
+        ibge = str(k.get("ibge") or arq.stem)
+        c_arq = DADOS / "cidades" / (k.get("uf") or "") / f"{ibge}.json"
+        c = ler_json(c_arq)
+        if not c or not k.get("membros"):
+            continue
+        v = c.get("vereadores") or {}
+        v["membros"] = _junta_membros(k["membros"], v.get("membros") or [])
+        v["total"] = len(v["membros"])
+        v["oficial"] = True
+        v["aviso"] = f"Lista oficial da {k.get('casa') or 'Câmara Municipal'}: quem está no cargo hoje, inclusive suplentes que assumiram."
+        v["aviso_en"] = (f"Official list from the {k.get('casa_en') or 'City Council'}: who is in office today, "
+                         "including substitutes who took a seat.")
+        v["fonte"] = k.get("fonte") or v.get("fonte")
+        c["vereadores"] = v
+        salvar_json(c_arq, sem_mudar_data(c, c_arq))
+        nc += 1
+    return na, nc
+
+
 def main() -> None:
     fed = ler_json(DADOS / "tse" / "federais.json", {}) or {}
     cache = carregar_simples()
     log(f"TSE federais: {len(fed)} | explicações simples no cache: {len(cache)}")
 
-    # ---------- perfis federais
+    # ---------- perfis federais (e as propostas das Assembleias e Câmaras, que também ganham explicação simples)
     escritos = 0
     for f in sorted(PESSOAS.glob("*.json")):
         p = ler_json(f)
         if not isinstance(p, dict):
             continue
-        t = fed.get(p.get("id")) or {}
-        for campo in ("eleicao", "bens"):
-            if t.get(campo) is not None:
-                p[campo] = t[campo]
-        if t.get("eleicao2026") is not None:
-            p["eleicao2026"] = com_en(t["eleicao2026"])
-        mesma_regua(p, t)
         lista = (p.get("propostas") or {}).get("lista") or []
+        if re.match(r"(dep|sen|pres|vp)-", p.get("id") or f.stem):
+            t = fed.get(p.get("id")) or {}
+            for campo in ("eleicao", "bens"):
+                if t.get(campo) is not None:
+                    p[campo] = t[campo]
+            if t.get("eleicao2026") is not None:
+                p["eleicao2026"] = com_en(t["eleicao2026"])
+            mesma_regua(p, t)
         aplicar_simples(lista, cache)
         if salvar_json(f, sem_mudar_data(p, f)):
             escritos += 1
@@ -190,6 +252,8 @@ def main() -> None:
             if m.get("eleicao2026"):
                 m["eleicao2026"] = com_en(m["eleicao2026"])
         salvar_json(arq, sem_mudar_data(e, arq))
+    a, c = juntar_legislativos()
+    log(f"listas oficiais: {a} Assembleias e {c} Câmaras Municipais")
     log(f"dados/cidades.json: {indice_cidades()} cidades")
     log(f"sitemap.xml: {sitemap()} endereços")
     log("pronto")

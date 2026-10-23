@@ -100,6 +100,15 @@ def limpa(s) -> str | None:
     return s or None
 
 
+_CPF = re.compile(r"\b\d{3}\.\d{3}\.\d{3}-\d{2}\b|(?<=CPF )(?:n[º°o.]*\s*)?\d{11}\b", re.I)
+
+
+def sem_documentos(s):
+    """Tira números de CPF de textos oficiais (algumas ementas citam o CPF de quem é preso ou processado). O site não
+    precisa deles; o resto do texto continua igual ao oficial."""
+    return _CPF.sub("[CPF omitido]", s) if isinstance(s, str) else s
+
+
 def nome_proprio(s: str | None) -> str | None:
     """'JOSÉ DA SILVA' -> 'José da Silva'; mantém siglas sem vogal ('JHC') e põe maiúscula depois de hífen/apóstrofo."""
     if not s:

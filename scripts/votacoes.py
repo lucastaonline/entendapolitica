@@ -59,7 +59,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from comum import (CACHE, DADOS, PESSOAS, carregar_simples, chave_nome, hoje, ler_json, limpa, log,  # noqa: E402
-                   salvar_json, sem_acento, sem_mudar_data)
+                   salvar_json, sem_acento, sem_documentos, sem_mudar_data)
 
 CASAS = {"camara": 513, "senado": 81}
 CATEGORIAS = ("principal", "mudanca", "procedimento", "outra")
@@ -373,6 +373,8 @@ def atualizar_simples(simples: dict | None = None) -> int:
         if not isinstance(d, dict) or not isinstance(d.get("proposta"), dict):
             continue
         prop, s = d["proposta"], simples.get(d["proposta"].get("propostaId") or "")
+        prop["ementa"] = sem_documentos(prop.get("ementa"))
+        d["descricao"] = sem_documentos(d.get("descricao"))
         prop.pop("s", None)
         prop.pop("s_en", None)
         if isinstance(s, dict):

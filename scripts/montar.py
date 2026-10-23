@@ -259,6 +259,9 @@ def main() -> None:
         if not isinstance(p, dict):
             continue
         lista = (p.get("propostas") or {}).get("lista") or []
+        for x in lista:
+            if x.get("ementa"):
+                x["ementa"] = sem_documentos(x["ementa"])
         if re.match(r"(dep|sen|pres|vp)-", p.get("id") or f.stem):
             t = fed.get(p.get("id")) or {}
             for campo in ("eleicao", "bens"):

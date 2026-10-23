@@ -38,9 +38,9 @@ O site tem versão em inglês para quem é de fora do Brasil (`?lang=en`; a esco
 
 ## Fases combinadas
 
-1. **Fase 1:** federal completo (presidente, vice, ministros, senadores, deputados federais) + ficha básica (TSE) de governadores, deputados estaduais, prefeitos e vereadores.
-2. **Fase 2:** propostas dos deputados estaduais, Assembleia por Assembleia.
-3. **Fase 3:** vereadores das capitais e das Câmaras com dados abertos (ex.: SAPL/Interlegis).
+1. **Fase 1:** federal completo (presidente, vice, ministros, senadores, deputados federais) + ficha básica (TSE) de governadores, deputados estaduais, prefeitos e vereadores. **Feita**, com as votações da Câmara e do Senado e os mandatos anteriores.
+2. **Fase 2:** propostas dos deputados estaduais, Assembleia por Assembleia. **Feita em 21 das 27** (lista oficial em 26; votações em 4; gastos em 5): ver "Assembleias Legislativas".
+3. **Fase 3:** vereadores das capitais e das Câmaras com dados abertos (ex.: SAPL/Interlegis). **Capitais feitas** (lista oficial em 19 de 26, propostas em 8); outras 824 Câmaras com SAPL podem entrar (ver "Câmaras Municipais das capitais").
 
 Mandatos: o site mostra **quem está no cargo hoje** e marca quem foi **eleito/reeleito em 2026**. As listas trocam sozinhas no dia da posse de quem foi eleito (presidente em 5/1/2027 e governadores em 6/1/2027, pela Emenda Constitucional 111/2021; Congresso em 1º/2/2027; prefeitos e vereadores em 1º/1/2029). Qual é o mandato de hoje sai das datas de posse (`scripts/mandatos.py`, a mesma regra para os coletores e para o navegador), nunca de um ano escrito no código. Os mandatos anteriores (quem foi eleito em cada um, segundo o TSE) ficam no campo **Ver outro mandato**.
 
@@ -140,6 +140,47 @@ Correções à mão (sempre com fonte): `dados/manual/governadores.json`, `dados
 - **Situação das propostas numa Câmara de uma casa só**: o "aprovado" da votação final vai para a sanção do prefeito (`aprovada`); sancionado, promulgado ou com norma ligada = `lei`; "veto rejeitado" quer dizer que a Câmara derrubou o veto; aprovação em 1º turno e pareceres = `andando`. As regras estão em `scripts/camaras/_base.py` (`REGRAS`).
 - **Votações nominais e gastos** das Câmaras ainda não entram: o SAPL das capitais quase não tem votos nominais; São Paulo publica as votações em XML e os gastos no SisGV (próximo passo).
 - `scripts/descobrir_sapl.py` (não roda todo dia) testa `sapl.<cidade>.<uf>.leg.br` nas 5.569 cidades: em 23/10/2026, 824 Câmaras tinham a API funcionando, a legislatura atual cadastrada e projetos desde 2025.
+
+### Assembleias Legislativas (e a Câmara Legislativa do DF)
+
+`python scripts/legislativos.py assembleias` (ou só alguns estados: `python scripts/legislativos.py BA SP GO`) roda um coletor por Casa (`scripts/assembleias/<uf>.py`; ajudas em `_ne_comum.py`, `_ne_sapl.py` e `_ne_nopaper.py` no Nordeste, `_sse_comum.py` no Sudeste, Sul e DF, `_nco_comum.py` e `_nco_sapl.py` no Norte e Centro-Oeste). Cada um lê só o site oficial da Casa, um pedido por vez, com pausa, e guarda o que leu em `.cache/<casa>/`. Hoje, **26 das 27 Casas** têm a **lista oficial de quem está no cargo** (1.035 deputados, inclusive suplentes que assumiram: "Suplente em exercício"), com o partido de hoje, a foto e a página oficial; cada pessoa é ligada ao candidato do TSE da eleição da legislatura (`dest-<UF>-<SQ_CANDIDATO>`; conferências à mão no próprio coletor). **21** têm as **propostas desde a posse** (59.148: projetos de lei, de lei complementar, de emenda à Constituição — no DF, à Lei Orgânica —, de decreto legislativo e de resolução), com autor principal ou coautor e a situação (regras de cada Casa, conferidas à mão numa amostra, antes da tabela comum). **4** têm **votações nominais** (catálogos `dados/votacoes/<aleam|alero|alego|alepa>.json`, no mesmo formato do Congresso) e **5** têm **gastos** (verba indenizatória ou cota; o perfil diz o nome de cada uma).
+
+| UF | Casa | No cargo (suplentes marcados) | Propostas | Votações nominais | Gastos |
+|---|---|---|---|---|---|
+| AC | Aleac | 24 (0) | 868 | — | — |
+| AL | ALE-AL | 27 (0) | 2.136 | — | — |
+| AM | Aleam | 24 (1) | 3.966 | 3.140 | — |
+| AP | Alap | — (o site não respondeu: fica a lista do TSE) | — | — | — |
+| BA | Alba | 63 (0) | 1.359 | — | — |
+| CE | Alece | 46 (0) | 3.103 | — | — |
+| DF | CLDF | 24 (0) | 2.757 | — | — |
+| ES | Ales | 30 (2) | 2.770 | — | — |
+| GO | Alego | 41 (2) | — (o sistema proíbe robôs) | 2.080 | verba indenizatória |
+| MA | Alema | 42 (0) | 2.389 | — | — |
+| MG | ALMG | 77 (5) | 5.559 | — | verba indenizatória |
+| MS | Alems | 24 (1) | — (desafio anti-robô) | — | CEAP |
+| MT | ALMT | 24 (1) | — (a API exige cadastro) | — | — |
+| PA | Alepa | 41 (2) | — (busca sem paginação aberta) | 151 | — |
+| PB | ALPB | 36 (3) | 7.862 | — | — |
+| PE | Alepe | 49 (0) | 3.912 | — | — |
+| PI | Alepi | 30 (3) | 1.509 | — | — |
+| PR | Alep | 54 (3) | 3.260 | — | — |
+| RJ | Alerj | 70 (9) | — (o sistema só mostra as 15 mais recentes) | — | — (não existe verba indenizatória no RJ) |
+| RN | ALRN | 24 (0) | 2.240 | — | — |
+| RO | Ale-RO | 24 (1) | 2.439 | 367 | — |
+| RR | ALE-RR | 24 (1) | 1.296 | — | — |
+| RS | ALRS | 55 (1) | 1.590 | — | — |
+| SC | Alesc | 40 (4) | 2.038 | — | despesas dos gabinetes |
+| SE | Alese | 24 (0) | 1.510 | — | — |
+| SP | Alesp | 94 (5) | 4.824 | — | despesas de gabinete |
+| TO | Aleto | 24 (1) | 1.761 | — | — |
+
+(Números de 23/10/2026. "Suplentes marcados" = onde a lista oficial diz que a pessoa é suplente; nas outras, o perfil mostra "Como chegou ao cargo".) O que falta em cada Casa, e por quê, está nas `notas` de `dados/assembleias/<UF>.json`, que a página do estado mostra no quadro "O que o site já tem da Assembleia".
+
+- **Tempo por dia, com o cache cheio:** ~25 min para as 26 (os coletores lentos param num limite de tempo e completam aos poucos nos dias seguintes; enquanto isso fica o dado da rodada anterior). A **primeira rodada sem cache** é longa (PE ~70 min, ALMG ~70 min de verba, Alesc ~1 h, AM ~25 min). Para encher de uma vez: `NE_SEM_LIMITE=1`, `ALMG_VERBAS_MAX`, `CLDF_NORMAS_MAX`, `ALEP_NORMAS_MAX`, `ALESC_FICHAS`, `ALESC_PAGINAS` e `ALES_SEGUNDOS` (o que cada uma faz está no topo do coletor).
+- **Posse da legislatura eleita em 2026** (conferida nas Constituições e na Lei Orgânica do DF; fica em `scripts/mandatos.py`, `POSSE_ESTADUAL`): 1º de fevereiro de 2027 em 24 estados; **31 de janeiro no RS**, **6 de janeiro no DF** (Emenda à Lei Orgânica 131/2024) e **1º de janeiro em RR** (Constituição de RR, art. 30, § 4º). Em 2023 foi diferente em SP (15 de março) e no DF (1º de janeiro): `POSSE_ESTADUAL_ATE_2022`.
+- **Troca de legislatura:** o começo das propostas (`regional.inicio_estadual(uf)`), os textos e a eleição do TSE usada nos ids (2026) trocam sozinhos na posse. A lista de quem está no cargo troca quando a Casa atualiza a dela; até lá, alguns coletores falham de propósito (para não mostrar a lista velha como se fosse a de hoje), e o `montar.py` não usa uma lista de uma legislatura que já acabou (`_lista_velha`): fica a lista do TSE, que já é a dos eleitos. Depois da posse, os ids dos deputados estaduais passam a usar o número do TSE de 2026 (o link antigo de um reeleito deixa de abrir o perfil).
+- **Testes:** `python testes/interacao_ale_sse.py` (Sudeste, Sul e DF) e `python testes/interacao_assembleias_nco.py` (Norte e Centro-Oeste).
 
 ---
 
@@ -335,6 +376,28 @@ Campos extras de quem vem do TSE (estados e cidades): `aConfirmar` (o TSE ainda 
 **Gastos (Câmara):** valores líquidos da cota parlamentar, iguais aos da página oficial de cada deputado, incluindo o que a página oficial mostra (passagens compradas pelo sistema da Câmara, o SIGEPA, e a complementação do auxílio-moradia). Não entram o salário nem a verba de gabinete (salários de assessores); por isso o site diz "gastos da cota" e não "tudo o que custou".
 
 **Mesma régua nos perfis federais (`scripts/montar.py`):** ocupação e escolaridade vêm, para todo mundo, da candidatura mais recente no TSE (`ocupacao`, `escolaridade`, `escolaridadeFonte`); as Casas e o Planalto descrevem isso de jeitos diferentes, ou não descrevem. "Mandatos anteriores" mostra só mandatos no mesmo cargo/Casa (deputado: Câmara; senador: Senado; presidente: Presidência), também para todo mundo.
+
+### Assembleias e Câmaras Municipais (`dados/assembleias/<UF>.json` e `dados/camaras/<IBGE>.json`, feitos por `scripts/legislativos.py`)
+
+Cada Casa tem um coletor com a função `coletar() -> dict` (`scripts/assembleias/<uf>.py`, `scripts/camaras/c<IBGE>.py`), que usa as ajudas de `scripts/regional.py`. Se o site da Casa cair, o coletor lança a exceção e o `legislativos.py` mantém o arquivo de antes; o resumo de cada rodada fica em `dados/legislativos.json`.
+
+```jsonc
+{
+  "uf": "SP", "ibge": null,                       // Câmara Municipal: "ibge": "3550308"
+  "casa": "Assembleia Legislativa do Estado de São Paulo", "casa_en": "Legislative Assembly of the State of São Paulo",
+  "sigla": "Alesp", "site": "https://www.al.sp.gov.br", "fonte": {},
+  "cobertura": { "lista": true, "propostas": true, "votacoes": false, "gastos": true },
+  "escopoPropostas": "Projetos apresentados desde ...", "escopoPropostas_en": "...",
+  "legislatura": { "numero": 20, "inicio": "2023-03-15", "fim": "2027-01-31" },   // nem toda Casa tem
+  "membros": [ { "id": "dest-SP-250001612345", "nome", "nomeCivil", "partido", "genero", "foto", "url",
+                 "exercicio": "Suplente em exercício", "exercicio_en": "Substitute in office" } ],   // exercicio só de suplente
+  "notas": ["o que falta e por quê"], "notas_en": ["..."], "atualizado": "2026-10-23"
+}
+```
+
+- Ids: os mesmos da lista do TSE (`dest-<UF>-<SQ_CANDIDATO>` da eleição da legislatura; `ver-<IBGE>-<SQ_CANDIDATO de 2024>`), achados pelo nome com `regional.candidatos_tse` + `regional.casar_tse` (na dúvida, não liga: o id vira `dest-<UF>-x<nome>`).
+- Quem tem algo a mais (propostas, votações, gastos, links) ganha `dados/pessoas/<id>.json`, com os mesmos campos dos perfis federais; `gastos` traz também `nome`/`nome_en` (o nome da verba naquela Casa) e `meses` (o primeiro e o último mês do ano mostrado). Ids das propostas: `<sigla da Casa>:<id oficial>` (ex.: `alesp:1000473`).
+- `scripts/montar.py` põe a lista oficial no lugar da lista do TSE em `dados/estados/<UF>.json` (`deputadosEstaduais`) e em `dados/cidades/<UF>/<IBGE>.json` (`vereadores`), com `oficial: true`, `infoCasa` (cobertura, notas e site, para o quadro "O que o site já tem da Casa") e `extras: true` em quem tem o arquivo a mais; e troca os deputados estaduais da busca. Não usa a lista de uma legislatura que já acabou.
 
 ### Mandatos anteriores (`dados/historico/`, feitos por `scripts/historico.py`)
 

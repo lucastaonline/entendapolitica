@@ -221,6 +221,8 @@
           var a = de2.eleicao || 2022;
           return m.votos != null ? EP.tr(EP.num(m.votos) + " votos em " + a, EP.num(m.votos) + " votes in " + a) : "";
         } });
+      // o que o site já tem da Assembleia (lista oficial, propostas, votações, gastos) e as notas dela
+      if (de2.infoCasa) document.getElementById("casa-est").insertAdjacentHTML("afterend", EP.infoCasa(de2.infoCasa));
       EP.revelar(el);
     }).catch(function () {
       falhou(document.getElementById("gov"), "os dados deste estado", "the data for this state");

@@ -115,7 +115,7 @@
       '<section class="miolo bloco" aria-labelledby="t-camara-mun"><div class="cab-bloco rev"><span class="ic-bloco" aria-hidden="true">🏛️</span><div>' +
         '<h2 id="t-camara-mun">' + EP.tr("A Câmara Municipal", "The City Council") + " <small>(" + EP.num(n) + " " + EP.tr(n === 1 ? "vereador" : "vereadores", n === 1 ? "councilor" : "councilors") + ")</small></h2>" +
         '<p class="muted">' + EP.tr("Os vereadores fazem as leis da cidade e fiscalizam o prefeito.", "City councilors (<span lang=\"pt-BR\">vereadores</span>) make the city's laws and oversee the mayor.") + "</p></div></div>" +
-        aviso(D.aviso(v.aviso, v.aviso_en)) + '<div id="casa-ver"></div></section>' +
+        aviso(D.aviso(v.aviso, v.aviso_en)) + '<div id="casa-ver"></div>' + EP.infoCasa(v.infoCasa) + "</section>" +
       '<section class="miolo bloco" aria-label="' + EP.tr("Ver mais", "See more") + '"><div class="links-cidade rev">' +
         '<a class="btn claro" href="estado.html?uf=' + uf + (EP.en ? "&lang=en" : "") + '"><span aria-hidden="true">📍 </span>' +
           esc(EP.tr("Ver a política " + EP.doEstado(uf), "See the politics " + EP.doEstado(uf))) + "</a>" +

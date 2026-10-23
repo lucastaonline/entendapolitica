@@ -24,11 +24,35 @@
     }
     var desde = p.desde ? EP.tr("No cargo desde ", "In office since ") + EP.data(p.desde) : "";
     return '<a class="pessoa-grande rev" href="pessoa.html?id=' + encodeURIComponent(p.id) + '">' + EP.av(p.foto, p.nome, null, true) +
-      '<span><span class="cargo">' + esc(cargo) + "</span><b>" + esc(p.nome) + "</b><small>" + [p.partido ? EP.pt(esc(p.partido)) : "", esc(desde)].filter(Boolean).join(" · ") + "</small>" +
+      '<span><span class="cargo">' + esc(cargo) + "</span><b>" + EP.pt(esc(p.nome)) + "</b><small>" + [p.partido ? EP.pt(esc(p.partido)) : "", esc(desde)].filter(Boolean).join(" · ") + "</small>" +
       (extra || "") + EP.chip2026(p.eleicao2026, p.genero, true) +
       (p.comoAssumiu && !/^eleit/i.test(p.comoAssumiu) ? '<small style="margin-top:6px"><span aria-hidden="true">🔑 </span>' + D.traduz(p.comoAssumiu, null, p.comoAssumiu_en) + "</small>" : "") +
       (p.nota ? '<small style="margin-top:6px"><span aria-hidden="true">📝 </span>' + D.traduz(p.nota, null, p.nota_en) + "</small>" : "") +
       '<span class="ver">' + EP.tr("Ver mais", "See more") + ' <span aria-hidden="true">›</span></span></span></a>';
+  };
+
+  // O que o site já tem de uma Assembleia ou Câmara Municipal (lista oficial, propostas, votações, gastos), as notas da Casa
+  // (o que falta e por quê) e o site oficial. info = deputadosEstaduais.infoCasa ou vereadores.infoCasa (scripts/montar.py).
+  var COBERTURA = [["lista", "👥", "Quem está no cargo hoje (lista oficial)", "Who is in office today (official list)"],
+    ["propostas", "📜", "O que cada um propôs", "What each member proposed"],
+    ["votacoes", "🗳️", "Como cada um votou", "How each member voted"],
+    ["gastos", "💰", "Gastos com a verba do mandato", "Spending of the office allowance"]];
+  EP.infoCasa = function (info) {
+    if (!info || !info.cobertura) return "";
+    var nomeHtml = EP.en && info.casa_en ? esc(info.casa_en) : EP.pt(esc(info.casa || ""));
+    var notasEn = EP.en && (info.notas_en || []).length === (info.notas || []).length && (info.notas_en || []).length;
+    var notas = notasEn ? info.notas_en : (info.notas || []);
+    return '<div class="info-casa rev"><h3>' + EP.tr("O que o site já tem da ", "What this site has from the ") + nomeHtml + "</h3>" +
+      '<ul class="cobertura-casa">' + COBERTURA.map(function (c) {
+        var tem = !!info.cobertura[c[0]];
+        return '<li class="' + (tem ? "tem" : "falta") + '"><span aria-hidden="true">' + (tem ? "✔️ " : "⏳ ") + "</span>" +
+          (tem ? '<span class="sr">' + EP.tr("Tem: ", "Available: ") + "</span>" : "") + esc(EP.tr(c[2], c[3])) +
+          (tem ? "" : " <small>(" + EP.tr("ainda não", "not yet") + ")</small>") + "</li>";
+      }).join("") + "</ul>" +
+      (notas.length ? '<ul class="notas-casa">' + notas.map(function (n) { return "<li>" + (EP.en && !notasEn ? EP.pt(esc(n)) : esc(n)) + "</li>"; }).join("") + "</ul>" : "") +
+      (/^https:\/\//.test(info.site || "") ? '<p class="site-casa"><a href="' + esc(info.site) + '" target="_blank" rel="noopener" hreflang="pt-BR">' +
+        EP.tr("Site oficial da ", "Official website of the ") + nomeHtml + ' <span aria-hidden="true">↗</span><span class="sr"> ' +
+        EP.tr("(abre em outra aba)", "(opens in a new tab)") + "</span></a></p>" : "") + "</div>";
   };
 
   EP.montaCasa = function (el, o) {

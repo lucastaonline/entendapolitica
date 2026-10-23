@@ -270,6 +270,16 @@ kbd { display: inline-block; min-width: 1.6em; text-align: center; border: 2px s
 .aviso-idioma { position: relative; z-index: 70; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; background: #1f3a5f; color: #fff; padding: 10px 14px; font-weight: 700; font-size: .95rem; }
 .aviso-idioma .btn { box-shadow: none; }
 
+/* Assembleias e Câmaras Municipais: o que o site já tem da Casa, as notas dela e o site oficial (EP.infoCasa, js/casa.js) */
+.info-casa { background: var(--card); border: 2px dashed var(--line); border-radius: var(--raio); padding: 14px 18px; margin-top: 20px; }
+.info-casa h3 { font-size: 1.05rem; margin: 0 0 10px; }
+.cobertura-casa { list-style: none; padding: 0; margin: 0 0 8px; display: flex; flex-wrap: wrap; gap: 8px; }
+.cobertura-casa li { background: var(--bg); border: 2px solid var(--line); border-radius: 999px; padding: 4px 12px; font-size: .9rem; font-weight: 700; }
+.cobertura-casa li.falta { font-weight: 600; color: var(--muted); }
+.notas-casa { margin: 8px 0; padding-left: 1.2em; font-size: .9rem; color: var(--muted); }
+.notas-casa li + li { margin-top: 4px; }
+.site-casa { margin: 8px 0 0; font-size: .92rem; font-weight: 700; }
+
 /* alto contraste */
 html.alto-contraste { --bg: #fff; --card: #fff; --ink: #000; --muted: #1a1a1a; --line: #000; --brand: #002a6b; --creme-forte: #fff; --sombra: none; }
 html.alto-contraste body { background: #fff; color: #000; }

@@ -90,7 +90,8 @@
     if ((m = /^(gov|vgov)-([A-Z]{2})$/.exec(id))) {
       return EP.json("dados/estados/" + m[2] + ".json").then(function (e) { return deEstado(e, m[1], m[1] === "gov" ? "governador" : "vice"); });
     }
-    if ((m = /^dest-([A-Z]{2})-\w+$/.exec(id))) {
+    // o id de quem a Casa lista mas não foi ligado ao TSE é "dest-UF-x<nome-com-hifens>" (regional.id_pessoa)
+    if ((m = /^dest-([A-Z]{2})-[\w-]+$/.exec(id))) {
       return EP.json("dados/estados/" + m[1] + ".json").then(function (e) {
         var de = e.deputadosEstaduais || {}, p = (de.membros || []).filter(function (x) { return x.id === id; })[0];
         if (!p) throw new Error("não achei");
@@ -98,7 +99,7 @@
           avisoLista: de.aviso, avisoLista_en: de.aviso_en, fonte: p.fonte || de.fonte }, p);
       });
     }
-    if ((m = /^(pref|vpref|ver)-(\d{7})(?:-\w+)?$/.exec(id))) {
+    if ((m = /^(pref|vpref|ver)-(\d{7})(?:-[\w-]+)?$/.exec(id))) {
       var uf = EP.UF_IBGE[m[2].slice(0, 2)];
       return EP.json("dados/cidades/" + uf + "/" + m[2] + ".json").then(function (c) {
         var p, tipo = m[1];
@@ -398,7 +399,10 @@
     var s = EP.STATUS[x.status] ? x.status : "outra";
     var ondeLink = /^senado:/.test(x.id || "") ? ["Ver no site do Senado", "See it on the Senate website"] :
       /^camara:/.test(x.id || "") ? ["Ver no site da Câmara", "See it on the Chamber of Deputies website"] :
-      ["Ver no site oficial", "See it on the official website"];  // Assembleias e Câmaras Municipais
+      P.tipo === "dest" && P.uf === "DF" ? ["Ver no site da Câmara Legislativa", "See it on the Legislative Chamber website"] :
+      P.tipo === "dest" ? ["Ver no site da Assembleia", "See it on the state legislature website"] :
+      P.tipo === "ver" ? ["Ver no site da Câmara Municipal", "See it on the city council website"] :
+      ["Ver no site oficial", "See it on the official website"];
     var simples = EP.en ? x.s_en : x.s;
     var ementa = EP.pt(esc(x.ementa || ""));
     var corpo = simples ?
@@ -406,14 +410,14 @@
       '<div class="oficial"><span class="rot-texto">' + EP.tr("Texto oficial (ementa)", "Official text (ementa, in Portuguese)") + "</span>" + ementa + "</div>" :
       '<div class="oficial so-oficial"><span class="rot-texto">' + EP.tr("Texto oficial (ementa)", "Official text (ementa, in Portuguese)") + "</span>" + ementa + "</div>" +
       '<p class="muted preparando"><span aria-hidden="true">⏳ </span>' + EP.tr("A explicação em palavras simples desta proposta está sendo preparada.", "A plain-language explanation is being prepared.") + "</p>";
-    return '<li class="prop s-' + s + '"><div class="prop-cab"><h3 class="sigla"' + (focavel ? ' tabindex="-1"' : "") + ">" + esc(x.sigla || x.tipo || "") + "</h3>" +
+    return '<li class="prop s-' + s + '"><div class="prop-cab"><h3 class="sigla"' + (focavel ? ' tabindex="-1"' : "") + (EP.en ? ' lang="pt-BR"' : "") + ">" + esc(x.sigla || x.tipo || "") + "</h3>" +
       (x.data ? '<span class="data"><span class="sr">' + EP.tr("Apresentada em ", "Filed on ") + "</span>" + EP.data(x.data) + "</span>" : "") + EP.carimbo(s) +
       (P.tipo !== "pres" ? '<span class="papel' + (x.papel === "autor" ? "" : " coautor") + '">' + (x.papel === "autor" ? '<span aria-hidden="true">✍️ </span>' + EP.tr(EP.gen(P.genero, "Autor principal", "Autora principal"), "Main author") :
         '<span aria-hidden="true">🤝 </span>' + EP.tr("Assinou junto", "Co-signed")) + "</span>" : "") + "</div>" + corpo +
       '<div class="rodape-prop"><span class="status-txt">' + D.status(x) + "</span>" +
       ((x.temas || []).length ? '<span class="temas"><span aria-hidden="true">🏷️ </span><span class="sr">' + EP.tr("Assuntos: ", "Topics: ") + "</span>" + esc(x.temas.map(EP.tema).join(", ")) + "</span>" : "") +
-      (x.url ? linkFora(x.url, EP.tr(ondeLink[0], ondeLink[1]) +
-        '<span class="sr"> (' + esc(x.sigla || "") + ")</span>", true) : "") +
+      (x.url ? linkFora(x.url, (/\.pdf($|[?#])/i.test(x.url) ? EP.tr("Ver o documento oficial", "See the official document") : EP.tr(ondeLink[0], ondeLink[1])) +
+        '<span class="sr"> (' + EP.pt(esc(x.sigla || "")) + ")</span>", true) : "") +
       (x.lei && x.lei.url ? linkFora(x.lei.url, EP.tr("Ler a ", "Read ") + EP.pt(esc(x.lei.nome || "lei")), true) : "") + "</div></li>";
   }
   function textoBusca(x) {
@@ -549,7 +553,7 @@
       var vt = D.voto(x.voto);
       var res = x.resultado ? " · " + EP.tr("Resultado: ", "Result: ") + D.resultado(x.resultado) : "";
       var cat = CAT_VOTO[x.categoria], u = urlVotacao(x.id);
-      var tit = "<b>" + esc(x.proposta || EP.tr("Votação", "Vote")) + "</b>" + (x.data ? "\u00a0·\u00a0" + EP.data(x.data) : "");
+      var tit = "<b>" + (x.proposta ? EP.pt(esc(x.proposta)) : EP.tr("Votação", "Vote")) + "</b>" + (x.data ? "\u00a0·\u00a0" + EP.data(x.data) : "");
       return "<li" + (focarDe != null && k === focarDe ? ' tabindex="-1"' : "") + '><span class="voto-chip" style="--cv:' + (COR_VOTO[vt.cat] || COR_VOTO.Outro) + '"><span class="sr">' + EP.tr("Voto: ", "Vote: ") + "</span>" + esc(vt.curto) + "</span>" +
         '<span class="v-txt">' + (u ? '<a href="' + u + '">' + tit + '<span class="sr"> (' + EP.tr("ver como todos votaram", "see how everyone voted") + ")</span></a>" : tit) + res +
         (cat ? ' <span class="chip neutro" style="font-size:.7rem;padding:1px 8px;white-space:normal"><span aria-hidden="true">' + cat[0] + " </span>" +
@@ -582,12 +586,24 @@
     var g = p.gastos;
     if (!g || g.total == null) return "";
     var max = Math.max.apply(null, (g.porTipo || []).map(function (x) { return x.valor; }).concat([1]));
+    var regional = p.tipo === "dest" || p.tipo === "ver";
     var quem = p.tipo === "sen" ? EP.tr("Todo senador", "Every senator") : EP.tr("Todo deputado", "Every deputy");
-    return '<section class="secao-perfil" id="gastos" aria-labelledby="t-gastos"><h2 id="t-gastos"><span class="ic" aria-hidden="true">💰</span>' + EP.tr("Gastos da cota do mandato", "Spending from the office allowance") + "</h2>" +
-      '<div class="dica-coruja"><span class="coruja" aria-hidden="true">🦉</span><p>' + EP.tr(
-        quem + " tem uma verba por mês para pagar despesas do trabalho, como passagens, escritório, combustível e divulgação. <b>Não é salário.</b> O limite muda de estado para estado. Gastar mais ou menos não quer dizer, sozinho, trabalhar mais ou menos.",
-        quem + " has a monthly allowance (the cota) to pay for work expenses, such as flights, offices, fuel and publicity. <b>It is not a salary.</b> The limit is different for each state. Spending more or less does not, on its own, mean working more or less.") + "</p></div>" +
-      '<div class="grandes-n" style="margin-top:14px"><div class="grande-n"><b>' + EP.dinheiroCurto(g.total) + "</b><span>" + EP.tr("gastos em ", "spent in ") + esc(g.ano) + "</span></div>" +
+    var quemR = p.tipo === "ver" ? EP.tr("cada vereador", "each city councilor") : p.uf === "DF" ? EP.tr("cada deputado distrital", "each district deputy") : EP.tr("cada deputado estadual", "each state deputy");
+    var explica = regional ? EP.tr(
+        "Além do salário, " + quemR + " pode usar uma verba para pagar despesas do trabalho, como escritório, combustível e divulgação. <b>Não é salário.</b> Cada Casa tem as suas regras e os seus limites. Gastar mais ou menos não quer dizer, sozinho, trabalhar mais ou menos.",
+        "Besides the salary, " + quemR + " can use an allowance to pay for work expenses, such as offices, fuel and publicity. <b>It is not a salary.</b> Each legislature has its own rules and limits. Spending more or less does not, on its own, mean working more or less.") :
+      EP.tr(quem + " tem uma verba por mês para pagar despesas do trabalho, como passagens, escritório, combustível e divulgação. <b>Não é salário.</b> O limite muda de estado para estado. Gastar mais ou menos não quer dizer, sozinho, trabalhar mais ou menos.",
+        quem + " has a monthly allowance (the cota) to pay for work expenses, such as flights, offices, fuel and publicity. <b>It is not a salary.</b> The limit is different for each state. Spending more or less does not, on its own, mean working more or less.");
+    // meses que o número do ano cobre (["2026-01", "2026-09"]): "de janeiro a setembro de 2026"
+    var ms = g.meses && g.meses.length === 2 ? [+String(g.meses[0]).slice(5, 7), +String(g.meses[1]).slice(5, 7)] : null;
+    var rotAno = ms && ms[0] && ms[1] && ms[1] >= ms[0] ? (ms[0] === ms[1] ? EP.tr("gastos em " + MESES_PT[ms[0] - 1] + " de " + g.ano, "spent in " + MESES_EN[ms[0] - 1] + " " + g.ano) :
+      EP.tr("gastos de " + MESES_PT[ms[0] - 1] + " a " + MESES_PT[ms[1] - 1] + " de " + g.ano, "spent from " + MESES_EN[ms[0] - 1] + " to " + MESES_EN[ms[1] - 1] + " " + g.ano)) :
+      EP.tr("gastos em ", "spent in ") + esc(g.ano);
+    return '<section class="secao-perfil" id="gastos" aria-labelledby="t-gastos"><h2 id="t-gastos"><span class="ic" aria-hidden="true">💰</span>' +
+      (regional ? EP.tr("Gastos do mandato", "Office spending") : EP.tr("Gastos da cota do mandato", "Spending from the office allowance")) + "</h2>" +
+      (g.nome ? '<p class="muted">' + EP.tr("O que entra aqui: ", "What is counted here: ") + "<b>" + (EP.en && g.nome_en ? esc(g.nome_en) : EP.pt(esc(g.nome))) + "</b></p>" : "") +
+      '<div class="dica-coruja"><span class="coruja" aria-hidden="true">🦉</span><p>' + explica + "</p></div>" +
+      '<div class="grandes-n" style="margin-top:14px"><div class="grande-n"><b>' + EP.dinheiroCurto(g.total) + "</b><span>" + rotAno + "</span></div>" +
       (g.mandatoTotal != null ? '<div class="grande-n"><b>' + EP.dinheiroCurto(g.mandatoTotal) + "</b><span>" + desdeMes(g.desde || "2023-02") + "</span></div>" : "") + "</div>" +
       ((g.porTipo || []).length ? '<h3 style="margin-top:16px">' + EP.tr("Com o que gastou em ", "What the money was spent on in ") + esc(g.ano) + '</h3><ul class="gastos-lista" style="list-style:none;padding:0">' + g.porTipo.slice(0, 8).map(function (x) {
         return '<li class="gasto"><span>' + D.gasto(x.tipo) + "</span><b>" + EP.dinheiro(x.valor) + '</b><span class="tr" aria-hidden="true"><i style="width:' + (100 * x.valor / max).toFixed(1) + '%"></i></span></li>';

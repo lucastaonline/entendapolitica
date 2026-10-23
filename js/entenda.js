@@ -128,7 +128,7 @@
   }
   var DET = [];
   function det(titulo, html) { DET.push({ t: titulo, h: html }); return DET.length - 1; }
-  var PAGINAS_SITE = /^(index|entenda|brasil|estado|cidade|dados|imparcialidade)\.html(\?[\w=&-]*)?(#[\w-]+)?$/;
+  var PAGINAS_SITE = /^(index|entenda|brasil|estado|cidade|votacoes|votacao|dados|imparcialidade)\.html(\?[\w=&-]*)?(#[\w-]+)?$/;
   function linkDoSlide(s) {
     var l = s.link;
     if (!l || !l.url || !PAGINAS_SITE.test(l.url)) return "";

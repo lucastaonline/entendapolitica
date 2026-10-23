@@ -698,7 +698,12 @@
     "cn-maioria-absoluta",
     "camara-processo",
     "senado-glossario"
-   ]
+   ],
+   "link": {
+    "url": "votacoes.html",
+    "ic": "🔢",
+    "txt": "See real votes and how many “yes” votes each one got"
+   }
   },
   {
    "tipo": "explica",

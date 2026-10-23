@@ -672,7 +672,12 @@
     "cn-maioria-absoluta",
     "camara-processo",
     "senado-glossario"
-   ]
+   ],
+   "link": {
+    "url": "votacoes.html",
+    "ic": "🔢",
+    "txt": "Ver votações de verdade e quantos “sim” cada uma teve"
+   }
   },
   {
    "tipo": "explica",

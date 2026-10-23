@@ -472,7 +472,12 @@
     "camara-processo",
     "senado-glossario",
     "agsenado-emendas"
-   ]
+   ],
+   "link": {
+    "url": "votacoes.html",
+    "ic": "🗳️",
+    "txt": "See how deputies and senators really voted"
+   }
   },
   {
    "tipo": "explica",

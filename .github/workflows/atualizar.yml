@@ -122,5 +122,11 @@ jobs:
             echo "Nada mudou."
           else
             git commit -m "Dados atualizados em $(date -u +%Y-%m-%d)"
-            git push
+            # alguém pode ter publicado outra mudança enquanto esta rodada corria (ela leva de minutos a horas):
+            # junta com o que está no GitHub antes de enviar; num conflito em dados/, valem os dados desta rodada
+            for tentativa in 1 2 3; do
+              git pull --rebase -X theirs origin main && git push && exit 0
+              sleep 20
+            done
+            exit 1
           fi

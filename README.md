@@ -429,4 +429,6 @@ Tipos de slide: `abertura`, `explica`, `cards` (cartões que viram), `passos` (e
 
 ## Publicar
 
-Repositório privado no GitHub + Vercel (Framework Preset: Other). Commits com o e-mail noreply do GitHub (senão a Vercel bloqueia o deploy). **Nada é publicado sem o dono pedir.**
+Repositório **público** no GitHub ([lucastaonline/entendapolitica](https://github.com/lucastaonline/entendapolitica)): o código aberto ajuda a mostrar a imparcialidade, e repositório público tem minutos ilimitados no GitHub Actions para a atualização diária. Site na Vercel (projeto `entendapolitica`, Framework Preset: **Other**, sem comando de build, pasta raiz `./`): cada commit na `main` (inclusive os do workflow diário) é publicado sozinho. Commits com o e-mail noreply do GitHub (senão a Vercel bloqueia o deploy). O workflow junta as mudanças com a `main` antes de enviar (`git pull --rebase`), então dá para publicar uma correção enquanto ele roda. **Nada é publicado sem o dono pedir.**
+
+Antes de publicar algo novo: nenhum segredo no código (chaves ficam nos segredos do GitHub, como `OPENAI_API_KEY`) e nenhum dado pessoal desnecessário (o `montar.py` tira números de CPF que aparecem em textos oficiais, com `comum.sem_documentos`).

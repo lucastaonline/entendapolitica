@@ -109,6 +109,7 @@ Para ver no computador: `python -m http.server 8770` dentro da pasta e abra http
 - `python testes/interacao.py`: teclado, busca, listas com busca (estado, cidade, filtros), página da cidade, 4 portas, filtros, mapa e menu de acessibilidade.
 - `python testes/interacao_votacoes.py`: votações (lista, uma votação, bloco do Brasil e "Como votou" do perfil): teclado, filtros, "Mostrar mais" com o foco, números que batem com os dados, inglês, 320 px e axe-core depois de rolar e clicar.
 - `python testes/interacao_historico.py`: mandatos anteriores (campo pelo teclado, páginas do passado no Brasil, estado e cidade, "Voltar para hoje", cidade que ainda não existia, virada de mandato com o relógio adiantado).
+- `python testes/interacao_camaras.py`: Câmaras Municipais das capitais (lista oficial na página da cidade, perfil com propostas e filtros, textos em inglês, cidades só com a lista).
 - `python testes/gerar_imagens.py`: gera os ícones e a imagem de compartilhamento (`testes/og.html` → `img/compartilhar.jpg`).
 - Observação: as fotos do TSE não carregam no navegador sem janela dos testes (o firewall do TSE barra); num navegador normal, carregam.
 
@@ -127,6 +128,18 @@ O mapa do Brasil da página do estado (`dados/mapa-brasil.json`: o contorno real
 Os mandatos anteriores (`dados/historico/`) são feitos por `scripts/historico.py`, a partir dos dados abertos do TSE (candidaturas de 1994 a 2026 e o resultado de 1990, para o Senado de 1995 a 1998). O passado não muda, então ele **não roda todo dia**: rode à mão (`python scripts/historico.py`, uns 40 s com o cache; na primeira vez baixa uns 650 MB para `.cache/tse/`). Rode de novo quando o resultado de uma eleição fechar (ex.: depois do 2º turno de 2026): o mandato novo entra sozinho no índice e, no dia da posse, o de antes vira passado.
 
 Correções à mão (sempre com fonte): `dados/manual/governadores.json`, `dados/manual/ministros.json`, `dados/manual/prefeitos.json` (quando quem está no cargo hoje não é quem o TSE mostra: morte, renúncia, cassação) e `dados/manual/presidentes.json` (presidente e vice dos mandatos anteriores: só o que o TSE não tem, como o vice de 1994 e 1998 e o 2º turno de 2006, e o que mudou durante um mandato, como em 2016).
+
+### Câmaras Municipais das capitais
+
+`python scripts/legislativos.py camaras` roda um coletor por Câmara (`scripts/camaras/c<IBGE>.py`). Hoje, 19 das 26 capitais têm a **lista oficial de quem está no cargo** (inclusive suplentes que assumiram), com o partido de hoje, a foto oficial (reduzida para 240 px em `img/pessoas/ver-*.jpg`) e a página oficial de cada pessoa; 8 delas têm também as **propostas desde 1º/1/2025** (projetos de lei, de lei complementar, de emenda à Lei Orgânica, de decreto legislativo e de resolução), com autor ou coautor e a situação de cada uma. Os ids são os mesmos da lista do TSE (`ver-<IBGE>-<SQ_CANDIDATO de 2024>`).
+
+- **SAPL do Interlegis** (Fortaleza, Manaus, Natal, João Pessoa, Porto Velho, Rio Branco e Boa Vista): `scripts/camaras/_sapl.py` lê a API pública (`<endereço>/api/`): legislatura atual, mandatos e o campo "ativo", autoria (com o primeiro autor), a última tramitação de cada proposta e a norma ligada a ela ("virou lei"). Uma cidade nova com SAPL é um arquivo de 8 linhas. O estado fica em `.cache/camaras/<IBGE>/`: a primeira execução baixa o histórico das tramitações; as seguintes, só o que mudou. O coletor confere se o número de vereadores ativos bate com o de vagas; se não bater, a cidade é conferida à mão (`excluir`/`incluir`, sempre com a fonte anotada no arquivo da cidade).
+- **São Paulo**: web service de dados abertos SPLegis. Ele não diz quem assinou primeiro um projeto de vários autores; nesse caso, todos aparecem como "assinou junto" (a página avisa).
+- **Só a lista oficial** (uma página do portal de cada Câmara por dia): Rio de Janeiro, Belo Horizonte, Salvador, Curitiba, Porto Alegre, Belém, Goiânia, São Luís, Vitória, Teresina e Cuiabá (as três últimas usam o sistema da Ágape, `scripts/camaras/_agape.py`). As propostas dessas Câmaras só existem em páginas HTML, sem dados abertos.
+- **Sem coletor** (continuam com a lista de eleitos do TSE): Recife (a API do SAGL não diz quais titulares estão licenciados), Maceió (a página mistura licenciados e não mostra os suplentes), Campo Grande e Florianópolis (os sites pedem "não sou robô"), Macapá (aplicativo sem API pública), Aracaju (sistema fora do ar) e Palmas (sistema parado em 2024).
+- **Situação das propostas numa Câmara de uma casa só**: o "aprovado" da votação final vai para a sanção do prefeito (`aprovada`); sancionado, promulgado ou com norma ligada = `lei`; "veto rejeitado" quer dizer que a Câmara derrubou o veto; aprovação em 1º turno e pareceres = `andando`. As regras estão em `scripts/camaras/_base.py` (`REGRAS`).
+- **Votações nominais e gastos** das Câmaras ainda não entram: o SAPL das capitais quase não tem votos nominais; São Paulo publica as votações em XML e os gastos no SisGV (próximo passo).
+- `scripts/descobrir_sapl.py` (não roda todo dia) testa `sapl.<cidade>.<uf>.leg.br` nas 5.569 cidades: em 23/10/2026, 824 Câmaras tinham a API funcionando, a legislatura atual cadastrada e projetos desde 2025.
 
 ---
 

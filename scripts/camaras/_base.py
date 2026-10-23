@@ -1,0 +1,410 @@
+"""Ajudas comuns dos coletores das Câmaras Municipais (scripts/camaras/c<IBGE>.py), por cima de scripts/regional.py.
+
+- partido(): a sigla que cada Câmara usa ("UNIÃO BRASIL", "REPUB", "Podemos"...) -> a sigla atual do TSE ("UNIÃO", "PODE"...),
+  para o mesmo partido não aparecer com dois nomes no plenário da cidade;
+- nome_limpo(): tira "Vereador(a)" do começo e arruma nomes TODOS EM MAIÚSCULAS;
+- Tse: liga cada pessoa da lista oficial ao candidato do TSE de 2024 (id ver-<IBGE>-<SQ>), pelo nome, só na cidade certa;
+- situacao(): texto oficial da última tramitação -> um dos 9 status do site, com regras pensadas para Câmaras de uma casa só
+  (o "aprovado" final vai para a sanção do prefeito; "veto rejeitado" quer dizer que a Câmara derrubou o veto...);
+- salvar(): grava dados/camaras/<IBGE>.json e dados/pessoas/ver-<IBGE>-*.json e devolve o resumo para dados/legislativos.json.
+Arquivos que começam com "_" não são coletores (scripts/legislativos.py pula).
+"""
+from __future__ import annotations
+
+import io
+import re
+import sys
+import time
+
+import regional
+from comum import (CACHE, DADOS, FOTOS, baixar, fonte, hoje, ler_json, log, nome_proprio, salvar_json, sem_acento,
+                   slug)
+
+INICIO = regional.INICIO_MUNICIPAL  # 2025-01-01, começo da legislatura municipal atual
+# formato dos robôs de busca: alguns sites barram quem não começa com "Mozilla/5.0", mas continua dizendo quem somos
+UA_COMPAT = "Mozilla/5.0 (compatible; EntendaPolitica/1.0; +https://entendapolitica.vercel.app)"
+
+# ---------------------------------------------------------------- partidos
+# siglas atuais (TSE, eleição de 2026) + fusões e mudanças de nome já registradas no TSE
+_PARTIDOS = {
+    "UNIAO": "UNIÃO", "UNIAO BRASIL": "UNIÃO", "UB": "UNIÃO", "DEM": "UNIÃO", "PSL": "UNIÃO",
+    "REPUBLICANOS": "REPUBLICANOS", "REP": "REPUBLICANOS", "REPUB": "REPUBLICANOS", "REPUBLICA": "REPUBLICANOS",
+    "PRB": "REPUBLICANOS", "REPUBLICANO": "REPUBLICANOS",
+    "PODEMOS": "PODE", "PODE": "PODE", "PSC": "PODE", "PHS": "PODE",
+    "PCDOB": "PCdoB", "PC DO B": "PCdoB", "PC B": "PCdoB",
+    "SD": "SOLIDARIEDADE", "SDD": "SOLIDARIEDADE", "SOLIDARIEDADE": "SOLIDARIEDADE", "PROS": "SOLIDARIEDADE",
+    "PROGRESSISTAS": "PP", "PP": "PP",
+    "PTB": "PRD", "PATRIOTA": "PRD", "PATRI": "PRD", "PEN": "PRD", "PRD": "PRD",
+    "PMN": "MOBILIZA", "MOBILIZA": "MOBILIZA", "PTC": "AGIR", "AGIR": "AGIR", "PPS": "CIDADANIA", "CIDADANIA": "CIDADANIA",
+    "PR": "PL", "PL": "PL", "PMDB": "MDB", "MDB": "MDB", "MISSAO": "MISSÃO", "PARTIDO MISSAO": "MISSÃO",
+    "NOVO": "NOVO", "PARTIDO NOVO": "NOVO", "REDE": "REDE", "REDE SUSTENTABILIDADE": "REDE",
+    "PARTIDO DOS TRABALHADORES": "PT", "PARTIDO LIBERAL": "PL", "PARTIDO SOCIAL DEMOCRATICO": "PSD",
+    "PARTIDO SOCIALISTA BRASILEIRO": "PSB", "PARTIDO DEMOCRATICO TRABALHISTA": "PDT", "PARTIDO VERDE": "PV",
+    "DEMOCRACIA CRISTA": "DC", "MOVIMENTO DEMOCRATICO BRASILEIRO": "MDB", "PARTIDO DA SOCIAL DEMOCRACIA BRASILEIRA": "PSDB",
+    "PARTIDO SOCIALISMO E LIBERDADE": "PSOL", "PARTIDO RENOVACAO DEMOCRATICA": "PRD", "MOBILIZACAO NACIONAL": "MOBILIZA",
+}
+SEM_PARTIDO = "Sem partido"
+
+
+def partido(sigla: str | None) -> str | None:
+    """Sigla como a Câmara escreve -> sigla atual do TSE. None quando a Câmara não informa."""
+    s = re.sub(r"\s+", " ", (sigla or "").strip())
+    if not s:
+        return None
+    k = re.sub(r"[^A-Z0-9 ]", "", sem_acento(s).upper()).strip()
+    if re.search(r"NAO POSSUI|SEM PARTIDO|SEM FILIACAO|^S ?P$|^SP$", k):
+        return SEM_PARTIDO
+    if k in _PARTIDOS:
+        return _PARTIDOS[k]
+    return s.upper() if len(s) <= 14 else s
+
+
+# ---------------------------------------------------------------- nomes
+_TITULO = re.compile(r"^(vereador[a]?|ver\.|vereadora?\(?a?\)?)\s+", re.I)
+
+
+def nome_limpo(nome: str | None) -> str | None:
+    """'Vereador Fulano' -> 'Fulano'; 'FULANO DA SILVA' -> 'Fulano da Silva' (só quando está todo em maiúsculas)."""
+    n = re.sub(r"\s+", " ", (nome or "").strip())
+    n = _TITULO.sub("", n).strip()
+    n = re.sub(r"\s*\(c[aâ]mara digital\)\s*$", "", n, flags=re.I).strip(" .")  # rótulos do sistema, não fazem parte do nome
+    if not n:
+        return None
+    letras = [c for c in n if c.isalpha()]
+    if letras and all(c.isupper() for c in letras) and len(letras) > 3:
+        n = nome_proprio(n)
+        n = re.sub(r"\b(DR|DRA|PROF|PROFA|SGT|CEL|CAP|TEN|PR|PRA)\b", lambda m: m.group(1).capitalize(), n, flags=re.I)
+    return n
+
+
+# ---------------------------------------------------------------- TSE
+def ue_da_cidade(ibge: str, uf: str) -> str | None:
+    """Código TSE do município (SG_UE), tirado das fotos/fontes do DivulgaCandContas em dados/cidades/<UF>/<IBGE>.json."""
+    c = ler_json(DADOS / "cidades" / uf / f"{ibge}.json") or {}
+    textos = []
+    for p in [c.get("prefeito") or {}, c.get("vice") or {}] + list((c.get("vereadores") or {}).get("membros") or []):
+        textos.append(p.get("foto") or "")
+        for f in p.get("fontes") or []:
+            textos.append(f.get("url") or "")
+    for t in textos:
+        m = re.search(r"divulgacandcontas\.tse\.jus\.br/divulga/rest/arquivo/img/\d+/\d+/(\d+)", t)
+        if m:
+            return m.group(1)
+        m = re.search(r"/candidato/[A-Z-]+/[A-Z]{2}/\d+/\d+/\d{4}/(\d+)", t)
+        if m:
+            return m.group(1)
+    return None
+
+
+class Tse:
+    """Liga a lista oficial aos candidatos do TSE de 2024 (vereador) na cidade, para usar o mesmo id do site
+    (ver-<IBGE>-<SQ_CANDIDATO>). manual = {chave oficial: SQ} para quem foi conferido à mão; "-" = sem ligação."""
+
+    def __init__(self, ibge: str, uf: str, manual: dict | None = None):
+        self.ibge, self.uf = ibge, uf
+        self.ue = ue_da_cidade(ibge, uf)
+        if not self.ue:
+            raise RuntimeError(f"não achei o código TSE (ue) de {ibge}")
+        self.cands = [c for c in regional.candidatos_tse(2024, {"VEREADOR"}, uf) if c["ue"] == self.ue]
+        self.por_sq = {c["sq"]: c for c in self.cands}
+        self.manual = {str(k): v for k, v in (manual or {}).items()}
+        self.sem_ligacao: list[str] = []
+
+    def casar(self, chave: str, nomes: list[str | None], partido_hoje: str | None = None) -> tuple[str, dict | None]:
+        """(id no site, candidato do TSE ou None)."""
+        nomes = [n for n in nomes if n]
+        m = self.manual.get(str(chave))
+        if m == "-":
+            cand = None
+        elif m:
+            cand = self.por_sq.get(str(m))
+            if cand is None:
+                raise RuntimeError(f"SQ {m} (manual) não é candidato a vereador em {self.ibge}")
+        else:
+            cand = regional.casar_tse(nomes, self.cands, ue=self.ue, partido=partido_hoje)
+        if cand is None:
+            self.sem_ligacao.append(f"{nomes[0] if nomes else chave} ({chave})")
+        return regional.id_pessoa("ver", self.ibge, cand, nomes[0] if nomes else str(chave)), cand
+
+
+# ---------------------------------------------------------------- situação das propostas
+# Textos (statusTxt) com tradução: os que já existem em js/traducoes.js ficam iguais; os novos levam statusTxt_en.
+TXT = {
+    "sancao": ("Aprovada pela Câmara; esperando a sanção do prefeito", "Approved by the City Council; waiting for the mayor to sign it"),
+    "promulgar": ("Aprovada; esperando ser promulgada", "Approved; waiting to be promulgated"),
+    "veto_derrubado": ("A Câmara derrubou o veto do prefeito; falta promulgar", "The City Council overrode the mayor's veto; it still has to be promulgated"),
+    "veto_total": ("O prefeito vetou a proposta inteira", "The mayor vetoed the whole bill"),
+    "veto_mantido": ("O prefeito vetou e a Câmara manteve o veto", "The mayor vetoed it and the City Council upheld the veto"),
+    "veto_total_pendente": ("O prefeito vetou tudo; a Câmara ainda vai decidir sobre o veto", "The mayor vetoed all of it; the City Council has yet to decide on the veto"),
+    "veto_pendente": ("Esperando a Câmara decidir sobre um veto do prefeito", "Waiting for the City Council to decide on a veto by the mayor"),
+    "veto_parcial": ("Virou lei, com partes vetadas pelo prefeito", "Became law, with some parts vetoed by the mayor"),
+    "sem_tramitacao": ("Apresentada; ainda vai começar a ser analisada", "Filed; the review has not started yet"),
+}
+
+# (expressão sem acento, em minúsculas) -> (status, chave de TXT ou None). A primeira que bater vale.
+# Escritas olhando as listas oficiais de situações do SAPL de várias capitais (Natal, Fortaleza, Manaus, João Pessoa,
+# Porto Velho, Rio Branco, Boa Vista): cada Câmara cria as suas, mas muitas vêm do modelo do Interlegis.
+REGRAS = [
+    # ainda falta promulgar (vem antes de "norma jurídica" e de "promulgada")
+    (r"aguardando (a )?promulga|(decreto legislativo|resolucao) elaborad", "aprovada", "promulgar"),
+    # esperando a sanção (vem antes das regras de veto: "Aguardando sanção/veto do Executivo")
+    (r"aguardando (a )?sancao|sancao ?/ ?veto|sancao ou veto|(encaminhad[oa]|enviad[oa]|encaminhar|remetid[oa]) (para|a) sancao", "aprovada", "sancao"),
+    # virou norma
+    (r"sancionad|norma (numerada|promulgada|publicada)|transformad[oa] em (lei|decreto|resolu|norma|emenda)|"
+     r"lei promulgada|veto (total ou parcial|integral ou parcial) promulgad|^(lei|lei complementar|lei ordinaria|resolucao|"
+     r"decreto legislativo|emenda a lei organica)$", "lei", None),
+    # veto (o "rejeitado" aqui é do veto: a proposta segue para virar lei)
+    (r"solicitacao de devolucao do autografo", "outra", None),
+    (r"veto.{0,40}(rejeitad|derrubad)|(rejeitad|derrubad)[oa]? o veto|rejeicao do veto pelo plenario", "aprovada", "veto_derrubado"),
+    (r"veto parcial|vetad[oa] parcialmente", "lei", "veto_parcial"),
+    (r"veto (total|integral)|vetad[oa] (totalmente|integralmente)", "rejeitada", "veto_total"),
+    (r"veto (sobre a (proposicao|materia) )?mantido|sobre veto mantido|veto mantido", "rejeitada", "veto_mantido"),
+    (r"\bveto\b|vetad", "veto?", None),  # veto pendente: decide pelo histórico (ver situacao())
+    # desistência
+    (r"retirad[oa] pel[oa] autor|retirad[oa] a pedido d[oa] autor|a pedido d[oa] autor|arquivamento solicitado pelo autor|"
+     r"^proposicao retirada$", "retirada", None),
+    (r"retirad[oa] (da|de) (ordem do dia|pauta)|retirado de pauta|retirad[oa] pelo presidente", "andando", None),
+    (r"desarquivad", "andando", None),
+    (r"arquivad|arquivamento", "arquivada", None),
+    (r"prejudicad|prejudicialidade|materia vencida", "parada", None),
+    (r"anexad[oa]|apensad|tramitacao conjunta|tramitando em conjunto", "junta", None),
+    # pareceres: só a decisão final conta
+    (r"parecer (contrario|desfavoravel) (mantido|acatado)|parecer d[ao] .{0,40}desfavoravel acatad|aprovado parecer contrario", "rejeitada", None),
+    (r"parecer (contrario|desfavoravel) rejeitad|parecer d[ao] .{0,40}(desfavoravel|contrario) rejeitad|rejeitado parecer contrario|"
+     r"parecer rejeitado pela comissao", "andando", None),
+    (r"parecer.{0,40}rejeitad|rejeitad[oa] (o )?parecer|parecer.{0,40}mantido|recurso (rejeitado|provido)", "outra", None),
+    (r"rejeitad|nao aprovad", "rejeitada", None),
+    # aprovações que não são a final
+    (r"aprovad[oa] (em )?(1|primeir[oa])|aprovad[oa] em 1|1o turno|1 turno|primeira (discussao|votacao)|"
+     r"aprovad[oa] o regime de urgencia|regime de urgencia aprovad|votacao do regime de urgencia|parecer.{0,30}aprovad|"
+     r"aprovad[oa] (o )?parecer|aprovado voto em separado|aprovado recurso|requerimento aprovado|ata aprovada", "andando", None),
+    # aprovada: vai para a sanção do prefeito (ou para a promulgação, no caso de decretos legislativos e resoluções)
+    (r"sancao|autografo|enviad[oa] (ao|para o) (poder )?executivo e arquivad", "aprovada", "sancao"),
+    (r"aprovad|numero de lei", "aprovada", None),
+    # ainda em discussão
+    (r"aguardando|parecer|relator|comiss|pauta|ordem do dia|discuss|votac|vista|leitura|\blid[oa]\b|ciencia|protocolad|autuad|"
+     r"apresentad|distribu|encaminhad|tramit|prazo|emenda|substitutiv|redacao final|procuradoria|despacho|recurso|devolvid|"
+     r"devoluc|adiad|sobrestad|suspens|retorn|plenario|expediente|secretaria|gabinete|consultoria|elaboracao|analise|"
+     r"audiencia|subscri|recebid", "andando", None),
+]
+
+
+def norm(texto: str | None) -> str:
+    """Minúsculas, sem acento, ordinais ("1ª", "2º", "2°") como letras e espaços simples, para as regras."""
+    t = sem_acento((texto or "").lower()).replace("ª", "a").replace("º", "o").replace("°", "o")
+    return re.sub(r"\s+", " ", t).strip()
+
+
+def situacao(texto: str | None, regras_casa: list | None = None, vetos: set | None = None,
+             em_tramitacao: bool | None = None, tipo: str | None = None) -> tuple[str, str | None, str | None]:
+    """(status, statusTxt, statusTxt_en) a partir do texto oficial da última situação.
+    vetos: o que já apareceu no histórico ({"vt"} veto total, {"vp"} veto parcial, {"vd"} veto derrubado).
+    em_tramitacao: o que o sistema da Câmara diz ("em tramitação: sim/não"), usado só quando o texto não diz nada claro."""
+    t = norm(texto)
+    st, chave = None, None
+    if not t:
+        if em_tramitacao is not False:
+            return "andando", *TXT["sem_tramitacao"]
+        return "outra", None, None
+    for exp, s, k in list(regras_casa or []) + REGRAS:
+        if re.search(exp, t):
+            st, chave = s, k
+            break
+    vetos = vetos or set()
+    if st == "veto?":
+        if "vd" in vetos:
+            st, chave = "aprovada", "veto_derrubado"
+        elif "vt" in vetos:
+            st, chave = "rejeitada", "veto_total_pendente"
+        elif "vp" in vetos:
+            st, chave = "lei", "veto_parcial"
+        else:
+            st, chave = "outra", "veto_pendente"
+    if chave == "sancao" and tipo in ("PDL", "PRC", "PELO"):
+        chave = "promulgar"  # decreto legislativo, resolução e emenda à Lei Orgânica não vão à sanção: a Câmara promulga
+    if st is None:
+        st = regional.situacao_para_status(texto)
+    if st == "outra" and chave is None and em_tramitacao:
+        st = "andando"  # o próprio sistema da Câmara diz que ainda está em tramitação
+    if chave:
+        return st, TXT[chave][0], TXT[chave][1]
+    return st, None, None
+
+
+def flags_veto(texto: str | None) -> set:
+    t = norm(texto)
+    f = set()
+    if re.search(r"veto.{0,40}(rejeitad|derrubad)|(rejeitad|derrubad)[oa]? o veto", t):
+        f.add("vd")
+    elif re.search(r"veto (total|integral)|vetad[oa] (totalmente|integralmente)", t):
+        f.add("vt")
+    elif re.search(r"veto parcial|vetad[oa] parcialmente", t):
+        f.add("vp")
+    return f
+
+
+def nome_norma(tipo: str | None, numero, ano) -> str:
+    """'Lei Ordinária', 8223, 2026 -> 'Lei Ordinária nº 8.223/2026'."""
+    tipo = re.sub(r"\s+", " ", (tipo or "Norma").strip())
+    if tipo.isupper():
+        tipo = nome_proprio(tipo)
+        tipo = re.sub(r"\b(Da|De|Do|Das|Dos|E|A|À)\b", lambda m: m.group(1).lower(), tipo)
+    n = str(numero or "").strip()
+    if n.isdigit() and len(n) > 3:
+        n = f"{int(n):,}".replace(",", ".")
+    return f"{tipo} nº {n}/{ano}" if ano else f"{tipo} nº {n}"
+
+
+def virou(nome_lei: str, veto_parcial: bool = False) -> str:
+    art = "o" if re.match(r"(decreto|ato)\b", sem_acento(nome_lei.lower())) else "a"
+    return f"Virou {art} {nome_lei}" + (" (com partes vetadas)" if veto_parcial else "")
+
+
+ESCOPO = ("Projetos de lei, de lei complementar, de emenda à Lei Orgânica, de decreto legislativo e de resolução "
+          "apresentados desde 1º/1/2025 (começo da legislatura atual)")
+ESCOPO_EN = ("Bills (ordinary and complementary laws, amendments to the city's Organic Law, legislative decrees and "
+             "resolutions) filed since January 1, 2025 (start of the current term)")
+
+
+# ---------------------------------------------------------------- fotos
+def foto(url: str | None, pid: str, ibge: str, largura: int = 240) -> str | None:
+    """Foto oficial reduzida para 240 px em img/pessoas/<id>.jpg, como as dos perfis federais (as originais de algumas
+    Câmaras têm vários MB). Só baixa de novo quando o endereço oficial da foto muda. Devolve o caminho no site ou None."""
+    if not url:
+        return None
+    rel, destino = f"img/pessoas/{pid}.jpg", FOTOS / f"{pid}.jpg"
+    mapa_arq = CACHE / "camaras" / ibge / "fotos.json"
+    mapa = ler_json(mapa_arq, {}) or {}
+    chave = url
+    if url.startswith("data:"):  # foto embutida na própria página oficial (base64)
+        import base64
+        import hashlib
+        bruto_b64 = url.split(",", 1)[1] if "," in url else ""
+        chave = "data:" + hashlib.sha1(bruto_b64.encode()).hexdigest()
+    if mapa.get(pid) == chave and destino.exists():
+        return rel
+    try:
+        from PIL import Image
+        if url.startswith("data:"):
+            bruto = base64.b64decode(bruto_b64)
+        else:
+            bruto = baixar(url, tentativas=3, timeout=90, headers={"User-Agent": UA_COMPAT})
+        im = Image.open(io.BytesIO(bruto))
+        im.load()
+        if im.mode in ("RGBA", "LA", "P"):
+            im = im.convert("RGBA")
+            fundo = Image.new("RGB", im.size, (255, 255, 255))
+            fundo.paste(im, mask=im.split()[-1])
+            im = fundo
+        else:
+            im = im.convert("RGB")
+        if im.width > largura:
+            im = im.resize((largura, round(im.height * largura / im.width)), Image.LANCZOS)
+        im.save(destino, "JPEG", quality=82, optimize=True, progressive=True)
+        time.sleep(0.3)
+    except Exception as e:
+        print(f"  [foto] {pid}: {e}", file=sys.stderr)
+        return rel if destino.exists() else None
+    mapa[pid] = chave
+    salvar_json(mapa_arq, mapa)
+    return rel
+
+
+# ---------------------------------------------------------------- só a lista oficial (Câmaras sem dados abertos de propostas)
+def baixar_pagina(url: str, ibge: str, nome_cache: str, idade_h: float = 20, contexto=None, ua_navegador: bool = False) -> str:
+    """Página HTML oficial, guardada em .cache/camaras/<IBGE>/http/<nome>.html (uma requisição por dia).
+    ua_navegador: alguns sites barram robôs que não começam com "Mozilla/5.0"; aí usamos o formato dos robôs de busca
+    ("Mozilla/5.0 (compatible; EntendaPolitica/1.0; +site)"), que continua dizendo quem somos."""
+    arq = CACHE / "camaras" / ibge / "http" / f"{nome_cache}.html"
+    if arq.exists() and (time.time() - arq.stat().st_mtime) / 3600 < idade_h:
+        return arq.read_text(encoding="utf-8")
+    cab = {"User-Agent": UA_COMPAT} if ua_navegador else None
+    if contexto is None:
+        t = baixar(url, tentativas=4, timeout=120, headers=cab).decode("utf-8", "replace")
+    else:  # site com a cadeia de certificados incompleta (o navegador completa sozinho; o Python não)
+        import gzip
+        import urllib.request
+        from comum import UA
+        req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept-Encoding": "gzip"})
+        with urllib.request.urlopen(req, timeout=120, context=contexto) as r:
+            b = r.read()
+            if r.headers.get("Content-Encoding") == "gzip":
+                b = gzip.decompress(b)
+        t = b.decode("utf-8", "replace")
+    arq.parent.mkdir(parents=True, exist_ok=True)
+    arq.write_text(t, encoding="utf-8")
+    time.sleep(0.5)
+    return t
+
+
+def so_lista(ibge: str, uf: str, casa: dict, pessoas: list[dict], vagas: int, notas: list[tuple[str, str]],
+             tse_manual: dict | None = None, minimo: float = 0.8) -> dict:
+    """Câmara que publica só a lista de vereadores (sem propostas em dados abertos).
+    pessoas = [{chave, nome, nomeCivil?, partido (como a Câmara escreve), foto (URL), url, genero?}] tiradas da página oficial.
+    Confere o tamanho (pelo menos 80% das vagas e no máximo as vagas + 3) para não gravar uma página quebrada."""
+    if not (vagas * minimo <= len(pessoas) <= vagas + 3):
+        raise RuntimeError(f"a lista oficial tem {len(pessoas)} pessoas para {vagas} vagas: a página deve ter mudado")
+    tse = Tse(ibge, uf, tse_manual)
+    membros, extras = [], {}
+    for p in pessoas:
+        nome = nome_limpo(p["nome"])
+        civil = nome_limpo(p.get("nomeCivil")) if p.get("nomeCivil") else None
+        sigla = partido(p.get("partido"))
+        pid, cand = tse.casar(p["chave"], [nome, civil], sigla)
+        supl = (cand or {}).get("sit") == "SUPLENTE"
+        if not civil and cand and cand.get("nome"):
+            civil = nome_limpo(cand["nome"])
+        if civil and re.sub(r"\W", "", sem_acento(civil).lower()) == re.sub(r"\W", "", sem_acento(nome).lower()):
+            civil = None
+        g = p.get("genero") or (cand or {}).get("genero")
+        m = {"id": pid, "nome": nome, "nomeCivil": civil, "partido": sigla, "genero": g if g in ("F", "M") else None,
+             "foto": foto(p.get("foto"), pid, ibge), "url": p.get("url"),
+             "exercicio": "Suplente em exercício" if supl else None, "exercicio_en": "Substitute in office" if supl else None}
+        membros.append(m)
+        x = {"links": {"oficial": p.get("url"), "email": p.get("email"), "redes": []}, "fontes": [casa["fonte"]]}
+        if m["foto"]:
+            x["fotoCredito"] = casa["casa"]
+        extras[pid] = x
+    ids = [m["id"] for m in membros]
+    if len(set(ids)) != len(ids):
+        raise RuntimeError(f"duas pessoas com o mesmo id: {sorted(i for i in ids if ids.count(i) > 1)}")
+    if tse.sem_ligacao:
+        log(f"  {casa.get('sigla')}: sem ligação com o TSE: {', '.join(tse.sem_ligacao)}")
+    cobertura = {"lista": True, "propostas": False, "votacoes": False, "gastos": False}
+    r = salvar(ibge, uf, casa, membros, extras, cobertura, notas)
+    r["semTse"] = len(tse.sem_ligacao)
+    log(f"  {casa.get('sigla')}: {len(membros)} no cargo (lista oficial, sem propostas)")
+    return r
+
+
+# ---------------------------------------------------------------- gravar
+def salvar(ibge: str, uf: str, casa: dict, membros: list[dict], extras: dict[str, dict], cobertura: dict,
+           notas: list[tuple[str, str]] | None = None, escopo: tuple[str, str] | None = None) -> dict:
+    """casa = {casa, casa_en, sigla, site, fonte}; membros = lista oficial (contrato); extras = {id: dados/pessoas/<id>.json}.
+    Devolve o resumo para dados/legislativos.json."""
+    dados = {"uf": uf, "ibge": ibge, **casa, "cobertura": cobertura}
+    if escopo:
+        dados["escopoPropostas"], dados["escopoPropostas_en"] = escopo
+    dados["membros"] = sorted(membros, key=lambda m: sem_acento(m["nome"]).lower())
+    if notas:
+        dados["notas"] = [n[0] for n in notas]
+        dados["notas_en"] = [n[1] for n in notas]
+    regional.salvar_casa("camara", ibge, dados)
+    ids = {m["id"] for m in membros}
+    for pid, x in extras.items():
+        if pid in ids:
+            regional.salvar_extras(pid, x)
+    apagados = regional.limpar_extras(f"ver-{ibge}-", set(extras) & ids)
+    for arq in FOTOS.glob(f"ver-{ibge}-*.jpg"):  # fotos de quem saiu
+        if arq.stem not in ids:
+            arq.unlink()
+    if apagados:
+        log(f"  {apagados} perfis de quem saiu da Câmara foram apagados")
+    nprop = len({p["id"] for x in extras.values() for p in ((x.get("propostas") or {}).get("lista") or [])})
+    return {"casa": casa.get("sigla"), "nome": casa.get("casa"), "membros": len(membros), "propostas": nprop,
+            "cobertura": cobertura, "fonte": casa.get("fonte")}
+
+
+__all__ = ["INICIO", "SEM_PARTIDO", "partido", "nome_limpo", "ue_da_cidade", "Tse", "TXT", "REGRAS", "norm", "situacao",
+           "flags_veto", "nome_norma", "virou", "ESCOPO", "ESCOPO_EN", "foto", "baixar_pagina", "so_lista", "salvar",
+           "fonte", "hoje", "log", "slug", "CACHE"]

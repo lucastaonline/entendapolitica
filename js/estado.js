@@ -216,7 +216,11 @@
       var nomesE = uf === "DF" ? { um: EP.tr("deputado distrital", "district deputy"), uma: EP.tr("deputada distrital", "district deputy"), varios: EP.tr("deputados distritais", "district deputies"), varias: EP.tr("deputadas distritais", "district deputies") } :
         { um: EP.tr("deputado estadual", "state deputy"), uma: EP.tr("deputada estadual", "state deputy"), varios: EP.tr("deputados estaduais", "state deputies"), varias: EP.tr("deputadas estaduais", "state deputies") };
       EP.montaCasa(document.getElementById("casa-est"), { membros: de2.membros || [], nomes: nomesE, filtroUF: false, fonte: de2.fonte, atualizado: e.atualizado,
-        extra: function (m) { var a = de2.eleicao || 2022; return m.votos != null ? EP.tr(EP.num(m.votos) + " votos em " + a, EP.num(m.votos) + " votes in " + a) : ""; } });
+        extra: function (m) {
+          if (m.exercicio) return EP.tr(m.exercicio, m.exercicio_en || m.exercicio);  // suplente que assumiu a vaga
+          var a = de2.eleicao || 2022;
+          return m.votos != null ? EP.tr(EP.num(m.votos) + " votos em " + a, EP.num(m.votos) + " votes in " + a) : "";
+        } });
       EP.revelar(el);
     }).catch(function () {
       falhou(document.getElementById("gov"), "os dados deste estado", "the data for this state");

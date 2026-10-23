@@ -70,8 +70,12 @@ def main(args: list[str]) -> int:
             log(f"{grupo} {chave}: FALHOU ({r['erro']})")
             traceback.print_exc(limit=3)
         indice[grupo][chave] = {k: v for k, v in r.items() if k != "segundos"}
-    indice["atualizado"] = hoje()
-    salvar_json(indice_arq, sem_mudar_data(indice, indice_arq), indentado=True)
+    # lê de novo antes de gravar: outra execução pode ter gravado enquanto esta rodava; só troca as Casas desta execução
+    fresco = ler_json(indice_arq, {}) or {}
+    for grupo, chave, _ in lista:
+        fresco.setdefault(grupo, {})[chave] = indice[grupo][chave]
+    fresco["atualizado"] = hoje()
+    salvar_json(indice_arq, sem_mudar_data(fresco, indice_arq), indentado=True)
     log(f"legislativos: {len(lista) - falhas} de {len(lista)} Casas atualizadas")
     return 0
 

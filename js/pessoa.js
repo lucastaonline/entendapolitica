@@ -191,6 +191,8 @@
   function topoHtml(p) {
     var m = p.mandato || {};
     var anos = m.inicio ? m.inicio.slice(0, 4) + EP.tr(" a ", " to ") + (m.fim || "").slice(0, 4) : "";
+    // começa e acaba no mesmo ano (ex.: suplente que assumiu por uns meses): mostra as datas inteiras
+    if (m.inicio && m.fim && m.inicio.slice(0, 4) === m.fim.slice(0, 4)) anos = EP.data(m.inicio) + EP.tr(" a ", " to ") + EP.data(m.fim);
     var chips = [];
     if (p.tipo === "min") { /* ministro não tem partido obrigatório: aparece na ficha */ }
     if (p.partido) chips.push('<span class="chip"><span aria-hidden="true">🎗️ </span><span class="sr">' + EP.tr("Partido: ", "Party: ") + "</span>" +
@@ -199,8 +201,10 @@
     if (p.eleicao2026) chips.push(EP.chip2026(p.eleicao2026, p.genero, true));
     if (m.obs) chips.push('<span class="chip amarelo"><span aria-hidden="true">ℹ️ </span>' + D.obs(m.obs, m.obs_en) + "</span>");
     if (p.interino) chips.push('<span class="chip amarelo">' + EP.tr(EP.gen(p.genero, "Interino", "Interina"), "Acting") + "</span>");
+    // suplente que assumiu a vaga (listas oficiais das Assembleias e Câmaras Municipais)
+    if (p.exercicio) chips.push('<span class="chip amarelo"><span aria-hidden="true">🔑 </span>' + esc(EP.tr(p.exercicio, p.exercicio_en || p.exercicio)) + "</span>");
     return '<section class="perfil-topo" aria-labelledby="nome-pessoa"><div class="moldura">' + EP.av(p.foto, p.nome, null, true) + "</div><div>" +
-      '<span class="cargo-p">' + cargoHtml(p) + (onde(p) ? " · " + esc(onde(p)) : "") + '</span><h1 id="nome-pessoa">' + esc(p.nome) + "</h1>" +
+      '<span class="cargo-p">' + cargoHtml(p) + (onde(p) ? " · " + esc(onde(p)) : "") + '</span><h1 id="nome-pessoa">' + EP.pt(esc(p.nome)) + "</h1>" +
       (p.nomeCivil && EP.norm(p.nomeCivil) !== EP.norm(p.nome) ? '<p class="muted" style="margin:-4px 0 8px">' + EP.tr("Nome completo: ", "Full name: ") + esc(p.nomeCivil) + "</p>" : "") +
       (chips.length ? '<div class="chips">' + chips.join("") + "</div>" : "") +
       (p.fotoCredito ? '<p class="muted credito">' + EP.tr("Foto: ", "Photo: ") + (/licença/.test(p.fotoCredito) ? esc(EP.en ? p.fotoCredito.replace("licença", "license") : p.fotoCredito) : EP.pt(esc(p.fotoCredito))) + "</p>" : "") + "</div></section>";
@@ -392,7 +396,9 @@
   }
   function propHtml(x, focavel) {
     var s = EP.STATUS[x.status] ? x.status : "outra";
-    var senado = /^senado:/.test(x.id || "");
+    var ondeLink = /^senado:/.test(x.id || "") ? ["Ver no site do Senado", "See it on the Senate website"] :
+      /^camara:/.test(x.id || "") ? ["Ver no site da Câmara", "See it on the Chamber of Deputies website"] :
+      ["Ver no site oficial", "See it on the official website"];  // Assembleias e Câmaras Municipais
     var simples = EP.en ? x.s_en : x.s;
     var ementa = EP.pt(esc(x.ementa || ""));
     var corpo = simples ?
@@ -406,7 +412,7 @@
         '<span aria-hidden="true">🤝 </span>' + EP.tr("Assinou junto", "Co-signed")) + "</span>" : "") + "</div>" + corpo +
       '<div class="rodape-prop"><span class="status-txt">' + D.status(x) + "</span>" +
       ((x.temas || []).length ? '<span class="temas"><span aria-hidden="true">🏷️ </span><span class="sr">' + EP.tr("Assuntos: ", "Topics: ") + "</span>" + esc(x.temas.map(EP.tema).join(", ")) + "</span>" : "") +
-      (x.url ? linkFora(x.url, EP.tr(senado ? "Ver no site do Senado" : "Ver no site da Câmara", senado ? "See it on the Senate website" : "See it on the Chamber of Deputies website") +
+      (x.url ? linkFora(x.url, EP.tr(ondeLink[0], ondeLink[1]) +
         '<span class="sr"> (' + esc(x.sigla || "") + ")</span>", true) : "") +
       (x.lei && x.lei.url ? linkFora(x.lei.url, EP.tr("Ler a ", "Read ") + EP.pt(esc(x.lei.nome || "lei")), true) : "") + "</div></li>";
   }

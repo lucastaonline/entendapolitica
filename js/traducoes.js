@@ -106,6 +106,7 @@
     [/^Foi transformada em indicação \(sugestão ao governo\)$/i, "Was turned into a suggestion to the government"],
     [/^Foi transformada em outro processo$/i, "Was turned into another proceeding"],
     [/^Situação não classificada$/i, "Status not classified"],
+    [/^Situação na Câmara: (.+)$/i, function (m) { return "Status at the City Council: " + EP.pt(esc(m[1])); }],
     [/^Devolvida ao autor: a Presidência da Câmara não deixou seguir$/i, "Returned to the author: the Speaker of the Chamber did not let it go ahead"],
     [/^Ficou prejudicada \(não vai mais ser votada\)$/i, "Became moot (it will no longer be voted on)"],
     [/^Ficou prejudicada \(outra decisão fez ela perder o sentido\)$/i, "Became moot (another decision made it pointless)"],

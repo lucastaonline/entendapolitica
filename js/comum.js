@@ -317,8 +317,9 @@
   EP.cartaoPessoa = function (p, extra) {
     var partido = /^sem partido$/i.test(p.partido || "") ? EP.tr("Sem partido", "No party") : p.partido;
     var linha2 = [partido, p.uf].filter(Boolean).join(" · ");
+    // nomes são em português: no inglês, o leitor de tela pronuncia melhor com lang="pt-BR"
     return '<a class="pessoa-card" href="pessoa.html?id=' + encodeURIComponent(p.id) + '">' + EP.av(p.foto, p.nome) +
-      "<b>" + EP.esc(p.nome) + "</b>" + (extra ? "<small>" + EP.esc(extra) + "</small>" : "") + (linha2 ? "<small>" + EP.esc(linha2) + "</small>" : "") +
+      "<b>" + EP.pt(EP.esc(p.nome)) + "</b>" + (extra ? "<small>" + EP.esc(extra) + "</small>" : "") + (linha2 ? "<small>" + EP.esc(linha2) + "</small>" : "") +
       EP.chip2026(p.eleicao2026, p.genero) + "</a>";
   };
 

@@ -526,9 +526,9 @@
     "veiculo": "Câmara Municipal de Natal",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.natal.rn.leg.br/parlamentar/",
-    "data": "2026-10-23"
+    "data": "2026-10-24"
    },
-   "requisicoes": 28,
+   "requisicoes": 312,
    "semTse": 0,
    "ok": true
   },
@@ -549,7 +549,7 @@
     "url": "https://sapl.portovelho.ro.leg.br/parlamentar/",
     "data": "2026-10-23"
    },
-   "requisicoes": 16,
+   "requisicoes": 134,
    "semTse": 0,
    "ok": true
   },
@@ -557,7 +557,7 @@
    "casa": "CMRB",
    "nome": "Câmara Municipal de Rio Branco",
    "membros": 21,
-   "propostas": 529,
+   "propostas": 531,
    "cobertura": {
     "lista": true,
     "propostas": true,
@@ -570,7 +570,7 @@
     "url": "https://sapl.riobranco.ac.leg.br/parlamentar/",
     "data": "2026-10-23"
    },
-   "requisicoes": 10,
+   "requisicoes": 74,
    "semTse": 0,
    "ok": true
   },
@@ -591,7 +591,7 @@
     "url": "https://sapl.cmm.am.gov.br/parlamentar/",
     "data": "2026-10-23"
    },
-   "requisicoes": 25,
+   "requisicoes": 208,
    "semTse": 0,
    "ok": true
   },
@@ -610,9 +610,9 @@
     "veiculo": "Câmara Municipal de Boa Vista",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.boavista.rr.leg.br/parlamentar/",
-    "data": "2026-10-23"
+    "data": "2026-10-24"
    },
-   "requisicoes": 36,
+   "requisicoes": 307,
    "semTse": 0,
    "ok": true
   },
@@ -635,7 +635,8 @@
    },
    "requisicoes": 27,
    "semTse": 0,
-   "ok": true
+   "ok": false,
+   "erro": "RuntimeError: Falha ao baixar https://sapl.fortaleza.ce.leg.br/api/parlamentares/legislatura/?page=1&page_size=100: HTTP Error 404: Not Found"
   },
   "2507507": {
    "casa": "CMJP",
@@ -652,9 +653,9 @@
     "veiculo": "Câmara Municipal de João Pessoa",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.joaopessoa.pb.leg.br/parlamentar/",
-    "data": "2026-10-23"
+    "data": "2026-10-24"
    },
-   "requisicoes": 35,
+   "requisicoes": 258,
    "semTse": 0,
    "ok": true
   },
@@ -673,7 +674,7 @@
     "veiculo": "Câmara Municipal de Belém",
     "titulo": "Vereadores (portal oficial)",
     "url": "https://www.cmb.pa.gov.br/vereadores",
-    "data": "2026-10-23"
+    "data": "2026-10-24"
    },
    "semTse": 0,
    "ok": true
@@ -696,7 +697,8 @@
     "data": "2026-10-23"
    },
    "semTse": 0,
-   "ok": true
+   "ok": false,
+   "erro": "RuntimeError: Falha ao baixar https://www.cmsaoluis.ma.gov.br/vereadores: HTTP Error 403: Forbidden"
   },
   "2211001": {
    "casa": "CMT",
@@ -716,7 +718,8 @@
     "data": "2026-10-23"
    },
    "semTse": 0,
-   "ok": true
+   "ok": false,
+   "erro": "RuntimeError: Falha ao baixar https://teresina.camarasempapel.com.br/spl/parlamentares.aspx: <urlopen error timed out>"
   },
   "2927408": {
    "casa": "CMS",
@@ -733,7 +736,7 @@
     "veiculo": "Câmara Municipal de Salvador",
     "titulo": "Vereadores - 20ª Legislatura (portal oficial)",
     "url": "https://www.cms.ba.gov.br/vereadores",
-    "data": "2026-10-23"
+    "data": "2026-10-24"
    },
    "semTse": 0,
    "ok": true
@@ -753,7 +756,7 @@
     "veiculo": "Câmara Municipal de Belo Horizonte",
     "titulo": "Vereadores em exercício (portal oficial)",
     "url": "https://www.cmbh.mg.gov.br/vereadores",
-    "data": "2026-10-23"
+    "data": "2026-10-24"
    },
    "semTse": 0,
    "ok": true
@@ -776,7 +779,8 @@
     "data": "2026-10-23"
    },
    "semTse": 0,
-   "ok": true
+   "ok": false,
+   "erro": "RuntimeError: Falha ao baixar https://camarasempapel.cmv.es.gov.br/spl/parlamentares.aspx: HTTP Error 403: Forbidden"
   },
   "3304557": {
    "casa": "CMRJ",
@@ -796,13 +800,14 @@
     "data": "2026-10-23"
    },
    "semTse": 0,
-   "ok": true
+   "ok": false,
+   "erro": "URLError: <urlopen error [Errno 104] Connection reset by peer>"
   },
   "3550308": {
    "casa": "CMSP",
    "nome": "Câmara Municipal de São Paulo",
    "membros": 55,
-   "propostas": 2653,
+   "propostas": 2655,
    "cobertura": {
     "lista": true,
     "propostas": true,
@@ -813,9 +818,9 @@
     "veiculo": "Câmara Municipal de São Paulo",
     "titulo": "Vereadores em exercício (portal oficial; SPLegis: ocupação dos gabinetes)",
     "url": "https://www.saopaulo.sp.leg.br/vereadores/membros/",
-    "data": "2026-10-23"
+    "data": "2026-10-24"
    },
-   "requisicoes": 0,
+   "requisicoes": 126,
    "semTse": 0,
    "ok": true
   },
@@ -837,7 +842,8 @@
     "data": "2026-10-23"
    },
    "semTse": 0,
-   "ok": true
+   "ok": false,
+   "erro": "RuntimeError: Falha ao baixar https://www.cmc.pr.gov.br/vereadores/conheca-os-vereadores: HTTP Error 403: Forbidden"
   },
   "4314902": {
    "casa": "CMPA",
@@ -857,7 +863,8 @@
     "data": "2026-10-23"
    },
    "semTse": 0,
-   "ok": true
+   "ok": false,
+   "erro": "RuntimeError: Falha ao baixar https://www.camarapoa.rs.gov.br/vereadores: <urlopen error _ssl.c:993: The handshake operation timed out>"
   },
   "5103403": {
    "casa": "CMC-MT",
@@ -877,7 +884,8 @@
     "data": "2026-10-23"
    },
    "semTse": 0,
-   "ok": true
+   "ok": false,
+   "erro": "RuntimeError: Falha ao baixar https://legislativo.camaracuiaba.mt.gov.br/spl/parlamentares.aspx: <urlopen error timed out>"
   },
   "5208707": {
    "casa": "CMG",
@@ -894,11 +902,11 @@
     "veiculo": "Câmara Municipal de Goiânia",
     "titulo": "Parlamentares da 20ª Legislatura em exercício (portal oficial)",
     "url": "https://www.goiania.go.leg.br/institucional/parlamentares",
-    "data": "2026-10-23"
+    "data": "2026-10-24"
    },
    "semTse": 0,
    "ok": true
   }
  },
- "atualizado": "2026-10-23"
+ "atualizado": "2026-10-24"
 }

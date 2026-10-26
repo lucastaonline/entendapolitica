@@ -65,7 +65,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from comum import *  # noqa: E402
 import ibge  # noqa: E402
 import mandatos  # noqa: E402  (datas de posse: a regra fica num lugar só)
-from tse import cpf_valido, data_br, data_en, genero, ler_csv, nome_tse  # noqa: E402
+from tse import cpf_valido, data_br, data_en, genero, ler_csv, nome_tse, resultado_2turno  # noqa: E402
 
 CDN = "https://cdn.tse.jus.br/estatistica/sead/odsele/"
 PORTAL = "https://dadosabertos.tse.jus.br/dataset/"
@@ -163,7 +163,33 @@ def linhas(ano: int) -> dict:
     d = _linhas(ano)
     for c in d["linhas"]:
         c["ano"] = ano
+    if ano >= 2026:
+        completar_2turno(d["linhas"], ano)
     return d
+
+
+def completar_2turno(rows: list[dict], ano: int) -> None:
+    """Os dados abertos de candidaturas levam alguns dias para trazer a situação depois do 2º turno (até lá, "#NULO"):
+    usa a totalização final do sistema de resultados do TSE, como o scripts/tse.py, e guarda a fonte na linha
+    ("fonte2t"), para ela aparecer junto na ficha de quem venceu."""
+    disputas = collections.defaultdict(list)
+    for c in rows:
+        if (c["turno"] == 2 and c["ord"] and c["sit"] not in ("ELEITO", "NÃO ELEITO") and c["dt"] and c["dt"] <= hoje()
+                and c["cargo"] in EXECUTIVOS):
+            disputas[(c["el"], c["uf"], c["cargo"].replace("VICE-", ""))].append(c)
+    for (el, uf, cargo), cs in sorted(disputas.items()):
+        r = resultado_2turno(ano, el, uf, cargo)
+        if not r:
+            continue
+        sit, f = r
+        for c in cs:
+            if sit.get(c["sq"]):
+                c["sit"], c["fonte2t"] = sit[c["sq"]], f
+
+
+def fontes_com_2turno(fts: list, *cs) -> list:
+    """As fontes da ficha mais o resultado do 2º turno do sistema de resultados do TSE, se veio de lá."""
+    return fts + [c["fonte2t"] for c in cs if c and c.get("fonte2t")]
 
 
 def _linhas(ano: int) -> dict:
@@ -374,11 +400,11 @@ def executivo_federal(ano: int, rows: list[dict], data: str, m: dict) -> dict:
         p = executivo(pres)
         if turno_manual:
             p["situacao"], p["situacao_en"] = turno_txt(turno_manual, pres["g"])
-        p["fontes"] = fts + (m.get("fontes") or [] if turno_manual else [])
+        p["fontes"] = fontes_com_2turno(fts, pres) + (m.get("fontes") or [] if turno_manual else [])
         out["presidente"] = p
     vice = vice_da_chapa(rows, "VICE-PRESIDENTE", pres, ano) if pres else None
     if vice:
-        out["vice"] = dict(executivo(vice, True, pres), fontes=fts)
+        out["vice"] = dict(executivo(vice, True, pres), fontes=fontes_com_2turno(fts, vice))
     for papel in ("presidente", "vice"):
         mp = m.get(papel)
         if mp and mp.get("nome"):
@@ -540,8 +566,8 @@ def gerar_geral(ano: int, base: dict, ant: dict | None, man: dict) -> tuple[dict
         cad = cadeiras_estaduais(por_uf_dep.get(uf, 0), uf)
         quem = ("deputados distritais", "district deputies") if uf == "DF" else ("deputados estaduais", "state deputies")
         e = {"eleicao": ano,
-             "governador": dict(executivo(gov), fontes=fts) if gov else None,
-             "vice": dict(executivo(vice, True, gov), fontes=fts) if vice else None,
+             "governador": dict(executivo(gov), fontes=fontes_com_2turno(fts, gov)) if gov else None,
+             "vice": dict(executivo(vice, True, gov), fontes=fontes_com_2turno(fts, vice)) if vice else None,
              "deputados": dict({"total": len(dest), "cadeiras": cad, "membros": ordem([membro(c) for c in dest]), "fonte": fts[0]},
                                **junta_avisos(aviso_lista(ano, *quem), aviso_excluidos(len(exc)), aviso_cadeiras(len(dest), cad)))}
         if gov and not vice:

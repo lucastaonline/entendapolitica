@@ -535,9 +535,9 @@
     "veiculo": "Câmara Municipal de Natal",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.natal.rn.leg.br/parlamentar/",
-    "data": "2026-10-25"
+    "data": "2026-10-26"
    },
-   "requisicoes": 36,
+   "requisicoes": 35,
    "semTse": 0,
    "ok": true
   },
@@ -556,9 +556,9 @@
     "veiculo": "Câmara Municipal de Porto Velho",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.portovelho.ro.leg.br/parlamentar/",
-    "data": "2026-10-25"
+    "data": "2026-10-26"
    },
-   "requisicoes": 23,
+   "requisicoes": 25,
    "semTse": 0,
    "ok": true
   },
@@ -566,7 +566,7 @@
    "casa": "CMRB",
    "nome": "Câmara Municipal de Rio Branco",
    "membros": 21,
-   "propostas": 531,
+   "propostas": 537,
    "cobertura": {
     "lista": true,
     "propostas": true,
@@ -577,9 +577,9 @@
     "veiculo": "Câmara Municipal de Rio Branco",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.riobranco.ac.leg.br/parlamentar/",
-    "data": "2026-10-25"
+    "data": "2026-10-26"
    },
-   "requisicoes": 20,
+   "requisicoes": 23,
    "semTse": 0,
    "ok": true
   },
@@ -587,7 +587,7 @@
    "casa": "CMM",
    "nome": "Câmara Municipal de Manaus",
    "membros": 41,
-   "propostas": 1598,
+   "propostas": 1600,
    "cobertura": {
     "lista": true,
     "propostas": true,
@@ -598,9 +598,9 @@
     "veiculo": "Câmara Municipal de Manaus",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.cmm.am.gov.br/parlamentar/",
-    "data": "2026-10-25"
+    "data": "2026-10-26"
    },
-   "requisicoes": 33,
+   "requisicoes": 35,
    "semTse": 0,
    "ok": true
   },
@@ -608,7 +608,7 @@
    "casa": "CMBV",
    "nome": "Câmara Municipal de Boa Vista",
    "membros": 23,
-   "propostas": 1707,
+   "propostas": 1711,
    "cobertura": {
     "lista": true,
     "propostas": true,
@@ -619,9 +619,9 @@
     "veiculo": "Câmara Municipal de Boa Vista",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.boavista.rr.leg.br/parlamentar/",
-    "data": "2026-10-25"
+    "data": "2026-10-26"
    },
-   "requisicoes": 42,
+   "requisicoes": 53,
    "semTse": 0,
    "ok": true
   },
@@ -640,9 +640,9 @@
     "veiculo": "Câmara Municipal de Fortaleza",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.fortaleza.ce.leg.br/parlamentar/",
-    "data": "2026-10-25"
+    "data": "2026-10-26"
    },
-   "requisicoes": 41,
+   "requisicoes": 36,
    "semTse": 0,
    "ok": true
   },
@@ -650,7 +650,7 @@
    "casa": "CMJP",
    "nome": "Câmara Municipal de João Pessoa",
    "membros": 29,
-   "propostas": 1510,
+   "propostas": 1513,
    "cobertura": {
     "lista": true,
     "propostas": true,
@@ -661,7 +661,7 @@
     "veiculo": "Câmara Municipal de João Pessoa",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.joaopessoa.pb.leg.br/parlamentar/",
-    "data": "2026-10-25"
+    "data": "2026-10-26"
    },
    "requisicoes": 41,
    "semTse": 0,
@@ -682,7 +682,7 @@
     "veiculo": "Câmara Municipal de Belém",
     "titulo": "Vereadores (portal oficial)",
     "url": "https://www.cmb.pa.gov.br/vereadores",
-    "data": "2026-10-25"
+    "data": "2026-10-26"
    },
    "semTse": 0,
    "ok": true
@@ -744,7 +744,7 @@
     "veiculo": "Câmara Municipal de Salvador",
     "titulo": "Vereadores - 20ª Legislatura (portal oficial)",
     "url": "https://www.cms.ba.gov.br/vereadores",
-    "data": "2026-10-25"
+    "data": "2026-10-26"
    },
    "semTse": 0,
    "ok": true
@@ -764,7 +764,7 @@
     "veiculo": "Câmara Municipal de Belo Horizonte",
     "titulo": "Vereadores em exercício (portal oficial)",
     "url": "https://www.cmbh.mg.gov.br/vereadores",
-    "data": "2026-10-25"
+    "data": "2026-10-26"
    },
    "semTse": 0,
    "ok": true
@@ -809,13 +809,13 @@
    },
    "semTse": 0,
    "ok": false,
-   "erro": "URLError: <urlopen error [Errno 104] Connection reset by peer>"
+   "erro": "URLError: <urlopen error timed out>"
   },
   "3550308": {
    "casa": "CMSP",
    "nome": "Câmara Municipal de São Paulo",
    "membros": 55,
-   "propostas": 2655,
+   "propostas": 2656,
    "cobertura": {
     "lista": true,
     "propostas": true,
@@ -826,7 +826,7 @@
     "veiculo": "Câmara Municipal de São Paulo",
     "titulo": "Vereadores em exercício (portal oficial; SPLegis: ocupação dos gabinetes)",
     "url": "https://www.saopaulo.sp.leg.br/vereadores/membros/",
-    "data": "2026-10-25"
+    "data": "2026-10-26"
    },
    "requisicoes": 126,
    "semTse": 0,
@@ -910,11 +910,11 @@
     "veiculo": "Câmara Municipal de Goiânia",
     "titulo": "Parlamentares da 20ª Legislatura em exercício (portal oficial)",
     "url": "https://www.goiania.go.leg.br/institucional/parlamentares",
-    "data": "2026-10-25"
+    "data": "2026-10-26"
    },
    "semTse": 0,
    "ok": true
   }
  },
- "atualizado": "2026-10-25"
+ "atualizado": "2026-10-26"
 }

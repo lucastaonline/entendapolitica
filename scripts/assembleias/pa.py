@@ -3,11 +3,12 @@
 Lista oficial: https://www.alepa.pa.gov.br/Home/Page/Deputados. A página monta a lista com um componente DevExpress; a
 resposta de /Institucional/CardViewDeputados (pedida com o cookie da página e o Referer) traz os códigos dos 41 deputados
 em exercício, e a página de cada um (/Institucional/Deputado/<código>) traz nome, nome completo, partido, e-mail e foto.
-Propostas: NÃO entram por enquanto. A busca de proposições (/Home/Page/Proposicoes) só devolve 10 resultados por vez e
+Propostas: NÃO entram. A busca de proposições (/Home/Page/Proposicoes) só devolve 10 resultados por vez e
 muda de página por um protocolo próprio do componente (sem endereço de página ou arquivo aberto).
 Votações nominais: lista oficial de cada mês (/Legislativo/CallbackPanelVotacoesNominais?ano=&mes=, a mesma que a página
 /Home/Page/VotacoesNominais mostra; até 12 por mês numa página) e o detalhe de cada votação
 (/Legislativo/DetalhesVotacaoNominal?IdProposicao=&IdVotacao=), com o voto de cada deputado.
+Governadora (gov-PA): leis sancionadas, pelo Banco de Leis da Alepa (governo()).
 """
 from __future__ import annotations
 
@@ -39,30 +40,24 @@ class Sessao(Rede):
 
     def pagina(self, url: str, referer: str | None = None) -> str:
         import gzip
-        import time
         import urllib.request
         from comum import UA
-        espera = self.pausa - (time.time() - self._ult)
-        if espera > 0:
-            time.sleep(espera)
         h = {"User-Agent": UA, "Accept-Encoding": "gzip"}
         if referer:
             h["Referer"] = referer
-        try:
-            for t in range(3):
-                try:
-                    with self._op.open(urllib.request.Request(url, headers=h), timeout=90) as r:
-                        b = r.read()
-                        if r.headers.get("Content-Encoding") == "gzip":
-                            b = gzip.decompress(b)
-                        return b.decode("utf-8", "replace")
-                except Exception:
-                    if t == 2:
-                        raise
-                    time.sleep(5 * (t + 1))
-        finally:
-            self._ult = time.time()
-            self.pedidos += 1
+        for t in range(3):
+            self.esperar(url)  # robots.txt, intervalo e limite de tempo (como na Rede)
+            try:
+                with self._op.open(urllib.request.Request(url, headers=h), timeout=90) as r:
+                    b = r.read()
+                    if r.headers.get("Content-Encoding") == "gzip":
+                        b = gzip.decompress(b)
+                    return b.decode("utf-8", "replace")
+            except Exception:
+                if t == 2:
+                    raise
+            finally:
+                self.feito(url)
         return ""
 
 
@@ -231,19 +226,117 @@ def coletar() -> dict:
             x["fontes"].append(vot[pid]["fonte"])
     cobertura = {"lista": True, "propostas": False, "votacoes": bool(vot), "gastos": False}
     notas = [
-        ("As propostas de cada deputado ainda não entram: a busca de proposições do site da Alepa mostra 10 resultados por vez "
-         "e não tem arquivo aberto nem endereço para cada página de resultados.",
-         "Each deputy's bills are not included yet: the Alepa website's bill search shows 10 results at a time and has no "
-         "open data file or address for each page of results."),
+        ("As propostas de cada deputado não entram: a busca de proposições do site da Alepa mostra 10 resultados por vez e "
+         "não tem arquivo aberto nem endereço para cada página de resultados. Cada proposta pode ser consultada nessa busca, "
+         "no site da Alepa.",
+         "Each deputy's bills are not included: the Alepa website's bill search shows 10 results at a time and has no open "
+         "data file or address for each page of results. Each bill can be looked up in that search, on the Alepa website."),
+        GOV_NOTA,
     ]
     if cheios:
         notas.append((f"Votações: nos meses {', '.join(cheios)} a lista oficial tinha mais de 12 votações nominais e só a primeira "
                       "página entrou.", "Votes: in some months the official list had more than 12 roll-call votes and only the "
                       "first page was included."))
     r = gravar("PA", {"casa": "Assembleia Legislativa do Estado do Pará", "casa_en": "Legislative Assembly of the State of Pará",
-                      "sigla": "Alepa", "site": SITE}, membros, extras, cobertura, fonte_lista, notas, minimo=VAGAS - 5,
-               legislatura=leg)
+                      "sigla": "Alepa", "site": SITE}, membros, extras, cobertura, fonte_lista,
+               notas, minimo=VAGAS - 5, legislatura=leg)  # canal de pedido de informação: dados/manual/canais-lai.json
     if len(membros) != VAGAS:
         log(f"  PA: ATENÇÃO: {len(membros)} pessoas na lista oficial (a Casa tem {VAGAS} vagas)")
     log(f"  PA: {rede.pedidos} pedidos ao site oficial")
+    try:
+        governo(Rede("alepa-leis", pausa=1.5))
+    except Exception as e:  # o arquivo da governadora de antes continua (se for do mesmo período)
+        from . import _nco_gov as G
+        log(f"  PA: ATENÇÃO: o que o governo fez não foi atualizado ({type(e).__name__}: {e})")
+        G.descartar_se_velho("PA")
     return r
+
+
+# ---------------------------------------------------------------- o que o governo do estado fez (perfil gov-PA)
+# Leis: Banco de Leis da Alepa (https://bancodeleis.alepa.pa.gov.br, sem robots.txt): lista por tipo e ano, 10 por página,
+# com número e ementa, mas sem a data de cada lei (algumas aparecem duas vezes, com dois PDFs). Por isso a conta começa na
+# primeira lei do governo de hoje, conferida à mão no PDF oficial de cada lei (PRIMEIRAS, abaixo). Vetos e projetos do
+# Executivo: não há lista aberta (a busca de proposições da Alepa não tem endereço por página; o Diário Oficial do Pará,
+# da Imprensa Oficial, estava fora do ar em 23/10/2026).
+BANCO = "https://bancodeleis.alepa.pa.gov.br"
+TIPOS_BANCO = {"LO": 3, "LC": 4}
+# {início do período: primeira lei de cada tipo do governo de hoje + a frase que explica (pt, en)}; conferido em 23/10/2026
+# nos PDFs do Banco de Leis: Lei nº 11.356, de 31/3/2026, e Lei Complementar nº 203, de 1º/4/2026, ainda com a assinatura de
+# Helder Barbalho; Lei nº 11.359, de 7/4/2026, e Lei Complementar nº 205, de 29/4/2026, já com a de Hana Ghassan; as Leis nº
+# 11.357 e 11.358 e a Lei Complementar nº 204 não estão no Banco de Leis. Um governo novo precisa de uma linha nova aqui.
+PRIMEIRAS = {
+    "2026-04-02": {"LO": 11359, "LC": 205,
+                   "txt": ("O Banco de Leis não traz a data de cada lei: a conta começa na primeira lei com a assinatura de Hana "
+                           "Ghassan (Lei nº 11.359, de 7 de abril de 2026, e Lei Complementar nº 205, de 29 de abril de 2026), "
+                           "conferida nos textos oficiais; a Lei nº 11.356, de 31 de março, e a Lei Complementar nº 203, de 1º "
+                           "de abril, têm a assinatura do governador anterior, e as Leis nº 11.357 e 11.358 e a Lei "
+                           "Complementar nº 204 não estão no Banco de Leis.",
+                           "The law database does not give the date of each law: the count starts with the first law signed by "
+                           "Hana Ghassan (Law No. 11,359 of April 7, 2026, and Complementary Law No. 205 of April 29, 2026), "
+                           "checked in the official texts; Law No. 11,356 of March 31 and Complementary Law No. 203 of April 1 "
+                           "were signed by the previous governor, and Laws No. 11,357 and 11,358 and Complementary Law No. 204 "
+                           "are not in the database.")},
+}
+GOV_NOTA = ("Governo do estado: entram as leis sancionadas, pelo Banco de Leis da Alepa. Os vetos e os projetos que o governo "
+            "mandou à Assembleia não entram: a busca de proposições da Alepa não tem endereço para cada página de resultados, "
+            "e não achamos uma lista aberta dos vetos.",
+            "State government: signed laws are included, from the Alepa law database. Vetoes and the bills the government sent "
+            "to the state assembly are not: the Alepa bill search has no address for each page of results, and we found no "
+            "open list of vetoes.")
+
+
+def _numeros_banco(rede: Rede, tipo: int, ano: int, minimo: int, conhecidos: set[int], cheio: bool) -> set[int]:
+    """Números das leis de um tipo e ano no Banco de Leis, da maior para a menor, até passar de 'minimo' (ou, numa rodada
+    sem 'cheio', até uma página sem número novo)."""
+    nums: set[int] = set()
+    p = 1
+    while p <= 200:
+        html = rede.texto(f"{BANCO}/index.php?tipo={tipo}&ano={ano}&ordem=num_desc&p={p}")
+        achados = [int(n) for n in re.findall(r'class="td-num">\s*N\D{0,3}\s*(\d+)', html)]
+        if not achados:
+            break
+        nums.update(achados)
+        if min(achados) < minimo or (not cheio and set(achados) <= conhecidos):
+            break
+        p += 1
+    return nums
+
+
+def governo(rede: Rede) -> None:
+    import datetime as dt
+    from comum import hoje
+    from . import _nco_gov as G
+    g = G.governo_atual("PA")
+    ini = g["inicio"]
+    prim = PRIMEIRAS.get(ini)
+    if not prim:
+        raise RuntimeError(f"PA: falta conferir à mão a primeira lei do governo que começou em {ini} (PRIMEIRAS)")
+    st = rede.estado("leis.json", {}) or {}
+    if st.get("inicio") != ini:
+        st = {"inicio": ini}
+    completo = st.get("completo") or ""
+    cheio = not completo or (dt.date.fromisoformat(hoje()) - dt.date.fromisoformat(completo[:10])).days >= 30
+    c = {"total": 0, "promulgadas": 0, "ultima": None, "tipos": {}}
+    for sig, tid in TIPOS_BANCO.items():
+        conhecidos = set(st.get(sig) or [])
+        nums = set() if cheio else set(conhecidos)
+        for ano in range(int(ini[:4]), int(hoje()[:4]) + 1):
+            nums |= _numeros_banco(rede, tid, ano, prim[sig], conhecidos, cheio)
+        nums = sorted(n for n in nums if n >= prim[sig])
+        st[sig] = nums
+        if nums:
+            c["tipos"][sig] = {"n": len(nums), "de": nums[0], "ate": nums[-1], "promulgadas": 0,
+                               "faltam": [n for n in range(nums[0], nums[-1] + 1) if n not in set(nums)]}
+            c["total"] += len(nums)
+    if cheio:
+        st["completo"] = hoje()
+    rede.guardar(st, "leis.json")
+    if not c["total"]:
+        raise RuntimeError("PA: nenhuma lei no período")
+    pt, en = G.texto_leis(c, ("pelo Banco de Leis da Alepa (as que aparecem duas vezes contam uma)",
+                              "from the Alepa law database (laws listed twice count once)"), G.PROMULGADAS_INCLUIDAS)
+    fontes = [fonte(VEICULO, "Banco de Leis: leis ordinárias", f"{BANCO}/index.php?tipo=3&ano={ini[:4]}"),
+              fonte(VEICULO, "Banco de Leis: leis complementares", f"{BANCO}/index.php?tipo=4&ano={ini[:4]}")]
+    ex = G.bloco_executivo(g, c, None, fontes, [pt, prim["txt"][0], G.EM_EXERCICIO[0], GOV_NOTA[0]],
+                           [en, prim["txt"][1], G.EM_EXERCICIO[1], GOV_NOTA[1]])
+    G.gravar_gov("PA", None, ex, fontes, inicio=ini)

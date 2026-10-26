@@ -8,6 +8,8 @@ Complementar, de Decreto Legislativo, de Resolução e Proposta de Emenda Consti
 1º/2/2023. Cada item traz número, ementa, data de entrada, autoria (o primeiro é o autor principal), setor e situação
 atual. São páginas HTML de 10 itens (não há API aberta): a primeira página de cada tipo é lida todo dia e as outras em
 rodízio, no máximo ALESC_PAGINAS páginas por rodada (80), até completar a volta; o que já foi lido fica no cache.
+Primeira carga (cache vazio, como no robô do GitHub): as listas e as páginas de tramitação usam a rodada toda
+(_carga.py) e, enquanto não terminam, nada é gravado em dados/ (ficam os arquivos de antes; "em andamento").
 Situação: o texto oficial "Situação atual" com as regras REGRAS. "Arquivado" quase sempre vem depois de a proposta virar
 lei; por isso as propostas que terminaram (arquivadas, "Transformado", "Veto Parcial", "Retirado") têm a página de
 tramitação lida uma vez (no máximo ALESC_FICHAS por rodada, 100; relida só se a situação mudar): ela diz se virou norma
@@ -16,6 +18,10 @@ Gastos: "Despesas dos gabinetes parlamentares" (CSV anual do Portal da Transpar�
 Inclui diárias e passagens da equipe do gabinete, como a Alesc publica; elas aparecem separadas ("Diárias da equipe",
 "Passagens da equipe") das do próprio deputado.
 Votações nominais: a Alesc publica a "planilha de votação" de cada sessão em PDF; não entram.
+O governo do estado (perfil do governador, dados/pessoas/gov-SC.json), desde o começo do mandato: os projetos de
+iniciativa do Governador no e-Legis (PL, PLC e PEC; as medidas provisórias não entram, porque viram projetos de
+conversão com outro número); as leis pela pesquisa da Legislação SC (leis.alesc.sc.gov.br, total por tipo e data); e
+os vetos pelas mensagens de veto (MSV, tipoPropositura=10), com "Veto Total" ou "Veto Parcial" na ementa.
 """
 from __future__ import annotations
 
@@ -23,12 +29,17 @@ import csv
 import io
 import os
 import re
+import time
+import urllib.parse
 
+import mandatos
 import regional
 from comum import chave_nome, data_iso, hoje, log, sem_acento
 
-from ._sse_comum import (Rede, bloco_gastos, casar_membros, com_status_en, desde, escopo, fonte, gravar, https,
-                         legislatura, membro, nome_lei, partido_sigla, resumo_status, sem_html, virou)
+from . import _carga
+from ._sse_comum import (Rede, SemTempo, bloco_executivo, bloco_gastos, casar_membros, com_status_en, desde, escopo,
+                         escopo_governo, fonte, gravar, gravar_governo, https, legislatura, membro, nome_lei, partido_sigla,
+                         periodo_governo, qtd, resumo_status, sem_html, virou)
 
 UF = "SC"
 SITE = "https://www.alesc.sc.gov.br"
@@ -36,9 +47,11 @@ ELEGIS = "https://portalelegis.alesc.sc.gov.br"
 TRANSP = "https://transparencia.alesc.sc.gov.br"
 VEICULO = "Assembleia Legislativa do Estado de Santa Catarina (Alesc)"
 CASA = {"casa": "Assembleia Legislativa do Estado de Santa Catarina", "casa_en": "Legislative Assembly of the State of Santa Catarina",
-        "sigla": "Alesc", "site": SITE}
+        "sigla": "Alesc", "site": SITE,
+        "sic": "https://www.alesc.sc.gov.br/sic/"}  # pedido de informação (Lei de Acesso à Informação)
 INICIO = legislatura(UF)["inicio"]
 TIPOS = {1: ("PL", "PL"), 2: ("PLC", "PLP"), 6: ("PDL", "PDL"), 8: ("PRS", "PRC"), 7: ("PEC", "PEC")}
+LEIS = "https://leis.alesc.sc.gov.br"  # Legislação SC, mantida pela Alesc
 NOME_GASTOS = ("Despesas do gabinete (inclui diárias e passagens da equipe)", "Office expenses (including staff travel)")
 
 # situação oficial (sem acento, minúsculas) -> status do site; o que não bate aqui segue a tabela comum (comum.py).
@@ -112,34 +125,57 @@ def _itens(t: str) -> list[dict]:
     return out
 
 
-def _proposicoes(rede: Rede) -> dict[str, dict]:
+def _proposicoes(rede: Rede) -> tuple[dict[str, dict], bool]:
     """Junta, no cache (estado.json), o que já foi lido do e-Legis; lê a 1ª página de cada tipo e um rodízio das outras
-    (o limite de páginas por rodada é dividido entre os tipos, na proporção do tamanho de cada um)."""
+    (o limite de páginas por rodada é dividido entre os tipos, na proporção do tamanho de cada um). Devolve (itens,
+    completo): completo quando todas as páginas de cada tipo já foram lidas pelo menos uma vez. Na primeira carga (cache
+    vazio, como no robô do GitHub), o rodízio usa a rodada toda (_carga.py) em vez do limite de páginas."""
     est = rede.estado("estado.json", {}) or {}
     itens, cursor = est.get("itens", {}), est.get("cursor", {})
+    volta = set(est.get("volta") or [])  # tipos com todas as páginas já lidas
     limite = int(os.environ.get("ALESC_PAGINAS", "80"))
     bases, paginas = {}, {}
-    for cod in TIPOS:
-        bases[cod] = f"{ELEGIS}/proposicoes/processo-legislativo?tipoPropositura={cod}&inicio={INICIO}&arquivados=1"
-        t = rede.texto(bases[cod], None)
-        for x in _itens(t):
-            itens[x["id"]] = dict(x, tipo=cod)
-        paginas[cod] = max([int(p) for p in re.findall(r"page=(\d+)", t)] or [1])
-    soma = sum(p - 1 for p in paginas.values()) or 1
-    for cod, (sig, _) in TIPOS.items():
-        if paginas[cod] < 2:
-            continue
-        cota = max(1, round((limite - len(TIPOS)) * (paginas[cod] - 1) / soma))
-        pagina = int(cursor.get(str(cod), 2))
-        for _ in range(min(cota, paginas[cod] - 1)):
-            if pagina > paginas[cod]:
-                pagina = 2
-            for x in _itens(rede.texto(f"{bases[cod]}&page={pagina}", None)):
+    t0 = time.time()
+    try:
+        for cod in TIPOS:
+            bases[cod] = f"{ELEGIS}/proposicoes/processo-legislativo?tipoPropositura={cod}&inicio={INICIO}&arquivados=1"
+            t = rede.texto(bases[cod], None)
+            for x in _itens(t):
                 itens[x["id"]] = dict(x, tipo=cod)
-            pagina += 1
-        cursor[str(cod)] = pagina if pagina <= paginas[cod] else 2
-    rede.guardar({"itens": itens, "cursor": cursor}, "estado.json")
-    return itens
+            paginas[cod] = max([int(p) for p in re.findall(r"page=(\d+)", t)] or [1])
+            n = sum(1 for x in itens.values() if int(x["tipo"]) == cod)
+            if paginas[cod] < 2 or n >= (paginas[cod] - 1) * 10:  # cache de antes desta regra: já tem (quase) tudo
+                volta.add(cod)
+        primeira = any(cod not in volta for cod in TIPOS)
+        prazo = _carga.limite_diario(0, primeira)  # na primeira carga, a rodada toda; senão, o limite de páginas
+        soma = sum(p - 1 for p in paginas.values()) or 1
+        for cod, (sig, _) in TIPOS.items():
+            if paginas[cod] < 2:
+                continue
+            cota = max(1, round((limite - len(TIPOS)) * (paginas[cod] - 1) / soma))
+            if primeira:
+                cota = paginas[cod] - 1 if cod not in volta else min(cota, paginas[cod] - 1)
+            pagina = int(cursor.get(str(cod), 2))
+            ja_completo = cod in volta
+            for _ in range(min(cota, paginas[cod] - 1)):
+                if primeira and time.time() - t0 > prazo:
+                    break
+                if pagina > paginas[cod]:
+                    pagina = 2
+                for x in _itens(rede.texto(f"{bases[cod]}&page={pagina}", None)):
+                    itens[x["id"]] = dict(x, tipo=cod)
+                pagina += 1
+                if pagina > paginas[cod]:
+                    volta.add(cod)
+                    if not ja_completo:  # primeira volta completa deste tipo: as páginas do começo já foram lidas antes
+                        break
+                if primeira and pagina % 20 == 0:
+                    rede.guardar({"itens": itens, "cursor": dict(cursor, **{str(cod): pagina}), "volta": sorted(volta)}, "estado.json")
+            cursor[str(cod)] = pagina if pagina <= paginas[cod] else 2
+    except SemTempo:  # o fim da rodada chegou: o cursor guarda onde parou
+        pass
+    rede.guardar({"itens": itens, "cursor": cursor, "volta": sorted(volta)}, "estado.json")
+    return itens, all(cod in volta for cod in TIPOS)
 
 
 def _gastos(rede: Rede, quem) -> dict[str, list]:
@@ -195,25 +231,33 @@ def _ficha(rede: Rede, pid: str, situacao: str | None) -> dict:
             "ev": importantes[-12:]}
 
 
-def _fichas(rede: Rede, itens: dict[str, dict], precisa: list[str]) -> dict[str, dict]:
+def _fichas(rede: Rede, itens: dict[str, dict], precisa: list[str]) -> tuple[dict[str, dict], int]:
     """Lê (uma vez) a tramitação das propostas que já terminaram; relê só se a situação mudar. No máximo ALESC_FICHAS
-    páginas por rodada (100): o resto fica para as próximas."""
+    páginas por rodada (100): o resto fica para as próximas. Na primeira carga (mais do que isso por ler, como no robô
+    que começa com o cache vazio), até o fim da rodada (_carga.py). Devolve (fichas, quantas faltam)."""
     fichas = rede.estado("fichas.json", {}) or {}
     falta = [i for i in precisa if (fichas.get(i) or {}).get("sit") != itens[i].get("situacao")]
     limite = int(os.environ.get("ALESC_FICHAS", "100"))
+    primeira = len(falta) > limite
+    prazo, t0 = _carga.limite_diario(0, primeira), time.time()
     lidas = 0
-    for i in falta[:limite]:
+    for i in (falta if primeira else falta[:limite]):
+        if primeira and time.time() - t0 > prazo:
+            break
         try:
             fichas[i] = _ficha(rede, i, itens[i].get("situacao"))
             lidas += 1
+        except SemTempo:
+            break
         except Exception as e:  # noqa: BLE001 - uma página com problema não derruba a coleta
             log(f"  SC: tramitação de {i} não veio ({e})")
         if lidas and lidas % 50 == 0:
             rede.guardar(fichas, "fichas.json")
     rede.guardar(fichas, "fichas.json")
-    if len(falta) > limite:
-        log(f"  SC: {len(falta) - limite} páginas de tramitação ficam para as próximas rodadas")
-    return fichas
+    resto = sum(1 for i in precisa if (fichas.get(i) or {}).get("sit") != itens[i].get("situacao"))
+    if resto:
+        log(f"  SC: {resto} páginas de tramitação ficam para as próximas rodadas")
+    return fichas, resto
 
 
 def _desfecho(f: dict) -> tuple[str | None, dict | None, str | None, str | None]:
@@ -251,12 +295,49 @@ def _desfecho(f: dict) -> tuple[str | None, dict | None, str | None, str | None]
     return None, None, None, None
 
 
+def _vetos(rede: Rede, ini: str) -> list[dict]:
+    """Mensagens de veto do governador (MSV) no e-Legis, todas as páginas: a primeira todo dia; as outras, a cada semana
+    ou quando a primeira muda (uma mensagem nova empurra as outras uma posição para trás, de página em página)."""
+    base = f"{ELEGIS}/proposicoes/processo-legislativo?tipoPropositura=10&inicio={ini}&arquivados=1"
+    t = rede.texto(base, "vetos-1.html", 20)
+    out = {x["id"]: x for x in _itens(t)}
+    est = rede.estado("vetos.json", {}) or {}
+    mudou = est.get("p1") != list(out)
+    paginas = max([int(p) for p in re.findall(r"page=(\d+)", t)] or [1])
+    for pg in range(2, paginas + 1):
+        for x in _itens(rede.texto(f"{base}&page={pg}", f"vetos-{pg}.html", 0 if mudou else 24 * 7)):
+            out.setdefault(x["id"], x)
+    rede.guardar({"p1": [x["id"] for x in _itens(t)]}, "vetos.json")
+    return list(out.values())
+
+
+def _leis(rede: Rede, ini: str) -> tuple[dict[str, int], str | None]:
+    """Leis ordinárias e complementares assinadas de ini até hoje, pela pesquisa oficial da Legislação SC
+    (leis.alesc.sc.gov.br: "Foram encontrados N resultados"), e a data da mais recente."""
+    total, ultima = {}, None
+    for tipo in ("Lei Ordinária", "Lei Complementar"):
+        t = rede.texto(f"{LEIS}/legislativo?tipo_ato_normativo={urllib.parse.quote(tipo)}&data_inicial={ini}"
+                       f"&data_final={hoje()}&sort=data_desc", f"leis-{tipo[4:7].lower()}.html", 20)
+        m = re.search(r'totalItems\\?":(\d+)', t)
+        if not m:
+            raise RuntimeError(f"Alesc: a pesquisa de leis ({tipo}) não trouxe o total")
+        total[tipo] = int(m.group(1))
+        datas = re.findall(r'data-ato-normativo\\?":\\?"(\d{4}-\d{2}-\d{2})', t)
+        if datas:
+            ultima = max([ultima or ""] + datas)
+    return total, ultima
+
+
 def coletar() -> dict:
     rede = Rede("alesc", pausa=1.0)
     membros, ids, avisos, casados = _membros(rede)
     for a in avisos:
         log(f"  SC: {a}")
-    itens = _proposicoes(rede)
+    itens, completo = _proposicoes(rede)
+    if not completo:  # primeira carga em andamento: nada pela metade no site (ficam os arquivos de antes)
+        log(f"  SC: primeira carga das listas em andamento ({len(itens)} proposições lidas); os arquivos de antes "
+            f"continuam; {rede.pedidos} pedidos à rede")
+        return _carga.pendente(CASA["sigla"], f"primeira carga: {len(itens)} proposições lidas", rede.pedidos)
     hj = hoje()
     por_nome: dict[str, str] = {}
     for k, pid in ids.items():
@@ -279,44 +360,56 @@ def coletar() -> dict:
 
     por_dep: dict[str, list] = {}
     ligados: dict[str, list[str]] = {}
+    per = periodo_governo(UF)
+    do_governo: list[str] = []
     for x in itens.values():
+        if any(re.search(r"(?i)governador|governo do estado|poder executivo", a or "") for a in x.get("autores") or []) and \
+                (x.get("entrada") or "") >= per["inicio"]:
+            do_governo.append(x["id"])
         if (x.get("entrada") or "") < INICIO:
             continue
         autores = [k for k in dict.fromkeys(quem(a) for a in x.get("autores") or []) if k]
         if autores:
             ligados[x["id"]] = autores
-    fichas = _fichas(rede, itens, sorted((i for i in ligados if FICHA.search(itens[i].get("situacao") or "")),
-                                         key=lambda i: itens[i].get("entrada") or "", reverse=True))
-    for i, autores in ligados.items():
-        x = itens[i]
-        principal = quem((x.get("autores") or [""])[0])
+    precisa = sorted((i for i in set(ligados) | set(do_governo) if FICHA.search(itens[i].get("situacao") or "")),
+                     key=lambda i: itens[i].get("entrada") or "", reverse=True)
+    fichas, sem_ficha = _fichas(rede, itens, precisa)
+    if sem_ficha > max(5, 0.01 * len(precisa)):  # primeira carga das tramitações: sem elas, a situação sai errada
+        log(f"  SC: primeira carga das páginas de tramitação em andamento; os arquivos de antes continuam; "
+            f"{rede.pedidos} pedidos à rede")
+        return _carga.pendente(CASA["sigla"], f"primeira carga: {sem_ficha} páginas de tramitação por ler", rede.pedidos)
+
+    def proposta(x: dict, papel: str) -> dict:
         sig, tipo = TIPOS[int(x["tipo"])]
         m = re.search(r"(\d+)/(\d{4})", x.get("sigla") or "")
         sigla = f"{sig} {int(m.group(1))}/{m.group(2)}" if m else (x.get("sigla") or sig)
-        f = fichas.get(i) if FICHA.search(x.get("situacao") or "") else None
+        f = fichas.get(x["id"]) if FICHA.search(x.get("situacao") or "") else None
         st, norma, dst, motivo = _desfecho(f) if f and f.get("sit") == x.get("situacao") else (None, None, None, None)
+        p = regional.proposta(f"alesc:{x['id']}", sigla, tipo, x.get("entrada"), x.get("ementa"), x.get("situacao"),
+                              f"{ELEGIS}/proposicoes/{x['id']}", papel=papel, regras=REGRAS, status=st, data_status=dst)
+        if norma:
+            parcial = norma.get("parcial") or re.search(r"(?i)veto parcial", x.get("situacao") or "") or any(
+                re.search(r"(?i)veto parcial", e["s"]) for e in (f or {}).get("ev") or [])
+            virou(p, norma["nome"] + (" (com partes vetadas)" if parcial else ""), norma["url"])
+            p["lei"]["nome"] = norma["nome"]
+        elif p["status"] == "lei":
+            com_status_en(p, "Virou lei (a página oficial não mostra o número)",
+                          "Became law (the official page does not show the number)")
+        elif motivo == "veto" or (p["status"] == "rejeitada" and re.match(r"(?i)veto total", x.get("situacao") or "")):
+            com_status_en(p, "Aprovada pela Assembleia, mas vetada por inteiro pelo governador",
+                          "Approved by the Assembly, but fully vetoed by the governor")
+        elif motivo == "parecer":
+            com_status_en(p, "Rejeitada numa comissão (parecer contrário) e arquivada",
+                          "Rejected in a committee (unfavorable opinion) and archived")
+        elif p["status"] == "aprovada":
+            com_status_en(p, "Aprovada pela Assembleia; segue para a sanção ou o veto do governador",
+                          "Approved by the Assembly; it goes to the governor to sign or veto")
+        return p
+
+    for i, autores in ligados.items():
+        principal = quem((itens[i].get("autores") or [""])[0])
         for k in autores:
-            p = regional.proposta(f"alesc:{x['id']}", sigla, tipo, x.get("entrada"), x.get("ementa"), x.get("situacao"),
-                                  f"{ELEGIS}/proposicoes/{x['id']}", papel="autor" if k == principal else "coautor", regras=REGRAS,
-                                  status=st, data_status=dst)
-            if norma:
-                parcial = norma.get("parcial") or re.search(r"(?i)veto parcial", x.get("situacao") or "") or any(
-                    re.search(r"(?i)veto parcial", e["s"]) for e in (f or {}).get("ev") or [])
-                virou(p, norma["nome"] + (" (com partes vetadas)" if parcial else ""), norma["url"])
-                p["lei"]["nome"] = norma["nome"]
-            elif p["status"] == "lei":
-                com_status_en(p, "Virou lei (a página oficial ainda não mostra o número)",
-                              "Became law (the official page does not show the number yet)")
-            elif motivo == "veto" or (p["status"] == "rejeitada" and re.match(r"(?i)veto total", x.get("situacao") or "")):
-                com_status_en(p, "Aprovada pela Assembleia, mas vetada por inteiro pelo governador",
-                              "Approved by the Assembly, but fully vetoed by the governor")
-            elif motivo == "parecer":
-                com_status_en(p, "Rejeitada numa comissão (parecer contrário) e arquivada",
-                              "Rejected in a committee (unfavorable opinion) and archived")
-            elif p["status"] == "aprovada":
-                com_status_en(p, "Aprovada pela Assembleia; segue para a sanção ou o veto do governador",
-                              "Approved by the Assembly; it goes to the governor to sign or veto")
-            por_dep.setdefault(k, []).append(p)
+            por_dep.setdefault(k, []).append(proposta(itens[i], "autor" if k == principal else "coautor"))
     gastos = _gastos(rede, quem)
     f_lista = fonte(VEICULO, "Deputados da legislatura atual (página oficial)", f"{SITE}/deputados/", hj)
     f_prop = fonte(VEICULO, "e-Legis: processo legislativo eletrônico (lista de proposições)", f"{ELEGIS}/proposicoes/processo-legislativo", hj)
@@ -335,6 +428,48 @@ def coletar() -> dict:
             x["gastos"] = g
         extras[m["id"]] = x
     log(f"  SC: situações {resumo_status([x['propostas']['lista'] for x in extras.values()])}; {rede.pedidos} pedidos à rede")
+    try:
+        # o governo: projetos do Governador, leis do período e mensagens de veto
+        governo = [proposta(itens[i], "autor") for i in do_governo if int(itens[i]["tipo"]) in TIPOS]
+        tot_leis, ultima_lei = _leis(rede, per["inicio"])
+        vetos = sorted((v for v in _vetos(rede, per["inicio"]) if (v.get("entrada") or "") >= per["inicio"]),
+                       key=lambda v: v.get("entrada") or "")
+        totais = sum(1 for v in vetos if re.match(r"(?i)\s*veto total", v.get("ementa") or ""))
+        parciais = sum(1 for v in vetos if re.match(r"(?i)\s*veto parcial", v.get("ementa") or ""))
+        d_pt, d_en = desde(per["inicio"])
+        primeiro_veto = mandatos.data_br(vetos[0]["entrada"]) if vetos else "-"
+        n_ord, n_lc, sem = tot_leis["Lei Ordinária"], tot_leis["Lei Complementar"], len(vetos) - totais - parciais
+        v_pt = f"{qtd(totais, 'total', 'totais')} e {qtd(parciais, 'parcial', 'parciais')}" + (
+            f"; {sem} sem a indicação na ementa" if sem else "")
+        v_en = f"{totais} full and {parciais} partial" + (f"; {sem} without that information in the summary" if sem else "")
+        esc_g = escopo_governo(UF, per, "Assembleia Legislativa", "Legislative Assembly", ("PL", "PLP", "PEC"),
+                               "As medidas provisórias também não entram: na Alesc, cada uma vira um projeto de conversão em "
+                               "lei, com outro número. Lista do e-Legis, o sistema da Alesc, que começa com a legislatura "
+                               "(fevereiro de 2023).",
+                               "Provisional measures are not included either: at the Alesc, each one becomes a conversion bill, "
+                               "with another number. List from e-Legis, the Alesc system, which starts with the current "
+                               "legislature (February 2023).")
+        executivo = bloco_executivo(
+            per, [fonte(VEICULO, "Legislação SC: pesquisa de leis ordinárias e complementares por data",
+                        f"{LEIS}/legislativo?tipo_ato_normativo={urllib.parse.quote('Lei Ordinária')}&data_inicial={per['inicio']}", hj),
+                  fonte(VEICULO, "e-Legis: mensagens de veto do governador",
+                        f"{ELEGIS}/proposicoes/processo-legislativo?tipoPropositura=10&arquivados=1", hj)],
+            f"Leis: {qtd(n_ord, 'lei ordinária', 'leis ordinárias')} e {qtd(n_lc, 'lei complementar', 'leis complementares')} "
+            f"assinadas desde {d_pt}, pela pesquisa oficial da Legislação SC (mantida pela Alesc). A pesquisa não separa as "
+            "poucas leis promulgadas pela própria Assembleia (quando ela derruba um veto ou o governador não responde no prazo): "
+            f"elas estão na conta. Vetos: as mensagens de veto que chegaram à Assembleia (no e-Legis, desde {primeiro_veto}), "
+            f"{v_pt}.",
+            f"Laws: {qtd(n_ord, 'ordinary law', 'ordinary laws')} and {qtd(n_lc, 'complementary law', 'complementary laws')} "
+            f"signed since {d_en}, from the official search of Santa Catarina's legislation (kept by the Alesc). The search "
+            "does not single out the few laws promulgated by the Assembly itself (when it overrides a veto or the governor does "
+            "not answer in time): they are included. Vetoes: the veto messages that reached the Assembly (in e-Legis, since "
+            f"{mandatos.extenso(vetos[0]['entrada'])[1] if vetos else '-'}), {v_en}.",
+            leis=sum(tot_leis.values()), vetos=len(vetos), vetos_totais=None if sem else totais,
+            vetos_parciais=None if sem else parciais,
+            ultima_lei=ultima_lei, ultimo_veto=vetos[-1]["entrada"] if vetos else None)
+        gravar_governo(UF, per, governo, *esc_g, f_prop, executivo)
+    except Exception as e:  # uma fonte do governo fora do ar não derruba a coleta: fica o perfil da rodada anterior
+        log(f"  SC: governo: {e}")
     notas = [("A Alesc publica o voto de cada deputado só em planilhas PDF de cada sessão; as votações não entram.",
               "The Alesc only publishes each deputy's vote in PDF spreadsheets for each session; votes are not included."),
              ("Os gastos são as despesas de cada gabinete que a Alesc publica (diárias, passagens, telefone, veículos, aluguel e "

@@ -5,9 +5,11 @@ Lista oficial: deputados ativos na legislatura atual do SAPL (no SAPL de Roraima
 75/2021). Propostas: matérias do SAPL desde 1º/2/2023; situação = a da última
 tramitação (quando ela não diz nada sozinha, vale o texto dela ou a tramitação de antes); "virou lei" = norma jurídica
 ligada à proposta no SAPL. O SAPL de Roraima não tem votações registradas.
+Governador (gov-RR): projetos do governador de hoje, leis e vetos desde a posse dele (GOVERNO, abaixo).
 """
 from __future__ import annotations
 
+from . import _nco_gov as G
 from ._nco_sapl import Sapl
 
 VETO_PENDENTE = ("Vetada pelo governador; a Assembleia ainda vai decidir sobre o veto",
@@ -42,6 +44,24 @@ AMBIGUOS = [r"^para providencias$", r"para conhecimento", r"oficio encaminhado",
             r"para emissao de certidao", r"para criacao de comissao", r"^transferido$", r"proposicao deliberada",
             r"prazo expirado"]
 
+# o que o governo do estado fez (perfil gov-RR): no SAPL de Roraima cada governador é um autor do tipo "Poder Executivo"
+# (Soldado Sampaio = "Francisco dos Santos Sampaio"); entram os projetos de todos eles no período (mesma régua do
+# presidente: inclusive de quem estava no exercício do cargo; a nota diz quantos). Vetos: "Mensagem Governamental" (MGOV)
+# com a ementa começando por "Veto total ao..." ou "Veto parcial ao..." (as outras mensagens não contam); leis = normas
+# "Lei Ordinária" (2) e "Lei Complementar" (3). Conferido à mão em 23/10/2026.
+GOVERNO = {
+    "autores": "tipo", "tipo_autor": r"^poder executivo$",
+    "tipos": {1: "PL", 2: "PLP", 5: "PEC", 6: "PDL"},
+    "vetos": {"tipos": [17], "filtro": r"^veto", "parcial": r"^veto parcial", "total": r"^veto total",
+              "de_onde": ("mensagens governamentais de veto que chegaram à ALE-RR no período, pela data em que foram lidas",
+                          "government veto messages received by the ALE-RR in the period, by the date they were read")},
+    "leis": {"tipos": {2: "LO", 3: "LC"},
+             "de_onde": ("cadastradas no sistema da ALE-RR (SAPL) com data no período",
+                         "recorded in the ALE-RR's system (SAPL) with a date in the period"),
+             "promulgadas": G.PROMULGADAS_INCLUIDAS},
+    "nota": [G.EM_EXERCICIO],
+}
+
 
 def coletar() -> dict:
     return Sapl(
@@ -49,5 +69,5 @@ def coletar() -> dict:
         "Assembleia Legislativa do Estado de Roraima", "Legislative Assembly of the State of Roraima",
         "ALE-RR", "https://al.rr.leg.br", "Assembleia Legislativa de Roraima (ALE-RR)", "alerr",
         {1: "PL", 2: "PLP", 5: "PEC", 6: "PDL", 7: "PRC"}, REGRAS, "alerr",
-        ambiguos=AMBIGUOS, posse="01-01",
+        ambiguos=AMBIGUOS, posse="01-01", governo=GOVERNO,
     ).coletar()

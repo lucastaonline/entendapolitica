@@ -11,18 +11,57 @@ O que ele pega (só da API oficial da Casa, documentada na página "Dados Aberto
 A API é lenta (cada proposição traz todas as tramitações): todo dia ela lê a 1ª página de cada tipo no ano atual (o que
 acabou de chegar) e, até um limite de tempo, um "cursor" que passa por todas as páginas de todos os anos e recomeça quando
 chega ao fim (cada proposição é relida a cada poucos dias). Cache em .cache/<pasta>/ (só o resumo de cada proposição).
+Primeira carga (cache vazio, como no robô do GitHub): o cursor usa a rodada toda (_carga.py) e, enquanto alguma janela
+(tipo e ano) não foi lida inteira, nada é gravado em dados/ (ficam os arquivos de antes; o coletor devolve "em andamento").
 """
 from __future__ import annotations
 
-import os
+import csv
+import html
+import http.cookiejar
+import io
 import re
 import time
+import urllib.parse
+import urllib.request
 
 import regional
-from comum import chave_nome, data_iso, fonte, hoje, log, nome_proprio, sem_acento
+from comum import UA, chave_nome, data_iso, fonte, hoje, log, nome_proprio, sem_acento
 
-from ._ne_comum import (ESCOPO, ESCOPO_EN, INICIO, Rede, casar_membros, com_status_en, gravar, legislatura_estadual, membro,
-                        partido_sigla, resumo_status)
+from . import _carga
+from ._ne_comum import (ESCOPO, ESCOPO_EN, INICIO, Rede, casar_membros, com_status_en, feito, gravar, legislatura_estadual,
+                        membro, partido_sigla, resumo_status, vez)
+
+
+def consulta_csv(base: str, params: str, pausa: float = 1.0) -> list[list[str]]:
+    """Uma consulta do portal legislativo (spl/consulta-producao.aspx?<params>) exportada em CSV, como o botão
+    "Download > CSV" da página (formulário do ASP.NET: a página e, depois, o pedido do arquivo). Os dois pedidos respeitam
+    o robots.txt e o intervalo entre pedidos (vez/feito)."""
+    op = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(http.cookiejar.CookieJar()))
+    url = f"{base}/spl/consulta-producao.aspx?{params}"
+    iv = vez(url, pausa)
+    try:
+        t = op.open(urllib.request.Request(url, headers={"User-Agent": UA}), timeout=180).read().decode("utf-8", "replace")
+    finally:
+        feito(url, iv)
+    campos = {}
+    for m in re.finditer(r'<input[^>]+type="hidden"[^>]*>', t):
+        n, v = re.search(r'name="([^"]+)"', m.group(0)), re.search(r'value="([^"]*)"', m.group(0))
+        if n:
+            campos[n.group(1)] = html.unescape(v.group(1)) if v else ""
+    campos["ctl00$ContentPlaceHolder1$btn_export_csv"] = "CSV"
+    req = urllib.request.Request(url, data=urllib.parse.urlencode(campos).encode(),
+                                 headers={"User-Agent": UA, "Content-Type": "application/x-www-form-urlencoded"})
+    iv = vez(url, pausa)
+    try:
+        b = op.open(req, timeout=180).read()
+    finally:
+        feito(url, iv)
+    try:
+        s = b.decode("utf-8-sig")
+    except UnicodeDecodeError:
+        s = b.decode("cp1252", "replace")
+    return list(csv.reader(io.StringIO(s)))
 
 
 def _dh(v: str | None) -> str | None:
@@ -97,12 +136,28 @@ class NoPaper:
                 "sit": (x.get("situacao") or "").strip() or None, "tr": trs[-8:], "nt": len(trs), "anx": anexos[-5:],
                 "pr": (x.get("ProcessoPrincipal") or {}).get("id") or None}
 
-    def _pagina(self, tipo: int, ano: int, pag: int, props: dict) -> int:
+    def _pagina(self, tipo: int, ano: int, pag: int, props: dict, n_conhecido: int | None = None) -> int:
         """Uma página (qtd proposições) de um tipo num ano; devolve quantas páginas a janela tem."""
         d = self.api(f"/api/publico/proposicao/?pag={pag}&qtd={self.qtd}&tipoID={tipo}&ano={ano}")
-        for x in d.get("Data") or []:
+        dados, pg = d.get("Data") or [], d.get("Paginacao") or {}
+        if not dados and not pg and n_conhecido and pag < n_conhecido:
+            # a API às vezes devolve, no meio da lista, uma página vazia e sem paginação (uma proposição com defeito
+            # derruba a página inteira): os mesmos itens são lidos em pedaços menores, para não perder o resto da janela
+            self._pedacos(tipo, ano, pag, props)
+            return n_conhecido
+        for x in dados:
             props[str(x["id"])] = self._resumo(x)
-        return max(1, int((d.get("Paginacao") or {}).get("quantidade") or 1))
+        return max(1, int(pg.get("quantidade") or 1))
+
+    def _pedacos(self, tipo: int, ano: int, pag: int, props: dict, q: int = 5) -> None:
+        primeiro = (pag - 1) * self.qtd  # posição (a partir de 0) do primeiro item da página quebrada
+        for sub in range(primeiro // q + 1, (primeiro + self.qtd) // q + 1):
+            dados = self.api(f"/api/publico/proposicao/?pag={sub}&qtd={q}&tipoID={tipo}&ano={ano}").get("Data") or []
+            if not dados:  # ainda quebrada: um por um (o item com defeito fica de fora)
+                for um in range((sub - 1) * q + 1, sub * q + 1):
+                    dados += self.api(f"/api/publico/proposicao/?pag={um}&qtd=1&tipoID={tipo}&ano={ano}").get("Data") or []
+            for x in dados:
+                props[str(x["id"])] = self._resumo(x)
 
     def propostas(self) -> dict:
         """A API é lenta (cada proposição vem com todas as tramitações). Todo dia: a 1ª página de cada tipo no ano atual
@@ -111,34 +166,41 @@ class NoPaper:
         est = self.rede.estado("estado.json", {}) or {}
         props: dict[str, dict] = {k: v for k, v in (est.get("props") or {}).items() if (v.get("d") or "9999") >= f"{INICIO[:4]}-01-01"}
         feitas_em: dict[str, str] = est.get("janelas") or {}
+        paginas: dict[str, int] = est.get("paginas") or {}  # quantas páginas cada janela tinha na última leitura
         w, p = est.get("cursor") or [0, 1]
         h = hoje()
         anos = list(range(int(h[:4]), int(INICIO[:4]) - 1, -1))
         janelas = [(t, a) for a in anos for t in self.tipos]
-        sem_limite = os.environ.get("NE_SEM_LIMITE") == "1"
+        # primeira carga (alguma janela nunca lida inteira, como no robô que começa com o cache vazio): a rodada toda
+        primeira = any(not feitas_em.get(f"{t}-{a}") for t, a in janelas)
+        limite = _carga.limite_diario(self.orcamento_s, primeira)
         t0, pags = time.time(), 0
         for t in self.tipos:
-            self._pagina(t, anos[0], 1, props)
+            paginas[f"{t}-{anos[0]}"] = self._pagina(t, anos[0], 1, props, paginas.get(f"{t}-{anos[0]}"))
             pags += 1
         if w >= len(janelas):
             w, p = 0, 1
         inicio_volta = (w, p)
-        while sem_limite or time.time() - t0 < self.orcamento_s:
-            if w >= len(janelas):
-                w, p = 0, 1
-            t, a = janelas[w]
-            n = self._pagina(t, a, p, props)
-            pags += 1
-            if p >= n:
-                feitas_em[f"{t}-{a}"] = h
-                w, p = w + 1, 1
-            else:
-                p += 1
-            if pags % 10 == 0:
-                self.rede.guardar({"props": props, "janelas": feitas_em, "cursor": [w, p]}, "estado.json")
-            if (w % len(janelas), p) == inicio_volta and pags > len(self.tipos):  # deu a volta completa
-                break
-        self.rede.guardar({"props": props, "janelas": feitas_em, "cursor": [w, p]}, "estado.json")
+        try:
+            while time.time() - t0 < limite:
+                if w >= len(janelas):
+                    w, p = 0, 1
+                t, a = janelas[w]
+                n = self._pagina(t, a, p, props, paginas.get(f"{t}-{a}"))
+                paginas[f"{t}-{a}"] = n
+                pags += 1
+                if p >= n:
+                    feitas_em[f"{t}-{a}"] = h
+                    w, p = w + 1, 1
+                else:
+                    p += 1
+                if pags % 10 == 0:
+                    self.rede.guardar({"props": props, "janelas": feitas_em, "cursor": [w, p], "paginas": paginas}, "estado.json")
+                if (w % len(janelas), p) == inicio_volta and pags > len(self.tipos):  # deu a volta completa
+                    break
+        except _carga.SemTempo:  # o fim da rodada chegou: o cursor guarda onde parou
+            pass
+        self.rede.guardar({"props": props, "janelas": feitas_em, "cursor": [w, p], "paginas": paginas}, "estado.json")
         faltam = [f"{t}-{a}" for t, a in janelas if not feitas_em.get(f"{t}-{a}")]
         log(f"  {self.uf}: {len(props)} propostas no cache; {pags} páginas lidas hoje"
             + (f"; {len(faltam)} janelas (tipo e ano) ainda sem a primeira leitura completa" if faltam else ""))
@@ -159,8 +221,11 @@ class NoPaper:
     def coletar(self) -> dict:
         pessoas = self.pessoas()
         est = self.propostas()
-        if est["faltam"] and len(est["faltam"]) > len(est["janelas"]) // 2:
-            raise RuntimeError(f"{self.uf}: menos da metade das propostas baixadas; rode de novo (cache em andamento)")
+        if est["faltam"]:  # primeira carga em andamento: nada pela metade no site (ficam os arquivos de antes)
+            log(f"  {self.uf}: primeira carga das propostas em andamento ({len(est['faltam'])} de {len(est['janelas'])} "
+                f"janelas de tipo e ano por ler); os arquivos de antes continuam; {self.rede.pedidos} pedidos ao site oficial")
+            return _carga.pendente(self.info["sigla"], f"primeira carga: {len(est['faltam'])} janelas de tipo e ano por ler",
+                                   self.rede.pedidos)
         casar = [{"chave": p["parlamentarID"], "nome": p.get("parlamentarNome"), "nomeCivil": _civil(p.get("parlamentarRazaoSocial")),
                   "partido": partido_sigla(p.get("partidoSigla"))} for p in pessoas]
         ligados, avisos = casar_membros(self.uf, casar, self.tse_manual)
@@ -214,9 +279,6 @@ class NoPaper:
                            "fontes": [fonte_l, fonte_prop]}
         log(f"  {self.uf}: situações {resumo_status(listas)}")
         notas = list(self.notas)
-        if est["faltam"]:
-            notas.append((f"Ainda faltam propostas de {len(est['faltam'])} combinações de tipo e ano (a API é lenta; o coletor completa aos poucos).",
-                          f"Bills from {len(est['faltam'])} type-and-year combinations are still missing (the API is slow; the collector fills them in gradually)."))
         cobertura = {"lista": True, "propostas": True, "votacoes": False, "gastos": False}
         r = gravar(self.uf, self.info, membros, extras, cobertura, fonte_l, notas)
         log(f"  {self.uf}: {self.rede.pedidos} pedidos ao site oficial")

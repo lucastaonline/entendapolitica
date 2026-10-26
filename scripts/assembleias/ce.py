@@ -6,19 +6,22 @@ Propostas: as listas oficiais de proposições da 31ª legislatura (2023-2027) e
 proposicoes/ (projetos de lei, de lei complementar, de emenda constitucional, de decreto legislativo e de resolução;
 "Deliberados" e "Tramitando"), com número, autor, data de entrada, ementa (com o link do texto), histórico, autógrafo,
 número da lei e veto. São páginas de 20 em 20: elas são lidas em rodízio (a 1ª página de cada lista todo dia e um
-cursor que passa por todas as outras até um limite de tempo), com cache em .cache/alece/.
+cursor que passa por todas as outras até um limite de tempo), com cache em .cache/alece/. Primeira carga (cache vazio,
+como no robô do GitHub): o cursor usa a rodada toda (_carga.py) e, enquanto alguma lista não foi lida inteira, nada é
+gravado em dados/ (ficam os arquivos de antes; o coletor devolve "em andamento").
 """
 from __future__ import annotations
 
 import codecs
 import html
-import os
 import re
 import time
 
 import regional
 from comum import chave_nome, fonte, hoje, log, sem_acento
 
+from . import _carga
+from . import _ne_gov as gv
 from ._ne_comum import (ESCOPO, ESCOPO_EN, INICIO, Rede, casar_membros, com_status_en, gravar, legislatura_estadual, membro,
                         nome_lei, partido_sigla, resumo_status)
 
@@ -72,7 +75,8 @@ def _registros(t: str, tabela: str, opcao: str) -> list[dict]:
         aut = re.search(r"<b>Aut&oacute;grafo:</b>.*?<font[^>]*>\s*(?:<a href='[^']+'>)?(.*?)(?:</a>)?\s*</font>", p, re.S)
         hist = re.search(r"Localiza&ccedil;&atilde;o:</b></font>&nbsp;<font[^>]*>(.*?)</font><br><font[^>]*>(.*?)</font>", p, re.S)
         out.append({"tab": tabela, "op": opcao, "n": str(int(m.group(1))), "a": ano, "au": _campo(p, "Autor"),
-                    "d": _data(_campo(p, "Entrada")), "e": _txt(ementa.group(2)) if ementa else None,
+                    "d": _data(_campo(p, "Entrada")), "dx": _data(_campo(p, "Expediente")),
+                    "e": _txt(ementa.group(2)) if ementa else None,
                     "url": ementa.group(1) if ementa and ementa.group(1) else None,
                     "lei": _txt(lei.group(2)) if lei else None, "lei_url": lei.group(1) if lei and lei.group(1) else None,
                     "veto": veto if veto and veto != "-" else None, "autografo": _txt(aut.group(1)) if aut else None,
@@ -84,6 +88,15 @@ def _registros(t: str, tabela: str, opcao: str) -> list[dict]:
 def _paginas(t: str) -> int:
     m = re.search(r"P&aacute;gina \d+ de (\d+)|Página \d+ de (\d+)", t)
     return int(next(g for g in m.groups() if g)) if m else 1
+
+
+def _data_entrada(r: dict) -> str | None:
+    """A data de entrada só vale se cair no ano do número da proposição (a Alece tem erros de digitação, como "26.06.26"
+    numa proposição de 2023); senão, a data do expediente, com a mesma conferência."""
+    for d in (r.get("d"), r.get("dx")):
+        if d and d[:4] == r["a"] and d <= hoje():
+            return d
+    return None
 
 
 def coletar() -> dict:
@@ -111,8 +124,10 @@ def coletar() -> dict:
     paginas: dict[str, int] = est.get("paginas") or {}
     lidas_em: dict[str, str] = est.get("lidas") or {}
     cursor = est.get("cursor") or [0, 1]
-    listas = [(tb, op) for tb in TABELAS for op in ("T", "D")]
-    sem_limite = os.environ.get("NE_SEM_LIMITE") == "1"
+    listas = [(tb, op) for tb in list(TABELAS) + [MENSAGENS] for op in ("T", "D")]
+    # primeira carga (alguma lista nunca lida inteira, como no robô que começa com o cache vazio): a rodada toda
+    primeira = any(not lidas_em.get(f"{tb}-{op}") for tb, op in listas)
+    limite = _carga.limite_diario(ORCAMENTO_S, primeira)
     t0, pags = time.time(), 0
 
     def ler(tb: str, op: str, pag: int) -> int:
@@ -132,24 +147,28 @@ def coletar() -> dict:
     if w >= len(listas):
         w, p = 0, 1
     inicio = (w, p)
-    while sem_limite or time.time() - t0 < ORCAMENTO_S:
-        tb, op = listas[w]
-        n = ler(tb, op, p) if p > 1 else paginas.get(f"{tb}-{op}", 1)
-        pags += 1 if p > 1 else 0
-        if p >= n:
-            lidas_em[f"{tb}-{op}"] = hoje()
-            w, p = (w + 1) % len(listas), 1
-        else:
-            p += 1
-        if pags % 20 == 0:
-            rede.guardar({"regs": regs, "paginas": paginas, "lidas": lidas_em, "cursor": [w, p]}, "estado.json")
-        if (w, p) == inicio:
-            break
+    try:
+        while time.time() - t0 < limite:
+            tb, op = listas[w]
+            n = ler(tb, op, p) if p > 1 else paginas.get(f"{tb}-{op}", 1)
+            pags += 1 if p > 1 else 0
+            if p >= n:
+                lidas_em[f"{tb}-{op}"] = hoje()
+                w, p = (w + 1) % len(listas), 1
+            else:
+                p += 1
+            if pags % 20 == 0:
+                rede.guardar({"regs": regs, "paginas": paginas, "lidas": lidas_em, "cursor": [w, p]}, "estado.json")
+            if (w, p) == inicio:
+                break
+    except _carga.SemTempo:  # o fim da rodada chegou: o cursor guarda onde parou
+        pass
     rede.guardar({"regs": regs, "paginas": paginas, "lidas": lidas_em, "cursor": [w, p]}, "estado.json")
     faltam = [f"{tb}-{op}" for tb, op in listas if not lidas_em.get(f"{tb}-{op}")]
     log(f"  CE: {len(regs)} proposições no cache; {pags} páginas lidas hoje" + (f"; listas sem leitura completa: {faltam}" if faltam else ""))
-    if len(faltam) > len(listas) // 2:
-        raise RuntimeError("Alece: menos da metade das listas de proposições lidas; rode de novo (cache em andamento)")
+    if faltam:  # primeira carga em andamento: nada pela metade no site (ficam os arquivos de antes)
+        log(f"  CE: primeira carga das listas em andamento; os arquivos de antes continuam; {rede.pedidos} pedidos ao site oficial")
+        return _carga.pendente("Alece", f"primeira carga: {len(faltam)} de {len(listas)} listas por ler", rede.pedidos)
     # TSE e propostas por pessoa
     ligados, avisos = casar_membros("CE", pessoas, TSE_MANUAL)
     for a in avisos:
@@ -177,11 +196,11 @@ def coletar() -> dict:
                     continue
                 vistos.add(k)
                 r = regs[k]
-                if (r.get("d") or "9999") < INICIO:
+                if (_data_entrada(r) or "9999") < INICIO or r["tab"] not in TABELAS:
                     continue
                 tipo, sigla, norma = TABELAS[r["tab"]]
                 s = _situacao(r, norma)
-                prop = regional.proposta(f"alece:{r['tab']}:{r['n']}-{r['a']}", f"{sigla} {r['n']}/{r['a']}", tipo, r["d"], r["e"],
+                prop = regional.proposta(f"alece:{r['tab']}:{r['n']}-{r['a']}", f"{sigla} {r['n']}/{r['a']}", tipo, _data_entrada(r), r["e"],
                                          r.get("obs") or ("Tramitando" if r["op"] == "T" else "Deliberado"),
                                          r.get("url") or LISTAS.format(leg=legislatura_estadual(31), t=r["tab"], o=r["op"]),
                                          papel=papel, status=s["status"],
@@ -199,9 +218,146 @@ def coletar() -> dict:
               "every few days.")]
     cobertura = {"lista": True, "propostas": True, "votacoes": False, "gastos": False}
     r = gravar("CE", {"casa": "Assembleia Legislativa do Estado do Ceará", "casa_en": "Legislative Assembly of the State of Ceará",
-                      "sigla": "Alece", "site": SITE}, membros, extras, cobertura, fonte_l, notas)
+                      "sigla": "Alece", "site": SITE}, membros, extras, cobertura, fonte_l, notas + [NOTA_GOVERNO])
+    try:
+        _governo(rede, regs)
+    except Exception as e:  # o perfil do governador não derruba a lista da Assembleia: fica o arquivo da última vez
+        log(f"  CE: o que o governo fez não foi atualizado ({type(e).__name__}: {e})")
     log(f"  CE: {rede.pedidos} pedidos ao site oficial")
     return r
+
+
+MENSAGENS = "projeto_mens"  # lista "Mensagens": os projetos de lei que o Executivo (e os outros Poderes) mandam à Assembleia
+LEIS_ANO = "https://www2.al.ce.gov.br/legislativo/legislacao5/leis{a}/LEIS{a}.htm"
+LEIS_LC = "https://www2.al.ce.gov.br/legislativo/ementario/lc.htm"
+NOTA_GOVERNO = ("Os vetos do governador não entram no perfil dele: a Alece não publica uma lista dos vetos (o campo \"Veto nº\" "
+                "das proposições quase nunca vem preenchido). Os vetos saem no Diário Oficial do Estado do Ceará.",
+                "The governor's vetoes are not shown on his profile: the Alece does not publish a list of vetoes (the \"Veto nº\" "
+                "field of bills is almost never filled in). Vetoes are published in the Ceará State Official Gazette.")
+_TIPO_MSG = [(r"lei complementar", "PLP", "PLC", "Lei Complementar"), (r"emenda (a|à) constitui|emenda constitucional", "PEC", "PEC", "Emenda Constitucional"),
+             (r"decreto legislativo", "PDL", "PDL", "Decreto Legislativo"), (r"resolu", "PRC", "PR", "Resolução")]
+
+
+def _linhas_leis(h: str, base: str, tipo: str) -> list[dict]:
+    """Linhas das listas oficiais de leis da Alece ("LEI N.° 19.167, DE 30.12.24 ( D.O. 02.01.25)" com o link do texto)."""
+    import urllib.parse
+    padrao = r"LEI\s+COMPLEMENTAR\s+N\D{0,5}?(\d[\d.]*)" if tipo == "LC" else r"LEI\s+N\D{0,5}?(\d[\d.]*)"
+    ancoras = [(m.start(), m.end(), m.group(1), _txt(m.group(2)))
+               for m in re.finditer(r"<a\b[^>]*?href=['\"]?([^'\" >]+)['\"]?[^>]*>(.*?)</a>", h, re.S | re.I)]
+    out = []
+    for i, (_, fim, href, txt) in enumerate(ancoras):
+        m = re.match(padrao, txt, re.I)
+        if not m or not re.search(r"\.html?$", href, re.I):
+            continue
+        n = str(int(re.sub(r"\D", "", m.group(1))))
+        prox = ancoras[i + 1][0] if i + 1 < len(ancoras) else len(h)
+        seg = txt + " " + _txt(h[fim:prox])[:80]
+        # "DE 30.12.24", "DE 1°.04.2026", "DE 29/12/99" (e um "DFE 24.03.25" na lista de 2025)
+        d = re.search(r"\bD\w{0,2}\s+(\d{1,2})\s*[°ºo]?\s*[./]\s*(\d{1,2})\s*[./]\s*(\d{2,4})", seg, re.I)
+        if not d:
+            continue
+        a = d.group(3)
+        a = a if len(a) == 4 else str((2000 if int(a) <= int(hoje()[2:4]) + 1 else 1900) + int(a))
+        data = f"{a}-{int(d.group(2)):02d}-{int(d.group(1)):02d}"
+        url = urllib.parse.urljoin(base, href)
+        num_href = re.search(r"(\d+)\.html?$", href, re.I)
+        if not num_href or str(int(num_href.group(1))) != n:  # o link de uma linha às vezes aponta para a lei vizinha
+            url = (f"https://www2.al.ce.gov.br/legislativo/ementario/lc{n}.htm" if tipo == "LC"
+                   else f"https://www2.al.ce.gov.br/legislativo/legislacao5/leis{data[:4]}/{n}.htm")
+        out.append({"n": n, "d": data, "url": url, "tipo": tipo})
+    return out
+
+
+def _ler_lei(rede: Rede, url: str) -> str:
+    h = rede.bruto(url, None, None).decode("utf-8", "ne_cp1252")
+    return _txt(re.sub(r"(?is)<(style|script)[^>]*>.*?</\1>", " ", h))
+
+
+def _quem_assinou(texto: str) -> bool | None:
+    """Como gv.quem_assinou; algumas páginas de lei da Alece não trazem o "Faço saber... eu sanciono", mas terminam com a
+    assinatura "<nome> GOVERNADOR DO ESTADO" (conferido à mão nas leis 18.337, 18.368, 18.630 e 19.064)."""
+    q = gv.quem_assinou(texto)
+    if q is None:
+        fim = sem_acento((texto or "")[-400:].lower())
+        if re.search(r"\bgovernador(a)? do estado\b", fim) and "presidente" not in fim and "promulgo" not in fim:
+            return False
+    return q
+
+
+def _leis(rede: Rede, inicio: str) -> dict[str, dict]:
+    """Leis ordinárias (lista oficial de cada ano) e complementares (ementário) com data a partir de inicio."""
+    out: dict[str, dict] = {}
+    atual = int(hoje()[:4])
+    for a in range(int(inicio[:4]) - 1, atual + 1):  # o ano anterior também: uma lei de 2 de janeiro pode estar na lista dele
+        url = LEIS_ANO.format(a=a)
+        idade = 20 if a == atual else 24 * 7 if a == atual - 1 else 24 * 30
+        h = rede.bruto(url, f"gov-leis-{a}.htm", idade).decode("utf-8", "ne_cp1252")
+        for lei in _linhas_leis(h, url, "LO"):
+            if lei["d"] >= inicio:
+                out[f"LO {lei['n']}"] = lei
+    h = rede.bruto(LEIS_LC, "gov-leis-lc.htm", 20).decode("utf-8", "ne_cp1252")
+    for lei in _linhas_leis(h, LEIS_LC, "LC"):
+        if lei["d"] >= inicio:
+            out[f"LC {lei['n']}"] = lei
+    return out
+
+
+def _governo(rede: Rede, regs: dict) -> dict:
+    """dados/pessoas/gov-CE.json: projetos do "PODER EXECUTIVO" (projetos de lei na lista "Mensagens"; os de lei complementar
+    e de emenda à Constituição nas listas deles) e leis sancionadas (contadas pelo texto oficial de cada lei)."""
+    per = gv.periodo("CE")
+    ini = per["inicio"]
+    lista, msgs = [], set()
+    ordem = sorted(regs.items(), key=lambda kv: kv[1]["tab"] == MENSAGENS)  # as listas próprias primeiro
+    for k, r in ordem:
+        if r["tab"] not in (MENSAGENS, "projeto_compl", "projeto_emen"):
+            continue
+        if (_data_entrada(r) or f"{r['a']}-12-31") < ini or not gv.autor_do_executivo(r.get("au"), per):
+            continue
+        cab = sem_acento((r.get("e") or "")[:160].lower())
+        msg = re.search(r"mensagem n\D{0,5}?(\d[\d.]*\d)", cab)
+        if msg and msg.group(1) in msgs:
+            continue
+        if msg:
+            msgs.add(msg.group(1))
+        if r["tab"] == MENSAGENS:
+            tipo, sigla, norma = "PL", "PL", "Lei"
+            for exp, t, s, n in _TIPO_MSG:
+                if re.search(exp, cab.split(" - ")[0]):
+                    tipo, sigla, norma = t, s, n
+                    break
+            tab = "projeto_compl" if tipo == "PLP" else "projeto_lei" if tipo == "PL" else r["tab"]
+        else:
+            (tipo, sigla, norma), tab = TABELAS[r["tab"]], r["tab"]
+        s_ = _situacao(dict(r, tab=tab), norma)
+        prop = regional.proposta(f"alece:{r['tab']}:{r['n']}-{r['a']}",
+                                 f"{sigla} {r['n']}/{r['a']}" + (f" (Mensagem nº {msg.group(1)})" if msg else ""),
+                                 tipo, _data_entrada(r), r["e"], r.get("obs") or ("Tramitando" if r["op"] == "T" else "Deliberado"),
+                                 r.get("url") or LISTAS.format(leg=legislatura_estadual(31), t=r["tab"], o=r["op"]), papel="autor",
+                                 status=s_["status"], data_status=s_["data"], status_txt=s_["txt"], lei=s_["lei"])
+        lista.append(com_status_en(prop, s_["en"]))
+    fonte_prop = fonte(VEICULO, "Proposições do Poder Executivo (listas \"Mensagens\", \"Projetos de Lei Complementar\" e "
+                       "\"Propostas de Emenda Constitucional\")", "https://www.al.ce.gov.br/paginas/proposicoes?menu=96")
+    fontes = [fonte(VEICULO, "Leis ordinárias de cada ano e ementário das leis complementares",
+                    "https://www2.al.ce.gov.br/legislativo/lei_ordinaria.htm")]
+    leis = _leis(rede, ini)
+    quem, faltam = gv.classificar_leis(rede, {k: v["url"] for k, v in leis.items()}, lambda u: _ler_lei(rede, u), orcamento_s=120,
+                                       decidir=_quem_assinou)
+    if faltam or not leis:  # sem a conta das leis, o perfil ficaria pela metade: fica o arquivo da última vez
+        log("  CE: " + (f"{faltam} leis com o texto ainda não lido" if faltam else "as listas de leis não vieram")
+            + "; o perfil do governador fica como estava")
+        return {}
+    import collections
+    c = collections.Counter(quem.values())
+    pt, en = gv.nota_leis(per, len(leis), c[False], c[True], c[None], "nas listas oficiais da Alece",
+                          "in the Alece's official lists",
+                          ("em que o texto oficial diz \"eu sanciono\" ou termina com a assinatura do governador",
+                           "whose official text says \"I sign\" (\"eu sanciono\") or ends with the governor's signature"))
+    pt += " Os vetos não entram: a Alece não publica uma lista deles."
+    en += " Vetoes are not included: the Alece does not publish a list of them."
+    ex = gv.bloco_executivo(per, c[False], None, fontes, pt, en, promulgadas_pela_casa=c[True])
+    esc, esc_en = gv.escopo(per, "Assembleia Legislativa", "state legislature")
+    return gv.gravar_gov("CE", per, lista, esc, esc_en, fonte_prop, ex, fontes)
 
 
 def _situacao(r: dict, norma: str) -> dict:
@@ -210,8 +366,11 @@ def _situacao(r: dict, norma: str) -> dict:
     datas = re.findall(r"em (\d{2}\.\d{2}\.\d{2,4})", hist)
     data = _data(datas[-1]) if datas else None
     if r.get("lei") and re.search(r"\d", r["lei"]):
-        num = re.sub(r"\D", "", r["lei"])
-        ano = (re.search(r"leis(\d{4})", r.get("lei_url") or "") or [None, None])[1] or (data or "")[:4] or None
+        # "18.376", "LC 322 D.O. 11.04.24", "EC 116 D.O. 21.12.23": o número é o primeiro; a data do Diário Oficial dá o ano
+        num = re.sub(r"\D", "", re.search(r"\d[\d.]*", r["lei"]).group(0))
+        do = re.search(r"D\.\s*O\.?\s*(\d{1,2})[./](\d{1,2})[./](\d{2,4})", r["lei"])
+        ano = ((re.search(r"leis(\d{4})", r.get("lei_url") or "") or [None, None])[1]
+               or (("20" + do.group(3))[-4:] if do else None) or (data or "")[:4] or None)
         nl = nome_lei(norma, num, ano)
         return {"status": "lei", "txt": f"Virou {'o' if norma.startswith('Decreto') else 'a'} {nl}", "en": None, "data": data,
                 "lei": {"nome": nl, "url": r.get("lei_url")}}

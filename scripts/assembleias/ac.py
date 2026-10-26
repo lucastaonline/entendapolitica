@@ -4,9 +4,11 @@ Lista oficial: deputados ativos na legislatura atual do SAPL. Propostas: matéri
 da última tramitação. A Aleac não cadastra no SAPL as leis que saem dos projetos (uma norma desde 2023), então "virou lei"
 não aparece: o último passo registrado costuma ser "Autógrafo enviado" (o texto aprovado foi enviado ao governador),
 que o site mostra como "aprovada". As votações registradas no SAPL são poucas e irregulares: não entram.
+Governadora (gov-AC): projetos do Poder Executivo e vetos desde a posse de quem governa hoje (GOVERNO, abaixo).
 """
 from __future__ import annotations
 
+from . import _nco_gov as G
 from ._nco_sapl import Sapl
 
 REGRAS = [
@@ -36,6 +38,26 @@ REGRAS = [
 AMBIGUOS = [r"^deferido$", r"secretaria executiva para providencias", r"oficio (expedido|recebido)",
             r"servi publico", r"nao tramitou"]
 
+# o que o governo do estado fez (perfil gov-AC): autor 38 = "PODER EXECUTIVO"; vetos = matérias "Veto" (a ementa é a
+# mensagem: "decidi vetar" ou "decidi vetar parcialmente"). Leis: não entram (a Aleac não cadastra as leis no SAPL; o
+# Legis, portal de legislação do Acre, proíbe no robots.txt as buscas com parâmetros e a página de leis dá erro 500; o
+# Diário Oficial só tem busca por edição inteira, misturando atos do estado e dos municípios). Conferido em 23/10/2026.
+SEM_LEIS = ("Governo do estado: entram os projetos que o Poder Executivo mandou à Assembleia e os vetos. As leis sancionadas "
+            "não entram: a Aleac não cadastra as leis no seu sistema (SAPL), e o portal de legislação do Acre (Legis) não "
+            "oferece uma lista das leis que o site consiga ler.",
+            "State government: the bills the executive branch sent to the state assembly and the vetoes are included. Signed "
+            "laws are not: the Aleac does not record laws in its system (SAPL), and Acre's legislation portal (Legis) does "
+            "not offer a list of laws this site can read.")
+GOVERNO = {
+    "autores": [38],
+    "tipos": {1: "PL", 5: "PLP", 10: "PEC", 6: "PDL"},
+    "vetos": {"tipos": [13], "parcial": r"parcial", "total": r"vet",
+              "de_onde": ("mensagens de veto que chegaram à Aleac no período, pela data em que foram lidas",
+                          "veto messages received by the Aleac in the period, by the date they were read")},
+    "leis": None,
+    "nota": [G.EM_EXERCICIO, SEM_LEIS],
+}
+
 
 def coletar() -> dict:
     return Sapl(
@@ -43,9 +65,9 @@ def coletar() -> dict:
         "Assembleia Legislativa do Estado do Acre", "Legislative Assembly of the State of Acre",
         "Aleac", "https://www.al.ac.leg.br", "Assembleia Legislativa do Acre (Aleac)", "aleac",
         {1: "PL", 5: "PLP", 10: "PEC", 6: "PDL", 2: "PRC"}, REGRAS, "aleac",
-        ambiguos=AMBIGUOS,
+        ambiguos=AMBIGUOS, governo=GOVERNO, sic="https://www.al.ac.leg.br/?page_id=41640",
         notas=[("A Aleac não registra no seu sistema (SAPL) as leis que saem dos projetos: o último passo que aparece costuma ser "
                 "o envio do texto aprovado ao governador.",
                 "The Aleac does not record in its system (SAPL) the laws that come out of the bills: the last step shown is "
-                "usually the approved text being sent to the governor.")],
+                "usually the approved text being sent to the governor."), SEM_LEIS],
     ).coletar()

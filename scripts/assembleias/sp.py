@@ -13,6 +13,10 @@ arquivamento); sem nenhum deles, a proposta está em discussão.
 Gastos: despesas de gabinete reembolsadas (despesas_gabinetes_<ano>.xml), somadas por ano e tipo, desde março de 2023.
 Votações nominais: a Alesp lista as votações nominais na API do portal (/votacao/<ano>), mas o voto de cada deputado
 só aparece em PDF (painel de votação), sem formato aberto. Por isso não entram.
+O governo do estado (perfil do governador, dados/pessoas/gov-SP.json), desde o começo do mandato: os projetos do
+autor "Governador" (IdAutor 105) pela API do portal do Processo Legislativo (lista e tramitação de cada um); as leis e
+leis complementares pelo arquivo de dados abertos de legislação (legislacao_normas.zip); e os vetos pelos documentos
+"Veto Total" e "Veto Parcial" da API do portal (sem as mensagens do governo anterior registradas depois da posse).
 """
 from __future__ import annotations
 
@@ -25,8 +29,9 @@ import xml.etree.ElementTree as ET
 import regional
 from comum import PESSOAS, hoje, ler_json, log, sem_acento
 
-from ._sse_comum import (Rede, bloco_gastos, casar_membros, com_status_en, desde, dia_rodizio, escopo, fonte, gravar,
-                         legislatura, membro, nome_lei, partido_sigla, resumo_status, virou)
+from ._sse_comum import (Rede, SemTempo, bloco_executivo, bloco_gastos, casar_membros, com_status_en, desde, dia_rodizio,
+                         escopo, escopo_governo, fonte, gravar, gravar_governo, legislatura, membro, nome_lei, partido_sigla,
+                         periodo_governo, qtd, resumo_status, sem_html, virou)
 
 UF = "SP"
 REPO = "https://www.al.sp.gov.br/repositorioDados"
@@ -34,7 +39,8 @@ API = "https://legis-api-portal-prd.al.sp.gov.br"
 SITE = "https://www.al.sp.gov.br"
 VEICULO = "Assembleia Legislativa do Estado de São Paulo (Alesp)"
 CASA = {"casa": "Assembleia Legislativa do Estado de São Paulo", "casa_en": "Legislative Assembly of the State of São Paulo",
-        "sigla": "Alesp", "site": SITE}
+        "sigla": "Alesp", "site": SITE,
+        "sic": "https://www.al.sp.gov.br/transparencia/fale-conosco/"}  # pedido de informação (Lei de Acesso à Informação)
 INICIO = legislatura(UF)["inicio"]  # 2023-03-15: começo da 20ª legislatura (Constituição de SP, ADCT art. 1º-A, EC nº 47/2019)
 NATUREZAS = {"1": ("PL", "PL"), "2": ("PLC", "PLP"), "3": ("PR", "PRC"), "4": ("PDL", "PDL"), "5": ("PEC", "PEC")}
 NOME_GASTOS = ("Verba de gabinete (despesas reembolsadas)", "Office allowance (reimbursed expenses)")
@@ -110,6 +116,8 @@ def _membros(rede: Rede) -> tuple[list[dict], dict[str, str], dict[str, str], li
         try:
             fichas[mat] = rede.json(f"{API}/parlamentar-portal/detalhes/{mat}", f"deputados/{mat}.json",
                                     20 if dia_rodizio(mat) else 24 * 8)
+        except SemTempo:  # o fim da rodada chegou: nada pela metade (fica o arquivo de antes)
+            raise
         except Exception as e:  # sem a ficha, fica sem foto
             log(f"  SP: ficha {mat}: {e}")
             fichas[mat] = {}
@@ -206,6 +214,93 @@ def _andamentos(rede: Rede, docs: dict) -> dict[str, list]:
         base[d].sort(key=lambda a: a[0])  # sort estável: no mesmo dia, fica a ordem dos arquivos oficiais
     rede.guardar(est, "andamentos.json")
     return base
+
+
+# ---------------------------------------------------------------- o governo (perfil do governador)
+GOVERNADOR = "105"  # IdAutor do "Governador" no processo legislativo da Alesp (documento_autor e API do portal)
+TERMINAIS = {"lei", "rejeitada", "retirada", "parada"}
+
+
+def _etapa(desc: str) -> str:
+    """A API do portal dá só data e descrição de cada tramitação; a etapa (usada por _situacao) sai do começo do texto."""
+    d = sem_acento((desc or "").lower())
+    if d.startswith("arquivo"):
+        return "Arquivo"
+    if re.match(r"entrada na comiss|distribuid[oa] a[o]? deputad|comiss", d):
+        return "Comissao"
+    if "ordem do dia" in d:
+        return "Ordem do Dia"
+    return ""
+
+
+def _governo(rede: Rede, ini: str) -> list[tuple[str, dict, dict]]:
+    """[(id, info, situação)] dos projetos do Governador desde ini, pela API do portal (a lista e a tramitação de cada
+    um; os arquivos de dados abertos pararam de ser atualizados em julho de 2026). As que já terminaram são relidas a
+    cada mês; as outras, a cada 3 dias (em rodízio)."""
+    procs, pagina = [], 0
+    while True:
+        d = rede.json(f"{API}/processo?flPropositura=true&listaIdAutor={GOVERNADOR}&dtInicio={ini}&dtFim={hoje()}"
+                      f"&page={pagina}&size=500&sort=desc", f"governo/lista-{pagina}.json", 20)
+        procs += d.get("content") or []
+        pagina += 1
+        if d.get("last", True) or not d.get("content"):
+            break
+    est = rede.estado("governo/estado.json", {}) or {}
+    nat = {v[0]: k for k, v in NATUREZAS.items()}
+    out = []
+    for x in procs:
+        if x.get("tipoProcesso") not in nat or str(x.get("numeroAutorPrincipal")) != GOVERNADOR:
+            continue
+        pid = str(x["idProcesso"])
+        ttl = 24 * 30 if est.get(pid) in TERMINAIS else (20 if dia_rodizio(pid, 3) else 24 * 3)
+        try:
+            t = rede.json(f"{API}/processo/tramitacoes/{pid}?size=500", f"governo/tramitacoes/{pid}.json", ttl)
+        except SemTempo:  # o fim da rodada chegou: o perfil do governador fica como estava
+            raise
+        except Exception as e:  # um processo fora do ar não derruba a coleta
+            log(f"  SP: tramitação de {x.get('descricao')}: {e}")
+            continue
+        itens = t.get("content") if isinstance(t, dict) else t
+        # a API dá a tramitação da mais nova para a mais antiga, às vezes com links (HTML) no texto
+        ands = sorted(([(a.get("data") or "")[:10], _etapa(sem_html(a.get("descricao"))), sem_html(a.get("descricao")) or ""]
+                       for a in reversed(itens or [])), key=lambda a: a[0])
+        sit = _situacao(ands)
+        est[pid] = sit["status"]
+        info = {"nat": nat[x["tipoProcesso"]], "num": x.get("numeroTipo"), "ano": x.get("anoTipo"),
+                "data": (x.get("dtPublicacao") or "")[:10], "ementa": re.sub(r"\s+", " ", x.get("resumo") or "").strip() or None}
+        out.append((pid, info, sit))
+    rede.guardar(est, "governo/estado.json")
+    return out
+
+
+def _leis(rede: Rede) -> list[dict]:
+    """Leis e leis complementares do cadastro de legislação da Alesp (legislacao_normas.zip, ~10 MB, lido de 3 em 3
+    dias): o resumo (tipo, número, data, quem promulgou) fica em leis.json até o arquivo mudar."""
+    arq = rede.arquivo(f"{REPO}/legislacao/legislacao_normas.zip", "legislacao_normas.zip", 70)
+    marca = f"{arq.stat().st_size}-{int(arq.stat().st_mtime)}"
+    est = rede.estado("leis.json", {}) or {}
+    if est.get("marca") != marca:
+        vistos = {}
+        for r in _registros(arq, b"LegislacaoNorma"):
+            if r.get("IdTipo") in ("9", "2") and (r.get("Data") or "")[:4] >= "2019":
+                vistos[r["IdNorma"]] = {"tipo": "Lei" if r["IdTipo"] == "9" else "Lei Complementar", "numero": r.get("Numero"),
+                                        "data": r["Data"][:10], "promulg": r.get("Promulg")}
+        est = {"marca": marca, "leis": list(vistos.values())}
+        rede.guardar(est, "leis.json")
+    return est["leis"]
+
+
+def _vetos(rede: Rede, ini: str) -> list[dict]:
+    """Documentos "Veto Total" (20) e "Veto Parcial" (21) do processo legislativo, pela API do portal."""
+    out, pagina = [], 0
+    while True:
+        d = rede.json(f"{API}/documento?listaIdTipoDocumento=20&listaIdTipoDocumento=21&dtInicio={ini}&dtFim={hoje()}"
+                      f"&page={pagina}&size=500&sort=desc", f"governo/vetos-{pagina}.json", 20)
+        out += d.get("content") or []
+        pagina += 1
+        if d.get("last", True) or not d.get("content"):
+            break
+    return list({str(v["idDocumento"]): v for v in out}.values())
 
 
 def _lei(desc: str) -> tuple[str | None, str | None]:
@@ -356,6 +451,62 @@ def coletar() -> dict:
         x["fontes"] = [fonte(VEICULO, f"Página de {m['nome']} no portal da Alesp", m["url"], hj)]
         extras[m["id"]] = x
     log(f"  SP: situações {resumo_status([x['propostas']['lista'] for x in extras.values()])}; {rede.pedidos} pedidos à rede")
+    try:
+        # o governo: projetos do Governador (API do portal), leis do cadastro de legislação e documentos de veto
+        per = periodo_governo(UF)
+        governo = [_proposta(pid, info, "autor", sit) for pid, info, sit in _governo(rede, per["inicio"])]
+        # leis: o cadastro marca "promulgada pela Assembleia" só em 3 leis do período (uma delas foi sancionada) e deixa de
+        # marcar outras (ex.: Lei 17.669/2023, promulgada depois da derrubada de um veto): todas entram na conta. Registro com
+        # número fora da sequência (ex.: uma "Lei 9.999" de teste) fica fora.
+        todas = _leis(rede)
+        antes = {t: max((int(x["numero"]) for x in todas if x["tipo"] == t and x["data"] < per["inicio"]
+                         and str(x["numero"]).isdigit()), default=0) for t in ("Lei", "Lei Complementar")}
+        leis = sorted({(x["tipo"], x["numero"]): x for x in todas if per["inicio"] <= x["data"] <= hj
+                       and str(x["numero"]).isdigit() and int(x["numero"]) > antes[x["tipo"]]}.values(), key=lambda x: x["data"])
+        vetos, anteriores = [], 0
+        for v in _vetos(rede, per["inicio"]):
+            m = re.search(r"(\d+)\s*/\s*(\d{4})", v.get("resumo") or "")
+            if m and m.group(2) < per["inicio"][:4]:  # mensagem do governo anterior registrada depois da posse
+                anteriores += 1
+                continue
+            vetos.append(v)
+        vetos.sort(key=lambda v: v.get("dtDocumento") or "")
+        totais = sum(1 for v in vetos if str(v.get("idTipoDocumento")) == "20")
+        parciais = sum(1 for v in vetos if str(v.get("idTipoDocumento")) == "21")
+        d_pt, d_en = desde(per["inicio"])
+        n_ord = sum(1 for x in leis if x["tipo"] == "Lei")
+        esc_g = escopo_governo(UF, per, "Assembleia Legislativa", "Legislative Assembly", ("PL", "PLP", "PEC"),
+                               "Na Alesp, o autor desses projetos aparece como \"Governador\".",
+                               "At the Alesp, the author of these bills is listed as the governor.")
+        f_gov = [fonte(VEICULO, "Pesquisa de proposituras do Governador no portal do Processo Legislativo", f"{SITE}/propositura/pesquisa", hj),
+                 fonte(VEICULO, "API do portal do Processo Legislativo: proposituras e tramitações", API + "/processo?flPropositura=true&listaIdAutor=105", hj)]
+        executivo = bloco_executivo(
+            per, [fonte(VEICULO, "Dados Abertos: legislação estadual (arquivo legislacao_normas, atualizado todo dia)",
+                        f"{REPO}/legislacao/legislacao_normas.zip", hj),
+                  fonte(VEICULO, "API do portal do Processo Legislativo: documentos de veto total e parcial",
+                        API + "/documento?listaIdTipoDocumento=20&listaIdTipoDocumento=21", hj)],
+            f"Leis: {qtd(n_ord, 'lei ordinária', 'leis ordinárias')} e {qtd(len(leis) - n_ord, 'lei complementar', 'leis complementares')} "
+            f"desde {d_pt}, pelo cadastro de legislação da "
+            "Alesp (data da lei). O cadastro não separa com segurança as poucas leis promulgadas pela própria Assembleia (quando "
+            "ela derruba um veto ou o governador não responde no prazo): elas estão na conta. Vetos: os documentos de veto do "
+            f"processo legislativo ({qtd(totais, 'total', 'totais')} e {qtd(parciais, 'parcial', 'parciais')}), pela data "
+            "do documento" + (("; fica fora uma mensagem do governo anterior registrada depois da posse." if anteriores == 1 else
+                                f"; ficam fora {anteriores} mensagens do governo anterior registradas depois da posse.")
+                               if anteriores else "."),
+            f"Laws: {qtd(n_ord, 'ordinary law', 'ordinary laws')} and {qtd(len(leis) - n_ord, 'complementary law', 'complementary laws')} "
+            f"since {d_en}, from the Alesp register of laws "
+            "(by the law's date). The register does not reliably mark the few laws promulgated by the Assembly itself (when it "
+            "overrides a veto or the governor does not answer in time): they are included. Vetoes: the veto documents in the "
+            f"legislative process ({totais} full and {parciais} partial), by the document's date" + (
+                ("; one message from the previous government, recorded after the new governor took office, is left out."
+                 if anteriores == 1 else f"; {anteriores} messages from the previous government, recorded after the new "
+                 "governor took office, are left out.") if anteriores else "."),
+            leis=len(leis), vetos=len(vetos), vetos_totais=totais if totais + parciais == len(vetos) else None,
+            vetos_parciais=parciais if totais + parciais == len(vetos) else None,
+            ultima_lei=leis[-1]["data"] if leis else None, ultimo_veto=(vetos[-1].get("dtDocumento") or "")[:10] or None if vetos else None)
+        gravar_governo(UF, per, governo, *esc_g, f_gov, executivo)
+    except Exception as e:  # uma fonte do governo fora do ar não derruba a coleta: fica o perfil da rodada anterior
+        log(f"  SP: governo: {e}")
     notas = [("A Alesp lista as votações nominais, mas o voto de cada deputado só aparece em PDF, sem formato aberto.",
               "The Alesp lists its roll-call votes, but each deputy's vote is only published in PDF files, not in an open format.")]
     return gravar(UF, CASA, membros, extras, {"lista": True, "propostas": True, "votacoes": False, "gastos": True},

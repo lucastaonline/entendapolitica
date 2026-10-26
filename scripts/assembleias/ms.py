@@ -8,6 +8,7 @@ mais recente por categoria oficial e total desde fevereiro de 2023.
 Propostas: NÃO entram. O sistema público de proposições da Alems (SGPL, http://sgpl.consulta.al.ms.gov.br/sgpl-publico/)
 só responde depois de um desafio anti-robô (prova de trabalho) em cada acesso à API; não contornamos proteções dos sites
 oficiais. Votações nominais: não há publicação aberta com o voto de cada deputado.
+Governador (gov-MS): leis sancionadas desde 1º/1/2023, pelo banco de Legislação Estadual do governo do estado (governo()).
 """
 from __future__ import annotations
 
@@ -138,16 +139,86 @@ def coletar() -> dict:
     leg = legislatura_por_data("02-01")
     conferir_virada(rede, "MS", [str(d["id"]) for d in lista], leg)
     notas = [
-        ("As propostas de cada deputado ainda não entram: o sistema de proposições da Alems (SGPL) exige um teste anti-robô "
-         "a cada consulta, e o site não contorna proteções.",
-         "Each deputy's bills are not included yet: the Alems bill system (SGPL) requires an anti-bot test for every "
-         "query, and this site does not get around such protections."),
+        ("As propostas de cada deputado não entram: o sistema de proposições da Alems (SGPL) exige um teste anti-robô a "
+         "cada consulta, e este site não contorna proteções. Cada proposta pode ser consultada no próprio SGPL, pelo site "
+         "da Alems.",
+         "Each deputy's bills are not included: the Alems bill system (SGPL) requires an anti-bot test for every query, "
+         "and this site does not get around such protections. Each bill can be looked up in the SGPL itself, through the "
+         "Alems website."),
         ("Gastos: CEAP (cota parlamentar), com as notas publicadas no Portal da Transparência da Alems.",
          "Spending: CEAP (the office allowance), from the receipts published on the Alems transparency portal."),
+        GOV_NOTA,
     ]
     r = gravar("MS", {"casa": "Assembleia Legislativa do Estado de Mato Grosso do Sul",
                       "casa_en": "Legislative Assembly of the State of Mato Grosso do Sul", "sigla": "Alems",
                       "site": "https://www.al.ms.gov.br"},
                membros, extras, cobertura, fonte_lista, notas, minimo=20, legislatura=leg)
     log(f"  MS: {len(g)} pessoas com gastos da CEAP; {rede.pedidos} pedidos ao site oficial")
+    try:
+        governo(Rede("ms-legislacao", pausa=1.5))
+    except Exception as e:  # o arquivo do governador de antes continua (se for do mesmo período)
+        from . import _nco_gov as G
+        log(f"  MS: ATENÇÃO: o que o governo fez não foi atualizado ({type(e).__name__}: {e})")
+        G.descartar_se_velho("MS")
     return r
+
+
+# ------------------------------------------------------------ o que o governo do estado fez (perfil gov-MS)
+# Leis: banco "Legislação Estadual" do governo do estado (Lotus Domino; as visões "Lei Estadual" e "Lei Complementar",
+# por ano, em XML: ?ReadViewEntries). Numeração conferida em 23/10/2026: Lei nº 6.036, de 1º/1/2023, a nº 6.641, de
+# 13/10/2026, sem faltas. Vetos: a visão "Mensagem Veto" do mesmo banco tem só 2 em 2023 e nenhum depois (6 em 2022, nenhum
+# em 2021): não está completa e não entra. Projetos do Executivo: só no SGPL (teste anti-robô); a lista da Secretaria de
+# Governo (segov.ms.gov.br/informativos/consultas) começa em 2024 e tem 7 de 2026: incompleta, não entra.
+LEGIS = "https://aacpdappls.net.ms.gov.br/appls/legislacao/secoge/govato.nsf"
+GOV_VEICULO = "Governo do Estado de Mato Grosso do Sul"
+GOV_NOTA = ("Governo do estado: entram as leis sancionadas, pelo banco de Legislação Estadual do governo de Mato Grosso do Sul. "
+            "Os vetos e os projetos que o governo mandou à Assembleia não entram: os projetos só aparecem no SGPL (com teste "
+            "anti-robô), e as listas de mensagens de veto e de projetos publicadas pelo governo estão incompletas.",
+            "State government: signed laws are included, from the Mato Grosso do Sul government's state legislation database. "
+            "Vetoes and the bills the government sent to the state assembly are not: the bills only appear in the SGPL (with "
+            "an anti-bot test), and the lists of veto messages and bills published by the government are incomplete.")
+# canal oficial de pedido de informação: o coordenador conferiu e guarda em dados/manual/canais-lai.json (não repetir aqui)
+
+
+def _leis_ms(rede: Rede, ini: str) -> list[dict]:
+    out = []
+    for visao, tipo in (("Lei%20Estadual", "LO"), ("Lei%20Complementar", "LC")):
+        topo = rede.texto(f"{LEGIS}/{visao}?ReadViewEntries&Start=1&Count=100", f"{tipo}-anos.xml", 20)
+        anos = re.findall(r'<viewentry position="(\d+)"[^>]*?children="(\d+)"[^>]*>\s*<entrydata[^>]*name="wano"[^>]*>\s*'
+                          r'<number>(\d{4})</number>', topo)
+        if not anos:
+            raise RuntimeError(f"MS: a visão {visao} da Legislação Estadual mudou")
+        for pos, filhos, ano in anos:
+            if int(ano) < int(ini[:4]):
+                continue
+            xml = rede.texto(f"{LEGIS}/{visao}?ReadViewEntries&Start={pos}&Count={int(filhos) + 1}&Expand={pos}",
+                             f"{tipo}-{ano}.xml", 20)
+            achadas = 0
+            for m in re.finditer(rf'<viewentry position="{pos}\.\d+"[^>]*>(.*?)</viewentry>', xml, re.S):
+                tit = re.search(r'name="wnumero">\s*<text>(.*?)</text>', m.group(1), re.S)
+                t = sem_acento(re.sub(r"\s+", " ", tit.group(1) if tit else "")).lower()
+                d = re.search(r"n\D{0,4}([\d.]+),? de (\d{1,2})[oº°]? de ([a-z]+) de (\d{4})", t)
+                if not d or not MESES.get(d.group(3)):
+                    log(f"  gov-MS: título sem número ou data: {t[:80]}")
+                    continue
+                out.append({"tipo": tipo, "numero": int(d.group(1).replace(".", "")),
+                            "data": f"{d.group(4)}-{MESES[d.group(3)]:02d}-{int(d.group(2)):02d}"})
+                achadas += 1
+            if achadas < int(filhos):
+                log(f"  gov-MS: {visao} {ano}: li {achadas} de {filhos}")
+    return out
+
+
+def governo(rede: Rede) -> None:
+    from . import _nco_gov as G
+    g = G.governo_atual("MS")
+    leis = G.contar_leis(_leis_ms(rede, g["inicio"]), g["inicio"], hoje())
+    if not leis["total"]:
+        raise RuntimeError("MS: nenhuma lei no período")
+    pt, en = G.texto_leis(leis, ("publicadas no banco de Legislação Estadual do governo de Mato Grosso do Sul",
+                                 "published in the Mato Grosso do Sul government's state legislation database"),
+                          G.PROMULGADAS_INCLUIDAS)
+    fontes = [fonte(GOV_VEICULO, "Legislação Estadual: leis estaduais (ordinárias)", f"{LEGIS}/Lei%20Estadual?OpenView"),
+              fonte(GOV_VEICULO, "Legislação Estadual: leis complementares", f"{LEGIS}/Lei%20Complementar?OpenView")]
+    ex = G.bloco_executivo(g, leis, None, fontes, [pt, G.EM_EXERCICIO[0], GOV_NOTA[0]], [en, G.EM_EXERCICIO[1], GOV_NOTA[1]])
+    G.gravar_gov("MS", None, ex, fontes, inicio=g["inicio"])

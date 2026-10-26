@@ -4,9 +4,11 @@ Lista oficial: deputados ativos na legislatura atual do SAPL (a mesma lista de h
 Propostas: matérias do SAPL desde 1º/2/2023; situação = a da última tramitação (quando ela não diz nada sozinha, como
 "Para Providências", vale o texto dela ou a tramitação de antes); "virou lei" = norma jurídica ligada à proposta no SAPL.
 Votações nominais: voto de cada deputado registrado no SAPL (painel do Plenário).
+Governador (gov-AM): projetos do Poder Executivo, leis e vetos desde a posse de quem governa hoje (GOVERNO, abaixo).
 """
 from __future__ import annotations
 
+from . import _nco_gov as G
 from ._nco_sapl import Sapl
 
 # situação da última tramitação (texto oficial sem acento, minúsculas) -> status do site; a primeira que bater vale.
@@ -45,6 +47,22 @@ REGRAS = [
 AMBIGUOS = [r"para providencias", r"requerimento deferido", r"deferido pela presidencia", r"^parecer contrario",
             r"assinatura do secretario geral"]
 
+# o que o governo do estado fez (perfil gov-AM): autor 28 = "Poder Executivo" (tipo de autor "Externo"); vetos = matérias
+# "Veto a Projeto de Lei" (a ementa começa com "VETO TOTAL" ou "VETO PARCIAL"); leis = normas "Lei Ordinária" e "Lei
+# Complementar" (o tipo "Lei Promulgada" não tem nada desde 2018). Conferido à mão em 23/10/2026.
+GOVERNO = {
+    "autores": [28],
+    "tipos": {1: "PL", 5: "PLP", 10: "PEC", 6: "PDL"},
+    "vetos": {"tipos": [9], "parcial": r"veto parcial", "total": r"veto total",
+              "de_onde": ("mensagens \"Veto a Projeto de Lei\" que chegaram à Aleam no período, pela data em que foram lidas",
+                          "\"Veto a Projeto de Lei\" messages received by the Aleam in the period, by the date they were read")},
+    "leis": {"tipos": {1: "LO", 2: "LC"},
+             "de_onde": ("cadastradas no sistema da Aleam (SAPL) com data no período",
+                         "recorded in the Aleam's system (SAPL) with a date in the period"),
+             "promulgadas": G.PROMULGADAS_INCLUIDAS},
+    "nota": [G.EM_EXERCICIO],
+}
+
 
 def coletar() -> dict:
     return Sapl(
@@ -52,5 +70,5 @@ def coletar() -> dict:
         "Assembleia Legislativa do Estado do Amazonas", "Legislative Assembly of the State of Amazonas",
         "Aleam", "https://www.aleam.gov.br", "Assembleia Legislativa do Amazonas (Aleam)", "aleam",
         {1: "PL", 5: "PLP", 10: "PEC", 6: "PDL", 2: "PRC"}, REGRAS, "aleam",
-        ambiguos=AMBIGUOS, votacoes=True,
+        ambiguos=AMBIGUOS, votacoes=True, governo=GOVERNO, sic="https://www.aleam.gov.br/transparencia/sic",
     ).coletar()

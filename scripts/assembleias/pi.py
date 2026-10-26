@@ -36,10 +36,28 @@ REGRAS = [
 ]
 
 
+GOV = {
+    # "Rafael Tajra Fonteles" e "Governo do Estado do Piauí" (a Alepi usa os dois); "Governadora Maria Regina Sousa" (265)
+    # é o governo anterior: os vetos dela que chegaram à Assembleia em janeiro de 2023 não entram
+    "autores": [268, 139],
+    "autores_fora": [265],
+    "tipos": {19: "PL", 20: "PLP", 21: "PEC"},  # os tipos "do Governo"
+    "tipos_lei": None,  # o SAPL da Alepi não tem todas as leis do período (ver as notas da Casa)
+}
+
+NOTA_LEIS = ("As leis sancionadas pelo governador não entram no perfil dele: o SAPL da Alepi, onde a Casa publica as "
+             "normas, não tem todas as leis do período (há números faltando na sequência das leis desde 2023), e a lista "
+             "completa sai só no Diário Oficial do Estado, em PDF.",
+             "The laws signed by the governor are not shown on his profile: the Alepi SAPL system, where the House publishes "
+             "laws, does not have every law of the period (there are numbers missing in the sequence of laws since 2023), "
+             "and the full list is only in the State Official Gazette, as PDF files.")
+
+
 def coletar() -> dict:
     return SaplAssembleia(
         uf="PI", base="https://sapl.al.pi.leg.br", casa="Assembleia Legislativa do Estado do Piauí",
         casa_en="Legislative Assembly of the State of Piauí", sigla="Alepi", site="https://www.al.pi.leg.br",
         veiculo="Assembleia Legislativa do Piauí (Alepi)", prefixo="alepi", pasta="alepi",
         tipos={1: "PL", 5: "PLP", 15: "PEC", 6: "PDL", 2: "PRC"}, tipos_veto={17: None, 18: "parcial"}, regras=REGRAS,
+        gov=GOV, notas=[NOTA_LEIS],
     ).coletar()

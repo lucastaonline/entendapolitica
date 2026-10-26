@@ -13,13 +13,14 @@ governador: processos do tipo VETO ("Veto Integral ao Projeto de Lei 296/2026 ..
 from __future__ import annotations
 
 import datetime as dt
-import os
 import re
 import time
 
 import regional
 from comum import chave_nome, data_iso, fonte, hoje, log, nome_proprio, sem_acento, slug
 
+from . import _carga
+from . import _ne_gov as gv
 from ._ne_comum import (ESCOPO, ESCOPO_EN, INICIO, Rede, casar_membros, com_status_en, gravar, membro, nome_lei,
                         partido_sigla, resumo_status)
 
@@ -43,8 +44,8 @@ REGRAS = [
      "About to be declared moot (awaiting the announcement)"),
     (r"prejudicad", "parada", "Ficou prejudicada", None),
     (r"devolvid[ao] ao autor", "parada", "Devolvida ao autor", "Returned to the author"),
-    (r"sugerido o arquivamento", "andando", "Foi sugerido o arquivamento; ainda falta a decisão",
-     "Shelving was suggested; there is no final decision yet"),
+    (r"sugerido o arquivamento", "andando", "Foi sugerido o arquivamento; falta a decisão",
+     "Shelving was suggested; the decision is pending"),
     (r"arquivad|arquivamento", "arquivada", "Arquivada", None),
     (r"desapensad", "andando", None, None),
     (r"apensad|apensamento|anexad|tramitacao conjunta", "junta", None, None),
@@ -72,7 +73,14 @@ def coletar() -> dict:
                 and ((p.get("vigencia") or {}).get("fim") or "9999")[:10] >= h]
     if not 20 <= len(vigentes) <= 30:
         raise RuntimeError(f"ALRN: {len(vigentes)} deputados com mandato em vigor (esperado: 24)")
-    site = {chave_nome(d["nome"]): d for d in rede.json(f"{SITE}/api/deputados", "site-deputados.json", 20)}
+    try:
+        lista_site = rede.json(f"{SITE}/api/deputados", "site-deputados.json", 20)
+    except _carga.SemTempo:
+        raise
+    except Exception as e:  # o site da ALRN fora do ar (ex.: manutenção programada): vale a lista guardada da última vez
+        log(f"  RN: lista do site fora do ar ({e}); vale a da última leitura")
+        lista_site = rede.json(f"{SITE}/api/deputados", "site-deputados.json", None)
+    site = {chave_nome(d["nome"]): d for d in lista_site}
     # propostas
     est = rede.estado("estado.json", {}) or {}
     tram: dict = est.get("tram") or {}
@@ -80,11 +88,15 @@ def coletar() -> dict:
     for tp in list(TIPOS) + [VETO]:
         pag = 0
         while True:
-            d = rede.json(f"{API}/processo?pagina={pag}&tamanhoPagina=100&tipoPropositura={tp}&dataInicio={INICIO}")
+            # desde 1º de janeiro do ano da posse: os projetos que o governador mandou em janeiro também entram (no perfil dele);
+            # os vetos, desde 2019 (há veto com a data de entrada errada, de anos antes do número)
+            desde = "2019-01-01" if tp == VETO else f"{INICIO[:4]}-01-01"
+            d = rede.json(f"{API}/processo?pagina={pag}&tamanhoPagina=100&tipoPropositura={tp}&dataInicio={desde}")
             for x in d.get("dados") or []:
                 procs[str(x["id"])] = {"tp": tp, "n": (x.get("propositura") or {}).get("numero"), "a": (x.get("propositura") or {}).get("ano"),
                                        "d": data_iso(x.get("dataEntrada")), "e": (x.get("ementa") or "").strip(),
                                        "ini": (x.get("iniciativa") or {}).get("id"), "lei": x.get("informacaoLei"),
+                                       "idesc": (x.get("iniciativa") or {}).get("descricao"),
                                        "arq": data_iso(x.get("dataArquivamento")), "proc": f"{x.get('numero')}/{x.get('ano')}",
                                        "ap": (x.get("apensamento") or {}).get("id") if isinstance(x.get("apensamento"), dict) else None}
             if (pag + 1) * 100 >= int(d.get("total") or 0):
@@ -100,7 +112,9 @@ def coletar() -> dict:
             tipo = {"lei complementar": 2, "lei": 1, "resolucao": 8}[m.group(2)]
             vetos[(tipo, int(m.group(3).replace(".", "")), int(m.group(4)))] = {"total": m.group(1) != "parcial", "d": v["d"]}
     ids_dep = {i["id"] for p in vigentes for i in p.get("iniciativas") or []}
-    alvo = [k for k, v in procs.items() if v["tp"] != VETO and v["ini"] in ids_dep and not v["lei"] and not v["arq"]]
+    per = gv.periodo("RN")
+    gov = {k for k, v in procs.items() if v["tp"] != VETO and gv.autor_do_executivo(v.get("idesc"), per) and (v["d"] or "") >= per["inicio"]}
+    alvo = [k for k, v in procs.items() if v["tp"] != VETO and (v["ini"] in ids_dep or k in gov) and not v["lei"] and not v["arq"]]
     hoje_d = dt.date.fromisoformat(h)
 
     def vencido(k: str) -> bool:
@@ -108,12 +122,17 @@ def coletar() -> dict:
         return not x or (hoje_d - dt.date.fromisoformat(x["lido"])).days >= RELER_ANDANDO
 
     fila = sorted([k for k in alvo if vencido(k)], key=lambda k: (k in tram, (tram.get(k) or {}).get("lido") or "", -int(k)))
-    t0, lidos, sem_limite = time.time(), 0, os.environ.get("NE_SEM_LIMITE") == "1"
+    # primeira carga (mais de 1% das propostas sem a tramitação, como no robô que começa com o cache vazio): a rodada toda
+    primeira = sum(1 for k in alvo if k not in tram) > 0.01 * max(1, len(alvo))
+    limite = _carga.limite_diario(ORCAMENTO_S, primeira)
+    t0, lidos = time.time(), 0
     for k in fila:
-        if time.time() - t0 > ORCAMENTO_S and not sem_limite:
+        if time.time() - t0 > limite or _carga.acabou():
             break
         try:
             tr = rede.json(f"{API}/processo/{k}/tramitacao")
+        except _carga.SemTempo:
+            break
         except Exception as e:
             log(f"  RN: tramitação {k} falhou ({e})")
             continue
@@ -126,8 +145,12 @@ def coletar() -> dict:
             rede.guardar({"tram": tram}, "estado.json")
     tram = {k: v for k, v in tram.items() if k in procs}
     rede.guardar({"tram": tram}, "estado.json")
+    sem_tram = sum(1 for k in alvo if k not in tram)
     log(f"  RN: {sum(1 for v in procs.values() if v['tp'] != VETO)} propostas desde 2023; {lidos} tramitações lidas hoje; "
-        f"{sum(1 for k in alvo if k not in tram)} ainda sem tramitação")
+        f"{sem_tram} ainda sem tramitação")
+    if sem_tram > 0.01 * max(1, len(alvo)):  # primeira carga em andamento: nada pela metade no site
+        log(f"  RN: primeira carga das tramitações em andamento; os arquivos de antes continuam; {rede.pedidos} pedidos ao site oficial")
+        return _carga.pendente("ALRN", f"primeira carga: {sem_tram} propostas sem a tramitação", rede.pedidos)
     # pessoas
     pessoas = []
     for p in vigentes:
@@ -155,7 +178,7 @@ def coletar() -> dict:
         membros.append(membro(pid, p["nome"], p["nomeCivil"], p["partido"], (cand or {}).get("genero"), foto, url))
         lista = []
         for k, v in procs.items():
-            if v["tp"] == VETO or v["ini"] not in p["ini"]:
+            if v["tp"] == VETO or v["ini"] not in p["ini"] or (v["d"] or "") < INICIO:
                 continue
             tipo, sigla, nome_norma = TIPOS[v["tp"]]
             s_ = _situacao(k, v, tram.get(k), vetos, nome_norma)
@@ -180,8 +203,50 @@ def coletar() -> dict:
     r = gravar("RN", {"casa": "Assembleia Legislativa do Estado do Rio Grande do Norte",
                       "casa_en": "Legislative Assembly of the State of Rio Grande do Norte", "sigla": "ALRN", "site": SITE},
                membros, extras, cobertura, fonte_l, notas)
+    try:
+        _governo(per, procs, gov, tram, vetos)
+    except Exception as e:  # o perfil do governador não derruba a lista da Assembleia: fica o arquivo da última vez
+        log(f"  RN: o que o governo fez não foi atualizado ({type(e).__name__}: {e})")
     log(f"  RN: {rede.pedidos} pedidos ao site oficial")
     return r
+
+
+VETOS_DESDE = "2025-01-01"  # primeiro ano inteiro com os vetos registrados como processos VET (o 1º é o VET nº 2/2024, de julho)
+
+
+def _governo(per: dict, procs: dict, gov: set, tram: dict, vetos: dict) -> dict:
+    """dados/pessoas/gov-RN.json: os processos de iniciativa "GOVERNO DO ESTADO" e os vetos do governo (processos VET)."""
+    lista = []
+    for k in gov:
+        v = procs[k]
+        tipo, sigla, nome_norma = TIPOS[v["tp"]]
+        s_ = _situacao(k, v, tram.get(k), vetos, nome_norma)
+        prop = regional.proposta(f"alrn:{k}", f"{sigla} {v['n']}/{v['a']}", tipo, v["d"], v["e"], s_["sit"],
+                                 f"{PORTAL}/projeto/{k}", papel="autor", status=s_["status"], data_status=s_["data"],
+                                 status_txt=s_["txt"], lei=s_["lei"])
+        lista.append(com_status_en(prop, s_["en"]))
+    fonte_prop = fonte(VEICULO, "Processos de iniciativa do Governo do Estado (Transparência Legislativa)", f"{PORTAL}/")
+    ini_v = max(per["inicio"], VETOS_DESDE)
+    # conta pela data de entrada do veto; o número/ano do VET só quando não há data (os VET 25 e 26/2025 são vetos de
+    # setembro de 2020, aos PL 175/19 e 266/19, registrados no fim de 2025: ficam fora)
+    vts = [v for v in procs.values() if v["tp"] == VETO and gv.autor_do_executivo(v.get("idesc"), per)
+           and (v["d"] >= ini_v if v["d"] else bool(v["a"] and int(v["a"]) >= int(ini_v[:4])))]
+    totais = sum(1 for v in vts if re.search(r"veto (integral|total)", sem_acento(v["e"].lower())))
+    parciais = sum(1 for v in vts if re.search(r"veto parcial", sem_acento(v["e"].lower())))
+    nota = (f"Vetos: os processos do tipo veto (VET) que o governo mandou à Assembleia desde {gv.data_pt(ini_v)}, pela data "
+            f"de entrada (vetos antigos registrados depois, como os VET 25 e 26/2025, que são de 2020, ficam fora). A ALRN "
+            f"passou a registrar cada veto como um processo VET em julho de 2024 (o primeiro é o VET nº 2/2024), por isso a "
+            f"conta começa em 2025, o primeiro ano inteiro. As leis sancionadas não entram: a ALRN não publica em dados "
+            f"abertos a lista das leis do estado.")
+    nota_en = (f"Vetoes: the veto items (VET) the government sent to the Assembly since {gv.data_en(ini_v)}, by date received "
+               f"(old vetoes recorded later, such as VET 25 and 26/2025, which are from 2020, are left out). The ALRN started "
+               f"recording each veto as a VET item in July 2024 (the first one is VET 2/2024), so the count starts in 2025, the "
+               f"first full year. Laws signed are not included: the ALRN does not publish the list of state laws as open data.")
+    fontes = [fonte(VEICULO, "Processos do tipo veto (Transparência Legislativa, API)", f"{API}/processo?tipoPropositura={VETO}")]
+    ex = gv.bloco_executivo(dict(per, inicio=ini_v), None, len(vts), fontes, nota, nota_en,
+                            totais if totais + parciais == len(vts) else None, parciais if totais + parciais == len(vts) else None)
+    esc, esc_en = gv.escopo(per, "Assembleia Legislativa", "state legislature")
+    return gv.gravar_gov("RN", per, lista, esc, esc_en, fonte_prop, ex, fontes)
 
 
 def _situacao(k: str, v: dict, tr: dict | None, vetos: dict, nome_norma: str) -> dict:
@@ -200,7 +265,7 @@ def _situacao(k: str, v: dict, tr: dict | None, vetos: dict, nome_norma: str) ->
     if v.get("ap"):
         return {"status": "junta", "txt": None, "en": None, "data": None, "lei": None, "sit": "Anexado a outro processo"}
     if not tr:
-        return {"status": "outra", "txt": "Situação ainda não consultada", "en": "Status not checked yet", "data": None, "lei": None, "sit": None}
+        return {"status": "outra", "txt": "Situação não consultada nesta atualização", "en": "Status not checked in this update", "data": None, "lei": None, "sit": None}
     t = sem_acento((tr.get("st") or "").lower())
     for exp, st, pt, en in REGRAS:
         if re.search(exp, t):

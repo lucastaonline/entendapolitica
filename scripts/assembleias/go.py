@@ -11,6 +11,7 @@ Gastos: verba indenizatória (API do Portal da Transparência: valor indenizado 
 por grupo de despesa do ano mais recente).
 Propostas: NÃO entram. O sistema de processo legislativo da Alego (SPL, https://alegodigital.al.go.leg.br/spl/) proíbe
 robôs no robots.txt ("Disallow: /"), e a lista de processos do Portal da Transparência (Opine Cidadão) parou em 2023.
+Governador (gov-GO): leis sancionadas, pelos dados abertos da Casa Civil de Goiás (governo()).
 """
 from __future__ import annotations
 
@@ -258,11 +259,13 @@ def coletar() -> dict:
     leg = legislatura_por_data("02-01")
     conferir_virada(rede, "GO", [l["id"] for l in lista], leg)
     notas = [
-        ("As propostas de cada deputado ainda não entram: o sistema de processo legislativo da Alego (SPL) não permite "
-         "consulta por robôs.",
-         "Each deputy's bills are not included yet: the Alego legislative system (SPL) does not allow queries by robots."),
+        ("As propostas de cada deputado não entram: o sistema de processo legislativo da Alego (SPL) proíbe consultas por "
+         "robôs (robots.txt). Cada proposta pode ser consultada no próprio SPL, pelo site da Alego.",
+         "Each deputy's bills are not included: the Alego legislative system (SPL) forbids queries by robots (robots.txt). "
+         "Each bill can be looked up in the SPL itself, through the Alego website."),
         ("Gastos: verba indenizatória (valor indenizado), do Portal da Transparência da Alego.",
          "Spending: the expense allowance (verba indenizatória, amount reimbursed), from the Alego transparency portal."),
+        GOV_NOTA,
     ]
     if tirados:
         notas.append(("A página oficial de deputados em exercício ainda trazia: " + "; ".join(tirados) +
@@ -273,4 +276,72 @@ def coletar() -> dict:
                       "sigla": "Alego", "site": SITE}, membros, extras, cobertura, fonte_lista, notas, minimo=VAGAS - 5,
                legislatura=leg)
     log(f"  GO: {rede.pedidos} pedidos aos sites oficiais")
+    try:
+        governo(Rede("go-dadosabertos"))  # o robots.txt de dadosabertos.go.gov.br pede 10 s entre pedidos: a Rede respeita
+    except Exception as e:  # o arquivo do governador de antes continua (se for do mesmo período)
+        from . import _nco_gov as G
+        log(f"  GO: ATENÇÃO: o que o governo fez não foi atualizado ({type(e).__name__}: {e})")
+        G.descartar_se_velho("GO")
     return r
+
+
+# ---------------------------------------------------------------- o que o governo do estado fez (perfil gov-GO)
+# Leis: dados abertos da Casa Civil de Goiás (https://dadosabertos.go.gov.br, conjuntos "leis-ordinarias" e
+# "leis-complementares"): um CSV por período, o do ano corrente atualizado uma vez por mês; a página de cada conjunto dá o
+# endereço de cada arquivo e o período no nome. O robots.txt proíbe /api/ (não usado) e pede 10 s entre pedidos.
+# Conferido em 23/10/2026: Lei nº 24.189, de 3/4/2026, a nº 24.501, de 27/8/2026, sem faltas (o arquivo vai até 31/8).
+# Vetos e projetos do Executivo: não há lista aberta (SPL da Alego fechado a robôs; os dados abertos não têm vetos).
+DADOS_GO = "https://dadosabertos.go.gov.br"
+GOV_VEICULO = "Governo de Goiás (Casa Civil)"
+GOV_NOTA = ("Governo do estado: entram as leis sancionadas, pelos dados abertos da Casa Civil de Goiás. Os vetos e os projetos "
+            "que o governo mandou à Assembleia não entram: a Alego não publica uma lista aberta deles (o sistema de processo "
+            "legislativo, SPL, proíbe consultas por robôs) e os dados abertos do estado não trazem os vetos.",
+            "State government: signed laws are included, from the Goiás Casa Civil open data. Vetoes and the bills the "
+            "government sent to the state assembly are not: the Alego does not publish an open list of them (its legislative "
+            "system, SPL, forbids queries by robots) and the state's open data does not include vetoes.")
+
+
+def _arquivos_go(rede: Rede, ds: str) -> list[tuple[str, str, str]]:
+    """[(início, fim, endereço do CSV)] de um conjunto de dados, pelo período escrito no nome de cada arquivo."""
+    html = rede.texto(f"{DADOS_GO}/dataset/{ds}", f"{ds}.html", 20)
+    titulos = dict(re.findall(r'href="/dataset/[^/"]+/resource/([0-9a-f-]+)"[^>]*title="([^"]+)"', html))
+    urls = {rid: u for u, rid in re.findall(
+        r'href="(https://dadosabertos\.go\.gov\.br/dataset/[^"]+/resource/([0-9a-f-]+)/download/[^"]+\.csv)"', html, re.I)}
+    out = []
+    for rid, t in titulos.items():
+        m = re.search(r"(\d{2})-(\d{2})-(\d{4})-a-(\d{2})-(\d{2})-(\d{4})", t)
+        if m and rid in urls:
+            out.append((f"{m[3]}-{m[2]}-{m[1]}", f"{m[6]}-{m[5]}-{m[4]}", urls[rid]))
+    return out
+
+
+def governo(rede: Rede) -> None:
+    import csv
+    import io
+    from . import _nco_gov as G
+    g = G.governo_atual("GO")
+    ini = g["inicio"]
+    leis, ate, fontes = [], [], []
+    for ds, tipo, nome in (("leis-ordinarias", "LO", "leis ordinárias"), ("leis-complementares", "LC", "leis complementares")):
+        arqs = [a for a in _arquivos_go(rede, ds) if a[1] >= ini]
+        if not arqs:
+            raise RuntimeError(f"GO: nenhum arquivo de {ds} cobre o período")
+        for a_ini, a_fim, url in arqs:
+            txt = rede.texto(url, f"{tipo}-{a_ini}-{a_fim}.csv", 20)
+            for r in csv.DictReader(io.StringIO(txt.lstrip("\ufeff")), delimiter=";"):
+                num, d = re.sub(r"\D", "", r.get("numero") or ""), data_iso(r.get("data_legislacao"))
+                if num and d:
+                    leis.append({"tipo": tipo, "numero": int(num), "data": d})
+        ate.append(max(a[1] for a in arqs))
+        fontes.append(fonte(GOV_VEICULO, f"Dados abertos: {nome} (um arquivo por período)", f"{DADOS_GO}/dataset/{ds}"))
+    c = G.contar_leis(leis, ini, hoje())
+    if not c["total"]:
+        raise RuntimeError("GO: nenhuma lei no período")
+    fim = min(ate)
+    pt, en = G.texto_leis(c, (f"publicadas nos dados abertos da Casa Civil de Goiás (um arquivo por ano, atualizado uma vez "
+                              f"por mês: o mais recente vai até {G.data_pt(fim)})",
+                              f"published in the Goiás Casa Civil open data (one file per year, updated once a month: the "
+                              f"latest one goes up to {G.data_en(fim)})"), G.PROMULGADAS_INCLUIDAS)
+    fontes.append(fonte(GOV_VEICULO, "Legisla Goiás: texto de cada lei", "https://legisla.casacivil.go.gov.br"))
+    ex = G.bloco_executivo(g, c, None, fontes, [pt, G.EM_EXERCICIO[0], GOV_NOTA[0]], [en, G.EM_EXERCICIO[1], GOV_NOTA[1]])
+    G.gravar_gov("GO", None, ex, fontes, inicio=ini)

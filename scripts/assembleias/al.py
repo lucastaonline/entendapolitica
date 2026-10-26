@@ -15,6 +15,8 @@ from __future__ import annotations
 import html
 import re
 
+from comum import sem_acento
+
 from ._ne_comum import legislatura_estadual
 from ._ne_sapl import SaplAssembleia
 
@@ -73,8 +75,8 @@ REGRAS = [
     (r"devolvida ao gabinete", "parada", "Devolvida ao autor", "Returned to the author"),
     (r"arquiv", "arquivada", "Arquivada", None),
     (r"identica (do mesmo autor )?tramitando|materia identica", "junta", None, None),
-    (r"parecer contrario|parecer pela rejeicao", "andando", "Uma comissão deu parecer contra; ainda falta a decisão final",
-     "A committee recommended rejecting it; the final decision is still pending"),
+    (r"parecer contrario|parecer pela rejeicao", "andando", "Uma comissão deu parecer contra; falta a decisão final",
+     "A committee recommended rejecting it; the final decision is pending"),
     (r"parecer aprovado|parecer deliberado", "andando", "Aprovada numa comissão; falta a votação em Plenário",
      "Approved by a committee; the vote in the full Assembly is still pending"),
     (r"aprovada 1. turno|1. turno", "andando", None, None),
@@ -86,6 +88,29 @@ REGRAS = [
 ]
 
 
+def _promulgada(n: dict) -> bool | None:
+    """Na ALE-AL, o SAPL anota onde cada lei saiu e, quase sempre, quem a assinou: as sancionadas pelo governador saem no
+    Diário Oficial do Estado; as que o presidente da Assembleia promulga (sanção tácita ou veto derrubado) saem no Diário
+    Oficial da Assembleia (e a observação diz "promulgada pelo presidente da Assembleia")."""
+    v = sem_acento((n.get("veiculo_publicacao") or "").lower())
+    o = sem_acento((n.get("observacao") or "").lower())
+    if re.search(r"assembleia|legislativo|\bale\b", v) or re.search(r"presidente da assembleia|sancao tacita|poder legislativo", o):
+        return True
+    if re.search(r"diario oficial do estado|\bd\.?o\.?e|doeal", v) or re.search(r"sancionad|governador", o):
+        return False
+    return None
+
+
+GOV = {
+    "autores": [40],  # "PODER EXECUTIVO ESTADUAL"
+    "tipos": {1: "PL", 5: "PLP", 9: "PEC", 6: "PDL"},
+    "tipos_lei": [1, 2],  # LEI ORDINARIA, LEI COMPLEMENTAR
+    "promulgada": _promulgada,
+    "criterio_leis": ("publicadas no Diário Oficial do Estado ou anotadas como sancionadas pelo governador",
+                      "published in the State Official Gazette or recorded as signed by the governor"),
+}
+
+
 def coletar() -> dict:
     n = legislatura_estadual(20)
     return SaplAssembleia(
@@ -93,7 +118,7 @@ def coletar() -> dict:
         casa_en="Legislative Assembly of the State of Alagoas", sigla="ALE-AL", site="https://www.al.al.leg.br",
         veiculo="Assembleia Legislativa de Alagoas (ALE-AL)", prefixo="aleal", pasta="aleal",
         tipos={1: "PL", 5: "PLP", 9: "PEC", 6: "PDL", 2: "PRC"}, tipos_veto={23: "total", 24: "parcial"}, regras=REGRAS,
-        em_exercicio=em_exercicio,
+        em_exercicio=em_exercicio, gov=GOV,
         lista_oficial=(f"Parlamentares no exercício do mandato ({n}ª Legislatura, página oficial)", PAGINA.format(n=n)),
         notas=[(f"A lista de quem está no cargo vem da página oficial da {n}ª Legislatura no site da ALE-AL. Substituições "
                 "temporárias (licenças) podem demorar a aparecer nessa página.",

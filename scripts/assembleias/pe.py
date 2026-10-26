@@ -10,6 +10,7 @@ terminaram (lei, arquivado...) a cada 90 dias.
 """
 from __future__ import annotations
 
+import collections
 import datetime as dt
 import html
 import re
@@ -19,6 +20,8 @@ import xml.etree.ElementTree as ET
 import regional
 from comum import chave_nome, data_iso, fonte, hoje, log, sem_acento
 
+from . import _carga as gv_carga
+from . import _ne_gov as gv
 from ._ne_comum import (ESCOPO, ESCOPO_EN, INICIO, Rede, casar_membros, com_status_en, gravar, legislatura_estadual, membro,
                         nome_lei, partido_sigla, resumo_status)
 
@@ -27,7 +30,10 @@ SITE = "https://www.alepe.pe.gov.br"
 VEICULO = "Assembleia Legislativa de Pernambuco (Alepe)"
 TIPOS = {"PROJETO DE LEI ORDINARIA": ("PL", "PLO"), "PROJETO DE LEI COMPLEMENTAR": ("PLP", "PLC"),
          "PROPOSTA DE EMENDA A CONSTITUICAO": ("PEC", "PEC"), "PROJETO DE DECRETO LEGISLATIVO": ("PDL", "PDL"),
-         "PROJETO DE RESOLUCAO": ("PRC", "PR")}
+         "PROJETO DE RESOLUCAO": ("PRC", "PR"),
+         # os projetos do orçamento (só o governo apresenta)
+         "PROJETO DE LEI DE DIRETRIZES ORCAMENTARIAS": ("PL", "PLDO"), "PROJETO DE LEI ORCAMENTARIA ANUAL": ("PL", "PLOA"),
+         "PROJETO DE PLANO PLURIANUAL": ("PL", "PPA")}
 NORMA = {"PL": ("Lei", 1), "PLP": ("Lei Complementar", 2), "PRC": ("Resolução", 4), "PEC": ("Emenda Constitucional", None),
          "PDL": ("Decreto Legislativo", None)}
 RELER_ANDANDO, RELER_FIM, ORCAMENTO_S = 21, 90, 150
@@ -100,8 +106,8 @@ def _situacao(v: dict, principal: dict | None = None) -> dict:
         (r"rejeitad", "rejeitada", "Rejeitada", None),
         (r"prejudicad", "parada", "Ficou prejudicada", None),
         (r"arquivad", "arquivada", "Arquivada", None),
-        (r"autografo (promulgado|sancionado)", "lei", "Virou norma; o número ainda não foi informado",
-         "Became law; the number has not been published yet"),
+        (r"autografo (promulgado|sancionado)", "lei", "Virou norma; o número não aparece nos dados da Alepe",
+         "Became law; the number does not appear in the Alepe data"),
         (r"autografo (criado|enviado)|sancao|promulgacao", "aprovada", "Aprovada; enviada ao governador para sanção ou veto",
          "Approved; sent to the governor to sign or veto"),
         (r"redacao final", "aprovada", "Aprovada; falta votar a redação final", "Approved; the final wording still needs a vote"),
@@ -128,18 +134,22 @@ def coletar() -> dict:
                                    f"projetos-leg{legislatura_estadual(20)}.xml", 20))
     est = rede.estado("estado.json", {}) or {}
     det: dict = est.get("det") or {}
-    projetos = {}
+    per = gv.periodo("PE")
+    projetos, gov = {}, set()
     for p in lst:
         tp = _tipo(p.get("tipo"))
         autores = [(a.get("nome") or "").strip() for a in p.iter("autor")]
-        if not tp or not any(a.get("tipo") == "DEPUTADO" for a in p.iter("autor")):
+        do_executivo = any(a.get("tipo") != "DEPUTADO" and gv.autor_do_executivo(a.get("nome"), per) for a in p.iter("autor"))
+        if not tp or not (do_executivo or any(a.get("tipo") == "DEPUTADO" for a in p.iter("autor"))):
             continue
         d = data_iso(p.get("dataPublicacao"))
         # projetos de legislaturas passadas que foram desarquivados também aparecem na lista: ficam de fora (escopo: desde 1º/2/2023)
-        if (d and d < INICIO) or int(p.get("ano") or 0) < int(INICIO[:4]):
+        if (d and d < min(INICIO, per["inicio"])) or int(p.get("ano") or 0) < int(INICIO[:4]):
             continue
         projetos[p.get("docid")] = {"t": tp[0], "s": tp[1], "n": p.get("numero"), "a": p.get("ano"), "d": d,
                                     "e": (p.get("ementa") or "").strip(), "au": autores}
+        if do_executivo:
+            gov.add(p.get("docid"))
     h = dt.date.fromisoformat(hoje())
 
     def vencido(docid: str) -> bool:
@@ -151,14 +161,18 @@ def coletar() -> dict:
         return dias >= (RELER_FIM if terminou else RELER_ANDANDO)
 
     fila = sorted([k for k in projetos if vencido(k)], key=lambda k: (k in det, (det.get(k) or {}).get("lido") or "", -int(k)))
+    # primeira carga (mais de 1% dos projetos sem o detalhe, como no robô que começa com o cache vazio): a rodada toda
+    primeira = sum(1 for k in projetos if k not in det) > 0.01 * max(1, len(projetos))
+    limite = gv_carga.limite_diario(ORCAMENTO_S, primeira)
     t0, lidos = time.time(), 0
-    sem_limite = __import__("os").environ.get("NE_SEM_LIMITE") == "1"
     for k in fila:
-        if time.time() - t0 > ORCAMENTO_S and not sem_limite:
+        if time.time() - t0 > limite or gv_carga.acabou():
             break
         try:
             det[k] = _resumo_detalhe(rede.texto(f"{API}/proposicoes/projetos/?docid={k}&tipoprop=p"))
             lidos += 1
+        except gv_carga.SemTempo:
+            break
         except Exception as e:
             log(f"  PE: detalhe {k} falhou ({e})")
         if lidos % 50 == 0:
@@ -167,6 +181,9 @@ def coletar() -> dict:
     rede.guardar({"det": det}, "estado.json")
     sem_det = sum(1 for k in projetos if k not in det)
     log(f"  PE: {len(projetos)} projetos de deputados na legislatura; {lidos} detalhes lidos hoje; {sem_det} ainda sem detalhe")
+    if sem_det > 0.01 * max(1, len(projetos)):  # primeira carga em andamento: nada pela metade no site
+        log(f"  PE: primeira carga dos detalhes em andamento; os arquivos de antes continuam; {rede.pedidos} pedidos ao site oficial")
+        return gv_carga.pendente("Alepe", f"primeira carga: {sem_det} projetos sem o detalhe", rede.pedidos)
     # pessoas
     pessoas = []
     for o in oficiais:
@@ -204,7 +221,7 @@ def coletar() -> dict:
         lista = []
         for k, papel in por_nome.get(chave_nome(p["nome"]), []):
             v = dict(projetos[k], det=det.get(k))
-            s = _situacao(v, principal(v)) if v["det"] else {"status": "outra", "txt": "Situação ainda não consultada", "en": "Status not checked yet",
+            s = _situacao(v, principal(v)) if v["det"] else {"status": "outra", "txt": "Situação não consultada nesta atualização", "en": "Status not checked in this update",
                                                                 "data": None, "lei": None}
             prop = regional.proposta(f"alepe:{k}", f"{v['s']} {v['n']}/{v['a']}", v["t"], v["d"], v["e"],
                                      (v["det"] or {}).get("res"), f"https://proposicoes.alepe.pe.gov.br/proposicoes/detalhes?docid={k}&tipoprop=p",
@@ -212,7 +229,7 @@ def coletar() -> dict:
             lista.append(com_status_en(prop, s["en"]))
         listas.append(lista)
         fonte_p = fonte(VEICULO, f"Projetos de {p['nome']} na {legislatura_estadual(20)}ª legislatura (Portal de Dados Abertos)",
-                        f"https://proposicoes.alepe.pe.gov.br/")
+                        "https://proposicoes.alepe.pe.gov.br/")
         extras[pid] = {"propostas": regional.bloco_propostas(lista, ESCOPO, ESCOPO_EN, fonte_p),
                        "links": {"oficial": url, "email": None, "redes": []}, "fontes": [fonte_l, fonte_p]}
     log(f"  PE: situações {resumo_status(listas)}")
@@ -222,9 +239,84 @@ def coletar() -> dict:
               "(those still under discussion, every 21 days).")]
     cobertura = {"lista": True, "propostas": True, "votacoes": False, "gastos": False}
     r = gravar("PE", {"casa": "Assembleia Legislativa do Estado de Pernambuco", "casa_en": "Legislative Assembly of the State of Pernambuco",
-                      "sigla": "Alepe", "site": SITE}, membros, extras, cobertura, fonte_l, notas)
+                      "sigla": "Alepe", "site": SITE}, membros, extras, cobertura, fonte_l, notas + [NOTA_VETOS])
+    try:
+        _governo(rede, per, {k: dict(projetos[k], det=det.get(k)) for k in gov}, principal)
+    except Exception as e:  # o perfil da governadora não derruba a lista da Assembleia: fica o arquivo da última vez
+        log(f"  PE: o que o governo fez não foi atualizado ({type(e).__name__}: {e})")
     log(f"  PE: {rede.pedidos} pedidos ao site oficial")
     return r
+
+
+NOTA_VETOS = ("Os vetos do governo do estado não entram no perfil de quem governa: a Alepe não publica os vetos em dados "
+              "abertos, e o resultado de cada projeto não separa o veto derrubado da sanção tácita (nos dois casos, quem "
+              "promulga a lei é o presidente da Assembleia).",
+              "The state government's vetoes are not shown on the governor's profile: the Alepe does not publish vetoes as "
+              "open data, and the result of each bill does not tell an overridden veto from a tacit sanction (in both cases, "
+              "the law is promulgated by the Assembly's president).")
+LEGIS = "https://legis.alepe.pe.gov.br"  # legislação estadual (Alepe)
+
+
+def _leis_do_ano(rede: Rede, ano: int, atual: bool) -> list[dict]:
+    """Leis ordinárias (tiponorma=1) e complementares (2) de um ano na Legislação Estadual da Alepe (só o resumo fica guardado)."""
+    est = rede.estado("gov-leis-lista.json", {}) or {}
+    x = est.get(str(ano))
+    h = dt.date.fromisoformat(hoje())
+    if x and (h - dt.date.fromisoformat(x["lido"])).days < (1 if atual else 30):
+        return x["itens"]
+    itens = []
+    for tn in (1, 2):
+        t = rede.texto(f"{LEGIS}/lista.aspx?tiponorma={tn}&ano={ano}")
+        for m in re.finditer(r"href='texto\.aspx\?id=(\d+)&tipo='''>\s*Lei (Ordin[aá]ria|Complementar) n[°º]\s*([\d.]+)\s*</a>"
+                             r"\s*</span>\s*<span class=\"publicacao\">\s*Publicada no DOE (\d{2}/\d{2}/\d{4})", t):
+            itens.append({"id": m.group(1), "tl": "LC" if m.group(2).startswith("Compl") else "LO", "n": m.group(3).replace(".", ""),
+                          "pub": data_iso(m.group(4))})
+    est[str(ano)] = {"lido": hoje(), "itens": itens}
+    rede.guardar(est, "gov-leis-lista.json")
+    return itens
+
+
+def _governo(rede: Rede, per: dict, projetos: dict, principal) -> dict:
+    """dados/pessoas/gov-PE.json: os projetos do Executivo (autor: a governadora ou, no exercício do governo, a vice) e as
+    leis sancionadas (pelo texto oficial de cada lei, na Legislação Estadual da Alepe)."""
+    ini = per["inicio"]
+    lista = []
+    for k, v in projetos.items():
+        if (v["d"] or "") < ini:
+            continue
+        s = _situacao(v, principal(v)) if v["det"] else {"status": "outra", "txt": "Situação não consultada nesta atualização",
+                                                            "en": "Status not checked in this update", "data": None, "lei": None}
+        prop = regional.proposta(f"alepe:{k}", f"{v['s']} {v['n']}/{v['a']}", v["t"], v["d"], v["e"], (v["det"] or {}).get("res"),
+                                 f"https://proposicoes.alepe.pe.gov.br/proposicoes/detalhes?docid={k}&tipoprop=p", papel="autor",
+                                 status=s["status"], data_status=s["data"], status_txt=s["txt"], lei=s["lei"])
+        lista.append(com_status_en(prop, s["en"]))
+    fonte_prop = fonte(VEICULO, "Projetos do Poder Executivo na legislatura (Portal de Dados Abertos)", "https://proposicoes.alepe.pe.gov.br/")
+    h = hoje()
+    leis = {}
+    for ano in range(int(ini[:4]), int(h[:4]) + 1):
+        for i in _leis_do_ano(rede, ano, ano == int(h[:4])):
+            if (i.get("pub") or "9999") >= ini:
+                leis[f"{i['tl']}-{i['n']}"] = i
+    quem, faltam = gv.classificar_leis(rede, {k: f"{LEGIS}/texto.aspx?id={i['id']}&tipo=" for k, i in leis.items()},
+                                       lambda u: rede.texto(u, None, None), orcamento_s=150)
+    fontes = [fonte(VEICULO, "Legislação Estadual: leis ordinárias e complementares", f"{LEGIS}/lista.aspx?tiponorma=1")]
+    if faltam:  # sem a conta das leis, o perfil ficaria pela metade: fica o arquivo da última vez
+        log(f"  PE: {faltam} leis ainda sem leitura do texto; o perfil da governadora fica como estava até todas serem lidas")
+        return {}
+    c = collections.Counter(quem.values())
+    n_leis, prom = c[False], c[True]
+    nota, nota_en = gv.nota_leis(per, len(leis), c[False], c[True], c[None], "na Legislação Estadual da Alepe (publicadas "
+                                 "no Diário Oficial a partir dessa data)", "in the Alepe state legislation portal (published in "
+                                 "the Official Gazette from that date on)")
+    nota += " Vetos: a Alepe não publica os vetos em dados abertos."
+    nota_en += " Vetoes: the Alepe does not publish vetoes as open data."
+    ex = gv.bloco_executivo(per, n_leis, None, fontes, nota, nota_en, promulgadas_pela_casa=prom)
+    esc, esc_en = gv.escopo(per, "Assembleia Legislativa", "state legislature",
+                            "projetos de lei (inclusive os do orçamento), de lei complementar e de emenda à Constituição do estado",
+                            "bills (including budget bills), complementary bills and amendments to the state Constitution",
+                            "Entram também os que a vice-governadora assinou quando estava no exercício do governo.",
+                            "Also included are those signed by the vice governor while acting as governor.")
+    return gv.gravar_gov("PE", per, lista, esc, esc_en, fonte_prop, ex, fontes)
 
 
 TSE_MANUAL: dict[str, str] = {}

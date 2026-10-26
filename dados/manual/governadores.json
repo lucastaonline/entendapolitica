@@ -114,12 +114,24 @@
     "nomeCivil": "Roberto Maia Cidade Filho",
     "partido": "UNIÃO",
     "genero": "M",
-    "desde": "2026-05-04",
-    "comoAssumiu": "Era presidente da Assembleia Legislativa e assumiu o governo de forma interina em abril de 2026, depois que o governador Wilson Lima e o vice Tadeu de Souza renunciaram para disputar a eleição; em 04/05/2026 foi eleito governador pelos deputados estaduais (eleição indireta) para completar o mandato",
-    "comoAssumiu_en": "He was the president of the Legislative Assembly (state parliament). He became acting governor in April 2026, after Governor Wilson Lima and Vice Governor Tadeu de Souza resigned to run in the election. On May 4, 2026, the state deputies (members of the state parliament) chose him as governor in an indirect election (a vote by the lawmakers, not by the people) to finish the term.",
+    "desde": "2026-04-05",
+    "comoAssumiu": "Era presidente da Assembleia Legislativa e assumiu o governo como interino em 05/04/2026, depois que o governador Wilson Lima e o vice Tadeu de Souza renunciaram (04/04/2026) para disputar a eleição; em 04/05/2026 foi eleito governador pelos deputados estaduais (eleição indireta) para completar o mandato",
+    "comoAssumiu_en": "He was the president of the Legislative Assembly (state parliament). He became acting governor on April 5, 2026, after Governor Wilson Lima and Vice Governor Tadeu de Souza resigned (April 4, 2026) to run in the election. On May 4, 2026, the state deputies (members of the state parliament) chose him as governor in an indirect election (a vote by the lawmakers, not by the people) to finish the term.",
     "eleicao2026": "Disputou o governo do Amazonas e não foi eleito (1º turno, 04/10/2026)",
     "nascimento": "1986-10-02",
     "fonte": [
+     {
+      "veiculo": "Assembleia Legislativa do Amazonas (Aleam)",
+      "titulo": "Diário Oficial Eletrônico da Aleam, Edição Extra nº 2422 (05/04/2026): termo de assunção do governo",
+      "url": "https://www.aleam.gov.br/wp-content/uploads/2026/04/Edicao242205042026-2.pdf",
+      "data": "2026-04-05"
+     },
+     {
+      "veiculo": "Assembleia Legislativa do Amazonas (Aleam)",
+      "titulo": "Diário Oficial Eletrônico da Aleam, Edição Extra nº 2421 (05/04/2026): convocação da reunião para a posse de Roberto Cidade como governador interino",
+      "url": "https://www.aleam.gov.br/wp-content/uploads/2026/04/Edicao242105042026EXTRA-1.pdf",
+      "data": "2026-04-05"
+     },
      {
       "veiculo": "Assembleia Legislativa do Amazonas (Aleam)",
       "titulo": "Presidente da Aleam, Adjuto Afonso, acompanha balanço das ações estaduais de combate às queimadas no Amazonas (cita o governador Roberto Cidade e o vice-governador Serafim Corrêa)",

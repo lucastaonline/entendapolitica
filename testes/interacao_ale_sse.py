@@ -1,4 +1,5 @@
-"""Testes de interação das Assembleias do Sudeste, do Sul e do DF (lista oficial, propostas, gastos), com Playwright + Edge.
+"""Testes de interação das Assembleias do Sudeste, do Sul e do DF (lista oficial, propostas, gastos e o perfil de cada
+governador), com Playwright + Edge.
 Precisa do servidor em 8770 e dos dados gerados (python scripts/legislativos.py MG SP RJ ES PR SC RS DF; python scripts/montar.py).
 Uso: python testes/interacao_ale_sse.py"""
 import asyncio
@@ -130,6 +131,27 @@ async def main():
            and "Onde ver mais" in corpo and "Alerj" in await pg.locator(".onde-ver .notas-casa").inner_text()
            and await pg.locator('.onde-ver a[href*="alerj.rj.gov.br"]').count() >= 1)
         ok("RJ: suplente em exercício marcado no perfil", sup.get("exercicio") in corpo, sup["nome"])
+
+        # 5. o perfil de cada governador: projetos que o governo mandou e "Leis sancionadas e vetos" (pt e en)
+        for uf in UFS:
+            g = pessoa(f"gov-{uf}")
+            ex, lista = g.get("executivo") or {}, (g.get("propostas") or {}).get("lista") or []
+            await pg.goto(BASE + f"pessoa.html?id=gov-{uf}&lang=pt", wait_until="networkidle")
+            await pg.wait_for_timeout(900)
+            corpo = await pg.locator("#perfil").inner_text()
+            sec = await pg.locator("#t-exec").count() and await pg.locator("section:has(#t-exec)").inner_text() or ""
+            nums = [f"{ex[c]:,}".replace(",", ".") for c in ("leisSancionadas", "vetos") if ex.get(c) is not None]
+            n = await pg.locator("#lista-prop li.prop").count()
+            ok(f"{uf}: governo com projetos e leis no perfil", lista and n > 0 and all(x in sec for x in nums)
+               and "Em breve" not in corpo, f"{n} projetos na tela; {', '.join(nums)}")
+            await pg.goto(BASE + f"pessoa.html?id=gov-{uf}&lang=en", wait_until="networkidle")
+            await pg.wait_for_timeout(900)
+            sec = await pg.locator("#t-exec").count() and await pg.locator("section:has(#t-exec)").inner_text() or ""
+            sts = await pg.locator("#lista-prop .status-txt").all_inner_texts()
+            pt = [s for s in sts if any(w in s for w in PT)]
+            esc = await pg.locator("#propostas > p.muted").first.inner_text()
+            ok(f"{uf}: governo em inglês", "Laws signed and vetoes" in sec and sts and not pt and esc.startswith("Bills the "),
+               (" | ".join(pt[:2]) or esc[:60]))
 
         ok("nenhum erro de JavaScript", not erros, "; ".join(erros[:3]))
         await nav.close()

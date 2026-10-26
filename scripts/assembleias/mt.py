@@ -7,6 +7,7 @@ ALMT, a página de cada deputado só mostra as 10 mais recentes, e a API da Casa
 cadastro (OAuth 2.0): sem credencial, responde 403. Gastos: a verba indenizatória de MT é um valor mensal fixo (Lei
 9.493/2010); o site publica só as leis, não um gasto por deputado (a pesquisa do Portal da Transparência também é
 proibida para robôs).
+Governador (gov-MT): leis, vetos e projetos não entram (motivo em GOV_NOTA); o perfil leva o link do Diário Oficial.
 """
 from __future__ import annotations
 
@@ -65,12 +66,32 @@ def coletar() -> dict:
     leg = legislatura_por_data("02-01")
     conferir_virada(rede, "MT", [d["id"] for d in lista], leg)
     notas = [
-        ("As propostas e as votações de cada deputado ainda não entram: a busca de proposições do site da ALMT é fechada "
-         "para robôs e a API da Casa exige cadastro.",
-         "Each deputy's bills and votes are not included yet: the ALMT website's bill search is closed to robots and the "
-         "assembly's API requires registration."),
+        ("As propostas e as votações de cada deputado não entram: a busca de proposições do site da ALMT é fechada para "
+         "robôs (robots.txt) e a API da Casa exige cadastro. Cada proposta pode ser consultada nessa busca, no site da ALMT.",
+         "Each deputy's bills and votes are not included: the ALMT website's bill search is closed to robots (robots.txt) "
+         "and the assembly's API requires registration. Each bill can be looked up in that search, on the ALMT website."),
+        GOV_NOTA,
     ]
     r = gravar("MT", {"casa": "Assembleia Legislativa do Estado de Mato Grosso", "casa_en": "Legislative Assembly of the State of Mato Grosso",
                       "sigla": "ALMT", "site": SITE}, membros, extras, cobertura, fonte_lista, notas, minimo=20, legislatura=leg)
     log(f"  MT: {rede.pedidos} pedidos ao site oficial")
+    # perfil do governador: sem lista aberta de leis, vetos e projetos; o quadro "Onde ver mais" mostra o Diário Oficial
+    from . import _nco_gov as G
+    G.gravar_gov("MT", diario=DIARIO, fontes=[fonte("Imprensa Oficial de Mato Grosso (Iomat)", DIARIO["nome"], DIARIO["url"])])
     return r
+
+
+# o que o governo do estado fez (perfil gov-MT): não entra. Conferido em 23/10/2026: a busca de normas do site da ALMT
+# (/norma-juridica?...) e a de proposições (/proposicao?...) são proibidas no robots.txt, a página de cada norma monta o
+# texto no navegador, a API da ALMT exige cadastro (OAuth 2.0), o portal de legislação do governo do estado
+# (Liferay: casacivil.mt.gov.br, seplag.mt.gov.br...) proíbe robôs ("Disallow: /") e o SAPL da ALMT parou em 2018. O
+# Diário Oficial (Iomat) tem busca por palavra em edições inteiras, sem lista de leis.
+DIARIO = {"nome": "Diário Oficial do Estado de Mato Grosso (Iomat)", "url": "https://www.iomat.mt.gov.br/"}
+GOV_NOTA = ("Governo do estado: as leis sancionadas, os vetos e os projetos que o governo mandou à Assembleia não entram: as "
+            "buscas de normas e de proposições do site da ALMT são fechadas para robôs, a API da Casa exige cadastro e o portal "
+            "de legislação do governo de Mato Grosso também não permite robôs. As leis e os vetos saem no Diário Oficial do "
+            "estado (Iomat).",
+            "State government: signed laws, vetoes and the bills the government sent to the state assembly are not included: "
+            "the ALMT website's law and bill searches are closed to robots, the assembly's API requires registration and the "
+            "Mato Grosso government's legislation portal does not allow robots either. Laws and vetoes are published in the "
+            "state's Official Gazette (Iomat).")

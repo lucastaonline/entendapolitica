@@ -5,9 +5,11 @@ Propostas: matérias do SAPL desde 1º/2/2023; situação = a da última tramita
 texto dela ou a tramitação de antes); "virou lei" = norma jurídica ligada à proposta no SAPL.
 Votações nominais: voto de cada deputado registrado no SAPL. Em Rondônia, a maioria das votações é simbólica (sem o voto
 de cada um); as nominais (vetos, por exemplo) têm o voto de cada deputado.
+Governador (gov-RO): projetos do Poder Executivo, leis e vetos desde 1º/1/2023 (GOVERNO, abaixo).
 """
 from __future__ import annotations
 
+from . import _nco_gov as G
 from ._nco_sapl import Sapl
 
 VETO_PENDENTE = ("Vetada pelo governador; a Assembleia ainda vai decidir sobre o veto",
@@ -46,6 +48,21 @@ REGRAS = [
 ]
 AMBIGUOS = [r"para providencias", r"requerimento deferido", r"^parecer contrario"]
 
+# o que o governo do estado fez (perfil gov-RO): autor 29 = "Poder Executivo"; vetos = matérias "Veto Total" (17) e
+# "Veto Parcial" (18); leis = normas "Lei ordinária" e "Lei Complementar". Conferido à mão em 23/10/2026.
+GOVERNO = {
+    "autores": [29],
+    "tipos": {1: "PL", 5: "PLP", 12: "PEC", 6: "PDL"},
+    "vetos": {"tipos": [17, 18], "tipos_totais": [17], "tipos_parciais": [18],
+              "de_onde": ("matérias \"Veto Total\" e \"Veto Parcial\" que chegaram à Ale-RO no período, pela data em que foram lidas",
+                          "\"Veto Total\" and \"Veto Parcial\" items received by the Ale-RO in the period, by the date they were read")},
+    "leis": {"tipos": {1: "LO", 2: "LC"},
+             "de_onde": ("cadastradas no sistema da Ale-RO (SAPL) com data no período",
+                         "recorded in the Ale-RO's system (SAPL) with a date in the period"),
+             "promulgadas": G.PROMULGADAS_INCLUIDAS},
+    "nota": [G.EM_EXERCICIO],
+}
+
 
 def coletar() -> dict:
     return Sapl(
@@ -53,5 +70,5 @@ def coletar() -> dict:
         "Assembleia Legislativa do Estado de Rondônia", "Legislative Assembly of the State of Rondônia",
         "Ale-RO", "https://www.al.ro.leg.br", "Assembleia Legislativa de Rondônia (Ale-RO)", "alero",
         {1: "PL", 5: "PLP", 12: "PEC", 6: "PDL", 2: "PRC"}, REGRAS, "alero",
-        ambiguos=AMBIGUOS, votacoes=True,
+        ambiguos=AMBIGUOS, votacoes=True, governo=GOVERNO, sic="https://transparencia.al.ro.leg.br/AcessoInformacao/",
     ).coletar()

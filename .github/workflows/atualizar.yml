@@ -90,12 +90,13 @@ jobs:
         run: python scripts/tse.py
         continue-on-error: true
 
-      # cada Casa tem o seu coletor (scripts/assembleias/<uf>.py, scripts/camaras/c<IBGE>.py); se o site de uma
-      # Casa estiver fora do ar, fica a lista da última rodada que deu certo. Com o cache cheio: ~25 min (Assembleias)
-      # e ~10 min (Câmaras). A primeira rodada sem cache é bem mais longa: os coletores param no limite de tempo de
-      # cada dia e completam aos poucos (o que já foi lido fica no cache).
+      # cada Casa tem o seu coletor (scripts/assembleias/<uf>.py) e o seu servidor: rodam todas ao mesmo tempo, cada uma
+      # respeitando o robots.txt e o intervalo pedido (60 s nos SAPL do Interlegis). Com o cache cheio: 6 a 13 min. Sem
+      # cache (a primeira vez), cada Casa usa a rodada toda, guarda o que leu em .cache/ e só grava quando termina: as
+      # mais lentas (MG, PB) levam uns 7 dias; até lá ficam os dados publicados antes. As Câmaras das capitais seguem
+      # num passo próprio (se o site de uma Casa estiver fora do ar, fica a lista da última rodada que deu certo).
       - name: Assembleias Legislativas
-        run: python scripts/legislativos.py assembleias
+        run: python scripts/legislativos.py assembleias --paralelo 27 --minutos 50
         continue-on-error: true
         timeout-minutes: 60
 

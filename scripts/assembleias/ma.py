@@ -15,6 +15,7 @@ import re
 import regional
 from comum import chave_nome, fonte, hoje, log, sem_acento
 
+from . import _ne_gov as gv
 from ._ne_comum import (ESCOPO, ESCOPO_EN, INICIO, Rede, casar_membros, com_status_en, gravar, legislatura_estadual, membro,
                         nome_lei, partido_sigla, resumo_status)
 
@@ -22,6 +23,7 @@ API = "https://alemalegis.al.ma.leg.br/api/v1/public"
 SITE = "https://alemalegis.al.ma.leg.br"
 VEICULO = "Assembleia Legislativa do Maranhão (Alema)"
 TIPOS = {10110: ("PL", "PLO"), 10114: ("PLP", "PLC"), 10123: ("PEC", "PEC"), 10115: ("PDL", "PDL"), 10111: ("PRC", "PRE")}
+TIPOS_GOV = {10110: ("PL", "PLO"), 10114: ("PLP", "PLC"), 10123: ("PEC", "PEC"), 10115: ("PDL", "PDL"), 10118: ("MPV", "MPV")}
 VETOS = {10120: True, 10124: False}
 NORMA = [(r"lei complementar", "Lei Complementar"), (r"emenda", "Emenda Constitucional"), (r"decreto legislativo", "Decreto Legislativo"),
          (r"resolu", "Resolução"), (r"^lei", "Lei")]
@@ -41,8 +43,8 @@ REGRAS = [
     (r"aguardando promulgacao", "aprovada", "Aprovada; esperando ser promulgada", None),
     (r"aguardando sancao|autografo", "aprovada", "Aprovada; enviada ao governador para sanção ou veto",
      "Approved; sent to the governor to sign or veto"),
-    (r"parecer contrario", "andando", "Uma comissão deu parecer contra; ainda falta a decisão final",
-     "A committee recommended rejecting it; the final decision is still pending"),
+    (r"parecer contrario", "andando", "Uma comissão deu parecer contra; falta a decisão final",
+     "A committee recommended rejecting it; the final decision is pending"),
     (r"aprovad[ao] (em|no|pelo) plenario|aprovad[ao] em (discussao|votacao|turno unico|segundo turno|2)", "aprovada", None, None),
     (r"tramitacao inicial", "andando", "Apresentada; ainda vai começar a ser analisada", None),
     (r".", "andando", None, None),
@@ -79,7 +81,7 @@ def coletar() -> dict:
     # propostas: por tipo e por ano
     mats: dict[str, dict] = {}
     anos = range(int(INICIO[:4]), int(hoje()[:4]) + 1)
-    for tp in list(TIPOS) + list(VETOS):
+    for tp in list(TIPOS) + [10118] + list(VETOS):
         for ano in anos:
             pag = 0
             while True:
@@ -144,8 +146,65 @@ def coletar() -> dict:
     cobertura = {"lista": True, "propostas": True, "votacoes": False, "gastos": False}
     r = gravar("MA", {"casa": "Assembleia Legislativa do Estado do Maranhão", "casa_en": "Legislative Assembly of the State of Maranhão",
                       "sigla": "Alema", "site": "https://www.al.ma.leg.br"}, membros, extras, cobertura, fonte_l, notas)
+    try:
+        _governo(rede, mats, vetos)
+    except Exception as e:  # o perfil do governador não derruba a lista da Assembleia: fica o arquivo da última vez
+        log(f"  MA: o que o governo fez não foi atualizado ({type(e).__name__}: {e})")
     log(f"  MA: {rede.pedidos} pedidos ao site oficial")
     return r
+
+
+def _governo(rede: Rede, mats: dict, vetos: dict) -> dict:
+    """dados/pessoas/gov-MA.json: matérias do "PODER EXECUTIVO" (projetos e medidas provisórias), as leis do período no
+    AlemaLegis e os vetos (matérias Veto Total e Veto Parcial)."""
+    per = gv.periodo("MA")
+    ini = per["inicio"]
+    lista = []
+    for k, v in mats.items():
+        if v["tp"] not in TIPOS_GOV or (v["d"] or "") < ini or not gv.autor_do_executivo(v["au"], per):
+            continue
+        tipo, sigla = TIPOS_GOV[v["tp"]]
+        s = _situacao(v, vetos)
+        prop = regional.proposta(f"alema:{k}", f"{sigla} {v['n']}/{v['a']}", tipo, v["d"], v["e"], v["sit"],
+                                 f"{SITE}/sapl/protocol/legislative-matter/view/{k}", papel="autor", status=s["status"],
+                                 data_status=s["data"], status_txt=s["txt"], lei=s["lei"])
+        lista.append(com_status_en(prop, s["en"]))
+    fonte_prop = fonte(VEICULO, "Matérias de autoria do Poder Executivo (AlemaLegis)", f"{SITE}/sapl/protocol/legislative-matter/research")
+    # vetos do governador recebidos no período
+    vts = [v for v in mats.values() if v["tp"] in VETOS and (v["d"] or "") >= ini]
+    totais = sum(1 for v in vts if VETOS[v["tp"]])
+    # leis do período (o AlemaLegis não diz quem assinou cada uma: entram também as promulgadas pelo presidente da Assembleia)
+    leis = 0
+    for ano in range(int(ini[:4]), int(hoje()[:4]) + 1):
+        pag = 0
+        while True:
+            d = rede.json(f"{API}/legal-norm/filter?page={pag}&size=100&year={ano}", f"gov-normas-{ano}-{pag}.json", 20)
+            for x in d.get("content") or []:
+                if ((x.get("legalNormType") or {}).get("description") in ("Lei", "Lei Ordinária", "Lei Complementar")
+                        and (x.get("date") or "")[:10] >= ini):
+                    leis += 1
+            pag += 1
+            if pag >= int(d.get("totalPages") or 0):
+                break
+    nota = (f"Leis: as {leis} leis ordinárias e complementares com data a partir de {gv.data_pt(ini)} registradas no AlemaLegis "
+            f"(o sistema legislativo da Alema). O sistema não diz quem assinou cada lei, então entram também as promulgadas pelo "
+            f"presidente da Assembleia (quando o governador não sanciona no prazo ou quando o veto é derrubado). Vetos: as matérias "
+            f"\"Veto Total\" e \"Veto Parcial\" recebidas pela Assembleia desde {gv.data_pt(ini)}.")
+    nota_en = (f"Laws: the {leis} ordinary and complementary laws dated from {gv.data_en(ini)} on in AlemaLegis (the Alema "
+               f"legislative system). The system does not say who signed each law, so this also includes laws promulgated by the "
+               f"Assembly's president (when the governor does not sign in time or a veto is overridden). Vetoes: the \"Veto Total\" "
+               f"and \"Veto Parcial\" items received by the Assembly since {gv.data_en(ini)}.")
+    fontes = [fonte(VEICULO, "Normas jurídicas (AlemaLegis)", f"{SITE}/sapl/protocol/legal-norm/research"),
+              fonte(VEICULO, "Matérias Veto Total e Veto Parcial (AlemaLegis)", f"{SITE}/sapl/protocol/legislative-matter/research")]
+    ex = gv.bloco_executivo(per, leis, len(vts), fontes, nota, nota_en, totais, len(vts) - totais)
+    esc, esc_en = gv.escopo(per, "Assembleia Legislativa", "state legislature",
+                            "projetos de lei, de lei complementar e de emenda à Constituição do estado e medidas provisórias",
+                            "bills, complementary bills, amendments to the state Constitution and provisional measures")
+    nota_prop = ("Medidas provisórias (MP) valem como lei assim que o governador as publica, mas perdem a validade se a "
+                 "Assembleia não as aprovar no prazo da Constituição do estado.",
+                 "Provisional measures (MP) take effect as law as soon as the governor publishes them, but they expire if the "
+                 "state legislature does not approve them within the deadline set by the state Constitution.")
+    return gv.gravar_gov("MA", per, lista, esc, esc_en, fonte_prop, ex, fontes, nota_prop)
 
 
 def _situacao(v: dict, vetos: dict) -> dict:

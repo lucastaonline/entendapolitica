@@ -14,7 +14,7 @@
     "veiculo": "Assembleia Legislativa do Paraná (Alep)",
     "titulo": "Deputados estaduais em exercício (página oficial)",
     "url": "https://www.assembleia.pr.leg.br/deputados/conheca",
-    "data": "2026-10-25"
+    "data": "2026-10-26"
    },
    "ok": true
   },
@@ -34,7 +34,10 @@
     "url": "https://www.al.al.leg.br/processo-legislativo/20-a-legislatura",
     "data": "2026-10-25"
    },
-   "ok": true
+   "ok": true,
+   "pendente": true,
+   "etapa": "primeira carga: materias, página 17",
+   "requisicoes": 47
   },
   "BA": {
    "casa": "Alba",
@@ -58,7 +61,7 @@
   "CE": {
    "casa": "Alece",
    "membros": 46,
-   "propostas": 3466,
+   "propostas": 3491,
    "cobertura": {
     "lista": true,
     "propostas": true,
@@ -69,7 +72,7 @@
     "veiculo": "Assembleia Legislativa do Ceará (Alece)",
     "titulo": "Deputados em exercício (página oficial)",
     "url": "https://www.al.ce.gov.br/deputados",
-    "data": "2026-10-25"
+    "data": "2026-10-26"
    },
    "ok": true
   },
@@ -87,7 +90,7 @@
     "veiculo": "Assembleia Legislativa do Maranhão (Alema)",
     "titulo": "Parlamentares em atividade na 20ª legislatura (AlemaLegis)",
     "url": "https://alemalegis.al.ma.leg.br/sapl/protocol/parliamentary/research",
-    "data": "2026-10-25"
+    "data": "2026-10-26"
    },
    "ok": true
   },
@@ -107,7 +110,10 @@
     "url": "https://sapl.al.pb.leg.br/parlamentar/",
     "data": "2026-10-25"
    },
-   "ok": true
+   "ok": true,
+   "pendente": true,
+   "etapa": "primeira carga: materias, página 6",
+   "requisicoes": 45
   },
   "PE": {
    "casa": "Alepe",
@@ -126,7 +132,7 @@
     "data": "2026-10-23"
    },
    "ok": false,
-   "erro": "RuntimeError: Falha ao baixar https://dadosabertos.alepe.pe.gov.br/api/v1/parlamentares?formato=json: <urlopen error timed out>"
+   "erro": "Bloqueado: https://dadosabertos.alepe.pe.gov.br/api/v1/parlamentares?formato=json: o robots.txt do site não respondeu (ou pede mais de 120 s entre pedidos); nada é lido dele nesta rodada"
   },
   "PI": {
    "casa": "Alepi",
@@ -144,7 +150,10 @@
     "url": "https://sapl.al.pi.leg.br/parlamentar/",
     "data": "2026-10-25"
    },
-   "ok": true
+   "ok": true,
+   "pendente": true,
+   "etapa": "primeira carga: materias, página 14",
+   "requisicoes": 46
   },
   "RN": {
    "casa": "ALRN",
@@ -182,7 +191,7 @@
     "data": "2026-10-23"
    },
    "ok": false,
-   "erro": "RuntimeError: Falha ao baixar https://aleselegis.al.se.leg.br/api/publico/parlamentar/?pag=1&qtd=30: <urlopen error [Errno 110] Connection timed out>"
+   "erro": "Bloqueado: https://aleselegis.al.se.leg.br/api/publico/parlamentar/?pag=1&qtd=30: o robots.txt do site não respondeu (ou pede mais de 120 s entre pedidos); nada é lido dele nesta rodada"
   },
   "DF": {
    "casa": "CLDF",
@@ -201,7 +210,7 @@
     "data": "2026-10-23"
    },
    "ok": false,
-   "erro": "RuntimeError: Falha ao baixar https://www.cl.df.gov.br/deputados-2023-2026: <urlopen error timed out>"
+   "erro": "RuntimeError: o robots.txt de www.cl.df.gov.br não deixa robôs lerem /deputados-2023-2026"
   },
   "ES": {
    "casa": "Ales",
@@ -220,7 +229,7 @@
     "data": "2026-10-23"
    },
    "ok": false,
-   "erro": "RuntimeError: Falha ao baixar https://www3.al.es.gov.br/api/publico/parlamentar/?pag=1&qtd=200&parlamentarSituacao=1: <urlopen error [Errno 110] Connection timed out>"
+   "erro": "RuntimeError: o robots.txt de www3.al.es.gov.br não deixa robôs lerem /api/publico/parlamentar/?pag=1&qtd=200&parlamentarSituacao=1"
   },
   "MG": {
    "casa": "ALMG",
@@ -238,8 +247,11 @@
     "url": "https://dadosabertos.almg.gov.br/documentacao/arquivos/deputados-da-atual-legislatura",
     "data": "2026-10-23"
    },
-   "ok": false,
-   "erro": "RuntimeError: Falha ao baixar https://dadosabertos.almg.gov.br/arquivo/deputados-legislatura/download: <urlopen error timed out>"
+   "ok": true,
+   "erro": "RuntimeError: Falha ao baixar https://dadosabertos.almg.gov.br/arquivo/deputados-legislatura/download: <urlopen error timed out>",
+   "pendente": true,
+   "etapa": "primeira carga: 658 proposições lidas",
+   "requisicoes": 1688
   },
   "RJ": {
    "casa": "Alerj",
@@ -255,7 +267,7 @@
     "veiculo": "Assembleia Legislativa do Estado do Rio de Janeiro (Alerj)",
     "titulo": "Deputados da legislatura atual (página oficial \"Quem são\")",
     "url": "https://www.alerj.rj.gov.br/Deputados/QuemSao",
-    "data": "2026-10-25"
+    "data": "2026-10-26"
    },
    "ok": true
   },
@@ -276,7 +288,7 @@
     "data": "2026-10-23"
    },
    "ok": false,
-   "erro": "RuntimeError: Falha ao baixar https://ww4.al.rs.gov.br:5000/listarDestaqueDeputados: <urlopen error timed out>"
+   "erro": "RuntimeError: o robots.txt de ww4.al.rs.gov.br:5000 não deixa robôs lerem /listarDestaqueDeputados"
   },
   "SC": {
    "casa": "Alesc",
@@ -294,7 +306,10 @@
     "url": "https://www.alesc.sc.gov.br/deputados/",
     "data": "2026-10-25"
    },
-   "ok": true
+   "ok": true,
+   "pendente": true,
+   "etapa": "primeira carga: 1114 páginas de tramitação por ler",
+   "requisicoes": 536
   },
   "SP": {
    "casa": "Alesp",
@@ -310,7 +325,7 @@
     "veiculo": "Assembleia Legislativa do Estado de São Paulo (Alesp)",
     "titulo": "Dados Abertos: deputados em exercício (deputados.xml)",
     "url": "https://www.al.sp.gov.br/dados-abertos/dataset/41",
-    "data": "2026-10-25"
+    "data": "2026-10-26"
    },
    "ok": true
   },
@@ -335,7 +350,10 @@
     "inicio": "2023-02-01",
     "fim": "2027-01-31"
    },
-   "ok": true
+   "ok": true,
+   "pendente": true,
+   "etapa": "o tempo da rodada acabou",
+   "requisicoes": 47
   },
   "AM": {
    "casa": "Aleam",
@@ -358,7 +376,10 @@
     "inicio": "2023-02-01",
     "fim": "2027-01-31"
    },
-   "ok": true
+   "ok": true,
+   "pendente": true,
+   "etapa": "o tempo da rodada acabou",
+   "requisicoes": 47
   },
   "GO": {
    "casa": "Alego",
@@ -380,7 +401,8 @@
     "inicio": "2023-02-01",
     "fim": "2027-01-31"
    },
-   "ok": true
+   "ok": false,
+   "erro": "SemTempo: acabou o tempo desta rodada (461 pedidos)"
   },
   "MS": {
    "casa": "Alems",
@@ -402,7 +424,8 @@
     "inicio": "2023-02-01",
     "fim": "2027-01-31"
    },
-   "ok": true
+   "ok": false,
+   "erro": "RobotsFechado: robots.txt de www.al.ms.gov.br sem resposta (<urlopen error [Errno -3] Temporary failure in name resolution>); o site não é lido nesta rodada"
   },
   "MT": {
    "casa": "ALMT",
@@ -418,7 +441,7 @@
     "veiculo": "Assembleia Legislativa de Mato Grosso (ALMT)",
     "titulo": "Deputados em exercício (página oficial)",
     "url": "https://www.al.mt.gov.br/parlamento/deputados",
-    "data": "2026-10-25"
+    "data": "2026-10-26"
    },
    "legislatura": {
     "inicio": "2023-02-01",
@@ -440,7 +463,7 @@
     "veiculo": "Assembleia Legislativa do Pará (Alepa)",
     "titulo": "Deputados em exercício (página oficial)",
     "url": "https://www.alepa.pa.gov.br/Home/Page/Deputados",
-    "data": "2026-10-25"
+    "data": "2026-10-26"
    },
    "legislatura": {
     "inicio": "2023-02-01",
@@ -469,7 +492,10 @@
     "inicio": "2023-02-01",
     "fim": "2027-01-31"
    },
-   "ok": true
+   "ok": true,
+   "pendente": true,
+   "etapa": "o tempo da rodada acabou",
+   "requisicoes": 47
   },
   "RR": {
    "casa": "ALE-RR",
@@ -516,7 +542,10 @@
     "inicio": "2023-02-01",
     "fim": "2027-01-31"
    },
-   "ok": true
+   "ok": true,
+   "pendente": true,
+   "etapa": "o tempo da rodada acabou",
+   "requisicoes": 49
   }
  },
  "camaras": {
@@ -542,9 +571,11 @@
     "leis": 446,
     "vetos": 242
    },
-   "requisicoes": 69,
+   "requisicoes": 33,
    "semTse": 0,
-   "ok": true
+   "ok": true,
+   "pendente": true,
+   "etapa": "autoria"
   },
   "1100205": {
    "casa": "CMPV",
@@ -568,9 +599,11 @@
     "leis": 262,
     "vetos": 182
    },
-   "requisicoes": 70,
+   "requisicoes": 33,
    "semTse": 0,
-   "ok": true
+   "ok": true,
+   "pendente": true,
+   "etapa": "autoria"
   },
   "1200401": {
    "casa": "CMRB",
@@ -594,9 +627,11 @@
     "leis": null,
     "vetos": 1
    },
-   "requisicoes": 9,
+   "requisicoes": 33,
    "semTse": 0,
-   "ok": true
+   "ok": true,
+   "pendente": true,
+   "etapa": "tramitações"
   },
   "1302603": {
    "casa": "CMM",
@@ -620,9 +655,11 @@
     "leis": 89,
     "vetos": 25
    },
-   "requisicoes": 46,
+   "requisicoes": 32,
    "semTse": 0,
-   "ok": true
+   "ok": true,
+   "pendente": true,
+   "etapa": "autoria"
   },
   "1400100": {
    "casa": "CMBV",
@@ -646,11 +683,11 @@
     "leis": 75,
     "vetos": 56
    },
-   "requisicoes": 18,
+   "requisicoes": 32,
    "semTse": 0,
    "ok": true,
    "pendente": true,
-   "etapa": "normas"
+   "etapa": "autoria"
   },
   "2304400": {
    "casa": "CMFor",
@@ -674,9 +711,11 @@
     "leis": 228,
     "vetos": 51
    },
-   "requisicoes": 39,
+   "requisicoes": 32,
    "semTse": 0,
-   "ok": true
+   "ok": true,
+   "pendente": true,
+   "etapa": "autoria"
   },
   "2507507": {
    "casa": "CMJP",
@@ -700,9 +739,11 @@
     "leis": 173,
     "vetos": 25
    },
-   "requisicoes": 52,
+   "requisicoes": 32,
    "semTse": 0,
-   "ok": true
+   "ok": true,
+   "pendente": true,
+   "etapa": "autoria"
   },
   "1501402": {
    "casa": "CMB",
@@ -764,7 +805,7 @@
    },
    "semTse": 0,
    "ok": false,
-   "erro": "RuntimeError: Falha ao baixar https://teresina.camarasempapel.com.br/spl/parlamentares.aspx: <urlopen error timed out>"
+   "erro": "RuntimeError: robots.txt de https://teresina.camarasempapel.com.br não respondeu (URLError); nada é lido desse servidor nesta rodada"
   },
   "2927408": {
    "casa": "CMS",
@@ -842,17 +883,16 @@
     "veiculo": "Câmara Municipal do Rio de Janeiro",
     "titulo": "Vereadores atuais (portal oficial)",
     "url": "https://www.camara.rio/vereadores/quem-sao",
-    "data": "2026-10-23"
+    "data": "2026-10-26"
    },
    "semTse": 0,
-   "ok": false,
-   "erro": "URLError: <urlopen error timed out>"
+   "ok": true
   },
   "3550308": {
    "casa": "CMSP",
    "nome": "Câmara Municipal de São Paulo",
    "membros": 55,
-   "propostas": 2656,
+   "propostas": 2660,
    "cobertura": {
     "lista": true,
     "propostas": true,
@@ -870,7 +910,7 @@
     "leis": null,
     "vetos": null
    },
-   "requisicoes": 4,
+   "requisicoes": 129,
    "semTse": 0,
    "ok": true
   },
@@ -914,7 +954,7 @@
    },
    "semTse": 0,
    "ok": false,
-   "erro": "RuntimeError: Falha ao baixar https://www.camarapoa.rs.gov.br/vereadores: <urlopen error _ssl.c:993: The handshake operation timed out>"
+   "erro": "RuntimeError: robots.txt de https://www.camarapoa.rs.gov.br não respondeu (URLError); nada é lido desse servidor nesta rodada"
   },
   "5103403": {
    "casa": "CMC-MT",
@@ -935,7 +975,7 @@
    },
    "semTse": 0,
    "ok": false,
-   "erro": "RuntimeError: Falha ao baixar https://legislativo.camaracuiaba.mt.gov.br/spl/parlamentares.aspx: <urlopen error timed out>"
+   "erro": "RuntimeError: robots.txt de https://legislativo.camaracuiaba.mt.gov.br não respondeu (URLError); nada é lido desse servidor nesta rodada"
   },
   "5208707": {
    "casa": "CMG",

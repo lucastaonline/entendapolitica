@@ -11,7 +11,7 @@
     "desde": "2026-04-02",
     "comoAssumiu": "Era vice-governadora e assumiu em 02/04/2026 depois que Gladson Camelí renunciou para disputar o Senado",
     "comoAssumiu_en": "She was vice governor. She became governor on April 2, 2026, after Gladson Camelí resigned to run for the Senate.",
-    "eleicao2026": "Disputa o 2º turno para governadora em 25/10/2026",
+    "eleicao2026": "Reeleita governadora no 2º turno (25/10/2026)",
     "nascimento": "1976-12-10",
     "fonte": [
      {
@@ -25,6 +25,12 @@
       "titulo": "Resultado oficial do 1º turno de 2026 – governador(a) e vice – Acre",
       "url": "https://resultados.tse.jus.br/oficial/ele2026/6259/dados/ac/ac-c0003-e006259-u.json",
       "data": "2026-10-04"
+     },
+     {
+      "veiculo": "Tribunal Superior Eleitoral (TSE)",
+      "titulo": "Resultado oficial do 2º turno de 2026 – governador(a) e vice – Acre (totalização final)",
+      "url": "https://resultados.tse.jus.br/oficial/ele2026/6260/dados/ac/ac-c0003-e006260-u.json",
+      "data": "2026-10-25"
      }
     ]
    },
@@ -401,7 +407,7 @@
     "desde": "2026-03-30",
     "comoAssumiu": "Era vice-governadora e assumiu em 30/03/2026 depois que Ibaneis Rocha renunciou ao governo (ele anunciou que disputaria o Senado)",
     "comoAssumiu_en": "She was vice governor. She became governor on March 30, 2026, after Ibaneis Rocha resigned (he had announced that he would run for the Senate).",
-    "eleicao2026": "Disputa o 2º turno para governadora em 25/10/2026",
+    "eleicao2026": "Reeleita governadora no 2º turno (25/10/2026)",
     "nascimento": "1977-03-02",
     "fonte": [
      {
@@ -427,6 +433,12 @@
       "titulo": "Resultado oficial do 1º turno de 2026 – governador(a) e vice – Distrito Federal",
       "url": "https://resultados.tse.jus.br/oficial/ele2026/6259/dados/df/df-c0003-e006259-u.json",
       "data": "2026-10-15"
+     },
+     {
+      "veiculo": "Tribunal Superior Eleitoral (TSE)",
+      "titulo": "Resultado oficial do 2º turno de 2026 – governador(a) e vice – Distrito Federal (totalização final)",
+      "url": "https://resultados.tse.jus.br/oficial/ele2026/6260/dados/df/df-c0003-e006260-u.json",
+      "data": "2026-10-25"
      }
     ]
    },
@@ -453,7 +465,7 @@
     "desde": "2026-04-02",
     "comoAssumiu": "Era vice-governador e assumiu em 02/04/2026 depois que Renato Casagrande renunciou para disputar o Senado",
     "comoAssumiu_en": "He was vice governor. He became governor on April 2, 2026, after Renato Casagrande resigned to run for the Senate.",
-    "eleicao2026": "Disputa o 2º turno para governador em 25/10/2026",
+    "eleicao2026": "Disputou o 2º turno para governador e não foi eleito (25/10/2026)",
     "nascimento": "1963-08-17",
     "fonte": [
      {
@@ -473,6 +485,12 @@
       "titulo": "Resultado oficial do 1º turno de 2026 – governador(a) e vice – Espírito Santo",
       "url": "https://resultados.tse.jus.br/oficial/ele2026/6259/dados/es/es-c0003-e006259-u.json",
       "data": "2026-10-04"
+     },
+     {
+      "veiculo": "Tribunal Superior Eleitoral (TSE)",
+      "titulo": "Resultado oficial do 2º turno de 2026 – governador(a) e vice – Espírito Santo (totalização final)",
+      "url": "https://resultados.tse.jus.br/oficial/ele2026/6260/dados/es/es-c0003-e006260-u.json",
+      "data": "2026-10-25"
      }
     ]
    },

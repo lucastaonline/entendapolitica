@@ -89,8 +89,29 @@
       p.id = base.id || id;
       p.tipo = base.tipo;
       ["uf", "municipio", "cargo", "avisoLista", "avisoLista_en"].forEach(function (k) { if (base[k] != null && x[k] == null) p[k] = base[k]; });
+      if (base.executivo && x.executivo) p.executivo = juntaExecutivo(x.executivo, base.executivo);
       return p;
     }, function () { return base; });
+  }
+  // Leis e vetos de duas fontes oficiais: vale o que o sistema da Câmara (SAPL, no arquivo extra) contou; o que ele não
+  // conseguiu contar com segurança vem da ficha (Diário Oficial ou página oficial de leis do município, que o montar.py só
+  // põe ali quando falta no SAPL e as duas contas começam no mesmo dia). Cada número leva a explicação e a fonte de onde
+  // veio ("notaLeis", "notaVetos"); sem as explicações separadas, fica só a conta do SAPL (nada de frase que contradiga
+  // o número mostrado).
+  function juntaExecutivo(a, b) {
+    var leis = a.leisSancionadas == null && b.leisSancionadas != null, vetos = a.vetos == null && b.vetos != null;
+    var deLeis = leis ? b : a, deVetos = vetos ? b : a;
+    if (!(leis || vetos) || !deLeis.notaLeis || !deVetos.notaVetos) return a;
+    var e = Object.assign({}, a);
+    if (leis) {
+      e.leisSancionadas = b.leisSancionadas;
+      e.periodo = Object.assign({}, a.periodo || b.periodo, { ultimaLei: (b.periodo || {}).ultimaLei || null });
+    }
+    if (vetos) ["vetos", "vetosTotais", "vetosParciais"].forEach(function (k) { e[k] = b[k] != null ? b[k] : null; });
+    e.fontes = [].concat(b.fontes || b.fonte || [], a.fontes || a.fonte || []);
+    e.nota = deLeis.notaLeis + " " + deVetos.notaVetos;
+    e.nota_en = deLeis.notaLeis_en && deVetos.notaVetos_en ? deLeis.notaLeis_en + " " + deVetos.notaVetos_en : null;
+    return e;
   }
   function carregarBase() {
     var m;
@@ -669,7 +690,7 @@
       (e.leisPromulgadasPelaCasa ? " " + EP.tr(casa[0] + " promulga a própria lei quando derruba um veto ou quando " + chefe[0] + " não sanciona nem veta no prazo.",
         mai(casa[3]) + " promulgates a law itself when it overrides a veto or when " + chefe[2] + " neither signs nor vetoes it in time.") : "") + "</p>" +
       (comoContou ? '<details class="como-contou"><summary>' + EP.tr("Como contamos", "How we counted") + "</summary><p>" + (EP.en && !(e.nota_en || e.obs_en) ? D.ptHtml(comoContou) : EP.en ? citacoesPt(comoContou) : esc(comoContou)) + "</p></details>" : "") +
-      (e.fonte ? '<p style="margin-top:10px">' + fonteBtn(e.fonte, null, EP.tr("leis e vetos", "laws and vetoes")) + "</p>" : "") + "</section>";
+      (e.fonte || (e.fontes || []).length ? '<p style="margin-top:10px">' + fonteBtn((e.fontes || []).length ? e.fontes : e.fonte, null, EP.tr("leis e vetos", "laws and vetoes")) + "</p>" : "") + "</section>";
   }
   // ---------------------------------------------------------------- onde ver mais
   // Quando a Assembleia, a Câmara Municipal ou o governo não publicam um dado de um jeito que o site consiga ler, o perfil
@@ -743,7 +764,16 @@
       txt = EP.tr(oQue[0], oQue[1]);
       if (!gov) notas = notasCasa(p, /prefeit|executivo/i);
       var dio = pre.diarioOficial || p.diarioOficial || {};
-      if (semExec && urlBoa(dio.url)) links.push(itemOnde("📰", dio.url, dio.nome ? (EP.en ? EP.pt(esc(dio.nome)) : esc(dio.nome)) : EP.tr("Diário Oficial", "Official Gazette"),
+      // dados/prefeituras (montar.py): onde o robô procurou as leis da prefeitura e por que a contagem não é segura
+      var lf = !gov && semExec && pre.leis && pre.leis.motivo ? pre.leis : null, lfLink = lf && urlBoa(lf.url);
+      if (lf) {
+        var lfMot = EP.en && lf.motivo_en ? esc(lf.motivo_en) : EP.en ? EP.pt(esc(lf.motivo)) : esc(lf.motivo);
+        var lfNome = lf.nome ? (EP.en ? (lf.nome_en && lf.nome_en !== lf.nome ? esc(lf.nome_en) : EP.pt(esc(lf.nome))) : esc(lf.nome)) :
+          lf.tipo === "legislacao" ? EP.tr("Página de leis do site oficial da prefeitura", "Laws page of the city government's official website") : EP.tr("Diário Oficial", "Official Gazette");
+        if (lfLink) links.push(itemOnde(lf.tipo === "legislacao" ? "📜" : "📰", lf.url, lfNome, lfMot));
+        else notas.push(lfMot);
+      }
+      if (semExec && urlBoa(dio.url) && !(lfLink && lf.tipo === "diario")) links.push(itemOnde("📰", dio.url, dio.nome ? (EP.en ? EP.pt(esc(dio.nome)) : esc(dio.nome)) : EP.tr("Diário Oficial", "Official Gazette"),
         gov ? EP.tr("É onde saem as leis, os vetos e os decretos do governo do estado.", "Where the state government's laws, vetoes and decrees are published.") :
           EP.tr("É onde saem as leis, os vetos e os decretos da prefeitura.", "Where the city government's laws, vetoes and decrees are published.")));
       if (gov && urlBoa(i.site)) links.push(itemOnde("🏛️", i.site, EP.tr("Site oficial da ", "Official website of the ") + nomeAssembleia(p),

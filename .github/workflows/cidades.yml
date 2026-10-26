@@ -1,6 +1,7 @@
-# Atualiza o que é de cada cidade, num robô separado do diário. Hoje: o mapa das Câmaras Municipais e prefeituras (sites
-# oficiais, sistema de propostas da Câmara, Diário Oficial e pedido de informação), um grupo de estados por dia: cada
-# estado é conferido uma vez por semana. Cada commit na main faz a Vercel publicar sozinha.
+# Atualiza o que é de cada cidade, num robô separado do diário: o mapa das Câmaras Municipais e prefeituras (sites
+# oficiais, sistema de propostas da Câmara, Diário Oficial e pedido de informação) e as leis e os vetos de cada prefeitura
+# (Diários Oficiais e páginas oficiais de leis dos municípios), um grupo de estados por dia: cada estado é conferido uma
+# vez por semana. Cada commit na main faz a Vercel publicar sozinha.
 # Também dá para rodar à mão: aba Actions > "Atualizar cidades" > Run workflow.
 name: Atualizar cidades
 
@@ -20,7 +21,7 @@ concurrency:
 jobs:
   cidades:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 150
     steps:
       - uses: actions/checkout@v4
 
@@ -31,7 +32,9 @@ jobs:
       - run: pip install pillow
 
       # o que foi visto em cada cidade (uma cidade só é conferida de novo depois de 6 dias; se um site não abrir numa
-      # rodada, vale o que foi conferido até 45 dias antes). Lido aqui e guardado no fim, mesmo se algo falhar.
+      # rodada, vale o que foi conferido até 45 dias antes) e o que já foi lido dos Diários Oficiais (diarios/atos: os
+      # meses lidos não são lidos de novo; a primeira carga continua de uma rodada para a outra). Lido aqui e guardado no
+      # fim, mesmo se algo falhar.
       - uses: actions/cache/restore@v4
         with:
           path: .cache/municipios
@@ -42,6 +45,13 @@ jobs:
         run: python scripts/municipios/mapear.py --rodizio
         continue-on-error: true
         timeout-minutes: 60
+
+      # leis e vetos de cada prefeitura, só onde a contagem é segura (o mesmo grupo de estados do dia); o que não der
+      # tempo fica para a próxima rodada, e nada é publicado pela metade
+      - name: Leis e vetos das prefeituras (Diários Oficiais e páginas oficiais de leis)
+        run: python scripts/municipios/diarios.py --rodizio --minutos 40
+        continue-on-error: true
+        timeout-minutes: 50
 
       - name: Juntar tudo
         run: python scripts/montar.py

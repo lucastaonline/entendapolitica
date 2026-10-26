@@ -210,11 +210,62 @@ def _info_casa(a: dict, canal: dict | None = None) -> dict:
     return d
 
 
-def _onde_ver_cidades() -> int:
+def _prefeituras() -> tuple[dict, dict]:
+    """dados/prefeituras/<UF>.json (scripts/municipios/diarios.py): as leis e os vetos de cada prefeitura contados no
+    Diário Oficial ou nas páginas oficiais de legislação do município, só onde a contagem é segura ({IBGE: bloco
+    "executivo"}), e, nas outras cidades lidas, o motivo e onde conferir ({IBGE: {tipo, nome, url, motivo, ...}})."""
+    contadas, fora = {}, {}
+    for arq in sorted((DADOS / "prefeituras").glob("*.json")):
+        d = ler_json(arq) or {}
+        for ibge, c in (d.get("cidades") or {}).items():
+            ex = (c or {}).get("executivo")
+            if isinstance(ex, dict) and (ex.get("leisSancionadas") is not None or ex.get("vetos") is not None):
+                contadas[str(ibge)] = {k: v for k, v in ex.items() if k != "conferencia"}  # conferencia: só para quem confere
+        for ibge, f in (d.get("fora") or {}).items():
+            if isinstance(f, dict) and f.get("motivo"):
+                fora[str(ibge)] = {k: f[k] for k in ("tipo", "nome", "nome_en", "url", "motivo", "motivo_en", "data") if f.get(k)}
+    return contadas, fora
+
+
+def _executivo_sapl(ibge: str) -> dict:
+    """O bloco "executivo" do prefeito que o SAPL da Câmara já dá: no arquivo da cidade (dados/camaras/extras/<IBGE>.json)
+    ou, nas capitais com arquivo próprio, em dados/pessoas/pref-<IBGE>.json."""
+    pid = f"pref-{ibge}"
+    x = (((ler_json(EXTRAS_CIDADES / f"{ibge}.json") or {}).get("pessoas")) or {}).get(pid) or ler_json(PESSOAS / f"{pid}.json") or {}
+    return (x.get("executivo") if isinstance(x, dict) else None) or {}
+
+
+def _executivo_prefeito(ibge: str, p, bloco: dict | None) -> dict | None:
+    """O bloco "executivo" dos Diários Oficiais vai para a ficha do prefeito só se for de quem governa hoje, desde o
+    começo do período contado: fica fora quem assumiu numa eleição suplementar sem a data da posse na ficha (a conta
+    juntaria as leis de quem governava antes) e quem está "a confirmar". Onde o SAPL da Câmara já tem a contagem, vale a do
+    SAPL (o perfil põe o arquivo extra por cima da ficha); se o SAPL tiver só os vetos (ou só as leis), o bloco dos Diários
+    fica na ficha e o perfil junta os dois (js/pessoa.js, juntaExecutivo), cada número com a sua fonte e a sua nota, desde
+    que os dois contem do mesmo dia."""
+    if not bloco or not isinstance(p, dict) or not p.get("nome") or p.get("aConfirmar"):
+        return None
+    if "suplementar" in (p.get("situacao") or "") and not p.get("desde"):
+        return None
+    if ((bloco.get("periodo") or {}).get("inicio") or "") < (p.get("desde") or vigente("prefeito")["inicio"]):
+        return None
+    sapl = _executivo_sapl(ibge)
+    if sapl:
+        soma = ((sapl.get("leisSancionadas") is None and bloco.get("leisSancionadas") is not None) or
+                (sapl.get("vetos") is None and bloco.get("vetos") is not None))
+        ini = (sapl.get("periodo") or {}).get("inicio")
+        if not soma or (ini and ini != (bloco.get("periodo") or {}).get("inicio")):
+            return None
+    return bloco
+
+
+def _onde_ver_cidades() -> tuple[int, int]:
     """dados/municipios/<UF>.json (scripts/municipios/mapear.py: site oficial da Câmara e da prefeitura, sistema de
     propostas, pedido de informação, Diário Oficial) e os canais conferidos à mão (dados/manual/canais-lai.json) -> campo
     "onde" de cada dados/cidades/<UF>/<IBGE>.json. É o que o perfil mostra quando a Câmara ou a prefeitura não publica um
-    dado num formato que o site consiga ler: onde ver e como pedir, em vez de "Em breve"."""
+    dado num formato que o site consiga ler: onde ver e como pedir, em vez de "Em breve".
+    Também dados/prefeituras/<UF>.json: as leis e os vetos contados vão para prefeito.executivo (_executivo_prefeito), e o
+    motivo das cidades em que a contagem não é segura vai para onde.prefeitura.leis, com o link para conferir.
+    Devolve (cidades com "onde" atualizado, prefeitos com as leis e vetos atualizados)."""
     ondes: dict[str, dict] = {}
     for arq in sorted((DADOS / "municipios").glob("*.json")):
         for ibge, o in (((ler_json(arq) or {}).get("cidades")) or {}).items():
@@ -225,20 +276,36 @@ def _onde_ver_cidades() -> int:
         if canal.get("sic") and not cam.get("sic"):
             cam["sic"] = canal["sic"]
             cam.setdefault("conferido", canal.get("conferido"))
-    n = 0
+    contadas, fora = _prefeituras()
+    for ibge, f in fora.items():
+        ondes.setdefault(ibge, {}).setdefault("prefeitura", {})["leis"] = f
+    n = n_ex = 0
     for c_arq in sorted((DADOS / "cidades").glob("*/*.json")):
         c = ler_json(c_arq)
         if not isinstance(c, dict):
             continue
+        mudou = False
         onde = ondes.get(c_arq.stem)
         if c.get("onde") != onde:
             if onde:
                 c["onde"] = onde
             else:
                 c.pop("onde", None)
-            salvar_json(c_arq, sem_mudar_data(c, c_arq))
+            mudou = True
             n += 1
-    return n
+        p = c.get("prefeito")
+        if isinstance(p, dict):
+            ex = _executivo_prefeito(c_arq.stem, p, contadas.get(c_arq.stem))
+            if p.get("executivo") != ex:
+                if ex:
+                    p["executivo"] = ex
+                else:
+                    p.pop("executivo")
+                mudou = True
+                n_ex += 1
+        if mudou:
+            salvar_json(c_arq, sem_mudar_data(c, c_arq))
+    return n, n_ex
 
 
 def _marcar_extras_cidades() -> int:
@@ -448,7 +515,9 @@ def main() -> None:
     a, c = juntar_legislativos()
     log(f"listas oficiais: {a} Assembleias e {c} Câmaras Municipais")
     log(f"cidades com dados a mais num arquivo por cidade: {_marcar_extras_cidades()} atualizadas")
-    log(f"cidades com \"onde ver\" (site oficial, pedido de informação, Diário Oficial) atualizado: {_onde_ver_cidades()}")
+    n_onde, n_ex = _onde_ver_cidades()
+    log(f"cidades com \"onde ver\" (site oficial, pedido de informação, Diário Oficial) atualizado: {n_onde}")
+    log(f"prefeitos com as leis e os vetos dos Diários Oficiais atualizados: {n_ex}")
     log(f"dados/cidades.json: {indice_cidades()} cidades")
     log(f"sitemap.xml: {sitemap()} endereços")
     log("pronto")

@@ -11,7 +11,7 @@ import sys
 
 from playwright.async_api import async_playwright
 
-BASE = "http://127.0.0.1:8770/"
+BASE = __import__("os").environ.get("EP_BASE", "http://127.0.0.1:8770/")  # outro servidor: EP_BASE=http://127.0.0.1:8771/
 sys.stdout.reconfigure(encoding="utf-8")
 
 JS = r"""() => {

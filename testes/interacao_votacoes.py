@@ -10,7 +10,7 @@ from pathlib import Path
 
 from playwright.async_api import async_playwright
 
-BASE = "http://127.0.0.1:8770/"
+BASE = __import__("os").environ.get("EP_BASE", "http://127.0.0.1:8770/")  # outro servidor: EP_BASE=http://127.0.0.1:8771/
 RAIZ = Path(__file__).resolve().parent.parent
 AXE = RAIZ.parent / "ferramentas" / "node_modules" / "axe-core" / "axe.min.js"
 sys.stdout.reconfigure(encoding="utf-8")

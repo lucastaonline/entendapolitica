@@ -95,7 +95,9 @@ scripts/              coletores em Python (só biblioteca padrão + Pillow):
   mandatos.py         datas de posse e qual mandato está em curso em cada data (a regra da "virada" de mandato)
   simplificar.py, montar.py   explicações simples (IA) e a junção final (todo dia)
   historico.py, mapa.py       mandatos anteriores e mapa do Brasil (à mão)
-.github/workflows/    atualização automática diária
+  municipios/mapear.py        mapa das Câmaras Municipais e prefeituras (sites oficiais, sistema de propostas, Diário Oficial, pedido de informação)
+.github/workflows/    atualizar.yml (robô diário) e cidades.yml (robô das cidades: o mapa das Câmaras e prefeituras, um grupo de estados por dia)
+.vercelignore         o que vai para o repositório mas não para o site (scripts, testes e arquivos de trabalho dos coletores)
 testes/               capturas de tela, auditoria de acessibilidade e amostras
 ```
 
@@ -142,6 +144,17 @@ Correções à mão (sempre com fonte): `dados/manual/governadores.json`, `dados
 - **Situação das propostas numa Câmara de uma casa só**: o "aprovado" da votação final vai para a sanção do prefeito (`aprovada`); sancionado, promulgado ou com norma ligada = `lei`; "veto rejeitado" quer dizer que a Câmara derrubou o veto; aprovação em 1º turno e pareceres = `andando`. As regras estão em `scripts/camaras/_base.py` (`REGRAS`).
 - **Votações nominais e gastos** das Câmaras ainda não entram: o SAPL das capitais quase não tem votos nominais; São Paulo publica as votações em XML e os gastos no SisGV (próximo passo).
 - `scripts/descobrir_sapl.py` (não roda todo dia) testa `sapl.<cidade>.<uf>.leg.br` nas 5.569 cidades: em 23/10/2026, 824 Câmaras tinham a API funcionando, a legislatura atual cadastrada e projetos desde 2025.
+
+### Mapa das Câmaras Municipais e prefeituras (`dados/municipios/<UF>.json`)
+
+`python scripts/municipios/mapear.py [UF ...]` confere, nas 5.569 cidades, o site oficial da Câmara Municipal e da prefeitura, o sistema de proposições da Câmara e se as proposições estão na internet (quando não estão, por quê), a página de pedido de informação (e-SIC), o portal da transparência e o Diário Oficial da prefeitura. É o que o quadro **"Onde ver mais"** dos perfis de vereadores e prefeitos mostra (o `montar.py` leva cada cidade para o campo `onde` de `dados/cidades/<UF>/<IBGE>.json`). As pistas vêm de listas oficiais — a do Interlegis (domínio .leg.br, SAPL e Portal Modelo de cada Câmara), a descoberta do SAPL (`scripts/descobrir_sapl.py`), as listas de municípios dos Diários Oficiais das associações de municípios (SIGPub, em www.diariomunicipal.com.br, e Assomasul) e a do Ciga (SC) —, mas tudo é conferido no próprio site oficial (título, nome do site, texto). Só entram sites .leg.br e .gov.br; o Diário Oficial pode estar na plataforma que o site da prefeitura indica (ou na da associação em que a cidade publicou nos últimos 6 meses).
+
+- **No robô:** `.github/workflows/cidades.yml` roda `mapear.py --rodizio` todo dia (um grupo de estados por dia: cada estado é conferido uma vez por semana) e junta tudo com o `montar.py`.
+- **Educado:** respeita o robots.txt de cada site (e o `Crawl-delay`; o do SAPL pede 60 s); 1 s entre pedidos ao mesmo site; poucos pedidos ao mesmo tempo para o mesmo servidor; até 16 cidades em paralelo (sites diferentes); um servidor que para de responder é deixado em paz pelo resto da rodada. O que foi visto fica em `.cache/municipios/`; cada cidade só é refeita depois de 6 dias e, se um site não abrir, vale o que foi conferido até 45 dias antes.
+- **Formato:** `{uf, atualizado, fontes, nota, cidades: {<IBGE>: {camara: {site, sistema, api, propostas, propostasOnline, sic, conferido, motivo, motivo_en, plataforma?}, prefeitura: {site, transparencia, sic, diarioOficial: {nome, url, plataforma, entidade?, confirmado?}, conferido, lido?}}}}`. `sistema`: `sapl`, `sagl`, `nopaper` (SPL da Ágape, "Câmara sem Papel"), `outro` ou `null`. `propostasOnline`: `true` (conferido que estão na internet), `false` (conferido que não estão onde deviam) ou `null` (não deu para conferir); `motivo`/`motivo_en` dizem por quê, em frases curtas que qualquer pessoa confere abrindo o site. `propostas` é a página pública das proposições (no SAPL, a busca de matérias).
+- **Conferir:** `python scripts/municipios/resumo.py` (tabela por estado e plataformas de Diário Oficial) e `python scripts/municipios/resumo.py --conferir` (formato); `python scripts/municipios/mapear.py --ibge <código>` mostra o que foi achado numa cidade.
+- **Limites:** domínios fora do padrão (abreviações, .com.br) ficam sem site ("Não achamos..."); sites que pedem no robots.txt para não serem lidos, ou que só funcionam com JavaScript, ficam com o endereço e o motivo; o DOM/SC fecha para robôs (em SC, sem link no site da prefeitura, a ligação ao DOM/SC vem da adesão ao Ciga: `"confirmado": false`).
+- Os canais de pedido de informação conferidos à mão (`dados/manual/canais-lai.json`) completam o mapa nas capitais em que ele não achou.
 
 ### Assembleias Legislativas (e a Câmara Legislativa do DF)
 

@@ -1,0 +1,15 @@
+# O que vai para o repositório mas não precisa ir para o site (a Vercel publica até ~15 mil arquivos por vez).
+# O site só lê o que está em js/, css/, img/, conteudo/, as páginas .html e, de dados/, os arquivos que as páginas pedem
+# (dados/camaras/extras/ sim; os outros arquivos de dados/camaras/ não). Os arquivos de trabalho abaixo são lidos só
+# pelos scripts (scripts/montar.py junta o que importa nos arquivos que as páginas leem).
+/.github/
+/scripts/
+/testes/
+/dados/assembleias/
+/dados/municipios/
+/dados/prefeituras/
+/dados/simples/
+/dados/tse/
+/dados/camaras/*.json
+/dados/legislativos.json
+/dados/simples-recusadas.json

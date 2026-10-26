@@ -406,9 +406,9 @@
     var s = EP.STATUS[x.status] ? x.status : "outra";
     var ondeLink = /^senado:/.test(x.id || "") ? ["Ver no site do Senado", "See it on the Senate website"] :
       /^camara:/.test(x.id || "") ? ["Ver no site da Câmara", "See it on the Chamber of Deputies website"] :
-      P.tipo === "dest" && P.uf === "DF" ? ["Ver no site da Câmara Legislativa", "See it on the Legislative Chamber website"] :
-      P.tipo === "dest" ? ["Ver no site da Assembleia", "See it on the state legislature website"] :
-      P.tipo === "ver" ? ["Ver no site da Câmara Municipal", "See it on the city council website"] :
+      /^(dest|gov)$/.test(P.tipo) && P.uf === "DF" ? ["Ver no site da Câmara Legislativa", "See it on the Legislative Chamber website"] :
+      /^(dest|gov)$/.test(P.tipo) ? ["Ver no site da Assembleia", "See it on the state legislature website"] :
+      /^(ver|pref)$/.test(P.tipo) ? ["Ver no site da Câmara Municipal", "See it on the city council website"] :
       ["Ver no site oficial", "See it on the official website"];
     var simples = EP.en ? x.s_en : x.s;
     var ementa = EP.pt(esc(x.ementa || ""));
@@ -655,13 +655,19 @@
       '<p class="muted">' + EP.tr(casa[0] + " aprova as leis; " + chefe[0] + " assina (sanciona) ou recusa (veta), no todo ou em parte. " + casa[0] + " pode derrubar o veto.",
         mai(casa[3]) + " passes laws; " + chefe[2] + " signs them (sanction) or rejects them (veto), in whole or in part. " + mai(casa[3]) + " can override a veto.") + '</p><div class="grandes-n">' +
       (e.leisSancionadas != null ? '<div class="grande-n"><b>' + EP.num(e.leisSancionadas) + "</b><span>" + EP.tr("leis sancionadas desde " + desde, "laws signed since " + desde) + "</span></div>" : "") +
-      (e.vetos != null ? '<div class="grande-n"><b>' + EP.num(e.vetos) + "</b><span>" + EP.tr("vetos (totais ou parciais) desde " + desde, "vetoes (full or partial) since " + desde) + "</span></div>" : "") +
+      (e.leisPromulgadasPelaCasa ? '<div class="grande-n"><b>' + EP.num(e.leisPromulgadasPelaCasa) + "</b><span>" + EP.tr("leis promulgadas " + casa[1] + " desde " + desde, "laws promulgated by " + casa[3] + " itself since " + desde) + "</span></div>" : "") +
+      (e.vetos != null ? '<div class="grande-n"><b>' + EP.num(e.vetos) + "</b><span>" + (e.vetosTotais != null && e.vetosParciais != null ?
+        EP.tr("vetos desde " + desde + ": " + EP.num(e.vetosTotais) + (e.vetosTotais === 1 ? " total" : " totais") + " e " + EP.num(e.vetosParciais) + (e.vetosParciais === 1 ? " parcial" : " parciais"),
+          "vetoes since " + desde + ": " + EP.num(e.vetosTotais) + " full and " + EP.num(e.vetosParciais) + " partial") :
+        EP.tr("vetos (totais ou parciais) desde " + desde, "vetoes (full or partial) since " + desde)) + "</span></div>" : "") +
       "</div>" + (e.leisSancionadas != null && ultima ? '<p class="muted" style="margin-top:8px">' + esc(EP.tr("A lei mais recente na fonte é de " + EP.dataLonga(ultima) + ".", "The most recent law in the source is from " + EP.dataLonga(ultima) + ".")) + "</p>" : "") +
       '<p class="muted nota-contexto" style="margin-top:10px"><span aria-hidden="true">🦉 </span>' + (e.leisSancionadas != null ? EP.tr(
         "Quase todo projeto aprovado " + casa[1] + " passa " + chefe[1] + ", venha de quem vier. Por isso, este número mostra o que " + casa[2] + " aprovou e " + chefe[0] + " assinou, e não o que " + chefe[0] + " propôs (isso está em \"O que " + ele(p) + " propôs\"). ",
         "Almost every bill passed by " + casa[3] + " goes to " + chefe[2] + ", no matter who proposed it. So this number shows what " + casa[3] + " passed and " + chefe[2] + " signed, not what " + chefe[2] + " proposed (that is under \"What " + ele(p) + " proposed\"). ") : "") + EP.tr(
         "Vetar também é uma tarefa prevista " + regra[0] + ": o número, sozinho, não diz se as decisões foram boas ou ruins.",
-        "Vetoing is also a task set by " + regra[1] + ": the number alone does not say whether the decisions were good or bad.") + "</p>" +
+        "Vetoing is also a task set by " + regra[1] + ": the number alone does not say whether the decisions were good or bad.") +
+      (e.leisPromulgadasPelaCasa ? " " + EP.tr(casa[0] + " promulga a própria lei quando derruba um veto ou quando " + chefe[0] + " não sanciona nem veta no prazo.",
+        mai(casa[3]) + " promulgates a law itself when it overrides a veto or when " + chefe[2] + " neither signs nor vetoes it in time.") : "") + "</p>" +
       (comoContou ? '<details class="como-contou"><summary>' + EP.tr("Como contamos", "How we counted") + "</summary><p>" + (EP.en && !(e.nota_en || e.obs_en) ? D.ptHtml(comoContou) : EP.en ? citacoesPt(comoContou) : esc(comoContou)) + "</p></details>" : "") +
       (e.fonte ? '<p style="margin-top:10px">' + fonteBtn(e.fonte, null, EP.tr("leis e vetos", "laws and vetoes")) + "</p>" : "") + "</section>";
   }

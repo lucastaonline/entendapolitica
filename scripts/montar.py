@@ -243,21 +243,28 @@ def _onde_ver_cidades() -> int:
 
 def _marcar_extras_cidades() -> int:
     """Marca "extras": "cidade" em quem tem dados no arquivo da cidade (dados/camaras/extras/<IBGE>.json): vereadores,
-    prefeito e vice. Quem tem arquivo próprio (dados/pessoas/<id>.json) continua com "extras": true."""
+    prefeito e vice; e tira a marca de quem saiu do arquivo (o perfil não pede um arquivo à toa). Quem tem arquivo próprio
+    (dados/pessoas/<id>.json) continua com "extras": true."""
     n = 0
-    for f in sorted(EXTRAS_CIDADES.glob("*.json")):
-        ids = set(((ler_json(f) or {}).get("pessoas") or {}))
-        achados = list((DADOS / "cidades").glob(f"*/{f.stem}.json"))
-        c = ler_json(achados[0]) if achados else None
-        if not ids or not isinstance(c, dict):
+    com_arquivo = {f.stem: f for f in EXTRAS_CIDADES.glob("*.json")}
+    for c_arq in sorted((DADOS / "cidades").glob("*/*.json")):
+        f = com_arquivo.get(c_arq.stem)
+        ids = set(((ler_json(f) or {}).get("pessoas") or {})) if f else set()
+        c = ler_json(c_arq)
+        if not isinstance(c, dict):
             continue
         mudou = False
         for p in [c.get("prefeito"), c.get("vice")] + list((c.get("vereadores") or {}).get("membros") or []):
-            if isinstance(p, dict) and p.get("id") in ids and p.get("extras") is not True and p.get("extras") != "cidade":
+            if not isinstance(p, dict) or p.get("extras") is True:
+                continue
+            if p.get("id") in ids and p.get("extras") != "cidade":
                 p["extras"] = "cidade"
                 mudou = True
+            elif p.get("extras") == "cidade" and p.get("id") not in ids:
+                p.pop("extras")
+                mudou = True
         if mudou:
-            salvar_json(achados[0], sem_mudar_data(c, achados[0]))
+            salvar_json(c_arq, sem_mudar_data(c, c_arq))
             n += 1
     return n
 
@@ -308,7 +315,17 @@ def juntar_legislativos() -> tuple[int, int]:
         ibge = str(k.get("ibge") or arq.stem)
         c_arq = DADOS / "cidades" / (k.get("uf") or "") / f"{ibge}.json"
         c = ler_json(c_arq)
-        if not c or not k.get("membros"):
+        if not c:
+            continue
+        if not k.get("membros"):
+            # a Câmara tem dados abertos, mas a lista oficial não passou na conferência de vagas: fica a lista do TSE, e a
+            # página da cidade e o quadro "Onde ver mais" ganham as notas e o site da Câmara
+            v = c.get("vereadores") or {}
+            info = _info_casa(k, canais_cam.get(ibge))
+            if info.get("cobertura") and v.get("infoCasa") != info:
+                v["infoCasa"] = info
+                c["vereadores"] = v
+                salvar_json(c_arq, sem_mudar_data(c, c_arq))
             continue
         if _lista_velha(k, vigente("vereador")["inicio"]):
             log(f"  camaras/{arq.name}: lista de uma legislatura que já acabou; fica a lista do TSE")

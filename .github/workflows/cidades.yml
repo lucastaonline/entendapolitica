@@ -1,0 +1,72 @@
+# Atualiza o que é de cada cidade, num robô separado do diário. Hoje: o mapa das Câmaras Municipais e prefeituras (sites
+# oficiais, sistema de propostas da Câmara, Diário Oficial e pedido de informação), um grupo de estados por dia: cada
+# estado é conferido uma vez por semana. Cada commit na main faz a Vercel publicar sozinha.
+# Também dá para rodar à mão: aba Actions > "Atualizar cidades" > Run workflow.
+name: Atualizar cidades
+
+on:
+  schedule:
+    - cron: "0 5 * * *"    # 2h de Brasília, antes do robô diário
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+# o mesmo grupo do robô diário: um de cada vez (os dois fazem commit na main)
+concurrency:
+  group: atualizar-dados
+  cancel-in-progress: false
+
+jobs:
+  cidades:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install pillow
+
+      # o que foi visto em cada cidade (uma cidade só é conferida de novo depois de 6 dias; se um site não abrir numa
+      # rodada, vale o que foi conferido até 45 dias antes). Lido aqui e guardado no fim, mesmo se algo falhar.
+      - uses: actions/cache/restore@v4
+        with:
+          path: .cache/municipios
+          key: municipios-${{ github.run_id }}
+          restore-keys: municipios-
+
+      - name: Mapa das Câmaras e prefeituras (o grupo de estados do dia)
+        run: python scripts/municipios/mapear.py --rodizio
+        continue-on-error: true
+        timeout-minutes: 60
+
+      - name: Juntar tudo
+        run: python scripts/montar.py
+
+      - name: Salvar no repositório
+        run: |
+          git config user.name "lucastaonline"
+          git config user.email "31556507+lucastaonline@users.noreply.github.com"
+          git add -A dados img/pessoas 'sitemap*.xml'
+          if git diff --cached --quiet; then
+            echo "Nada mudou."
+          else
+            git commit -m "Cidades atualizadas em $(date -u +%Y-%m-%d)"
+            # o robô diário pode ter publicado enquanto esta rodada corria: junta com o que está no GitHub antes de
+            # enviar; num conflito em dados/, valem os dados desta rodada
+            for tentativa in 1 2 3; do
+              git pull --rebase -X theirs origin main && git push && exit 0
+              sleep 20
+            done
+            exit 1
+          fi
+
+      - name: Guardar o cache do mapa
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: .cache/municipios
+          key: municipios-${{ github.run_id }}

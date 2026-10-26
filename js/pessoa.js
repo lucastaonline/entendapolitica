@@ -683,8 +683,8 @@
         EP.tr("vetos (totais ou parciais) desde " + desde, "vetoes (full or partial) since " + desde)) + "</span></div>" : "") +
       "</div>" + (e.leisSancionadas != null && ultima ? '<p class="muted" style="margin-top:8px">' + esc(EP.tr("A lei mais recente na fonte é de " + EP.dataLonga(ultima) + ".", "The most recent law in the source is from " + EP.dataLonga(ultima) + ".")) + "</p>" : "") +
       '<p class="muted nota-contexto" style="margin-top:10px"><span aria-hidden="true">🦉 </span>' + (e.leisSancionadas != null ? EP.tr(
-        "Quase todo projeto aprovado " + casa[1] + " passa " + chefe[1] + ", venha de quem vier. Por isso, este número mostra o que " + casa[2] + " aprovou e " + chefe[0] + " assinou, e não o que " + chefe[0] + " propôs (isso está em \"O que " + ele(p) + " propôs\"). ",
-        "Almost every bill passed by " + casa[3] + " goes to " + chefe[2] + ", no matter who proposed it. So this number shows what " + casa[3] + " passed and " + chefe[2] + " signed, not what " + chefe[2] + " proposed (that is under \"What " + ele(p) + " proposed\"). ") : "") + EP.tr(
+        "Quase todo projeto aprovado " + casa[1] + " passa " + chefe[1] + ", venha de quem vier. Por isso, este número mostra o que " + casa[2] + " aprovou e " + chefe[0] + " assinou, e não o que " + chefe[0] + " propôs" + (p.propostas ? " (isso está em \"O que " + ele(p) + " propôs\")" : "") + ". ",
+        "Almost every bill passed by " + casa[3] + " goes to " + chefe[2] + ", no matter who proposed it. So this number shows what " + casa[3] + " passed and " + chefe[2] + " signed, not what " + chefe[2] + " proposed" + (p.propostas ? " (that is under \"What " + ele(p) + " proposed\")" : "") + ". ") : "") + EP.tr(
         "Vetar também é uma tarefa prevista " + regra[0] + ": o número, sozinho, não diz se as decisões foram boas ou ruins.",
         "Vetoing is also a task set by " + regra[1] + ": the number alone does not say whether the decisions were good or bad.") +
       (e.leisPromulgadasPelaCasa ? " " + EP.tr(casa[0] + " promulga a própria lei quando derruba um veto ou quando " + chefe[0] + " não sanciona nem veta no prazo.",

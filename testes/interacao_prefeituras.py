@@ -108,6 +108,8 @@ async def main():
             tot, par = ex["vetosTotais"], ex["vetosParciais"]
             ok("vetos com totais e parciais", f"{tot} {'total' if tot == 1 else 'totais'} e {par} {'parcial' if par == 1 else 'parciais'}" in txt, f"{ex['vetos']} vetos")
             ok("data da lei mais recente na fonte", "A lei mais recente na fonte é de " + data_longa(ex["periodo"]["ultimaLei"]) in txt)
+            ok("sem o quadro de propostas, o texto não manda procurar por ele",
+               "isso está em" not in txt and await pg.locator("#t-propostas").count() == 0)
             det = sec.locator("details.como-contou")
             await det.locator("summary").click()
             ok("\"Como contamos\" abre com a nota da contagem", await det.get_attribute("open") is not None and ex["nota"][:60] in await det.inner_text())

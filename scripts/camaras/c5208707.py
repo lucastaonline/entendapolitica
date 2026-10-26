@@ -28,8 +28,8 @@ def coletar() -> dict:
         sigla = html.unescape(re.sub(r"<[^>]+>", " ", resto)).strip(" ,\n")
         pessoas.append({"chave": href.rstrip("/").rsplit("/", 1)[-1], "nome": nome, "partido": sigla or None, "foto": foto, "url": href})
     CASA["fonte"] = fonte(CASA["casa"], "Parlamentares da 20ª Legislatura em exercício (portal oficial)", PAGINA, hoje())
-    notas = [("A Câmara não publica as proposições em dados abertos (só em páginas e PDFs): por enquanto, só a lista "
-              "oficial de quem está no cargo.",
-              "The City Council does not publish its bills as open data (only as web pages and PDFs): for now, only the "
-              "official list of who is in office.")]
+    notas = [("As propostas dos vereadores não entram neste site: a Câmara não publica as proposições em dados abertos, só em "
+              "páginas e PDFs.",
+              "Councilors' bills are not included on this site: the City Council does not publish its bills as open data, "
+              "only as web pages and PDFs.")]
     return B.so_lista(IBGE, UF, CASA, pessoas, 37, notas)

@@ -1,7 +1,7 @@
 """Câmara Municipal de Salvador (BA): só a lista oficial de vereadores da legislatura atual (www.cms.ba.gov.br/vereadores,
 aba "Vereadores - 20ª Legislatura"; quem saiu ou está de licença fica em outra aba, que não entra).
 
-As proposições estão no sistema legislativo da Câmara, em páginas HTML, sem dados abertos: ainda não entram aqui.
+As proposições estão no sistema legislativo da Câmara, em páginas HTML, sem dados abertos: não entram (nota da Câmara abaixo).
 """
 import html
 import re
@@ -32,10 +32,10 @@ def coletar() -> dict:
                         "foto": SITE + foto if foto.startswith("/") else foto, "url": SITE + href,
                         "email": emails.get(re.sub(r"\W", "", nome.lower()))})
     CASA["fonte"] = fonte(CASA["casa"], "Vereadores - 20ª Legislatura (portal oficial)", f"{SITE}/vereadores", hoje())
-    notas = [("As proposições estão no sistema legislativo da Câmara, em páginas HTML, sem dados abertos: por enquanto, só a "
-              "lista oficial de quem está no cargo.",
-              "The City Council's bills are in its legislative system, as web pages, without open data: for now, only the "
-              "official list of who is in office.")]
+    notas = [("As propostas dos vereadores não entram neste site: a Câmara publica as proposições só no sistema legislativo "
+              "dela, em páginas HTML, sem dados abertos.",
+              "Councilors' bills are not included on this site: the City Council publishes its bills only in its legislative "
+              "system, as web pages, without open data.")]
     # conferidos à mão (mesmo partido; nome de urna no TSE): "Omarzinho Gordilho" = OMARZINHO (Omar Antonio Gordilho de Britto,
     # PDT); "Téo Senna" = THEO SENNA (Theofilo Virgilio de Senna, PSDB), eleitos em 2024
     return B.so_lista(IBGE, UF, CASA, pessoas, 43, notas,

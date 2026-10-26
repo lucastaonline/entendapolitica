@@ -1,7 +1,7 @@
 """Câmara Municipal de Curitiba (PR): só a lista oficial de vereadores em exercício (www.cmc.pr.gov.br/vereadores/conheca-os-vereadores).
 
 O partido vem do logotipo de cada cartão ("Logo União"). As proposições ficam no sistema SPL da Câmara
-(www.cmc.pr.gov.br/wspl/sistema/ProposicaoConsultaForm.do), em páginas HTML, sem dados abertos: ainda não entram aqui.
+(www.cmc.pr.gov.br/wspl/sistema/ProposicaoConsultaForm.do), em páginas HTML, sem dados abertos: não entram (nota da Câmara abaixo).
 """
 import html
 import re
@@ -31,9 +31,9 @@ def coletar() -> dict:
                         "partido": html.unescape(logo.group(1)).strip() if logo else None,
                         "foto": SITE + f if f and f.startswith("/") else f, "url": SITE + href.group(1)})
     CASA["fonte"] = fonte(CASA["casa"], "Conheça os vereadores (portal oficial)", PAGINA, hoje())
-    notas = [("As proposições estão no sistema SPL da Câmara, em páginas HTML, sem dados abertos: por enquanto, só a lista "
-              "oficial de quem está no cargo.",
-              "The City Council's bills are in its SPL system, as web pages, without open data: for now, only the official "
-              "list of who is in office.")]
+    notas = [("As propostas dos vereadores não entram neste site: a Câmara publica as proposições só no sistema SPL, em "
+              "páginas HTML, sem dados abertos.",
+              "Councilors' bills are not included on this site: the City Council publishes its bills only in its SPL system, "
+              "as web pages, without open data.")]
     # conferido à mão: "Pier Petruzziello" no portal da Câmara = PIER no TSE (Pierpaolo Petruzziello, eleito em 2024)
     return B.so_lista(IBGE, UF, CASA, pessoas, 38, notas, tse_manual={"pier-petruzziello": "160002073993"})

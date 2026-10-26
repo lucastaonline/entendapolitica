@@ -6,23 +6,134 @@
 - Tse: liga cada pessoa da lista oficial ao candidato do TSE de 2024 (id ver-<IBGE>-<SQ>), pelo nome, só na cidade certa;
 - situacao(): texto oficial da última tramitação -> um dos 9 status do site, com regras pensadas para Câmaras de uma casa só
   (o "aprovado" final vai para a sanção do prefeito; "veto rejeitado" quer dizer que a Câmara derrubou o veto...);
-- salvar(): grava dados/camaras/<IBGE>.json e dados/pessoas/ver-<IBGE>-*.json e devolve o resumo para dados/legislativos.json.
+- salvar(): grava dados/camaras/<IBGE>.json (lista oficial) e dados/camaras/extras/<IBGE>.json (um arquivo por cidade, com
+  o que a Câmara publica a mais sobre cada vereador e sobre o prefeito) e devolve o resumo para dados/legislativos.json.
 Arquivos que começam com "_" não são coletores (scripts/legislativos.py pula).
 """
 from __future__ import annotations
 
 import io
+import os
 import re
 import sys
+import threading
 import time
+import urllib.error
+import urllib.parse
+import urllib.request
+import urllib.robotparser
+from pathlib import Path
 
 import regional
-from comum import (CACHE, DADOS, FOTOS, baixar, fonte, hoje, ler_json, log, nome_proprio, salvar_json, sem_acento,
-                   slug)
+from comum import (CACHE, DADOS, EXTRAS_CIDADES, FOTOS, UA, baixar, fonte, hoje, ler_json, log, nome_proprio, salvar_json,
+                   sem_acento, slug)
 
 INICIO = regional.INICIO_MUNICIPAL  # 2025-01-01, começo da legislatura municipal atual
+# o que cada Câmara já leu (estado da carga, páginas guardadas, fotos): .cache/camaras/<IBGE>/. CAMARAS_CACHE no ambiente
+# escolhe outra pasta (ex.: simular o robô do GitHub, que começa com o cache vazio, sem mexer no cache da pasta de trabalho)
+PASTA_CACHE = Path(os.environ["CAMARAS_CACHE"]).resolve() if os.environ.get("CAMARAS_CACHE") else CACHE / "camaras"
 # formato dos robôs de busca: alguns sites barram quem não começa com "Mozilla/5.0", mas continua dizendo quem somos
 UA_COMPAT = "Mozilla/5.0 (compatible; EntendaPolitica/1.0; +https://entendapolitica.vercel.app)"
+TOKEN_ROBOTS = "EntendaPolitica"  # o nome do nosso robô nas regras do robots.txt
+# só as capitais guardam a foto oficial reduzida em img/pessoas/ (limite de arquivos do site); nas outras cidades vale a foto
+# do TSE (que a lista da cidade já tem) ou o endereço oficial da foto na Câmara
+CAPITAIS = {"3550308", "3304557", "3106200", "2927408", "2304400", "2611606", "4106902", "4314902", "1302603", "1501402",
+            "5208707", "2111300", "2704302", "2211001", "2408102", "5002704", "2507507", "2800308", "5103403", "4205407",
+            "1100205", "1600303", "1200401", "3205309", "1400100", "1721000"}
+
+
+# ---------------------------------------------------------------- robots.txt e intervalo entre pedidos
+class Regras:
+    """O que o robots.txt de um servidor permite ao nosso robô e o intervalo pedido (Crawl-delay, em segundos).
+    As regras de caminho seguem a RFC 9309 (o "*" vale qualquer sequência, "$" marca o fim, a regra mais longa vale), que o
+    urllib.robotparser não entende sozinho."""
+
+    def __init__(self, parser: urllib.robotparser.RobotFileParser | None = None, atraso: float | None = None):
+        self.parser, self.atraso = parser, float(atraso or 0)
+
+    def pode(self, url: str) -> bool:
+        if self.parser is None:
+            return True
+        grupo = next((g for g in self.parser.entries if g.applies_to(TOKEN_ROBOTS)), None) or self.parser.default_entry
+        if grupo is None:
+            return True
+        p = urllib.parse.urlsplit(url)
+        caminho = urllib.parse.unquote(p.path or "/") + (f"?{urllib.parse.unquote(p.query)}" if p.query else "")
+        melhor = None
+        for regra in grupo.rulelines:
+            r = urllib.parse.unquote(regra.path or "")
+            if not r:
+                continue
+            exp = re.escape(r).replace(r"\*", ".*")
+            if exp.endswith(r"\$"):
+                exp = exp[:-2] + "$"
+            if re.match(exp, caminho):
+                if melhor is None or len(r) > melhor[0] or (len(r) == melhor[0] and regra.allowance):
+                    melhor = (len(r), regra.allowance)
+        return True if melhor is None else bool(melhor[1])
+
+
+_ROBOTS: dict[str, Regras] = {}
+_ROBOTS_TRAVAS: dict[str, threading.Lock] = {}
+_TRAVA = threading.Lock()
+_ULTIMO: dict[str, float] = {}  # servidor -> hora do último pedido (todas as Casas desta rodada)
+
+
+def raiz(url: str) -> str:
+    p = urllib.parse.urlsplit(url)
+    return f"{p.scheme}://{p.netloc}".lower()
+
+
+def robots(url: str, ua: str | None = None, contexto=None) -> Regras:
+    """robots.txt do servidor de `url`, lido uma vez por rodada (RFC 9309): 2xx = as regras dele; 4xx = pode ler tudo;
+    5xx ou sem resposta = RuntimeError (não lê nada desse servidor nesta rodada)."""
+    r = raiz(url)
+    with _TRAVA:
+        trava = _ROBOTS_TRAVAS.setdefault(r, threading.Lock())
+    with trava:
+        if r in _ROBOTS:
+            return _ROBOTS[r]
+        try:
+            req = urllib.request.Request(r + "/robots.txt", headers={"User-Agent": ua or UA})
+            with urllib.request.urlopen(req, timeout=30, context=contexto) as resp:
+                texto = resp.read(500_000).decode("utf-8", "replace")
+            rp = urllib.robotparser.RobotFileParser()
+            rp.parse(texto.splitlines())
+            regras = Regras(rp, rp.crawl_delay(TOKEN_ROBOTS))
+        except urllib.error.HTTPError as e:
+            if 400 <= e.code < 500:
+                regras = Regras()
+            else:
+                raise RuntimeError(f"robots.txt de {r}: HTTP {e.code}; nada é lido desse servidor nesta rodada")
+        except Exception as e:
+            raise RuntimeError(f"robots.txt de {r} não respondeu ({type(e).__name__}); nada é lido desse servidor nesta rodada")
+        with _TRAVA:
+            _ULTIMO[r] = time.time()
+        _ROBOTS[r] = regras
+        return regras
+
+
+def esperar_vez(url: str, pausa: float = 0.5, ua: str | None = None, contexto=None) -> None:
+    """Antes de um pedido: confere o robots.txt (Disallow) e espera o intervalo do servidor (o maior entre o Crawl-delay e
+    a pausa do coletor), contado do fim do pedido anterior ao mesmo servidor."""
+    regras = robots(url, ua, contexto)
+    if not regras.pode(url):
+        raise RuntimeError(f"o robots.txt de {raiz(url)} não deixa ler {urllib.parse.urlsplit(url).path}")
+    r = raiz(url)
+    intervalo = max(pausa, regras.atraso)
+    while True:
+        with _TRAVA:
+            falta = _ULTIMO.get(r, 0) + intervalo - time.time()
+            if falta <= 0:
+                _ULTIMO[r] = time.time()
+                return
+        time.sleep(min(falta, 5))
+
+
+def pedido_feito(url: str) -> None:
+    """Depois de um pedido: o intervalo até o próximo conta a partir daqui."""
+    with _TRAVA:
+        _ULTIMO[raiz(url)] = time.time()
 
 # ---------------------------------------------------------------- partidos
 # siglas atuais (TSE, eleição de 2026) + fusões e mudanças de nome já registradas no TSE
@@ -56,6 +167,11 @@ def partido(sigla: str | None) -> str | None:
         return SEM_PARTIDO
     if k in _PARTIDOS:
         return _PARTIDOS[k]
+    junto = k.replace(" ", "")
+    achados = {sig for nome, sig in _PARTIDOS.items()  # "UNIAOBRASIL", "REPUBLIC." (abreviado), "CIDAD."
+               if junto == nome.replace(" ", "") or (len(junto) >= 5 and nome.replace(" ", "").startswith(junto))}
+    if len(achados) == 1:
+        return achados.pop()
     return s.upper() if len(s) <= 14 else s
 
 
@@ -78,15 +194,23 @@ def nome_limpo(nome: str | None) -> str | None:
 
 
 # ---------------------------------------------------------------- TSE
-def ue_da_cidade(ibge: str, uf: str) -> str | None:
-    """Código TSE do município (SG_UE), tirado das fotos/fontes do DivulgaCandContas em dados/cidades/<UF>/<IBGE>.json."""
-    c = ler_json(DADOS / "cidades" / uf / f"{ibge}.json") or {}
+def cidade(ibge: str, uf: str) -> dict:
+    """dados/cidades/<UF>/<IBGE>.json (prefeito, vice e a lista de vereadores da página da cidade)."""
+    return ler_json(DADOS / "cidades" / uf / f"{ibge}.json") or {}
+
+
+def _fotos_e_fontes(c: dict) -> list[str]:
     textos = []
     for p in [c.get("prefeito") or {}, c.get("vice") or {}] + list((c.get("vereadores") or {}).get("membros") or []):
         textos.append(p.get("foto") or "")
         for f in p.get("fontes") or []:
             textos.append(f.get("url") or "")
-    for t in textos:
+    return textos
+
+
+def ue_da_cidade(ibge: str, uf: str) -> str | None:
+    """Código TSE do município (SG_UE), tirado das fotos/fontes do DivulgaCandContas em dados/cidades/<UF>/<IBGE>.json."""
+    for t in _fotos_e_fontes(cidade(ibge, uf)):
         m = re.search(r"divulgacandcontas\.tse\.jus\.br/divulga/rest/arquivo/img/\d+/\d+/(\d+)", t)
         if m:
             return m.group(1)
@@ -94,6 +218,30 @@ def ue_da_cidade(ibge: str, uf: str) -> str | None:
         if m:
             return m.group(1)
     return None
+
+
+def modelo_foto_tse(ibge: str, uf: str) -> str | None:
+    """Endereço da foto de candidato no DivulgaCandContas (TSE) com {sq} no lugar do número do candidato, tirado de uma foto
+    da própria cidade (ex.: https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/2045202024/{sq}/49590)."""
+    for p in list((cidade(ibge, uf).get("vereadores") or {}).get("membros") or []):
+        m = re.match(r"(https://divulgacandcontas\.tse\.jus\.br/divulga/rest/arquivo/img/\d+/)\d+(/\d+)$", p.get("foto") or "")
+        if m:
+            return m.group(1) + "{sq}" + m.group(2)
+    return None
+
+
+_CANDS: dict[str, dict[str, list]] = {}
+_CANDS_TRAVA = threading.Lock()
+
+
+def _candidatos(uf: str, ue: str) -> list[dict]:
+    with _CANDS_TRAVA:  # várias cidades ao mesmo tempo (legislativos.py --paralelo): o arquivo do estado é lido uma vez só
+        if uf not in _CANDS:
+            por_ue: dict[str, list] = {}
+            for c in regional.candidatos_tse(2024, {"VEREADOR"}, uf):
+                por_ue.setdefault(c["ue"], []).append(c)
+            _CANDS[uf] = por_ue
+        return list(_CANDS[uf].get(ue) or [])
 
 
 class Tse:
@@ -105,10 +253,18 @@ class Tse:
         self.ue = ue_da_cidade(ibge, uf)
         if not self.ue:
             raise RuntimeError(f"não achei o código TSE (ue) de {ibge}")
-        self.cands = [c for c in regional.candidatos_tse(2024, {"VEREADOR"}, uf) if c["ue"] == self.ue]
+        self.cands = _candidatos(uf, self.ue)
         self.por_sq = {c["sq"]: c for c in self.cands}
         self.manual = {str(k): v for k, v in (manual or {}).items()}
         self.sem_ligacao: list[str] = []
+
+    @property
+    def vagas(self) -> int:
+        return sum(1 for c in self.cands if c.get("sit", "").startswith("ELEITO"))
+
+    def ids_eleitos(self) -> set[str]:
+        """ids da lista do TSE que a página da cidade mostra quando não há lista oficial (eleitos em 2024)."""
+        return {f"ver-{self.ibge}-{c['sq']}" for c in self.cands if c.get("sit", "").startswith("ELEITO")}
 
     def casar(self, chave: str, nomes: list[str | None], partido_hoje: str | None = None) -> tuple[str, dict | None]:
         """(id no site, candidato do TSE ou None)."""
@@ -138,7 +294,7 @@ TXT = {
     "veto_total_pendente": ("O prefeito vetou tudo; a Câmara ainda vai decidir sobre o veto", "The mayor vetoed all of it; the City Council has yet to decide on the veto"),
     "veto_pendente": ("Esperando a Câmara decidir sobre um veto do prefeito", "Waiting for the City Council to decide on a veto by the mayor"),
     "veto_parcial": ("Virou lei, com partes vetadas pelo prefeito", "Became law, with some parts vetoed by the mayor"),
-    "sem_tramitacao": ("Apresentada; ainda vai começar a ser analisada", "Filed; the review has not started yet"),
+    "sem_tramitacao": ("Apresentada; ainda vai começar a ser analisada", "Filed; the review has not started"),
 }
 
 # (expressão sem acento, em minúsculas) -> (status, chave de TXT ou None). A primeira que bater vale.
@@ -148,7 +304,7 @@ REGRAS = [
     # ainda falta promulgar (vem antes de "norma jurídica" e de "promulgada")
     (r"aguardando (a )?promulga|(decreto legislativo|resolucao) elaborad", "aprovada", "promulgar"),
     # esperando a sanção (vem antes das regras de veto: "Aguardando sanção/veto do Executivo")
-    (r"aguardando (a )?sancao|sancao ?/ ?veto|sancao ou veto|(encaminhad[oa]|enviad[oa]|encaminhar|remetid[oa]) (para|a) sancao", "aprovada", "sancao"),
+    (r"aguardando (a )?sancao|sancao ?[/,] ?veto|sancao ou veto|(encaminhad[oa]|enviad[oa]|encaminhar|remetid[oa]) (para|a) sancao", "aprovada", "sancao"),
     # virou norma
     (r"sancionad|norma (numerada|promulgada|publicada)|transformad[oa] em (lei|decreto|resolu|norma|emenda)|"
      r"lei promulgada|veto (total ou parcial|integral ou parcial) promulgad|^(lei|lei complementar|lei ordinaria|resolucao|"
@@ -159,10 +315,13 @@ REGRAS = [
     (r"veto parcial|vetad[oa] parcialmente", "lei", "veto_parcial"),
     (r"veto (total|integral)|vetad[oa] (totalmente|integralmente)", "rejeitada", "veto_total"),
     (r"veto (sobre a (proposicao|materia) )?mantido|sobre veto mantido|veto mantido", "rejeitada", "veto_mantido"),
+    # "Veto acatado", "Veto acolhido tacitamente pelo Poder Legislativo", "Ofício ... comunicando a manutenção do Veto": a
+    # Câmara aceitou o veto (se ele foi parcial, a norma ligada à proposta já faz dela "lei" antes de chegar aqui)
+    (r"veto .{0,20}(acatad|acolhid)|(acatad|acolhid)[oa] o veto|manutencao do veto", "rejeitada", "veto_mantido"),
     (r"\bveto\b|vetad", "veto?", None),  # veto pendente: decide pelo histórico (ver situacao())
     # desistência
     (r"retirad[oa] pel[oa] autor|retirad[oa] a pedido d[oa] autor|a pedido d[oa] autor|arquivamento solicitado pelo autor|"
-     r"^proposicao retirada$", "retirada", None),
+     r"^proposicao retirada$|^retirad[oa]$", "retirada", None),
     (r"retirad[oa] (da|de) (ordem do dia|pauta)|retirado de pauta|retirad[oa] pelo presidente", "andando", None),
     (r"desarquivad", "andando", None),
     (r"arquivad|arquivamento", "arquivada", None),
@@ -179,13 +338,14 @@ REGRAS = [
      r"aprovad[oa] o regime de urgencia|regime de urgencia aprovad|votacao do regime de urgencia|parecer.{0,30}aprovad|"
      r"aprovad[oa] (o )?parecer|aprovado voto em separado|aprovado recurso|requerimento aprovado|ata aprovada", "andando", None),
     # aprovada: vai para a sanção do prefeito (ou para a promulgação, no caso de decretos legislativos e resoluções)
-    (r"sancao|autografo|enviad[oa] (ao|para o) (poder )?executivo e arquivad", "aprovada", "sancao"),
+    (r"sancao|autografo|enviad[oa] (ao|para o) (poder )?executivo e arquivad|^materia enviada (ao|para o) (poder )?executivo$",
+     "aprovada", "sancao"),
     (r"aprovad|numero de lei", "aprovada", None),
     # ainda em discussão
     (r"aguardando|parecer|relator|comiss|pauta|ordem do dia|discuss|votac|vista|leitura|\blid[oa]\b|ciencia|protocolad|autuad|"
      r"apresentad|distribu|encaminhad|tramit|prazo|emenda|substitutiv|redacao final|procuradoria|despacho|recurso|devolvid|"
      r"devoluc|adiad|sobrestad|suspens|retorn|plenario|expediente|secretaria|gabinete|consultoria|elaboracao|analise|"
-     r"audiencia|subscri|recebid", "andando", None),
+     r"audiencia|subscri|recebid|regime de urgencia|diligencia", "andando", None),
 ]
 
 
@@ -267,13 +427,17 @@ ESCOPO_EN = ("Bills (ordinary and complementary laws, amendments to the city's O
 
 
 # ---------------------------------------------------------------- fotos
-def foto(url: str | None, pid: str, ibge: str, largura: int = 240) -> str | None:
+def foto(url: str | None, pid: str, ibge: str, largura: int = 240, antes_de_baixar=None) -> str | None:
     """Foto oficial reduzida para 240 px em img/pessoas/<id>.jpg, como as dos perfis federais (as originais de algumas
-    Câmaras têm vários MB). Só baixa de novo quando o endereço oficial da foto muda. Devolve o caminho no site ou None."""
+    Câmaras têm vários MB). Só baixa de novo quando o endereço oficial da foto muda (guardado em fotos.json, no cache).
+    Com o cache vazio (o robô do GitHub na primeira vez), a foto que já está no site vale e o endereço de hoje fica anotado:
+    nada de baixar de novo todas as fotos, cada uma esperando o intervalo do servidor.
+    antes_de_baixar: função chamada antes de um download (o orçamento e o prazo do coletor; pode lançar uma exceção).
+    Devolve o caminho no site ou None."""
     if not url:
         return None
     rel, destino = f"img/pessoas/{pid}.jpg", FOTOS / f"{pid}.jpg"
-    mapa_arq = CACHE / "camaras" / ibge / "fotos.json"
+    mapa_arq = PASTA_CACHE / ibge / "fotos.json"
     mapa = ler_json(mapa_arq, {}) or {}
     chave = url
     if url.startswith("data:"):  # foto embutida na própria página oficial (base64)
@@ -283,12 +447,22 @@ def foto(url: str | None, pid: str, ibge: str, largura: int = 240) -> str | None
         chave = "data:" + hashlib.sha1(bruto_b64.encode()).hexdigest()
     if mapa.get(pid) == chave and destino.exists():
         return rel
+    if pid not in mapa and destino.exists():
+        mapa[pid] = chave
+        salvar_json(mapa_arq, mapa)
+        return rel
+    if antes_de_baixar is not None and not url.startswith("data:"):
+        antes_de_baixar()
     try:
         from PIL import Image
         if url.startswith("data:"):
             bruto = base64.b64decode(bruto_b64)
         else:
-            bruto = baixar(url, tentativas=3, timeout=90, headers={"User-Agent": UA_COMPAT})
+            esperar_vez(url, 0.3, UA_COMPAT)
+            try:
+                bruto = baixar(url, tentativas=1, timeout=90, headers={"User-Agent": UA_COMPAT})
+            finally:
+                pedido_feito(url)
         im = Image.open(io.BytesIO(bruto))
         im.load()
         if im.mode in ("RGBA", "LA", "P"):
@@ -301,7 +475,6 @@ def foto(url: str | None, pid: str, ibge: str, largura: int = 240) -> str | None
         if im.width > largura:
             im = im.resize((largura, round(im.height * largura / im.width)), Image.LANCZOS)
         im.save(destino, "JPEG", quality=82, optimize=True, progressive=True)
-        time.sleep(0.3)
     except Exception as e:
         print(f"  [foto] {pid}: {e}", file=sys.stderr)
         return rel if destino.exists() else None
@@ -312,28 +485,30 @@ def foto(url: str | None, pid: str, ibge: str, largura: int = 240) -> str | None
 
 # ---------------------------------------------------------------- só a lista oficial (Câmaras sem dados abertos de propostas)
 def baixar_pagina(url: str, ibge: str, nome_cache: str, idade_h: float = 20, contexto=None, ua_navegador: bool = False) -> str:
-    """Página HTML oficial, guardada em .cache/camaras/<IBGE>/http/<nome>.html (uma requisição por dia).
+    """Página HTML oficial, guardada em .cache/camaras/<IBGE>/http/<nome>.html (uma requisição por dia), respeitando o
+    robots.txt do site (Disallow e Crawl-delay).
     ua_navegador: alguns sites barram robôs que não começam com "Mozilla/5.0"; aí usamos o formato dos robôs de busca
     ("Mozilla/5.0 (compatible; EntendaPolitica/1.0; +site)"), que continua dizendo quem somos."""
-    arq = CACHE / "camaras" / ibge / "http" / f"{nome_cache}.html"
+    arq = PASTA_CACHE / ibge / "http" / f"{nome_cache}.html"
     if arq.exists() and (time.time() - arq.stat().st_mtime) / 3600 < idade_h:
         return arq.read_text(encoding="utf-8")
-    cab = {"User-Agent": UA_COMPAT} if ua_navegador else None
-    if contexto is None:
-        t = baixar(url, tentativas=4, timeout=120, headers=cab).decode("utf-8", "replace")
-    else:  # site com a cadeia de certificados incompleta (o navegador completa sozinho; o Python não)
-        import gzip
-        import urllib.request
-        from comum import UA
-        req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept-Encoding": "gzip"})
-        with urllib.request.urlopen(req, timeout=120, context=contexto) as r:
-            b = r.read()
-            if r.headers.get("Content-Encoding") == "gzip":
-                b = gzip.decompress(b)
-        t = b.decode("utf-8", "replace")
+    ua = UA_COMPAT if ua_navegador else UA
+    esperar_vez(url, 0.5, ua, contexto)
+    try:
+        if contexto is None:
+            t = baixar(url, tentativas=1, timeout=120, headers={"User-Agent": ua}).decode("utf-8", "replace")
+        else:  # site com a cadeia de certificados incompleta (o navegador completa sozinho; o Python não)
+            import gzip
+            req = urllib.request.Request(url, headers={"User-Agent": ua, "Accept-Encoding": "gzip"})
+            with urllib.request.urlopen(req, timeout=120, context=contexto) as r:
+                b = r.read()
+                if r.headers.get("Content-Encoding") == "gzip":
+                    b = gzip.decompress(b)
+            t = b.decode("utf-8", "replace")
+    finally:
+        pedido_feito(url)
     arq.parent.mkdir(parents=True, exist_ok=True)
     arq.write_text(t, encoding="utf-8")
-    time.sleep(0.5)
     return t
 
 
@@ -379,8 +554,13 @@ def so_lista(ibge: str, uf: str, casa: dict, pessoas: list[dict], vagas: int, no
 
 # ---------------------------------------------------------------- gravar
 def salvar(ibge: str, uf: str, casa: dict, membros: list[dict], extras: dict[str, dict], cobertura: dict,
-           notas: list[tuple[str, str]] | None = None, escopo: tuple[str, str] | None = None) -> dict:
-    """casa = {casa, casa_en, sigla, site, fonte}; membros = lista oficial (contrato); extras = {id: dados/pessoas/<id>.json}.
+           notas: list[tuple[str, str]] | None = None, escopo: tuple[str, str] | None = None,
+           prefeito: tuple[str, dict] | None = None, oficial: bool = True, ids_validos: set[str] | None = None) -> dict:
+    """casa = {casa, casa_en, sigla, site, fonte}; membros = lista oficial (contrato); extras = {id: dados a mais da pessoa};
+    prefeito = (id, dados) com o que a prefeitura mandou à Câmara ("propostas") e as leis e vetos ("executivo").
+    Grava dados/camaras/<IBGE>.json (a lista oficial) e dados/camaras/extras/<IBGE>.json (um arquivo por cidade).
+    oficial=False: a lista da Câmara não passou na conferência; o arquivo da Câmara fica sem "membros" (a página da cidade
+    continua com a lista do TSE) e os dados a mais entram só para quem está nela (ids_validos).
     Devolve o resumo para dados/legislativos.json."""
     dados = {"uf": uf, "ibge": ibge, **casa, "cobertura": cobertura}
     if escopo:
@@ -389,22 +569,42 @@ def salvar(ibge: str, uf: str, casa: dict, membros: list[dict], extras: dict[str
     if notas:
         dados["notas"] = [n[0] for n in notas]
         dados["notas_en"] = [n[1] for n in notas]
-    regional.salvar_casa("camara", ibge, dados)
-    ids = {m["id"] for m in membros}
-    for pid, x in extras.items():
-        if pid in ids:
-            regional.salvar_extras(pid, x)
-    apagados = regional.limpar_extras(f"ver-{ibge}-", set(extras) & ids)
-    for arq in FOTOS.glob(f"ver-{ibge}-*.jpg"):  # fotos de quem saiu
-        if arq.stem not in ids:
-            arq.unlink()
+    if oficial:
+        regional.salvar_casa("camara", ibge, dados)
+        ids = {m["id"] for m in membros}
+    else:
+        # sem a lista oficial: o arquivo da Câmara fica só com o que ela publica (cobertura, notas, site), sem "membros"; o
+        # montar.py mantém a lista do TSE na página da cidade
+        dados["membros"] = []
+        regional.salvar_casa("camara", ibge, dados)
+        ids = set(ids_validos or ())
+    pessoas = {pid: x for pid, x in extras.items() if pid in ids}
+    if prefeito and prefeito[1]:
+        pessoas[prefeito[0]] = prefeito[1]
+    if pessoas:
+        regional.salvar_extras_cidade(ibge, pessoas, fontes=[casa["fonte"]] if casa.get("fonte") else None)
+    elif (EXTRAS_CIDADES / f"{ibge}.json").exists():
+        (EXTRAS_CIDADES / f"{ibge}.json").unlink()
+    # formato antigo (até outubro de 2026): um arquivo por vereador em dados/pessoas/; agora fica tudo no arquivo da cidade
+    apagados = regional.limpar_extras(f"ver-{ibge}-", set())
     if apagados:
-        log(f"  {apagados} perfis de quem saiu da Câmara foram apagados")
-    nprop = len({p["id"] for x in extras.values() for p in ((x.get("propostas") or {}).get("lista") or [])})
-    return {"casa": casa.get("sigla"), "nome": casa.get("casa"), "membros": len(membros), "propostas": nprop,
-            "cobertura": cobertura, "fonte": casa.get("fonte")}
+        log(f"  {apagados} arquivos antigos dados/pessoas/ver-{ibge}-*.json apagados (agora é um arquivo por cidade)")
+    locais = {m["id"] for m in membros if oficial and (m.get("foto") or "").startswith("img/pessoas/")}
+    for arq in FOTOS.glob(f"ver-{ibge}-*.jpg"):  # fotos de quem saiu
+        if arq.stem not in locais:
+            arq.unlink()
+    nprop = len({p["id"] for pid, x in pessoas.items() if pid.startswith("ver-")
+                 for p in ((x.get("propostas") or {}).get("lista") or [])})
+    r = {"casa": casa.get("sigla"), "nome": casa.get("casa"), "membros": len(membros) if oficial else 0, "propostas": nprop,
+         "cobertura": cobertura, "fonte": casa.get("fonte")}
+    if prefeito and prefeito[1]:
+        x = prefeito[1]
+        ex = x.get("executivo") or {}
+        r["prefeito"] = {"propostas": len(((x.get("propostas") or {}).get("lista") or [])) if x.get("propostas") else None,
+                         "leis": ex.get("leisSancionadas"), "vetos": ex.get("vetos")}
+    return r
 
 
-__all__ = ["INICIO", "SEM_PARTIDO", "partido", "nome_limpo", "ue_da_cidade", "Tse", "TXT", "REGRAS", "norm", "situacao",
-           "flags_veto", "nome_norma", "virou", "ESCOPO", "ESCOPO_EN", "foto", "baixar_pagina", "so_lista", "salvar",
-           "fonte", "hoje", "log", "slug", "CACHE"]
+__all__ = ["INICIO", "PASTA_CACHE", "SEM_PARTIDO", "CAPITAIS", "TOKEN_ROBOTS", "Regras", "robots", "esperar_vez", "pedido_feito", "partido", "nome_limpo", "cidade", "ue_da_cidade", "modelo_foto_tse", "Tse",
+           "TXT", "REGRAS", "norm", "situacao", "flags_veto", "nome_norma", "virou", "ESCOPO", "ESCOPO_EN", "foto",
+           "baixar_pagina", "so_lista", "salvar", "fonte", "hoje", "log", "slug", "CACHE"]

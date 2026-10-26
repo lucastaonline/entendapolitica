@@ -1,7 +1,7 @@
 """Câmara Municipal de Belém (PA): só a lista oficial de vereadores (www.cmb.pa.gov.br/vereadores).
 
 O site oficial lista os projetos por tipo em páginas HTML (www.cmb.pa.gov.br/legislacao/projetos-de-lei), sem dizer o
-autor de forma estruturada nem oferecer dados abertos: as propostas ainda não entram aqui.
+autor de forma estruturada nem oferecer dados abertos: as propostas não entram (nota da Câmara abaixo).
 """
 import html
 import re
@@ -31,8 +31,8 @@ def coletar() -> dict:
                         "partido": html.unescape(sigla.group(1)).strip() if sigla else dpart.upper(),
                         "foto": foto.group(1) if foto else None, "url": href})
     CASA["fonte"] = fonte(CASA["casa"], "Vereadores (portal oficial)", f"{SITE}/vereadores", hoje())
-    notas = [("O site da Câmara lista os projetos em páginas HTML, sem o autor de forma organizada e sem dados abertos: "
-              "por enquanto, só a lista oficial de quem está no cargo.",
-              "The City Council's website lists bills as web pages, without structured author information or open data: "
-              "for now, only the official list of who is in office.")]
+    notas = [("As propostas dos vereadores não entram neste site: a Câmara lista os projetos só em páginas do site, sem o "
+              "autor de forma organizada e sem dados abertos.",
+              "Councilors' bills are not included on this site: the City Council lists bills only as web pages, without "
+              "structured author information or open data.")]
     return B.so_lista(IBGE, UF, CASA, pessoas, 35, notas)

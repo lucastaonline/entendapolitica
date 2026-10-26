@@ -3,7 +3,8 @@
 O sistema mostra, em /spl/parlamentares.aspx, os vereadores da legislatura atual em dois grupos: "Ativo" (quem está no
 cargo, inclusive suplentes que assumiram) e "Suplente" (suplentes que já exerceram e saíram). Aqui entra só o grupo "Ativo".
 As proposições estão no mesmo sistema (consulta-producao.aspx?autor=...), mas só em páginas HTML lentas (cerca de 20 s
-cada), paginadas por formulário (postback) e com milhares de indicações misturadas: ainda não entram.
+cada), paginadas por formulário (postback) e com milhares de indicações misturadas: as propostas não entram (a nota da
+Câmara diz isso na página da cidade e no perfil).
 """
 from __future__ import annotations
 
@@ -41,8 +42,8 @@ def coletar_agape(ibge: str, uf: str, base: str, casa: dict, vagas: int, tse_man
     casa = dict(casa, sistema="Processo Legislativo Eletrônico (Ágape)",
                 fonte=fonte(casa["casa"], "Vereadores ativos na legislatura atual" + (f" ({leg.group(1).strip()})" if leg else ""),
                             pagina, hoje()))
-    notas = [("As proposições estão no sistema de processo legislativo da Câmara só em páginas HTML (lentas e paginadas por "
-              "formulário), sem dados abertos: por enquanto, só a lista oficial de quem está no cargo.",
-              "The City Council's bills are in its legislative system only as web pages (slow and paginated through forms), "
-              "without open data: for now, only the official list of who is in office.")]
+    notas = [("As propostas dos vereadores não entram neste site: a Câmara mostra as proposições só em páginas do sistema de "
+              "processo legislativo (lentas e paginadas por formulário), sem dados abertos. Dá para procurar cada uma lá.",
+              "Councilors' bills are not included on this site: the City Council shows its bills only as web pages in its "
+              "legislative system (slow and paginated through forms), without open data. You can look each one up there.")]
     return B.so_lista(ibge, uf, casa, pessoas, vagas, notas, tse_manual=tse_manual)

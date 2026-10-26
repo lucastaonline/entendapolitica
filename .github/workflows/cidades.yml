@@ -7,7 +7,9 @@ name: Atualizar cidades
 
 on:
   schedule:
-    - cron: "0 5 * * *"    # 2h de Brasília, antes do robô diário
+    # meia-noite de Brasília, antes do robô diário (6h): enquanto as primeiras cargas das Câmaras com SAPL não terminam,
+    # este robô pode levar umas 5 horas
+    - cron: "0 3 * * *"
   workflow_dispatch:
 
 permissions:
@@ -21,7 +23,7 @@ concurrency:
 jobs:
   cidades:
     runs-on: ubuntu-latest
-    timeout-minutes: 150
+    timeout-minutes: 320
     steps:
       - uses: actions/checkout@v4
 
@@ -41,6 +43,21 @@ jobs:
           key: municipios-${{ github.run_id }}
           restore-keys: municipios-
 
+      # candidatos do TSE de 2024 (o coletor das Câmaras liga cada vereador ao TSE): só lê o cache que o robô diário guarda
+      - uses: actions/cache/restore@v4
+        with:
+          path: .cache/tse
+          key: tse-cidades-${{ github.run_id }}
+          restore-keys: tse-
+
+      # o estado de cada Câmara Municipal (o que já foi lido; ~0,4 MB por cidade). O mesmo cache do passo das capitais no
+      # robô diário; os dois robôs nunca rodam ao mesmo tempo
+      - uses: actions/cache/restore@v4
+        with:
+          path: .cache/camaras
+          key: camaras-${{ github.run_id }}
+          restore-keys: camaras-
+
       - name: Mapa das Câmaras e prefeituras (o grupo de estados do dia)
         run: python scripts/municipios/mapear.py --rodizio
         continue-on-error: true
@@ -52,6 +69,15 @@ jobs:
         run: python scripts/municipios/diarios.py --rodizio --minutos 40
         continue-on-error: true
         timeout-minutes: 50
+
+      # Câmaras Municipais com SAPL (scripts/camaras/sapl_cidades.json): as cidades do dia (cada uma uma vez por semana) e,
+      # depois, as que ainda não terminaram a primeira carga. O robots.txt do SAPL pede 60 s entre pedidos: cada cidade faz
+      # no máximo 60 pedidos por dia; o que não terminar continua no dia seguinte, e enquanto isso fica publicado o que já
+      # estava. 40 cidades ao mesmo tempo (quase todas no mesmo servidor do Interlegis: ~40 pedidos por minuto, no total)
+      - name: Câmaras Municipais com SAPL
+        run: python scripts/legislativos.py sapl --parte hoje --pendentes --paralelo 40 --minutos 150
+        continue-on-error: true
+        timeout-minutes: 165
 
       - name: Juntar tudo
         run: python scripts/montar.py
@@ -80,3 +106,10 @@ jobs:
         with:
           path: .cache/municipios
           key: municipios-${{ github.run_id }}
+
+      - name: Guardar o cache das Câmaras Municipais
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: .cache/camaras
+          key: camaras-${{ github.run_id }}

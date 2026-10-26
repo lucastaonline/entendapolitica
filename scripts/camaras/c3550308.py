@@ -20,6 +20,7 @@ import regional
 from comum import baixar, fonte, hoje, log, sem_acento
 
 from . import _base as B
+from ._sapl import data_en, data_pt
 
 IBGE, UF = "3550308", "SP"
 WS = "https://splegisws.saopaulo.sp.leg.br/ws/ws2.asmx/"
@@ -27,7 +28,7 @@ PORTAL = "https://www.saopaulo.sp.leg.br"
 CONSULTA = "https://splegisconsulta.saopaulo.sp.leg.br/Pesquisa/DetailsDetalhado?COD_MTRA_LEGL={t}&COD_PCSS_CMSP={n}&ANO_PCSS_CMSP={a}"
 CASA = "Câmara Municipal de São Paulo"
 TIPOS = {"PL": "PL", "PDL": "PDL", "PR": "PRC", "PLO": "PELO"}
-PASTA = B.CACHE / "camaras" / IBGE
+PASTA = B.PASTA_CACHE / IBGE
 
 # motivo do encerramento (ProjetosEncerradosJSON) -> (status, chave de _base.TXT ou None)
 MOTIVOS = [
@@ -47,9 +48,12 @@ def ws(metodo: str, cache: str | None = None, idade_h: float | None = 20):
     arq = PASTA / "http" / f"{cache}.json" if cache else None
     if arq and arq.exists() and (idade_h is None or (time.time() - arq.stat().st_mtime) / 3600 < idade_h):
         return json.loads(arq.read_text(encoding="utf-8"))
-    d = json.loads(baixar(WS + metodo, tentativas=4, timeout=240).decode("utf-8-sig"))
+    B.esperar_vez(WS + metodo, 0.4)  # robots.txt (Disallow e Crawl-delay) e intervalo entre pedidos
+    try:
+        d = json.loads(baixar(WS + metodo, tentativas=4, timeout=240).decode("utf-8-sig"))
+    finally:
+        B.pedido_feito(WS + metodo)
     _n += 1
-    time.sleep(0.4)
     if arq:
         arq.parent.mkdir(parents=True, exist_ok=True)
         arq.write_text(json.dumps(d, ensure_ascii=False), encoding="utf-8")
@@ -60,13 +64,22 @@ def chave_nome(s: str | None) -> str:
     return re.sub(r"[^a-z0-9]", "", sem_acento((s or "").lower()))
 
 
+def nome_ws_pref(executivos: list[dict], cod) -> str:
+    n = next((p.get("nome") for p in executivos if p["chave"] == cod), "") or ""
+    return B.nome_limpo(n) or "Poder Executivo"
+
+
 def portal_membros() -> dict[str, dict]:
     """Cartões da página oficial de vereadores: {nome sem acento: {nome, url, foto}}."""
     arq = PASTA / "http" / "membros.html"
     if arq.exists() and (time.time() - arq.stat().st_mtime) / 3600 < 20:
         t = arq.read_text(encoding="utf-8")
     else:
-        t = baixar(f"{PORTAL}/vereadores/membros/", tentativas=4, timeout=120).decode("utf-8", "replace")
+        B.esperar_vez(f"{PORTAL}/vereadores/membros/", 0.5)
+        try:
+            t = baixar(f"{PORTAL}/vereadores/membros/", tentativas=4, timeout=120).decode("utf-8", "replace")
+        finally:
+            B.pedido_feito(f"{PORTAL}/vereadores/membros/")
         arq.parent.mkdir(parents=True, exist_ok=True)
         arq.write_text(t, encoding="utf-8")
     out = {}
@@ -191,7 +204,12 @@ def coletar() -> dict:
             if x["tipo"] in TIPOS:
                 delib[(x["tipo"], x["numero"], x["ano"])] = [d.get("resultado") or "" for d in x.get("deliberacoes") or [] if d.get("resultado")]
     leis, vetos = {}, {}
-    for cod in por_cod:
+    # o prefeito de hoje no SPLegis: promovente do tipo EXECUTIVO com o nome dele (dados/cidades/SP/3550308.json)
+    pref = B.cidade(IBGE, UF).get("prefeito") or {}
+    executivos = [p for p in ws("PromoventesCMSPJSON", "promoventes", 24 * 7) if ((p.get("tipo") or {}).get("nome") or "") == "EXECUTIVO"]
+    cod_pref = next((p["chave"] for p in executivos if chave_nome(p.get("nome")) in {chave_nome(pref.get("nome")),
+                                                                                    chave_nome(pref.get("nomeCivil"))}), None)
+    for cod in list(por_cod) + ([cod_pref] if cod_pref else []):
         for x in ws(f"LeisAprovadasPorPromoventeJSON?Codigo={cod}", f"leis-{cod}", 20):
             p = x.get("projeto") or {}
             if p.get("tipo") in TIPOS and (p.get("ano") or 0) >= anos[0]:
@@ -201,8 +219,18 @@ def coletar() -> dict:
                 vetos[(x["tipo"], x["numero"], x["ano"])] = "total" if "total" in sem_acento(((x.get("veto") or {}).get("nome") or "").lower()) else "parcial"
 
     por_parl = {cod: [] for cod in por_cod}
+    inicio_pref = max(B.INICIO, (pref.get("desde") or "")[:10] or B.INICIO)
+    do_pref = []
     for k, p in projetos.items():
         autores = p["autores"]
+        if cod_pref and cod_pref in autores and (p["data"] or "") >= inicio_pref:
+            st, txt, txt_en, situ, data_st, lei = status_de(p, encerr, delib, leis, vetos)
+            x = regional.proposta(f"cmsp:{p['tipo']}-{p['numero']}-{p['ano']}", f"{p['tipo']} {p['numero']}/{p['ano']}",
+                                  TIPOS[p["tipo"]], p["data"], p["ementa"], situ, CONSULTA.format(t=p["_tipo"], n=p["numero"], a=p["ano"]),
+                                  "autor", status=st, data_status=data_st, status_txt=txt, lei=lei)
+            if txt_en:
+                x["statusTxt_en"] = txt_en
+            do_pref.append(x)
         if not any(a in por_parl for a in autores):
             continue
         st, txt, txt_en, situ, data_st, lei = status_de(p, encerr, delib, leis, vetos)
@@ -239,11 +267,30 @@ def coletar() -> dict:
     cobertura = {"lista": True, "propostas": True, "votacoes": False, "gastos": False}
     casa = {"casa": CASA, "casa_en": "São Paulo City Council", "sigla": "CMSP", "site": PORTAL, "fonte": fonte_lista,
             "sistema": "SPLegis (web service de dados abertos)", "api": "https://splegisws.saopaulo.sp.leg.br/ws/ws2.asmx"}
-    notas = [("A Câmara publica as votações de cada vereador (arquivo XML por ano) e os gastos do mandato (SisGV), "
-              "mas eles ainda não estão neste site.",
-              "The City Council publishes each councilor's votes (one XML file per year) and office spending (SisGV), "
-              "but they are not on this site yet.")]
-    r = B.salvar(IBGE, UF, casa, membros, extras, cobertura, notas, escopo)
+    notas = [("As votações de cada vereador e os gastos do mandato não entram neste site: a Câmara publica as votações num "
+              "arquivo XML por ano e os gastos no sistema SisGV, no site dela.",
+              "Each councilor's votes and office spending are not included on this site: the City Council publishes the votes "
+              "in one XML file per year and the spending in its SisGV system, on its website."),
+             ("O número de leis que o prefeito sancionou e o de vetos não entram neste site: o SPLegis lista as leis e os vetos "
+              "só por autor de cada projeto, e não todos os do município de uma vez.",
+              "The number of laws the mayor signed and of vetoes are not included on this site: SPLegis lists laws and vetoes "
+              "only by the author of each bill, not all of the city's at once.")]
+    prefeito = None
+    if cod_pref:
+        desde_pt = ("desde 1º/1/2025, começo do mandato" if inicio_pref == B.INICIO
+                    else f"desde {data_pt(inicio_pref)}, quando assumiu a prefeitura")
+        desde_en = ("since January 1, 2025 (start of the term)" if inicio_pref == B.INICIO
+                    else f"since {data_en(inicio_pref)}, when the current mayor took office")
+        f_pref = fonte(CASA, f"SPLegis (dados abertos): projetos do Executivo ({nome_ws_pref(executivos, cod_pref)})",
+                       WS.replace("/ws2.asmx/", "/ws2.asmx?op=") + "ProjetosAutoresJSON", h)
+        prefeito = (pref["id"], {"propostas": regional.bloco_propostas(
+            do_pref, f"Projetos que a prefeitura mandou à Câmara Municipal {desde_pt} (projetos de lei e de emenda à Lei "
+                     "Orgânica), segundo o SPLegis, o sistema oficial da Câmara",
+            f"Bills the mayor's office sent to the City Council {desde_en} (bills and amendments to the city's Organic Law), "
+            "according to SPLegis, the City Council's official system", f_pref), "fontes": [f_pref]})
+    else:
+        log("  CMSP: não achei o prefeito entre os promoventes do tipo EXECUTIVO do SPLegis")
+    r = B.salvar(IBGE, UF, casa, membros, extras, cobertura, notas, escopo, prefeito=prefeito)
     r["requisicoes"] = _n
     r["semTse"] = len(tse.sem_ligacao)
     log(f"  CMSP: {len(membros)} no cargo, {r['propostas']} propostas, {_n} requisições, {time.time() - t0:.0f} s")

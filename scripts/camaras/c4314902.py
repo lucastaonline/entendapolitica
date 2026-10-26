@@ -1,7 +1,7 @@
 """Câmara Municipal de Porto Alegre (RS): só a lista oficial de vereadores em exercício (www.camarapoa.rs.gov.br/vereadores).
 
 A página separa quem está no cargo ("titulares", com os suplentes que assumiram) de quem está de licença. As proposições
-ficam no sistema de processos da Câmara (páginas HTML), sem dados abertos para baixar: ainda não entram aqui.
+ficam no sistema de processos da Câmara (páginas HTML), sem dados abertos para baixar: não entram (nota da Câmara abaixo).
 """
 import html
 import re
@@ -25,8 +25,8 @@ def coletar() -> dict:
         pessoas.append({"chave": href.rsplit("/", 1)[-1], "nome": m.group(1) if m else nome, "partido": m.group(2) if m else None,
                         "foto": foto, "url": SITE + href})
     CASA["fonte"] = fonte(CASA["casa"], "Vereadores em exercício (portal oficial)", f"{SITE}/vereadores", hoje())
-    notas = [("A Câmara publica as proposições no sistema de processos do site (páginas HTML), sem um arquivo ou API de "
-              "dados abertos: por enquanto, só a lista oficial de quem está no cargo.",
-              "The City Council publishes its bills as web pages in its case system, with no open data file or API: for now, "
-              "only the official list of who is in office.")]
+    notas = [("As propostas dos vereadores não entram neste site: a Câmara publica as proposições só no sistema de processos "
+              "do site (páginas HTML), sem arquivo nem API de dados abertos.",
+              "Councilors' bills are not included on this site: the City Council publishes its bills only as web pages in its "
+              "case system, with no open data file or API.")]
     return B.so_lista(IBGE, UF, CASA, pessoas, 35, notas)

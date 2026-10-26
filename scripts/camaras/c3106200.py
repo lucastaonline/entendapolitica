@@ -1,7 +1,7 @@
 """Câmara Municipal de Belo Horizonte (MG): só a lista oficial de vereadores em exercício (www.cmbh.mg.gov.br/vereadores).
 
 As proposições ficam na pesquisa do site (www.cmbh.mg.gov.br/atividade-legislativa/pesquisar-proposicoes), em páginas
-HTML, sem API nem arquivo de dados abertos: ainda não entram aqui. A Câmara publica a verba indenizatória de cada
+HTML, sem API nem arquivo de dados abertos: não entram (nota da Câmara abaixo). A Câmara publica a verba indenizatória de cada
 vereador (www.cmbh.mg.gov.br/transparencia/vereadores/verba-indenizatoria), também só em páginas.
 """
 import html
@@ -29,10 +29,10 @@ def coletar() -> dict:
                         "partido": html.unescape(sigla.group(1)).strip() if sigla else None,
                         "foto": html.unescape(foto.group(1)) if foto else None, "url": SITE + nome.group(1)})
     CASA["fonte"] = fonte(CASA["casa"], "Vereadores em exercício (portal oficial)", f"{SITE}/vereadores", hoje())
-    notas = [("A Câmara mostra as proposições e a verba indenizatória em páginas do site, sem API nem arquivo de dados "
-              "abertos: por enquanto, só a lista oficial de quem está no cargo.",
-              "The City Council shows its bills and office allowance spending as web pages, with no API or open data file: "
-              "for now, only the official list of who is in office.")]
+    notas = [("As propostas e os gastos dos vereadores não entram neste site: a Câmara mostra as proposições e a verba "
+              "indenizatória só em páginas do site, sem API nem arquivo de dados abertos.",
+              "Councilors' bills and spending are not included on this site: the City Council shows its bills and office "
+              "allowance spending only as web pages, with no API or open data file.")]
     # conferidos à mão (nome no portal da Câmara = nome de urna no TSE, eleitos em 2024): "Trópia" = MARCELA TRÓPIA (NOVO);
     # "Vile Santos" = VILE (Wili dos Santos, PL)
     return B.so_lista(IBGE, UF, CASA, pessoas, 41, notas, tse_manual={"tr%C3%B3pia": "130001976053", "vile-santos": "130002172736"})

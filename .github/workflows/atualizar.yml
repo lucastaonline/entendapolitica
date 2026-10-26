@@ -62,7 +62,7 @@ jobs:
           key: camara-${{ github.run_id }}
           restore-keys: camara-
 
-      # o resto: IBGE, votações, Assembleias Legislativas e Câmaras Municipais (cada Casa na sua pasta)
+      # o resto: IBGE, votações e Assembleias Legislativas (cada Casa na sua pasta)
       - uses: actions/cache/restore@v4
         with:
           path: |
@@ -71,8 +71,17 @@ jobs:
             !.cache/senado
             !.cache/executivo
             !.cache/camara
+            !.cache/camaras
           key: outros-${{ github.run_id }}
           restore-keys: outros-
+
+      # Câmaras Municipais: o estado de cada Câmara (o que já foi lido). O mesmo cache do robô das cidades (Câmaras com
+      # SAPL); os dois robôs nunca rodam ao mesmo tempo, então o último cache salvo tem o estado de todas
+      - uses: actions/cache/restore@v4
+        with:
+          path: .cache/camaras
+          key: camaras-${{ github.run_id }}
+          restore-keys: camaras-
 
       - name: Câmara dos Deputados
         run: python scripts/camara.py
@@ -100,8 +109,10 @@ jobs:
         continue-on-error: true
         timeout-minutes: 60
 
+      # as capitais com SAPL respeitam os 60 s entre pedidos que o robots.txt pede: sem o cache, a primeira leitura de
+      # cada uma leva de 1 a 4 dias (até lá fica o que estava publicado); com o cache, 5 a 25 min
       - name: Câmaras Municipais das capitais
-        run: python scripts/legislativos.py camaras
+        run: python scripts/legislativos.py camaras --paralelo 8 --minutos 35
         continue-on-error: true
         timeout-minutes: 40
 
@@ -173,4 +184,12 @@ jobs:
             !.cache/senado
             !.cache/executivo
             !.cache/camara
+            !.cache/camaras
           key: outros-${{ github.run_id }}
+
+      - name: Guardar o cache das Câmaras Municipais
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: .cache/camaras
+          key: camaras-${{ github.run_id }}

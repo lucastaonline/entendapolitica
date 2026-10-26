@@ -1,7 +1,7 @@
 """Câmara Municipal de São Luís (MA): só a lista oficial de vereadores (www.cmsaoluis.ma.gov.br/vereadores).
 
 As proposições ficam na pesquisa do site (www.cmsaoluis.ma.gov.br/atividade-legislativa/proposicoes/pesquisa), em
-páginas HTML, sem dados abertos: ainda não entram aqui.
+páginas HTML, sem dados abertos: não entram (nota da Câmara abaixo).
 """
 import html
 import re
@@ -25,9 +25,9 @@ def coletar() -> dict:
                         "nomeCivil": html.unescape(civil).strip() or None, "partido": html.unescape(sigla).strip() or None,
                         "foto": foto, "url": href})
     CASA["fonte"] = fonte(CASA["casa"], "Vereadores (portal oficial)", f"{SITE}/vereadores", hoje())
-    notas = [("A Câmara mostra as proposições numa pesquisa do site (páginas HTML), sem dados abertos: por enquanto, só a "
-              "lista oficial de quem está no cargo.",
-              "The City Council shows its bills in a search on its website (web pages), without open data: for now, only "
-              "the official list of who is in office.")]
+    notas = [("As propostas dos vereadores não entram neste site: a Câmara mostra as proposições só numa pesquisa do site "
+              "(páginas HTML), sem dados abertos.",
+              "Councilors' bills are not included on this site: the City Council shows its bills only through a search on "
+              "its website (web pages), without open data.")]
     # conferido à mão: "Nato Júnior" no site da Câmara = NATO JR no TSE (José Raimundo Alves Sena Junior, PSB, eleito em 2024)
     return B.so_lista(IBGE, UF, CASA, pessoas, 31, notas, tse_manual={"nato-junior": "100001943522"})

@@ -1,5 +1,9 @@
-"""Testes de interação das Câmaras Municipais das capitais (lista oficial e propostas), com Playwright + Edge.
-Precisa do servidor em 8770 e dos dados gerados (python scripts/legislativos.py camaras; python scripts/montar.py).
+"""Testes de interação das Câmaras Municipais (lista oficial, propostas e o que o prefeito fez), com Playwright + Edge.
+Precisa do servidor em 8770 e dos dados gerados (python scripts/legislativos.py camaras; python scripts/legislativos.py sapl
+ou só as cidades usadas aqui; python scripts/montar.py).
+Tudo de uma cidade (vereadores e prefeito) fica num arquivo só: dados/camaras/extras/<IBGE>.json.
+O teste só olha as Câmaras que o montar.py já juntou à página da cidade (dados/cidades/<UF>/<IBGE>.json com a lista oficial):
+uma Câmara recém-coletada entra na página na próxima rodada do montar.
 Uso: python testes/interacao_camaras.py"""
 import asyncio
 import json
@@ -12,6 +16,9 @@ BASE = "http://127.0.0.1:8770/"
 RAIZ = Path(__file__).resolve().parent.parent
 sys.stdout.reconfigure(encoding="utf-8")
 RES = []
+CAPITAIS = {"3550308", "3304557", "3106200", "2927408", "2304400", "2611606", "4106902", "4314902", "1302603", "1501402",
+            "5208707", "2111300", "2704302", "2211001", "2408102", "5002704", "2507507", "2800308", "5103403", "4205407",
+            "1100205", "1600303", "1200401", "3205309", "1400100", "1721000"}
 
 
 def ok(nome, cond, extra=""):
@@ -19,18 +26,64 @@ def ok(nome, cond, extra=""):
     print(("✅ " if cond else "❌ ") + nome + (f"  ({extra})" if extra else ""))
 
 
+def ler(arq):
+    return json.loads(arq.read_text(encoding="utf-8")) if arq.exists() else None
+
+
 def casa(ibge):
-    return json.loads((RAIZ / "dados" / "camaras" / f"{ibge}.json").read_text(encoding="utf-8"))
+    return ler(RAIZ / "dados" / "camaras" / f"{ibge}.json")
 
 
-def com_propostas(ibge):
-    """Um membro da Câmara que tem propostas (para abrir o perfil)."""
-    for m in casa(ibge)["membros"]:
-        arq = RAIZ / "dados" / "pessoas" / f"{m['id']}.json"
-        if arq.exists():
-            p = json.loads(arq.read_text(encoding="utf-8"))
-            if len((p.get("propostas") or {}).get("lista") or []) > 25:
-                return m
+def extras(ibge):
+    return (ler(RAIZ / "dados" / "camaras" / "extras" / f"{ibge}.json") or {}).get("pessoas") or {}
+
+
+def cidade(ibge):
+    """dados/cidades/<UF>/<IBGE>.json: o que a página da cidade mostra (o montar.py junta a lista oficial aqui)."""
+    k = casa(ibge) or {}
+    uf = k.get("uf") or SAPL.get(ibge, {}).get("uf")
+    return (ler(RAIZ / "dados" / "cidades" / uf / f"{ibge}.json") or {}) if uf else {}
+
+
+def juntada(ibge):
+    """A lista oficial da Câmara já foi juntada à página da cidade pelo montar.py (as Câmaras novas só aparecem na página
+    depois da próxima rodada do montar)."""
+    return bool((cidade(ibge).get("vereadores") or {}).get("oficial"))
+
+
+def com_propostas(ibge, minimo=25):
+    """Um vereador da cidade que tem propostas no arquivo da cidade e que a página da cidade já marca com "extras": "cidade"
+    (o perfil só busca o arquivo da cidade para quem tem a marca)."""
+    ex = extras(ibge)
+    marcados = {m["id"] for m in (cidade(ibge).get("vereadores") or {}).get("membros") or [] if m.get("extras") == "cidade"}
+    for pid, p in sorted(ex.items()):
+        if pid.startswith("ver-") and pid in marcados and len((p.get("propostas") or {}).get("lista") or []) > minimo:
+            return {"id": pid, **p}
+    return None
+
+
+def tem_lista(ibge):
+    return bool((casa(ibge) or {}).get("membros"))
+
+
+SAPL = (ler(RAIZ / "scripts" / "camaras" / "sapl_cidades.json") or {}).get("cidades") or {}
+
+
+def cidade_sapl(oficial=True, prefeito_completo=False):
+    """Uma cidade da lista SAPL (não capital) já coletada e já juntada pelo montar.py: com ou sem lista oficial; com o
+    prefeito completo (projetos, leis e vetos) se pedido."""
+    for ibge in sorted(SAPL):
+        if not (RAIZ / "dados" / "camaras" / "extras" / f"{ibge}.json").exists() or casa(ibge) is None:
+            continue
+        if oficial != tem_lista(ibge) or (oficial and not juntada(ibge)):
+            continue
+        pref = extras(ibge).get(f"pref-{ibge}") or {}
+        ex = pref.get("executivo") or {}
+        if prefeito_completo and not (pref.get("propostas") and ex.get("leisSancionadas") is not None and ex.get("vetos") is not None
+                                      and (cidade(ibge).get("prefeito") or {}).get("extras") == "cidade"):
+            continue
+        if com_propostas(ibge, 3 if oficial else 0):
+            return ibge
     return None
 
 
@@ -43,13 +96,14 @@ async def main():
         pg.on("pageerror", lambda e: erros.append(str(e)))
 
         # 1. cidade com SAPL: a lista oficial substitui a do TSE
-        k = casa("2408102")
+        v = cidade("2408102").get("vereadores") or {}
         await pg.goto(BASE + "cidade.html?ibge=2408102&lang=pt", wait_until="networkidle")
         await pg.wait_for_timeout(1200)
         txt = await pg.locator("#cidade").inner_text()
         n = await pg.locator("#casa-ver .pessoa-card").count()
         ok("Natal: aviso de lista oficial da Câmara", "Lista oficial da Câmara Municipal de Natal" in txt)
-        ok("Natal: um cartão para cada pessoa da lista oficial", n == len(k["membros"]), f"{n} de {len(k['membros'])}")
+        ok("Natal: um cartão para cada pessoa da lista oficial", v.get("oficial") and n == len(v.get("membros") or []),
+           f"{n} de {len(v.get('membros') or [])}")
 
         # 2. do cartão para o perfil, só com o teclado: propostas com filtros
         m = com_propostas("2408102")
@@ -93,29 +147,77 @@ async def main():
         ok("São Paulo: a nota também em inglês", "co-signed" in await pg.locator("#propostas").inner_text())
 
         # 5. cidade só com a lista oficial (sem propostas): perfil com link oficial e "Onde ver mais" (sem "Em breve")
-        k = casa("3106200")
+        v = cidade("3106200").get("vereadores") or {}
         await pg.goto(BASE + "cidade.html?ibge=3106200&lang=pt", wait_until="networkidle")
         await pg.wait_for_timeout(1200)
         n = await pg.locator("#casa-ver .pessoa-card").count()
-        ok("Belo Horizonte: lista oficial com todos", n == len(k["membros"]) == 41, f"{n}")
-        sup = next((x for x in k["membros"] if x.get("exercicio")), k["membros"][0])
+        ok("Belo Horizonte: lista oficial com todos", v.get("oficial") and n == len(v.get("membros") or []) == 41, f"{n}")
+        sup = next((x for x in v.get("membros") or [] if x.get("exercicio")), (v.get("membros") or [{}])[0])
         await pg.goto(BASE + f"pessoa.html?id={sup['id']}&lang=pt", wait_until="networkidle")
         await pg.wait_for_timeout(1000)
         corpo = await pg.locator("#perfil").inner_text()
         ok("perfil só com a lista: link oficial e o quadro \"Onde ver mais\" (sem \"Em breve\")",
            await pg.locator('.contatos a[href*="cmbh.mg.gov.br"]').count() == 1 and "Em breve" not in corpo and "Onde ver mais" in corpo)
 
-        # 6. todas as capitais com coletor: a página da cidade abre e usa a lista oficial
+        # 6. as capitais com coletor e uma amostra das cidades com SAPL: a página da cidade abre e usa a lista oficial.
+        # Só as Câmaras que o montar.py já juntou à página (uma Câmara nova entra na página na próxima rodada do montar).
         falhas = []
-        for arq in sorted((RAIZ / "dados" / "camaras").glob("*.json")):
-            k = json.loads(arq.read_text(encoding="utf-8"))
-            await pg.goto(BASE + f"cidade.html?ibge={k['ibge']}&lang=en", wait_until="networkidle")
+        lista = sorted(a.stem for a in (RAIZ / "dados" / "camaras").glob("*.json") if tem_lista(a.stem))
+        juntadas = [i for i in lista if juntada(i)]
+        if len(juntadas) < len(lista):
+            print(f"   ({len(lista) - len(juntadas)} Câmaras com lista oficial ainda não juntadas à página: rode python scripts/montar.py)")
+        amostra = [i for i in juntadas if i in CAPITAIS] + [i for i in juntadas if i not in CAPITAIS][:12]
+        for ibge in amostra:
+            v = cidade(ibge).get("vereadores") or {}
+            await pg.goto(BASE + f"cidade.html?ibge={ibge}&lang=en", wait_until="networkidle")
             await pg.wait_for_timeout(700)
             n = await pg.locator("#casa-ver .pessoa-card").count()
             t = await pg.locator("#cidade").inner_text()
-            if n != len(k["membros"]) or "Official list from the" not in t:
-                falhas.append(f"{k['ibge']} ({n}/{len(k['membros'])})")
-        ok("todas as Câmaras com coletor mostram a lista oficial (em inglês)", not falhas, ", ".join(falhas))
+            if n != len(v.get("membros") or []) or "Official list from the" not in t:
+                falhas.append(f"{ibge} ({n}/{len(v.get('membros') or [])})")
+        ok(f"{len(amostra)} Câmaras com lista oficial (já juntadas pelo montar) mostram a lista (em inglês)", amostra and not falhas,
+           ", ".join(falhas))
+
+        # 7. cidade com SAPL (não capital), lista oficial: perfil do vereador com propostas do arquivo da cidade
+        ib = cidade_sapl(oficial=True, prefeito_completo=True)
+        ok("há uma cidade com SAPL, lista oficial e prefeito completo", ib)
+        if ib:
+            m = com_propostas(ib, 3)
+            await pg.goto(BASE + f"pessoa.html?id={m['id']}&lang=pt", wait_until="networkidle")
+            await pg.wait_for_timeout(1000)
+            corpo = await pg.locator("#perfil").inner_text()
+            n_prop = await pg.locator("#lista-prop li.prop").count()
+            ok(f"{ib}: perfil do vereador com propostas (arquivo da cidade)", n_prop > 0 and "Onde ver mais" not in corpo, f"{n_prop}")
+            base = json.loads((RAIZ / "scripts" / "camaras" / "sapl_cidades.json").read_text(encoding="utf-8"))["cidades"][ib]["base"]
+            ok(f"{ib}: cada proposta leva ao SAPL da Câmara", await pg.locator(f'#lista-prop a[href^="{base}/materia/"]').count() > 0)
+            # 8. o prefeito: projetos que mandou à Câmara e o quadro de leis e vetos, nos dois idiomas
+            ex = (extras(ib).get(f"pref-{ib}") or {}).get("executivo") or {}
+            await pg.goto(BASE + f"pessoa.html?id=pref-{ib}&lang=pt", wait_until="networkidle")
+            await pg.wait_for_timeout(1000)
+            corpo = await pg.locator("#perfil").inner_text()
+            ok(f"{ib}: prefeito com os projetos que mandou à Câmara", await pg.locator("#lista-prop li.prop").count() > 0)
+            ok(f"{ib}: prefeito com \"Leis sancionadas e vetos\"", "Leis sancionadas e vetos" in corpo and "Em breve" not in corpo)
+            ok(f"{ib}: \"Como contamos\" (a nota de como as leis e os vetos foram contados)",
+               await pg.locator("details.como-contou").count() == 1 and "Como contamos" in corpo)
+            if (ex.get("periodo") or {}).get("ultimaLei"):
+                ok(f"{ib}: a data da lei mais recente na fonte", "A lei mais recente na fonte é de" in corpo)
+            await pg.goto(BASE + f"pessoa.html?id=pref-{ib}&lang=en", wait_until="networkidle")
+            await pg.wait_for_timeout(1000)
+            corpo = await pg.locator("#perfil").inner_text()
+            ok(f"{ib}: em inglês também", "Laws signed and vetoes" in corpo and "mayor's office sent" in corpo
+               and "How we counted" in corpo, corpo[:0])
+
+        # 9. cidade com SAPL sem lista oficial (a conferência de vagas falhou): fica a lista do TSE, com as propostas
+        ib = cidade_sapl(oficial=False)
+        if ib:
+            await pg.goto(BASE + f"cidade.html?ibge={ib}&lang=pt", wait_until="networkidle")
+            await pg.wait_for_timeout(1000)
+            t = await pg.locator("#cidade").inner_text()
+            ok(f"{ib}: sem lista oficial, a página mostra a lista do TSE", "Lista oficial da" not in t and "eleito em 2024" in t)
+            m = com_propostas(ib, 0)
+            await pg.goto(BASE + f"pessoa.html?id={m['id']}&lang=pt", wait_until="networkidle")
+            await pg.wait_for_timeout(1000)
+            ok(f"{ib}: o perfil (lista do TSE) mostra as propostas do SAPL", await pg.locator("#propostas").count() == 1)
 
         ok("nenhum erro de JavaScript", not erros, "; ".join(erros[:3]))
         await nav.close()

@@ -261,9 +261,11 @@
   };
   function txt2026(sit, genero, curto) {
     var a = genero === "F" ? "a" : "o";
-    if (EP.en) return { eleito: "Elected in 2026", reeleito: "Re-elected in 2026", "segundo-turno": curto ? "Runoff in 2026" : "In the runoff on October 25, 2026",
+    // o 2º turno de 2026 foi em 25/10: depois dessa data, o texto fala no passado
+    var passou = new Date() >= new Date("2026-10-26T00:00:00-03:00");
+    if (EP.en) return { eleito: "Elected in 2026", reeleito: "Re-elected in 2026", "segundo-turno": curto ? "Runoff in 2026" : passou ? "Ran in the runoff on October 25, 2026" : "In the runoff on October 25, 2026",
       "nao-eleito": "Not elected in 2026", suplente: "Alternate in 2026", candidato: "Candidate in 2026", "nao-concorreu": "Did not run in 2026" }[sit] || "2026";
-    return { eleito: "Eleit" + a + " em 2026", reeleito: "Reeleit" + a + " em 2026", "segundo-turno": curto ? "2º turno em 2026" : "Disputa o 2º turno em 25/10/2026",
+    return { eleito: "Eleit" + a + " em 2026", reeleito: "Reeleit" + a + " em 2026", "segundo-turno": curto ? "2º turno em 2026" : (passou ? "Disputou" : "Disputa") + " o 2º turno em 25/10/2026",
       "nao-eleito": "Não eleit" + a + " em 2026", suplente: curto ? "Suplente em 2026" : "Ficou como suplente em 2026", candidato: "Candidat" + a + " em 2026",
       "nao-concorreu": "Não concorreu em 2026" }[sit] || "2026";
   }

@@ -41,11 +41,18 @@ def txt_en(e: dict | None) -> str | None:
     s = e["situacao"]
     if s == "nao-concorreu":
         return "Did not run in 2026"
+    t2 = e.get("turno") == 2  # resultado do 2º turno
+    passou = s == "segundo-turno" and (e.get("txt") or "").startswith("Disputou")  # o 2º turno já foi, sem resultado
     if not c:
-        return {"eleito": "Elected in 2026", "reeleito": "Re-elected in 2026", "segundo-turno": "In the runoff on October 25, 2026",
-                "nao-eleito": "Not elected in 2026", "suplente": "Alternate in 2026", "candidato": "Candidate in 2026"}.get(s)
-    return {"eleito": f"Elected {c} in 2026", "reeleito": f"Re-elected {c} in 2026",
-            "segundo-turno": f"In the runoff for {c} on October 25, 2026", "nao-eleito": f"Ran for {c} in 2026 and was not elected",
+        return {"eleito": "Elected in the 2026 runoff" if t2 else "Elected in 2026",
+                "reeleito": "Re-elected in the 2026 runoff" if t2 else "Re-elected in 2026",
+                "segundo-turno": "Ran in the runoff on October 25, 2026" if passou else "In the runoff on October 25, 2026",
+                "nao-eleito": "Ran in the 2026 runoff and was not elected" if t2 else "Not elected in 2026",
+                "suplente": "Alternate in 2026", "candidato": "Candidate in 2026"}.get(s)
+    return {"eleito": f"Elected {c} in the 2026 runoff" if t2 else f"Elected {c} in 2026",
+            "reeleito": f"Re-elected {c} in the 2026 runoff" if t2 else f"Re-elected {c} in 2026",
+            "segundo-turno": f"Ran in the runoff for {c} on October 25, 2026" if passou else f"In the runoff for {c} on October 25, 2026",
+            "nao-eleito": f"Ran for {c} in the 2026 runoff and was not elected" if t2 else f"Ran for {c} in 2026 and was not elected",
             "suplente": f"Alternate for {c} in 2026", "candidato": f"Candidate for {c} in 2026"}.get(s)
 
 

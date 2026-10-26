@@ -484,7 +484,7 @@
        "val": "More than half of the valid votes. If no one gets there, there is a runoff (second round)."
       }
      ],
-     "mais": "The president is elected together with the vice president, on the same ticket. Valid votes are the ones given to candidates: blank and null votes do not count. Whoever wins the 2026 election takes office on January 5, 2027."
+     "mais": "The president is elected together with the vice president, on the same ticket. Valid votes are the ones given to candidates: blank and null votes do not count. Whoever won the 2026 election takes office on January 5, 2027."
     },
     {
      "ic": "🗺️",
@@ -508,7 +508,7 @@
        "val": "Same rule as for president: there may be a runoff."
       }
      ],
-     "mais": "The governor is elected together with the vice governor. The Federal District also has a governor. Whoever wins the 2026 election takes office on January 6, 2027."
+     "mais": "The governor is elected together with the vice governor. The Federal District also has a governor. Whoever won the 2026 election in each state takes office on January 6, 2027."
     },
     {
      "ic": "🏙️",

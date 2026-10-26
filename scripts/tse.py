@@ -400,6 +400,46 @@ def ids_suplementares_2024(ufs) -> dict:
 
 
 # ---------------------------------------------------------------- 2026
+RESULTADOS = "https://resultados.tse.jus.br/oficial"
+# código do cargo no sistema de resultados do TSE (o vice vem junto com o titular, no campo "vs")
+CARGO_RESULTADOS = {"PRESIDENTE": 1, "GOVERNADOR": 3}
+
+
+def resultado_2turno(ano: int, eleicao: str, uf: str, cargo: str) -> tuple[dict, dict] | None:
+    """Resultado de um 2º turno no sistema de resultados do TSE (resultados.tse.jus.br), para quando os dados abertos
+    (consulta_cand) ainda não trazem a situação depois do 2º turno (eles são refeitos dias depois da eleição). Só vale a
+    totalização final ("tf": "s"). Devolve ({SQ do titular e do vice: "ELEITO" | "NÃO ELEITO"}, fonte) ou None."""
+    cod = CARGO_RESULTADOS.get(cargo)
+    if not cod:
+        return None
+    ab = "br" if uf == "BR" else uf.lower()
+    nome = f"{ab}-c{cod:04d}-e{int(eleicao):06d}-u.json"
+    url = f"{RESULTADOS}/ele{ano}/{eleicao}/dados/{ab}/{nome}"
+    try:
+        j = baixar_json(url, cache=f"tse/resultados/{nome}", max_idade_h=3, tentativas=3, timeout=60)
+    except Exception as e:  # sistema fora do ar: fica o que os dados abertos dizem
+        log(f"  [aviso] o resultado do 2º turno ({cargo.lower()}, {uf}) não abriu: {e}")
+        return None
+    if not isinstance(j, dict) or j.get("tf") != "s":
+        return None
+    sit = {}
+    for cg in j.get("carg") or []:
+        for ag in cg.get("agr") or []:
+            for par in ag.get("par") or []:
+                for c in par.get("cand") or []:
+                    st = sem_acento(c.get("st") or "").upper()
+                    s = "ELEITO" if st == "ELEITO" else "NÃO ELEITO" if st == "NAO ELEITO" else None
+                    if s:
+                        for sq in [c.get("sqcand")] + [v.get("sqcand") for v in c.get("vs") or []]:
+                            if sq:
+                                sit[str(sq)] = s
+    if not sit:
+        return None
+    titulo = (f"Resultados: 2º turno de {ano} para {'presidente' if cod == 1 else 'governador'}"
+              + ("" if uf == "BR" else f" ({uf})") + ", totalização final")
+    return sit, fonte("TSE", titulo, url, data_iso(j.get("dt")) or data_iso(j.get("dg")))
+
+
 class Base2026:
     """Candidaturas de 2026 (situação depois da totalização) para o campo eleicao2026."""
 
@@ -419,6 +459,31 @@ class Base2026:
                 self.por_cpf[c["cpf"]].add(c["sq"])
             if c["nasc"]:
                 self.por_nn[(chave_nome(c["nome"]), c["nasc"])].add(c["sq"])
+        self.fonte_2turno = {}
+        self._completar_2turno()
+
+    def _completar_2turno(self):
+        """Quem foi ao 2º turno e ainda está sem a situação depois dele nos dados abertos ("#NULO"): completa com o
+        resultado final do sistema de resultados do próprio TSE, depois do dia do 2º turno."""
+        disputas = collections.defaultdict(list)
+        for rs in self.por_sq.values():
+            t1 = min(rs, key=lambda c: c["turno"])
+            t2 = next((c for c in rs if c["turno"] == 2), None)
+            if (t1["sit"] == "2º TURNO" and t2 and t2["sit"] not in ("ELEITO", "NÃO ELEITO")
+                    and t2["dt"] and t2["dt"] <= hoje()):
+                disputas[(t2["el"], t1["uf"], t1["cargo"].replace("VICE-", ""))].append(t2)
+        for (el, uf, cargo), linhas in sorted(disputas.items()):
+            r = resultado_2turno(2026, el, uf, cargo)
+            if not r:
+                continue
+            sit, f = r
+            for c in linhas:
+                if sit.get(c["sq"]):
+                    c["sit"] = sit[c["sq"]]
+                    self.fonte_2turno[c["sq"]] = f
+        if disputas:
+            log(f"2º turno de 2026: {len(self.fonte_2turno)} candidaturas com o resultado final do sistema de resultados "
+                f"do TSE ({len(disputas)} disputas sem a situação nos dados abertos)")
 
     def achar(self, cpf=None, nome=None, nasc=None) -> list[str]:
         sqs = set(self.por_cpf.get(cpf_valido(cpf) or "", ())) if cpf else set()
@@ -456,7 +521,9 @@ class Base2026:
         elif t2 and t2["sit"] == "NÃO ELEITO":
             sit, txt = "nao-eleito", f"Disputou o 2º turno para {cl} em 2026 e não foi eleit{a}"
         elif t1["sit"] == "2º TURNO":
-            sit, txt = "segundo-turno", f"Disputa o 2º turno para {cl} em {data_br(t2['dt']) if t2 else 'outubro de 2026'}"
+            quando = data_br(t2["dt"]) if t2 and t2["dt"] else "outubro de 2026"
+            passou = bool(t2 and t2["dt"] and t2["dt"] < hoje())
+            sit, txt = "segundo-turno", f"{'Disputou' if passou else 'Disputa'} o 2º turno para {cl} em {quando}"
         elif eleito(t1["sit"]):
             if suplente_senado:
                 sit, txt = "suplente", f"Eleit{a} {cl} em 2026"
@@ -483,7 +550,12 @@ class Base2026:
                 txt = f"Era candidat{a} a {cl} em 2026"
             else:
                 txt = f"Pediu registro de candidatura a {cl} em 2026, mas não foi para a urna"
-        return {"cargo": cargo, "situacao": sit, "txt": txt, "fonte": fonte_cand(t1, self.data)}
+        out = {"cargo": cargo, "situacao": sit, "txt": txt, "fonte": fonte_cand(t1, self.data)}
+        if t2 and t2["sit"] in ("ELEITO", "NÃO ELEITO"):
+            out["turno"] = 2
+            if t2["sq"] in self.fonte_2turno:  # o resultado veio do sistema de resultados do TSE: a fonte vai junto
+                out["fonte"] = [out["fonte"], self.fonte_2turno[t2["sq"]]]
+        return out
 
     def foto(self, cpf=None, nome=None, nasc=None) -> str | None:
         sqs = self.achar(cpf, nome, nasc)

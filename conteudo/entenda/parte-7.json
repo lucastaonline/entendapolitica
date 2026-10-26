@@ -76,7 +76,7 @@
     { "ic": "🇧🇷", "txt": "**Eleições gerais**, como a de 2026: presidente, governador, senador e deputados." },
     { "ic": "🏙️", "txt": "**Eleições municipais**, como a de 2024: prefeito e vereador." },
     { "ic": "1️⃣", "txt": "1º turno: no primeiro domingo de outubro. Em 2026, foi no dia 4." },
-    { "ic": "2️⃣", "txt": "2º turno, quando precisa: no último domingo de outubro. Em 2026, no dia 25." },
+    { "ic": "2️⃣", "txt": "2º turno, quando precisa: no último domingo de outubro. Em 2026, foi no dia 25." },
     { "ic": "⏰", "txt": "A votação vai das 8h às 17h, no horário de Brasília." }
    ],
    "emoji": "📅",

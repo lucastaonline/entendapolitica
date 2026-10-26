@@ -39,7 +39,7 @@ O site tem versão em inglês para quem é de fora do Brasil (`?lang=en`; a esco
 ## Fases combinadas
 
 1. **Fase 1:** federal completo (presidente, vice, ministros, senadores, deputados federais) + ficha básica (TSE) de governadores, deputados estaduais, prefeitos e vereadores. **Feita**, com as votações da Câmara e do Senado e os mandatos anteriores.
-2. **Fase 2:** propostas dos deputados estaduais, Assembleia por Assembleia. **Feita em 21 das 27** (lista oficial em 26; votações em 4; gastos em 5): ver "Assembleias Legislativas".
+2. **Fase 2:** propostas dos deputados estaduais, Assembleia por Assembleia. **Feita em 21 das 27** (lista oficial nas 27; votações em 10; gastos em 14): ver "Assembleias Legislativas".
 3. **Fase 3:** vereadores das capitais e das Câmaras com dados abertos (ex.: SAPL/Interlegis). **Capitais feitas** (lista oficial em 19 de 26, propostas em 8) e 804 Câmaras com SAPL no site; as outras 14 da lista entram aos poucos pelo robô das cidades (ver "Câmaras Municipais").
 
 Mandatos: o site mostra **quem está no cargo hoje** e marca quem foi **eleito/reeleito em 2026**. As listas trocam sozinhas no dia da posse de quem foi eleito (presidente em 5/1/2027 e governadores em 6/1/2027, pela Emenda Constitucional 111/2021; Congresso em 1º/2/2027; prefeitos e vereadores em 1º/1/2029). Qual é o mandato de hoje sai das datas de posse (`scripts/mandatos.py`, a mesma regra para os coletores e para o navegador), nunca de um ano escrito no código. Os mandatos anteriores (quem foi eleito em cada um, segundo o TSE) ficam no campo **Ver outro mandato**.
@@ -97,6 +97,7 @@ scripts/              coletores em Python (só biblioteca padrão + Pillow):
   historico.py, mapa.py       mandatos anteriores e mapa do Brasil (à mão)
   municipios/mapear.py        mapa das Câmaras Municipais e prefeituras (sites oficiais, sistema de propostas, Diário Oficial, pedido de informação)
   municipios/diarios.py       leis e vetos de cada prefeitura (Diários Oficiais e páginas oficiais de leis), só onde a contagem é segura
+  atualizar_do_brasil.py      à mão, num computador no Brasil: lê de novo as Casas que os robôs do GitHub não conseguem ler e publica
 .github/workflows/    atualizar.yml (robô diário) e cidades.yml (robô das cidades: o mapa das Câmaras e prefeituras e as leis e vetos das prefeituras, um grupo de estados por dia, e as Câmaras com SAPL, as cidades do dia da semana)
 .vercelignore         o que vai para o repositório mas não para o site (scripts, testes e arquivos de trabalho dos coletores)
 testes/               capturas de tela, auditoria de acessibilidade e amostras
@@ -127,6 +128,8 @@ Para ver no computador: `python -m http.server 8770` dentro da pasta e abra http
 4. faz commit só do que mudou de verdade (datas de consulta não contam) e a Vercel publica sozinha. Os caches (`.cache/`) são guardados no fim, mesmo se alguma etapa falhar ou o tempo acabar, para o que já foi baixado não se perder.
 
 O robô das cidades (`.github/workflows/cidades.yml`, todo dia de madrugada, antes do diário; os dois nunca rodam ao mesmo tempo) atualiza, para o grupo de estados do dia, o mapa das Câmaras e prefeituras (`scripts/municipios/mapear.py --rodizio`) e as leis e vetos das prefeituras (`scripts/municipios/diarios.py --rodizio --minutos 40`), e as Câmaras com SAPL: as cidades do dia da semana e as que ainda não terminaram a primeira carga (`python scripts/legislativos.py sapl --parte hoje --pendentes --paralelo 40 --minutos 150`), com o cache `.cache/camaras` guardado entre as rodadas (o mesmo do passo das capitais no robô diário).
+
+**Do Brasil, à mão.** Os robôs rodam no GitHub, fora do Brasil, e alguns sites oficiais de Assembleias e Câmaras Municipais não aceitam esse acesso (recusam, não respondem ou mandam regras que proíbem a leitura): essas Casas ficam com os dados da última leitura completa, e o site mostra essa data ("Última atualização dos dados", no quadro da Casa nas páginas do estado e da cidade, e "Dados da Assembleia/Câmara atualizados em" no topo do perfil; em amarelo quando tem mais de 8 dias). A data é o `conferido` de cada Casa em `dados/legislativos.json` (o dia da última leitura completa que deu certo, gravado pelo `scripts/legislativos.py`), que o `montar.py` leva para `infoCasa.conferido`. Para atualizar essas Casas, num computador no Brasil: `python scripts/atualizar_do_brasil.py --so-ver` (o que está atrasado e por quê) e `python scripts/atualizar_do_brasil.py --publicar` (lê de novo só as atrasadas, roda o `montar.py` e faz o commit e o push só dos dados; não roda com um robô do GitHub rodando). Opções: `--todas` (todas as Assembleias e capitais), `--casas BA RN 2111300`, `--mapa` (o mapa das cidades) e `--diarios` (as leis das prefeituras). Não há rotina automática: roda quando alguém pede (a skill `entendapolitica-atualizar` do Copilot, no computador do Lucas, faz isso).
 
 **Troca de mandato.** Ninguém precisa mexer no código quando um mandato acaba: `scripts/mandatos.py` sabe a data de posse de cada cargo (presidente em 5/1 e governadores em 6/1 a partir de 2027, pela EC 111/2021; Congresso em 1º/2; prefeitos e vereadores em 1º/1) e os coletores perguntam a ele qual mandato está em curso. No dia da posse, presidente, vice, governadores, deputados estaduais e as legislaturas da Câmara e do Senado trocam sozinhos, e os selos "Eleito em 2026" saem. As pesquisas à mão dizem de qual mandato são (`"eleicao": 2022` em `governadores.json`, `"eleicao": 2024` em `prefeitos.json`, `"mandatoInicio"` em `ministros.json`): quando um mandato novo começa, a de governadores deixa de valer (o site mostra quem ganhou, com "aConfirmar") e a de ministros ganha um aviso, até serem refeitas. Para as eleições municipais de 2028, `tse.py` ainda precisa aprender o ano novo (`ORDINARIAS`, `ID_DIVULGA` e a leitura de 2024).
 
@@ -233,46 +236,47 @@ Quando mais de uma fonte dá a contagem segura, vale a que tem os vetos; senão 
 
 ### Assembleias Legislativas (e a Câmara Legislativa do DF)
 
-`python scripts/legislativos.py assembleias` (ou só alguns estados: `python scripts/legislativos.py BA SP GO`) roda um coletor por Casa (`scripts/assembleias/<uf>.py`; ajudas em `_ne_comum.py`, `_ne_sapl.py` e `_ne_nopaper.py` no Nordeste, `_sse_comum.py` no Sudeste, Sul e DF, `_nco_comum.py`, `_nco_sapl.py` e `_nco_gov.py` no Norte e Centro-Oeste, `_ne_gov.py` no Nordeste e, para as três, `_carga.py`: tempo da rodada e primeira carga). Cada um lê só o site oficial da Casa, um pedido por vez, com pausa, e guarda o que leu em `.cache/<casa>/`. Hoje, **26 das 27 Casas** têm a **lista oficial de quem está no cargo** (1.035 deputados, inclusive suplentes que assumiram: "Suplente em exercício"), com o partido de hoje, a foto e a página oficial; cada pessoa é ligada ao candidato do TSE da eleição da legislatura (`dest-<UF>-<SQ_CANDIDATO>`; conferências à mão no próprio coletor). **21** têm as **propostas desde a posse** (59.148: projetos de lei, de lei complementar, de emenda à Constituição — no DF, à Lei Orgânica —, de decreto legislativo e de resolução), com autor principal ou coautor e a situação (regras de cada Casa, conferidas à mão numa amostra, antes da tabela comum). **4** têm **votações nominais** (catálogos `dados/votacoes/<aleam|alero|alego|alepa>.json`, no mesmo formato do Congresso) e **5** têm **gastos** (verba indenizatória ou cota; o perfil diz o nome de cada uma).
+`python scripts/legislativos.py assembleias` (ou só alguns estados: `python scripts/legislativos.py BA SP GO`) roda um coletor por Casa (`scripts/assembleias/<uf>.py`; ajudas em `_ne_comum.py`, `_ne_sapl.py` e `_ne_nopaper.py` no Nordeste, `_sse_comum.py` no Sudeste, Sul e DF, `_nco_comum.py`, `_nco_sapl.py` e `_nco_gov.py` no Norte e Centro-Oeste, `_ne_gov.py` no Nordeste e, para as três, `_carga.py` (tempo da rodada e primeira carga) e `_votos_gastos.py` (votações e gastos)). Cada um lê só o site oficial da Casa, um pedido por vez, com pausa, e guarda o que leu em `.cache/<casa>/`. Hoje, **as 27 Casas** têm a **lista oficial de quem está no cargo** (inclusive suplentes que assumiram: "Suplente em exercício"), com o partido de hoje, a foto e a página oficial; cada pessoa é ligada ao candidato do TSE da eleição da legislatura (`dest-<UF>-<SQ_CANDIDATO>`; conferências à mão no próprio coletor). **21** têm as **propostas desde a posse** (59.148: projetos de lei, de lei complementar, de emenda à Constituição — no DF, à Lei Orgânica —, de decreto legislativo e de resolução), com autor principal ou coautor e a situação (regras de cada Casa, conferidas à mão numa amostra, antes da tabela comum). **10** têm **votações nominais** (o voto de cada deputado no Plenário: AM, RO, GO e PA em catálogos `dados/votacoes/<aleam|alero|alego|alepa>.json`; CE, RN, RS, SC, PI e PB dentro do perfil, no campo `lista`) e **14** têm **gastos** (verba indenizatória, cota ou verba de gabinete; o perfil diz o nome de cada uma). As ajudas comuns das votações e dos gastos estão em `scripts/assembleias/_votos_gastos.py` (formato, ligação de nomes, planilhas XLSX/ODS com a biblioteca padrão e a regra da primeira carga: enquanto a leitura de uma Casa não termina, cada perfil fica com o bloco publicado antes).
 
 | UF | Casa | No cargo (suplentes marcados) | Propostas | Votações nominais | Gastos |
 |---|---|---|---|---|---|
 | AC | Aleac | 24 (0) | 868 | — | — |
 | AL | ALE-AL | 27 (0) | 2.136 | — | — |
-| AM | Aleam | 24 (1) | 3.966 | 3.140 | — |
-| AP | Alap | — (o site não respondeu: fica a lista do TSE) | — | — | — |
-| BA | Alba | 63 (0) | 1.359 | — | — |
-| CE | Alece | 46 (0) | 3.103 | — | — |
+| AM | Aleam | 24 (1) | 3.966 | 3.140 | cota parlamentar (CEAP) |
+| AP | Alap | 24 (2) | — (o e-Legis está em migração) | — (o e-Legis não traz o voto de cada um) | CEAP |
+| BA | Alba | 63 (0) | 1.359 | — | verba indenizatória |
+| CE | Alece | 46 (0) | 3.103 | 60 | verba de desempenho parlamentar |
 | DF | CLDF | 24 (0) | 2.757 | — | — |
-| ES | Ales | 30 (2) | 2.770 | — | — |
+| ES | Ales | 30 (2) | 2.770 | — (boletins em PDF) | cota parlamentar (valor solicitado) |
 | GO | Alego | 41 (2) | — (o sistema proíbe robôs) | 2.080 | verba indenizatória |
-| MA | Alema | 42 (0) | 2.389 | — | — |
-| MG | ALMG | 77 (5) | 5.559 | — | verba indenizatória |
+| MA | Alema | 42 (0) | 2.389 | — (PDF) | CEAP |
+| MG | ALMG | 77 (5) | 5.559 | — (só nas atas) | verba indenizatória |
 | MS | Alems | 24 (1) | — (desafio anti-robô) | — | CEAP |
 | MT | ALMT | 24 (1) | — (a API exige cadastro) | — | — |
-| PA | Alepa | 41 (2) | — (busca sem paginação aberta) | 151 | — |
-| PB | ALPB | 36 (3) | 7.862 | — | — |
-| PE | Alepe | 49 (0) | 3.912 | — | — |
-| PI | Alepi | 30 (3) | 1.509 | — | — |
+| PA | Alepa | 41 (2) | — (busca sem paginação aberta) | 151 | — (painel fora do domínio da Casa) |
+| PB | ALPB | 36 (3) | 7.862 | 148 (o SAPL só tem votos desde 10/2024) | verba indenizatória (VIAP) |
+| PE | Alepe | 49 (0) | 3.912 | — | CEAP |
+| PI | Alepi | 30 (3) | 1.509 | 136 | — |
 | PR | Alep | 54 (3) | 3.260 | — | — |
 | RJ | Alerj | 70 (9) | — (o sistema só mostra as 15 mais recentes) | — | — (não existe verba indenizatória no RJ) |
-| RN | ALRN | 24 (0) | 2.240 | — | — |
-| RO | Ale-RO | 24 (1) | 2.439 | 367 | — |
+| RN | ALRN | 24 (0) | 2.240 | 141 (236 dão erro no sistema da ALRN) | — (serviço com chave) |
+| RO | Ale-RO | 24 (1) | 2.439 | 367 | verba indenizatória (verbas gerais) |
 | RR | ALE-RR | 24 (1) | 1.296 | — | — |
-| RS | ALRS | 55 (1) | 1.590 | — | — |
-| SC | Alesc | 40 (4) | 2.038 | — | despesas dos gabinetes |
+| RS | ALRS | 55 (1) | 1.590 | 846 | — |
+| SC | Alesc | 40 (4) | 2.038 | 226 | despesas dos gabinetes |
 | SE | Alese | 24 (0) | 1.510 | — | — |
-| SP | Alesp | 94 (5) | 4.824 | — | despesas de gabinete |
+| SP | Alesp | 94 (5) | 4.824 | — (voto só em PDF) | despesas de gabinete |
 | TO | Aleto | 24 (1) | 1.761 | — | — |
 
-(Números de 23/10/2026. "Suplentes marcados" = onde a lista oficial diz que a pessoa é suplente; nas outras, o perfil mostra "Como chegou ao cargo".) O que falta em cada Casa, e por quê, está nas `notas` de `dados/assembleias/<UF>.json`, que a página do estado mostra no quadro "O que o site já tem da Assembleia".
+(Listas e propostas: números de 23/10/2026; votações, gastos e o Amapá: 26/10/2026. "Suplentes marcados" = onde a lista oficial diz que a pessoa é suplente; nas outras, o perfil mostra "Como chegou ao cargo".) O que falta em cada Casa, e por quê, está nas `notas` de `dados/assembleias/<UF>.json`, que a página do estado mostra no quadro "O que o site já tem da Assembleia".
 
 - **Educado com cada site:** todos os pedidos respeitam o robots.txt de cada servidor (lido uma vez por rodada; o que ele fecha não é lido, e um robots.txt fora do ar faz o site não ser lido naquele dia) e o intervalo que ele pede (`Crawl-delay`: 60 s nos SAPL do Interlegis — AC, AL, AM, PB, PI, RO, RR e TO —, 10 s nos dados abertos do RJ e de GO). Nos SAPL, cada rodada pede só o que mudou desde a anterior, em páginas de 100, e confere as outras situações aos poucos (5 a 12 pedidos por Casa e por dia).
 - **Tempo por dia:** as 26 Casas rodam ao mesmo tempo (`python scripts/legislativos.py assembleias --paralelo 27 --minutos 50`; cada uma no seu servidor): com o cache cheio, 6 a 13 minutos. Nenhum pedido novo começa depois do fim da rodada (`scripts/assembleias/_carga.py`).
 - **Primeira carga (cache vazio, como no robô do GitHub):** cada Casa usa a rodada toda, guarda o que já leu em `.cache/<casa>/` e continua no dia seguinte; enquanto não termina, não grava nada (ficam os arquivos publicados antes e o `dados/legislativos.json` marca a Casa como "em andamento"). A maioria termina em 1 ou 2 dias; os SAPL do Interlegis, em 2 a 7 dias (PB é o mais longo), e a ALMG em uns 7 (sem os arquivos anuais, que o robots.txt fecha, ela procura número por número). Para encher de uma vez à mão: `NE_SEM_LIMITE=1` (sem limite de tempo); `ALMG_VERBAS_MAX`, `CLDF_NORMAS_MAX`, `ALEP_NORMAS_MAX`, `ALESC_FICHAS`, `ALESC_PAGINAS` e `ALES_SEGUNDOS` mudam os limites diários de cada Casa.
+- **Votações e gastos (fase 6):** só onde a Casa publica o voto de cada deputado ou o gasto de cada gabinete em formato que dá para ler e conferir (API, CSV/XLSX/ODS, JSON ou HTML com tabela); PDF não entra. Votações: só do Plenário, desde a posse, sem quem não registrou voto; o placar é conferido com a apuração oficial. Gastos: o ano mais recente por tipo (os tipos da própria Casa) e o total desde a posse, iguais à página oficial (conferências à mão em cada coletor). RN: API da Transparência Legislativa (o "Extrato de Votação"; as votações em que o sistema da ALRN dá erro ficam fora, com a conta no escopo); CE: planilhas da página "Votação Nominal" e a "Verba de Desempenho Parlamentar" (CSV por mês, sem tipos); SC: "Extrato de votação" do e-Legis; RS: planilhas de votação do portal do DAL; PI e PB: votos registrados no SAPL (na PB, desde 10/2024; o SAPL da ALPB ignora o filtro `id__in`, e a sessão e a matéria saem do texto de cada voto); AM: CSV da cota por deputado e mês; RO: verba indenizatória (só as verbas gerais); ES: Cotas Parlamentares; BA: planilha anual da verba; PE: serviços da página "Verbas Indenizatórias"; PB: planilhas da VIAP; MA: páginas da CEAP; AP: CEAP do Portal da Transparência. Nas votações de veto, o escopo diz o que quer dizer o "sim" quando o resultado oficial confirma (`_votos_gastos.sentido_veto`). Onde não entra, a nota da Casa diz por quê (PDF, teste anti-robô, chave de acesso, site fora do ar...).
 - **Posse da legislatura eleita em 2026** (conferida nas Constituições e na Lei Orgânica do DF; fica em `scripts/mandatos.py`, `POSSE_ESTADUAL`): 1º de fevereiro de 2027 em 24 estados; **31 de janeiro no RS**, **6 de janeiro no DF** (Emenda à Lei Orgânica 131/2024) e **1º de janeiro em RR** (Constituição de RR, art. 30, § 4º). Em 2023 foi diferente em SP (15 de março) e no DF (1º de janeiro): `POSSE_ESTADUAL_ATE_2022`.
 - **Troca de legislatura:** o começo das propostas (`regional.inicio_estadual(uf)`), os textos e a eleição do TSE usada nos ids (2026) trocam sozinhos na posse. A lista de quem está no cargo troca quando a Casa atualiza a dela; até lá, alguns coletores falham de propósito (para não mostrar a lista velha como se fosse a de hoje), e o `montar.py` não usa uma lista de uma legislatura que já acabou (`_lista_velha`): fica a lista do TSE, que já é a dos eleitos. Depois da posse, os ids dos deputados estaduais passam a usar o número do TSE de 2026 (o link antigo de um reeleito deixa de abrir o perfil).
-- **Testes:** `python testes/interacao_ale_sse.py` (Sudeste, Sul e DF) e `python testes/interacao_assembleias_nco.py` (Norte e Centro-Oeste).
+- **Testes:** `python testes/interacao_ale_sse.py` (Sudeste, Sul e DF), `python testes/interacao_assembleias_nco.py` (Norte e Centro-Oeste) e `python testes/interacao_assembleias_votos.py` (votações e gastos da fase 6: números das páginas × dados, "Mostrar mais votações" com o foco, link oficial, inglês, 320 px e axe).
 
 #### O que cada governador fez (`dados/pessoas/gov-<UF>.json`)
 

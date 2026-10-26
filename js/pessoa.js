@@ -232,6 +232,15 @@
     if (p.interino) chips.push('<span class="chip amarelo">' + EP.tr(EP.gen(p.genero, "Interino", "Interina"), "Acting") + "</span>");
     // suplente que assumiu a vaga (listas oficiais das Assembleias e Câmaras Municipais)
     if (p.exercicio) chips.push('<span class="chip amarelo"><span aria-hidden="true">🔑 </span>' + esc(EP.tr(p.exercicio, p.exercicio_en || p.exercicio)) + "</span>");
+    // dados que vêm do site oficial da Assembleia ou da Câmara Municipal: a data da última leitura completa (infoCasa.conferido)
+    var conf = (p.infoCasa || {}).conferido, dias = conf ? EP.diasDesde(conf) : null;
+    if (dias != null && (p.tipo === "dest" || p.tipo === "ver" || ((p.tipo === "gov" || p.tipo === "pref") && p.extras))) {
+      var daCasa = p.tipo === "dest" || p.tipo === "gov" ? (p.uf === "DF" ? EP.tr("da Câmara Legislativa", "from the Legislative Chamber") : EP.tr("da Assembleia", "from the state legislature")) :
+        EP.tr("da Câmara Municipal", "from the city council");
+      chips.push('<span class="chip ' + (dias > 8 ? "amarelo" : "neutro") + '"><span aria-hidden="true">' + (dias > 8 ? "⚠️ " : "🔄 ") + "</span>" +
+        EP.tr("Dados " + daCasa + " atualizados em ", "Data " + daCasa + " updated on ") + esc(EP.data(conf)) +
+        (dias > 8 ? EP.tr(" (podem ter mudado desde então)", " (they may have changed since then)") : "") + "</span>");
+    }
     return '<section class="perfil-topo" aria-labelledby="nome-pessoa"><div class="moldura">' + EP.av(p.foto, p.nome, null, true) + "</div><div>" +
       '<span class="cargo-p">' + cargoHtml(p) + (onde(p) ? " · " + esc(onde(p)) : "") + '</span><h1 id="nome-pessoa">' + EP.pt(esc(p.nome)) + "</h1>" +
       (p.nomeCivil && EP.norm(p.nomeCivil) !== EP.norm(p.nome) ? '<p class="muted" style="margin:-4px 0 8px">' + EP.tr("Nome completo: ", "Full name: ") + EP.pt(esc(p.nomeCivil)) + "</p>" : "") +
@@ -635,7 +644,9 @@
       (g.mandatoTotal != null ? '<div class="grande-n"><b>' + EP.dinheiroCurto(g.mandatoTotal) + "</b><span>" + desdeMes(g.desde || "2023-02") + "</span></div>" : "") + "</div>" +
       ((g.porTipo || []).length ? '<h3 style="margin-top:16px">' + EP.tr("Com o que gastou em ", "What the money was spent on in ") + esc(g.ano) + '</h3><ul class="gastos-lista" style="list-style:none;padding:0">' + g.porTipo.slice(0, 8).map(function (x) {
         return '<li class="gasto"><span>' + D.gasto(x.tipo) + "</span><b>" + EP.dinheiro(x.valor) + '</b><span class="tr" aria-hidden="true"><i style="width:' + (100 * x.valor / max).toFixed(1) + '%"></i></span></li>';
-      }).join("") + "</ul>" : "") + (g.fonte ? '<p style="margin-top:10px">' + fonteBtn(g.fonte, null, EP.tr("gastos", "spending")) + "</p>" : "") + "</section>";
+      }).join("") + "</ul>" : regional ? '<p class="muted" style="margin-top:10px">' + EP.tr("A Casa não separa estes gastos por tipo: aqui aparecem só os totais.",
+        "The legislature does not break this spending down by type: only the totals are shown here.") + "</p>" : "") +
+      (g.fonte ? '<p style="margin-top:10px">' + fonteBtn(g.fonte, null, EP.tr("gastos", "spending")) + "</p>" : "") + "</section>";
   }
   function comissoesHtml(p) {
     if (!(p.comissoes || []).length) return "";

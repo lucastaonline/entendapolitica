@@ -37,13 +37,27 @@
     ["propostas", "📜", "O que cada um propôs", "What each member proposed"],
     ["votacoes", "🗳️", "Como cada um votou", "How each member voted"],
     ["gastos", "💰", "Gastos com a verba do mandato", "Spending of the office allowance"]];
+  // Quantos dias faz desde uma data "AAAA-MM-DD" (meio-dia, para não errar por causa do fuso)
+  EP.diasDesde = function (iso) { var t = Date.parse(String(iso).slice(0, 10) + "T12:00:00"); return isNaN(t) ? null : Math.floor((Date.now() - t) / 864e5); };
+  // A última leitura completa do site oficial da Casa (infoCasa.conferido): o robô lê cada Casa todo dia (as Câmaras com SAPL,
+  // uma vez por semana); alguns sites oficiais não aceitam o robô, que roda fora do Brasil, e são atualizados à mão. Com mais
+  // de 8 dias, o aviso fica amarelo: os dados podem ter mudado desde então.
+  EP.dataCasa = function (conferido) {
+    var dias = conferido ? EP.diasDesde(conferido) : null;
+    if (dias == null) return "";
+    var velho = dias > 8;
+    return '<p class="data-casa' + (velho ? " velho" : "") + '"><span aria-hidden="true">' + (velho ? "⚠️ " : "🔄 ") + "</span>" +
+      EP.tr("Última atualização dos dados: ", "Data last updated: ") + "<b>" + esc(EP.dataLonga(conferido)) + "</b>" +
+      (velho ? ". " + EP.tr("Os dados podem ter mudado desde então: o site oficial não pôde ser lido depois disso.",
+        "The data may have changed since then: the official website could not be read after that date.") : ".") + "</p>";
+  };
   EP.infoCasa = function (info) {
     if (!info || !info.cobertura) return "";
     var nomeHtml = EP.en && info.casa_en ? esc(info.casa_en) : EP.pt(esc(info.casa || ""));
     var notasEn = EP.en && (info.notas_en || []).length === (info.notas || []).length && (info.notas_en || []).length;
     var notas = notasEn ? info.notas_en : (info.notas || []);
     var falta = COBERTURA.some(function (c) { return !info.cobertura[c[0]]; });
-    return '<div class="info-casa rev"><h3>' + EP.tr("O que o site já tem da ", "What this site has from the ") + nomeHtml + "</h3>" +
+    return '<div class="info-casa rev"><h3>' + EP.tr("O que o site já tem da ", "What this site has from the ") + nomeHtml + "</h3>" + EP.dataCasa(info.conferido) +
       '<ul class="cobertura-casa">' + COBERTURA.map(function (c) {
         var tem = !!info.cobertura[c[0]];
         return '<li class="' + (tem ? "tem" : "falta") + '"><span aria-hidden="true">' + (tem ? "✔️ " : "➖ ") + "</span>" +

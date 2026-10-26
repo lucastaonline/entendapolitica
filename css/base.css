@@ -279,6 +279,9 @@ kbd { display: inline-block; min-width: 1.6em; text-align: center; border: 2px s
 .notas-casa { margin: 8px 0; padding-left: 1.2em; font-size: .9rem; color: var(--muted); }
 .notas-casa li + li { margin-top: 4px; }
 .site-casa { margin: 8px 0 0; font-size: .92rem; font-weight: 700; }
+/* a data da última leitura completa do site oficial da Casa (EP.dataCasa); amarela quando tem mais de 8 dias */
+.data-casa { margin: 0 0 10px; font-size: .92rem; }
+.data-casa.velho { background: #fff8e6; border: 2px solid #f2d48a; border-radius: 12px; padding: 8px 12px; color: #4a3500; }
 
 /* perfil: onde ver o que não está neste site (sites oficiais e Lei de Acesso à Informação; ondeVerHtml, js/pessoa.js) */
 .links-onde { list-style: none; padding: 0; margin: 12px 0 0; display: grid; gap: 8px; }

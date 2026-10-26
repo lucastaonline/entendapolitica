@@ -120,7 +120,8 @@
         '<a class="btn claro" href="estado.html?uf=' + uf + (EP.en ? "&lang=en" : "") + '"><span aria-hidden="true">📍 </span>' +
           esc(EP.tr("Ver a política " + EP.doEstado(uf), "See the politics " + EP.doEstado(uf))) + "</a>" +
         '<button class="btn bege" type="button" id="outra-cidade"><span aria-hidden="true">🔎 </span>' + EP.tr("Procurar outra cidade", "Search for another city") + "</button></div></section>";
-    EP.montaCasa(document.getElementById("casa-ver"), { membros: v.membros || [], filtroUF: false, fonte: v.fonte, atualizado: c.atualizado, nivel: 3,
+    EP.montaCasa(document.getElementById("casa-ver"), { membros: v.membros || [], filtroUF: false, fonte: v.fonte,
+      atualizado: (v.oficial && (v.infoCasa || {}).conferido) || c.atualizado, nivel: 3,
       nomes: { um: EP.tr("vereador", "city councilor"), uma: EP.tr("vereadora", "city councilor"), varios: EP.tr("vereadores", "city councilors"), varias: EP.tr("vereadoras", "city councilors") },
       extra: function (m) {
         if (m.exercicio) return EP.tr(m.exercicio, m.exercicio_en || m.exercicio);  // suplente que assumiu a vaga

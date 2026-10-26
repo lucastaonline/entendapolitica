@@ -150,6 +150,9 @@ def main(args: list[str]) -> int:
                 r = dict(indice[grupo].get(chave, {}), **r)
             else:
                 r.pop("pendente", None)
+                # a data da última leitura completa do site oficial: é a que o site mostra como "atualizado em" (uma
+                # Casa que falha ou que ainda está na primeira carga fica com a data da última leitura que deu certo)
+                r["conferido"] = hoje()
             indice[grupo][chave] = {k: v for k, v in r.items() if k != "segundos"}
             feitos.append((grupo, chave))
     # lê de novo antes de gravar: outra execução pode ter gravado enquanto esta rodava; só troca as Casas desta execução

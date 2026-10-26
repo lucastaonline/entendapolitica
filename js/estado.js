@@ -215,7 +215,9 @@
       if (de2.aviso) document.getElementById("aviso-est").innerHTML = aviso(D.aviso(de2.aviso, de2.aviso_en));
       var nomesE = uf === "DF" ? { um: EP.tr("deputado distrital", "district deputy"), uma: EP.tr("deputada distrital", "district deputy"), varios: EP.tr("deputados distritais", "district deputies"), varias: EP.tr("deputadas distritais", "district deputies") } :
         { um: EP.tr("deputado estadual", "state deputy"), uma: EP.tr("deputada estadual", "state deputy"), varios: EP.tr("deputados estaduais", "state deputies"), varias: EP.tr("deputadas estaduais", "state deputies") };
-      EP.montaCasa(document.getElementById("casa-est"), { membros: de2.membros || [], nomes: nomesE, filtroUF: false, fonte: de2.fonte, atualizado: e.atualizado,
+      // lista oficial da Assembleia: a data da última leitura completa do site oficial (infoCasa.conferido)
+      EP.montaCasa(document.getElementById("casa-est"), { membros: de2.membros || [], nomes: nomesE, filtroUF: false, fonte: de2.fonte,
+        atualizado: (de2.oficial && (de2.infoCasa || {}).conferido) || e.atualizado,
         extra: function (m) {
           if (m.exercicio) return EP.tr(m.exercicio, m.exercicio_en || m.exercicio);  // suplente que assumiu a vaga
           var a = de2.eleicao || 2022;

@@ -37,9 +37,7 @@
     ["propostas", "📜", "O que cada um propôs", "What each member proposed"],
     ["votacoes", "🗳️", "Como cada um votou", "How each member voted"],
     ["gastos", "💰", "Gastos com a verba do mandato", "Spending of the office allowance"]];
-  // Quantos dias faz desde uma data "AAAA-MM-DD" (meio-dia, para não errar por causa do fuso)
-  EP.diasDesde = function (iso) { var t = Date.parse(String(iso).slice(0, 10) + "T12:00:00"); return isNaN(t) ? null : Math.floor((Date.now() - t) / 864e5); };
-  // A última leitura completa do site oficial da Casa (infoCasa.conferido): o robô lê cada Casa todo dia (as Câmaras com SAPL,
+  // A última leitura completa do site oficial da Casa (infoCasa.conferido; EP.diasDesde fica em comum.js): o robô lê cada Casa todo dia (as Câmaras com SAPL,
   // uma vez por semana); alguns sites oficiais não aceitam o robô, que roda fora do Brasil, e são atualizados à mão. Com mais
   // de 8 dias, o aviso fica amarelo: os dados podem ter mudado desde então.
   EP.dataCasa = function (conferido) {

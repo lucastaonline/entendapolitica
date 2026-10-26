@@ -93,6 +93,8 @@
   EP.norm = function (s) {
     return String(s || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
   };
+  // Quantos dias faz desde uma data "AAAA-MM-DD" (meio-dia, para não errar por causa do fuso); null se a data não for válida
+  EP.diasDesde = function (iso) { var t = Date.parse(String(iso || "").slice(0, 10) + "T12:00:00"); return isNaN(t) ? null : Math.floor((Date.now() - t) / 864e5); };
   EP.gen = function (genero, masc, fem) { return genero === "F" ? fem : masc; };
   EP.plural = function (n, um, varios) { return EP.num(n) + " " + (n === 1 ? um : varios); };
   // marca um texto oficial em português dentro da página em inglês (o leitor de tela troca a pronúncia)

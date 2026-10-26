@@ -766,26 +766,52 @@ def montar_uf(uf: str, cidades: list, sigi: dict, diarios: dict, nomes_assoc: di
 
 
 # ---------------------------------------------------------------------------------------------------- manter o que valia
-ERROS_PASSAGEIROS = ("timeout", "conexao", "tls", "redirecionamentos", "suspenso", "http 403", "http 429")
+MANTER_PUBLICADO_DIAS = 90   # o bloco já publicado vale por este tanto de dias, se a rodada nova achar menos
 
 
-def _passageiro(e: str | None) -> bool:
-    return bool(e) and (e in ERROS_PASSAGEIROS or e.startswith("http 5"))
+def _host(u: str | None) -> str:
+    h = (urllib.parse.urlsplit(u or "").hostname or "").lower()
+    return h[4:] if h.startswith("www.") else h
+
+
+def _pontos(parte: str, x: dict) -> int:
+    """Quanto um bloco diz: site, sistema, página das proposições (na internet vale mais), pedido de informação..."""
+    if parte == "camara":
+        return (bool(x.get("site")) + bool(x.get("sistema")) + bool(x.get("propostas"))
+                + 2 * (x.get("propostasOnline") is True) + bool(x.get("sic")))
+    return (bool(x.get("site")) + (bool(x.get("site")) and x.get("lido") is not False) + bool(x.get("transparencia"))
+            + bool(x.get("sic")) + bool(x.get("diarioOficial")))
+
+
+def _leu(parte: str, x: dict) -> bool:
+    """A rodada conseguiu ler o site (não ficou só no endereço, por bloqueio ou erro)."""
+    if not x.get("site"):
+        return False
+    if parte == "camara":
+        return x.get("motivo") not in (MOTIVOS["bloqueio"][0], MOTIVOS["fora_do_ar"][0])
+    return x.get("lido") is not False
 
 
 def manter_publicado(novo: dict, velho: dict | None, b: dict) -> dict:
-    """Se o site da Câmara ou da prefeitura sumiu nesta rodada só por erros passageiros (tempo esgotado, recusa, bloqueio
-    de quem acessa de fora do país), fica o bloco que já estava publicado em dados/municipios/, com a data em que foi
-    conferido. Vale também quando o cache está vazio (robô do GitHub)."""
+    """O robô do GitHub roda fora do Brasil, e muitos sites de prefeituras e Câmaras bloqueiam esse acesso (ou demoram);
+    ele também pode começar com o cache vazio. Por isso, um bloco já publicado em dados/municipios/ (Câmara ou prefeitura)
+    só é trocado quando a rodada nova achou pelo menos o mesmo tanto (_pontos), quando o site mudou de endereço e o novo foi
+    lido, quando o endereço publicado não existe mais (erro de DNS) ou quando o publicado tem mais de MANTER_PUBLICADO_DIAS
+    dias. Senão fica o bloco publicado, com a data em que foi conferido."""
     if not velho:
         return novo
+    limite = (dt.date.fromisoformat(hoje()) - dt.timedelta(days=MANTER_PUBLICADO_DIAS)).isoformat()
     for parte in ("camara", "prefeitura"):
         n, v = novo.get(parte) or {}, velho.get(parte) or {}
-        if n.get("site") or not v.get("site"):
+        if not v.get("site") or (v.get("conferido") or "") < limite or _pontos(parte, n) >= _pontos(parte, v):
             continue
-        erros = [x.get("erro") for x in (b.get(parte) or {}).get("visitas") or [] if x.get("erro")]
-        if erros and all(_passageiro(e) for e in erros):
-            novo[parte] = v
+        if n.get("site") and _host(n["site"]) != _host(v["site"]) and _leu(parte, n):
+            continue
+        h = _host(v["site"])
+        if any(x.get("erro") == "dns" and _host("https://" + (x.get("host") or "")) == h
+               for x in (b.get(parte) or {}).get("visitas") or []):
+            continue
+        novo[parte] = v
     return novo
 
 

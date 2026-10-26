@@ -69,5 +69,14 @@ def coletar() -> dict:
         notas=[("A Aleac não registra no seu sistema (SAPL) as leis que saem dos projetos: o último passo que aparece costuma ser "
                 "o envio do texto aprovado ao governador.",
                 "The Aleac does not record in its system (SAPL) the laws that come out of the bills: the last step shown is "
-                "usually the approved text being sent to the governor."), SEM_LEIS],
+                "usually the approved text being sent to the governor."), SEM_LEIS, NOTA_VOTOS_GASTOS],
     ).coletar()
+
+
+NOTA_VOTOS_GASTOS = (
+    "As votações e os gastos não entram. Votações: o SAPL da Aleac tem o voto de cada deputado só de 26/6/2025 a 30/3/2026 "
+    "(cerca de 40 votações) e nada de 2023 e 2024. Gastos: o Portal da Transparência da Aleac (app.al.ac.leg.br) desativou "
+    "a página da verba indenizatória e publica só a regulamentação.",
+    "Votes and spending are not included. Votes: the Aleac SAPL system has each deputy's vote only from June 26, 2025 to "
+    "March 30, 2026 (about 40 votes) and nothing from 2023 or 2024. Spending: the Aleac transparency portal "
+    "(app.al.ac.leg.br) has taken down its expense allowance page and publishes only the rules.")

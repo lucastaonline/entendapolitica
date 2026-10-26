@@ -70,6 +70,12 @@ def coletar() -> dict:
          "robôs (robots.txt) e a API da Casa exige cadastro. Cada proposta pode ser consultada nessa busca, no site da ALMT.",
          "Each deputy's bills and votes are not included: the ALMT website's bill search is closed to robots (robots.txt) "
          "and the assembly's API requires registration. Each bill can be looked up in that search, on the ALMT website."),
+        ("Os gastos não entram: o site da ALMT publica só as leis e as resoluções da verba indenizatória, não o que cada "
+         "deputado gastou; o portal de transparência da Assembleia fica num endereço de uma empresa contratada "
+         "(almt.eloweb.net), fora do domínio oficial da Casa, e este site só usa fontes oficiais.",
+         "Spending is not included: the ALMT website only publishes the laws and resolutions on the expense allowance, not "
+         "what each deputy spent; the assembly's transparency portal is hosted at a contractor's address (almt.eloweb.net), "
+         "outside the assembly's official domain, and this site only uses official sources."),
         GOV_NOTA,
     ]
     r = gravar("MT", {"casa": "Assembleia Legislativa do Estado de Mato Grosso", "casa_en": "Legislative Assembly of the State of Mato Grosso",

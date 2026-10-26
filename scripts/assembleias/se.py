@@ -342,9 +342,19 @@ def coletar() -> dict:
         casa_en="Legislative Assembly of the State of Sergipe", sigla="Alese", site="https://al.se.leg.br",
         veiculo="Assembleia Legislativa de Sergipe (Alese)", prefixo="alese", pasta="alese",
         tipos={5: "PL", 4: "PLP", 7: "PEC", 3: "PDL", 6: "PRC"}, situacao=situacao, qtd_pessoas=30,
-        tse_manual=TSE_MANUAL, notas=[NOTA_VETOS],
+        tse_manual=TSE_MANUAL, notas=[NOTA_VETOS, NOTA_VOTOS_GASTOS],
     )
     return COLETOR.coletar()
+
+
+NOTA_VOTOS_GASTOS = ("As votações e os gastos não entram. Votações: a Alese publica, para cada sessão, a pauta, a ordem do "
+                     "dia e a presença em Plenário (no sistema legislativo), além do áudio e da ata no site, sem o voto de "
+                     "cada deputado em formato aberto. Gastos: a Alese publica o ressarcimento de despesas dos deputados só "
+                     "em PDF, um relatório por mês, no Portal da Transparência.",
+                     "Votes and spending are not included. Votes: for each session the Alese publishes the agenda, the order "
+                     "of business and attendance (in its legislative system), plus the audio and the minutes on its website, "
+                     "but not each deputy's vote in an open format. Spending: the Alese publishes the deputies' expense "
+                     "reimbursements only as PDF files, one report per month, on its transparency portal.")
 
 
 NOTA_VETOS = ("Os vetos do governador não entram no perfil dele: o registro de vetos da Alese (proposições \"Veto "

@@ -59,6 +59,10 @@ def _menos_dias(iso: str, dias: int) -> str:
     return d.isoformat()
 
 
+def _mais_dias(iso: str, dias: int) -> str:
+    return _menos_dias(iso, -dias)
+
+
 # nome comum de cada tipo de norma (descrição oficial sem acento, minúsculas) -> nome usado no site
 _NORMAS = [
     (r"lei complementar", "Lei Complementar"), (r"^lei( ordinaria)?( promulgada)?$", "Lei"),
@@ -80,7 +84,7 @@ class SaplAssembleia:
                  tipos: dict[int, str], tipos_veto: dict[int, str | None], regras: list[tuple], pasta: str,
                  em_exercicio=None, tse_manual: dict | None = None, pausa: float = 0.6, notas: list | None = None,
                  pagina_pessoa: str | None = None, foto_pessoa=None, lista_oficial: tuple[str, str] | None = None,
-                 gov: dict | None = None):
+                 gov: dict | None = None, gastos=None, votacoes: bool = False):
         """tipos = {id do tipo de matéria no SAPL: PL|PLP|PEC|PDL|PRC}; tipos_veto = {id do tipo: "total"|"parcial"|None
         (None: lê na ementa)}; regras = [(expressão sem acento, status, texto pt ou None, texto en ou None)] para a situação
         da última tramitação; em_exercicio(coletor, parlamentares_da_legislatura) -> {id SAPL: dados extras} troca a regra
@@ -90,7 +94,10 @@ class SaplAssembleia:
         de norma lei ordinária e complementar] ou None (sem contagem de leis), "promulgada": função(norma) -> True (a
         Assembleia promulgou), False (o governador sancionou) ou None (sem a informação), "criterio_leis": (pt, en) que
         completa "contam como sancionadas as N ...", "autores_fora": [ids de autor cujos vetos não entram (governo
-        anterior)], "nota_prop": (pt, en) ou None, "tipos_txt": (pt, en) ou None}."""
+        anterior)], "nota_prop": (pt, en) ou None, "tipos_txt": (pt, en) ou None}; gastos(coletor, membros) -> {id da
+        pessoa: bloco "gastos"} (fonte própria da Casa, fora do SAPL; ver _votos_gastos.py) ou None enquanto a primeira
+        carga dos gastos não termina (os perfis ficam com o bloco de antes; uma exceção também mantém os de antes);
+        votacoes = True: votações nominais do Plenário registradas no SAPL (ver votacoes())."""
         self.uf, self.base = uf, base.rstrip("/")
         self.info = {"casa": casa, "casa_en": casa_en, "sigla": sigla, "site": site}
         self.veiculo, self.prefixo = veiculo, prefixo
@@ -101,6 +108,9 @@ class SaplAssembleia:
         self.foto_pessoa = foto_pessoa
         self.lista_oficial = lista_oficial
         self.gov = gov
+        self.gastos = gastos
+        self.com_votacoes = votacoes
+        self.votos_info: dict | None = None
         self.rede = Rede(pasta, pausa=pausa)
         self.t0 = time.time()
         self.orcamento = ORCAMENTO_S
@@ -555,6 +565,7 @@ class SaplAssembleia:
         velhas = sorted((i, a) for a, i in idades.items() if i is not None and i > OUTROS_DIAS * 24)
         self._outros_reler = {a for a, i in idades.items() if i is None} | {a for _, a in velhas[-OUTROS_POR_RODADA:]}
         membros, extras, listas = [], {}, []
+        pid_de_sapl: dict[int, str] = {}
         for p in pessoas:
             det = p["det"]
             nome = _limpa_nome(p.get("nome_parlamentar") or det.get("nome_parlamentar"))
@@ -602,6 +613,7 @@ class SaplAssembleia:
             if not x["mandato"]:
                 x.pop("mandato")
             extras[pid] = x
+            pid_de_sapl[int(p["id"])] = pid
         # fichas e contagens que ainda não estão no cache (primeira carga sem tempo para elas): nada é gravado ainda
         sem_outros = [a for a in cod if self._idade_h(f"outros/{a}.json") is None]
         if self.sem_ficha or len(sem_outros) > OUTROS_POR_RODADA:
@@ -609,8 +621,34 @@ class SaplAssembleia:
                 "documentos; os arquivos de antes ficam até a próxima rodada")
             return self._pendente("fichas e contagens dos deputados")
         log(f"  {self.uf}: situações {resumo_status(listas)}")
-        cobertura = {"lista": True, "propostas": True, "votacoes": False, "gastos": False}
-        r = gravar(self.uf, self.info, membros, extras, cobertura, self.fonte_lista(leg), self.notas)
+        com_gastos = False
+        if self.gastos:
+            from . import _votos_gastos as VG
+            try:
+                g = self.gastos(self, membros)
+            except SemTempo:
+                g = None
+                log(f"  {self.uf}: gastos: o tempo da rodada acabou; a leitura continua na próxima")
+            except Exception as e:  # o site dos gastos fora do ar não derruba a Casa: ficam os blocos de antes
+                g = None
+                log(f"  {self.uf}: ATENÇÃO: gastos não atualizados ({type(e).__name__}: {e}); ficam os de antes")
+            com_gastos = VG.aplicar(extras, g, "gastos")
+        com_votos = False
+        notas = list(self.notas)
+        if self.com_votacoes:
+            from . import _votos_gastos as VG
+            try:
+                vb = self.votacoes(pid_de_sapl)
+            except SemTempo:
+                vb = None
+            except Exception as e:  # o SAPL das votações com erro não derruba a Casa: ficam os blocos de antes
+                vb = None
+                log(f"  {self.uf}: ATENÇÃO: votações não atualizadas ({type(e).__name__}: {e}); ficam as de antes")
+            com_votos = VG.aplicar(extras, vb, "votacoes")
+            if com_votos:
+                notas.append(self.nota_votacoes())
+        cobertura = {"lista": True, "propostas": True, "votacoes": com_votos, "gastos": com_gastos}
+        r = gravar(self.uf, self.info, membros, extras, cobertura, self.fonte_lista(leg), notas)
         if self.gov:
             try:
                 self.governo(est, norma_de, nomes_norma)
@@ -697,6 +735,293 @@ class SaplAssembleia:
             return fonte(self.veiculo, titulo, url)
         return fonte(self.veiculo, f"Deputados em exercício na {leg.get('numero')}ª legislatura (SAPL, dados abertos)",
                      f"{self.base}/parlamentar/")
+
+    # ------------------------------------------------------------ votações nominais (painel do Plenário registrado no SAPL)
+    # voto como o SAPL escreve -> como o site guarda (js/traducoes.js, D.voto); o mesmo de _nco_sapl.Sapl.VOTO
+    VOTO = {"sim": "Sim", "nao": "Não", "abstencao": "Abstenção", "nao votou": "NR", "obstrucao": "Obstrução",
+            "presidente": "PS", "presidencia": "PS", "presidente da sessao": "PS", "ausente": "NCOM"}
+
+    def votacoes(self, pid_de_sapl: dict[int, str]) -> dict | None:
+        """{id da pessoa: bloco "votacoes"} (formato "lista" de _votos_gastos.py) ou None enquanto a primeira carga não
+        termina (os perfis ficam com o bloco de antes). Lê os votos registrados no SAPL (/api/sessao/votoparlamentar/, pela
+        data do registro: na primeira vez desde a posse; depois, desde a última leitura menos 2 dias), o registro de cada
+        votação (placar, resultado, matéria: /api/sessao/registrovotacao/?id__in=), a ordem do dia ou o expediente de cada
+        uma (a sessão e a data) e a ementa das matérias votadas que não estão no cache das propostas. Com 60 s entre pedidos
+        (Interlegis), a primeira carga leva de 30 a 60 pedidos (uma a três rodadas, guardando o progresso em votos.json);
+        depois, 1 a 3 pedidos por dia. O SAPL que ignora o filtro id__in (o da ALPB devolve a lista inteira) não é lido um
+        registro por pedido: cada voto da lista já traz a ordem do dia (ou o expediente), a data e um texto com a sessão, o
+        resultado e a matéria ("... Veto nº 366 de 2025 em 28ª Sessão Ordinária da 4ª Sessão Legislativa da 20ª Legislatura -
+        Votação: Mantida - Matéria: Veto nº 366 de 2025 - ..."); a matéria é achada pelo tipo, número e ano no cache das
+        propostas e dos vetos, e a sessão pela lista de sessões (/api/sessao/sessaoplenaria/, ligada pelo nome). Só o que não
+        se acha assim vai ao registro, um por pedido. Na ALPB: ~52 pedidos na primeira carga (2 a 3 rodadas)."""
+        from . import _votos_gastos as VG
+        from mandatos import mes_ano
+        vt = self.rede.estado("votos.json", {}) or {}
+        if vt.get("inicio") != INICIO:
+            vt = {"inicio": INICIO}
+        votos: dict = vt.setdefault("votos", {})   # id da votação -> {id do parlamentar: voto}
+        regs: dict = vt.setdefault("regs", {})     # id da votação -> registro resumido
+        ords: dict = vt.setdefault("ords", {})     # "o<id>" (ordem do dia) / "e<id>" (expediente) -> {"s": sessão, "d": data}
+        mats: dict = vt.setdefault("mats", {})     # matéria votada fora do cache das propostas -> {"t", "n", "a", "e"}
+        vinfo: dict = vt.setdefault("vinfo", {})   # id da votação -> o que o voto traz: {"o", "x", "d", "s" (texto)}
+        if vt.get("sem_in") and not vt.get("cursor") and any(k not in vinfo and k not in regs for k in votos):
+            # cache de antes desta regra: relê a lista dos votos uma vez, para guardar a sessão e a matéria de cada votação
+            vt["cursor"] = {"desde": INICIO, "pag": 1, "ate": hoje()}
+
+        def guardar() -> None:
+            self.rede.guardar(vt, "votos.json")
+
+        def pedir() -> None:
+            if not self.tem_tempo():
+                raise SemTempo("votações: acabou o tempo desta rodada")
+
+        try:
+            cur = vt.get("cursor") or {"desde": _menos_dias(vt["feito"], 2) if vt.get("feito") else INICIO, "pag": 1, "ate": hoje()}
+            vt["cursor"] = cur
+            while True:
+                pedir()
+                d = self.api(f"/api/sessao/votoparlamentar/?data_hora__gte={cur['desde']}&o=data_hora&page={cur['pag']}"
+                             f"&page_size={LOTE}", None, None)
+                for v in d.get("results") or []:
+                    if v.get("votacao") is not None and v.get("parlamentar") is not None:
+                        vid = str(v["votacao"])
+                        votos.setdefault(vid, {})[str(v["parlamentar"])] = v.get("voto")
+                        if vid not in vinfo:
+                            s = re.sub(r"\s+", " ", v.get("__str__") or "").strip()
+                            vinfo[vid] = {"o": v.get("ordem"), "x": v.get("expediente"),
+                                          "d": (v.get("data_hora") or "")[:10] or None,
+                                          "s": re.sub(r" - Parlamentar: .*$", "", s)[:400]}
+                if not (d.get("pagination") or {}).get("next_page"):
+                    break
+                cur["pag"] += 1
+                guardar()
+            vt["feito"] = cur["ate"]
+            vt.pop("cursor", None)
+            guardar()
+
+            def por_ids(caminho: str, ids: list[str]) -> list[dict] | None:
+                """Os registros de `ids` pelo filtro id__in, ou None se este SAPL ignora o filtro (o da ALPB devolve a lista
+                inteira): aí vale um registro por pedido (vt["sem_in"])."""
+                d = self.api(f"{caminho}?id__in={','.join(ids)}&page=1&page_size={LOTE}", None, None)
+                res = d.get("results") or []
+                total = (d.get("pagination") or {}).get("total_entries")
+                if (total is not None and total > len(ids)) or any(str(x.get("id")) not in ids for x in res):
+                    return None
+                return res
+
+            def um(caminho: str, i: str) -> dict | None:
+                """Um registro pelo endereço dele (None se foi apagado: 404)."""
+                try:
+                    return self.api(f"{caminho}{i}/", None, None)
+                except RuntimeError as e:
+                    if re.search(r"HTTP Error 404\b", str(e)):
+                        return None
+                    raise
+
+            def lido(r: dict) -> dict:
+                s = re.sub(r"\s+", " ", r.get("__str__") or "")
+                ses = re.search(r" em (\d+\S* .*?Legislatura)\b", s)
+                return {"m": r.get("materia"), "o": r.get("ordem"), "x": r.get("expediente"),
+                        "r": r.get("tipo_resultado_votacao"), "d": (r.get("data_hora") or "")[:10] or None,
+                        "sim": r.get("numero_votos_sim"), "nao": r.get("numero_votos_nao"),
+                        "abst": r.get("numero_abstencoes"), "s": s[:300],
+                        "ses": ses.group(1) if ses else None,
+                        "obs": (r.get("observacao") or "").strip()[:300] or None}
+
+            indice_m: dict | None = None
+
+            def pelo_texto(vid: str) -> dict | None:
+                """O registro da votação montado com o que o voto traz (ver a docstring), ou None se a matéria ou a sessão
+                não aparecem no texto ou se a matéria não está no cache (aí vale o registro, um pedido)."""
+                nonlocal indice_m
+                vi = vinfo.get(vid)
+                if not vi or not (vi.get("o") or vi.get("x")):
+                    return None
+                s = vi.get("s") or ""
+                ses = re.search(r" em (\d+\S* .*?Legislatura)\b", s)
+                res = re.search(r" - Votação: (.*?)(?: - Matéria: |$)", s)
+                mat = re.search(r" - Matéria: (.+?) nº ?(\d+) de (\d{4})", s)
+                if not (ses and mat):
+                    return None
+                if indice_m is None:
+                    por_desc = {}
+                    for t in self.todos("/api/materia/tipomaterialegislativa/", "tipomateria", 24 * 30):
+                        por_desc.setdefault(sem_acento((t.get("descricao") or "").lower()).strip(), set()).add(t["id"])
+                    indice_m = {"desc": por_desc, "m": {}}
+                    for fonte_m in ((self.est or {}).get("materias") or {}, (self.est or {}).get("vetos") or {}, mats):
+                        for mid, x in fonte_m.items():
+                            if x and x.get("t") and x.get("n") and x.get("a"):
+                                indice_m["m"].setdefault((int(x["t"]), int(x["n"]), int(x["a"])), set()).add(str(mid))
+                tipos_m = indice_m["desc"].get(sem_acento(mat.group(1).lower()).strip()) or set()
+                achou = set().union(*[indice_m["m"].get((t, int(mat.group(2)), int(mat.group(3))), set()) for t in tipos_m]) if tipos_m else set()
+                if len(achou) != 1:
+                    return None
+                return {"m": int(next(iter(achou))), "o": vi.get("o"), "x": vi.get("x"), "r": None,
+                        "rt": res.group(1).strip() if res else None, "d": vi.get("d"), "sim": None, "nao": None,
+                        "abst": None, "s": s[:300], "ses": ses.group(1), "obs": None}
+
+            faltam = sorted((k for k in votos if k not in regs), key=int)
+            while faltam:
+                if vt.get("sem_in"):
+                    vid = faltam.pop(0)
+                    r = pelo_texto(vid)
+                    if r is None:
+                        pedir()
+                        rr = um("/api/sessao/registrovotacao/", vid)
+                        r = lido(rr) if rr else {}
+                    regs[vid] = r
+                    if not faltam or len(regs) % 20 == 0:
+                        guardar()
+                    continue
+                pedir()
+                lote, faltam = faltam[:LOTE], faltam[LOTE:]
+                rs = por_ids("/api/sessao/registrovotacao/", lote)
+                if rs is None:
+                    vt["sem_in"] = True
+                    log(f"  {self.uf}: votações: o SAPL ignora o filtro id__in; a sessão e a matéria de cada votação vêm do "
+                        "texto de cada voto (e, se faltar, do registro, um por pedido)")
+                    faltam = lote + faltam
+                else:
+                    for r in rs:
+                        regs[str(r["id"])] = lido(r)
+                guardar()
+            if vt.get("sem_in"):
+                # sessão e data de cada votação pela lista de sessões (poucos pedidos), ligada pelo nome da sessão que o
+                # registro da votação traz ("28ª Sessão Ordinária da 4ª Sessão Legislativa da 20ª Legislatura")
+                sess: dict = vt.setdefault("sessoes", {})   # nome da sessão -> {"s": id, "d": data}
+                sem_sessao = [r for r in regs.values() if r and (r.get("o") or r.get("x"))
+                              and f"{'o' if r.get('o') else 'e'}{r.get('o') or r.get('x')}" not in ords]
+                if sem_sessao and vt.get("sessoes_em") != hoje() and any(r.get("ses") and r["ses"] not in sess for r in sem_sessao):
+                    pedir()
+                    desde = _menos_dias(max((v.get("d") or INICIO for v in sess.values()), default=INICIO), 7) if sess else INICIO
+                    for s in self.todos(f"/api/sessao/sessaoplenaria/?data_inicio__gte={desde}"):
+                        sess[re.sub(r"\s+", " ", s.get("__str__") or "").strip()] = {"s": s.get("id"), "d": s.get("data_inicio")}
+                    vt["sessoes_em"] = hoje()
+                    guardar()
+                for r in sem_sessao:
+                    s = sess.get(r.get("ses"))
+                    if s:
+                        ords[f"{'o' if r.get('o') else 'e'}{r.get('o') or r.get('x')}"] = {"s": s["s"], "d": s["d"]}
+                guardar()
+            else:
+                for pre, caminho in (("o", "/api/sessao/ordemdia/"), ("e", "/api/sessao/expedientemateria/")):
+                    ids = sorted({str(r["o" if pre == "o" else "x"]) for r in regs.values() if r and r.get("o" if pre == "o" else "x")}
+                                 - {k[1:] for k in ords if k[0] == pre}, key=int)
+                    for i in range(0, len(ids), LOTE):
+                        pedir()
+                        for o in self.todos(f"{caminho}?id__in={','.join(ids[i:i + LOTE])}"):
+                            ords[f"{pre}{o['id']}"] = {"s": o.get("sessao_plenaria"), "d": (o.get("data_ordem") or "")[:10] or None}
+                        guardar()
+            cache_m = (self.est or {}).get("materias") or {}
+            vetos_c = (self.est or {}).get("vetos") or {}   # os vetos do governo também estão no cache (com tipo, número e ementa)
+            sem_m = sorted({str(r["m"]) for r in regs.values() if r and r.get("m") and str(r["m"]) not in cache_m
+                            and str(r["m"]) not in vetos_c and str(r["m"]) not in mats}, key=int)
+            for i in range(0, len(sem_m), 1 if vt.get("sem_in") else LOTE):
+                pedir()
+                ms = ([x for x in [um("/api/materia/materialegislativa/", sem_m[i])] if x] if vt.get("sem_in")
+                      else self.todos(f"/api/materia/materialegislativa/?id__in={','.join(sem_m[i:i + LOTE])}"))
+                for m in ms:
+                    mats[str(m["id"])] = {"t": m.get("tipo"), "n": m.get("numero"), "a": m.get("ano"),
+                                          "e": re.sub(r"\s+", " ", m.get("ementa") or "").strip() or None}
+                if vt.get("sem_in") and not ms:
+                    mats[sem_m[i]] = {}
+                guardar()
+        except SemTempo:
+            guardar()
+            log(f"  {self.uf}: votações: primeira leitura em andamento ({len(votos)} votações com votos lidas até aqui); "
+                "os perfis ficam com as votações de antes")
+            return None
+        resultados = {t["id"]: t.get("nome") for t in self.todos("/api/sessao/tiporesultadovotacao/", "tiporesultado", 24 * 30)}
+        cache_m = (self.est or {}).get("materias") or {}
+        vetos_c = (self.est or {}).get("vetos") or {}
+        vetos_sim: list[tuple] = []   # (sim, não, resultado) de cada votação de veto
+        por_pessoa: dict[str, list] = {}
+        datas, divergentes, desconhecidos, sem_placar = [], 0, set(), 0
+        for vid, vs in votos.items():
+            r = regs.get(vid)
+            if not r:
+                continue
+            o = ords.get(f"o{r['o']}") if r.get("o") else ords.get(f"e{r['x']}") if r.get("x") else None
+            data = (o or {}).get("d") or r.get("d")
+            if not data or data < INICIO:
+                continue
+            convertidos = {}
+            for parl, voto in vs.items():
+                v = self.VOTO.get(sem_acento((voto or "").lower()).strip())
+                if v:
+                    convertidos[int(parl)] = v
+                else:
+                    desconhecidos.add(voto)
+            if not convertidos:
+                continue
+            pl = VG.placar(convertidos.values())
+            if r.get("sim") is not None and (pl["Sim"], pl["Não"], pl["Abstenção"]) != (r.get("sim"), r.get("nao"), r.get("abst")):
+                divergentes += 1
+            sem_placar += r.get("sim") is None
+            resultado = resultados.get(r.get("r")) or r.get("rt")
+            datas.append(data)
+            m = str(r.get("m") or "")
+            info_m = cache_m.get(m) or vetos_c.get(m) or mats.get(m) or {}
+            sigla = f"{self.sigla_tipo(info_m['t'])} {info_m['n']}/{info_m['a']}" if info_m.get("t") and info_m.get("n") else None
+            if o and o.get("s") and r.get("o"):
+                url = f"{self.base}/sessao/{o['s']}/votacao-nominal-transparencia/{r['o']}/{m}?&materia=ordem"
+            elif o and o.get("s") and r.get("x"):
+                url = f"{self.base}/sessao/{o['s']}/votacao-nominal-transparencia/{r['x']}/{m}?&materia=expediente"
+            else:
+                url = f"{self.base}/materia/{m}"
+            desc = re.sub(r"\s+", " ", info_m.get("e") or "").strip() or r.get("obs") or None
+            chave = f"{self.prefixo}-vot:{vid}"
+            prop_id = f"{self.prefixo}:{m}" if m in cache_m else None
+            if info_m.get("t") in (self.tipos_veto or {}):  # votação de veto: para dizer o que quer dizer o "sim"
+                vetos_sim.append((pl["Sim"], pl["Não"], resultado))
+            for parl, voto in convertidos.items():
+                pid = pid_de_sapl.get(parl)
+                if pid:
+                    por_pessoa.setdefault(pid, []).append(VG.item_voto(chave, voto, data, sigla, desc, resultado,
+                                                                       pl, url, prop_id))
+        if desconhecidos:
+            log(f"  {self.uf}: votações: votos com valor desconhecido (fora): {sorted(map(str, desconhecidos))}")
+        sigla_casa = self.info["sigla"]
+        extra = None
+        if datas and min(datas) > _mais_dias(INICIO, 60):
+            primeira = mes_ano(min(datas))
+            extra = (f"O sistema da {sigla_casa} (SAPL) registra o voto de cada deputado a partir de {primeira[0]}; as votações "
+                     "de antes não aparecem lá",
+                     f"The {sigla_casa} system (SAPL) records each deputy's vote from {primeira[1]} on; earlier votes do not "
+                     "appear there")
+        if vetos_sim:
+            # o que quer dizer cada voto nos vetos (como na RN e em SC), só quando o resultado registrado confirma
+            v = VG.sentido_veto(vetos_sim, len(set(pid_de_sapl.values())))
+            if v:
+                extra = VG.junta(extra, v)
+            else:
+                log(f"  {self.uf}: votações: o resultado das {len(vetos_sim)} votações de veto não mostra sozinho o que quer "
+                    "dizer o \"sim\" (sem a frase no escopo)")
+        esc, esc_en = VG.escopo_votos(sigla_casa, extra=extra)
+        fonte_v = fonte(self.veiculo, "Votações nominais do Plenário (SAPL, dados abertos)", f"{self.base}/sessao/pesquisar-sessao")
+        blocos = {pid: VG.bloco_votacoes(l, esc, esc_en, fonte_v) for pid, l in por_pessoa.items()}
+        n = len({x["id"] for l in por_pessoa.values() for x in l})
+        self.votos_info = {"votacoes": n, "desde": min(datas) if datas else None, "divergentes": divergentes, "extra": extra}
+        vt["info"] = self.votos_info
+        guardar()
+        log(f"  {self.uf}: votações: {n} votações nominais desde {INICIO} (a primeira em {min(datas) if datas else '—'}); votos de "
+            f"{len(blocos)} deputados; {divergentes} com o placar do registro diferente da soma dos votos"
+            + (f" ({sem_placar} montadas pelo texto dos votos, sem o placar do registro para conferir)" if sem_placar else ""))
+        return blocos
+
+    def nota_votacoes(self) -> tuple[str, str]:
+        """Nota da Casa sobre as votações (o que entra e de onde; e, se for o caso, desde quando o SAPL registra os votos)."""
+        s = self.info["sigla"]
+        pt = (f"Votações: entram as votações nominais do Plenário (com o voto de cada deputado) desde 1º/2/2023, como estão "
+              f"registradas no sistema da {s} (SAPL, dados abertos). As votações simbólicas não entram: nelas o voto de cada um "
+              "não fica registrado.")
+        en = (f"Votes: roll-call votes in the full Assembly (with each deputy's vote) since February 1, 2023 are included, as "
+              f"recorded in the {s} system (SAPL, open data). Voice votes are not included: in them, each member's vote is not "
+              "recorded.")
+        info = self.votos_info or (self.rede.estado("votos.json", {}) or {}).get("info") or {}
+        if info.get("extra"):
+            pt, en = f"{pt} {info['extra'][0]}.", f"{en} {info['extra'][1]}."
+        return pt, en
 
     _siglas: dict | None = None
 

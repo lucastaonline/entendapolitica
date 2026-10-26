@@ -123,5 +123,14 @@ def coletar() -> dict:
         notas=[(f"A lista de quem está no cargo vem da página oficial da {n}ª Legislatura no site da ALE-AL. Substituições "
                 "temporárias (licenças) podem demorar a aparecer nessa página.",
                 f"The list of who is in office comes from the official page of the {n}th Legislature on the ALE-AL website. Temporary "
-                "substitutions (leaves of absence) may take a while to show up on that page.")],
+                "substitutions (leaves of absence) may take a while to show up on that page."), NOTA_VOTOS_GASTOS],
     ).coletar()
+
+
+NOTA_VOTOS_GASTOS = (
+    "As votações e os gastos não entram. Votações: o SAPL da ALE-AL (sapl.al.al.leg.br) não tem nenhuma sessão nem votação "
+    "registrada desde 1º/2/2023. Gastos: a ALE-AL publica a verba indenizatória (VIAP) de cada deputado só como documento "
+    "digitalizado (uma imagem em PDF por mês), na página \"VIAP\" do seu Portal da Transparência.",
+    "Votes and spending are not included. Votes: the ALE-AL SAPL system (sapl.al.al.leg.br) has no sessions or votes "
+    "recorded since February 1, 2023. Spending: the ALE-AL publishes each deputy's expense allowance (VIAP) only as a "
+    "scanned document (one PDF image per month), on the \"VIAP\" page of its transparency portal.")

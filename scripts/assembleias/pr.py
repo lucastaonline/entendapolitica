@@ -253,8 +253,14 @@ def coletar() -> dict:
         log(f"  PR: governo: {e}")
     notas = [("A Alep só informa se a proposta está tramitando ou arquivada; projeto que virou lei aparece pela norma legal ligada a ele.",
               "The Alep only says whether a proposal is moving or shelved; bills that became law are found through the law linked to them."),
-             ("Gastos e votações nominais: o Portal da Transparência da Alep mostra, mas não pela API de dados abertos.",
-              "Spending and roll-call votes: the Alep transparency portal shows them, but not through its open data API."),
+             ("As votações e os gastos não entram: o Portal da Transparência da Alep mostra os dois (\"Controle de Votações\" e "
+              "verbas de ressarcimento), mas os dados vêm de serviços protegidos por um teste anti-robô (reCAPTCHA) e fechados "
+              "a robôs no robots.txt, e este site não contorna esse tipo de proteção. A API de dados abertos da Alep traz só "
+              "proposições e normas.",
+              "Votes and spending are not included: the Alep transparency portal shows both (the vote control page and "
+              "the expense reimbursements), but the data comes from services protected by an anti-bot test (reCAPTCHA) and closed "
+              "to robots in robots.txt, and this site does not get around that kind of protection. The Alep open data API only "
+              "has bills and laws."),
              ("Os vetos do governador não entram no perfil dele: a lista de vetos da API da Alep vai só até fevereiro de 2024, "
               "e o detalhe de cada projeto na API (com a tramitação) devolve erro.",
               "The governor's vetoes are not included in his profile: the veto list in the Alep API only goes up to February "

@@ -147,6 +147,10 @@ def coletar() -> dict:
          "Alems website."),
         ("Gastos: CEAP (cota parlamentar), com as notas publicadas no Portal da Transparência da Alems.",
          "Spending: CEAP (the office allowance), from the receipts published on the Alems transparency portal."),
+        ("As votações não entram: a Alems não publica o voto de cada deputado em formato aberto; nas votações nominais, ele "
+         "aparece só no texto das notas taquigráficas de cada sessão (PDF), no Portal da Transparência.",
+         "Votes are not included: the Alems does not publish each deputy's vote in an open format; in roll-call votes it "
+         "only appears in the text of each session's transcript (PDF), on its transparency portal."),
         GOV_NOTA,
     ]
     r = gravar("MS", {"casa": "Assembleia Legislativa do Estado de Mato Grosso do Sul",

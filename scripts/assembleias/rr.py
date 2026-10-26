@@ -69,5 +69,14 @@ def coletar() -> dict:
         "Assembleia Legislativa do Estado de Roraima", "Legislative Assembly of the State of Roraima",
         "ALE-RR", "https://al.rr.leg.br", "Assembleia Legislativa de Roraima (ALE-RR)", "alerr",
         {1: "PL", 2: "PLP", 5: "PEC", 6: "PDL", 7: "PRC"}, REGRAS, "alerr",
-        ambiguos=AMBIGUOS, posse="01-01", governo=GOVERNO,
+        ambiguos=AMBIGUOS, posse="01-01", governo=GOVERNO, notas=[NOTA_VOTOS_GASTOS],
     ).coletar()
+
+
+NOTA_VOTOS_GASTOS = (
+    "As votações e os gastos não entram. Votações: o SAPL da ALE-RR não tem nenhuma votação registrada. Gastos: a ALE-RR "
+    "publica o ressarcimento de despesas de cada deputado só a partir de setembro de 2025 (um arquivo por deputado e por mês "
+    "no Portal da Transparência); a página do período anterior estava fora do ar quando foi conferida, em 26/10/2026.",
+    "Votes and spending are not included. Votes: the ALE-RR SAPL system has no votes recorded. Spending: the ALE-RR "
+    "publishes each deputy's expense reimbursements only from September 2025 on (one file per deputy and month on its "
+    "transparency portal); the page for the earlier period was down when checked, on October 26, 2026.")

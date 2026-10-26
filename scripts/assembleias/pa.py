@@ -231,6 +231,10 @@ def coletar() -> dict:
          "no site da Alepa.",
          "Each deputy's bills are not included: the Alepa website's bill search shows 10 results at a time and has no open "
          "data file or address for each page of results. Each bill can be looked up in that search, on the Alepa website."),
+        ("Os gastos não entram: a Alepa mostra a verba indenizatória só num painel interativo hospedado fora do domínio da "
+         "Casa (num endereço da empresa que faz o site), sem arquivo para baixar.",
+         "Spending is not included: the Alepa shows the expense allowance only in an interactive dashboard hosted outside the "
+         "assembly's domain (at an address of the company that runs its website), with no file to download."),
         GOV_NOTA,
     ]
     if cheios:

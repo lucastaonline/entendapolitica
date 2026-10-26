@@ -72,12 +72,15 @@ class Sapl:
                  pausa: float = 1.0, notas: list | None = None, vagas: int = 24, votacoes: bool = False,
                  nomes: dict | None = None, posse: str = "02-01", ambiguos: list[str] | None = None,
                  lista_url: str | None = None, lista_titulo: str | None = None, governo: dict | None = None,
-                 sic: str | None = None):
+                 sic: str | None = None, gastos=None):
         """tipos = {id do tipo de matéria no SAPL: PL|PLP|PEC|PDL|PRC}; regras = [(expressão sem acento, status, frase pt ou
         None, frase en ou None)] para a situação da última tramitação; lista_oficial(coletor, parlamentares) -> lista de
         {"sapl": id SAPL ou None, "nome", "partido", "foto", "url", "email", "redes"} troca a regra padrão (ativos na
         legislatura atual); tse_manual = {nome ou id SAPL: SQ do TSE ou "-"} conferido à mão; nomes = {id SAPL: nome usado
-        no cargo} quando o SAPL escreve diferente da Casa; governo = o que o governo do estado fez (ver governo_gravar)."""
+        no cargo} quando o SAPL escreve diferente da Casa; governo = o que o governo do estado fez (ver governo_gravar);
+        gastos(coletor, membros) -> {id da pessoa: bloco "gastos"} (fonte própria da Casa, fora do SAPL; ver
+        _votos_gastos.py), ou None enquanto a primeira carga dos gastos não termina (os perfis ficam com o bloco de antes).
+        Uma exceção em gastos() não derruba a Casa: os perfis ficam com o bloco de antes."""
         self.uf, self.base = uf, base.rstrip("/")
         self.info = {"casa": casa, "casa_en": casa_en, "sigla": sigla, "site": site, "sic": sic}
         self.veiculo, self.prefixo, self.tipos, self.regras = veiculo, prefixo, tipos, regras
@@ -87,6 +90,7 @@ class Sapl:
         self.ambiguos = list(ambiguos or [])
         self.lista_url, self.lista_titulo = lista_url, lista_titulo
         self.gov = governo
+        self.gastos = gastos
         self.rede = Rede(pasta, pausa=pausa)
         self.parcial = False          # primeira carga das propostas em andamento (não grava os perfis)
         self.votos_de_antes = False   # votações relidas desde o começo: os perfis ficam com as da última leitura completa
@@ -646,7 +650,19 @@ class Sapl:
             return self._pendente(f"contas de outros documentos: {self._contas['sem_outros']} por ler", t0)
         log(f"  {self.uf}: situações {resumo_status(listas)}")
         self.listas = listas
-        cobertura = {"lista": True, "propostas": True, "votacoes": bool(votos) or self.votos_de_antes, "gastos": False}
+        com_gastos = False
+        if self.gastos:
+            from . import _votos_gastos as VG
+            try:
+                g = self.gastos(self, membros)
+            except SemTempo:
+                g = None
+                log(f"  {self.uf}: gastos: o tempo da rodada acabou; a leitura continua na próxima")
+            except Exception as e:  # o site dos gastos fora do ar não derruba a Casa: ficam os blocos de antes
+                g = None
+                log(f"  {self.uf}: ATENÇÃO: gastos não atualizados ({type(e).__name__}: {e}); ficam os de antes")
+            com_gastos = VG.aplicar(extras, g, "gastos")
+        cobertura = {"lista": True, "propostas": True, "votacoes": bool(votos) or self.votos_de_antes, "gastos": com_gastos}
         notas = list(self.notas)
         legis = {"numero": leg.get("numero"), "inicio": leg.get("data_inicio"), "fim": leg.get("data_fim")}
         if self.lista_oficial:  # lista do site da Casa: depois da posse, só vale se o site já trocou a lista

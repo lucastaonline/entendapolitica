@@ -284,10 +284,16 @@ def coletar() -> dict:
         log(f"  DF: governo: {e}")
     notas = [("A CLDF não diz, em formato aberto, se um projeto na etapa de sanção foi vetado; ele aparece como aprovado até a lei sair.",
               "The CLDF does not say, in an open format, whether a bill at the signing stage was vetoed; it shows as approved until the law comes out."),
-             ("A verba indenizatória não entra: a CLDF a publica em planilhas anuais, cada ano num formato diferente (CSV num "
-              "ano, XLSX em outro) e num endereço novo.",
-              "The expense allowance is not included: the CLDF publishes it in yearly spreadsheets, each year in a different "
-              "format (CSV one year, XLSX another) and at a new address."),
+             ("A verba indenizatória não entra: a CLDF a publica em planilhas anuais no portal de dados abertos "
+              "(dados.cl.df.gov.br), cada ano num formato diferente (CSV num ano, XLSX em outro) e só com parte dos deputados; "
+              "o quadro mensal completo sai só em PDF, no Portal da Transparência.",
+              "The expense allowance is not included: the CLDF publishes it in yearly spreadsheets on its open data portal "
+              "(dados.cl.df.gov.br), each year in a different format (CSV one year, XLSX another) and with only some of the "
+              "deputies; the complete monthly table is only published as a PDF, on its transparency portal."),
+             ("As votações não entram: a CLDF não publica o voto de cada deputado em formato aberto; a página \"Sessões "
+              "Plenárias\" traz as atas, o áudio e a lista de presença de cada sessão, em documentos.",
+              "Votes are not included: the CLDF does not publish each deputy's vote in an open format; its \"Sessões "
+              "Plenárias\" page has the minutes, the audio and the attendance list of each session, as documents."),
              ("Os vetos do governo do DF não entram no perfil da governadora: o PLe não registra o veto (a tramitação para na "
               "etapa de sanção, que acontece no governo); o veto sai só no Diário Oficial do DF.",
               "The Federal District government's vetoes are not included in the governor's profile: the PLe does not record "

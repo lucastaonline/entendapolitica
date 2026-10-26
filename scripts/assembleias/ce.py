@@ -9,6 +9,9 @@ número da lei e veto. São páginas de 20 em 20: elas são lidas em rodízio (a
 cursor que passa por todas as outras até um limite de tempo), com cache em .cache/alece/. Primeira carga (cache vazio,
 como no robô do GitHub): o cursor usa a rodada toda (_carga.py) e, enquanto alguma lista não foi lida inteira, nada é
 gravado em dados/ (ficam os arquivos de antes; o coletor devolve "em andamento").
+Votações nominais (votacoes()): a página "Votação Nominal" do Portal da Transparência da Alece (relatório de cada votação
+em PDF e a mesma planilha em XLSX, com o voto de cada deputado e a apuração). Gastos (gastos()): a "Verba de Desempenho
+Parlamentar", uma lista por mês em CSV (as anulações vêm com valor negativo). Ver as notas junto de votacoes().
 """
 from __future__ import annotations
 
@@ -22,6 +25,7 @@ from comum import chave_nome, fonte, hoje, log, sem_acento
 
 from . import _carga
 from . import _ne_gov as gv
+from . import _votos_gastos as VG
 from ._ne_comum import (ESCOPO, ESCOPO_EN, INICIO, Rede, casar_membros, com_status_en, gravar, legislatura_estadual, membro,
                         nome_lei, partido_sigla, resumo_status)
 
@@ -181,11 +185,15 @@ def coletar() -> dict:
         for i, nm in enumerate(nomes):
             por_nome.setdefault(chave_nome(re.sub(r"^DEP(UTAD[OA])?\.?\s+", "", nm)), []).append((k, "autor" if i == 0 else "coautor"))
     membros, extras, listas_p = [], {}, []
+    para_nomes: list[dict] = []   # nomes de cada deputado para ligar as planilhas de votação e de gastos (site e urna)
     fonte_l = fonte(VEICULO, "Deputados em exercício (página oficial)", f"{SITE}/deputados")
     for p in pessoas:
         cand = ligados.get(p["chave"])
         pid = regional.id_pessoa("dest", "CE", cand, p["nome"])
         membros.append(membro(pid, p["nome"], None, p["partido"], (cand or {}).get("genero"), p["foto"], p["url"]))
+        para_nomes.append({"id": pid, "nome": p["nome"], "nomeCivil": (cand or {}).get("nome")})
+        if cand and cand.get("urna"):
+            para_nomes.append({"id": pid, "nome": cand["urna"], "nomeCivil": None})
         chaves = {chave_nome(p["nome"]), chave_nome(re.sub(r"^(Dra?|Ap|Pr)\.?\s+", "", p["nome"]))}
         if cand:
             chaves.add(chave_nome(cand["urna"]))
@@ -216,14 +224,31 @@ def coletar() -> dict:
               "e cada proposição é relida a cada poucos dias.",
               "Alece has no API for bills: the official lists (pages of 20) are read gradually, and each bill is re-read "
               "every few days.")]
-    cobertura = {"lista": True, "propostas": True, "votacoes": False, "gastos": False}
+    transp = Rede("alece-transp", pausa=1.0, timeout=90)  # Portal da Transparência (outro servidor; cache próprio)
+    try:
+        vot, vinfo = votacoes(transp, VG.Nomes(para_nomes, NOMES_MANUAL, aproximado=True))
+    except Exception as e:  # o portal fora do ar não derruba a Casa: ficam as votações publicadas antes
+        vot, vinfo = None, {}
+        log(f"  CE: ATENÇÃO: votações não atualizadas ({type(e).__name__}: {e}); ficam as de antes")
+    try:
+        gas = gastos(transp, VG.Nomes(para_nomes, NOMES_MANUAL, aproximado=True))
+    except Exception as e:
+        gas = None
+        log(f"  CE: ATENÇÃO: gastos não atualizados ({type(e).__name__}: {e}); ficam os de antes")
+    com_votos, com_gastos = VG.aplicar(extras, vot, "votacoes"), VG.aplicar(extras, gas, "gastos")
+    if com_votos:
+        veto = (vinfo or {}).get("veto")
+        notas.append((f"{NOTA_VOTOS[0]} {veto[0]}.", f"{NOTA_VOTOS[1]} {veto[1]}.") if veto else NOTA_VOTOS)
+    if com_gastos:
+        notas.append(NOTA_VERBA)
+    cobertura = {"lista": True, "propostas": True, "votacoes": com_votos, "gastos": com_gastos}
     r = gravar("CE", {"casa": "Assembleia Legislativa do Estado do Ceará", "casa_en": "Legislative Assembly of the State of Ceará",
                       "sigla": "Alece", "site": SITE}, membros, extras, cobertura, fonte_l, notas + [NOTA_GOVERNO])
     try:
         _governo(rede, regs)
     except Exception as e:  # o perfil do governador não derruba a lista da Assembleia: fica o arquivo da última vez
         log(f"  CE: o que o governo fez não foi atualizado ({type(e).__name__}: {e})")
-    log(f"  CE: {rede.pedidos} pedidos ao site oficial")
+    log(f"  CE: {rede.pedidos} pedidos ao site oficial; {transp.pedidos} ao Portal da Transparência")
     return r
 
 
@@ -411,3 +436,264 @@ def _situacao(r: dict, norma: str) -> dict:
 # mesmos 46.082 votos de 2022 informados pela Alece.
 TSE_MANUAL: dict[str, str] = {"ap-luiz-henrique": "60001608819", "carmelo-bolsonaro": "60001633791",
                               "julio-cesar-filho": "60001633659"}
+
+
+# ---------------------------------------------------------------- votações nominais e verba de desempenho parlamentar
+# Portal da Transparência da Alece (robots.txt: "Disallow:" vazio). Votações: a página "Votação Nominal" lista cada votação
+# nominal da legislatura (data, sessão, matéria) com o relatório em PDF e a mesma planilha em XLSX (voto de cada deputado,
+# com a apuração no fim). Gastos: a "Verba de Desempenho Parlamentar", uma lista por mês (CSV aberto: deputado, período,
+# empenho, descrição, credor e valor; as anulações vêm com valor negativo); a página de cada deputado no mês mostra o
+# "TOTAL GERAL", que é a soma das linhas do CSV.
+TRANSP = "https://transparencia.al.ce.gov.br"
+VOT_PAGINA = f"{TRANSP}/consultas-gerais/votacao-nominal"
+VERBA = f"{TRANSP}/despesas/verba-desempenho-parlamentar"
+VOT_ORCAMENTO_S, VERBA_ORCAMENTO_S = 120, 120
+VOTO_CE = {"SIM": "Sim", "NAO": "Não", "ABSTENCAO": "Abstenção", "BRANCO": "Branco"}
+RESULTADO_CE = [(r"^APROVAD", "Aprovado"), (r"^REJEITAD", "Rejeitado"), (r"^MANTID", "Mantido"), (r"^DERRUBAD", "Derrubado")]
+# nomes como a Alece escreve nas planilhas (sem o "DEP"), conferidos à mão quando a regra ou a semelhança erram (nome -> id
+# ou "-" = ninguém da lista de hoje). Conferido em 26/10/2026 na lista da verba: "Felipe Aguiar" (11/2023 a 2/2024, com os
+# benefícios do mês ao mesmo tempo que Felipe Mota) é o suplente Felipe Aguiar de Meneses (TSE 2022), não Felipe Mota (nome
+# civil Felipe Aguiar Fonseca da Mota); "Delegado Cavalcante" (só em 2/2023, mandato anterior) não é Walter Cavalcante.
+NOMES_MANUAL: dict[str, str] = {"Felipe Aguiar": "-", "Delegado Cavalcante": "-"}
+
+
+def _tipo_materia(txt: str) -> str | None:
+    """'69/2026 – Projeto de Lei oriundo da Mensagem...' -> 'PL 69/2026'; 'PEC n° 10/2023' -> 'PEC 10/2023'."""
+    t = sem_acento(txt or "")
+    num = re.search(r"(\d{1,4})\s*/\s*(\d{4})", t)
+    sig = None
+    if re.search(r"(?i)\bveto\b", t):
+        m = re.search(r"(?i)veto\s+n\W{0,4}\s*(\d{1,4})\s*/\s*(\d{4})", t)
+        if m:
+            return f"Veto {int(m.group(1))}/{m.group(2)}"
+        m = re.search(r"(?i)aut[oó]grafo de lei\D{0,12}(\d{1,4})\s*/\s*(\d{4})", t)
+        return f"Veto ao autógrafo {int(m.group(1))}/{m.group(2)}" if m else "Veto"
+    for exp, s in [(r"(?i)projeto de lei complementar|\bPLC\b", "PLC"), (r"(?i)emenda constitucional|emenda a constitui|\bPEC\b", "PEC"),
+                   (r"(?i)projeto de resolu|\bPR\b", "PR"), (r"(?i)decreto legislativo|\bPDL\b", "PDL"), (r"(?i)projeto de lei|\bPL\b", "PL")]:
+        if re.search(exp, t):
+            sig = s
+            break
+    m = re.search(r"(?i)\b(?:PLC|PEC|PDL|PL|PR)\s*n?\W{0,3}\s*(\d{1,4})\s*/\s*(\d{4})", t) or num
+    if not sig or not m:
+        return None
+    return f"{sig} {int(m.group(1))}/{m.group(2)}"
+
+
+def _planilha_voto(ls: list[list[str]]) -> dict:
+    """Uma planilha "Relatório de Votação" da Alece -> {"data", "resultado", "materia", "votos": [(nome, [marcas])],
+    "apuracao": {voto: n}}. O layout muda de uma planilha para outra (colunas deslocadas, cabeçalho numa célula só): as
+    colunas de voto vêm da linha de cabeçalho ("SIM", "NÃO", "ABSTENÇÃO", "BRANCO")."""
+    hdr = next((i for i, l in enumerate(ls) if {"SIM", "NAO"} <= {sem_acento(c).strip().upper() for c in l}), None)
+    if hdr is None:
+        raise RuntimeError("Alece: planilha de votação sem a linha SIM/NÃO")
+    cols = {j: VOTO_CE[sem_acento(c).strip().upper()] for j, c in enumerate(ls[hdr]) if sem_acento(c).strip().upper() in VOTO_CE}
+    topo = "\n".join(c for l in ls[:hdr] for c in l if c)
+    data = re.search(r"Data:\s*(\d{1,2})\s*/\s*(\d{1,2})\s*/\s*(\d{4})", topo)
+    res = re.search(r"Resultado:\s*([A-Za-zÇÃÕÉÍçãõéí]+)", topo)
+    materia = None
+    for linha in topo.split("\n"):
+        if re.match(r"(?i)\s*m?at[eé]rias?\s*[-–:]", linha):
+            materia = re.sub(r"(?i)^\s*m?at[eé]rias?\s*[-–:]\s*", "", linha).strip()
+    votos, apur = [], None
+    for l in ls[hdr + 1:]:
+        c0 = (l[0] if l else "").strip()
+        if c0.upper().startswith("APURA"):
+            apur = {cols[j]: int(re.sub(r"\D", "", l[j]) or 0) for j in cols if j < len(l) and re.search(r"\d", l[j] or "")}
+            break
+        if re.fullmatch(r"\d+", c0) and len(l) > 1 and (l[1] or "").strip():
+            votos.append(((l[1] or "").strip(), [cols[j] for j in sorted(cols) if j < len(l) and (l[j] or "").strip()]))
+    resultado = None
+    if res:
+        r = sem_acento(res.group(1)).upper()
+        resultado = next((v for exp, v in RESULTADO_CE if re.search(exp, r)), res.group(1).capitalize())
+    return {"data": f"{data.group(3)}-{int(data.group(2)):02d}-{int(data.group(1)):02d}" if data else None,
+            "resultado": resultado, "materia": re.sub(r"\s+", " ", materia).strip() if materia else None,
+            "votos": votos, "apuracao": apur}
+
+
+def _lista_votacoes(rede: Rede) -> list[dict]:
+    h = rede.texto(VOT_PAGINA, "votos/lista.html", 20)
+    out = []
+    for row in re.findall(r"<tr>(.*?)</tr>", h, re.S):
+        tds = [_txt(t) for t in re.findall(r"<td[^>]*>(.*?)</td>", row, re.S)]
+        links = re.findall(r'href="([^"]+)"', row)
+        xlsx = next((l for l in links if l.lower().endswith(".xlsx")), None)
+        pdf = next((l for l in links if l.lower().endswith(".pdf")), None)
+        d = re.match(r"(\d{2})/(\d{2})/(\d{4})$", tds[3]) if len(tds) >= 5 else None
+        if xlsx and d:
+            out.append({"sessao": tds[2], "data": f"{d.group(3)}-{d.group(2)}-{d.group(1)}", "materia": tds[4],
+                        "xlsx": xlsx, "pdf": pdf, "tok": xlsx.rsplit("/", 1)[1].rsplit(".", 1)[0]})
+    if not out:
+        raise RuntimeError("Alece: a página de votações nominais veio sem nenhuma votação (o formato mudou?)")
+    return out
+
+
+def votacoes(rede: Rede, nomes: "VG.Nomes") -> tuple[dict | None, dict]:
+    """({id da pessoa: bloco "votacoes"} ou None enquanto há planilha por ler, resumo para o log e a nota)."""
+    lista = [v for v in _lista_votacoes(rede) if v["data"] >= INICIO]
+    est = rede.estado("votos.json", {}) or {}
+    primeira = not est.get("completo")
+    limite = _carga.limite_diario(VOT_ORCAMENTO_S, primeira)
+    t0, faltam = time.time(), 0
+    for v in lista:
+        if (rede.pasta / "votos" / "xlsx" / f"{v['tok']}.xlsx").exists():
+            continue
+        if time.time() - t0 > limite or _carga.acabou():
+            faltam += 1
+            continue
+        try:
+            rede.bruto(v["xlsx"], f"votos/xlsx/{v['tok']}.xlsx", None)
+        except _carga.SemTempo:
+            faltam += 1
+    if faltam:
+        log(f"  CE votações: primeira carga em andamento ({faltam} planilhas por ler); os perfis ficam com as votações de antes")
+        return None, est.get("info") or {}
+    from ._votos_gastos import xlsx_linhas
+    por_pessoa: dict[str, list] = {}
+    ambiguos, divergentes, vetos = 0, [], []
+    for v in lista:
+        p = _planilha_voto(xlsx_linhas((rede.pasta / "votos" / "xlsx" / f"{v['tok']}.xlsx").read_bytes()))
+        marcas = [m for _, ms in p["votos"] for m in ms]
+        conta = {k: marcas.count(k) for k in set(VOTO_CE.values())}
+        if p["apuracao"] is not None and any(conta.get(k, 0) != n for k, n in p["apuracao"].items()):
+            divergentes.append(v["tok"])
+            log(f"  CE votações: a apuração da planilha {v['tok']} ({p['apuracao']}) não bate com as marcas ({conta})")
+        validos = [(nome, ms[0]) for nome, ms in p["votos"] if len(ms) == 1 and ms[0] in VG.VOTOS_RESUMO]
+        ambiguos += sum(1 for _, ms in p["votos"] if len(ms) > 1)
+        pl = VG.placar([vt for _, vt in validos])
+        materia = p["materia"] or v["materia"]
+        sigla = _tipo_materia(materia)
+        chave = f"alece-vot:{v['tok']}"
+        if (sigla or "").startswith("Veto"):
+            vetos.append((pl["Sim"], pl["Não"], p["resultado"]))
+        for nome, voto in validos:
+            pid = nomes.quem(nome)
+            if pid:
+                por_pessoa.setdefault(pid, []).append(VG.item_voto(chave, voto, v["data"], sigla, materia, p["resultado"], pl,
+                                                                   v["pdf"] or VOT_PAGINA))
+    nomes.avisar("CE", "votações")
+    # o que quer dizer o "sim" nos vetos (conferido em 26/10/2026: 2 vetos "Mantido" com 34 e 28 "sim" de 46 deputados)
+    veto = VG.sentido_veto(vetos, len({pid for pid, _, _ in nomes.indice}))
+    info = {"votacoes": len(lista), "ambiguos": ambiguos, "divergentes": len(divergentes), "veto": veto}
+    rede.guardar({"completo": hoje(), "info": info}, "votos.json")
+    extra = None
+    if ambiguos:
+        extra = (f"Quando a planilha oficial marca dois votos para o mesmo deputado na mesma votação ({ambiguos} casos), "
+                 "esse voto não entra",
+                 f"When the official spreadsheet marks two votes for the same deputy in the same vote ({ambiguos} cases), "
+                 "that vote is not included")
+    extra = VG.junta(extra, veto)
+    esc, esc_en = VG.escopo_votos("Alece", extra=extra)
+    fonte_v = fonte(VEICULO, "Votação nominal: relatórios de votação (Portal da Transparência)", VOT_PAGINA)
+    blocos = {pid: VG.bloco_votacoes(l, esc, esc_en, fonte_v) for pid, l in por_pessoa.items()}
+    log(f"  CE votações: {len(lista)} votações nominais desde {INICIO}; votos de {len(blocos)} deputados; "
+        f"{ambiguos} votos com duas marcas (fora); {len(divergentes)} planilhas com apuração diferente das marcas")
+    return blocos, info
+
+
+def _meses_desde(inicio: str) -> list[str]:
+    a, m = int(inicio[:4]), int(inicio[5:7])
+    h = hoje()
+    out = []
+    while f"{a}-{m:02d}" <= h[:7]:
+        out.append(f"{a}-{m:02d}")
+        a, m = (a + 1, 1) if m == 12 else (a, m + 1)
+    return out
+
+
+def gastos(rede: Rede, nomes: "VG.Nomes") -> dict | None:
+    """{id da pessoa: bloco "gastos"} da Verba de Desempenho Parlamentar (CSV de cada mês), ou None enquanto algum mês
+    desde a posse não foi lido (primeira carga). Os dois últimos meses são relidos a cada 20 h; os outros, a cada 30 dias."""
+    import csv
+    import io
+    meses = _meses_desde(INICIO)
+    est = rede.estado("verba.json", {}) or {}
+    primeira = not est.get("completo")
+    limite = _carga.limite_diario(VERBA_ORCAMENTO_S, primeira)
+    t0 = time.time()
+    linhas: dict[str, list] = {}
+    faltam = []
+    for i, mes in enumerate(reversed(meses)):
+        nome_c = f"verba/{mes}.csv"
+        horas = 20 if i < 2 else 24 * 30
+        arq = rede.pasta / nome_c
+        if not arq.exists() or (time.time() - arq.stat().st_mtime) / 3600 >= horas:
+            if time.time() - t0 > limite or _carga.acabou():
+                if not arq.exists():
+                    faltam.append(mes)
+                continue
+            try:
+                rede.bruto(f"{VERBA}/csv?mes={mes[5:]}&ano={mes[:4]}", nome_c, horas)
+            except _carga.SemTempo:
+                if not arq.exists():
+                    faltam.append(mes)
+                continue
+        texto = arq.read_bytes().decode("utf-8-sig", "replace")
+        rows = list(csv.reader(io.StringIO(texto), delimiter=";"))
+        cab = next((k for k, r in enumerate(rows) if r and r[0].strip().upper() == "DEPUTADO"), None)
+        if cab is None:
+            raise RuntimeError(f"Alece: a lista da verba de {mes} veio sem o cabeçalho DEPUTADO (o formato mudou?)")
+        idx = {c.strip().upper(): j for j, c in enumerate(rows[cab])}
+        for r in rows[cab + 1:]:
+            if len(r) <= max(idx.values()) or not r[idx["DEPUTADO"]].strip():
+                continue
+            pid = nomes.quem(r[idx["DEPUTADO"]])
+            if not pid:
+                continue
+            m = VG.mes_br(r[idx["PERIODO"]]) or mes
+            linhas.setdefault(pid, []).append((m, "Verba de desempenho parlamentar", VG.valor_br(r[idx["VALOR"]])))
+    nomes.avisar("CE", "verba")
+    # A lista do primeiro mês (02/2023) ainda traz pagamentos do mandato anterior (2019-2023), até de quem não voltou
+    # ("telefonia de 11.12.22 a 10.01.23"). Todo deputado em exercício tem linhas todo mês (benefícios do mês): quem não
+    # tem nenhuma de 03/2023 a 08/2023 não estava no cargo nesta legislatura no começo de 2023, e as linhas de 02/2023 dessa
+    # pessoa (do mandato anterior) não entram.
+    primeiro, janela = INICIO[:7], {m for m in meses[1:7]}
+    fora = {}
+    for pid, ls in (linhas.items() if len(meses) >= 8 else ()):  # só com os 6 meses seguintes já publicados
+        if not any(m in janela for m, _, _ in ls):
+            antes = [v for m, _, v in ls if m == primeiro]
+            if antes:
+                fora[pid] = round(sum(antes), 2)
+                linhas[pid] = [x for x in ls if x[0] != primeiro]
+    if fora:
+        log(f"  CE verba: linhas de {primeiro} do mandato anterior (sem linhas de {min(janela)} a {max(janela)}), fora: {fora}")
+    if faltam:
+        log(f"  CE verba: primeira carga em andamento ({len(faltam)} meses por ler); os perfis ficam com os gastos de antes")
+        return None
+    rede.guardar({"completo": hoje()}, "verba.json")
+    out = {}
+    for pid, ls in linhas.items():
+        b = VG.bloco_gastos(ls, fonte(VEICULO, "Verba de Desempenho Parlamentar (Portal da Transparência)", VERBA),
+                            INICIO, ("Verba de desempenho parlamentar", "Parliamentary performance allowance (verba de desempenho parlamentar)"))
+        if b:
+            b["porTipo"] = []  # a Alece não classifica cada despesa por tipo (a lista traz só a descrição de cada empenho)
+            fim = b["meses"][1]
+            b["fonte"] = fonte(VEICULO, "Verba de Desempenho Parlamentar (Portal da Transparência)",
+                               f"{VERBA}?mes={fim[5:]}&ano={fim[:4]}")
+            out[pid] = b
+    log(f"  CE verba: {len(meses)} meses desde {INICIO[:7]}; gastos de {len(out)} deputados")
+    return out
+
+
+NOTA_VOTOS = ("Votações: entram as votações nominais do Plenário (com o voto de cada deputado) desde 1º/2/2023, pelos "
+              "relatórios de votação da página \"Votação Nominal\" do Portal da Transparência da Alece (a planilha de cada "
+              "votação, com a apuração). As votações simbólicas não entram: nelas o voto de cada um não fica registrado.",
+              "Votes: roll-call votes in the full Assembly (with each deputy's vote) since February 1, 2023 are included, "
+              "from the vote reports on the roll-call vote page of the Alece transparency portal (the spreadsheet of "
+              "each vote, with the tally). Voice votes are not included: in them, each member's vote is not recorded.")
+NOTA_VERBA = ("Gastos: a verba de desempenho parlamentar, pela lista de cada mês do Portal da Transparência da Alece, desde "
+              "fevereiro de 2023: os valores reservados para pagar as despesas de cada gabinete (os empenhos), já com as "
+              "anulações descontadas; por exemplo, benefício alimentação e refeição, cartão de combustível, telefone, "
+              "consultorias e assessorias, aluguel de carros e reembolso de despesas. A Alece não separa essas despesas por "
+              "tipo; por isso o perfil mostra só os totais. Quando a lista escreve o nome de um deputado com erro de digitação "
+              "(o portal mostra essas linhas num nome à parte), a despesa entra no perfil do deputado certo. A lista de "
+              "fevereiro de 2023 ainda traz pagamentos do mandato anterior: as linhas desse mês de quem não estava no cargo "
+              "no começo desta legislatura (nenhuma linha de março a agosto de 2023) não entram.",
+              "Spending: the parliamentary performance allowance (verba de desempenho parlamentar), from the monthly list on "
+              "the Alece transparency portal, since February 2023: the amounts set aside to pay each office's expenses "
+              "(commitments, or \"empenhos\"), net of cancellations; for example, meal and food allowance cards, fuel cards, "
+              "phone, consulting and advisory services, car rental and reimbursed expenses. The Alece does not group these "
+              "expenses by type, so the profile shows only the totals. When the list spells a deputy's name with a typo (the "
+              "portal shows those lines under a separate name), the expense goes to the right deputy's profile. The February "
+              "2023 list still includes payments from the previous term: that month's lines for people who were not in office "
+              "at the start of this legislature (no lines from March to August 2023) are not included.")

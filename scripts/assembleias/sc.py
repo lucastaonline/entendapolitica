@@ -17,7 +17,18 @@ tramitação lida uma vez (no máximo ALESC_FICHAS por rodada, 100; relida só s
 Gastos: "Despesas dos gabinetes parlamentares" (CSV anual do Portal da Transparência), somadas por ano e tipo de verba.
 Inclui diárias e passagens da equipe do gabinete, como a Alesc publica; elas aparecem separadas ("Diárias da equipe",
 "Passagens da equipe") das do próprio deputado.
-Votações nominais: a Alesc publica a "planilha de votação" de cada sessão em PDF; não entram.
+Votações nominais do Plenário, desde o começo da legislatura (_votacoes): no e-Legis, a lista de sessões plenárias
+(/sessoes-plenarias, ordinárias e extraordinárias, 10 por página), a Ordem do Dia de cada sessão
+(/sessoes-plenarias/<id>/ordem-do-dia: cada proposição votada, o selo do resultado e, nas votações nominais, o botão
+"Extrato de votação") e o extrato (/extrato-votacao/<id>, um pedaço de página que a Ordem do Dia busca com o cabeçalho
+X-Requested-With, como o htmx da própria página faz): o nome e o voto (Sim, Não, Abstenção) de cada deputado que votou,
+sem partido nem totais; o placar é a soma (conferido com as atas das sessões, em PDF, que trazem a chamada nominal). O
+extrato também diz a fase (turno, redação final, votação em separado, parecer de comissão), que entra na descrição. Os
+nomes são ligados aos deputados de hoje (_votos_gastos.Nomes; quem saiu da Casa fica fora). Primeira carga (63
+páginas, ~630 Ordens do Dia e os extratos, ~920 pedidos): o tempo que sobrar na rodada, com o progresso em
+.cache/alesc-votos/; até terminar, os perfis ficam com o bloco de antes. Depois (no máximo ALESC_VOTOS_SEGUNDOS por
+rodada, 300): a 1ª página da lista, a Ordem do Dia das sessões dos últimos RELER_DIAS dias (o resultado pode ser
+lançado depois) e os extratos novos.
 O governo do estado (perfil do governador, dados/pessoas/gov-SC.json), desde o começo do mandato: os projetos de
 iniciativa do Governador no e-Legis (PL, PLC e PEC; as medidas provisórias não entram, porque viram projetos de
 conversão com outro número); as leis pela pesquisa da Legislação SC (leis.alesc.sc.gov.br, total por tipo e data); e
@@ -26,6 +37,7 @@ os vetos pelas mensagens de veto (MSV, tipoPropositura=10), com "Veto Total" ou 
 from __future__ import annotations
 
 import csv
+import datetime as dt
 import io
 import os
 import re
@@ -40,6 +52,7 @@ from . import _carga
 from ._sse_comum import (Rede, SemTempo, bloco_executivo, bloco_gastos, casar_membros, com_status_en, desde, escopo,
                          escopo_governo, fonte, gravar, gravar_governo, https, legislatura, membro, nome_lei, partido_sigla,
                          periodo_governo, qtd, resumo_status, sem_html, virou)
+from ._votos_gastos import Nomes, aplicar, bloco_votacoes, escopo_votos, item_voto, placar
 
 UF = "SC"
 SITE = "https://www.alesc.sc.gov.br"
@@ -79,6 +92,19 @@ NORMA_EV = re.compile(r"(?i)transformad[oa] em|resultou|promulgad")
 
 # ligações com o TSE conferidas à mão: {endereço da página oficial (final): SQ_CANDIDATO de 2022 ou "-" (sem ligação)}
 MANUAL: dict[str, str] = {}
+
+# votações nominais (e-Legis: sessões plenárias)
+VOTOS_CACHE = "alesc-votos"  # pasta própria em .cache/
+VOTOS_SEGUNDOS = float(os.environ.get("ALESC_VOTOS_SEGUNDOS", "300"))  # limite de cada rodada depois da primeira carga
+RELER_DIAS = 15  # a Ordem do Dia das sessões dos últimos 15 dias é relida (o resultado pode ser lançado depois)
+VOTO = {"sim": "Sim", "nao": "Não", "abstencao": "Abstenção", "obstrucao": "Obstrução"}
+# o extrato é um pedaço de página que a própria Ordem do Dia busca com este cabeçalho (htmx, extensão "ajax-header");
+# sem ele, o e-Legis responde 405
+AJAX = {"X-Requested-With": "XMLHttpRequest"}
+# nome como o extrato de votação escreve -> id da pessoa (ou "-": sem ligação), conferido à mão. Em out/2026 os 39
+# deputados de hoje com voto em extrato batem sozinhos (mesmo nome da página "Deputados"); os 18 nomes sem ligação são de
+# quem saiu da Casa ou se licenciou (Marquito, Emerson Stein, Massocco, Delegado Egidio, Soratto, ...).
+VOTOS_MANUAL: dict[str, str] = {}
 
 
 def _membros(rede: Rede) -> tuple[list[dict], dict[str, str], list[str], dict]:
@@ -328,6 +354,262 @@ def _leis(rede: Rede, ini: str) -> tuple[dict[str, int], str | None]:
     return total, ultima
 
 
+# ---------------------------------------------------------------- votações nominais (e-Legis: sessões plenárias)
+def _lista_sessoes(t: str) -> tuple[list[dict], int | None, int]:
+    """Uma página da lista de sessões plenárias do e-Legis (10 por página, da mais nova para a mais antiga):
+    ([{"id", "t" (nome), "d" (data), "s" (situação)}], total de sessões que a lista mostra, última página)."""
+    out = []
+    for card in t.split('<div class="card card-alesc mb-4">')[1:]:
+        sid = re.search(r'href="/sessoes-plenarias/([A-Za-z0-9]+)/', card)
+        dia = re.search(r"\b(\d{2}/\d{2}/\d{4})\b", card)
+        if sid and dia:
+            out.append({"id": sid.group(1), "t": sem_html((re.search(r"<h4[^>]*>(.*?)</h4>", card, re.S) or [None, ""])[1]),
+                        "d": data_iso(dia.group(1)),
+                        "s": sem_html((re.search(r'<span class="badge[^"]*">(.*?)</span>', card, re.S) or [None, ""])[1])})
+    total = re.search(r"Exibindo\s+[\d.]+\s*-\s*[\d.]+\s+de\s+([\d.]+)", t)
+    ultima = max([int(p) for p in re.findall(r"page=(\d+)", t)] or [1])
+    return out, (int(total.group(1).replace(".", "")) if total else None), ultima
+
+
+def _ordem_do_dia(t: str) -> dict:
+    """A Ordem do Dia de uma sessão: data e situação (cabeçalho) e as proposições com "Extrato de votação" (as votações
+    nominais): {"x": [extratos], "pid": id da proposição, "p": rótulo ("MSV/1424/2022"), "r": selo do resultado
+    ("Aprovado"), "n": selo "Votação nominal", "e": ementa}."""
+    cab = {sem_html(k): sem_html(v) for k, v in re.findall(r"<th>(.*?)</th>\s*<td>(.*?)</td>", t, re.S)}
+    if not cab.get("Início"):
+        raise RuntimeError("Alesc: a Ordem do Dia veio sem o cabeçalho da sessão")
+    itens = []
+    for bloco in t.split("<footer", 1)[0].split('<div class="border-bottom mb-3">')[1:]:
+        ext = list(dict.fromkeys(re.findall(r'hx-get="/extrato-votacao/([A-Za-z0-9]+)"', bloco)))
+        if not ext:
+            continue
+        a = re.search(r'<a href="/proposicoes/([A-Za-z0-9]+)">(.*?)</a>', bloco, re.S)
+        selos = [sem_html(x) or "" for x in re.findall(r'<span class="badge[^"]*">(.*?)</span>', bloco, re.S)]
+        itens.append({"x": ext, "pid": a.group(1) if a else None, "p": sem_html(a.group(2)) if a else None,
+                      "r": next((s for s in selos if s and not re.match(r"(?i)vota", s)), None),
+                      "n": any(re.search(r"(?i)nominal", s) for s in selos),
+                      "e": sem_html((re.search(r'<p class="fst-italic[^"]*">(.*?)</p>', bloco, re.S) or [None, ""])[1])})
+    return {"d": data_iso(cab.get("Início")), "s": cab.get("Situação"), "v": itens}
+
+
+def _extrato(t: str) -> dict:
+    """O extrato de uma votação nominal: rótulo da proposição ("c"), fase ("f") e [nome, voto] de cada deputado que
+    votou ("v"; só quem votou aparece, sem partido nem totais: o placar é a soma)."""
+    if re.search(r"(?i)<html|<!doctype", t[:3000]):
+        raise RuntimeError("Alesc: o extrato de votação veio como página inteira (formato diferente)")
+    votos = [[sem_html(n) or "", sem_html(v) or ""] for n, v in re.findall(
+        r'<div class="d-flex justify-content-between[^"]*">\s*<div>(.*?)</div>\s*<div>\s*<span class="badge[^"]*">(.*?)</span>',
+        t, re.S)]
+    if len(votos) != t.count('class="border rounded'):
+        raise RuntimeError("Alesc: o extrato de votação veio num formato diferente")
+    return {"c": sem_html((re.search(r"<h4[^>]*>(.*?)</h4>", t, re.S) or [None, ""])[1]),
+            "f": sem_html((re.search(r"<h5[^>]*>(.*?)</h5>", t, re.S) or [None, ""])[1]), "v": votos}
+
+
+def _voto(txt: str) -> str:
+    t = (txt or "").strip()
+    return VOTO.get(sem_acento(t).lower(), t or "NR")
+
+
+def _rotulo(r: str | None) -> str | None:
+    """'MSV/1424/2022' -> 'MSV 1424/2022'; 'PL./0096/2023' -> 'PL 96/2023' (como na lista de propostas)."""
+    m = re.match(r"\s*([A-Za-z]+)\W*?0*(\d+)\s*/\s*(\d{4})\s*$", r or "")
+    return f"{m.group(1).upper()} {int(m.group(2))}/{m.group(3)}" if m else r
+
+
+def _fase(f: str | None) -> str:
+    """Fase do extrato ("Aguardando Discussão e Votação em 2º Turno") -> "discussao e votacao em 2º turno"."""
+    return re.sub(r"^aguardando\s+", "", sem_acento(f or "").lower().strip())
+
+
+def _descricao(ementa: str | None, proposta: str | None, fase: str, resultado: str | None, turno: bool,
+               sessao: str | None = None) -> str | None:
+    """A ementa oficial e, quando o extrato diz, a fase que foi votada, entre parênteses e com as palavras do extrato: o
+    turno (se não houver dúvida: turno=False quando a mesma proposição tem outra votação com a mesma fase; aí entra o nome
+    da sessão, para separar as duas), a redação final, a votação em separado ou o parecer de comissão. O que quer dizer cada
+    voto nos vetos e nos pareceres (como a Presidência anuncia na sessão, nas atas) fica no escopo do bloco, em português e
+    em inglês (VOTOS_EXPLICA)."""
+    e = (ementa or "").strip()
+    partes = [e if not e or re.search(r"[.!?;:]$", e) else e + "."]
+    m = re.search(r"\b([12])º turno\b", fase)
+    if "votacao do parecer" in fase:
+        partes.append("(Votação do parecer de comissão.)")
+    elif "redacao final" in fase:
+        partes.append("(Redação final.)")
+    elif "em separado" in fase:
+        if not re.search(r"(?i)em separado", e):
+            partes.append("(Votação em separado.)")
+    elif m and turno:
+        partes.append(f"({m.group(1)}º turno.)")
+    elif m and sessao:
+        partes.append(f"({sessao}.)")
+    return " ".join(p for p in partes if p) or None
+
+
+# o que quer dizer cada voto nas votações de veto (MSV) e de parecer de comissão, como a Presidência anuncia (atas)
+VOTOS_EXPLICA = ("Nas votações de veto, quem vota “sim” mantém o veto e quem vota “não” o derruba; nas votações do parecer de "
+                 "uma comissão, “sim” aprova o parecer e “não” o rejeita",
+                 "In votes on a veto, a “yes” vote keeps the veto and a “no” vote overturns it; in votes on a committee's "
+                 "opinion, “yes” approves the opinion and “no” rejects it")
+
+
+def _votacoes(rede: Rede, membros: list[dict]) -> dict[str, dict] | None:
+    """{id da pessoa: bloco "votacoes"} com as votações nominais do Plenário desde o começo da legislatura, pelo e-Legis:
+    a lista de sessões plenárias (/sessoes-plenarias?page=N, ordinárias e extraordinárias), a Ordem do Dia de cada
+    sessão (/sessoes-plenarias/<id>/ordem-do-dia: cada proposição, o selo do resultado e o botão "Extrato de votação" nas
+    nominais) e o extrato de cada votação (/extrato-votacao/<id>: nome e voto de cada deputado que votou). Primeira carga
+    (cache vazio): todas as páginas da lista, todas as Ordens do Dia e todos os extratos, com o tempo que sobrar na rodada
+    (_carga.py); até terminar, devolve None e cada perfil fica com o bloco de antes (nada pela metade). Depois: a 1ª
+    página da lista (e as seguintes enquanto aparecer sessão nova), a Ordem do Dia das sessões dos últimos RELER_DIAS dias
+    (o resultado pode ser lançado depois) e os extratos novos."""
+    rv = Rede(VOTOS_CACHE, pausa=1.0)
+    rv._ult, rv._robots = rede._ult, rede._robots  # o mesmo servidor das propostas: a mesma pausa e o robots.txt lido uma vez
+    est = rv.estado("estado.json", {}) or {}
+    sessoes, odias, extratos = est.get("sessoes") or {}, est.get("odia") or {}, est.get("extratos") or {}
+    volta, cursor, completa = bool(est.get("volta")), int(est.get("cursor") or 1), bool(est.get("completa"))
+    hj = hoje()
+    recente = (dt.date.fromisoformat(hj) - dt.timedelta(days=RELER_DIAS)).isoformat()
+    prazo, t0 = _carga.limite_diario(VOTOS_SEGUNDOS, not completa), time.time()
+    novos = [0]
+
+    def guardar() -> None:
+        rv.guardar({"sessoes": sessoes, "odia": odias, "extratos": extratos, "volta": volta, "cursor": cursor,
+                    "completa": completa}, "estado.json")
+
+    def antes_de_pedir() -> None:
+        if time.time() - t0 >= prazo:
+            raise SemTempo("acabou o limite de tempo das votações nesta rodada")
+        novos[0] += 1
+        if novos[0] % 25 == 0:
+            guardar()
+
+    def pagina(n: int) -> tuple[int, int | None, int]:
+        antes_de_pedir()
+        lst, total, ultima = _lista_sessoes(rv.texto(f"{ELEGIS}/sessoes-plenarias?page={n}", None))
+        if not lst and n <= ultima:
+            raise RuntimeError(f"Alesc: a página {n} da lista de sessões plenárias veio sem sessões")
+        novas = sum(1 for s in lst if s["id"] not in sessoes)
+        for s in lst:
+            sessoes[s["id"]] = {"t": s["t"], "d": s["d"], "s": s["s"]}
+        return novas, total, ultima
+
+    def reler(lido_em: float, data: str) -> bool:
+        return data >= recente and time.time() - lido_em >= 20 * 3600
+
+    rotulos: dict[str, int] = {}
+    try:
+        lidas = set()
+        while not volta:  # primeira volta: todas as páginas da lista, de onde parou
+            _, _, ultima = pagina(cursor)
+            lidas.add(cursor)
+            cursor += 1
+            if cursor > ultima:
+                volta, cursor = True, 1
+        if 1 not in lidas:  # depois: a 1ª página e as seguintes enquanto aparecer sessão nova (ou faltar sessão)
+            n = 1
+            while True:
+                novas, total, ultima = pagina(n)
+                n += 1
+                if n > ultima or (not novas and (total is None or len(sessoes) >= total)):
+                    break
+        for sid in sorted(sessoes, key=lambda k: (sessoes[k].get("d") or "", k), reverse=True):
+            s = sessoes[sid]
+            if not s.get("d") or not INICIO <= s["d"] <= hj:
+                continue
+            o = odias.get(sid)
+            if o is None or reler(o.get("em", 0), s["d"]):
+                antes_de_pedir()
+                try:
+                    o = dict(_ordem_do_dia(rv.texto(f"{ELEGIS}/sessoes-plenarias/{sid}/ordem-do-dia", None)), em=int(time.time()))
+                except SemTempo:
+                    raise
+                except Exception as e:  # noqa: BLE001 - uma sessão com problema não derruba as outras
+                    if "HTTP Error 404" not in str(e):
+                        log(f"  SC votações: Ordem do Dia de {s.get('t')} ({s['d']}) não veio ({e})")
+                        continue
+                    o = {"d": s["d"], "s": None, "v": [], "em": int(time.time())}
+                odias[sid] = o
+            for it in o["v"]:
+                for x in it["x"]:
+                    e = extratos.get(x)
+                    # extrato lido no próprio dia da sessão: a votação podia estar aberta; é relido no dia seguinte
+                    if e is None or (e.get("lido", "") <= s["d"] and reler(e.get("em", 0), s["d"])):
+                        antes_de_pedir()
+                        try:
+                            e = dict(_extrato(rv.texto(f"{ELEGIS}/extrato-votacao/{x}", None, headers=AJAX)),
+                                     em=int(time.time()), lido=hj)
+                        except SemTempo:
+                            raise
+                        except Exception as erro:  # noqa: BLE001
+                            if "HTTP Error 404" not in str(erro):
+                                log(f"  SC votações: extrato {x} ({it.get('p')}, {s['d']}) não veio ({erro})")
+                                continue
+                            e = {"v": [], "em": int(time.time()), "lido": hj}
+                        extratos[x] = e
+    except SemTempo:
+        pass
+    finally:
+        guardar()
+    falta_o = [k for k, s in sessoes.items() if s.get("d") and INICIO <= s["d"] <= hj and k not in odias]
+    falta_x = {x for o in odias.values() for it in o["v"] for x in it["x"] if x not in extratos}
+    if not completa:
+        if not volta or falta_o or falta_x:
+            log(f"  SC votações: primeira carga em andamento ({len(sessoes)} sessões na lista"
+                f"{'' if volta else (f', lista lida até a página {cursor - 1}' if cursor > 1 else ', lista por ler')}; "
+                f"{len(falta_o)} Ordens do Dia e {len(falta_x)} extratos por ler; {rv.pedidos} pedidos nesta rodada); "
+                "os perfis ficam com o bloco de antes")
+            return None
+        completa = True
+        guardar()
+    elif falta_o or falta_x:
+        log(f"  SC votações: {len(falta_o)} Ordens do Dia e {len(falta_x)} extratos ficam para a próxima rodada")
+    nomes = Nomes(membros, VOTOS_MANUAL)
+    por_pessoa: dict[str, dict[str, dict]] = {}
+    votacoes = []  # (sessão, data, item da Ordem do Dia, extrato, [(nome, voto)])
+    for sid, o in odias.items():
+        data = (sessoes.get(sid) or {}).get("d") or o.get("d")
+        if not data or data < INICIO:
+            continue
+        for it in o["v"]:
+            for x in it["x"]:
+                votos = [(n_, _voto(v)) for n_, v in (extratos.get(x) or {}).get("v") or [] if n_]
+                if votos:
+                    votacoes.append((sid, data, it, x, votos))
+    # a fase do extrato é a situação da proposição quando ela entrou na pauta: nos dois turnos no mesmo dia (sessão
+    # ordinária e, logo depois, extraordinária), a segunda votação às vezes ainda diz "1º Turno". Quando a mesma
+    # proposição tem duas votações com a mesma fase, o turno fica de fora (o que não se sabe fica de fora).
+    fases: dict[tuple, int] = {}
+    for _, _, it, x, _ in votacoes:
+        k = (it.get("pid") or it.get("p"), _fase(extratos[x].get("f")))
+        fases[k] = fases.get(k, 0) + 1
+    for sid, data, it, x, votos in votacoes:
+        for _, v in votos:
+            if v not in VOTO.values():
+                rotulos[v] = rotulos.get(v, 0) + 1
+        chave = f"alesc-vot:{x}"
+        proposta = _rotulo(it.get("p") or extratos[x].get("c"))
+        fase = _fase(extratos[x].get("f"))
+        desc = _descricao(it.get("e"), proposta, fase, it.get("r"), fases[(it.get("pid") or it.get("p"), fase)] == 1,
+                          (sessoes.get(sid) or {}).get("t"))
+        pl = placar(v for _, v in votos)
+        url = f"{ELEGIS}/sessoes-plenarias/{sid}/ordem-do-dia"
+        for nome, v in votos:
+            pid = nomes.quem(nome)
+            if pid and chave not in por_pessoa.setdefault(pid, {}):
+                por_pessoa[pid][chave] = item_voto(chave, v, data, proposta, desc, it.get("r"), pl, url,
+                                                   f"alesc:{it['pid']}" if it.get("pid") else None)
+    nomes.avisar(UF, "votações")
+    if rotulos:
+        log(f"  SC votações: votos com outro nome no extrato (ficam como a Alesc escreve): {rotulos}")
+    esc_pt, esc_en = escopo_votos(CASA["sigla"], *desde(INICIO), extra=VOTOS_EXPLICA)
+    f_vot = fonte(VEICULO, "e-Legis: sessões plenárias (Ordem do Dia e extrato de votação de cada sessão)",
+                  f"{ELEGIS}/sessoes-plenarias", hj)
+    blocos = {pid: bloco_votacoes(list(d.values()), esc_pt, esc_en, f_vot) for pid, d in por_pessoa.items() if d}
+    log(f"  SC: {len(votacoes)} votações nominais em {len({v[0] for v in votacoes})} sessões (de {len(odias)} lidas); "
+        f"votos de {len(blocos)} deputados; {rv.pedidos} pedidos (votações)")
+    return blocos
+
+
 def coletar() -> dict:
     rede = Rede("alesc", pausa=1.0)
     membros, ids, avisos, casados = _membros(rede)
@@ -470,11 +752,30 @@ def coletar() -> dict:
         gravar_governo(UF, per, governo, *esc_g, f_prop, executivo)
     except Exception as e:  # uma fonte do governo fora do ar não derruba a coleta: fica o perfil da rodada anterior
         log(f"  SC: governo: {e}")
-    notas = [("A Alesc publica o voto de cada deputado só em planilhas PDF de cada sessão; as votações não entram.",
-              "The Alesc only publishes each deputy's vote in PDF spreadsheets for each session; votes are not included."),
+    try:  # por último: na primeira carga, as votações usam o tempo que sobrar na rodada
+        vot = _votacoes(rede, membros)
+    except Exception as e:  # noqa: BLE001 - o e-Legis fora do ar não derruba a coleta: fica o bloco de antes
+        log(f"  SC: votações: {e}")
+        vot = None
+    com_votos = aplicar(extras, vot, "votacoes")
+    v_pt, v_en = desde(INICIO)
+    nota_votos = ((f"Votações: entram as nominais do Plenário (sessões ordinárias e extraordinárias) desde {v_pt}, com o voto "
+                   "de cada deputado, do “Extrato de votação” de cada sessão no e-Legis (Sessões Plenárias > Ordem do Dia). O "
+                   "extrato mostra só quem votou; o placar é a soma dele. As votações simbólicas não registram o voto de cada um "
+                   "e não entram. Nas votações de veto, quem vota “sim” mantém o veto e quem vota “não” derruba o veto.",
+                   f"Votes: roll-call votes in the full Assembly (regular and extraordinary sessions) since {v_en} are included, "
+                   "with each deputy's vote, from the vote record of each session in e-Legis, the Alesc system (plenary "
+                   "sessions > order of business > vote record). The record lists only those who voted; the tally is its sum. "
+                   "Voice votes do not record each member's vote and are not included. In votes on a veto, a “yes” vote keeps "
+                   "the veto and a “no” vote overturns it.") if com_votos else
+                  ("O voto de cada deputado nas votações nominais está no e-Legis, no “Extrato de votação” de cada sessão "
+                   "(Sessões Plenárias > Ordem do Dia).",
+                   "Each deputy's vote in roll-call votes is in e-Legis, the Alesc system, in the vote record of each session "
+                   "(plenary sessions > order of business > vote record)."))
+    notas = [nota_votos,
              ("Os gastos são as despesas de cada gabinete que a Alesc publica (diárias, passagens, telefone, veículos, aluguel e "
               "outras), inclusive as diárias e passagens da equipe, que aparecem separadas.",
               "Spending is each office's expenses as published by the Alesc (per diems, tickets, phone, vehicles, rent and "
               "others), including staff per diems and tickets, which are shown separately.")]
-    return gravar(UF, CASA, membros, extras, {"lista": True, "propostas": True, "votacoes": False, "gastos": True},
+    return gravar(UF, CASA, membros, extras, {"lista": True, "propostas": True, "votacoes": com_votos, "gastos": True},
                   f_lista, esc_pt, esc_en, notas)

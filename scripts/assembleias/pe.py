@@ -7,21 +7,27 @@ autor principal) e, para a situação, o detalhe de cada projeto (/api/v1/propos
 resultado final, tramitação conjunta e o autógrafo, que traz o número da lei). O detalhe é grande (traz o texto inteiro),
 então só o resumo fica no cache e ele é relido em rodízio: os novos na hora, os que ainda andam a cada 21 dias e os que já
 terminaram (lei, arquivado...) a cada 90 dias.
+Gastos: a cota para o exercício da atividade parlamentar (CEAP), que o Portal da Transparência da Alepe mostra na página
+"Verbas Indenizatórias": os pedidos de reembolso e os complementos de cada mês desde fevereiro de 2023, com as notas e as
+rubricas (os tipos de despesa) do ano mais recente (ver "gastos: CEAP" abaixo).
 """
 from __future__ import annotations
 
 import collections
 import datetime as dt
 import html
+import json
 import re
 import time
 import xml.etree.ElementTree as ET
 
 import regional
 from comum import chave_nome, data_iso, fonte, hoje, log, sem_acento
+from mandatos import mes_ano
 
 from . import _carga as gv_carga
 from . import _ne_gov as gv
+from . import _votos_gastos as VG
 from ._ne_comum import (ESCOPO, ESCOPO_EN, INICIO, Rede, casar_membros, com_status_en, gravar, legislatura_estadual, membro,
                         nome_lei, partido_sigla, resumo_status)
 
@@ -237,9 +243,20 @@ def coletar() -> dict:
               "(os que ainda tramitam, a cada 21 dias).",
               "The list of bills comes from the Alepe Open Data Portal; the status of each one is re-read gradually "
               "(those still under discussion, every 21 days).")]
-    cobertura = {"lista": True, "propostas": True, "votacoes": False, "gastos": False}
+    g = None
+    try:
+        g = gastos_ceap(membros)
+    except gv_carga.SemTempo:
+        log("  PE CEAP: o tempo da rodada acabou; a leitura continua na próxima (ficam os gastos de antes)")
+    except Exception as e:  # o serviço dos gastos fora do ar não derruba a Casa: ficam os blocos de antes
+        log(f"  PE CEAP: ATENÇÃO: gastos não atualizados ({type(e).__name__}: {e}); ficam os de antes")
+    com_gastos = VG.aplicar(extras, g, "gastos")
+    if com_gastos:  # quem não está na lista de deputados da página tem o link para o serviço de dados (SERV)
+        notas += nota_ceap([m["nome"] for m in membros
+                            if (((extras.get(m["id"]) or {}).get("gastos") or {}).get("fonte") or {}).get("url", "").startswith(SERV)])
+    cobertura = {"lista": True, "propostas": True, "votacoes": False, "gastos": com_gastos}
     r = gravar("PE", {"casa": "Assembleia Legislativa do Estado de Pernambuco", "casa_en": "Legislative Assembly of the State of Pernambuco",
-                      "sigla": "Alepe", "site": SITE}, membros, extras, cobertura, fonte_l, notas + [NOTA_VETOS])
+                      "sigla": "Alepe", "site": SITE}, membros, extras, cobertura, fonte_l, notas + [NOTA_VETOS, NOTA_VOTOS])
     try:
         _governo(rede, per, {k: dict(projetos[k], det=det.get(k)) for k in gov}, principal)
     except Exception as e:  # o perfil da governadora não derruba a lista da Assembleia: fica o arquivo da última vez
@@ -248,12 +265,305 @@ def coletar() -> dict:
     return r
 
 
+NOTA_VOTOS = ("As votações não entram: a Alepe publica, para cada reunião plenária, o expediente, a ata e a frequência, mas não "
+              "a lista com o voto de cada deputado; o Portal de Dados Abertos da Alepe não tem votações.",
+              "Votes are not included: for each plenary meeting the Alepe publishes the agenda, the minutes and attendance, but "
+              "not the list of each deputy's vote; the Alepe Open Data Portal has no votes.")
 NOTA_VETOS = ("Os vetos do governo do estado não entram no perfil de quem governa: a Alepe não publica os vetos em dados "
               "abertos, e o resultado de cada projeto não separa o veto derrubado da sanção tácita (nos dois casos, quem "
               "promulga a lei é o presidente da Assembleia).",
               "The state government's vetoes are not shown on the governor's profile: the Alepe does not publish vetoes as "
               "open data, and the result of each bill does not tell an overridden veto from a tacit sanction (in both cases, "
               "the law is promulgated by the Assembly's president).")
+
+
+# ---------------------------------------------------------------- gastos: CEAP (cota para o exercício da atividade parlamentar)
+# Portal da Transparência da Alepe, página "Verbas Indenizatórias" (PAGINA_CEAP): escolhendo o deputado, o ano e o mês, a
+# página mostra cada documento do mês ("PEDIDO" ou "COMPLEMENTO", com o número e o total) e, dentro dele, as notas
+# (rubrica, data, CNPJ, empresa e valor). Ela lê os dados em JSON de www.alepe.pe.gov.br/servicos/transparencia/, os mesmos
+# endereços usados aqui: adm/verbaindenizatoria.php?dep=&ano=&mes= (os documentos do mês; sem o deputado, vêm os de todos,
+# com o nome de cada um), adm/verbaindenizatorianotas.php?docid= (as notas de um documento; só a rubrica e o valor de
+# cada nota ficam no cache, sem CNPJ nem empresa), adm/verbaindenizatoria-rubricas.php?ano= (o nome de cada rubrica no
+# ano; a página liga a nota à rubrica pelo número) e dep/deputados.php?leg=-16 (a lista de deputados da página). A CEAP
+# substituiu a antiga verba indenizatória em 1º/9/2021 (Lei nº 17.368/2021, art. 3º); a página ainda usa o nome antigo. O
+# mês é o de competência: os complementos de um mês chegam até o começo do ano seguinte (os de 2025 foram lançados até
+# janeiro de 2026). Entram o pedido e os complementos (tipos "P" e "C"), como na página. O total do ano mostrado e os
+# tipos de despesa vêm das notas (só as do ano mais recente de cada pessoa são lidas); o total desde fevereiro de 2023 soma
+# o total de cada documento (que é a soma das notas dele). Conferido à mão em 26/10/2026, com os mesmos pedidos que a
+# página faz para cada deputado: Álvaro Porto 06/2025 R$ 60.073,27 (pedido nº 447 + complementos nº 469 e 782) e 08/2026
+# R$ 59.675,00; Dani Portela 06/2025 R$ 49.736,00 e 08/2026 R$ 59.670,00; os anos de 2026 inteiros (Álvaro Porto
+# R$ 536.653,60 em 9 documentos; Dani Portela R$ 516.252,31 em 12) e o de 2025 de Álvaro Porto (R$ 720.879,24); o total
+# de cada rubrica bate. A lista de deputados da página não traz Cayo Albino nem Junior Matuto (os gastos dos dois começam
+# em 2024 e 2025): para eles, a fonte é o serviço de dados do mês. robots.txt de www.alepe.pe.gov.br: "Disallow:" vazio
+# (tudo liberado), sem Crawl-delay.
+SERV = "https://www.alepe.pe.gov.br/servicos/transparencia"
+PAGINA_CEAP = "https://transparencia.alepe.pe.gov.br/financas/verbas-indenizatorias"
+NOME_CEAP = ("Cota para o exercício da atividade parlamentar (CEAP)",
+             "Office allowance (CEAP)")
+CEAP_PASTA = "alepe-gastos"
+CEAP_DIA_S = 120  # rodada diária com o cache cheio: cerca de 10 pedidos (os meses recentes e as notas dos documentos novos)
+CEAP_MANUAL: dict[str, str] = {}  # {nome como a Alepe escreve nos documentos: id da pessoa ou "-"} (conferido à mão)
+
+
+def _meses_ceap(ini: str) -> list[tuple[int, int]]:
+    """(ano, mês) do começo da legislatura até o mês corrente."""
+    h = hoje()
+    a, m = int(ini[:4]), int(ini[5:7])
+    out = []
+    while (a, m) <= (int(h[:4]), int(h[5:7])):
+        out.append((a, m))
+        a, m = (a + 1, 1) if m == 12 else (a, m + 1)
+    return out
+
+
+def _idade_mes(a: int, m: int) -> float:
+    """Quantas horas a lista de documentos de um mês vale no cache: os 3 meses mais recentes são relidos a cada 20 h; os
+    outros do ano corrente e do anterior (ainda podem ganhar complementos), a cada 7 a 9 dias; os mais antigos, a cada 30
+    a 36 dias (o dia muda de mês para mês, para as releituras não caírem todas na mesma rodada)."""
+    h = hoje()
+    atras = int(h[:4]) * 12 + int(h[5:7]) - (a * 12 + m)
+    return 20 if atras <= 2 else 24 * (7 + (a * 12 + m) % 3) if a >= int(h[:4]) - 1 else 24 * (30 + (a * 12 + m) % 7)
+
+
+def _ceap_cache(rede: Rede, nome: str):
+    """O JSON guardado em .cache/alepe-gastos/<nome> (None se não existe; se não for JSON, é apagado e baixado de novo)."""
+    arq = rede.pasta / nome
+    if not arq.exists():
+        return None
+    try:
+        return json.loads(arq.read_text(encoding="utf-8-sig"))
+    except Exception:
+        arq.unlink(missing_ok=True)
+        return None
+
+
+def _ceap_fresco(rede: Rede, nome: str, horas: float) -> bool:
+    arq = rede.pasta / nome
+    return arq.exists() and (time.time() - arq.stat().st_mtime) / 3600 < horas
+
+
+def _ceap_baixar(rede: Rede, est: dict, pedidos: list[tuple[str, str, bool]], fim: float) -> int:
+    """Baixa [(url, arquivo do cache, pode vir vazio)] um por um até acabar, até `fim` (time.time()) ou até o fim da rodada
+    (SemTempo). A resposta tem de ser uma lista JSON. Uma lista vazia onde devia haver dados não entra no cache e conta como
+    erro (em 26/10/2026 o serviço respondeu [] para 106 pedidos seguidos, por cerca de 2 minutos, e depois voltou ao
+    normal); ela só vale se vier vazia em 3 dias diferentes. Três erros seguidos param a leitura. Cada arquivo fica no
+    cache assim que chega: a carga continua de onde parou na rodada seguinte."""
+    feitos, seguidos, erros, h = 0, 0, [], hoje()
+    vazias = est.setdefault("vazias", {})  # {arquivo: [dias diferentes em que veio vazio, último dia]}
+    for url, nome, pode_vazia in pedidos:
+        if time.time() >= fim:
+            break
+        try:
+            b = rede.bruto(url, None, 0, headers={"Accept": "application/json"})
+            x = json.loads(b.decode("utf-8-sig"))
+            if not isinstance(x, list):
+                raise ValueError("resposta fora do formato (não é uma lista)")
+            if not x and not pode_vazia:
+                n, dia = vazias.get(nome, [0, ""])
+                vazias[nome] = [n + (dia != h), h]
+                if vazias[nome][0] < 3:
+                    raise ValueError("lista vazia onde devia haver dados")
+        except gv_carga.SemTempo:
+            break
+        except Exception as e:
+            seguidos += 1
+            erros.append(f"{url.rsplit('/', 1)[-1]}: {type(e).__name__}: {e}")
+            if seguidos >= 3:
+                log("  PE CEAP: 3 erros seguidos; o resto fica para a próxima rodada")
+                break
+            continue
+        if x:
+            vazias.pop(nome, None)
+        if nome.startswith("notas/"):  # das notas, só a rubrica e o valor ficam no cache (nada de CNPJ ou nome de empresa)
+            b = json.dumps([{"rubrica": n.get("rubrica"), "valor": n.get("valor")} for n in x if isinstance(n, dict)],
+                           ensure_ascii=False).encode("utf-8")
+        arq = rede.pasta / nome
+        arq.parent.mkdir(parents=True, exist_ok=True)
+        tmp = arq.with_suffix(".tmp")
+        tmp.write_bytes(b)
+        tmp.replace(arq)
+        feitos, seguidos = feitos + 1, 0
+    if erros:
+        log(f"  PE CEAP: {len(erros)} pedidos sem resposta válida: {erros[:3]}{'...' if len(erros) > 3 else ''}")
+    return feitos
+
+
+def _tipo_ceap(nome: str) -> str:
+    """'LOCAÇÃO DE VEÍCULOS' -> 'Locação de veículos' (as palavras da Alepe, sem as maiúsculas)."""
+    t = re.sub(r"\s+", " ", nome or "").strip()
+    return t[:1].upper() + t[1:].lower() if t and t == t.upper() else t
+
+
+def _rubricas(lista) -> dict[int, str]:
+    """{número da rubrica: nome} de um ano (a página liga cada nota à rubrica pelo número)."""
+    out = {}
+    for i, x in enumerate(lista if isinstance(lista, list) else []):
+        n = str(x.get("numero_categoria") or "")
+        out[int(n) if n.isdigit() else i + 1] = _tipo_ceap(x.get("nome_categoria"))
+    return out
+
+
+def _na_pagina(lista, membros: list[dict]) -> set[str] | None:
+    """Ids de quem aparece na lista de deputados da página (o seletor "Deputado"); None se a lista não veio."""
+    if not isinstance(lista, list) or not lista:
+        return None
+    exatos = {chave_nome(d.get("nome")) for d in lista}
+    nomes = VG.Nomes([{"id": str(d.get("id")), "nome": d.get("nome")} for d in lista])
+    return {m["id"] for m in membros if chave_nome(m["nome"]) in exatos or nomes.quem(m["nome"])}
+
+
+def gastos_ceap(membros: list[dict]) -> dict[str, dict] | None:
+    """{id da pessoa: bloco "gastos"} desde o começo da legislatura ou desde que a pessoa assumiu. None enquanto a primeira
+    carga (as listas de todos os meses e as notas do ano mais recente de cada pessoa) não termina: os perfis ficam com o
+    bloco de antes. Depois dela, quem tem notas por ler (um documento novo) fica com o bloco de antes até a rodada seguinte.
+    Quem não aparece na lista de deputados da página ganha, como fonte, os dados do mês no serviço que a página usa (SERV)."""
+    t0 = time.time()
+    rede = Rede(CEAP_PASTA, pausa=1.0, timeout=60)
+    ini = regional.inicio_estadual("PE")
+    est = rede.estado("estado.json", {}) or {}
+    primeira = est.get("completa") != ini
+    fim = t0 + gv_carga.limite_diario(CEAP_DIA_S, primeira)
+    try:
+        return _gastos_ceap(rede, est, membros, ini, primeira, fim, t0)
+    finally:
+        rede.guardar(est, "estado.json")
+
+
+def _gastos_ceap(rede: Rede, est: dict, membros: list[dict], ini: str, primeira: bool, fim: float,
+                 t0: float) -> dict[str, dict] | None:
+    # 1. os documentos (pedidos e complementos) de cada mês, de todos os deputados: os mais recentes primeiro; só a lista do
+    # mês corrente pode vir vazia
+    meses = _meses_ceap(ini)
+    pedidos = [(f"{SERV}/adm/verbaindenizatoria.php?dep=&ano={a}&mes={m}", f"docs/{a}-{m:02d}.json", (a, m) == meses[-1])
+               for a, m in reversed(meses) if not _ceap_fresco(rede, f"docs/{a}-{m:02d}.json", _idade_mes(a, m))]
+    pedidos.sort(key=lambda p: (rede.pasta / p[1]).exists())  # os que nunca foram lidos vêm antes
+    _ceap_baixar(rede, est, pedidos, fim)
+    docs, faltam = {}, []
+    for a, m in meses:
+        x = _ceap_cache(rede, f"docs/{a}-{m:02d}.json")
+        if isinstance(x, list):
+            docs[(a, m)] = [d for d in x if str(d.get("docid") or "").isdigit()]
+        else:
+            faltam.append(f"{m:02d}/{a}")
+    if faltam:
+        log(f"  PE CEAP: {len(faltam)} meses sem a lista de documentos ({', '.join(faltam[:4])}{'...' if len(faltam) > 4 else ''}); "
+            f"os perfis ficam com os gastos de antes; {rede.pedidos} pedidos em {time.time() - t0:.0f} s")
+        return None
+    # 2. de quem é cada documento: o nome como a Alepe escreve -> a pessoa da lista de hoje
+    quem = VG.Nomes(membros, CEAP_MANUAL)
+    por: dict[str, list] = {}
+    for (a, m), ds in docs.items():
+        for d in ds:
+            pid = quem.quem(d.get("deputado") or "")
+            if pid:
+                por.setdefault(pid, []).append((a, m, d))
+    quem.avisar("PE", "CEAP")
+    # 3. as notas dos documentos do ano mais recente de cada pessoa, as rubricas desse ano e a lista de deputados da página
+    ultimo = {pid: max(a for a, _, d in ds if VG.valor_br(d.get("total"))) for pid, ds in por.items()
+              if any(VG.valor_br(d.get("total")) for _, _, d in ds)}
+    ano_atual = int(hoje()[:4])
+    pedidos = [(f"{SERV}/adm/verbaindenizatoria-rubricas.php?ano={a}", f"rubricas-{a}.json", False) for a in sorted(set(ultimo.values()))
+               if not _ceap_fresco(rede, f"rubricas-{a}.json", 24 * 7 if a >= ano_atual else 24 * 30)]
+    if not _ceap_fresco(rede, "deputados-pagina.json", 24 * 7):
+        pedidos.append((f"{SERV}/dep/deputados.php?leg=-16", "deputados-pagina.json", False))
+    notas = []
+    for pid, ds in por.items():
+        for a, _, d in ds:
+            if a != ultimo.get(pid) or not VG.valor_br(d.get("total")):
+                continue
+            nome = f"notas/{d['docid']}.json"
+            ns = _ceap_cache(rede, nome)
+            # documento novo, ou que mudou depois da leitura (a soma das notas não bate com o total): lê de novo
+            if not isinstance(ns, list) or (abs(sum(VG.valor_br(n.get("valor")) for n in ns) - VG.valor_br(d.get("total"))) > 0.005
+                                            and not _ceap_fresco(rede, nome, 20)):
+                notas.append((int(d["docid"]), f"{SERV}/adm/verbaindenizatorianotas.php?docid={d['docid']}", nome))
+    _ceap_baixar(rede, est, pedidos + [(u, n, False) for _, u, n in sorted(set(notas), reverse=True)], fim)
+    # 4. os blocos
+    rubricas = {a: _rubricas(_ceap_cache(rede, f"rubricas-{a}.json")) for a in set(ultimo.values())}
+    na_pagina = _na_pagina(_ceap_cache(rede, "deputados-pagina.json"), membros)
+    blocos, incompletos, avisos = {}, [], []
+    for m in membros:
+        pid = m["id"]
+        if pid not in ultimo:
+            continue
+        ano, ds = ultimo[pid], sorted(por[pid], key=lambda x: (x[0], x[1], int(x[2]["docid"])))
+        linhas, completo = [], bool(rubricas.get(ano))
+        for a, mes, d in ds:
+            total = VG.valor_br(d.get("total"))
+            if a != ano or not total:  # anos anteriores: o total de cada documento (os tipos só valem no ano mostrado)
+                linhas.append((f"{a}-{mes:02d}", "", total))
+                continue
+            ns = _ceap_cache(rede, f"notas/{d['docid']}.json")
+            if not isinstance(ns, list) or not completo:
+                completo = False
+                break
+            soma = sum(VG.valor_br(n.get("valor")) for n in ns)
+            if ns and abs(soma - total) > 0.005:
+                avisos.append(f"{m['nome']} {mes:02d}/{a} (documento {d['docid']}): notas R$ {soma:.2f}, total R$ {total:.2f}")
+            if not ns:  # o serviço não traz nota deste documento (vazio em 3 dias diferentes): o total entra sem rubrica
+                avisos.append(f"{m['nome']} {mes:02d}/{a} (documento {d['docid']}): sem notas; R$ {total:.2f} sem rubrica")
+                linhas.append((f"{a}-{mes:02d}", "Sem rubrica informada", total))
+            for n in ns:
+                r = str(n.get("rubrica") or "")
+                linhas.append((f"{a}-{mes:02d}", rubricas[ano].get(int(r)) if r.isdigit() and int(r) in rubricas[ano]
+                               else f"Rubrica {r or 'não informada'}", VG.valor_br(n.get("valor"))))
+        if not completo:
+            incompletos.append(pid)
+            continue
+        if na_pagina is None or pid in na_pagina:
+            f = fonte(VEICULO, f"Verbas indenizatórias (CEAP) de {m['nome']} no Portal da Transparência da Alepe "
+                      "(escolha o deputado, o ano e o mês)", PAGINA_CEAP)
+        else:  # a página não deixa escolher esta pessoa: os dados do mês mais recente, no serviço que a página usa
+            ua, um = max((a, mes) for a, mes, d in ds if VG.valor_br(d.get("total")))
+            f = fonte(VEICULO, f"Verbas indenizatórias (CEAP) de todos os deputados em {um:02d}/{ua}, com {m['nome']} (dados "
+                      "do Portal da Transparência da Alepe; a lista de deputados da página não traz esse nome)",
+                      f"{SERV}/adm/verbaindenizatoria.php?dep=&ano={ua}&mes={um}")
+        b = VG.bloco_gastos(linhas, f, ini, NOME_CEAP)
+        if b and b["ano"] == ano:
+            blocos[pid] = b
+        elif b:
+            avisos.append(f"{m['nome']}: o ano dos gastos ({b['ano']}) não é o dos documentos ({ano}); fica sem bloco")
+    if avisos:
+        log(f"  PE CEAP: ATENÇÃO: {len(avisos)} avisos: {avisos[:3]}{'...' if len(avisos) > 3 else ''}")
+    if incompletos and primeira:  # nada pela metade: a carga continua na próxima rodada, de onde parou
+        log(f"  PE CEAP: primeira carga em andamento ({len(incompletos)} pessoas com notas por ler); os perfis ficam com os "
+            f"gastos de antes; {rede.pedidos} pedidos em {time.time() - t0:.0f} s")
+        return None
+    for pid in incompletos:  # documento novo com as notas por ler: fica o bloco de antes, até a próxima rodada
+        velho = VG.de_antes(pid, "gastos")
+        if velho:
+            blocos[pid] = velho
+    if incompletos:
+        log(f"  PE CEAP: {len(incompletos)} pessoas com notas por ler ficam com o bloco de antes")
+    if primeira:
+        est["completa"] = ini
+    total = sum(b["mandatoTotal"] for b in blocos.values())
+    log(f"  PE CEAP: {len(blocos)} de {len(membros)} perfis com gastos (R$ {total:,.2f} desde {ini[:7]}); "
+        f"{rede.pedidos} pedidos em {time.time() - t0:.0f} s")
+    return blocos
+
+
+def nota_ceap(fora: list[str]) -> list[tuple[str, str]]:
+    pt, en = mes_ano(regional.inicio_estadual("PE"))
+    out = [(f"Gastos: cota para o exercício da atividade parlamentar (CEAP), que substituiu a antiga verba indenizatória e que "
+            f"o Portal da Transparência da Alepe mostra na página \"Verbas Indenizatórias\", desde {pt}. Entram os pedidos de "
+            f"reembolso e os complementos de cada mês; os tipos de despesa são as rubricas da Alepe, pelas notas de cada pedido.",
+            f"Spending: the office allowance (CEAP), which replaced the old "
+            f"expense allowance and which the Alepe transparency portal shows on its \"Verbas Indenizatórias\" page, since "
+            f"{en}. Each month's reimbursement requests and supplements are included; expense types are the Alepe's "
+            f"categories (\"rubricas\"), taken from the receipts in each request.")]
+    if fora:
+        um = len(fora) == 1
+        npt = fora[0] if um else f"{', '.join(fora[:-1])} nem {fora[-1]}"
+        nen = fora[0] if um else f"{', '.join(fora[:-1])} or {fora[-1]}"
+        out.append((f"Gastos: a lista de deputados da página \"Verbas Indenizatórias\" não traz {npt}; o link dos gastos "
+                    f"{'desse perfil' if um else 'desses perfis'} abre os dados do mês no serviço que a própria página usa.",
+                    f"Spending: the list of deputies on the \"Verbas Indenizatórias\" page does not include {nen}; the spending "
+                    f"link on {'that profile' if um else 'those profiles'} opens the month's data in the service the page itself "
+                    f"uses."))
+    return out
+
+
 LEGIS = "https://legis.alepe.pe.gov.br"  # legislação estadual (Alepe)
 
 

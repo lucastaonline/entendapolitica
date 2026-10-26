@@ -238,4 +238,14 @@ def coletar() -> dict:
         {1: "PL", 26: "PLP", 4: "PEC", 36: "PEC", 37: "PDL", 15: "PRC"}, REGRAS, "aleto",
         lista_oficial=lista_oficial, ambiguos=AMBIGUOS, governo=GOVERNO, sic=f"{SITE}/loginExterno/sic",
         lista_url=f"{SITE}/perfil", lista_titulo="Perfil dos deputados em exercício (página oficial)",
+        notas=[NOTA_VOTOS_GASTOS],
     ).coletar()
+
+
+NOTA_VOTOS_GASTOS = (
+    "As votações e os gastos não entram. Votações: o SAPL da Aleto não tem nenhuma votação registrada. Gastos: a Aleto "
+    "publica a verba indenizatória (CODAP) de cada deputado num documento PDF por mês, no Portal da Transparência, sem o tipo "
+    "de cada despesa e com um formato que muda de um ano para outro.",
+    "Votes and spending are not included. Votes: the Aleto SAPL system has no votes recorded. Spending: the Aleto publishes "
+    "each deputy's expense allowance (CODAP) as one PDF document per month on its transparency portal, without the type of "
+    "each expense and in a layout that changes from year to year.")

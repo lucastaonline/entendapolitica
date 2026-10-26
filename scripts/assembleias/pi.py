@@ -51,6 +51,13 @@ NOTA_LEIS = ("As leis sancionadas pelo governador não entram no perfil dele: o 
              "The laws signed by the governor are not shown on his profile: the Alepi SAPL system, where the House publishes "
              "laws, does not have every law of the period (there are numbers missing in the sequence of laws since 2023), "
              "and the full list is only in the State Official Gazette, as PDF files.")
+NOTA_GASTOS = ("Os gastos não entram: a Alepi mostra a verba indenizatória de cada deputado numa grade do Portal da "
+               "Transparência que só funciona dentro de uma sessão do navegador (com um código de segurança), e a exportação "
+               "completa da grade falha (erro 504); a lista de despesas em dados abertos da Alepi não separa os gastos por "
+               "deputado.",
+               "Spending is not included: the Alepi shows each deputy's expense allowance in a grid on its transparency portal "
+               "that only works inside a browser session (with a security code), and exporting the whole grid fails (error "
+               "504); the Alepi's open data list of expenses does not split spending by deputy.")
 
 
 def coletar() -> dict:
@@ -59,5 +66,5 @@ def coletar() -> dict:
         casa_en="Legislative Assembly of the State of Piauí", sigla="Alepi", site="https://www.al.pi.leg.br",
         veiculo="Assembleia Legislativa do Piauí (Alepi)", prefixo="alepi", pasta="alepi",
         tipos={1: "PL", 5: "PLP", 15: "PEC", 6: "PDL", 2: "PRC"}, tipos_veto={17: None, 18: "parcial"}, regras=REGRAS,
-        gov=GOV, notas=[NOTA_LEIS],
+        gov=GOV, notas=[NOTA_LEIS, NOTA_GASTOS], votacoes=True,
     ).coletar()

@@ -211,7 +211,8 @@ def nota(dados: dict, inicio: str, fim: str, r: dict, v: dict) -> tuple[str, str
     fim_pt, fim_en = _d(fim)
     nd = dados["nome_diario"]
     onde_pt, onde_en = dados.get("onde_pt", "no Diário"), dados.get("onde_en", "in the Gazette")
-    no_en = f"on the {dados['nome_en']}" if dados.get("nome_en") else f"in the {nd} (an Official Gazette)"
+    # o nome oficial (em português) vai entre aspas: o perfil marca a citação com lang="pt-BR" (js/pessoa.js, citacoesPt)
+    no_en = f"on the {dados['nome_en']}" if dados.get("nome_en") else f"in the “{nd}” (an Official Gazette)"
     q_pt, q_en = _n(r["leis"], "lei ordinária ou complementar", "leis ordinárias e complementares",
                     "ordinary or complementary law", "ordinary and complementary laws")
     pt = [f"Contamos as leis que a prefeitura publicou no {nd}, {dados['como_pt']}, de {ini_pt} a {fim_pt}: {q_pt}, cada "

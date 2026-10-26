@@ -733,11 +733,16 @@ def montar_uf(uf: str, cidades: list, sigi: dict, diarios: dict, nomes_assoc: di
                                "municípios)", "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm",
                                "1988-10-05")]
     datas = []
+    # o que já estava publicado: no robô (que roda fora do Brasil e pode começar com o cache vazio), um site que não abriu
+    # por um erro passageiro não apaga o que já tinha sido conferido (fica o bloco anterior, com a data dele)
+    publicado = (ler_json(destino) or {}).get("cidades") or {}
     for ibge, nome, uf_ in cidades:
         b = ler_json(PASTA_CIDADES / uf / f"{ibge}.json")
         if not b:
+            if ibge in publicado:
+                out["cidades"][ibge] = publicado[ibge]
             continue
-        out["cidades"][ibge] = montar_cidade(b, sigi, diarios, nomes_assoc)
+        out["cidades"][ibge] = manter_publicado(montar_cidade(b, sigi, diarios, nomes_assoc), publicado.get(ibge), b)
         datas.append(b.get("data") or "")
     if uf != "DF":
         fs = []
@@ -761,6 +766,29 @@ def montar_uf(uf: str, cidades: list, sigi: dict, diarios: dict, nomes_assoc: di
 
 
 # ---------------------------------------------------------------------------------------------------- manter o que valia
+ERROS_PASSAGEIROS = ("timeout", "conexao", "tls", "redirecionamentos", "suspenso", "http 403", "http 429")
+
+
+def _passageiro(e: str | None) -> bool:
+    return bool(e) and (e in ERROS_PASSAGEIROS or e.startswith("http 5"))
+
+
+def manter_publicado(novo: dict, velho: dict | None, b: dict) -> dict:
+    """Se o site da Câmara ou da prefeitura sumiu nesta rodada só por erros passageiros (tempo esgotado, recusa, bloqueio
+    de quem acessa de fora do país), fica o bloco que já estava publicado em dados/municipios/, com a data em que foi
+    conferido. Vale também quando o cache está vazio (robô do GitHub)."""
+    if not velho:
+        return novo
+    for parte in ("camara", "prefeitura"):
+        n, v = novo.get(parte) or {}, velho.get(parte) or {}
+        if n.get("site") or not v.get("site"):
+            continue
+        erros = [x.get("erro") for x in (b.get(parte) or {}).get("visitas") or [] if x.get("erro")]
+        if erros and all(_passageiro(e) for e in erros):
+            novo[parte] = v
+    return novo
+
+
 def juntar_com_antigo(novo: dict, antigo: dict | None) -> dict:
     """Se o site não abriu agora (fora do ar, tempo esgotado) mas abriu há pouco, vale o que foi conferido antes."""
     if not antigo:

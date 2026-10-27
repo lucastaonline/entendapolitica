@@ -553,6 +553,30 @@
    "pendente": true,
    "etapa": "o tempo da rodada acabou",
    "requisicoes": 49
+  },
+  "AP": {
+   "casa": "Alap",
+   "membros": 24,
+   "propostas": 1993,
+   "cobertura": {
+    "lista": true,
+    "propostas": true,
+    "votacoes": false,
+    "gastos": true
+   },
+   "fonte": {
+    "veiculo": "Assembleia Legislativa do Amapá (Alap)",
+    "titulo": "IX Legislatura (2023 / 2027): membros (página oficial)",
+    "url": "https://www.al.ap.leg.br/pagina.php?pg=exibir_legislatura&idlegislatura=9",
+    "data": "2026-10-27"
+   },
+   "legislatura": {
+    "numero": 9,
+    "inicio": "2023-02-01",
+    "fim": "2027-01-31"
+   },
+   "ok": true,
+   "conferido": "2026-10-27"
   }
  },
  "camaras": {

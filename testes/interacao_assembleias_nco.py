@@ -1,6 +1,6 @@
 """Testes de interação das Assembleias do Norte e do Centro-Oeste (lista oficial, perfis com propostas, votações e gastos)
 e do perfil dos governadores desses estados (projetos do Executivo, leis sancionadas e vetos).
-Precisa do servidor em 8770 e dos dados gerados por scripts/legislativos.py (AM, AC, RO, RR, TO, PA, GO, MT, MS).
+Precisa do servidor em 8770 e dos dados gerados por scripts/legislativos.py (AM, AC, RO, RR, TO, PA, GO, MT, MS, AP).
 Uso: python testes/interacao_assembleias_nco.py"""
 import asyncio
 import json
@@ -13,7 +13,7 @@ BASE = __import__("os").environ.get("EP_BASE", "http://127.0.0.1:8770/")  # outr
 RAIZ = Path(__file__).resolve().parents[1]
 sys.stdout.reconfigure(encoding="utf-8")
 RES = []
-UFS = ["AM", "AC", "RO", "RR", "TO", "PA", "GO", "MT", "MS"]
+UFS = ["AM", "AC", "RO", "RR", "TO", "PA", "GO", "MT", "MS", "AP"]
 
 
 def ok(nome, cond, extra=""):
@@ -151,6 +151,112 @@ async def main():
         await pg.wait_for_timeout(1200)
         links = await pg.locator('#lista-prop a[href^="https://sapl.al.am.leg.br/materia/"]').count()
         ok("gov-AM: cada projeto do Executivo tem o link oficial (SAPL)", links > 0, f"{links} links")
+
+        # 7. Amapá (e-Legis da Alap): perfis com propostas (filtros de autoria e de situação, link oficial de cada uma) e o
+        # governador com os projetos do Executivo, "Leis sancionadas e vetos" e "Como contamos", com os números dos dados
+        def perfil(pid):
+            return json.loads((RAIZ / "dados" / "pessoas" / f"{pid}.json").read_text(encoding="utf-8"))
+
+        async def com_link_oficial():
+            """Quantas propostas mostradas têm o link da página oficial delas no e-Legis (sem contar o link do texto da lei)."""
+            return await pg.evaluate("""() => [...document.querySelectorAll('#lista-prop li.prop')].filter(li =>
+              [...li.querySelectorAll('a[href]')].some(a => /^https:\\/\\/elegis\\.al\\.ap\\.leg\\.br\\/portal\\/proposicao\\/\\d+$/.test(a.href))).length""")
+        com_prop = [m for m in casa("AP")["membros"] if (RAIZ / "dados" / "pessoas" / f"{m['id']}.json").exists()
+                    and len((perfil(m["id"]).get("propostas") or {}).get("lista") or []) > 0]
+        com_prop.sort(key=lambda m: -len(perfil(m["id"])["propostas"]["lista"]))
+        ok("AP: deputados com propostas do e-Legis", len(com_prop) >= 20, f"{len(com_prop)} de {len(casa('AP')['membros'])}")
+        coautor = next((m for m in com_prop[1:] if any(x["papel"] == "coautor" for x in perfil(m["id"])["propostas"]["lista"])), None)
+        for m in [com_prop[0], coautor or com_prop[1]]:
+            lista = perfil(m["id"])["propostas"]["lista"]
+            n_aut = sum(1 for x in lista if x["papel"] == "autor")
+            n_co = len(lista) - n_aut
+            await ir(pg, f"pessoa.html?id={m['id']}&lang=pt")
+            await pg.wait_for_timeout(1200)
+            cont = " ".join((await pg.locator("#contagem-prop").inner_text()).split())
+            vis = await pg.locator("#lista-prop li.prop").count()
+            links = await com_link_oficial()
+            botoes = [" ".join((await pg.locator(f'[data-papel="{p}"] b').inner_text()).split()) for p in ("autor", "coautor")]
+            ok(f"AP {m['nome']}: propostas na tela iguais aos dados ({n_aut} como autor, {n_co} junto)",
+               f"de {num_pt(n_aut if n_aut else n_co)} proposta" in cont and botoes == [num_pt(n_aut), num_pt(n_co)], cont)
+            ok(f"AP {m['nome']}: cada proposta mostrada tem o link oficial do e-Legis", vis > 0 and links == vis, f"{links}/{vis}")
+            if n_co and n_aut:
+                await pg.locator('[data-papel="coautor"]').click()
+                await pg.wait_for_timeout(400)
+                cont2 = " ".join((await pg.locator("#contagem-prop").inner_text()).split())
+                ok(f"AP {m['nome']}: filtro \"Assinou junto\" mostra as {n_co} em que assinou junto",
+                   f"de {num_pt(n_co)} proposta" in cont2 and await pg.locator('[data-papel="coautor"]').get_attribute("aria-pressed") == "true", cont2)
+                await pg.locator('[data-papel="autor"]').click()
+                await pg.wait_for_timeout(400)
+            chip = pg.locator("#status-chips button").first
+            st = await chip.get_attribute("data-status")
+            await chip.click()
+            await pg.wait_for_timeout(400)
+            n_st = sum(1 for x in lista if x["papel"] == ("autor" if n_aut else "coautor") and x["status"] == st)
+            cont3 = " ".join((await pg.locator("#contagem-prop").inner_text()).split())
+            ok(f"AP {m['nome']}: filtro de situação \"{st}\" ({n_st}) muda a lista e fica marcado",
+               f"de {num_pt(n_st)} proposta" in cont3 and await chip.get_attribute("aria-pressed") == "true", cont3)
+        gv = perfil("gov-AP")
+        ex = gv.get("executivo") or {}
+        for lang in ("pt", "en"):
+            await ir(pg, f"pessoa.html?id=gov-AP&lang={lang}")
+            await pg.wait_for_timeout(1300)
+            corpo = " ".join((await pg.locator("#perfil").inner_text()).split())
+            n_proj = len(gv["propostas"]["lista"])
+            cont = " ".join((await pg.locator("#contagem-prop").inner_text()).split())
+            de_n = (f"de {num_pt(n_proj)} proposta" if lang == "pt" else f"of {n_proj:,} proposal")
+            ok(f"gov-AP ({lang}): projetos do Executivo iguais aos dados ({n_proj})", de_n in cont, cont)
+            vis = await pg.locator("#lista-prop li.prop").count()
+            links = await com_link_oficial()
+            ok(f"gov-AP ({lang}): cada projeto mostrado tem o link oficial do e-Legis", vis > 0 and links == vis, f"{links}/{vis}")
+            leis_link = await pg.locator('#lista-prop a[href$="/texto-integral"]').count()
+            ok(f"gov-AP ({lang}): os projetos que viraram lei têm o link do texto da lei", leis_link > 0, f"{leis_link} links")
+            tit = "Leis sancionadas e vetos" if lang == "pt" else "Laws signed and vetoes"
+            nums = []
+            if ex.get("leisSancionadas") is not None:
+                nums.append((f"{num_pt(ex['leisSancionadas'])} leis sancionadas" if lang == "pt"
+                             else f"{ex['leisSancionadas']:,} laws signed") in corpo)
+            if ex.get("vetos") is not None:
+                if lang == "pt":
+                    nums.append(f"{num_pt(ex['vetos'])} vetos" in corpo)
+                    if ex.get("vetosTotais") is not None:
+                        nums.append(f"{num_pt(ex['vetosTotais'])} totais e {num_pt(ex['vetosParciais'])} parciais" in corpo)
+                else:
+                    nums.append(f"{ex['vetos']:,} vetoes" in corpo)
+            if ex.get("leisPromulgadasPelaCasa"):
+                nums.append((f"{num_pt(ex['leisPromulgadasPelaCasa'])} leis promulgadas" if lang == "pt"
+                             else f"{ex['leisPromulgadasPelaCasa']:,} laws promulgated") in corpo)
+            ok(f"gov-AP ({lang}): \"{tit}\" com os números dos dados", tit in corpo and nums and all(nums),
+               f"{ex.get('leisSancionadas')} leis, {ex.get('vetos')} vetos")
+            como = pg.locator("details.como-contou")
+            await como.locator("summary").click()
+            await pg.wait_for_timeout(300)
+            txt = " ".join((await como.locator("p").inner_text()).split())
+            nota = " ".join((ex.get("nota") if lang == "pt" else ex.get("nota_en") or "").split())
+            ok(f"gov-AP ({lang}): \"{'Como contamos' if lang == 'pt' else 'How we counted'}\" abre e é a nota dos dados "
+               "(leis + vetos)", await como.get_attribute("open") is not None and txt == nota
+               and nota == " ".join(f"{ex.get('notaLeis' + ('' if lang == 'pt' else '_en'))} {ex.get('notaVetos' + ('' if lang == 'pt' else '_en'))}".split()),
+               txt[:90])
+            ok(f"gov-AP ({lang}): sem \"Em breve\" e sem \"Onde ver mais\" (tudo entrou)",
+               "Em breve" not in corpo and "Coming soon" not in corpo and "Onde ver mais" not in corpo and "Where to find more" not in corpo)
+        m = com_prop[0]
+        await ir(pg, f"pessoa.html?id={m['id']}&lang=en")
+        await pg.wait_for_timeout(1000)
+        txt = await pg.locator("#propostas").inner_text()
+        ok("AP em inglês: escopo das propostas em inglês", "Bills filed since February 1, 2023" in txt)
+        # celular de 320 px: sem rolar para os lados (página do estado, governador e dois deputados com propostas)
+        ctx2 = await nav.new_context(viewport={"width": 320, "height": 700}, is_mobile=True, has_touch=True)
+        pg2 = await ctx2.new_page()
+        for url in ["estado.html?uf=AP", "pessoa.html?id=gov-AP", f"pessoa.html?id={com_prop[0]['id']}",
+                    f"pessoa.html?id={(coautor or com_prop[1])['id']}"]:
+            for lang in ("pt", "en"):
+                try:
+                    await pg2.goto(BASE + url + f"&lang={lang}", wait_until="networkidle", timeout=25000)
+                except Exception:
+                    await pg2.wait_for_timeout(1500)
+                await pg2.wait_for_timeout(1200)
+                larg = await pg2.evaluate("[document.documentElement.scrollWidth, window.innerWidth]")
+                ok(f"320 px sem rolar para os lados: {url} ({lang})", larg[0] <= larg[1] + 1, str(larg))
+        await ctx2.close()
 
         ok("sem erros de JavaScript", not erros, "; ".join(erros[:3]))
         await nav.close()

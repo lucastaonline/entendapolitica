@@ -14,9 +14,11 @@ gabinete (pagamentos complementares, "(compl.)", aparecem à parte; a tabela do 
 cada ano e a de gabinetes de cada mês (cada gabinete é "NOME - PARTIDO", ligado pelo nome à pessoa da lista de hoje); uma
 página por gabinete e ano, que dá o valor de cada mês; e, no ano mais recente de cada pessoa, a página de cada mês, que dá
 os tipos de despesa. Período: desde fevereiro de 2023 (começo da legislatura).
-Propostas e votações: NÃO entram (motivos em NOTAS). O e-Legis da Alap (https://elegis.al.ap.leg.br/portal/proposicoes)
-tem as proposições, com busca por deputado, tipo e ano, mas está em migração (o site avisa que os dados podem não estar
-completos); as sessões no e-Legis têm pauta, ata e presença, sem o voto de cada deputado.
+Propostas dos deputados e perfil do governador (projetos do Executivo, leis sancionadas e vetos): e-Legis da Alap
+(https://elegis.al.ap.leg.br/portal), lido por _ap_elegis.py (listas por tipo e ano, a página de cada proposição, o
+cadastro de legislação em CSV e as mensagens de veto). Primeira carga longa (~2.450 pedidos, ~78 min): continua nos dias
+seguintes; enquanto não termina, cada perfil fica com o bloco de antes e o arquivo do governador não muda.
+Votações: NÃO entram (motivo em NOTAS).
 """
 from __future__ import annotations
 
@@ -29,8 +31,10 @@ import urllib.parse
 import regional
 from comum import fonte, hoje, log, sem_acento
 
+from . import _ap_elegis as EL
 from . import _carga
 from . import _nco_comum as _N
+from . import _nco_gov as G
 from ._nco_comum import (Rede, SemTempo, casar_membros, conferir_virada, gravar, legislatura_por_data, limpa_civil, limpa_nome,
                          membro, nome_civil, partido_sigla, texto_html)
 from ._votos_gastos import Nomes, aplicar, bloco_gastos, de_antes, mes_br, valor_br
@@ -57,27 +61,61 @@ MESES = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "a
          "dezembro"]
 ROMANOS = {"I": 1, "V": 5, "X": 10, "L": 50}
 
-NOTAS = [
-    ("Quem está no cargo: a lista de membros da legislatura atual no site da Alap, conferida com a situação de cada deputado "
-     "(\"Ativo\") na página dele. Suplentes que assumiram aparecem marcados.",
-     "Who is in office: the member list of the current term on the Alap website, checked against each deputy's status "
-     "(\"Ativo\", active) on their own page. Substitutes who took a seat are marked."),
-    ("Gastos: CEAP (Cota para o Exercício da Atividade Parlamentar), do Portal da Transparência da Alap, desde fevereiro de "
-     "2023: o valor de cada mês, com os pagamentos complementares, e, no ano mais recente, o total de cada tipo de despesa.",
-     "Spending: the office allowance (CEAP), from the Alap transparency "
-     "portal, since February 2023: the amount for each month, including supplementary payments, and, for the latest year, "
-     "the total for each type of expense."),
-    ("As propostas de cada deputado não entram aqui: a Alap as publica no e-Legis (elegis.al.ap.leg.br), com busca por "
-     "deputado, tipo e ano, e o próprio site avisa que o processo legislativo está mudando para esse sistema e que, durante a "
-     "mudança, as informações podem não estar completas nem atualizadas.",
-     "Each deputy's bills are not included here: the Alap publishes them in its e-Legis system (elegis.al.ap.leg.br), "
-     "searchable by deputy, type and year, and the website itself warns that the legislative process is moving to that "
-     "system and that, during the move, the information may be incomplete or out of date."),
-    ("As votações de cada deputado não entram: o e-Legis publica as pautas, as atas e a presença das sessões do Plenário, "
-     "mas não o voto de cada deputado.",
-     "Each deputy's votes are not included: the e-Legis system publishes the agendas, minutes and attendance of the "
-     "assembly's sessions, but not how each deputy voted."),
-]
+NOTA_LISTA = ("Quem está no cargo: a lista de membros da legislatura atual no site da Alap, conferida com a situação de cada "
+              "deputado (\"Ativo\") na página dele. Suplentes que assumiram aparecem marcados.",
+              "Who is in office: the member list of the current term on the Alap website, checked against each deputy's "
+              "status (\"Ativo\", active) on their own page. Substitutes who took a seat are marked.")
+NOTA_GASTOS = ("Gastos: CEAP (Cota para o Exercício da Atividade Parlamentar), do Portal da Transparência da Alap, desde "
+               "fevereiro de 2023: o valor de cada mês, com os pagamentos complementares, e, no ano mais recente, o total de "
+               "cada tipo de despesa.",
+               "Spending: the office allowance (CEAP), from the Alap transparency portal, since February 2023: the amount "
+               "for each month, including supplementary payments, and, for the latest year, the total for each type of "
+               "expense.")
+NOTA_PROPOSTAS = ("Propostas: as do e-Legis, o sistema do processo legislativo da Alap (elegis.al.ap.leg.br), desde 1º/2/2023. "
+                  "A situação de cada uma sai da página dela no e-Legis: a norma que ela gerou ou a movimentação mais recente "
+                  "que decide (sanção, veto, arquivamento, rejeição na Comissão de Constituição e Justiça...). O próprio "
+                  "e-Legis avisa que o processo legislativo mudou para esse sistema e que, durante a mudança, as informações "
+                  "podem não aparecer em tempo real.",
+                  "Bills: those in e-Legis, the Alap's legislative process system (elegis.al.ap.leg.br), since February 1, "
+                  "2023. The status of each one comes from its page in e-Legis: the law or decree it became, or the latest "
+                  "decisive step (signature, veto, shelving, rejection by the Constitution and Justice Committee...). e-Legis "
+                  "itself warns that the legislative process moved to this system and that, during the move, the information "
+                  "may not appear in real time.")
+NOTA_SEM_PROPOSTAS = ("As propostas de cada deputado não entram aqui: elas estão no e-Legis da Alap (elegis.al.ap.leg.br), "
+                      "que não respondeu por inteiro na última leitura deste site.",
+                      "Each deputy's bills are not included here: they are in the Alap's e-Legis system "
+                      "(elegis.al.ap.leg.br), which did not respond in full the last time this site read it.")
+NOTA_VOTACOES = ("As votações de cada deputado não entram: o e-Legis mostra, na página de cada proposição votada, uma lista de "
+                 "votos da sessão, mas não diz se a votação foi nominal (cada deputado vota no painel) ou simbólica; numa "
+                 "amostra de 40 dessas listas, de 2023 a 2026, todos os votos são \"favorável\" ou \"sem voto\".",
+                 "Each deputy's votes are not included: e-Legis shows, on the page of each bill that was voted on, a list of "
+                 "votes from that session, but it does not say whether the vote was a roll call (each member votes on the "
+                 "panel) or a symbolic one; in a sample of 40 of these lists, from 2023 to 2026, every vote is \"in favor\" "
+                 "or \"no vote\".")
+
+
+def notas_casa(com_propostas: bool, el: dict | None) -> list[tuple[str, str]]:
+    """As notas da Casa: lista, gastos, propostas (com as contas da última leitura do e-Legis, quando houver) e votações."""
+    notas = [NOTA_LISTA, NOTA_GASTOS]
+    if not com_propostas:
+        return notas + [NOTA_SEM_PROPOSTAS, NOTA_VOTACOES]
+    notas.append(NOTA_PROPOSTAS)
+    n = (el or {}).get("coletivos")
+    pt = ("Autoria: quando a origem de um projeto tem mais de um nome, o primeiro é o autor principal e os outros "
+          "assinaram junto. Os projetos de \"Deputados Diversos\"" + (f" ({n})" if n else "") + " não entram no perfil de "
+          "ninguém, porque o e-Legis não diz quais deputados assinaram.")
+    en = ("Authorship: when a bill's origin lists more than one name, the first one is the main author and the others "
+          "co-signed. The bills whose origin is listed only as \"several deputies\"" + (f" ({n})" if n else "") + " are not "
+          "in anyone's profile, because e-Legis does not say which deputies signed them.")
+    notas.append((pt, en))
+    k = (el or {}).get("ocultas")
+    if k:
+        notas.append((f"A busca de proposições do e-Legis conta {k} projeto{'s' if k > 1 else ''} do período que a lista não "
+                      f"mostra (o número entra na contagem, mas não há página para abrir): {'eles não entram' if k > 1 else 'ele não entra'}.",
+                      f"The e-Legis bill search counts {k} bill{'s' if k > 1 else ''} from the period that its list does not "
+                      f"show (included in the count, but with no page to open), so {'they are' if k > 1 else 'it is'} not "
+                      "included."))
+    return notas + [NOTA_VOTACOES]
 
 
 # ---------------------------------------------------------------- ajudas
@@ -558,13 +596,35 @@ def coletar() -> dict:
         g = None
         log(f"  AP: ATENÇÃO: gastos não atualizados ({type(e).__name__}: {e}); ficam os de antes")
     com_gastos = aplicar(extras, g, "gastos")
-    cobertura = {"lista": True, "propostas": False, "votacoes": False, "gastos": com_gastos}
     conferir_virada(rede, "AP", [l["id"] for l in lista], leg)
+    # propostas dos deputados e o perfil do governador: e-Legis (outro servidor). Enquanto a primeira carga não termina ou
+    # se o e-Legis falhar, cada perfil fica com o bloco de antes e o arquivo do governador não muda
+    gov = G.governo_atual("AP")
+    try:
+        el = EL.coletar_elegis(membros, regional.inicio_estadual("AP"), gov)
+    except SemTempo:
+        el = None
+        log("  AP: e-Legis: o tempo da rodada acabou; a leitura continua na próxima (ficam os blocos de antes)")
+    except Exception as e:  # o e-Legis fora do ar não derruba a Casa
+        el = None
+        log(f"  AP: ATENÇÃO: e-Legis não lido ({type(e).__name__}: {e}); ficam os blocos de antes")
+    com_propostas = aplicar(extras, (el or {}).get("propostas"), "propostas")
+    cobertura = {"lista": True, "propostas": com_propostas, "votacoes": False, "gastos": com_gastos}
     legislatura = {"numero": info.get("numero"), "inicio": leg["inicio"], "fim": leg["fim"]}
-    r = gravar("AP", CASA, membros, extras, cobertura, fonte_lista, NOTAS, minimo=VAGAS - 4, legislatura=legislatura)
+    notas = notas_casa(com_propostas, el)
+    gv = (el or {}).get("governo")
+    if gv and not gv.get("executivo"):  # leis e vetos sem conta segura: o motivo vai nas notas da Casa
+        notas += gv.get("notas") or []
+    r = gravar("AP", CASA, membros, extras, cobertura, fonte_lista, notas, minimo=VAGAS - 4, legislatura=legislatura)
+    if gv:
+        G.gravar_gov("AP", propostas=gv["propostas"], executivo=gv.get("executivo"), inicio=gov["inicio"])
+    else:
+        G.descartar_se_velho("AP")
     sup = sum(1 for m in membros if m.get("exercicio"))
     hosts = {h: rede.por_host.get(h, 0) + rg.por_host.get(h, 0) for h in set(rede.por_host) | set(rg.por_host)}
-    log(f"  AP: {len(membros)} pessoas ({sup} suplentes), {sum(1 for x in extras.values() if x.get('gastos'))} com gastos; "
-        f"{rede.pedidos + rg.pedidos} pedidos ({', '.join(f'{h}: {n}' for h, n in sorted(hosts.items()))}) em "
-        f"{int(time.time() - t0)} s")
+    log(f"  AP: {len(membros)} pessoas ({sup} suplentes), {sum(1 for x in extras.values() if x.get('gastos'))} com gastos, "
+        f"{sum(1 for x in extras.values() if (x.get('propostas') or {}).get('lista'))} com propostas; "
+        f"{rede.pedidos + rg.pedidos} pedidos ({', '.join(f'{h}: {n}' for h, n in sorted(hosts.items()))}) + "
+        f"{(el or {}).get('pedidos', 0)} no e-Legis em {int(time.time() - t0)} s"
+        + (f"; e-Legis: {el['pendente']}" if el and el.get("pendente") else ""))
     return r

@@ -155,7 +155,9 @@ As Câmaras Municipais entram de dois jeitos, sempre lendo só o sistema oficial
   nominais pelo SAGL (API JSON). Rio de Janeiro, Belo Horizonte, Salvador, Curitiba,
   Porto Alegre, Belém, Goiânia, São Luís, Vitória, Teresina e Cuiabá publicam só a lista oficial num formato que dá para ler
   (as propostas só existem em páginas HTML); Recife, Maceió, Campo Grande, Florianópolis, Macapá, Aracaju e Palmas continuam
-  com a lista de eleitos do TSE (os motivos estão nas notas de cada uma).
+  com a lista de eleitos do TSE (os motivos estão nas notas de cada uma). Em São Luís, o robots.txt do site da Câmara passou a
+  fechar a leitura para robôs (visto em 26/10/2026) e o coletor respeita: fica a lista da última leitura, de 23/10/2026, com
+  uma nota que explica isso (em `dados/camaras/2111300.json`, até a Câmara voltar a permitir a leitura).
 - **As outras Câmaras com SAPL** (`python scripts/legislativos.py sapl`, no robô das cidades): uma linha por cidade em
   `scripts/camaras/sapl_cidades.json` (818 cidades; feita por `python scripts/descobrir_sapl.py --lista`, que testa
   `sapl.<cidade>.<uf>.leg.br` e os endereços que o mapa das cidades achou), sem um arquivo .py por cidade

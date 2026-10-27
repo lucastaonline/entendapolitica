@@ -245,18 +245,20 @@ def ler_json(caminho, padrao=None):
 
 
 def salvar_json(caminho, obj, indentado: bool = False) -> bool:
-    """Salva em UTF-8 compacto. Só reescreve se mudou. Devolve True se escreveu."""
+    """Salva em UTF-8 compacto. Só reescreve se mudou. Devolve True se escreveu. O arquivo sai igual em qualquer sistema
+    (fim de linha "\\n" também no Windows: os arquivos vão para o GitHub como o robô os grava) e a comparação é byte a byte
+    (um arquivo que ficou com "\\r\\n" é regravado)."""
     caminho = Path(caminho)
     caminho.parent.mkdir(parents=True, exist_ok=True)
     if indentado:
         txt = json.dumps(obj, ensure_ascii=False, indent=1)
     else:
         txt = json.dumps(obj, ensure_ascii=False, separators=(",", ":"))
-    txt += "\n"
-    if caminho.exists() and caminho.read_text(encoding="utf-8") == txt:
+    dado = (txt + "\n").encode("utf-8")
+    if caminho.exists() and caminho.read_bytes() == dado:
         return False
     tmp = caminho.with_suffix(caminho.suffix + ".tmp")
-    tmp.write_text(txt, encoding="utf-8")
+    tmp.write_bytes(dado)
     os.replace(tmp, caminho)
     return True
 

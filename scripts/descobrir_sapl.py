@@ -160,7 +160,7 @@ def escrever_lista(com_proj: list[dict], ufs: set[str]) -> int:
              'coletor próprio). Feita por scripts/descobrir_sapl.py --lista; rodada por scripts/legislativos.py sapl. Campos: '
              'scripts/camaras/_lista.py.",\n "atualizado": ' + json.dumps(hoje()) + ',\n "cidades": {\n' + ",\n".join(linhas) +
              "\n }\n}\n")
-    LISTA.write_text(texto, encoding="utf-8")
+    LISTA.write_text(texto, encoding="utf-8", newline="\n")  # "\n" também no Windows
     return len(novo)
 
 

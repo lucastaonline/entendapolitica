@@ -152,9 +152,10 @@ def sitemap() -> int:
             linhas.append(f"<url><loc>{esc(u)}</loc>{lm}{alt}</url>")
 
     def grava(nome: str, txt: str) -> None:
-        arq = RAIZ / nome
-        if not arq.exists() or arq.read_text(encoding="utf-8") != txt:
-            arq.write_text(txt, encoding="utf-8")
+        # fim de linha "\n" em qualquer sistema, comparando byte a byte (ver comum.salvar_json)
+        arq, dado = RAIZ / nome, txt.encode("utf-8")
+        if not arq.exists() or arq.read_bytes() != dado:
+            arq.write_bytes(dado)
 
     cab = ('<?xml version="1.0" encoding="UTF-8"?>\n'
            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n')

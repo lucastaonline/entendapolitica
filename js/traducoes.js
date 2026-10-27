@@ -477,7 +477,18 @@
     "provedor de internet": "Internet service",
     "reprografia (xerox/encadernacao)": "Photocopying and binding",
     "telefone fixo": "Landline phone",
-    "telefone movel": "Mobile phone"
+    "telefone movel": "Mobile phone",
+    "consultoria contabil": "Accounting consulting",
+    "consultoria de comunicacao e marketing": "Communication and marketing consulting",
+    "consultoria juridica": "Legal consulting",
+    "cursos, palestras e eventos": "Courses, talks and events",
+    "generos alimenticios": "Food supplies",
+    "interprete de libras": "Sign language (Libras) interpreter",
+    "manutencao de escritorio": "Office upkeep",
+    "outras consultorias e assessorias": "Other consulting and advisory services",
+    "outras despesas": "Other expenses",
+    "sem a divisao por tipo (a descricao do mes nao soma o valor pago)": "Not split by type (the month's description does not add up to the amount paid)",
+    "viagens, estacionamento e pedagio": "Travel, parking and tolls"
   };
   D.gasto = function (tipo) {
     if (!EP.en) return esc(tipo);

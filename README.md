@@ -147,14 +147,25 @@ As Câmaras Municipais entram de dois jeitos, sempre lendo só o sistema oficial
 
 - **Capitais** (`python scripts/legislativos.py camaras`, no robô diário): um coletor por Câmara (`scripts/camaras/c<IBGE>.py`).
   19 das 26 capitais têm a **lista oficial de quem está no cargo** (inclusive suplentes que assumiram), com o partido de
-  hoje, a foto oficial (reduzida para 240 px em `img/pessoas/ver-*.jpg`) e a página oficial de cada pessoa; 8 têm também as
+  hoje, a foto oficial (reduzida para 240 px em `img/pessoas/ver-*.jpg`) e a página oficial de cada pessoa; 11 têm também as
   **propostas desde 1º/1/2025** e o que a **prefeitura** mandou à Câmara: as 7 com SAPL (Fortaleza, Manaus, Natal, João
-  Pessoa, Porto Velho, Rio Branco e Boa Vista) e São Paulo (SPLegis). São Paulo também tem as **votações nominais** (arquivo
+  Pessoa, Porto Velho, Rio Branco e Boa Vista), São Paulo (SPLegis) e Vitória, Teresina e Cuiabá (Ágape, abaixo). São Paulo também tem as **votações nominais** (arquivo
   XML anual da Câmara) e os **gastos do mandato** (Auxílio-Encargos Gerais de Gabinete, pelo SisGV); Porto Alegre tem as
   votações nominais (sistema de votações da Câmara) e Recife, que continua com a lista de eleitos do TSE, as votações
-  nominais pelo SAGL (API JSON). Rio de Janeiro, Belo Horizonte, Salvador, Curitiba,
-  Porto Alegre, Belém, Goiânia, São Luís, Vitória, Teresina e Cuiabá publicam só a lista oficial num formato que dá para ler
-  (as propostas só existem em páginas HTML); Recife, Maceió, Campo Grande, Florianópolis, Macapá, Aracaju e Palmas continuam
+  nominais pelo SAGL (API JSON). Vitória, Teresina e Cuiabá (Processo Legislativo Eletrônico da Ágape, o "Câmara sem
+  Papel") também têm as **propostas desde 1º/1/2025** e os projetos da prefeitura, lidos como uma pessoa lê o sistema
+  (`scripts/camaras/_agape.py`): a planilha da consulta de cada tipo e ano e a página de cada proposição, com a tramitação de
+  onde sai a situação (regras de cada Câmara, conferidas à mão); em Cuiabá, cuja página de proposição é muito pesada, a
+  situação vem primeiro da norma ligada no módulo de Legislação e da fase da lista, e a página só é lida quando isso não
+  basta. Teresina tem também os **gastos do mandato** (a verba de atividade parlamentar, pela consulta do Portal da
+  Transparência da Câmara, pela data do pagamento e sem a divisão por tipo) e Goiânia, os gastos da **cota parlamentar
+  (CEAP)**, com os tipos de despesa, pelo Portal da Transparência da Câmara (NúcleoGov). As propostas de Goiânia ficam fora:
+  estão só no SUAP, cujo robots.txt pede que robôs não leiam nada. Vitória, Teresina e Cuiabá não aceitam o robô do GitHub
+  e são atualizadas pelo `scripts/atualizar_do_brasil.py`; a primeira carga, com o cache vazio, leva perto de uma hora em
+  Vitória (1.007 páginas) e meia hora em Teresina e em Cuiabá, e depois cada rodada diária faz de 20 a 70 pedidos por
+  Câmara (ajudas comuns em `scripts/camaras/_capitais.py`: robots.txt, pausa, redirecionamento só para onde o robots.txt
+  deixa, fim da rodada e o bloco dos gastos). Rio de Janeiro, Belo Horizonte, Salvador, Curitiba, Porto Alegre, Belém e
+  São Luís publicam só a lista oficial num formato que dá para ler (as propostas só existem em páginas HTML); Recife, Maceió, Campo Grande, Florianópolis, Macapá, Aracaju e Palmas continuam
   com a lista de eleitos do TSE (os motivos estão nas notas de cada uma). Em São Luís, o robots.txt do site da Câmara passou a
   fechar a leitura para robôs (visto em 26/10/2026) e o coletor respeita: fica a lista da última leitura, de 23/10/2026, com
   uma nota que explica isso (em `dados/camaras/2111300.json`, até a Câmara voltar a permitir a leitura).
@@ -205,8 +216,8 @@ maioria das cidades). **Rodízio:** `--parte hoje` roda as cidades do dia da sem
 mesmo dia: `int(IBGE) % 7 + 1`) e `--pendentes` junta as que ainda não terminaram a primeira carga (uma cidade que falha 3
 dias seguidos sai dessa fila e volta no dia dela).
 
-**Cobertura (27/10/2026):** 824 Câmaras com dados abertos no site (777 com a lista oficial), 6.652 vereadores com
-propostas, 750 prefeitos com os projetos que mandaram à Câmara e 523 com leis ou vetos; **votações nominais em
+**Cobertura (27/10/2026):** 824 Câmaras com dados abertos no site (777 com a lista oficial), 6.728 vereadores com
+propostas, 753 prefeitos com os projetos que mandaram à Câmara e 523 com leis ou vetos; **votações nominais em
 268 Câmaras** (27.492 votações e 2.952 vereadores; 265 com SAPL, mais São Paulo, Porto Alegre e Recife) e
 **gastos do mandato em São Paulo** (55 vereadores). 14 cidades da lista ainda estão na primeira carga, e em
 371 Câmaras com SAPL a leitura das votações ainda não terminou (o robô continua). Por estado: ver
@@ -223,7 +234,7 @@ propostas, 750 prefeitos com os projetos que mandaram à Câmara e 523 com leis 
 
 ### Mapa das Câmaras Municipais e prefeituras (`dados/municipios/<UF>.json`)
 
-`python scripts/municipios/mapear.py [UF ...]` confere, nas 5.569 cidades, o site oficial da Câmara Municipal e da prefeitura, o sistema de proposições da Câmara e se as proposições estão na internet (quando não estão, por quê), a página de pedido de informação (e-SIC), o portal da transparência e o Diário Oficial da prefeitura. É o que o quadro **"Onde ver mais"** dos perfis de vereadores e prefeitos mostra (o `montar.py` leva cada cidade para o campo `onde` de `dados/cidades/<UF>/<IBGE>.json`). As pistas vêm de listas oficiais — a do Interlegis (domínio .leg.br, SAPL e Portal Modelo de cada Câmara), a descoberta do SAPL (`scripts/descobrir_sapl.py`), as listas de municípios dos Diários Oficiais das associações de municípios (SIGPub, em www.diariomunicipal.com.br, e Assomasul) e a do Ciga (SC) —, mas tudo é conferido no próprio site oficial (título, nome do site, texto). Só entram sites .leg.br e .gov.br; o Diário Oficial pode estar na plataforma que o site da prefeitura indica (ou na da associação em que a cidade publicou nos últimos 6 meses).
+`python scripts/municipios/mapear.py [UF ...]` confere, nas 5.569 cidades, o site oficial da Câmara Municipal e da prefeitura, o sistema de proposições da Câmara e se as proposições estão na internet (quando não estão, por quê), a página de pedido de informação (e-SIC), o portal da transparência e o Diário Oficial da prefeitura. É o que o quadro **"Onde ver mais"** dos perfis de vereadores e prefeitos mostra (o `montar.py` leva cada cidade para o campo `onde` de `dados/cidades/<UF>/<IBGE>.json`; nas cidades com coletor próprio da Câmara, `dados/camaras/<IBGE>.json`, o que o coletor leu vale mais que o palpite do mapa: sai o motivo do mapa, as notas da Câmara dizem o que falta e por quê, e o site da Câmara vem do coletor quando o mapa não o achou). As pistas vêm de listas oficiais — a do Interlegis (domínio .leg.br, SAPL e Portal Modelo de cada Câmara), a descoberta do SAPL (`scripts/descobrir_sapl.py`), as listas de municípios dos Diários Oficiais das associações de municípios (SIGPub, em www.diariomunicipal.com.br, e Assomasul) e a do Ciga (SC) —, mas tudo é conferido no próprio site oficial (título, nome do site, texto). Só entram sites .leg.br e .gov.br; o Diário Oficial pode estar na plataforma que o site da prefeitura indica (ou na da associação em que a cidade publicou nos últimos 6 meses).
 
 - **No robô:** `.github/workflows/cidades.yml` roda `mapear.py --rodizio` todo dia (um grupo de estados por dia: cada estado é conferido uma vez por semana) e junta tudo com o `montar.py`.
 - **Educado:** respeita o robots.txt de cada site (e o `Crawl-delay`; o do SAPL pede 60 s); 1 s entre pedidos ao mesmo site; poucos pedidos ao mesmo tempo para o mesmo servidor; até 16 cidades em paralelo (sites diferentes); um servidor que para de responder é deixado em paz pelo resto da rodada. O que foi visto fica em `.cache/municipios/`; cada cidade só é refeita depois de 6 dias e, se um site não abrir, vale o que foi conferido até 45 dias antes. O robô do GitHub roda fora do Brasil, e muitos sites de prefeituras e Câmaras bloqueiam esse acesso: por isso, um bloco já publicado (Câmara ou prefeitura) só é trocado quando a rodada nova acha pelo menos o mesmo tanto de informação, quando o site muda de endereço (e o novo é lido) ou quando o endereço publicado deixa de existir; senão fica o bloco publicado, com a data em que foi conferido, por até 90 dias (`manter_publicado`). Em 26/10/2026, uma rodada no robô achou bem menos que a rodada feita no Brasil (350 prefeituras de MG sem leitura, contra 220): de vez em quando, vale rodar o mapa num computador no Brasil (`python scripts/municipios/mapear.py`).

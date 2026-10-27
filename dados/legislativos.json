@@ -4307,22 +4307,30 @@
    "casa": "CMT",
    "nome": "Câmara Municipal de Teresina",
    "membros": 29,
-   "propostas": 0,
+   "propostas": 491,
    "cobertura": {
     "lista": true,
-    "propostas": false,
+    "propostas": true,
     "votacoes": false,
-    "gastos": false
+    "gastos": true
    },
    "fonte": {
     "veiculo": "Câmara Municipal de Teresina",
     "titulo": "Vereadores ativos na legislatura atual (01/01/2025 a 31/12/2028)",
     "url": "https://teresina.camarasempapel.com.br/spl/parlamentares.aspx",
-    "data": "2026-10-26"
+    "data": "2026-10-27"
    },
+   "vereadoresComGastos": 29,
+   "prefeito": {
+    "propostas": 66,
+    "leis": null,
+    "vetos": null
+   },
+   "semAutorNoCargo": 138,
+   "requisicoes": 19,
    "semTse": 0,
-   "ok": false,
-   "erro": "RuntimeError: robots.txt de https://teresina.camarasempapel.com.br não respondeu (URLError); nada é lido desse servidor nesta rodada"
+   "ok": true,
+   "conferido": "2026-10-27"
   },
   "2300754": {
    "casa": "CMA",
@@ -13443,10 +13451,10 @@
    "casa": "CMV",
    "nome": "Câmara Municipal de Vitória",
    "membros": 21,
-   "propostas": 0,
+   "propostas": 957,
    "cobertura": {
     "lista": true,
-    "propostas": false,
+    "propostas": true,
     "votacoes": false,
     "gastos": false
    },
@@ -13454,11 +13462,18 @@
     "veiculo": "Câmara Municipal de Vitória",
     "titulo": "Vereadores ativos na legislatura atual (01/01/2025 a 31/12/2028)",
     "url": "https://camarasempapel.cmv.es.gov.br/spl/parlamentares.aspx",
-    "data": "2026-10-26"
+    "data": "2026-10-27"
    },
+   "prefeito": {
+    "propostas": 10,
+    "leis": null,
+    "vetos": null
+   },
+   "semAutorNoCargo": 11,
+   "requisicoes": 18,
    "semTse": 0,
-   "ok": false,
-   "erro": "RuntimeError: Falha ao baixar https://camarasempapel.cmv.es.gov.br/spl/parlamentares.aspx: HTTP Error 403: Forbidden"
+   "ok": true,
+   "conferido": "2026-10-27"
   },
   "3300233": {
    "casa": "CMAB",
@@ -21407,10 +21422,10 @@
    "casa": "CMC-MT",
    "nome": "Câmara Municipal de Cuiabá",
    "membros": 27,
-   "propostas": 0,
+   "propostas": 1720,
    "cobertura": {
     "lista": true,
-    "propostas": false,
+    "propostas": true,
     "votacoes": false,
     "gastos": false
    },
@@ -21418,11 +21433,18 @@
     "veiculo": "Câmara Municipal de Cuiabá",
     "titulo": "Vereadores ativos na legislatura atual (01/01/2025 a 31/12/2028)",
     "url": "https://legislativo.camaracuiaba.mt.gov.br/spl/parlamentares.aspx",
-    "data": "2026-10-26"
+    "data": "2026-10-27"
    },
+   "prefeito": {
+    "propostas": 126,
+    "leis": null,
+    "vetos": null
+   },
+   "semAutorNoCargo": 116,
+   "requisicoes": 32,
    "semTse": 0,
-   "ok": false,
-   "erro": "RuntimeError: robots.txt de https://legislativo.camaracuiaba.mt.gov.br não respondeu (URLError); nada é lido desse servidor nesta rodada"
+   "ok": true,
+   "conferido": "2026-10-27"
   },
   "5103502": {
    "ok": true,
@@ -22160,7 +22182,7 @@
     "lista": true,
     "propostas": false,
     "votacoes": false,
-    "gastos": false
+    "gastos": true
    },
    "fonte": {
     "veiculo": "Câmara Municipal de Goiânia",
@@ -22168,6 +22190,8 @@
     "url": "https://www.goiania.go.leg.br/institucional/parlamentares",
     "data": "2026-10-27"
    },
+   "vereadoresComGastos": 37,
+   "requisicoes": 39,
    "semTse": 0,
    "ok": true,
    "conferido": "2026-10-27"

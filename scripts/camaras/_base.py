@@ -547,15 +547,6 @@ NOTAS_VOTOS_GASTOS = {
          "Office spending: the Belo Horizonte City Council abolished its office allowance in 2015 (Resolution 2,076/2015); "
          "since then, the supplies and services of each office are bought and paid for by the City Council itself (shown on "
          "pages of its transparency portal).")],
-    "5103403": [  # Cuiabá
-        ("As votações de cada vereador não entram neste site: a Câmara publica as atas das sessões em PDF escaneado (imagem), "
-         "sem dados abertos das votações.",
-         "Each councilor's votes are not included on this site: the City Council publishes the session minutes as scanned "
-         "PDFs (images), with no open data on the votes."),
-        ("Os gastos do mandato não entram neste site: a verba indenizatória da Câmara de Cuiabá é um valor fixo por mês, "
-         "definido em lei (Lei 6.910/2023), e não uma lista das despesas de cada gabinete.",
-         "Office spending is not included on this site: the Cuiabá City Council's allowance is a fixed monthly amount set by "
-         "law (Law 6,910/2023), not a list of each office's expenses.")],
     "2927408": [  # Salvador
         ("As votações de cada vereador não entram neste site: o sistema legislativo da Câmara não tem uma consulta das "
          "votações nominais (o voto de cada vereador).",
@@ -565,15 +556,6 @@ NOTAS_VOTOS_GASTOS = {
          "como pagamentos numa tabela de despesas do portal, sem um arquivo de dados abertos por vereador.",
          "Office spending is not included on this site: the City Council publishes its office allowance only as payments in "
          "an expenses table on its portal, with no open data file per councilor.")],
-    "2211001": [  # Teresina
-        ("As votações de cada vereador não entram neste site: o site e o portal da transparência da Câmara não têm uma "
-         "consulta das votações nominais (o voto de cada vereador).",
-         "Each councilor's votes are not included on this site: the City Council's website and transparency portal have no "
-         "search for roll-call votes (how each councilor voted)."),
-        ("Os gastos do mandato não entram neste site: o portal da transparência mostra a verba de atividade parlamentar numa "
-         "consulta de página, um vereador e um ano por vez, sem arquivo de dados abertos.",
-         "Office spending is not included on this site: the transparency portal shows the office allowance in an on-screen "
-         "search, one councilor and one year at a time, with no open data file.")],
     "1501402": [  # Belém
         ("As votações de cada vereador não entram neste site: a Câmara publica as votações nominais em arquivos PDF, sem "
          "dados abertos.",
@@ -583,15 +565,6 @@ NOTAS_VOTOS_GASTOS = {
          "parlamentares.",
          "Office spending: the Belém City Council publishes monthly statements on its transparency portal saying there were "
          "no office allowances.")],
-    "3205309": [  # Vitória
-        ("As votações de cada vereador não entram neste site: a Câmara publica um boletim de votação por projeto, em PDF "
-         "escaneado (imagem), sem dados abertos.",
-         "Each councilor's votes are not included on this site: the City Council publishes one voting report per bill, as a "
-         "scanned PDF (image), with no open data."),
-        ("Gastos do mandato: segundo o portal da transparência, a Câmara de Vitória não instituiu cotas parlamentares desde "
-         "1º/1/2023 (a verba de gabinete paga a equipe de cada gabinete).",
-         "Office spending: according to its transparency portal, the Vitória City Council has had no office allowances since "
-         "January 1, 2023 (the office budget pays each office's staff).")],
     "2111300": [  # São Luís
         ("As votações de cada vereador não entram neste site: as atas das sessões (PDF) trazem o placar e só o nome de quem "
          "votou diferente da maioria, sem a lista completa dos votos.",
@@ -601,15 +574,6 @@ NOTAS_VOTOS_GASTOS = {
          "com filtros, uma consulta por vez, sem arquivo de dados abertos.",
          "Office spending is not included on this site: the City Council publishes its office allowance (VIEP) in a search "
          "system with filters, one search at a time, with no open data file.")],
-    "5208707": [  # Goiânia
-        ("As votações de cada vereador não entram neste site: a consulta de votações do portal da transparência da Câmara "
-         "está vazia, e as atas das sessões (PDF) não trazem o voto de cada vereador.",
-         "Each councilor's votes are not included on this site: the votes search on the City Council's transparency portal "
-         "is empty, and the session minutes (PDF) do not list each councilor's vote."),
-        ("Os gastos do mandato de cada vereador não entram neste site: a Câmara publica a cota parlamentar (CEAP) numa "
-         "consulta do portal da transparência, que monta os arquivos na hora, sem um endereço fixo de dados abertos.",
-         "Each councilor's office spending is not included on this site: the City Council publishes its office allowance "
-         "(CEAP) in a search on its transparency portal, which builds the files on the fly, with no fixed open data address.")],
 }
 
 

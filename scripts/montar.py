@@ -282,6 +282,21 @@ def _onde_ver_cidades() -> tuple[int, int]:
         if canal.get("sic") and not cam.get("sic"):
             cam["sic"] = canal["sic"]
             cam.setdefault("conferido", canal.get("conferido"))
+    # Câmaras com coletor próprio (dados/camaras/<IBGE>.json): o coletor leu o site oficial da Câmara (do Brasil, quando o
+    # site recusa o robô do GitHub), e as notas dele dizem o que entra e o que não entra, e por quê. Ali, o palpite do mapa
+    # (ex.: "não achamos as proposições a partir da página inicial") não vale: sai o motivo do mapa, as propostas contam
+    # como publicadas quando o coletor as lê, e o site da Câmara vem do coletor quando o mapa não o achou.
+    for k_arq in sorted((DADOS / "camaras").glob("*.json")):
+        k = ler_json(k_arq) or {}
+        cam = (ondes.get(str(k.get("ibge") or k_arq.stem)) or {}).get("camara")
+        if not cam:
+            continue
+        if k.get("site") and not cam.get("site"):
+            cam["site"] = k["site"]
+        if cam.get("propostasOnline") is False or cam.get("motivo"):
+            cam["propostasOnline"] = True if (k.get("cobertura") or {}).get("propostas") else None
+            cam.pop("motivo", None)
+            cam.pop("motivo_en", None)
     contadas, fora = _prefeituras()
     for ibge, f in fora.items():
         ondes.setdefault(ibge, {}).setdefault("prefeitura", {})["leis"] = f

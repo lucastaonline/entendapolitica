@@ -114,6 +114,7 @@ Para ver no computador: `python -m http.server 8770` dentro da pasta e abra http
 - `python testes/interacao_votacoes.py`: votações (lista, uma votação, bloco do Brasil e "Como votou" do perfil): teclado, filtros, "Mostrar mais" com o foco, números que batem com os dados, inglês, 320 px e axe-core depois de rolar e clicar.
 - `python testes/interacao_historico.py`: mandatos anteriores (campo pelo teclado, páginas do passado no Brasil, estado e cidade, "Voltar para hoje", cidade que ainda não existia, virada de mandato com o relógio adiantado).
 - `python testes/interacao_camaras.py`: Câmaras Municipais (capitais e Câmaras com SAPL; só as que o `montar.py` já juntou à página da cidade): lista oficial na página da cidade, perfil do vereador com propostas e filtros, perfil do prefeito ("Como contamos", "A lei mais recente na fonte"), textos em inglês, cidades só com a lista; votações nominais (São Paulo, Porto Alegre, Recife e uma Câmara com SAPL: resumo, a votação mais nova, placar, link oficial, "Mostrar mais votações") e os gastos de São Paulo, conferidos contra os dados.
+- `python testes/interacao_capitais_a.py`, `interacao_capitais_b.py` e `interacao_capitais_c.py`: as capitais cujas Câmaras são lidas em páginas do site (propostas, prefeito, notas, gastos e votações onde houver, inglês, 320 px).
 - `python testes/interacao_prefeituras.py`: leis e vetos das prefeituras pelos Diários Oficiais (perfil do prefeito com a contagem, vetos totais e parciais, fontes, "Como contamos", o motivo e o link em "Onde ver mais", inglês, 320 px e axe-core).
 - `python testes/diarios_titulos.py`, `python testes/diarios_falhas.py` e `python testes/diarios_robo.py` (sem servidor e sem rede; o último simula a primeira rodada do robô, com o cache vazio e todos os sites falhando: nenhum byte de `dados/prefeituras/` pode mudar): as regras que leem os títulos das leis e fazem as contagens dos Diários Oficiais, e o que acontece quando um site bloqueia, cai ou devolve uma página quebrada (a cidade fica pendente, com o que já estava publicado).
 - `python testes/gerar_imagens.py`: gera os ícones e a imagem de compartilhamento (`testes/og.html` → `img/compartilhar.jpg`).
@@ -147,43 +148,52 @@ As Câmaras Municipais entram de dois jeitos, sempre lendo só o sistema oficial
 
 - **Capitais** (`python scripts/legislativos.py camaras`, no robô diário): um coletor por Câmara (`scripts/camaras/c<IBGE>.py`).
   19 das 26 capitais têm a **lista oficial de quem está no cargo** (inclusive suplentes que assumiram), com o partido de
-  hoje, a foto oficial (reduzida para 240 px em `img/pessoas/ver-*.jpg`) e a página oficial de cada pessoa; 14 têm também as
-  **propostas desde 1º/1/2025** e o que a **prefeitura** mandou à Câmara: as 7 com SAPL (Fortaleza, Manaus, Natal, João
-  Pessoa, Porto Velho, Rio Branco e Boa Vista), São Paulo (SPLegis), Vitória, Teresina e Cuiabá (Ágape, abaixo) e Rio de
-  Janeiro, Belo Horizonte e Porto Alegre (páginas do site, abaixo). São Paulo também tem as **votações nominais** (arquivo
-  XML anual da Câmara) e os **gastos do mandato** (Auxílio-Encargos Gerais de Gabinete, pelo SisGV); Porto Alegre tem as
-  votações nominais (sistema de votações da Câmara) e Recife, que continua com a lista de eleitos do TSE, as votações
-  nominais pelo SAGL (API JSON). Vitória, Teresina e Cuiabá (Processo Legislativo Eletrônico da Ágape, o "Câmara sem
-  Papel") também têm as **propostas desde 1º/1/2025** e os projetos da prefeitura, lidos como uma pessoa lê o sistema
-  (`scripts/camaras/_agape.py`): a planilha da consulta de cada tipo e ano e a página de cada proposição, com a tramitação de
-  onde sai a situação (regras de cada Câmara, conferidas à mão); em Cuiabá, cuja página de proposição é muito pesada, a
-  situação vem primeiro da norma ligada no módulo de Legislação e da fase da lista, e a página só é lida quando isso não
-  basta. Teresina tem também os **gastos do mandato** (a verba de atividade parlamentar, pela consulta do Portal da
-  Transparência da Câmara, pela data do pagamento e sem a divisão por tipo) e Goiânia, os gastos da **cota parlamentar
-  (CEAP)**, com os tipos de despesa, pelo Portal da Transparência da Câmara (NúcleoGov). As propostas de Goiânia ficam fora:
-  estão só no SUAP, cujo robots.txt pede que robôs não leiam nada. Vitória, Teresina e Cuiabá não aceitam o robô do GitHub
-  e são atualizadas pelo `scripts/atualizar_do_brasil.py`; a primeira carga, com o cache vazio, leva perto de uma hora em
-  Vitória (1.007 páginas) e meia hora em Teresina e em Cuiabá, e depois cada rodada diária faz de 20 a 70 pedidos por
-  Câmara (ajudas comuns em `scripts/camaras/_capitais.py`: robots.txt, pausa, redirecionamento só para onde o robots.txt
-  deixa, fim da rodada e o bloco dos gastos).
-  Nas capitais que publicam as propostas só em páginas do site da Câmara (outubro de 2026): no **Rio de Janeiro**, o
-  sistema de proposições (Lotus Notes, aplicnt.camara.rj.gov.br) entrega as listas e a tramitação em JSON; a situação
-  vem do documento mais novo que decide (lei, veto, retirada, anexação, arquivo, rejeição ou aprovação) e a lei tem o
-  link do texto (contlei.nsf). Em **Porto Alegre**, a consulta de projetos do site (o CSV da busca e a página de cada
-  processo, com o documento da lei e o veto) e, nos **gastos do mandato**, a cota mensal de cada gabinete (QBM) do
-  Portal Transparência, pela API pública que a própria página usa, com a mesma conta da página ("Valores utilizados");
-  as votações nominais continuam. Em **Belo Horizonte**, a pesquisa de proposições do portal (a lista e a página de cada
-  proposição), respeitando os 10 s entre pedidos do robots.txt: a primeira carga leva umas 4 horas (no robô, umas 8
-  rodadas, sem publicar nada pela metade); depois, 4 a 7 minutos por dia. Leitura em `scripts/camaras/_paginas.py`
-  (comum), `_cmrj.py`, `_cmbh.py` e `_cmpa.py`; o estado de cada carga fica em `.cache/camaras/<IBGE>/`. **Curitiba**
-  fica só com a lista oficial: o sistema de proposições (SPL) pede um código de imagem (CAPTCHA) para entrar, e o site
-  não contorna CAPTCHA. Gastos que não entram: Rio (a cota fica em partes separadas — combustível, alimentação e carros
-  blindados —, sem os gastos de cada vereador mês a mês), Belo Horizonte (verba indenizatória extinta em 2015) e
-  Curitiba (só subsídio). Salvador, Belém e São Luís publicam só a lista oficial num formato que dá para ler (as
-  propostas só existem em páginas HTML); Recife, Maceió, Campo Grande, Florianópolis, Macapá, Aracaju e Palmas continuam
-  com a lista de eleitos do TSE (os motivos estão nas notas de cada uma). Em São Luís, o robots.txt do site da Câmara passou a
-  fechar a leitura para robôs (visto em 26/10/2026) e o coletor respeita: fica a lista da última leitura, de 23/10/2026, com
-  uma nota que explica isso (em `dados/camaras/2111300.json`, até a Câmara voltar a permitir a leitura).
+  hoje, a foto oficial (reduzida para 240 px em `img/pessoas/ver-*.jpg`) e a página oficial de cada pessoa; Recife,
+  Maceió, Campo Grande, Florianópolis, Macapá, Aracaju e Palmas continuam com a lista de eleitos do TSE (os motivos
+  estão nas notas de cada uma). **Propostas desde 1º/1/2025** em 17 capitais, e o que a **prefeitura** mandou à Câmara
+  em 16 delas (em Belém, as páginas do Executivo no site da Câmara estão vazias):
+  - pelo SAPL: Fortaleza, Manaus, Natal, João Pessoa, Porto Velho, Rio Branco e Boa Vista; pelo SPLegis: São Paulo;
+  - pelo SAGL (API JSON, `@@materias`, com a autoria e o andamento de cada matéria): Recife, nos perfis dos eleitos em
+    2024 (como as votações);
+  - pelo Processo Legislativo Eletrônico da Ágape, o "Câmara sem Papel" (`scripts/camaras/_agape.py`): Vitória, Teresina
+    e Cuiabá, lidos como uma pessoa lê o sistema — a planilha da consulta de cada tipo e ano e a página de cada
+    proposição, com a tramitação de onde sai a situação (regras de cada Câmara, conferidas à mão); em Cuiabá, cuja
+    página de proposição é muito pesada, a situação vem primeiro da norma ligada no módulo de Legislação e da fase da
+    lista;
+  - por páginas do site da Câmara: **Rio de Janeiro** (o sistema de proposições em Lotus Notes,
+    aplicnt.camara.rj.gov.br, entrega as listas e a tramitação em JSON; a situação vem do documento mais novo que decide
+    e a lei tem o link do texto, contlei.nsf), **Porto Alegre** (o CSV da busca e a página de cada processo, com o
+    documento da lei e o veto), **Belo Horizonte** (a pesquisa de proposições do portal, com os 10 s entre pedidos do
+    robots.txt), **Salvador** (o sistema legislativo, um ScriptCase em páginas HTML: a lista de cada ano e modalidade e
+    a janela de tramitação de cada proposição; o link de cada proposta é o PDF do texto) e **Belém** (as listas e a
+    página de cada projeto, com os autores; o site quase nunca mostra o andamento, e a situação fica "não classificada",
+    com uma nota no perfil).
+
+  Ficam sem propostas Curitiba (o sistema de proposições, SPL, pede um código de imagem, CAPTCHA, para entrar, e o site
+  não contorna CAPTCHA), Goiânia (as proposições estão só no SUAP, cujo robots.txt pede que robôs não leiam nada) e São
+  Luís (o robots.txt do site da Câmara passou a fechar a leitura para robôs, visto em 26/10/2026, e o coletor respeita:
+  fica a lista da última leitura, de 23/10/2026, com uma nota que explica isso, até a Câmara voltar a permitir a
+  leitura). **Votações nominais**: São Paulo (arquivo XML anual da Câmara), Porto Alegre (sistema de votações da
+  Câmara), Recife (SAGL) e, pelo SAPL, Porto Velho e Rio Branco. **Gastos do mandato**: São Paulo (Auxílio-Encargos
+  Gerais de Gabinete, pelo SisGV), Porto Alegre (a cota mensal de cada gabinete, QBM, do Portal Transparência, pela API
+  pública que a própria página usa, com a mesma conta da página, "Valores utilizados"), Goiânia (a cota parlamentar,
+  CEAP, com os tipos de despesa, pelo Portal da Transparência, NúcleoGov), Teresina (a verba de atividade parlamentar,
+  pela data do pagamento) e João Pessoa (a verba indenizatória da tabela do site da Câmara); nessas duas, só os totais,
+  porque a Câmara não divide os gastos por tipo. Os gastos não entram no Recife (o sistema da verba pede o teste "não
+  sou robô" a cada pesquisa), em Salvador (a tabela de despesas não liga com segurança cada pagamento a cada vereador e
+  mês), no Rio (a cota fica em partes separadas — combustível, alimentação e carros blindados —, sem os gastos de cada
+  vereador mês a mês), em Belo Horizonte (verba indenizatória extinta em 2015), em Curitiba (só subsídio), em Vitória
+  (sem cotas desde 2023), em Cuiabá (valor fixo por lei) e em Belém (declarações mensais de que não houve cotas).
+
+  Ajudas: `scripts/camaras/_capitais.py` (robots.txt, pausa, redirecionamento só para onde o robots.txt deixa, fim da
+  rodada e o bloco dos gastos), `_paginas.py` (comum ao Rio, a Belo Horizonte e a Porto Alegre), `_cmrj.py`, `_cmbh.py`,
+  `_cmpa.py`, `_capitais_c.py` (comum ao Recife, a Salvador e a Belém), `_scriptcase.py` (sessão de sistemas ScriptCase,
+  como o de Salvador) e `_jp_gastos.py`; o estado de cada carga fica em `.cache/camaras/<IBGE>/`. As capitais lidas em
+  páginas seguem o `Crawl-delay` de cada robots.txt (Belo Horizonte 10 s, Belém 5 s) ou esperam de 1,5 a 2 s (o servidor
+  do SAGL do Recife respondeu "503" com 1 s); a primeira carga leva de 1 a 8 rodadas do robô (Belo Horizonte, a mais
+  longa: umas 4 horas de pedidos) e, até terminar, fica publicado o de antes (o resumo marca `pendente` e a `etapa`).
+  Vitória, Teresina, Cuiabá, Curitiba, Porto Alegre e São Luís não aceitam o robô do GitHub e são atualizadas pelo
+  `scripts/atualizar_do_brasil.py`.
 - **As outras Câmaras com SAPL** (`python scripts/legislativos.py sapl`, no robô das cidades): uma linha por cidade em
   `scripts/camaras/sapl_cidades.json` (818 cidades; feita por `python scripts/descobrir_sapl.py --lista`, que testa
   `sapl.<cidade>.<uf>.leg.br` e os endereços que o mapa das cidades achou), sem um arquivo .py por cidade
@@ -231,10 +241,10 @@ maioria das cidades). **Rodízio:** `--parte hoje` roda as cidades do dia da sem
 mesmo dia: `int(IBGE) % 7 + 1`) e `--pendentes` junta as que ainda não terminaram a primeira carga (uma cidade que falha 3
 dias seguidos sai dessa fila e volta no dia dela).
 
-**Cobertura (27/10/2026):** 838 Câmaras com dados no site (791 com a lista oficial), 7.010 vereadores com
-propostas, 770 prefeitos com os projetos que mandaram à Câmara e 536 com leis ou vetos; **votações nominais em
+**Cobertura (27/10/2026):** 838 Câmaras com dados no site (791 com a lista oficial), 7.123 vereadores com
+propostas, 772 prefeitos com os projetos que mandaram à Câmara e 536 com leis ou vetos; **votações nominais em
 522 Câmaras** (75.472 votações e 5.733 vereadores; 519 com SAPL, mais São Paulo, Porto Alegre e Recife) e
-**gastos do mandato** em São Paulo, Teresina, Goiânia e Porto Alegre (152 vereadores). Todas as cidades da lista
+**gastos do mandato** em São Paulo, Teresina, Goiânia, Porto Alegre e João Pessoa (180 vereadores). Todas as cidades da lista
 terminaram a primeira carga; em 3 Câmaras com SAPL a leitura das votações não terminou (o robô continua). Por estado: ver
 `dados/legislativos.json` (`camaras.<IBGE>`) e as notas de cada `dados/camaras/<IBGE>.json`.
 
@@ -245,7 +255,10 @@ terminaram a primeira carga; em 3 Câmaras com SAPL a leitura das votações nã
   proposta no SAPL".
 - `python scripts/descobrir_sapl.py --lista` (não roda todo dia) refaz a lista das Câmaras com SAPL sem apagar os ajustes
   feitos à mão (`tipos`, `regras`, `tse_manual`, `incluir`, `excluir`, `vagas`, `notas`, `ativo`).
-- **Teste:** `python testes/interacao_camaras.py` (só olha as Câmaras que o `montar.py` já juntou à página da cidade).
+- **Testes:** `python testes/interacao_camaras.py` (só olha as Câmaras que o `montar.py` já juntou à página da cidade) e,
+  nas capitais lidas em páginas do site, `python testes/interacao_capitais_a.py` (Vitória, Teresina, Cuiabá e Goiânia),
+  `interacao_capitais_b.py` (Rio, Belo Horizonte, Curitiba e Porto Alegre) e `interacao_capitais_c.py` (Recife, Salvador,
+  Belém e João Pessoa): propostas, prefeito, notas da Câmara, gastos e votações onde houver, inglês e 320 px.
 
 ### Mapa das Câmaras Municipais e prefeituras (`dados/municipios/<UF>.json`)
 

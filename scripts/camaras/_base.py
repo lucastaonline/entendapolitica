@@ -551,11 +551,7 @@ NOTAS_VOTOS_GASTOS = {
         ("As votações de cada vereador não entram neste site: o sistema legislativo da Câmara não tem uma consulta das "
          "votações nominais (o voto de cada vereador).",
          "Each councilor's votes are not included on this site: the City Council's legislative system has no search for "
-         "roll-call votes (how each councilor voted)."),
-        ("Os gastos do mandato não entram neste site: a Câmara publica a Verba Compensatória de Atividade Parlamentar só "
-         "como pagamentos numa tabela de despesas do portal, sem um arquivo de dados abertos por vereador.",
-         "Office spending is not included on this site: the City Council publishes its office allowance only as payments in "
-         "an expenses table on its portal, with no open data file per councilor.")],
+         "roll-call votes (how each councilor voted).")],
     "1501402": [  # Belém
         ("As votações de cada vereador não entram neste site: a Câmara publica as votações nominais em arquivos PDF, sem "
          "dados abertos.",

@@ -203,11 +203,11 @@ maioria das cidades). **Rodízio:** `--parte hoje` roda as cidades do dia da sem
 mesmo dia: `int(IBGE) % 7 + 1`) e `--pendentes` junta as que ainda não terminaram a primeira carga (uma cidade que falha 3
 dias seguidos sai dessa fila e volta no dia dela).
 
-**Cobertura (@DATA@):** @CAMARAS@ Câmaras com dados abertos no site (@OFICIAIS@ com a lista oficial), @VER_PROP@ vereadores com
-propostas, @PREF_PROJ@ prefeitos com os projetos que mandaram à Câmara e @PREF_LV@ com leis ou vetos; **votações nominais em
-@CAM_VOT@ Câmaras** (@N_VOT@ votações e @VER_VOT@ vereadores; @SAPL_VOT@ com SAPL, mais São Paulo, Porto Alegre e Recife) e
-**gastos do mandato em São Paulo** (@VER_GASTOS@ vereadores). @PRIMEIRA@ cidades da lista ainda estão na primeira carga, e em
-@VOT_FALTA@ Câmaras com SAPL a leitura das votações ainda não terminou (o robô continua). Por estado: ver
+**Cobertura (27/10/2026):** 824 Câmaras com dados abertos no site (777 com a lista oficial), 6.652 vereadores com
+propostas, 750 prefeitos com os projetos que mandaram à Câmara e 523 com leis ou vetos; **votações nominais em
+268 Câmaras** (27.492 votações e 2.952 vereadores; 265 com SAPL, mais São Paulo, Porto Alegre e Recife) e
+**gastos do mandato em São Paulo** (55 vereadores). 14 cidades da lista ainda estão na primeira carga, e em
+371 Câmaras com SAPL a leitura das votações ainda não terminou (o robô continua). Por estado: ver
 `dados/legislativos.json` (`camaras.<IBGE>`) e as notas de cada `dados/camaras/<IBGE>.json`.
 
 - **Situação das propostas numa Câmara de uma casa só**: o "aprovado" da votação final vai para a sanção do prefeito

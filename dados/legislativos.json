@@ -950,7 +950,7 @@
   "4314902": {
    "casa": "CMPA",
    "nome": "Câmara Municipal de Porto Alegre",
-   "membros": 35,
+   "membros": 33,
    "propostas": 0,
    "cobertura": {
     "lista": true,
@@ -962,11 +962,11 @@
     "veiculo": "Câmara Municipal de Porto Alegre",
     "titulo": "Vereadores em exercício (portal oficial)",
     "url": "https://www.camarapoa.rs.gov.br/vereadores",
-    "data": "2026-10-23"
+    "data": "2026-10-26"
    },
    "semTse": 0,
-   "ok": false,
-   "erro": "RuntimeError: robots.txt de https://www.camarapoa.rs.gov.br não respondeu (URLError); nada é lido desse servidor nesta rodada"
+   "ok": true,
+   "conferido": "2026-10-26"
   },
   "5103403": {
    "casa": "CMC-MT",

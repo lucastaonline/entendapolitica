@@ -453,6 +453,11 @@
     "servicos graficos e informacionais": "Printing and information services",
     "tecnologia da informacao": "Information technology",
     "telecomunicacoes": "Telecommunications",
+    // Câmara Municipal de Porto Alegre (cota mensal dos gabinetes, QBM)
+    "indenizacao por uso de veiculo particular": "Reimbursement for using a private vehicle",
+    "reprografia": "Photocopying",
+    "viagens": "Travel",
+    "produtos e servicos de ti": "IT products and services",
     // Câmara Municipal de São Paulo (SisGV)
     "aplicativo ottcs - deslocamento": "Ride-hailing apps",
     "assinatura de jornais e revistas": "Newspaper and magazine subscriptions",

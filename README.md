@@ -147,9 +147,10 @@ As Câmaras Municipais entram de dois jeitos, sempre lendo só o sistema oficial
 
 - **Capitais** (`python scripts/legislativos.py camaras`, no robô diário): um coletor por Câmara (`scripts/camaras/c<IBGE>.py`).
   19 das 26 capitais têm a **lista oficial de quem está no cargo** (inclusive suplentes que assumiram), com o partido de
-  hoje, a foto oficial (reduzida para 240 px em `img/pessoas/ver-*.jpg`) e a página oficial de cada pessoa; 11 têm também as
+  hoje, a foto oficial (reduzida para 240 px em `img/pessoas/ver-*.jpg`) e a página oficial de cada pessoa; 14 têm também as
   **propostas desde 1º/1/2025** e o que a **prefeitura** mandou à Câmara: as 7 com SAPL (Fortaleza, Manaus, Natal, João
-  Pessoa, Porto Velho, Rio Branco e Boa Vista), São Paulo (SPLegis) e Vitória, Teresina e Cuiabá (Ágape, abaixo). São Paulo também tem as **votações nominais** (arquivo
+  Pessoa, Porto Velho, Rio Branco e Boa Vista), São Paulo (SPLegis), Vitória, Teresina e Cuiabá (Ágape, abaixo) e Rio de
+  Janeiro, Belo Horizonte e Porto Alegre (páginas do site, abaixo). São Paulo também tem as **votações nominais** (arquivo
   XML anual da Câmara) e os **gastos do mandato** (Auxílio-Encargos Gerais de Gabinete, pelo SisGV); Porto Alegre tem as
   votações nominais (sistema de votações da Câmara) e Recife, que continua com a lista de eleitos do TSE, as votações
   nominais pelo SAGL (API JSON). Vitória, Teresina e Cuiabá (Processo Legislativo Eletrônico da Ágape, o "Câmara sem
@@ -164,8 +165,22 @@ As Câmaras Municipais entram de dois jeitos, sempre lendo só o sistema oficial
   e são atualizadas pelo `scripts/atualizar_do_brasil.py`; a primeira carga, com o cache vazio, leva perto de uma hora em
   Vitória (1.007 páginas) e meia hora em Teresina e em Cuiabá, e depois cada rodada diária faz de 20 a 70 pedidos por
   Câmara (ajudas comuns em `scripts/camaras/_capitais.py`: robots.txt, pausa, redirecionamento só para onde o robots.txt
-  deixa, fim da rodada e o bloco dos gastos). Rio de Janeiro, Belo Horizonte, Salvador, Curitiba, Porto Alegre, Belém e
-  São Luís publicam só a lista oficial num formato que dá para ler (as propostas só existem em páginas HTML); Recife, Maceió, Campo Grande, Florianópolis, Macapá, Aracaju e Palmas continuam
+  deixa, fim da rodada e o bloco dos gastos).
+  Nas capitais que publicam as propostas só em páginas do site da Câmara (outubro de 2026): no **Rio de Janeiro**, o
+  sistema de proposições (Lotus Notes, aplicnt.camara.rj.gov.br) entrega as listas e a tramitação em JSON; a situação
+  vem do documento mais novo que decide (lei, veto, retirada, anexação, arquivo, rejeição ou aprovação) e a lei tem o
+  link do texto (contlei.nsf). Em **Porto Alegre**, a consulta de projetos do site (o CSV da busca e a página de cada
+  processo, com o documento da lei e o veto) e, nos **gastos do mandato**, a cota mensal de cada gabinete (QBM) do
+  Portal Transparência, pela API pública que a própria página usa, com a mesma conta da página ("Valores utilizados");
+  as votações nominais continuam. Em **Belo Horizonte**, a pesquisa de proposições do portal (a lista e a página de cada
+  proposição), respeitando os 10 s entre pedidos do robots.txt: a primeira carga leva umas 4 horas (no robô, umas 8
+  rodadas, sem publicar nada pela metade); depois, 4 a 7 minutos por dia. Leitura em `scripts/camaras/_paginas.py`
+  (comum), `_cmrj.py`, `_cmbh.py` e `_cmpa.py`; o estado de cada carga fica em `.cache/camaras/<IBGE>/`. **Curitiba**
+  fica só com a lista oficial: o sistema de proposições (SPL) pede um código de imagem (CAPTCHA) para entrar, e o site
+  não contorna CAPTCHA. Gastos que não entram: Rio (a cota fica em partes separadas — combustível, alimentação e carros
+  blindados —, sem os gastos de cada vereador mês a mês), Belo Horizonte (verba indenizatória extinta em 2015) e
+  Curitiba (só subsídio). Salvador, Belém e São Luís publicam só a lista oficial num formato que dá para ler (as
+  propostas só existem em páginas HTML); Recife, Maceió, Campo Grande, Florianópolis, Macapá, Aracaju e Palmas continuam
   com a lista de eleitos do TSE (os motivos estão nas notas de cada uma). Em São Luís, o robots.txt do site da Câmara passou a
   fechar a leitura para robôs (visto em 26/10/2026) e o coletor respeita: fica a lista da última leitura, de 23/10/2026, com
   uma nota que explica isso (em `dados/camaras/2111300.json`, até a Câmara voltar a permitir a leitura).
@@ -216,8 +231,8 @@ maioria das cidades). **Rodízio:** `--parte hoje` roda as cidades do dia da sem
 mesmo dia: `int(IBGE) % 7 + 1`) e `--pendentes` junta as que ainda não terminaram a primeira carga (uma cidade que falha 3
 dias seguidos sai dessa fila e volta no dia dela).
 
-**Cobertura (27/10/2026):** 824 Câmaras com dados abertos no site (777 com a lista oficial), 6.728 vereadores com
-propostas, 753 prefeitos com os projetos que mandaram à Câmara e 523 com leis ou vetos; **votações nominais em
+**Cobertura (27/10/2026):** 824 Câmaras com dados abertos no site (777 com a lista oficial), 6.853 vereadores com
+propostas, 756 prefeitos com os projetos que mandaram à Câmara e 523 com leis ou vetos; **votações nominais em
 268 Câmaras** (27.492 votações e 2.952 vereadores; 265 com SAPL, mais São Paulo, Porto Alegre e Recife) e
 **gastos do mandato em São Paulo** (55 vereadores). 14 cidades da lista ainda estão na primeira carga, e em
 371 Câmaras com SAPL a leitura das votações ainda não terminou (o robô continua). Por estado: ver

@@ -148,17 +148,17 @@ async def main():
         ok("São Paulo: a nota também em inglês", "co-signed" in await pg.locator("#propostas").inner_text())
 
         # 5. cidade só com a lista oficial (sem propostas): perfil com link oficial e "Onde ver mais" (sem "Em breve")
-        v = cidade("3106200").get("vereadores") or {}
-        await pg.goto(BASE + "cidade.html?ibge=3106200&lang=pt", wait_until="networkidle")
+        v = cidade("4106902").get("vereadores") or {}
+        await pg.goto(BASE + "cidade.html?ibge=4106902&lang=pt", wait_until="networkidle")
         await pg.wait_for_timeout(1200)
         n = await pg.locator("#casa-ver .pessoa-card").count()
-        ok("Belo Horizonte: lista oficial com todos", v.get("oficial") and n == len(v.get("membros") or []) == 41, f"{n}")
+        ok("Curitiba: lista oficial com todos", v.get("oficial") and n == len(v.get("membros") or []) == 38, f"{n}")
         sup = next((x for x in v.get("membros") or [] if x.get("exercicio")), (v.get("membros") or [{}])[0])
         await pg.goto(BASE + f"pessoa.html?id={sup['id']}&lang=pt", wait_until="networkidle")
         await pg.wait_for_timeout(1000)
         corpo = await pg.locator("#perfil").inner_text()
         ok("perfil só com a lista: link oficial e o quadro \"Onde ver mais\" (sem \"Em breve\")",
-           await pg.locator('.contatos a[href*="cmbh.mg.gov.br"]').count() == 1 and "Em breve" not in corpo and "Onde ver mais" in corpo)
+           await pg.locator('.contatos a[href*="cmc.pr.gov.br"]').count() == 1 and "Em breve" not in corpo and "Onde ver mais" in corpo)
 
         # 6. as capitais com coletor e uma amostra das cidades com SAPL: a página da cidade abre e usa a lista oficial.
         # Só as Câmaras que o montar.py já juntou à página (uma Câmara nova entra na página na próxima rodada do montar).

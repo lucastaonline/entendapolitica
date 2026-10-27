@@ -9452,10 +9452,10 @@
    "casa": "CMBH",
    "nome": "Câmara Municipal de Belo Horizonte",
    "membros": 41,
-   "propostas": 0,
+   "propostas": 884,
    "cobertura": {
     "lista": true,
-    "propostas": false,
+    "propostas": true,
     "votacoes": false,
     "gastos": false
    },
@@ -9465,6 +9465,12 @@
     "url": "https://www.cmbh.mg.gov.br/vereadores",
     "data": "2026-10-27"
    },
+   "prefeito": {
+    "propostas": 58,
+    "leis": null,
+    "vetos": null
+   },
+   "requisicoes": 0,
    "semTse": 0,
    "ok": true,
    "conferido": "2026-10-27"
@@ -14044,10 +14050,10 @@
    "casa": "CMRJ",
    "nome": "Câmara Municipal do Rio de Janeiro",
    "membros": 51,
-   "propostas": 0,
+   "propostas": 2729,
    "cobertura": {
     "lista": true,
-    "propostas": false,
+    "propostas": true,
     "votacoes": false,
     "gastos": false
    },
@@ -14057,6 +14063,12 @@
     "url": "https://www.camara.rio/vereadores/quem-sao",
     "data": "2026-10-27"
    },
+   "prefeito": {
+    "propostas": 4,
+    "leis": null,
+    "vetos": null
+   },
+   "requisicoes": 15,
    "semTse": 0,
    "ok": true,
    "conferido": "2026-10-27"
@@ -16807,11 +16819,11 @@
     "veiculo": "Câmara Municipal de Curitiba",
     "titulo": "Conheça os vereadores (portal oficial)",
     "url": "https://www.cmc.pr.gov.br/vereadores/conheca-os-vereadores",
-    "data": "2026-10-26"
+    "data": "2026-10-27"
    },
    "semTse": 0,
-   "ok": false,
-   "erro": "RuntimeError: Falha ao baixar https://www.cmc.pr.gov.br/vereadores/conheca-os-vereadores: HTTP Error 403: Forbidden"
+   "ok": true,
+   "conferido": "2026-10-27"
   },
   "4107538": {
    "casa": "CMERO",
@@ -20465,25 +20477,30 @@
    "casa": "CMPA",
    "nome": "Câmara Municipal de Porto Alegre",
    "membros": 33,
-   "propostas": 0,
+   "propostas": 1052,
    "cobertura": {
     "lista": true,
-    "propostas": false,
+    "propostas": true,
     "votacoes": true,
-    "gastos": false
+    "gastos": true
    },
    "fonte": {
     "veiculo": "Câmara Municipal de Porto Alegre",
     "titulo": "Vereadores em exercício (portal oficial)",
     "url": "https://www.camarapoa.rs.gov.br/vereadores",
-    "data": "2026-10-26"
+    "data": "2026-10-27"
    },
    "votacoes": 611,
+   "vereadoresComGastos": 31,
+   "prefeito": {
+    "propostas": 153,
+    "leis": null,
+    "vetos": null
+   },
+   "requisicoes": 2,
    "semTse": 0,
-   "requisicoes": 1,
-   "ok": false,
-   "conferido": "2026-10-26",
-   "erro": "RuntimeError: robots.txt de https://www.camarapoa.rs.gov.br não respondeu (URLError); nada é lido desse servidor nesta rodada"
+   "ok": true,
+   "conferido": "2026-10-27"
   },
   "4315313": {
    "casa": "CM",

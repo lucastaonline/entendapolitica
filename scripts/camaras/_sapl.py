@@ -78,6 +78,17 @@ LEIS_SALTO = 50          # um salto de mais de 50 números separa outra numeraç
 LEIS_RECESSO_DIAS = 45   # no começo do mandato (recesso de janeiro), dias sem lei que não contam como falta
 LEIS_LAG_DIAS = 15       # no fim, o atraso normal entre a sanção e o cadastro da lei no SAPL (não conta como falta)
 MAT, TRAM, NORMA = "/api/materia/materialegislativa/", "/api/materia/tramitacao/", "/api/norma/normajuridica/"
+REG, VOTO = "/api/sessao/registrovotacao/", "/api/sessao/votoparlamentar/"
+ORDEM, EXPEDIENTE, TIPO_RES = "/api/sessao/ordemdia/", "/api/sessao/expedientemateria/", "/api/sessao/tiporesultadovotacao/"
+# texto do registro de votação: "Ordem: Ordem do Dia/Expediente: 1 - Projeto de Lei Ordinária nº 723 de 2016 em 10ª Ordinária ..."
+_REGISTRO_TXT = re.compile(r"\d+\s*-\s*(.+?)\s+n[º°o]\.?\s*\d+\s*(?:de|/)\s*\d{4}")
+ESCOPO_VOTOS = ("Votações nominais (em que o voto de cada vereador fica registrado) de projetos, emendas e vetos no Plenário "
+                "desde 1º/1/2025, segundo o sistema oficial da Câmara (SAPL). Votações de requerimentos, indicações, moções e "
+                "outros documentos, e as que não decidiram a proposta (adiamento, pedido de vista), não entram.",
+                "Roll-call votes (where each councilor's vote is recorded) on bills, amendments and vetoes in the full City "
+                "Council since January 1, 2025, according to the City Council's official system (SAPL). Votes on requests, "
+                "recommendations, motions and other documents, and votes that did not decide on the proposal (postponing it, "
+                "asking for more time to review it), are not included.")
 MESES = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro",
          "dezembro"]
 MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November",
@@ -126,6 +137,25 @@ def status_de_veto(descricao: str | None) -> bool:
         return False
     return not re.search(r"sancao\s*(ou|/|e|,)\s*(o |a )?vet|prazo\s*(de|para)\s*(a |o )?(sancao|vet)|sem vet|nao (foi )?vetad|"
                          r"nao houve vet|aguardando (a )?(sancao|prazo)", t)
+
+
+def voto_normal(voto: str | None) -> str:
+    """O voto como o perfil entende (os mesmos códigos do Congresso): Sim, Não, Abstenção, NR (não votou), NCom (ausente),
+    PS (presidia). Outro texto fica como a Câmara escreveu."""
+    t = B.norm(voto)
+    if t in ("sim", "favoravel", "a favor"):
+        return "Sim"
+    if t in ("nao", "contrario", "contra"):
+        return "Não"
+    if t.startswith("absten"):
+        return "Abstenção"
+    if t.startswith("nao vot") or t in ("nao registrou voto", "nr"):
+        return "NR"
+    if t.startswith("ausen"):
+        return "NCom"
+    if t.startswith("presid"):
+        return "PS"
+    return (voto or "").strip() or "NR"
 
 
 def eh_lei(t: dict) -> bool:
@@ -206,7 +236,8 @@ class Sapl:
                  tipos: dict[str, str | None] | None = None, regras: list | None = None, tse_manual: dict | None = None,
                  incluir: set | None = None, excluir: set | dict | None = None, pausa: float = 0.5, notas: list | None = None,
                  primeiro_por_ordem: bool = True, fotos_locais: bool | None = None, sem_lista_se_falhar: bool = False,
-                 vagas: tuple[int, int] | None = None, prefeito: bool = True, orcamento: int | None = None):
+                 vagas: tuple[int, int] | None = None, prefeito: bool = True, orcamento: int | None = None,
+                 nota_gastos: tuple[str, str] | None = None):
         """tipos = {sigla oficial do tipo: tipo comum ou None} para corrigir a escolha automática pela descrição;
         regras = [(expressão, status, chave de _base.TXT ou None)] próprias da Câmara (vêm antes das comuns);
         tse_manual = {id do parlamentar no SAPL: SQ do TSE ou "-"} conferidos à mão;
@@ -220,8 +251,11 @@ class Sapl:
         vagas = (mínimo, máximo) aceitos na conferência, quando conferido à mão (padrão: exatamente as vagas; capitais
         sem_lista_se_falhar=False: de 80% das vagas até as vagas + 1, como na primeira rodada);
         prefeito: junta os projetos da prefeitura e as leis e vetos do mandato (pref-<IBGE>);
-        orcamento: pedidos nesta rodada (padrão ORCAMENTO)."""
+        orcamento: pedidos nesta rodada (padrão ORCAMENTO);
+        nota_gastos: (pt, en) no lugar da nota padrão sobre os gastos do mandato (o SAPL não tem), quando a Câmara os publica
+        em outro lugar."""
         self.ibge, self.uf, self.base = ibge, uf, base.rstrip("/")
+        self.nota_gastos = tuple(nota_gastos) if nota_gastos else None
         self.casa, self.casa_en, self.sigla, self.site = casa, casa_en, sigla, site
         self.prefixo = prefixo or f"cm{ibge}"
         self.tipos_fixos = tipos or {}
@@ -909,6 +943,304 @@ class Sapl:
         h = hoje()
         return sorted(int(m) for m, d in e["vetos"].items() if B.INICIO <= d <= h and m not in todas)
 
+    # ------------------------------------------------------------ votações nominais (o voto de cada vereador)
+    def tipos_votacao(self, tipos: dict, tipos_v: set[int]) -> set[int]:
+        """Tipos de matéria cujas votações nominais entram: os projetos (tipos), os vetos e as emendas, substitutivos e
+        redações finais (o texto dos projetos). Requerimentos, indicações, moções e outros documentos ficam fora: em muitas
+        Câmaras quase tudo é votado no painel, e eles seriam a maior parte da lista."""
+        extra = {t["id"] for t in self.tipos_materia() if re.search(r"\bemenda|substitutiv|redacao final", B.norm(t.get("descricao")))}
+        return set(tipos) | set(tipos_v) | extra
+
+    def tipos_resultado(self) -> dict[int, tuple[str, str | None]]:
+        """{id: (nome, natureza)} dos tipos de resultado de votação ("A" = aprovado, "R" = rejeitado, "" = nenhum, como
+        adiamento e pedido de vista; None = versão do SAPL sem esse campo)."""
+        return {t["id"]: ((t.get("nome") or "").strip(), t.get("natureza")) for t in
+                self.todos(TIPO_RES, cache="tipos-resultado", idade_h=FIXO_H)}
+
+    @staticmethod
+    def resultado_votacao(nome: str, natureza: str | None) -> str | None:
+        """O resultado para o site, ou None se a votação não decidiu a matéria (adiamento, pedido de vista, resultado
+        desconhecido). Vale o nome oficial ("Aprovado em 2ª votação", "Veto mantido"), sem a caixa alta; nome sem
+        "aprovado"/"rejeitado" (como "Acatado"): o da natureza."""
+        nome = re.sub(r"\s+", " ", nome or "").strip().rstrip(".").strip()
+        if sum(c.isupper() for c in nome) > sum(c.islower() for c in nome):  # quase tudo em caixa alta
+            nome = nome.lower()
+        nome = nome[:1].upper() + nome[1:]
+        n = B.norm(nome)
+        sim, nao = r"aprovad|mantid|acatad|acolhid", r"rejeitad|reprovad|derrubad"
+        if natureza is None:  # SAPL antigo: só pelo nome
+            natureza = "A" if re.search(sim, n) and not re.search(nao, n) else "R" if re.search(nao, n) else ""
+        if natureza not in ("A", "R"):
+            return None
+        if not re.search(sim if natureza == "A" else nao, n):
+            return "Aprovado" if natureza == "A" else "Rejeitado"
+        if re.fullmatch(r"(aprovad|rejeitad|reprovad)[oa]", n):
+            return "Aprovado" if natureza == "A" else "Rejeitado"
+        return nome
+
+    def _tipo_do_registro(self, r: dict, por_texto: dict[str, int], todas: dict, mats: dict) -> int | None:
+        """O tipo da matéria votada: da lista guardada, do cadastro pedido antes ou do texto do registro ("... 1 - Projeto de
+        Lei Ordinária nº 723 de 2016 em ..."); None = é preciso pedir a matéria."""
+        mid = str(r.get("materia"))
+        if mid in todas:
+            return todas[mid].get("tipo")
+        if mid in mats:
+            return mats[mid][0]
+        m = _REGISTRO_TXT.search(r.get("__str__") or "")
+        return por_texto.get(B.norm(m.group(1))) if m else None
+
+    def _guardar_registros(self, v: dict, regs: list[dict], todas: dict, tipos_ok: set[int]) -> list[str]:
+        """Guarda os registros de votação desde 2025 das matérias de tipos_ok (pede o cadastro das matérias de tipo
+        desconhecido, 100 por vez). Devolve os ids guardados."""
+        por_texto = {B.norm(t.get("descricao")): t["id"] for t in self.tipos_materia() if t.get("descricao")}
+        regs = [r for r in regs if str(r.get("data_hora") or "")[:10] >= B.INICIO and r.get("materia")]
+        faltam = sorted({int(r["materia"]) for r in regs if self._tipo_do_registro(r, por_texto, todas, v["mat"]) is None})
+        self.materias_votadas(v, faltam)
+        out = []
+        for r in regs:
+            if self._tipo_do_registro(r, por_texto, todas, v["mat"]) not in tipos_ok:
+                continue
+            rid = str(r["id"])
+            obs = re.sub(r"\s+", " ", re.sub(r"<[^>]+>|&nbsp;", " ", r.get("observacao") or "")).strip()
+            v["reg"][rid] = [r["materia"], r.get("ordem"), r.get("expediente"), r.get("tipo_resultado_votacao"),
+                             r.get("numero_votos_sim"), r.get("numero_votos_nao"), r.get("numero_abstencoes"),
+                             str(r.get("data_hora") or "")[:10], obs[:300]]
+            out.append(rid)
+        # o número, o ano e a ementa das matérias votadas que não estão na lista guardada (projetos de antes de 2025, vetos)
+        self.materias_votadas(v, sorted({int(v["reg"][r][0]) for r in out if str(v["reg"][r][0]) not in todas}))
+        return out
+
+    def materias_votadas(self, v: dict, ids: list[int]) -> None:
+        """Cadastro (tipo, número, ano e ementa) das matérias votadas que não estão na lista guardada (projetos de antes de
+        2025, vetos, emendas), 100 por pedido. SAPL que ignora id__in: o tipo fica desconhecido e a votação não entra."""
+        faltam = [i for i in ids if str(i) not in v["mat"]]
+        for i in range(0, len(faltam), LOTE):
+            lote = faltam[i:i + LOTE]
+            pedidos = set(lote)
+            try:
+                rows = self.todos(MAT, {"id__in": ",".join(map(str, lote))}, checar=lambda x: x.get("id") in pedidos)
+            except FiltroIgnorado:
+                return
+            for x in rows:
+                v["mat"][str(x["id"])] = [x.get("tipo"), x.get("numero"), x.get("ano"), (x.get("ementa") or "").strip()[:600]]
+
+    def _votos_de(self, v: dict, rids: list[str]) -> None:
+        """O voto de cada vereador (votoparlamentar) dos registros que ainda não têm, 100 registros por vez (votacao__in)."""
+        faltam = [int(r) for r in rids if r not in v["votos"]]
+        for i in range(0, len(faltam), LOTE):
+            lote = faltam[i:i + LOTE]
+            rows = self.por_lotes(VOTO, "votacao", lote, cache="votos-lote")
+            por: dict[str, list] = {str(r): [] for r in lote}
+            for x in rows:
+                por.setdefault(str(x.get("votacao")), []).append([x.get("parlamentar"), x.get("voto")])
+            v["votos"].update(por)
+
+    def _itens_de(self, v: dict) -> None:
+        """A sessão e a data de cada item votado (ordem do dia ou expediente), 100 por pedido, para o endereço da votação na
+        página da Câmara. SAPL que ignora id__in: vale a data do registro e a página da matéria."""
+        if v.get("sem_itens"):
+            return
+        for chave, caminho, campo in (("o", ORDEM, 1), ("x", EXPEDIENTE, 2)):
+            ids = sorted({int(r[campo]) for rid, r in v["reg"].items() if r[campo] and v["votos"].get(rid)
+                          and f"{chave}{r[campo]}" not in v["itens"]})
+            for i in range(0, len(ids), LOTE):
+                lote = ids[i:i + LOTE]
+                pedidos = set(lote)
+                try:
+                    rows = self.todos(caminho, {"id__in": ",".join(map(str, lote))}, checar=lambda x: x.get("id") in pedidos)
+                except FiltroIgnorado:
+                    v["sem_itens"] = True
+                    return
+                for x in rows:
+                    v["itens"][f"{chave}{x['id']}"] = [x.get("sessao_plenaria"), str(x.get("data_ordem") or "")[:10]]
+
+    def votacoes(self, e: dict, todas: dict[str, dict], tipos_ok: set[int]) -> None:
+        """e["votacoes"]: as votações nominais desde 1º/1/2025 das matérias de tipos_ok (Sapl.tipos_votacao), com o voto de
+        cada vereador. A primeira vez (e a cada LISTA_COMPLETA_DIAS), a lista inteira desde 2025, por um de dois caminhos,
+        o que gastar menos pedidos: pelos registros de votação (registrovotacao; depois os votos de cada um) ou pelos votos
+        (votoparlamentar; depois o registro de cada votação), conforme o tamanho das duas listas. A lista inteira é montada
+        à parte (e["votacoes"]["nova"], guardada no estado a cada lote: uma leitura de várias rodadas continua de onde
+        parou) e só substitui a de antes quando termina. Depois, só o que foi registrado desde a última rodada."""
+        v = e.setdefault("votacoes", {})
+        for k in ("reg", "votos", "itens", "mat"):
+            v.setdefault(k, {})
+        if v.get("sem_filtro"):
+            return
+        h = hoje()
+        chk = lambda d: (lambda x: str(x.get("data_hora") or "")[:10] >= d)  # noqa: E731
+        try:
+            velha = (v.get("lista_em") or "") < _menos_dias(h, LISTA_COMPLETA_DIAS)
+            if velha or v.get("nova"):
+                w = v.setdefault("nova", {"ini": h, "reg": {}, "votos": {}, "fora": []})
+                p_reg = self.get(REG, {"data_hora__gte": B.INICIO, "page": 1, "page_size": LOTE}, cache="reg-lista-p1", idade_h=SEMANA_H)
+                p_vot = self.get(VOTO, {"data_hora__gte": B.INICIO, "page": 1, "page_size": LOTE}, cache="votos-lista-p1", idade_h=SEMANA_H)
+                if not all(chk(B.INICIO)(x) for x in (p_reg.get("results") or []) + (p_vot.get("results") or [])):
+                    raise FiltroIgnorado("data_hora__gte")
+                n_reg = (p_reg.get("pagination") or {}).get("total_entries") or 0
+                n_vot = (p_vot.get("pagination") or {}).get("total_entries") or 0
+                # a lista à parte usa o cadastro das matérias e os itens da pauta já guardados (valem para as duas)
+                tmp = {"reg": w["reg"], "votos": w["votos"], "mat": v["mat"], "itens": v["itens"], "sem_itens": v.get("sem_itens")}
+                if n_vot:
+                    modo = w.setdefault("modo", "votos" if n_vot < 1.4 * n_reg else "reg")
+                    if modo == "reg":
+                        regs = self.todos(REG, {"data_hora__gte": B.INICIO}, cache="reg-lista", idade_h=SEMANA_H, max_paginas=400,
+                                          checar=chk(B.INICIO))
+                        self.guardar_estado(e)
+                        self._votos_de(tmp, self._guardar_registros(tmp, regs, todas, tipos_ok))
+                    else:
+                        votos = self.todos(VOTO, {"data_hora__gte": B.INICIO}, cache="votos-lista", idade_h=SEMANA_H, max_paginas=400,
+                                           checar=chk(B.INICIO))
+                        self._votos_pelos_votos(tmp, votos, todas, tipos_ok, fora=w["fora"])
+                else:
+                    w["modo"] = "votos"  # nenhum voto nominal desde 2025: nas próximas rodadas, só os votos novos (1 pedido)
+                self._itens_de(tmp)
+                v.update(reg=w["reg"], votos=w["votos"], modo=w["modo"], n_reg=n_reg, n_votos=n_vot, lista_em=h,
+                         desde=min(w["ini"], h), sem_itens=tmp.get("sem_itens"))
+                v.pop("nova", None)
+            elif (v.get("desde") or "") < h:
+                ini = _menos_dias(v["desde"], FOLGA_DIAS)
+                if v.get("modo") == "reg":
+                    regs = self.todos(REG, {"data_hora__gte": ini}, max_paginas=60, checar=chk(ini))
+                    novos = self._guardar_registros(v, regs, todas, tipos_ok)
+                    for rid in novos:  # registro corrigido ou novo: os votos de novo
+                        v["votos"].pop(rid, None)
+                    self._votos_de(v, novos)
+                else:
+                    votos = self.todos(VOTO, {"data_hora__gte": ini}, max_paginas=60, checar=chk(ini))
+                    self._votos_pelos_votos(v, votos, todas, tipos_ok)
+                self._itens_de(v)
+                v["desde"] = h
+            if any(v["votos"].values()):
+                self.tipos_resultado()  # (guardado por 30 dias) o catálogo usa
+        except MuitasPaginas:
+            v.pop("nova", None)
+            v.update(sem_filtro=True, motivo="muitas")
+        except FiltroIgnorado:
+            v.pop("nova", None)
+            v["sem_filtro"] = True
+
+    def _votos_pelos_votos(self, v: dict, votos: list[dict], todas: dict, tipos_ok: set[int], fora: list | None = None) -> None:
+        """Caminho pelos votos: agrupa os votos por registro, pede os registros (100 por vez) e guarda os de tipos_ok, lote a
+        lote (uma leitura pela metade continua dali). fora = os registros já vistos que não entram (requerimentos etc.),
+        para não pedir de novo na rodada seguinte."""
+        por: dict[str, list] = {}
+        for x in votos:
+            por.setdefault(str(x.get("votacao")), []).append([x.get("parlamentar"), x.get("voto")])
+        fora = fora if fora is not None else []
+        ja = set(v["reg"]) | {str(r) for r in fora}
+        rids = sorted(int(r) for r in por if r != "None" and r not in ja)
+        for i in range(0, len(rids), LOTE):
+            lote = rids[i:i + LOTE]
+            pedidos = set(lote)
+            nome = f"reg-id-{hashlib.sha1(','.join(map(str, lote)).encode()).hexdigest()[:12]}"
+            regs = self.todos(REG, {"id__in": ",".join(map(str, lote))}, cache=nome, idade_h=48,
+                              checar=lambda x: x.get("id") in pedidos)
+            guardados = set(self._guardar_registros(v, regs, todas, tipos_ok))
+            fora.extend(r for r in lote if str(r) not in guardados)
+        for rid, lst in por.items():
+            if rid in v["reg"]:
+                antes = {p for p, _ in v["votos"].get(rid) or []}
+                v["votos"][rid] = (v["votos"].get(rid) or []) + [x for x in lst if x[0] not in antes]
+
+    def catalogo_votacoes(self, e: dict, todas: dict[str, dict], tipos: dict) -> tuple[dict, dict[int, list]]:
+        """({chave: votação} para o arquivo da cidade, {id do parlamentar no SAPL: [[chave, voto], ...]}): só as votações
+        nominais (com voto de cada vereador) desde 1º/1/2025. Placar = o publicado pela Câmara no registro; se a soma dos
+        votos for diferente, vai junto o "aviso" (como no Congresso)."""
+        v = e.get("votacoes") or {}
+        if not v.get("reg"):
+            return {}, {}
+        try:
+            res = self.tipos_resultado()
+        except SemOrcamento:  # a rodada acabou: vale a lista guardada, de qualquer idade
+            arq = self.pasta / "http" / "tipos-resultado-p1.json"
+            guardada = json.loads(arq.read_text(encoding="utf-8")) if arq.exists() else {}
+            res = {t["id"]: ((t.get("nome") or "").strip(), t.get("natureza")) for t in
+                   (guardada.get("results") if isinstance(guardada, dict) else guardada) or []}
+            if not res:
+                return {}, {}
+        siglas = {t["id"]: (t.get("sigla") or "").strip() for t in self.tipos_materia()}
+        cat, por_parl = {}, {}
+        for rid, r in v["reg"].items():
+            vs = v["votos"].get(rid) or []
+            if not vs:
+                continue  # votação simbólica: só o resultado
+            mid, oid, xid, tres, s, n, a, dh, obs = r
+            resultado = self.resultado_votacao(*res.get(tres, ("", "")))
+            if not resultado:
+                continue  # adiamento, pedido de vista: a votação não decidiu a matéria
+            item = v["itens"].get(f"o{oid}" if oid else f"x{xid}") or [None, None]
+            data = item[1] or dh
+            if not data or data < B.INICIO:
+                continue
+            m = todas.get(str(mid)) or {}
+            if m:
+                tipo, num, ano, ementa = m.get("tipo"), m.get("numero"), m.get("ano"), m.get("ementa")
+            else:
+                tipo, num, ano, ementa = (v["mat"].get(str(mid)) or [None, None, None, None])
+            sig = siglas.get(tipo) or ((tipos.get(tipo) or ("", "", ""))[1])
+            if item[0]:
+                url = f"{self.base}/sessao/{item[0]}/votacao-nominal-transparencia/{oid or xid}/{mid}?materia={'ordem' if oid else 'expediente'}"
+            else:
+                url = f"{self.base}/materia/{mid}"
+            chave = f"{self.prefixo}-vot:{rid}"
+            oficial = {"Sim": s or 0, "Não": n or 0, "Abstenção": a or 0}
+            # a mesma pessoa duas vezes na mesma votação: vale o voto que bate com o placar (B.votos_unicos)
+            votos = B.votos_unicos(((pid, voto_normal(voto)) for pid, voto in vs if pid is not None), oficial)
+            contado = {k: sum(1 for x in votos.values() if x == k) for k in oficial}
+            for pid, vn in votos.items():
+                por_parl.setdefault(pid, []).append([chave, vn])
+            ementa = re.sub(r"\s+", " ", ementa or "").strip()
+            desc = f"{ementa} (Observação do registro da votação: {obs})" if ementa and obs else ementa or obs or None
+            x = {"data": data, "proposta": f"{sig} {num}/{ano}".strip() if num and ano else (sig or None),
+                 "propostaId": f"{self.prefixo}:{mid}", "descricao": desc,
+                 "resultado": resultado, "placar": dict(oficial, total=sum(oficial.values())), "url": url}
+            if contado != oficial:
+                x["aviso"] = {"oficial": oficial, "contado": contado}
+            cat[chave] = x
+        for lst in por_parl.values():
+            lst.sort(key=lambda kv: (cat[kv[0]]["data"], kv[0]), reverse=True)
+        return dict(sorted(cat.items(), key=lambda kv: (kv[1]["data"], kv[0]), reverse=True)), por_parl
+
+    def notas_votacoes(self, e: dict, publicou: bool) -> list[tuple[str, str]]:
+        """As notas da Câmara sobre as votações (o que não entra e por quê) e sobre os gastos (o SAPL não tem)."""
+        v = e.get("votacoes") or {}
+        gastos = self.nota_gastos or (
+            "Os gastos do mandato de cada vereador não entram neste site: o sistema de dados abertos da Câmara (SAPL) "
+            "não tem esse dado.",
+            "Each councilor's office spending is not included on this site: the City Council's open data system (SAPL) "
+            "does not have it.")
+        if publicou:
+            return [gastos]
+        if not v.get("lista_em") and not v.get("sem_filtro"):
+            return [gastos]  # a leitura das votações ainda não terminou nenhuma vez: nada a dizer sobre elas
+        if v.get("motivo") == "muitas":
+            p = ("As votações de cada vereador não entram neste site: o SAPL desta Câmara tem mais votações desde 1º/1/2025 do que "
+                 "dá para ler respeitando o intervalo entre pedidos que o próprio sistema pede.",
+                 "Each councilor's votes are not included on this site: this City Council's SAPL system has more votes since "
+                 "January 1, 2025 than can be read while respecting the interval between requests the system itself asks for.")
+        elif v.get("sem_filtro"):
+            p = ("As votações de cada vereador não entram neste site: o SAPL desta Câmara não deixa pesquisar as votações por data.",
+                 "Each councilor's votes are not included on this site: this City Council's SAPL system does not allow searching "
+                 "the votes by date.")
+        elif not v.get("n_reg"):
+            p = ("As votações de cada vereador não entram neste site: o SAPL desta Câmara não tem as votações do Plenário desde "
+                 "1º/1/2025.",
+                 "Each councilor's votes are not included on this site: this City Council's SAPL system has no record of the "
+                 "full Council's votes since January 1, 2025.")
+        elif not v.get("n_votos"):
+            p = ("As votações de cada vereador não entram neste site: desde 1º/1/2025, o SAPL desta Câmara registra o resultado "
+                 "de cada votação, mas não o voto de cada vereador.",
+                 "Each councilor's votes are not included on this site: since January 1, 2025, this City Council's SAPL system "
+                 "has recorded the result of each vote, but not how each councilor voted.")
+        else:
+            p = ("As votações de cada vereador não entram neste site: desde 1º/1/2025, o SAPL desta Câmara tem o voto de cada "
+                 "vereador só em votações que ficam fora (de requerimentos, indicações, moções e outros documentos, ou que não "
+                 "decidiram a proposta, como o adiamento).",
+                 "Each councilor's votes are not included on this site: since January 1, 2025, this City Council's SAPL system "
+                 "has each councilor's vote only in votes that are left out (on requests, recommendations, motions and other "
+                 "documents, or votes that did not decide on the proposal, such as postponing it).")
+        return [p, gastos]
+
     # ------------------------------------------------------------ o prefeito
     def executivo(self, inicio: str, tipos_prop: dict, todas: dict[str, dict], tipos_v: set[int], e: dict) -> tuple[dict | None, list]:
         """("executivo" do contrato ou None, notas da Câmara sobre o que ficou fora). inicio = começo do mandato de quem está
@@ -1114,12 +1446,20 @@ class Sapl:
         dados = {k: v for k, v in antes.items() if k != "id"}
         return (pid, dados), notas
 
-    def limpar_paginas(self) -> None:
+    def limpar_paginas(self, votos: bool = True) -> None:
         """Depois de uma carga completa: apaga as páginas guardadas só para uma carga pela metade continuar (listas inteiras
         e lotes de autoria e de tramitação), para o cache do robô ficar pequeno. Ficam as listas de referência (tipos,
-        situações, autores, legislaturas...), que valem por dias."""
+        situações, autores, legislaturas...), que valem por dias. votos=False: a leitura das votações continua na próxima
+        rodada, e as páginas dela ficam."""
+        apagar = r"mats-lista|mats-ano|normas-lista|normas-ano|aut|hist|vetos-ini" + (r"|reg-lista|votos-lista|votos-lote|reg-id" if votos else "")
         for arq in (self.pasta / "http").glob("*.json"):
-            if re.match(r"(mats-lista|mats-ano|normas-lista|normas-ano|aut|hist|vetos-ini)-", arq.name):
+            if re.match(rf"({apagar})-", arq.name):
+                arq.unlink(missing_ok=True)
+
+    def limpar_paginas_votos(self) -> None:
+        """Apaga as páginas guardadas da leitura das votações (a lista inteira recomeça do zero)."""
+        for arq in (self.pasta / "http").glob("*.json"):
+            if re.match(r"(reg-lista|votos-lista|votos-lote|reg-id)-", arq.name):
                 arq.unlink(missing_ok=True)
 
     def coletar(self) -> dict:
@@ -1175,7 +1515,31 @@ class Sapl:
             if self.com_prefeito:
                 etapa = "vetos do prefeito"
                 self.tipos_de(self.vetadas_fora(e, todas), parar=True)  # o tipo de cada matéria vetada (pedido uma vez só)
+            etapa = "votações"
+            votos_pela_metade = False
+            try:
+                self.votacoes(e, todas, self.tipos_votacao(tipos, tipos_v))
+            except SemOrcamento as motivo:
+                # a leitura da lista inteira das votações continua na próxima rodada (de onde parou); a cidade é publicada
+                # com as votações completas de antes (na primeira leitura, sem votações) e fica na fila diária
+                votos_pela_metade = True
+                self.guardar_estado(e)
+                log(f"  {self.sigla} {self.ibge}: votações nominais pela metade ({motivo}; {self.n_req} pedidos): continuam "
+                    "na próxima rodada; publica o resto")
+            except Exception as erro:  # as votações são um extra: um erro aqui não derruba o resto da cidade
+                # (ex.: a lista mudou de tamanho entre um dia e outro e uma página guardada aponta para uma que não existe
+                # mais, HTTP 404): a leitura da lista inteira recomeça do zero na próxima vez
+                (e.get("votacoes") or {}).pop("nova", None)
+                self.limpar_paginas_votos()
+                self.guardar_estado(e)
+                log(f"  {self.sigla} {self.ibge}: votações: {type(erro).__name__}: {str(erro)[:200]}; recomeçam na próxima "
+                    "rodada; publica o resto")
         except SemOrcamento as motivo:
+            if self.n_req == 0 and e.get("completo") is True:
+                # a rodada acabou antes do primeiro pedido desta cidade (começou no último minuto): nada mudou, e ela
+                # continua completa (não entra na fila diária de primeira carga por isso)
+                log(f"  {self.sigla} {self.ibge}: sem tempo para começar ({motivo}); fica para a próxima rodada")
+                return {"ok": True, "pendente": True, "etapa": etapa, "requisicoes": 0}
             e["completo"] = False
             e["parou_em"] = {"data": h, "etapa": etapa, "pedidos": self.n_req}
             self.guardar_estado(e)
@@ -1246,6 +1610,34 @@ class Sapl:
                     x["desde"] = mh["data_inicio_mandato"]
             extras[m["id"]] = x
 
+        # votações nominais: o voto de cada vereador (no perfil) e o que foi votado (catálogo no arquivo da cidade)
+        cat_vot, votos_parl = self.catalogo_votacoes(e, todas, tipos)
+        usadas: set[str] = set()
+        if cat_vot:
+            fonte_vot = fonte(self.casa, "SAPL: votações nominais das sessões plenárias", f"{self.base}/sessao/pesquisar-sessao", h)
+            for parl, (m, d, v) in por_pid.items():
+                lst = votos_parl.get(parl) or []
+                if not lst or m["id"] not in extras:
+                    continue
+                resumo = {"total": len(lst)}
+                for k in ("Sim", "Não", "Abstenção"):
+                    resumo[k] = sum(1 for _, vt in lst if vt == k)
+                resumo["Outro"] = resumo["total"] - resumo["Sim"] - resumo["Não"] - resumo["Abstenção"]
+                extras[m["id"]]["votacoes"] = {"escopo": ESCOPO_VOTOS[0], "escopo_en": ESCOPO_VOTOS[1], "resumo": resumo,
+                                               "fonte": fonte_vot, "arquivo": f"dados/camaras/extras/{self.ibge}.json", "votos": lst}
+                extras[m["id"]]["fontes"].append(fonte_vot)
+                usadas.update(k for k, _ in lst)
+        elif (e.get("votacoes") or {}).get("nova"):
+            # a leitura da lista inteira das votações não terminou (no robô, que começa com o cache vazio, por exemplo):
+            # fica publicado o que já estava, para quem continua no cargo
+            cat_vot, blocos = B.votos_publicados(self.ibge)
+            for x_id, x in extras.items():
+                if x_id in blocos:
+                    x["votacoes"] = blocos[x_id]
+                    x["fontes"].append(blocos[x_id].get("fonte"))
+                    usadas.update(k for k, _ in blocos[x_id]["votos"])
+        cat_vot = {k: x for k, x in cat_vot.items() if k in usadas}
+
         pref, notas_pref = None, []
         if self.com_prefeito:
             try:
@@ -1253,25 +1645,22 @@ class Sapl:
             except Exception as erro:  # o que o prefeito fez é um extra: um erro aqui não derruba as propostas dos vereadores
                 log(f"  {self.sigla} {self.ibge}: prefeito: {type(erro).__name__}: {str(erro)[:200]}")
                 pref, notas_pref = self.prefeito_de_antes()
-        notas = list(self.notas_casa) + notas_extra + [
-            ("As votações de cada vereador e os gastos do mandato não entram neste site: o sistema de dados abertos da Câmara "
-             "(SAPL) não publica o voto de cada vereador nem os gastos.",
-             "Each councilor's votes and office spending are not included on this site: the City Council's open data system "
-             "(SAPL) does not publish individual votes or spending.")] + notas_pref
+        notas = list(self.notas_casa) + notas_extra + self.notas_votacoes(e, bool(cat_vot)) + notas_pref
         if tse.sem_ligacao:
             log(f"  {self.sigla} {self.ibge}: sem ligação com o TSE: {', '.join(tse.sem_ligacao)}")
         if problema:
             log(f"  {self.sigla} {self.ibge}: sem lista oficial ({problema}); propostas ligadas à lista do TSE")
-        cobertura = {"lista": oficial, "propostas": bool(autores), "votacoes": False, "gastos": False}
+        cobertura = {"lista": oficial, "propostas": bool(autores), "votacoes": bool(cat_vot), "gastos": False}
         casa = {"casa": self.casa, "casa_en": self.casa_en, "sigla": self.sigla, "site": self.site, "fonte": fonte_lista,
                 "sistema": "SAPL", "api": f"{self.base}/api/"}
         r = B.salvar(self.ibge, self.uf, casa, membros, extras, cobertura, notas, escopo, prefeito=pref, oficial=oficial,
-                     ids_validos=validos)
-        # só agora (a cidade foi publicada inteira) a carga conta como completa; um erro antes deixa a cidade na fila
-        e["completo"] = True
+                     ids_validos=validos, votacoes=cat_vot)
+        # só agora (a cidade foi publicada inteira) a carga conta como completa; um erro antes deixa a cidade na fila. Com
+        # as votações nominais pela metade, a cidade volta amanhã (_lista.pendentes) e as páginas delas ficam guardadas.
+        e["completo"] = not votos_pela_metade
         e.pop("parou_em", None)
         self.guardar_estado(e)
-        self.limpar_paginas()
+        self.limpar_paginas(votos=not votos_pela_metade)
         r["requisicoes"] = self.n_req
         r["semTse"] = len(tse.sem_ligacao)
         if problema:

@@ -452,7 +452,32 @@
     "servicos de entrega": "Delivery services",
     "servicos graficos e informacionais": "Printing and information services",
     "tecnologia da informacao": "Information technology",
-    "telecomunicacoes": "Telecommunications"
+    "telecomunicacoes": "Telecommunications",
+    // Câmara Municipal de São Paulo (SisGV)
+    "aplicativo ottcs - deslocamento": "Ride-hailing apps",
+    "assinatura de jornais e revistas": "Newspaper and magazine subscriptions",
+    "combustivel": "Fuel",
+    "composicao/arte/diagramacao/producao/impressao grafica": "Graphic design and printing",
+    "contratacao de pessoa juridica": "Services hired from companies",
+    "correios": "Postage",
+    "despesas relacionadas ao imovel locado - inciso xvi do art. 3º do ato 971/07": "Costs of the rented office",
+    "elaboracao/manutencao de site/hospedagem": "Website creation, upkeep and hosting",
+    "estacionamento": "Parking",
+    "eventos/seminarios": "Events and seminars",
+    "intermediado - correios": "Postage (contracted by the City Council)",
+    "intermediado - locacao veiculos hibridos": "Hybrid vehicle rental (contracted by the City Council)",
+    "limpeza de veiculos": "Vehicle cleaning",
+    "livros": "Books",
+    "locacao de imovel de pessoa fisica - inciso xvi do art 3º do ato 971/07": "Office rental (from an individual)",
+    "locacao de imovel de pessoa juridica - inciso xvi do art. 3º do ato 971/07": "Office rental (from a company)",
+    "locacao de veiculo": "Vehicle rental",
+    "locacao de veiculos onix": "Vehicle rental (Onix)",
+    "material de escritorio e outros materiais de consumo": "Office supplies and other consumables",
+    "producao de conteudo digital/edicao de videos/imagens/audios/textos para internet e redes sociais - inciso xvii do art. 3º do ato 971/07": "Digital content for the internet and social media (videos, images, audio, text)",
+    "provedor de internet": "Internet service",
+    "reprografia (xerox/encadernacao)": "Photocopying and binding",
+    "telefone fixo": "Landline phone",
+    "telefone movel": "Mobile phone"
   };
   D.gasto = function (tipo) {
     if (!EP.en) return esc(tipo);
@@ -598,7 +623,10 @@
     "lg": ["Outro", "De licença", "On leave", "Licença à gestante", "Maternity leave"],
     "la": ["Outro", "De licença", "On leave", "Licença à adotante", "Adoption leave"],
     "afo": ["Outro", "Afastado", "Away", "Afastado do exercício do mandato", "Temporarily away from office"],
-    "na": ["Outro", "Outro", "Other", "Ausência sem motivo informado", "Absence with no reason given"]
+    "na": ["Outro", "Outro", "Other", "Ausência sem motivo informado", "Absence with no reason given"],
+    // Câmara Municipal de Porto Alegre
+    "justificado": ["Outro", "Justificado", "Excused", "Ausência justificada", "Excused absence"],
+    "representacao externa": ["Outro", "Representação externa", "Away", "Representava a Câmara fora dela", "Was representing the City Council elsewhere"]
   };
   D.voto = function (v) {
     var x = VOTOS[EP.norm(v || "")];
@@ -612,6 +640,13 @@
     if (!r) return "";
     if (!EP.en) return esc(r);
     var n = EP.norm(r);
+    // Câmaras Municipais (SAPL, Porto Alegre): o resultado diz o que foi votado ("Veto Mantido", "Emenda Rejeitada"...)
+    if (/veto mantido/.test(n)) return "Veto upheld";
+    if (/veto (rejeitad|derrubad)/.test(n)) return "Veto overridden";
+    if (/^emenda aprovada/.test(n)) return "Amendment approved";
+    if (/^emenda rejeitada/.test(n)) return "Amendment rejected";
+    if (/^parecer aprovado/.test(n)) return "Committee report approved";
+    if (/^parecer rejeitado/.test(n)) return "Committee report rejected";
     if (/^aprovad/.test(n)) return "Approved";
     if (/^rejeitad/.test(n)) return "Rejected";
     if (/^mantid/.test(n)) return "Upheld";      // veto mantido (Alece, ALPB)

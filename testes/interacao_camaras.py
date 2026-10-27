@@ -1,4 +1,5 @@
-"""Testes de interação das Câmaras Municipais (lista oficial, propostas e o que o prefeito fez), com Playwright + Edge.
+"""Testes de interação das Câmaras Municipais (lista oficial, propostas, o que o prefeito fez, votações nominais e gastos do
+mandato), com Playwright + Edge.
 Precisa do servidor em 8770 e dos dados gerados (python scripts/legislativos.py camaras; python scripts/legislativos.py sapl
 ou só as cidades usadas aqui; python scripts/montar.py).
 Tudo de uma cidade (vereadores e prefeito) fica num arquivo só: dados/camaras/extras/<IBGE>.json.
@@ -12,7 +13,7 @@ from pathlib import Path
 
 from playwright.async_api import async_playwright
 
-BASE = __import__("os").environ.get("EP_BASE", "http://127.0.0.1:8770/")  # outro servidor: EP_BASE=http://127.0.0.1:8771/
+BASE = __import__("os").environ.get("EP_BASE", "http://127.0.0.1:8770/")
 RAIZ = Path(__file__).resolve().parent.parent
 sys.stdout.reconfigure(encoding="utf-8")
 RES = []
@@ -218,6 +219,75 @@ async def main():
             await pg.goto(BASE + f"pessoa.html?id={m['id']}&lang=pt", wait_until="networkidle")
             await pg.wait_for_timeout(1000)
             ok(f"{ib}: o perfil (lista do TSE) mostra as propostas do SAPL", await pg.locator("#propostas").count() == 1)
+
+        # 10. votações nominais e gastos do mandato (São Paulo e uma cidade com SAPL): os números da página batem com os dados
+        def com_votos(ibge, gastos=False):
+            ex = extras(ibge)
+            marcados = {m["id"] for m in (cidade(ibge).get("vereadores") or {}).get("membros") or [] if m.get("extras") == "cidade"}
+            cands = [(len(p["votacoes"]["votos"]), pid) for pid, p in ex.items() if pid in marcados and (p.get("votacoes") or {}).get("votos")
+                     and (not gastos or p.get("gastos"))]
+            return max(cands)[1] if cands else None
+
+        def reais(v):
+            return "R$ " + f"{v:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+
+        def sem_nbsp(t):
+            return t.replace("\u00a0", " ").replace("\u202f", " ")
+
+        CURTO = {"NR": "Não votou", "NCom": "Ausente", "PS": "Presidia"}
+        sapl_v = next((i for i in sorted(SAPL) if i not in CAPITAIS and juntada(i) and com_votos(i)), None)
+        for ibge in [i for i in ("3550308", "4314902", "2611606", sapl_v) if i]:
+            pid = com_votos(ibge, gastos=ibge == "3550308")
+            ok(f"{ibge}: há um vereador com votações nominais (já juntado pelo montar)", pid)
+            if not pid:
+                continue
+            p = extras(ibge)[pid]
+            cat = (ler(RAIZ / "dados" / "camaras" / "extras" / f"{ibge}.json") or {}).get("votacoes") or {}
+            vv = p["votacoes"]
+            await pg.goto(BASE + f"pessoa.html?id={pid}&lang=pt", wait_until="networkidle")
+            await pg.locator("#votacoes").scroll_into_view_if_needed()
+            await pg.wait_for_timeout(1500)
+            leg = await pg.locator("#votacoes .legenda-votos").inner_text()
+            ok(f"{ibge}: o resumo dos votos bate com os dados (total {vv['resumo']['total']})",
+               f"Total: {vv['resumo']['total']}" in leg.replace(".", "") and all(f"{k}: {vv['resumo'][k]}" in leg.replace(".", "")
+                                                                              for k in ("Sim", "Não") if vv["resumo"].get(k)), leg.replace("\n", " ")[:120])
+            itens = pg.locator("#lista-votos > li")
+            n = await itens.count()
+            ok(f"{ibge}: a lista mostra as votações 15 por vez", n == min(15, len(vv["votos"])), f"{n}")
+            k0, voto0 = vv["votos"][0]
+            x0 = cat.get(k0) or {}
+            t0 = await itens.first.inner_text()
+            ok(f"{ibge}: a votação mais nova (proposta, voto e resultado) é a do arquivo da cidade",
+               x0 and (x0.get("proposta") or "") in t0 and CURTO.get(voto0, voto0) in t0 and (x0.get("resultado") or "") in t0,
+               t0.replace("\n", " ")[:120])
+            ok(f"{ibge}: cada votação leva à página oficial", await pg.locator(f'#lista-votos a[href="{x0.get("url")}"]').count() >= 1)
+            pl = x0.get("placar") or {}
+            ok(f"{ibge}: o placar guardado é o publicado (Sim + Não + Abstenção = total)",
+               all(sum(c["placar"][a] for a in ("Sim", "Não", "Abstenção")) == c["placar"]["total"] for c in cat.values()) and pl)
+            if len(vv["votos"]) > 15:
+                b = pg.locator("#ver-mais-votos")
+                await b.focus()
+                await pg.keyboard.press("Enter")
+                await pg.wait_for_timeout(500)
+                ok(f"{ibge}: \"Mostrar mais votações\" com o teclado", await itens.count() == min(30, len(vv["votos"])))
+            g = p.get("gastos")
+            if g:
+                gs = sem_nbsp(await pg.locator("#gastos").inner_text())
+                primeiro = g["porTipo"][0]
+                ok(f"{ibge}: gastos do mandato com o valor de cada tipo (o maior: {reais(primeiro['valor'])})",
+                   reais(primeiro["valor"]) in gs and "Gastos do mandato" in gs and g["nome"] in gs, gs.replace("\n", " ")[:120])
+                n_t = await pg.locator("#gastos li.gasto").count()
+                ok(f"{ibge}: um item para cada tipo de gasto (até 8)", n_t == min(8, len(g["porTipo"])), f"{n_t}")
+                ok(f"{ibge}: o total do ano é a soma dos tipos", abs(sum(t["valor"] for t in g["porTipo"]) - g["total"]) < 0.01)
+            await pg.goto(BASE + f"pessoa.html?id={pid}&lang=en", wait_until="networkidle")
+            await pg.locator("#votacoes").scroll_into_view_if_needed()
+            await pg.wait_for_timeout(1500)
+            sec = await pg.locator("#votacoes").inner_text()
+            ok(f"{ibge}: em inglês, o escopo e o resultado em inglês", vv["escopo_en"][:60] in sec and
+               ("Result: Approved" in sec or "Result: Rejected" in sec), sec.replace("\n", " ")[:120])
+            if g:
+                gs = await pg.locator("#gastos").inner_text()
+                ok(f"{ibge}: gastos em inglês (o que entra)", "Office spending" in gs and g["nome_en"] in gs)
 
         ok("nenhum erro de JavaScript", not erros, "; ".join(erros[:3]))
         await nav.close()

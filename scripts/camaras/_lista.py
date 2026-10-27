@@ -35,7 +35,8 @@ def pendentes() -> set[str]:
     a carga de uma cidade grande leva várias rodadas; "legislativos.py sapl --parte hoje" põe estas na fila todo dia, depois
     das cidades do dia. O estado de cada uma fica em .cache/camaras/<IBGE>/estado.json (ou na pasta de CAMARAS_CACHE).
     Uma cidade que falhou em FALHAS_MAX dias seguidos (servidor fora do ar, robots.txt sem resposta) sai desta fila e volta
-    a ser tentada só no dia dela do rodízio; quando der certo, volta para a fila."""
+    a ser tentada só no dia dela do rodízio; quando der certo, volta para a fila. (Uma cidade já completa que para no meio
+    de uma etapa, como a primeira leitura das votações nominais, volta a esta fila: Sapl.coletar marca "completo": false.)"""
     out = set()
     for ibge in cidades():
         e = ler_json(B.PASTA_CACHE / ibge / "estado.json", {}) or {}

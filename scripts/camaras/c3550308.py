@@ -8,6 +8,10 @@ https://splegisws.saopaulo.sp.leg.br/ws/ws2.asmx) + lista de vereadores do porta
   FasesDeDeliberacaoJSON (aprovações em plenário), LeisAprovadasPorPromoventeJSON e ProjetosVetadosPorPromoventeJSON.
 - O SPLegis lista os autores de cada projeto em ordem de código, sem dizer quem assinou primeiro: projeto de um autor só
   conta como "autor"; projeto de vários autores conta como "assinou junto" para todos (está explicado na página).
+- Votações nominais desde 1º/1/2025: o arquivo anual da página "Votação em Plenário" (VOTACOES_<ano>.xml), com o voto de
+  cada vereador pelo código do SPLegis; entram as de projetos, emendas a projetos e vetos (votacoes_sp).
+- Gastos do mandato: os débitos do Auxílio-Encargos Gerais de Gabinete no SisGV (web service, um pedido por mês), somados por
+  vereador, por ano e por tipo de despesa (gastos_sp).
 """
 from __future__ import annotations
 
@@ -142,6 +146,165 @@ def status_de(p: dict, encerr: dict, delib: dict, leis: dict, vetos: dict) -> tu
     return "andando", None, None, "Em tramitação", None, None
 
 
+# ------------------------------------------------ votações nominais e gastos do mandato
+VOT_XML = "https://splegispdarmazenamento.blob.core.windows.net/containersip/VOTACOES_{ano}.xml"
+PAG_VOTOS = f"{PORTAL}/atividade-legislativa/sessao-plenaria/votacao-em-plenario/"
+SISGV = "https://sisgvconsulta.saopaulo.sp.leg.br/ws/ws2.asmx/ObterDebitoVereadorJSON"
+# a página "Prestação de contas dos vereadores" lista só os anos de 2010 a 2023 (atualizada pela última vez em agosto de
+# 2024); as contas mais novas a Câmara publica pelo SisGV, que está na página de dados abertos
+PAG_GASTOS = f"{PORTAL}/transparencia/dados-abertos/dados-disponibilizados-em-formato-aberto/"
+MESES = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"]
+ESCOPO_VOTOS = ("Votações nominais (em que o voto de cada vereador fica registrado) de projetos, emendas a projetos e vetos no "
+                "Plenário desde 1º/1/2025, segundo o arquivo de votações dos dados abertos da Câmara (SPLegis). Votações de "
+                "requerimentos, de outros documentos, de procedimentos da sessão (adiamento, suspensão, inversão da pauta), as "
+                "eleições da Mesa e as votações que ficaram sem resultado (\"Pendente de Votação\") não entram.",
+                "Roll-call votes (where each councilor's vote is recorded) on bills, amendments to bills and vetoes in the full "
+                "City Council since January 1, 2025, according to the votes file in the City Council's open data (SPLegis). Votes "
+                "on requests, on other documents, on session procedures (postponing, suspending, reordering the agenda), the "
+                "elections of the Council's board and the votes left without a result (marked as pending) are not included.")
+NOME_GASTOS = ("Auxílio-Encargos Gerais de Gabinete (custos do mandato), prestação de contas no SisGV",
+               "General office expenses allowance (office costs), as accounted for in the City Council's SisGV system")
+_PROJ = re.compile(r"\b(PL|PDL|PR|PLO)\s*(\d+)\s*/\s*(\d{4})", re.I)
+# o que não é votação de projeto: procedimentos da sessão, eleições da Mesa, CPIs, requerimentos
+_PROCEDIMENTO = re.compile(r"^(adiamento|suspens|invert|prorroga|requerimento|considerar|eleicao|instalacao|minuto|manutencao|cria)")
+
+
+def baixar_guardado(url: str, nome: str, idade_h: float, dados: bytes | None = None) -> bytes:
+    """Um pedido (com o robots.txt e o intervalo do servidor), guardado em .cache/camaras/3550308/http/<nome>."""
+    global _n
+    arq = PASTA / "http" / nome
+    if arq.exists() and (time.time() - arq.stat().st_mtime) / 3600 < idade_h:
+        return arq.read_bytes()
+    B.esperar_vez(url, 0.5)
+    try:
+        b = baixar(url, tentativas=4, timeout=240, dados=dados,
+                   headers={"Content-Type": "application/x-www-form-urlencoded"} if dados else None)
+    finally:
+        B.pedido_feito(url)
+    _n += 1
+    arq.parent.mkdir(parents=True, exist_ok=True)
+    arq.write_bytes(b)
+    return b
+
+
+def votacoes_sp(por_cod: dict, anos: list[int], h: str) -> tuple[dict, dict]:
+    """(catálogo {chave: votação}, {código do SPLegis: [[chave, voto], ...]}) das votações nominais desde 1º/1/2025, pelo
+    arquivo anual de votações (VOTACOES_<ano>.xml, o mesmo da página "Votação em Plenário"). O voto de cada vereador vem
+    com o código dele no SPLegis (IDParlamentar), o mesmo da ocupação dos gabinetes: a ligação é exata. Placar = o
+    publicado; se a soma dos votos for diferente, vai junto o "aviso". Votação ainda "Pendente de Votação" não entra."""
+    import xml.etree.ElementTree as ET
+    from ._sapl import voto_normal
+    cat, por = {}, {}
+    for ano in anos:
+        b = baixar_guardado(VOT_XML.format(ano=ano), f"votacoes-{ano}.xml", 20 if ano >= int(h[:4]) - 1 else 24 * 7)
+        raiz = ET.fromstring(b.decode("utf-8-sig"))
+        for ses in raiz.iter("Sessao"):
+            m = re.match(r"(\d{2})/(\d{2})/(\d{4})", ses.get("Data") or "")
+            if not m:
+                continue
+            data = f"{m.group(3)}-{m.group(2)}-{m.group(1)}"
+            if data < B.INICIO or data > h:
+                continue
+            for v in ses.iter("Votacao"):
+                mat = re.sub(r"\s+", " ", v.get("Materia") or "").strip()
+                nm = B.norm(mat)
+                pj = _PROJ.search(mat)
+                res = (v.get("Resultado") or "").strip()
+                if (v.get("TipoVotacao") or "").strip().lower() != "nominal" or not (pj or re.search(r"\bveto", nm)) \
+                        or _PROCEDIMENTO.match(nm) or B.norm(res).startswith("pendente"):
+                    continue
+                brutos = [(int(x.get("IDParlamentar")), voto_normal(x.get("Voto"))) for x in v.findall("Vereador")
+                          if (x.get("IDParlamentar") or "").isdigit()]
+                if not brutos:
+                    continue
+                chave = f"cmsp-vot:{v.get('VotacaoID')}"
+                nres = B.norm(res)
+                resultado = "Aprovado" if nres.startswith("aprovad") else "Rejeitado" if re.match(r"(reprovad|rejeitad)", nres) else (res or None)
+                oficial = {"Sim": int(v.get("Sim") or 0), "Não": int(v.get("Nao") or 0), "Abstenção": int(v.get("Abstencao") or 0)}
+                # o arquivo às vezes traz a mesma pessoa duas vezes na mesma votação, com votos diferentes
+                votos = B.votos_unicos(brutos, oficial)
+                contado = {k: sum(1 for x in votos.values() if x == k) for k in oficial}
+                ementa = re.sub(r"\s+", " ", v.get("Ementa") or "").strip()
+                sg = pj.group(1).upper() if pj else None  # a sigla do SPLegis, como nas propostas ("PLO 8/2017")
+                x = {"data": data, "proposta": f"{sg} {int(pj.group(2))}/{pj.group(3)}" if pj else None,
+                     "propostaId": f"cmsp:{sg}-{int(pj.group(2))}-{pj.group(3)}" if pj else None,
+                     "descricao": f"{mat}: {ementa}" if ementa else mat, "resultado": resultado,
+                     "placar": dict(oficial, total=sum(oficial.values())), "url": PAG_VOTOS}
+                if contado != oficial:
+                    x["aviso"] = {"oficial": oficial, "contado": contado}
+                cat[chave] = x
+                for cod, voto in votos.items():
+                    if cod in por_cod:
+                        por.setdefault(cod, []).append([chave, voto])
+    for lst in por.values():
+        lst.sort(key=lambda kv: (cat[kv[0]]["data"], kv[0]), reverse=True)
+    return cat, por
+
+
+_SIGLAS_DESPESA = {"ottcs": "OTTCS", "onix": "Onix"}
+
+
+def _tipo_despesa(t: str) -> str:
+    """Nome oficial do tipo de despesa, com as partes em CAIXA ALTA passadas para minúsculas (como os da Câmara dos
+    Deputados): "LOCAÇÃO DE IMÓVEL DE PESSOA FÍSICA - Inciso XVI do Art 3º do Ato 971/07" →
+    "Locação de imóvel de pessoa física - Inciso XVI do Art 3º do Ato 971/07"."""
+    partes = re.sub(r"\s+", " ", t or "").strip().split(" - ")
+    for i, p in enumerate(partes):
+        if p.isupper():
+            p = re.sub(r"[^\W\d_]+", lambda m: _SIGLAS_DESPESA.get(m.group(0).lower(), m.group(0).lower()), p)
+            partes[i] = p[:1].upper() + p[1:] if i == 0 else p
+    return " - ".join(partes)
+
+
+def gastos_sp(por_cod: dict, h: str) -> tuple[dict, set]:
+    """({código do SPLegis: bloco "gastos"}, nomes do SisGV sem ligação): os débitos do Auxílio-Encargos Gerais de Gabinete
+    de cada vereador (SisGV, ObterDebitoVereadorJSON, um pedido por mês desde janeiro de 2025; os meses passados ficam
+    guardados por 30 dias). Ligação pelo nome (o SisGV não traz o código do SPLegis), conferida com os nomes dos gabinetes.
+    O ano mostrado é o mais recente com gastos; o total do mandato soma tudo desde o primeiro mês com gastos."""
+    ano_h, mes_h = int(h[:4]), int(h[5:7])
+    nome_cod: dict[str, int] = {}
+    for cod, (m, g) in por_cod.items():
+        for n in (m.get("nome"), g.get("vereador"), m.get("nomeCivil")):
+            if n:
+                nome_cod.setdefault(chave_nome(n), cod)
+    soma: dict[int, dict[tuple, dict[str, float]]] = {}
+    sem = set()
+    for ano in range(int(B.INICIO[:4]), ano_h + 1):
+        for mes in range(1, 13):
+            if (ano, mes) > (ano_h, mes_h):
+                break
+            recente = (ano * 12 + mes) >= (ano_h * 12 + mes_h - 2)  # os 3 meses mais novos ainda podem mudar
+            b = baixar_guardado(SISGV, f"sisgv-{ano}-{mes:02d}.json", 20 if recente else 24 * 30,
+                                dados=f"ano={ano}&mes={mes}".encode())
+            for x in json.loads(b.decode("utf-8-sig") or "[]"):
+                cod = nome_cod.get(chave_nome(x.get("VEREADOR")))
+                if cod is None:
+                    sem.add(x.get("VEREADOR") or "?")
+                    continue
+                tipos = soma.setdefault(cod, {}).setdefault((ano, mes), {})
+                t = _tipo_despesa(x.get("DESPESA"))
+                tipos[t] = tipos.get(t, 0.0) + float(x.get("VALOR") or 0)
+    f = fonte(CASA, f"SisGV (custos de mandato dos vereadores): débitos do Auxílio-Encargos Gerais de Gabinete de "
+                    f"janeiro de {B.INICIO[:4]} a {MESES[mes_h - 1]} de {ano_h}, nos dados abertos da Câmara", PAG_GASTOS, h)
+    out = {}
+    for cod, por_mes in soma.items():
+        meses = sorted(por_mes)
+        if not meses or round(sum(sum(t.values()) for t in por_mes.values()), 2) <= 0:
+            continue
+        ano = meses[-1][0]
+        do_ano = [k for k in meses if k[0] == ano]
+        por_tipo: dict[str, float] = {}
+        for k in do_ano:
+            for t, val in por_mes[k].items():
+                por_tipo[t] = por_tipo.get(t, 0.0) + val
+        out[cod] = {"ano": ano, "total": round(sum(por_tipo.values()), 2),
+                    "porTipo": [{"tipo": t, "valor": round(val, 2)} for t, val in sorted(por_tipo.items(), key=lambda kv: (-kv[1], kv[0])) if round(val, 2)],
+                    "mandatoTotal": round(sum(sum(por_mes[k].values()) for k in meses), 2),
+                    "desde": f"{meses[0][0]}-{meses[0][1]:02d}", "meses": [f"{ano}-{do_ano[0][1]:02d}", f"{ano}-{do_ano[-1][1]:02d}"],
+                    "nome": NOME_GASTOS[0], "nome_en": NOME_GASTOS[1], "fonte": f}
+    return out, sem
+
+
 def coletar() -> dict:
     global _n
     _n = 0
@@ -264,14 +427,31 @@ def coletar() -> dict:
         extras[m["id"]] = x
     if tse.sem_ligacao:
         log(f"  CMSP: sem ligação com o TSE: {', '.join(tse.sem_ligacao)}")
-    cobertura = {"lista": True, "propostas": True, "votacoes": False, "gastos": False}
+
+    # ------------------------------------------------ votações nominais e gastos do mandato
+    cat_vot, votos_cod = votacoes_sp(por_cod, anos, h)
+    gastos_cod, sem_gastos = gastos_sp(por_cod, h)
+    if sem_gastos:
+        log(f"  CMSP: gastos de quem não está no cargo hoje (ficam fora): {', '.join(sorted(sem_gastos))}")
+    f_vot = fonte(CASA, "Votação em Plenário: arquivo de votações (dados abertos, XML por ano)", PAG_VOTOS, h)
+    for cod, (m, g) in por_cod.items():
+        x = extras[m["id"]]
+        lst = votos_cod.get(cod) or []
+        if lst:
+            resumo = {"total": len(lst)}
+            for k in ("Sim", "Não", "Abstenção"):
+                resumo[k] = sum(1 for _, vt in lst if vt == k)
+            resumo["Outro"] = resumo["total"] - resumo["Sim"] - resumo["Não"] - resumo["Abstenção"]
+            x["votacoes"] = {"escopo": ESCOPO_VOTOS[0], "escopo_en": ESCOPO_VOTOS[1], "resumo": resumo, "fonte": f_vot,
+                             "arquivo": f"dados/camaras/extras/{IBGE}.json", "votos": lst}
+            x["fontes"].append(f_vot)
+        if gastos_cod.get(cod):
+            x["gastos"] = gastos_cod[cod]
+            x["fontes"].append(gastos_cod[cod]["fonte"])
+    cobertura = {"lista": True, "propostas": True, "votacoes": bool(votos_cod), "gastos": bool(gastos_cod)}
     casa = {"casa": CASA, "casa_en": "São Paulo City Council", "sigla": "CMSP", "site": PORTAL, "fonte": fonte_lista,
             "sistema": "SPLegis (web service de dados abertos)", "api": "https://splegisws.saopaulo.sp.leg.br/ws/ws2.asmx"}
-    notas = [("As votações de cada vereador e os gastos do mandato não entram neste site: a Câmara publica as votações num "
-              "arquivo XML por ano e os gastos no sistema SisGV, no site dela.",
-              "Each councilor's votes and office spending are not included on this site: the City Council publishes the votes "
-              "in one XML file per year and the spending in its SisGV system, on its website."),
-             ("O número de leis que o prefeito sancionou e o de vetos não entram neste site: o SPLegis lista as leis e os vetos "
+    notas = [("O número de leis que o prefeito sancionou e o de vetos não entram neste site: o SPLegis lista as leis e os vetos "
               "só por autor de cada projeto, e não todos os do município de uma vez.",
               "The number of laws the mayor signed and of vetoes are not included on this site: SPLegis lists laws and vetoes "
               "only by the author of each bill, not all of the city's at once.")]
@@ -290,8 +470,9 @@ def coletar() -> dict:
             "according to SPLegis, the City Council's official system", f_pref), "fontes": [f_pref]})
     else:
         log("  CMSP: não achei o prefeito entre os promoventes do tipo EXECUTIVO do SPLegis")
-    r = B.salvar(IBGE, UF, casa, membros, extras, cobertura, notas, escopo, prefeito=prefeito)
+    r = B.salvar(IBGE, UF, casa, membros, extras, cobertura, notas, escopo, prefeito=prefeito, votacoes=cat_vot)
     r["requisicoes"] = _n
     r["semTse"] = len(tse.sem_ligacao)
-    log(f"  CMSP: {len(membros)} no cargo, {r['propostas']} propostas, {_n} requisições, {time.time() - t0:.0f} s")
+    log(f"  CMSP: {len(membros)} no cargo, {r['propostas']} propostas, {r.get('votacoes', 0)} votações nominais, "
+        f"{r.get('vereadoresComGastos', 0)} vereadores com gastos, {_n} requisições, {time.time() - t0:.0f} s")
     return r

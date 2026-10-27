@@ -113,7 +113,7 @@ Para ver no computador: `python -m http.server 8770` dentro da pasta e abra http
 - `python testes/interacao.py`: teclado, busca, listas com busca (estado, cidade, filtros), página da cidade, 4 portas, filtros, mapa e menu de acessibilidade.
 - `python testes/interacao_votacoes.py`: votações (lista, uma votação, bloco do Brasil e "Como votou" do perfil): teclado, filtros, "Mostrar mais" com o foco, números que batem com os dados, inglês, 320 px e axe-core depois de rolar e clicar.
 - `python testes/interacao_historico.py`: mandatos anteriores (campo pelo teclado, páginas do passado no Brasil, estado e cidade, "Voltar para hoje", cidade que ainda não existia, virada de mandato com o relógio adiantado).
-- `python testes/interacao_camaras.py`: Câmaras Municipais (capitais e Câmaras com SAPL; só as que o `montar.py` já juntou à página da cidade): lista oficial na página da cidade, perfil do vereador com propostas e filtros, perfil do prefeito ("Como contamos", "A lei mais recente na fonte"), textos em inglês, cidades só com a lista.
+- `python testes/interacao_camaras.py`: Câmaras Municipais (capitais e Câmaras com SAPL; só as que o `montar.py` já juntou à página da cidade): lista oficial na página da cidade, perfil do vereador com propostas e filtros, perfil do prefeito ("Como contamos", "A lei mais recente na fonte"), textos em inglês, cidades só com a lista; votações nominais (São Paulo, Porto Alegre, Recife e uma Câmara com SAPL: resumo, a votação mais nova, placar, link oficial, "Mostrar mais votações") e os gastos de São Paulo, conferidos contra os dados.
 - `python testes/interacao_prefeituras.py`: leis e vetos das prefeituras pelos Diários Oficiais (perfil do prefeito com a contagem, vetos totais e parciais, fontes, "Como contamos", o motivo e o link em "Onde ver mais", inglês, 320 px e axe-core).
 - `python testes/diarios_titulos.py`, `python testes/diarios_falhas.py` e `python testes/diarios_robo.py` (sem servidor e sem rede; o último simula a primeira rodada do robô, com o cache vazio e todos os sites falhando: nenhum byte de `dados/prefeituras/` pode mudar): as regras que leem os títulos das leis e fazem as contagens dos Diários Oficiais, e o que acontece quando um site bloqueia, cai ou devolve uma página quebrada (a cidade fica pendente, com o que já estava publicado).
 - `python testes/gerar_imagens.py`: gera os ícones e a imagem de compartilhamento (`testes/og.html` → `img/compartilhar.jpg`).
@@ -149,7 +149,10 @@ As Câmaras Municipais entram de dois jeitos, sempre lendo só o sistema oficial
   19 das 26 capitais têm a **lista oficial de quem está no cargo** (inclusive suplentes que assumiram), com o partido de
   hoje, a foto oficial (reduzida para 240 px em `img/pessoas/ver-*.jpg`) e a página oficial de cada pessoa; 8 têm também as
   **propostas desde 1º/1/2025** e o que a **prefeitura** mandou à Câmara: as 7 com SAPL (Fortaleza, Manaus, Natal, João
-  Pessoa, Porto Velho, Rio Branco e Boa Vista) e São Paulo (SPLegis). Rio de Janeiro, Belo Horizonte, Salvador, Curitiba,
+  Pessoa, Porto Velho, Rio Branco e Boa Vista) e São Paulo (SPLegis). São Paulo também tem as **votações nominais** (arquivo
+  XML anual da Câmara) e os **gastos do mandato** (Auxílio-Encargos Gerais de Gabinete, pelo SisGV); Porto Alegre tem as
+  votações nominais (sistema de votações da Câmara) e Recife, que continua com a lista de eleitos do TSE, as votações
+  nominais pelo SAGL (API JSON). Rio de Janeiro, Belo Horizonte, Salvador, Curitiba,
   Porto Alegre, Belém, Goiânia, São Luís, Vitória, Teresina e Cuiabá publicam só a lista oficial num formato que dá para ler
   (as propostas só existem em páginas HTML); Recife, Maceió, Campo Grande, Florianópolis, Macapá, Aracaju e Palmas continuam
   com a lista de eleitos do TSE (os motivos estão nas notas de cada uma).
@@ -174,7 +177,16 @@ O que cada Câmara com SAPL dá (`scripts/camaras/_sapl.py`, só a API pública 
    e nas notas da Câmara. No arquivo, `executivo.notaLeis` e `executivo.notaVetos` explicam cada número em separado
    (`nota` = as duas juntas): quando o SAPL só tem um dos dois números e o Diário Oficial tem o outro, o perfil junta as
    duas contas, cada uma com a explicação e a fonte de onde veio;
-4. votações nominais e gastos: o SAPL não publica (as notas dizem isso).
+4. as **votações nominais** desde 1º/1/2025, quando a Câmara registra no SAPL o voto de cada vereador
+   (`sessao/registrovotacao` e `sessao/votoparlamentar`): as de projetos, das emendas, substitutivos e redações finais deles e
+   de vetos que decidiram a matéria (resultado de natureza "aprovado" ou "rejeitado"); requerimentos, indicações, moções,
+   outros documentos e votações de adiamento ou pedido de vista ficam fora. O placar é o publicado no registro (se a soma dos
+   votos for diferente, vai junto um `aviso`, e o perfil diz isso), e cada votação leva à página de transparência dela no SAPL.
+   O que foi votado fica num catálogo dentro do arquivo da cidade (`dados/camaras/extras/<IBGE>.json` → `votacoes`); o perfil
+   guarda só `[chave, voto]`, como no Congresso. A primeira leitura de uma Câmara com muitas votações leva várias rodadas;
+   enquanto isso, a cidade é publicada com as votações de antes (ou sem elas) e fica na fila diária até terminar. Os gastos do
+   mandato não estão no SAPL (nota da Câmara). As notas das capitais sem dados abertos dizem o formato em que cada uma publica
+   votações e gastos (PDF, consulta de página, CAPTCHA) ou que a verba não existe (Belo Horizonte, Curitiba, Belém, Vitória).
 
 **Um arquivo por cidade** (limite de arquivos da Vercel): `dados/camaras/<IBGE>.json` (a lista oficial, a cobertura e as
 notas) e `dados/camaras/extras/<IBGE>.json` (o que a Câmara publica a mais sobre cada vereador e sobre o prefeito). O
@@ -191,10 +203,12 @@ maioria das cidades). **Rodízio:** `--parte hoje` roda as cidades do dia da sem
 mesmo dia: `int(IBGE) % 7 + 1`) e `--pendentes` junta as que ainda não terminaram a primeira carga (uma cidade que falha 3
 dias seguidos sai dessa fila e volta no dia dela).
 
-**Cobertura (26/10/2026):** 823 Câmaras com dados abertos no site (777 com a lista oficial), 6.645 vereadores com propostas,
-749 prefeitos com os projetos que mandaram à Câmara e 522 com leis ou vetos. 14 cidades da lista ainda estão na primeira
-carga (o robô continua). Por estado: ver `dados/legislativos.json` (`camaras.<IBGE>`) e as notas de cada
-`dados/camaras/<IBGE>.json`.
+**Cobertura (@DATA@):** @CAMARAS@ Câmaras com dados abertos no site (@OFICIAIS@ com a lista oficial), @VER_PROP@ vereadores com
+propostas, @PREF_PROJ@ prefeitos com os projetos que mandaram à Câmara e @PREF_LV@ com leis ou vetos; **votações nominais em
+@CAM_VOT@ Câmaras** (@N_VOT@ votações e @VER_VOT@ vereadores; @SAPL_VOT@ com SAPL, mais São Paulo, Porto Alegre e Recife) e
+**gastos do mandato em São Paulo** (@VER_GASTOS@ vereadores). @PRIMEIRA@ cidades da lista ainda estão na primeira carga, e em
+@VOT_FALTA@ Câmaras com SAPL a leitura das votações ainda não terminou (o robô continua). Por estado: ver
+`dados/legislativos.json` (`camaras.<IBGE>`) e as notas de cada `dados/camaras/<IBGE>.json`.
 
 - **Situação das propostas numa Câmara de uma casa só**: o "aprovado" da votação final vai para a sanção do prefeito
   (`aprovada`); sancionado, promulgado ou com norma ligada = `lei`; "veto rejeitado" quer dizer que a Câmara derrubou o veto;

@@ -85,9 +85,11 @@ def _parte(texto: str | None) -> tuple[int, int] | None:
     return k, n
 
 
-def rodar(item: tuple, prazo: float | None) -> tuple[str, str, dict | None]:
+def rodar(item: tuple, prazo: float | None, margem: float = 0) -> tuple[str, str, dict | None]:
     grupo, chave, modulo, args = item
-    if prazo and time.time() > prazo:
+    # nos últimos minutos da rodada não começa Casa nova: ela pararia antes do primeiro pedido e o índice ganharia uma marca
+    # de "em andamento" sem motivo (fica para a próxima rodada, com os dados publicados de antes)
+    if prazo and time.time() > prazo - margem:
         return grupo, chave, None  # passou do limite de tempo: fica para a próxima rodada
     t0 = time.time()
     try:
@@ -129,6 +131,8 @@ def main(args: list[str]) -> int:
         return 0
     paralelo = max(1, int(opcoes["--paralelo"]))
     prazo = time.time() + 60 * float(opcoes["--minutos"]) if opcoes["--minutos"] else None
+    # margem do fim da rodada: 2 minutos (ou um décimo da rodada, se ela for curta)
+    margem = min(120.0, 6 * float(opcoes["--minutos"])) if opcoes["--minutos"] else 0.0
     if prazo:  # as Câmaras com SAPL param no meio quando o tempo acaba (scripts/camaras/_sapl.py)
         os.environ["LEGISLATIVOS_PRAZO"] = str(prazo)
     indice_arq = DADOS / "legislativos.json"
@@ -138,7 +142,7 @@ def main(args: list[str]) -> int:
     log(f"legislativos: {len(lista)} Casas ({paralelo} ao mesmo tempo)")
     feitos, falhas, adiadas, andamento = [], 0, 0, 0
     with cf.ThreadPoolExecutor(paralelo) as ex:
-        for grupo, chave, r in ex.map(lambda it: rodar(it, prazo), lista):
+        for grupo, chave, r in ex.map(lambda it: rodar(it, prazo, margem), lista):
             if r is None:
                 adiadas += 1
                 continue

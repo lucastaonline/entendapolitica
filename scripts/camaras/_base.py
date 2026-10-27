@@ -26,7 +26,7 @@ from pathlib import Path
 
 import regional
 from comum import (CACHE, DADOS, EXTRAS_CIDADES, FOTOS, UA, baixar, fonte, hoje, ler_json, log, nome_proprio, salvar_json,
-                   sem_acento, slug)
+                   sem_acento, sem_mudar_data, slug)
 
 INICIO = regional.INICIO_MUNICIPAL  # 2025-01-01, começo da legislatura municipal atual
 # o que cada Câmara já leu (estado da carga, páginas guardadas, fotos): .cache/camaras/<IBGE>/. CAMARAS_CACHE no ambiente
@@ -512,13 +512,128 @@ def baixar_pagina(url: str, ibge: str, nome_cache: str, idade_h: float = 20, con
     return t
 
 
+# As votações de cada vereador e os gastos do mandato nas capitais que publicam só a lista em formato que dá para ler: o que
+# não entra e por quê (levantamento nos sites oficiais em outubro de 2026; notas em files/plano-100/notas/camaras-r4.md).
+# so_lista junta estas notas às da Câmara.
+NOTAS_VOTOS_GASTOS = {
+    "3304557": [  # Rio de Janeiro
+        ("As votações de cada vereador não entram neste site: a Câmara registra o voto de cada vereador só nas atas das "
+         "sessões (arquivos PDF e Word), sem dados abertos das votações.",
+         "Each councilor's votes are not included on this site: the City Council records each councilor's vote only in the "
+         "session minutes (PDF and Word files), with no open data on the votes."),
+        ("Os gastos do mandato de cada vereador não entram neste site: a Câmara publica a cota de gabinete em planilhas "
+         "separadas por tipo de despesa (abastecimento, alimentação, veículos blindados, selos) e por ano, sem um arquivo "
+         "com os gastos de cada vereador.",
+         "Each councilor's office spending is not included on this site: the City Council publishes its office allowance in "
+         "separate spreadsheets by type of expense (fuel, meals, armored vehicles, postage) and by year, with no file of "
+         "each councilor's spending.")],
+    "4106902": [  # Curitiba
+        ("As votações de cada vereador não entram neste site: o sistema de proposições da Câmara (SPL), onde ficam as "
+         "votações, pede um código de imagem (CAPTCHA) a cada consulta.",
+         "Each councilor's votes are not included on this site: the City Council's bills system (SPL), where the votes are, "
+         "asks for an image code (CAPTCHA) for every search."),
+        ("Gastos do mandato: segundo a própria Câmara, o vereador de Curitiba recebe do Legislativo só o subsídio, sem verba "
+         "de gabinete nem indenizações (há apenas diárias de viagem).",
+         "Office spending: according to the City Council itself, Curitiba councilors receive only their salary from the "
+         "legislature, with no office allowance or reimbursements (there are only travel per diems).")],
+    "3106200": [  # Belo Horizonte
+        ("As votações de cada vereador não entram neste site: a Câmara publica o voto de cada vereador num arquivo PDF por "
+         "votação, sem dados abertos.",
+         "Each councilor's votes are not included on this site: the City Council publishes each councilor's vote in one PDF "
+         "file per vote, with no open data."),
+        ("Gastos do mandato: a Câmara de Belo Horizonte extinguiu a verba indenizatória em 2015 (Resolução 2.076/2015); "
+         "desde então, o material e os serviços dos gabinetes são contratados e pagos pela própria Câmara (o \"custeio "
+         "parlamentar\", em páginas do portal da transparência).",
+         "Office spending: the Belo Horizonte City Council abolished its office allowance in 2015 (Resolution 2,076/2015); "
+         "since then, the supplies and services of each office are bought and paid for by the City Council itself (shown on "
+         "pages of its transparency portal).")],
+    "5103403": [  # Cuiabá
+        ("As votações de cada vereador não entram neste site: a Câmara publica as atas das sessões em PDF escaneado (imagem), "
+         "sem dados abertos das votações.",
+         "Each councilor's votes are not included on this site: the City Council publishes the session minutes as scanned "
+         "PDFs (images), with no open data on the votes."),
+        ("Os gastos do mandato não entram neste site: a verba indenizatória da Câmara de Cuiabá é um valor fixo por mês, "
+         "definido em lei (Lei 6.910/2023), e não uma lista das despesas de cada gabinete.",
+         "Office spending is not included on this site: the Cuiabá City Council's allowance is a fixed monthly amount set by "
+         "law (Law 6,910/2023), not a list of each office's expenses.")],
+    "2927408": [  # Salvador
+        ("As votações de cada vereador não entram neste site: o sistema legislativo da Câmara não tem uma consulta das "
+         "votações nominais (o voto de cada vereador).",
+         "Each councilor's votes are not included on this site: the City Council's legislative system has no search for "
+         "roll-call votes (how each councilor voted)."),
+        ("Os gastos do mandato não entram neste site: a Câmara publica a Verba Compensatória de Atividade Parlamentar só "
+         "como pagamentos numa tabela de despesas do portal, sem um arquivo de dados abertos por vereador.",
+         "Office spending is not included on this site: the City Council publishes its office allowance only as payments in "
+         "an expenses table on its portal, with no open data file per councilor.")],
+    "2211001": [  # Teresina
+        ("As votações de cada vereador não entram neste site: o site e o portal da transparência da Câmara não têm uma "
+         "consulta das votações nominais (o voto de cada vereador).",
+         "Each councilor's votes are not included on this site: the City Council's website and transparency portal have no "
+         "search for roll-call votes (how each councilor voted)."),
+        ("Os gastos do mandato não entram neste site: o portal da transparência mostra a verba de atividade parlamentar numa "
+         "consulta de página, um vereador e um ano por vez, sem arquivo de dados abertos.",
+         "Office spending is not included on this site: the transparency portal shows the office allowance in an on-screen "
+         "search, one councilor and one year at a time, with no open data file.")],
+    "1501402": [  # Belém
+        ("As votações de cada vereador não entram neste site: a Câmara publica as votações nominais em arquivos PDF, sem "
+         "dados abertos.",
+         "Each councilor's votes are not included on this site: the City Council publishes its roll-call votes as PDF files, "
+         "with no open data."),
+        ("Gastos do mandato: a Câmara de Belém publica no portal da transparência declarações mensais de que não houve cotas "
+         "parlamentares.",
+         "Office spending: the Belém City Council publishes monthly statements on its transparency portal saying there were "
+         "no office allowances.")],
+    "3205309": [  # Vitória
+        ("As votações de cada vereador não entram neste site: a Câmara publica um boletim de votação por projeto, em PDF "
+         "escaneado (imagem), sem dados abertos.",
+         "Each councilor's votes are not included on this site: the City Council publishes one voting report per bill, as a "
+         "scanned PDF (image), with no open data."),
+        ("Gastos do mandato: segundo o portal da transparência, a Câmara de Vitória não instituiu cotas parlamentares desde "
+         "1º/1/2023 (a verba de gabinete paga a equipe de cada gabinete).",
+         "Office spending: according to its transparency portal, the Vitória City Council has had no office allowances since "
+         "January 1, 2023 (the office budget pays each office's staff).")],
+    "2111300": [  # São Luís
+        ("As votações de cada vereador não entram neste site: as atas das sessões (PDF) trazem o placar e só o nome de quem "
+         "votou diferente da maioria, sem a lista completa dos votos.",
+         "Each councilor's votes are not included on this site: the session minutes (PDF) give the tally and only the names "
+         "of those who voted differently from the majority, without the full list of votes."),
+        ("Os gastos do mandato não entram neste site: a Câmara publica a verba indenizatória (VIEP) num sistema de consulta "
+         "com filtros, uma consulta por vez, sem arquivo de dados abertos.",
+         "Office spending is not included on this site: the City Council publishes its office allowance (VIEP) in a search "
+         "system with filters, one search at a time, with no open data file.")],
+    "5208707": [  # Goiânia
+        ("As votações de cada vereador não entram neste site: a consulta de votações do portal da transparência da Câmara "
+         "está vazia, e as atas das sessões (PDF) não trazem o voto de cada vereador.",
+         "Each councilor's votes are not included on this site: the votes search on the City Council's transparency portal "
+         "is empty, and the session minutes (PDF) do not list each councilor's vote."),
+        ("Os gastos do mandato de cada vereador não entram neste site: a Câmara publica a cota parlamentar (CEAP) numa "
+         "consulta do portal da transparência, que monta os arquivos na hora, sem um endereço fixo de dados abertos.",
+         "Each councilor's office spending is not included on this site: the City Council publishes its office allowance "
+         "(CEAP) in a search on its transparency portal, which builds the files on the fly, with no fixed open data address.")],
+}
+
+
+def bloco_votacoes(lst: list, escopo: tuple[str, str], fonte_vot: dict, ibge: str) -> dict:
+    """O bloco "votacoes" do perfil de um vereador (o mesmo formato do Congresso e das Assembleias): [[chave, voto], ...]
+    da mais nova para a mais antiga; o que foi votado fica no catálogo do arquivo da cidade ("arquivo")."""
+    resumo = {"total": len(lst)}
+    for k in ("Sim", "Não", "Abstenção"):
+        resumo[k] = sum(1 for _, vt in lst if vt == k)
+    resumo["Outro"] = resumo["total"] - resumo["Sim"] - resumo["Não"] - resumo["Abstenção"]
+    return {"escopo": escopo[0], "escopo_en": escopo[1], "resumo": resumo, "fonte": fonte_vot,
+            "arquivo": f"dados/camaras/extras/{ibge}.json", "votos": lst}
+
+
 def so_lista(ibge: str, uf: str, casa: dict, pessoas: list[dict], vagas: int, notas: list[tuple[str, str]],
-             tse_manual: dict | None = None, minimo: float = 0.8) -> dict:
+             tse_manual: dict | None = None, minimo: float = 0.8, votacoes=None, manter_votos: bool = False) -> dict:
     """Câmara que publica só a lista de vereadores (sem propostas em dados abertos).
     pessoas = [{chave, nome, nomeCivil?, partido (como a Câmara escreve), foto (URL), url, genero?}] tiradas da página oficial.
-    Confere o tamanho (pelo menos 80% das vagas e no máximo as vagas + 3) para não gravar uma página quebrada."""
+    Confere o tamanho (pelo menos 80% das vagas e no máximo as vagas + 3) para não gravar uma página quebrada.
+    votacoes = (catálogo, {chave da pessoa: [[chave da votação, voto], ...]}, escopo (pt, en), fonte) ou None;
+    manter_votos: sem votacoes (a leitura não terminou nesta rodada), ficam as votações já publicadas (votos_publicados)."""
     if not (vagas * minimo <= len(pessoas) <= vagas + 3):
         raise RuntimeError(f"a lista oficial tem {len(pessoas)} pessoas para {vagas} vagas: a página deve ter mudado")
+    notas = list(notas) + NOTAS_VOTOS_GASTOS.get(ibge, [])
     tse = Tse(ibge, uf, tse_manual)
     membros, extras = [], {}
     for p in pessoas:
@@ -539,25 +654,86 @@ def so_lista(ibge: str, uf: str, casa: dict, pessoas: list[dict], vagas: int, no
         x = {"links": {"oficial": p.get("url"), "email": p.get("email"), "redes": []}, "fontes": [casa["fonte"]]}
         if m["foto"]:
             x["fotoCredito"] = casa["casa"]
+        if votacoes and votacoes[1].get(p["chave"]):
+            x["votacoes"] = bloco_votacoes(votacoes[1][p["chave"]], votacoes[2], votacoes[3], ibge)
+            x["fontes"].append(votacoes[3])
         extras[pid] = x
     ids = [m["id"] for m in membros]
     if len(set(ids)) != len(ids):
         raise RuntimeError(f"duas pessoas com o mesmo id: {sorted(i for i in ids if ids.count(i) > 1)}")
     if tse.sem_ligacao:
         log(f"  {casa.get('sigla')}: sem ligação com o TSE: {', '.join(tse.sem_ligacao)}")
-    cobertura = {"lista": True, "propostas": False, "votacoes": False, "gastos": False}
-    r = salvar(ibge, uf, casa, membros, extras, cobertura, notas)
+    catalogo = votacoes[0] if votacoes else None
+    if votacoes is None and manter_votos:
+        catalogo, blocos = votos_publicados(ibge)
+        for pid, x in extras.items():
+            if pid in blocos:
+                x["votacoes"] = blocos[pid]
+                x["fontes"].append(blocos[pid].get("fonte"))
+    com_votos = any(x.get("votacoes") for x in extras.values())
+    cobertura = {"lista": True, "propostas": False, "votacoes": com_votos, "gastos": False}
+    r = salvar(ibge, uf, casa, membros, extras, cobertura, notas, votacoes=catalogo if com_votos else None)
     r["semTse"] = len(tse.sem_ligacao)
-    log(f"  {casa.get('sigla')}: {len(membros)} no cargo (lista oficial, sem propostas)")
+    log(f"  {casa.get('sigla')}: {len(membros)} no cargo (lista oficial, sem propostas)"
+        + (f", {r.get('votacoes', 0)} votações nominais" if com_votos else ""))
     return r
 
 
+# ---------------------------------------------------------------- votações nominais
+def votos_publicados(ibge: str) -> tuple[dict, dict]:
+    """(catálogo, {id: bloco "votacoes"}) do arquivo da cidade já publicado: quando a leitura das votações (a primeira, ou a
+    da lista inteira) ainda não terminou numa rodada (no robô, que começa com o cache vazio, por exemplo), fica publicado o
+    que já estava, em vez de nada."""
+    d = ler_json(EXTRAS_CIDADES / f"{ibge}.json", {}) or {}
+    blocos = {pid: x["votacoes"] for pid, x in (d.get("pessoas") or {}).items() if (x.get("votacoes") or {}).get("votos")}
+    return (d.get("votacoes") or {}) if blocos else {}, blocos
+
+
+def votos_unicos(pares, oficial: dict | None = None) -> dict:
+    """{quem: voto} de uma votação, a partir dos pares (quem, voto) da fonte. Quem aparece mais de uma vez com o mesmo voto
+    conta uma vez; com votos diferentes (erro da fonte), vale o voto que faz a soma bater com o placar publicado
+    (``oficial`` = {"Sim": n, "Não": n, "Abstenção": n}); se nenhum (ou mais de um) fizer bater, o voto dessa pessoa
+    nessa votação fica fora."""
+    import itertools
+    por: dict = {}
+    for q, v in pares:
+        if v not in por.setdefault(q, []):
+            por[q].append(v)
+    certos = {q: vs[0] for q, vs in por.items() if len(vs) == 1}
+    duvida = {q: vs for q, vs in por.items() if len(vs) > 1}
+    if duvida and oficial and len(duvida) <= 3:
+        def conta(d):
+            return {k: sum(1 for x in d.values() if x == k) for k in oficial}
+        boas = [e for e in (dict(zip(duvida, c)) for c in itertools.product(*duvida.values()))
+                if conta({**certos, **e}) == oficial]
+        if len(boas) == 1:
+            return {**certos, **boas[0]}
+    return certos
+
+
 # ---------------------------------------------------------------- gravar
+def salvar_extras_cidade(ibge: str, pessoas: dict[str, dict], fontes: list | None = None, votacoes: dict | None = None) -> bool:
+    """dados/camaras/extras/<IBGE>.json (regional.salvar_extras_cidade, o mesmo formato) e, quando há votações nominais, o
+    catálogo delas no mesmo arquivo ("votacoes": {chave: o que foi votado, data, resultado, placar, endereço}): o perfil de
+    cada vereador guarda só [chave, voto] e lê o resto daqui ("arquivo" do bloco "votacoes"). Um arquivo por cidade."""
+    if not votacoes:
+        return regional.salvar_extras_cidade(ibge, pessoas, fontes=fontes)
+    caminho = EXTRAS_CIDADES / f"{ibge}.json"
+    caminho.parent.mkdir(parents=True, exist_ok=True)
+    dados = {"ibge": str(ibge), "pessoas": {pid: dict(d, id=pid) for pid, d in sorted(pessoas.items())}, "atualizado": hoje()}
+    if fontes:
+        dados["fontes"] = fontes
+    dados["votacoes"] = votacoes
+    return salvar_json(caminho, sem_mudar_data(dados, caminho))
+
+
 def salvar(ibge: str, uf: str, casa: dict, membros: list[dict], extras: dict[str, dict], cobertura: dict,
            notas: list[tuple[str, str]] | None = None, escopo: tuple[str, str] | None = None,
-           prefeito: tuple[str, dict] | None = None, oficial: bool = True, ids_validos: set[str] | None = None) -> dict:
+           prefeito: tuple[str, dict] | None = None, oficial: bool = True, ids_validos: set[str] | None = None,
+           votacoes: dict | None = None) -> dict:
     """casa = {casa, casa_en, sigla, site, fonte}; membros = lista oficial (contrato); extras = {id: dados a mais da pessoa};
-    prefeito = (id, dados) com o que a prefeitura mandou à Câmara ("propostas") e as leis e vetos ("executivo").
+    prefeito = (id, dados) com o que a prefeitura mandou à Câmara ("propostas") e as leis e vetos ("executivo");
+    votacoes = catálogo das votações nominais (salvar_extras_cidade).
     Grava dados/camaras/<IBGE>.json (a lista oficial) e dados/camaras/extras/<IBGE>.json (um arquivo por cidade).
     oficial=False: a lista da Câmara não passou na conferência; o arquivo da Câmara fica sem "membros" (a página da cidade
     continua com a lista do TSE) e os dados a mais entram só para quem está nela (ids_validos).
@@ -582,7 +758,9 @@ def salvar(ibge: str, uf: str, casa: dict, membros: list[dict], extras: dict[str
     if prefeito and prefeito[1]:
         pessoas[prefeito[0]] = prefeito[1]
     if pessoas:
-        regional.salvar_extras_cidade(ibge, pessoas, fontes=[casa["fonte"]] if casa.get("fonte") else None)
+        usadas = {par[0] for x in pessoas.values() for par in ((x.get("votacoes") or {}).get("votos") or [])}
+        votacoes = {k: x for k, x in (votacoes or {}).items() if k in usadas}
+        salvar_extras_cidade(ibge, pessoas, fontes=[casa["fonte"]] if casa.get("fonte") else None, votacoes=votacoes or None)
     elif (EXTRAS_CIDADES / f"{ibge}.json").exists():
         (EXTRAS_CIDADES / f"{ibge}.json").unlink()
     # formato antigo (até outubro de 2026): um arquivo por vereador em dados/pessoas/; agora fica tudo no arquivo da cidade
@@ -597,6 +775,11 @@ def salvar(ibge: str, uf: str, casa: dict, membros: list[dict], extras: dict[str
                  for p in ((x.get("propostas") or {}).get("lista") or [])})
     r = {"casa": casa.get("sigla"), "nome": casa.get("casa"), "membros": len(membros) if oficial else 0, "propostas": nprop,
          "cobertura": cobertura, "fonte": casa.get("fonte")}
+    if votacoes:
+        r["votacoes"] = len(votacoes)
+    gastos = sum(1 for pid, x in pessoas.items() if pid.startswith("ver-") and (x.get("gastos") or {}).get("total") is not None)
+    if gastos:
+        r["vereadoresComGastos"] = gastos
     if prefeito and prefeito[1]:
         x = prefeito[1]
         ex = x.get("executivo") or {}

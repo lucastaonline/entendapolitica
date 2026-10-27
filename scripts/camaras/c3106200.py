@@ -29,10 +29,10 @@ def coletar() -> dict:
                         "partido": html.unescape(sigla.group(1)).strip() if sigla else None,
                         "foto": html.unescape(foto.group(1)) if foto else None, "url": SITE + nome.group(1)})
     CASA["fonte"] = fonte(CASA["casa"], "Vereadores em exercício (portal oficial)", f"{SITE}/vereadores", hoje())
-    notas = [("As propostas e os gastos dos vereadores não entram neste site: a Câmara mostra as proposições e a verba "
-              "indenizatória só em páginas do site, sem API nem arquivo de dados abertos.",
-              "Councilors' bills and spending are not included on this site: the City Council shows its bills and office "
-              "allowance spending only as web pages, with no API or open data file.")]
+    notas = [("As propostas dos vereadores não entram neste site: a Câmara mostra as proposições só em páginas do site, sem API "
+              "nem arquivo de dados abertos.",
+              "Councilors' bills are not included on this site: the City Council shows its bills only as web pages, with no "
+              "API or open data file.")]
     # conferidos à mão (nome no portal da Câmara = nome de urna no TSE, eleitos em 2024): "Trópia" = MARCELA TRÓPIA (NOVO);
     # "Vile Santos" = VILE (Wili dos Santos, PL)
     return B.so_lista(IBGE, UF, CASA, pessoas, 41, notas, tse_manual={"tr%C3%B3pia": "130001976053", "vile-santos": "130002172736"})

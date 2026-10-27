@@ -508,11 +508,18 @@
       (chaves.length ? '<div class="votos-barra" aria-hidden="true">' + chaves.map(function (k) { return '<i style="width:' + (100 * r[k] / tot).toFixed(2) + "%;background:" + COR_VOTO[k] + '"></i>'; }).join("") + "</div>" +
         '<ul class="legenda-votos">' + chaves.map(function (k) { return '<li><i style="background:' + COR_VOTO[k] + '" aria-hidden="true"></i>' + esc(D.nomeVoto(k)) + ": " + EP.num(r[k]) + "</li>"; }).join("") +
         "<li>" + EP.tr("Total: ", "Total: ") + EP.num(tot) + "</li></ul>" : "") +
-      (r.Outro ? '<p class="muted" style="font-size:.8rem;margin:6px 0 0">' + EP.tr('"Outro" quer dizer: estava ausente, de licença, em missão oficial ou presidindo a sessão.',
-        '"Other" means: absent, on leave, on an official mission or presiding over the session.') + "</p>" : "") +
+      (r.Outro ? '<p class="muted" style="font-size:.8rem;margin:6px 0 0">' + (p.tipo === "ver" ?
+        EP.tr('"Outro" quer dizer: não votou, estava ausente (com ou sem justificativa), representava a Câmara fora dela ou presidia a sessão.',
+          '"Other" means: did not vote, was absent (excused or not), was representing the City Council elsewhere or was presiding over the session.') :
+        EP.tr('"Outro" quer dizer: estava ausente, de licença, em missão oficial ou presidindo a sessão.',
+          '"Other" means: absent, on leave, on an official mission or presiding over the session.')) + "</p>" : "") +
       '<div class="dica-coruja nota-contexto" style="margin-top:12px"><span class="coruja" aria-hidden="true">🦉</span><p>' + EP.tr(
-        'Votar "Sim" não é bom e votar "Não" não é ruim: depende do que estava sendo votado. Leia cada votação para entender. "Obstrução" é um recurso previsto nas regras da Casa: o líder anuncia que o partido está em obstrução, e os parlamentares dele deixam de contar para o número mínimo de presentes, para adiar ou evitar aquela votação.',
-        'Voting "Yes" is not good and voting "No" is not bad: it depends on what was being voted on. Read each vote to understand it. "Obstruction" is a tool allowed by the rules: the party leader announces it, and the party\'s members stop counting toward the minimum number of members present, in order to delay or prevent that vote.') + "</p></div>" +
+        'Votar "Sim" não é bom e votar "Não" não é ruim: depende do que estava sendo votado. Leia cada votação para entender.',
+        'Voting "Yes" is not good and voting "No" is not bad: it depends on what was being voted on. Read each vote to understand it.') +
+      // "Obstrução" é um recurso das regras do Congresso: a explicação só aparece para quem tem votos assim
+      (r["Obstrução"] ? " " + EP.tr(
+        '"Obstrução" é um recurso previsto nas regras da Casa: o líder anuncia que o partido está em obstrução, e os parlamentares dele deixam de contar para o número mínimo de presentes, para adiar ou evitar aquela votação.',
+        '"Obstruction" is a tool allowed by the rules: the party leader announces it, and the party\'s members stop counting toward the minimum number of members present, in order to delay or prevent that vote.') : "") + "</p></div>" +
       (EP.en ? '<p class="muted" style="font-size:.85rem;margin:10px 0 0">The descriptions of each vote are official texts in Portuguese.</p>' : "") +
       '<div class="temas-chips" id="filtro-votos" role="group" aria-label="' + EP.tr("Filtrar as votações pelo tipo", "Filter the votes by type") + '" style="margin-top:14px" hidden></div>' +
       '<p class="muted nota-contexto" id="nota-tipos-votos" style="margin:0" hidden><span aria-hidden="true">💬 </span>' + EP.tr(
@@ -581,6 +588,15 @@
       io.observe(document.getElementById("votacoes"));
     } else vai();
   }
+  // placar publicado, nas votações que não têm página neste site (Assembleias e Câmaras Municipais); se a lista de votos da
+  // fonte somar diferente do placar publicado, a frase diz isso (como na página das votações do Congresso)
+  function placarHtml(x) {
+    if (!x.placar) return "";
+    function pl(o) { return ["Sim", "Não", "Abstenção"].map(function (k) { return esc(D.nomeVoto(k)) + " " + EP.num((o || {})[k] || 0); }).join(" · "); }
+    return " (" + pl(x.placar) + ")" + (x.aviso && x.aviso.oficial && x.aviso.contado ? "<small>" + EP.tr(
+      "O placar publicado (" + pl(x.aviso.oficial) + ") é diferente da soma da lista de votos da fonte (" + pl(x.aviso.contado) + ").",
+      "The published tally (" + pl(x.aviso.oficial) + ") differs from the sum of the source's list of votes (" + pl(x.aviso.contado) + ").") + "</small>" : "");
+  }
   function desenhaVotos(focarDe) {
     var el = document.getElementById("lista-votos");
     if (!el || !VOTOS) return;
@@ -588,8 +604,8 @@
     var vis = lista.slice(0, mostrandoV);
     el.innerHTML = vis.map(function (x, k) {
       var vt = D.voto(x.voto);
-      var res = x.resultado ? " · " + EP.tr("Resultado: ", "Result: ") + D.resultado(x.resultado) : "";
       var cat = CAT_VOTO[x.categoria], u = urlVotacao(x.id);
+      var res = x.resultado ? " · " + EP.tr("Resultado: ", "Result: ") + D.resultado(x.resultado) + (u ? "" : placarHtml(x)) : "";
       var tit = "<b>" + (x.proposta ? EP.pt(esc(x.proposta)) : EP.tr("Votação", "Vote")) + "</b>" + (x.data ? "\u00a0·\u00a0" + EP.data(x.data) : "");
       return "<li" + (focarDe != null && k === focarDe ? ' tabindex="-1"' : "") + '><span class="voto-chip" style="--cv:' + (COR_VOTO[vt.cat] || COR_VOTO.Outro) + '"><span class="sr">' + EP.tr("Voto: ", "Vote: ") + "</span>" + esc(vt.curto) + "</span>" +
         '<span class="v-txt">' + (u ? '<a href="' + u + '">' + tit + '<span class="sr"> (' + EP.tr("ver como todos votaram", "see how everyone voted") + ")</span></a>" : tit) + res +
@@ -597,7 +613,7 @@
           esc(EP.tr(cat[3], cat[4])) + "</span>" : "") +
         (vt.longo ? "<small>" + esc(vt.longo) + "</small>" : "") + oriVotoHtml(x) +
         (x.descricao ? '<span class="desc-voto" style="display:block">' + EP.pt(esc(x.descricao)) + "</span>" : "") +
-        (x.url ? linkFora(x.url, EP.tr("Ver no site oficial", "See it on the official website") + '<span class="sr"> (' + esc(x.proposta || "") + ")</span>", true) : "") + "</span></li>";
+        (x.url ? linkFora(x.url, EP.tr("Ver no site oficial", "See it on the official website") + '<span class="sr"> (' + EP.pt(esc(x.proposta || "")) + ")</span>", true) : "") + "</span></li>";
     }).join("") || '<li class="vazio">' + EP.tr("Nenhuma votação encontrada.", "No votes found.") + "</li>";
     var c = document.getElementById("contagem-votos");
     if (c) {

@@ -24,6 +24,7 @@ import regional
 from comum import baixar, fonte, hoje, log, sem_acento
 
 from . import _base as B
+from ._capitais import publicados
 from ._sapl import data_en, data_pt
 
 IBGE, UF = "3550308", "SP"
@@ -429,8 +430,22 @@ def coletar() -> dict:
         log(f"  CMSP: sem ligação com o TSE: {', '.join(tse.sem_ligacao)}")
 
     # ------------------------------------------------ votações nominais e gastos do mandato
-    cat_vot, votos_cod = votacoes_sp(por_cod, anos, h)
-    gastos_cod, sem_gastos = gastos_sp(por_cod, h)
+    # um sistema fora do ar não derruba a Câmara (o SisGV deu "erro 500" em todos os meses em 27 e 28/10/2026): as propostas
+    # seguem, e ficam publicadas as votações ou os gastos de antes, para quem continua no cargo
+    votos_antes: dict[str, dict] = {}
+    gastos_antes: dict[str, dict] = {}
+    try:
+        cat_vot, votos_cod = votacoes_sp(por_cod, anos, h)
+    except Exception as erro:
+        log(f"  CMSP: votações: {type(erro).__name__}: {str(erro)[:200]}; ficam as votações publicadas antes")
+        cat_vot, votos_antes = B.votos_publicados(IBGE)
+        votos_cod = {}
+    try:
+        gastos_cod, sem_gastos = gastos_sp(por_cod, h)
+    except Exception as erro:
+        log(f"  CMSP: gastos: {type(erro).__name__}: {str(erro)[:200]}; ficam os gastos publicados antes")
+        gastos_cod, sem_gastos = {}, set()
+        gastos_antes = publicados(IBGE, "gastos")
     if sem_gastos:
         log(f"  CMSP: gastos de quem não está no cargo hoje (ficam fora): {', '.join(sorted(sem_gastos))}")
     f_vot = fonte(CASA, "Votação em Plenário: arquivo de votações (dados abertos, XML por ano)", PAG_VOTOS, h)
@@ -445,10 +460,18 @@ def coletar() -> dict:
             x["votacoes"] = {"escopo": ESCOPO_VOTOS[0], "escopo_en": ESCOPO_VOTOS[1], "resumo": resumo, "fonte": f_vot,
                              "arquivo": f"dados/camaras/extras/{IBGE}.json", "votos": lst}
             x["fontes"].append(f_vot)
-        if gastos_cod.get(cod):
-            x["gastos"] = gastos_cod[cod]
-            x["fontes"].append(gastos_cod[cod]["fonte"])
-    cobertura = {"lista": True, "propostas": True, "votacoes": bool(votos_cod), "gastos": bool(gastos_cod)}
+        elif votos_antes.get(m["id"]):
+            x["votacoes"] = votos_antes[m["id"]]
+            x["fontes"].append(votos_antes[m["id"]].get("fonte"))
+        g_bloco = gastos_cod.get(cod) or gastos_antes.get(m["id"])
+        if g_bloco:
+            x["gastos"] = g_bloco
+            x["fontes"].append(g_bloco["fonte"])
+    if votos_antes:  # no catálogo, só o que foi votado por quem continua no cargo
+        usadas = {k for x in extras.values() for k, _ in (x.get("votacoes") or {}).get("votos") or []}
+        cat_vot = {k: v for k, v in cat_vot.items() if k in usadas}
+    cobertura = {"lista": True, "propostas": True, "votacoes": bool(votos_cod or votos_antes),
+                 "gastos": bool(gastos_cod or gastos_antes)}
     casa = {"casa": CASA, "casa_en": "São Paulo City Council", "sigla": "CMSP", "site": PORTAL, "fonte": fonte_lista,
             "sistema": "SPLegis (web service de dados abertos)", "api": "https://splegisws.saopaulo.sp.leg.br/ws/ws2.asmx"}
     notas = [("O número de leis que o prefeito sancionou e o de vetos não entram neste site: o SPLegis lista as leis e os vetos "

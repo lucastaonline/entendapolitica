@@ -109,10 +109,13 @@ jobs:
         continue-on-error: true
         timeout-minutes: 60
 
-      # as capitais com SAPL respeitam os 60 s entre pedidos que o robots.txt pede: sem o cache, a primeira leitura de
-      # cada uma leva de 1 a 4 dias (até lá fica o que estava publicado); com o cache, 5 a 25 min
+      # cada capital tem o seu coletor e o seu servidor: rodam todas ao mesmo tempo (uma vaga por capital, um pedido por vez
+      # em cada site). As capitais com SAPL respeitam os 60 s entre pedidos que o robots.txt pede, e as lidas em páginas do
+      # site têm primeiras cargas longas (Belo Horizonte, Belém, Salvador, Recife): essas usam a rodada toda, e com menos
+      # vagas as últimas da lista (São Paulo, Rio, Goiânia...) não começariam antes do fim da rodada. Sem o cache, a primeira
+      # leitura leva de 1 a 8 dias (até lá fica o que estava publicado); com o cache, 5 a 25 min.
       - name: Câmaras Municipais das capitais
-        run: python scripts/legislativos.py camaras --paralelo 8 --minutos 35
+        run: python scripts/legislativos.py camaras --paralelo 26 --minutos 35
         continue-on-error: true
         timeout-minutes: 40
 

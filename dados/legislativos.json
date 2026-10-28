@@ -16153,7 +16153,7 @@
    "casa": "CMSP",
    "nome": "Câmara Municipal de São Paulo",
    "membros": 55,
-   "propostas": 2660,
+   "propostas": 2665,
    "cobertura": {
     "lista": true,
     "propostas": true,
@@ -16164,7 +16164,7 @@
     "veiculo": "Câmara Municipal de São Paulo",
     "titulo": "Vereadores em exercício (portal oficial; SPLegis: ocupação dos gabinetes)",
     "url": "https://www.saopaulo.sp.leg.br/vereadores/membros/",
-    "data": "2026-10-26"
+    "data": "2026-10-28"
    },
    "votacoes": 44,
    "vereadoresComGastos": 55,
@@ -16173,11 +16173,10 @@
     "leis": null,
     "vetos": null
    },
-   "requisicoes": 0,
+   "requisicoes": 130,
    "semTse": 0,
-   "ok": false,
-   "conferido": "2026-10-26",
-   "erro": "RuntimeError: Falha ao baixar https://sisgvconsulta.saopaulo.sp.leg.br/ws/ws2.asmx/ObterDebitoVereadorJSON: HTTP Error 500: Internal Server Error"
+   "ok": true,
+   "conferido": "2026-10-28"
   },
   "3551009": {
    "casa": "CMSV",

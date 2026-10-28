@@ -223,7 +223,10 @@ O que cada Câmara com SAPL dá (`scripts/camaras/_sapl.py`, só a API pública 
    votos for diferente, vai junto um `aviso`, e o perfil diz isso), e cada votação leva à página de transparência dela no SAPL.
    O que foi votado fica num catálogo dentro do arquivo da cidade (`dados/camaras/extras/<IBGE>.json` → `votacoes`); o perfil
    guarda só `[chave, voto]`, como no Congresso. A primeira leitura de uma Câmara com muitas votações leva várias rodadas;
-   enquanto isso, a cidade é publicada com as votações de antes (ou sem elas) e fica na fila diária até terminar. Os gastos do
+   enquanto isso, a cidade é publicada com as votações de antes (ou sem elas) e fica na fila diária até terminar. "De antes" =
+   as da última leitura completa guardada no cache ou, se ela não existe (no robô, que começa com o cache vazio) ou se a
+   rodada acabou antes dos tipos de resultado que o catálogo usa, as que já estão publicadas no arquivo da cidade, e também a
+   nota da Câmara sobre as votações ("não entram... e por quê"): nada some porque uma leitura parou no meio. Os gastos do
    mandato não estão no SAPL (nota da Câmara). As notas das capitais sem dados abertos dizem o formato em que cada uma publica
    votações e gastos (PDF, consulta de página, CAPTCHA) ou que a verba não existe (Belo Horizonte, Curitiba, Belém, Vitória).
 

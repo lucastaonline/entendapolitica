@@ -1142,10 +1142,12 @@ class Sapl:
                 antes = {p for p, _ in v["votos"].get(rid) or []}
                 v["votos"][rid] = (v["votos"].get(rid) or []) + [x for x in lst if x[0] not in antes]
 
-    def catalogo_votacoes(self, e: dict, todas: dict[str, dict], tipos: dict) -> tuple[dict, dict[int, list]]:
+    def catalogo_votacoes(self, e: dict, todas: dict[str, dict], tipos: dict) -> tuple[dict | None, dict[int, list]]:
         """({chave: votação} para o arquivo da cidade, {id do parlamentar no SAPL: [[chave, voto], ...]}): só as votações
         nominais (com voto de cada vereador) desde 1º/1/2025. Placar = o publicado pela Câmara no registro; se a soma dos
-        votos for diferente, vai junto o "aviso" (como no Congresso)."""
+        votos for diferente, vai junto o "aviso" (como no Congresso). None no lugar do catálogo quando a rodada acabou antes
+        de ler os tipos de resultado e não há a lista guardada (no robô, que começa com o cache vazio): sem eles, não dá
+        para saber quais votações decidiram a matéria, e o catálogo não é montado nesta rodada."""
         v = e.get("votacoes") or {}
         if not v.get("reg"):
             return {}, {}
@@ -1157,7 +1159,7 @@ class Sapl:
             res = {t["id"]: ((t.get("nome") or "").strip(), t.get("natureza")) for t in
                    (guardada.get("results") if isinstance(guardada, dict) else guardada) or []}
             if not res:
-                return {}, {}
+                return None, {}
         siglas = {t["id"]: (t.get("sigla") or "").strip() for t in self.tipos_materia()}
         cat, por_parl = {}, {}
         for rid, r in v["reg"].items():
@@ -1201,8 +1203,20 @@ class Sapl:
             lst.sort(key=lambda kv: (cat[kv[0]]["data"], kv[0]), reverse=True)
         return dict(sorted(cat.items(), key=lambda kv: (kv[1]["data"], kv[0]), reverse=True)), por_parl
 
-    def notas_votacoes(self, e: dict, publicou: bool) -> list[tuple[str, str]]:
-        """As notas da Câmara sobre as votações (o que não entra e por quê) e sobre os gastos (o SAPL não tem)."""
+    def notas_votos_publicadas(self) -> list[tuple[str, str]]:
+        """As notas sobre as votações do arquivo da Câmara já publicado (o que não entra e por quê, de uma leitura completa).
+        Só as do formato de hoje ("As votações de cada vereador não entram neste site: ..."): a nota antiga, que juntava
+        votações e gastos, fica fora."""
+        d = ler_json(CAMARAS / f"{self.ibge}.json", {}) or {}
+        pt, en = d.get("notas") or [], d.get("notas_en") or []
+        return [(n, en[i] if len(en) == len(pt) else n) for i, n in enumerate(pt)
+                if isinstance(n, str) and n.startswith("As votações de cada vereador não entram neste site:")]
+
+    def notas_votacoes(self, e: dict, publicou: bool, sem_catalogo: bool = False) -> list[tuple[str, str]]:
+        """As notas da Câmara sobre as votações (o que não entra e por quê) e sobre os gastos (o SAPL não tem).
+        sem_catalogo: nesta rodada não deu para montar o catálogo (faltaram os tipos de resultado). Enquanto a leitura das
+        votações não termina (ou sem o catálogo), fica a nota publicada antes, de uma leitura completa; sem ela, nada a
+        dizer sobre as votações (uma nota de "não entram" seria um palpite)."""
         v = e.get("votacoes") or {}
         gastos = self.nota_gastos or (
             "Os gastos do mandato de cada vereador não entram neste site: o sistema de dados abertos da Câmara (SAPL) "
@@ -1211,8 +1225,8 @@ class Sapl:
             "does not have it.")
         if publicou:
             return [gastos]
-        if not v.get("lista_em") and not v.get("sem_filtro"):
-            return [gastos]  # a leitura das votações ainda não terminou nenhuma vez: nada a dizer sobre elas
+        if sem_catalogo or (not v.get("lista_em") and not v.get("sem_filtro")):
+            return self.notas_votos_publicadas() + [gastos]
         if v.get("motivo") == "muitas":
             p = ("As votações de cada vereador não entram neste site: o SAPL desta Câmara tem mais votações desde 1º/1/2025 do que "
                  "dá para ler respeitando o intervalo entre pedidos que o próprio sistema pede.",
@@ -1612,6 +1626,9 @@ class Sapl:
 
         # votações nominais: o voto de cada vereador (no perfil) e o que foi votado (catálogo no arquivo da cidade)
         cat_vot, votos_parl = self.catalogo_votacoes(e, todas, tipos)
+        sem_catalogo = cat_vot is None
+        cat_vot = cat_vot or {}
+        v_est = e.get("votacoes") or {}
         usadas: set[str] = set()
         if cat_vot:
             fonte_vot = fonte(self.casa, "SAPL: votações nominais das sessões plenárias", f"{self.base}/sessao/pesquisar-sessao", h)
@@ -1627,9 +1644,10 @@ class Sapl:
                                                "fonte": fonte_vot, "arquivo": f"dados/camaras/extras/{self.ibge}.json", "votos": lst}
                 extras[m["id"]]["fontes"].append(fonte_vot)
                 usadas.update(k for k, _ in lst)
-        elif (e.get("votacoes") or {}).get("nova"):
-            # a leitura da lista inteira das votações não terminou (no robô, que começa com o cache vazio, por exemplo):
-            # fica publicado o que já estava, para quem continua no cargo
+        elif sem_catalogo or v_est.get("nova") or not v_est.get("lista_em"):
+            # a leitura das votações não terminou (no robô, que começa com o cache vazio, por exemplo: a lista inteira pela
+            # metade, uma leitura que nunca terminou ou que nem começou, ou a rodada acabou antes dos tipos de resultado,
+            # que o catálogo usa): fica publicado o que já estava, para quem continua no cargo
             cat_vot, blocos = B.votos_publicados(self.ibge)
             for x_id, x in extras.items():
                 if x_id in blocos:
@@ -1645,7 +1663,7 @@ class Sapl:
             except Exception as erro:  # o que o prefeito fez é um extra: um erro aqui não derruba as propostas dos vereadores
                 log(f"  {self.sigla} {self.ibge}: prefeito: {type(erro).__name__}: {str(erro)[:200]}")
                 pref, notas_pref = self.prefeito_de_antes()
-        notas = list(self.notas_casa) + notas_extra + self.notas_votacoes(e, bool(cat_vot)) + notas_pref
+        notas = list(self.notas_casa) + notas_extra + self.notas_votacoes(e, bool(cat_vot), sem_catalogo) + notas_pref
         if tse.sem_ligacao:
             log(f"  {self.sigla} {self.ibge}: sem ligação com o TSE: {', '.join(tse.sem_ligacao)}")
         if problema:

@@ -146,7 +146,7 @@ Correções à mão (sempre com fonte): `dados/manual/governadores.json`, `dados
 
 As Câmaras Municipais entram de dois jeitos, sempre lendo só o sistema oficial de cada Câmara:
 
-- **Capitais** (`python scripts/legislativos.py camaras --paralelo 26 --minutos 35`, no robô diário: todas ao mesmo tempo,
+- **Capitais** (`python scripts/legislativos.py camaras --paralelo 26 --minutos 60`, no robô diário: todas ao mesmo tempo,
   cada uma no seu servidor): um coletor por Câmara (`scripts/camaras/c<IBGE>.py`).
   19 das 26 capitais têm a **lista oficial de quem está no cargo** (inclusive suplentes que assumiram), com o partido de
   hoje, a foto oficial (reduzida para 240 px em `img/pessoas/ver-*.jpg`) e a página oficial de cada pessoa; Recife,

@@ -22,7 +22,7 @@
   "AL": {
    "casa": "ALE-AL",
    "membros": 27,
-   "propostas": 2145,
+   "propostas": 2146,
    "cobertura": {
     "lista": true,
     "propostas": true,
@@ -79,7 +79,7 @@
   "MA": {
    "casa": "Alema",
    "membros": 42,
-   "propostas": 2392,
+   "propostas": 2394,
    "cobertura": {
     "lista": true,
     "propostas": true,
@@ -249,8 +249,8 @@
    "ok": true,
    "erro": "RuntimeError: Falha ao baixar https://dadosabertos.almg.gov.br/arquivo/deputados-legislatura/download: <urlopen error timed out>",
    "pendente": true,
-   "etapa": "primeira carga: 1833 proposições lidas",
-   "requisicoes": 1756
+   "etapa": "primeira carga: 3219 proposições lidas",
+   "requisicoes": 1811
   },
   "RJ": {
    "casa": "Alerj",
@@ -308,8 +308,8 @@
    },
    "ok": true,
    "pendente": true,
-   "etapa": "primeira carga: 659 páginas de tramitação por ler",
-   "requisicoes": 300,
+   "etapa": "primeira carga: 397 páginas de tramitação por ler",
+   "requisicoes": 345,
    "erro": "RuntimeError: o robots.txt de www.alesc.sc.gov.br não deixa robôs lerem /deputados/"
   },
   "SP": {
@@ -376,10 +376,10 @@
     "inicio": "2023-02-01",
     "fim": "2027-01-31"
    },
-   "ok": false,
+   "ok": true,
    "pendente": true,
    "etapa": "o tempo da rodada acabou",
-   "requisicoes": 47,
+   "requisicoes": 46,
    "erro": "RuntimeError: Falha ao baixar https://sapl.al.am.leg.br/api/materia/materialegislativa/?tipo__in=1,2,5,6,10&data_apresentacao__gte=2023-02-01&page=3&page_size=100: HTTP Error 503: Service Unavailable"
   },
   "GO": {
@@ -419,15 +419,14 @@
     "veiculo": "Assembleia Legislativa de Mato Grosso do Sul (Alems)",
     "titulo": "Deputados em exercício (lista oficial do site da Alems)",
     "url": "https://al.ms.gov.br/Partidos/Lista",
-    "data": "2026-10-28"
+    "data": "2026-10-29"
    },
    "legislatura": {
     "inicio": "2023-02-01",
     "fim": "2027-01-31"
    },
-   "ok": false,
-   "conferido": "2026-10-28",
-   "erro": "RobotsFechado: robots.txt de www.al.ms.gov.br sem resposta (<urlopen error [Errno -3] Temporary failure in name resolution>); o site não é lido nesta rodada"
+   "ok": true,
+   "conferido": "2026-10-29"
   },
   "MT": {
    "casa": "ALMT",
@@ -499,7 +498,7 @@
    "ok": true,
    "pendente": true,
    "etapa": "o tempo da rodada acabou",
-   "requisicoes": 46
+   "requisicoes": 47
   },
   "RR": {
    "casa": "ALE-RR",
@@ -549,7 +548,7 @@
    "ok": true,
    "pendente": true,
    "etapa": "o tempo da rodada acabou",
-   "requisicoes": 49
+   "requisicoes": 46
   },
   "AP": {
    "casa": "Alap",
@@ -924,20 +923,18 @@
     "veiculo": "Câmara Municipal de Porto Velho",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.portovelho.ro.leg.br/parlamentar/",
-    "data": "2026-10-27"
+    "data": "2026-10-29"
    },
    "votacoes": 1224,
    "prefeito": {
-    "propostas": 136,
-    "leis": 264,
+    "propostas": 137,
+    "leis": 271,
     "vetos": 182
    },
-   "requisicoes": 57,
+   "requisicoes": 56,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-10-27",
-   "pendente": true,
-   "etapa": "normas"
+   "conferido": "2026-10-29"
   },
   "1100254": {
    "casa": "CMPM",
@@ -1661,7 +1658,7 @@
     "leis": null,
     "vetos": 1
    },
-   "requisicoes": 57,
+   "requisicoes": 56,
    "semTse": 0,
    "ok": true,
    "conferido": "2026-10-29"
@@ -1872,7 +1869,7 @@
     "leis": 89,
     "vetos": 25
    },
-   "requisicoes": 57,
+   "requisicoes": 54,
    "semTse": 0,
    "ok": true,
    "pendente": true,
@@ -1976,7 +1973,7 @@
     "leis": 75,
     "vetos": 56
    },
-   "requisicoes": 57,
+   "requisicoes": 56,
    "semTse": 0,
    "ok": true,
    "pendente": true,
@@ -2057,11 +2054,11 @@
     "data": "2026-10-29"
    },
    "semTse": 0,
-   "requisicoes": 571,
+   "requisicoes": 566,
    "ok": true,
    "conferido": "2026-10-27",
    "pendente": true,
-   "etapa": "propostas (879 de 1503 páginas lidas)"
+   "etapa": "propostas (1445 de 1503 páginas lidas)"
   },
   "1502152": {
    "casa": "CMCC",
@@ -4665,7 +4662,7 @@
    "casa": "CMFor",
    "nome": "Câmara Municipal de Fortaleza",
    "membros": 43,
-   "propostas": 1028,
+   "propostas": 1033,
    "cobertura": {
     "lista": true,
     "propostas": true,
@@ -4676,18 +4673,17 @@
     "veiculo": "Câmara Municipal de Fortaleza",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.fortaleza.ce.leg.br/parlamentar/",
-    "data": "2026-10-26"
+    "data": "2026-10-29"
    },
    "prefeito": {
-    "propostas": 105,
+    "propostas": 109,
     "leis": 228,
     "vetos": 51
    },
-   "requisicoes": 57,
+   "requisicoes": 56,
    "semTse": 0,
    "ok": true,
-   "pendente": true,
-   "etapa": "tramitações"
+   "conferido": "2026-10-29"
   },
   "2305233": {
    "casa": "CMH",
@@ -5422,7 +5418,7 @@
     "leis": 446,
     "vetos": 242
    },
-   "requisicoes": 57,
+   "requisicoes": 56,
    "semTse": 0,
    "ok": true,
    "pendente": true,
@@ -6491,7 +6487,7 @@
     "leis": 188,
     "vetos": 27
    },
-   "requisicoes": 57,
+   "requisicoes": 56,
    "semTse": 0,
    "vereadoresComGastos": 28,
    "ok": true,
@@ -7873,7 +7869,7 @@
     "leis": null,
     "vetos": null
    },
-   "requisicoes": 544,
+   "requisicoes": 5,
    "ok": true,
    "conferido": "2026-10-29"
   },
@@ -9277,7 +9273,7 @@
    "casa": "CMS",
    "nome": "Câmara Municipal de Salvador",
    "membros": 43,
-   "propostas": 960,
+   "propostas": 963,
    "cobertura": {
     "lista": true,
     "propostas": true,
@@ -9296,11 +9292,9 @@
     "vetos": null
    },
    "semTse": 0,
-   "requisicoes": 977,
+   "requisicoes": 159,
    "ok": true,
-   "conferido": "2026-10-27",
-   "pendente": true,
-   "etapa": "propostas (1027 de 1027 tramitações lidas)"
+   "conferido": "2026-10-29"
   },
   "2929404": {
    "casa": "CMSMM",
@@ -9675,7 +9669,7 @@
     "leis": null,
     "vetos": null
    },
-   "requisicoes": 264,
+   "requisicoes": 263,
    "semTse": 0,
    "ok": true,
    "conferido": "2026-10-27",
@@ -14435,18 +14429,17 @@
     "veiculo": "Câmara Municipal do Rio de Janeiro",
     "titulo": "Vereadores atuais (portal oficial)",
     "url": "https://www.camara.rio/vereadores/quem-sao",
-    "data": "2026-10-28"
+    "data": "2026-10-29"
    },
    "prefeito": {
     "propostas": 4,
     "leis": null,
     "vetos": null
    },
-   "requisicoes": 59,
+   "requisicoes": 27,
    "semTse": 0,
-   "ok": false,
-   "conferido": "2026-10-28",
-   "erro": "RuntimeError: robots.txt de https://www.camara.rio não respondeu (URLError); nada é lido desse servidor nesta rodada"
+   "ok": true,
+   "conferido": "2026-10-29"
   },
   "3304805": {
    "casa": "CMSF",
@@ -16244,7 +16237,7 @@
     "leis": null,
     "vetos": null
    },
-   "requisicoes": 130,
+   "requisicoes": 0,
    "semTse": 0,
    "ok": true,
    "conferido": "2026-10-29"

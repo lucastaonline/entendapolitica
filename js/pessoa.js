@@ -149,6 +149,7 @@
         return EP.avisoMinistros(d).then(function (t) { return Object.assign({ tipo: "min", avisoLista: t, avisoLista_en: t }, p); });
       });
     }
+    if (/^stf-[a-z0-9-]+$/.test(id)) return EP.stf ? EP.stf.carregar(id) : Promise.reject(new Error("id inválido"));  // ministros do STF: js/stf.js
     return Promise.reject(new Error("id inválido"));
   }
 
@@ -866,6 +867,7 @@
       destino = v && v.pagina === ref ? v : { pagina: ref, secao: "", id: id };
       peloHistorico = history.length > 1;
     } else if (v && combina(v.pagina, p)) destino = v;
+    if (!destino && p.volta) destino = p.volta;  // perfis montados por outro arquivo (ministros do STF, eleitos 2026): o Voltar leva à seção de onde vieram
     if (!destino) {
       var federal = /^(dep|sen|pres|vp|min)$/.test(p.tipo);
       destino = { pagina: federal ? "brasil.html" : p.municipio ? "cidade.html?ibge=" + p.municipio.ibge : "estado.html?uf=" + p.uf,
@@ -906,6 +908,7 @@
     if (EP.en) o.setAttribute("lang", "pt-BR");
     ligaVoltar(p);
 
+    if (p.tipo === "stf" && EP.stf) { raiz.innerHTML = EP.stf.perfilHtml(p); return; }  // ministros do STF: o perfil vem do js/stf.js
     var todas = coletarFontes(p);
     raiz.innerHTML = topoHtml(p) + fatosHtml(p) + anterioresHtml(p) + contatosHtml(p) + oqueFazHtml(p) +
       (p.propostas ? propostasHtml(p) : "") + executivoHtml(p) + votacoesHtml(p) + gastosHtml(p) + comissoesHtml(p) + avisoEMinisterio(p) +

@@ -34,6 +34,7 @@
   <link rel="stylesheet" href="css/paginas.css?v=10">
   <link rel="stylesheet" href="css/votacoes.css?v=10">
   <link rel="stylesheet" href="css/historico.css?v=10">
+  <link rel="stylesheet" href="css/stf.css?v=1"><!-- ministros do STF -->
 </head>
 <body>
 <a class="pular" href="#conteudo" data-en="Skip to content">Pular para o conteúdo</a>
@@ -62,7 +63,7 @@
     <a class="chip" href="#senado"><span aria-hidden="true">🏛️</span><span data-en="Senate">Senado</span></a>
     <a class="chip" href="#camara"><span aria-hidden="true">🏛️</span><span data-en="Chamber of Deputies">Câmara</span></a>
     <a class="chip" href="#votacoes"><span aria-hidden="true">🗳️</span><span data-en="How Congress voted">Como votaram</span></a>
-    <a class="chip" href="#judiciario"><span aria-hidden="true">⚖️</span><span data-en="What about the courts?">E o Judiciário?</span></a>
+    <a class="chip" href="#judiciario"><span aria-hidden="true">⚖️</span><span data-en="Supreme Court">STF</span></a>
     <a class="chip" href="#procurar"><span aria-hidden="true">🔎</span><span data-en="Search">Procurar</span></a>
   </nav>
 
@@ -92,14 +93,10 @@
   </section>
 
   <section class="miolo bloco" id="judiciario" aria-labelledby="t-jud">
-    <div class="cartao cartao-jud rev">
-      <span class="ic-grande" aria-hidden="true">⚖️</span>
-      <div>
-        <h2 id="t-jud" data-en="What about the courts?">E o Judiciário?</h2>
-        <p data-en-html="Judges and the justices of the high courts <b>are not elected</b>: they pass a public exam, or they are nominated and approved by the other branches. That is why they are not on this list. See how it works on the Politics Map.">Juízes e ministros dos tribunais <b>não são eleitos</b>: eles fazem concurso ou são indicados e aprovados por outros Poderes. Por isso eles não aparecem nesta lista. Veja como funciona no Mapa da Política.</p>
-        <a class="btn peq claro" href="entenda.html#parte-8"><span data-en="See “Who judges and who oversees”">Ver "Quem julga e quem fiscaliza"</span> <span aria-hidden="true">▶</span></a>
-      </div>
-    </div>
+    <!-- ministros do STF: o conteúdo vem do js/stf.js (dados/stf.json) -->
+    <div class="cab-bloco rev"><span class="ic-bloco" aria-hidden="true">⚖️</span><div><h2 id="t-jud" data-en-html="The Federal Supreme Court (&lt;span lang=&quot;pt-BR&quot;&gt;Supremo Tribunal Federal&lt;/span&gt;, STF)">O Supremo Tribunal Federal (STF)</h2><p class="muted" data-en="Brazil's highest court. Its main job is to protect the Constitution, the country's highest law. Its justices are not elected.">O tribunal mais alto do Brasil. A principal tarefa dele é proteger a Constituição, a lei maior do país. Os ministros do STF não são eleitos.</p></div></div>
+    <div class="stf" id="stf"><div class="carregando" data-en="Loading…">Carregando…</div></div>
+    <p><a class="btn peq claro" href="entenda.html#parte-8"><span data-en="See “Who judges and who oversees” on the Politics Map">Ver "Quem julga e quem fiscaliza" no Mapa da Política</span> <span aria-hidden="true">▶</span></a></p>
   </section>
 
   <section class="miolo bloco" id="procurar" aria-labelledby="t-procurar">
@@ -112,7 +109,7 @@
 
 <footer class="miolo rodape">
   <p id="links-erro"></p>
-  <p data-en-html="The data comes from the Chamber of Deputies, the Federal Senate, the TSE (Brazil's Superior Electoral Court) and the federal government. <a href=&quot;dados.html&quot;>See where each piece of information comes from</a> and <a href=&quot;imparcialidade.html&quot;>how we stay impartial</a>.">Os dados vêm da Câmara dos Deputados, do Senado Federal, do Tribunal Superior Eleitoral (TSE) e do governo federal. <a href="dados.html">Veja de onde vem cada informação</a> e <a href="imparcialidade.html">como cuidamos da imparcialidade</a>.</p>
+  <p data-en-html="The data comes from the Chamber of Deputies, the Federal Senate, the TSE (Brazil's Superior Electoral Court), the Federal Supreme Court (STF) and the federal government. <a href=&quot;dados.html&quot;>See where each piece of information comes from</a> and <a href=&quot;imparcialidade.html&quot;>how we stay impartial</a>.">Os dados vêm da Câmara dos Deputados, do Senado Federal, do Tribunal Superior Eleitoral (TSE), do Supremo Tribunal Federal (STF) e do governo federal. <a href="dados.html">Veja de onde vem cada informação</a> e <a href="imparcialidade.html">como cuidamos da imparcialidade</a>.</p>
 </footer>
 
 <noscript><p style="padding:20px">Esta página precisa de JavaScript ligado no navegador. / This page needs JavaScript.</p></noscript>
@@ -126,5 +123,6 @@
 <script src="js/historico.js?v=10"></script>
 <script src="js/brasil.js?v=10"></script>
 <script src="js/votacoes.js?v=10"></script>
+<script src="js/stf.js?v=1"></script><!-- ministros do STF -->
 </body>
 </html>

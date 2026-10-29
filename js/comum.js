@@ -205,7 +205,8 @@
     "governador": "Governor", "governadora": "Governor", "vice-governador": "Vice Governor", "vice-governadora": "Vice Governor",
     "deputado estadual": "State Deputy", "deputada estadual": "State Deputy", "deputado distrital": "District Deputy", "deputada distrital": "District Deputy",
     "prefeito": "Mayor", "prefeita": "Mayor", "vice-prefeito": "Vice Mayor", "vice-prefeita": "Vice Mayor",
-    "vereador": "City Councilor", "vereadora": "City Councilor", "ministro": "Minister", "ministra": "Minister"
+    "vereador": "City Councilor", "vereadora": "City Councilor", "ministro": "Minister", "ministra": "Minister",
+    "ministro do supremo tribunal federal": "Justice of the Federal Supreme Court", "ministra do supremo tribunal federal": "Justice of the Federal Supreme Court"
   };
   EP.cargo = function (pt) {
     if (!EP.en || !pt) return pt;

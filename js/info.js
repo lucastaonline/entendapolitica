@@ -98,7 +98,21 @@
     "biblioteca-dilma": fonte("Biblioteca da Presidência da República", "Galeria dos ex-presidentes: ministérios do governo Dilma Rousseff (lista em PDF)",
       "Gallery of former presidents: ministries of the Dilma Rousseff government (PDF list)", "https://www.gov.br/secretariageral/pt-br/centrais-de-conteudo/biblioteca-da-pr/galeria-dos-ex-presidentes/dilma-vana-rousseff/ministerios-dilma.pdf"),
     "dou": fonte("Diário Oficial da União (Imprensa Nacional)", "Busca do Diário Oficial: decretos de nomeação e de exoneração de ministros de Estado",
-      "Official Gazette search: appointment and dismissal decrees of ministers of State", "https://www.in.gov.br/consulta/-/buscar/dou")
+      "Official Gazette search: appointment and dismissal decrees of ministers of State", "https://www.in.gov.br/consulta/-/buscar/dou"),
+    cf101: fonte("Planalto", "Constituição Federal, art. 101: o STF tem 11 ministros, com mais de 35 e menos de 70 anos, nomeados pelo presidente da República depois de aprovados pela maioria absoluta do Senado",
+      "Federal Constitution, art. 101: the STF has 11 justices, older than 35 and younger than 70, appointed by the President after approval by an absolute majority of the Senate", CF + "#art101", "2022-05-17"),
+    ec88: fonte("Senado Federal", "Emenda Constitucional nº 88, de 2015: os ministros do STF se aposentam obrigatoriamente aos 75 anos",
+      "Constitutional Amendment No. 88 of 2015: STF justices must retire at 75", "https://legis.senado.leg.br/norma/540691/publicacao/15624167", "2015-05-07"),
+    "stf-ostf": fonte("Supremo Tribunal Federal", "O STF: composição do Plenário, Turmas e presidência",
+      "The STF: members of the full court, Chambers (Turmas) and presidency", "https://portal.stf.jus.br/ostf/"),
+    "stf-pastas": fonte("Supremo Tribunal Federal (Biblioteca)", "Pastas dos Ministros: a composição atual, na ordem oficial, e as datas de cada ministro (indicação, aprovação no Senado, nomeação e posse)",
+      "Justices' files: the current composition, in the official order, and each justice's dates (nomination, Senate approval, appointment and swearing-in)",
+      "https://portal.stf.jus.br/textos/verTexto.asp?servico=bibliotecaConsultaProdutoBibliotecaPastaMinistro&pagina=ComposicaoAtual"),
+    "senado-msf": fonte("Senado Federal", "Dados Abertos: mensagens (MSF) com a indicação de autoridades, o parecer da CCJ e o resultado no Plenário",
+      "Open data: messages (MSF) nominating authorities, the CCJ committee report and the result in the full Senate",
+      "https://legis.senado.leg.br/dadosabertos/processo?sigla=MSF&ano=2026"),
+    "corte-aberta": fonte("Supremo Tribunal Federal", "Corte Aberta: os painéis de estatísticas do STF, com as decisões e o acervo de cada gabinete",
+      "Corte Aberta: the STF statistics dashboards, with the decisions and the caseload of each justice's office", "https://portal.stf.jus.br/hotsites/corteaberta/")
   };
   // botão "De onde veio isso?" com o assunto escondido para quem usa leitor de tela
   function fonteBtn(lista, assunto) {

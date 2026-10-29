@@ -95,6 +95,14 @@ jobs:
         run: python scripts/executivo.py
         continue-on-error: true
 
+      # ministros do STF (scripts/stf.py): lê os sites do STF e os Dados Abertos do Senado uma vez por semana (nos outros
+      # dias sai sem pedir nada); se um site estiver fora do ar, fica o dados/stf.json de antes. Avisa no resumo quando a
+      # composição muda. O cache (.cache/stf) já entra no cache "outros"; as fotos vão para img/pessoas/stf-*.jpg.
+      - name: Ministros do STF
+        run: python scripts/stf.py
+        continue-on-error: true
+        timeout-minutes: 15
+
       - name: TSE e IBGE
         run: python scripts/tse.py
         continue-on-error: true

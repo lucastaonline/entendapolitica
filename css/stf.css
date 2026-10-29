@@ -1,0 +1,86 @@
+/* ====== Ministros do STF: a seção da página do Brasil (#judiciario) e o perfil (pessoa.html?id=stf-...) ======
+   Cartões, escada "como alguém chega ao STF", Turmas, placar do Senado e a linha do tempo do perfil. */
+
+/* ---------- como alguém chega ao STF: os passos, um depois do outro ---------- */
+.stf-passos { list-style: none; counter-reset: passo; margin: 10px 0 8px; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr)); gap: 12px; }
+.stf-passos li {
+  counter-increment: passo; position: relative; display: flex; flex-direction: column; gap: 8px; background: #fff; border: 2px solid var(--line);
+  border-radius: 18px; padding: 14px; font-weight: 700; line-height: 1.4; box-shadow: 0 4px 0 #ece3d0; overflow-wrap: anywhere;
+}
+.stf-passos li::after {
+  content: counter(passo); position: absolute; top: 10px; right: 12px; width: 28px; height: 28px; border-radius: 50%;
+  background: var(--brand); color: #fff; display: grid; place-items: center; font-weight: 900; font-size: .85rem;
+}
+.stf-passos .stf-p-ic { font-size: 1.9rem; line-height: 1; }
+
+/* ---------- quem preside ---------- */
+.stf-presidencia { margin-top: 10px; }
+.stf-presidencia p { margin: 10px 0 0; }
+.stf-pres-gente { display: flex; flex-wrap: wrap; gap: 12px; }
+.stf-pres { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; color: var(--ink); background: #fff; border: 2px solid var(--line); border-radius: 18px; padding: 8px 16px 8px 8px; min-height: 44px; }
+.stf-pres:hover { background: #f3f7fd; }
+.stf-pres small { display: block; font-weight: 800; color: var(--muted); font-size: .78rem; text-transform: uppercase; letter-spacing: .03em; }
+.stf-pres b { display: block; font-size: 1.05rem; }
+
+/* ---------- os ministros (cartões) ---------- */
+.stf-grade { list-style: none; margin: 12px 0 8px; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr)); gap: 14px; }
+.stf-grade > li { display: flex; min-width: 0; }
+.stf-card {
+  display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; width: 100%; padding: 16px 14px;
+  background: #fff; border: 2px solid var(--line); border-radius: 20px; color: var(--ink); text-decoration: none;
+  box-shadow: 0 4px 0 #ece3d0; transition: transform .2s, box-shadow .2s; overflow-wrap: anywhere;
+}
+a.stf-card:hover { transform: perspective(700px) rotateX(5deg) translateY(-3px); box-shadow: 0 8px 18px rgba(60, 40, 0, .12); }
+.stf-card .av { width: 96px; height: 96px; }
+.stf-c-txt { display: flex; flex-direction: column; align-items: center; gap: 6px; width: 100%; }
+.stf-c-txt > b { font-size: 1.08rem; line-height: 1.2; }
+.stf-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
+.stf-chips .chip { white-space: normal; font-size: .72rem; padding: 2px 10px; }
+.stf-fatos { display: flex; flex-direction: column; gap: 3px; font-size: .84rem; color: var(--muted); line-height: 1.35; }
+.stf-fatos b { color: var(--ink); }
+.stf-card .ver { margin-top: auto; font-weight: 900; color: var(--brand); font-size: .9rem; }
+.stf-card.vaga { background: #fffaf0; border-style: dashed; border-color: #cdbf9f; box-shadow: none; }
+.stf-card.vaga .stf-c-txt > span { font-size: .86rem; line-height: 1.4; }
+.stf-cadeira { font-size: 3.2rem; line-height: 1; }
+.stf-fonte-vaga { margin-top: 4px; }
+
+/* ---------- Turmas ---------- */
+.stf-turmas { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 14px; margin-top: 10px; }
+.stf-turma h4 { margin: 0 0 2px; font-size: 1.1rem; color: var(--brand); }
+.stf-turma h4 small { font-weight: 700; color: var(--muted); }
+.stf-turma p { margin: 0 0 8px; font-size: .88rem; }
+.stf-turma ul { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; }
+.stf-turma li a { font-weight: 800; }
+.stf-turma .chip { font-size: .68rem; padding: 1px 8px; }
+
+/* ---------- o trabalho dos ministros ---------- */
+.stf-trabalho p { margin: 0 0 10px; }
+.stf-trabalho .links-onde { margin-top: 8px; }
+.stf-conf { font-size: .88rem; margin-top: 14px; }
+
+/* ---------- perfil: linha do tempo de como chegou ao STF ---------- */
+.stf-linha { list-style: none; margin: 14px 0 0; padding: 0; position: relative; }
+.stf-linha::before { content: ""; position: absolute; left: 22px; top: 10px; bottom: 10px; width: 4px; border-radius: 4px; background: #e6dcc6; }
+.stf-linha > li { position: relative; display: grid; grid-template-columns: 48px minmax(0, 1fr); gap: 12px; padding: 0 0 18px; }
+.stf-l-ic { position: relative; z-index: 1; width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; font-size: 1.4rem; background: #fff; border: 3px solid var(--brand); box-shadow: 0 3px 0 #d6e2f1; }
+.stf-linha h3 { margin: 10px 0 4px; font-size: 1.1rem; }
+.stf-linha h3 small { font-weight: 800; color: var(--muted); font-size: .85rem; }
+.stf-linha p { margin: 0 0 6px; overflow-wrap: anywhere; }
+.stf-placar { display: flex; flex-direction: column; gap: 6px; }
+.stf-barra { display: flex; width: 100%; max-width: 420px; height: 16px; border-radius: 99px; overflow: hidden; background: #efe9dc; border: 1px solid #ddd2bb; }
+.stf-barra i { display: block; height: 100%; }
+
+/* ---------- acessibilidade ---------- */
+html.sem-movimento .stf-card, html.sem-movimento a.stf-card:hover { transition: none; transform: none; }
+@media (prefers-reduced-motion: reduce) { .stf-card, a.stf-card:hover { transition: none; transform: none; } }
+html.alto-contraste .stf-card, html.alto-contraste .stf-passos li, html.alto-contraste .stf-pres { border-color: #000; box-shadow: none; }
+html.alto-contraste .stf-fatos { color: #000; }
+html.alto-contraste .stf-linha::before { background: #000; }
+html.alto-contraste .stf-l-ic { border-color: #000; box-shadow: none; }
+html.alto-contraste .stf-barra { border-color: #000; }
+@media (max-width: 420px) {
+  .stf-linha::before { left: 18px; }
+  .stf-linha > li { grid-template-columns: 40px minmax(0, 1fr); gap: 10px; }
+  .stf-l-ic { width: 40px; height: 40px; font-size: 1.15rem; }
+  .stf-pres { width: 100%; }
+}

@@ -7,7 +7,7 @@ Mesma identidade visual do [Entenda o 2º turno](https://entendaosegundoturno.ve
 ## As 4 portas da página inicial
 
 1. **Entenda a política** (`entenda.html`): um **mapa 3D** (tabuleiro) com 9 paradas: o que é política (escola), os Três Poderes, país/estado/cidade, os cargos (torre), o Congresso (no centro), como nasce uma lei, eleições (urna), quem julga e fiscaliza (tribunal) e como participar (palanque). Uma trilha amarela sugere a ordem, mas dá para clicar em qualquer lugar. Ao clicar, a câmera "mergulha" no lugar e abre a **aula daquela parada**: uma apresentação com muito 3D (escadas para processos, cartões que viram, quadrinhos que folheiam, quiz e simuladores). No fim: estrela no mapa e "próxima parada". O progresso fica salvo no aparelho.
-2. **A política do Brasil** (`brasil.html`): presidente, vice, ministros, os 81 senadores e os 513 deputados federais, com busca por qualquer político.
+2. **A política do Brasil** (`brasil.html`): presidente, vice, ministros, os 81 senadores e os 513 deputados federais, com busca por qualquer político, e o Supremo Tribunal Federal (STF), cujos ministros não são eleitos: como alguém chega ao STF, quem preside, os ministros na ordem oficial do tribunal (quem indicou cada um, desde quando está no STF, a Turma e a aposentadoria obrigatória aos 75 anos) e as Turmas. Cada ministro tem um perfil (`pessoa.html?id=stf-<slug>`) com a indicação, o placar na CCJ e no Plenário do Senado, o decreto de nomeação e a posse.
 3. **A política do meu estado** (`estado.html`): a pessoa escolhe o estado num mapa 3D com o formato real de cada estado (malha do IBGE; os estados pequenos têm a sigla num selo fora deles, ligado por uma linha) ou digitando o nome. Mostra governador e vice, os senadores e deputados federais do estado e os deputados estaduais. No fim, um campo leva para a página da cidade.
 4. **A política da minha cidade** (`cidade.html`): a pessoa digita o nome da cidade (as 5.569 do Brasil, com o estado ao lado para desempatar) e vê prefeito, vice e vereadores, além do que cada um faz. Brasília e Fernando de Noronha têm explicação própria (não têm prefeitura comum). Endereço: `cidade.html?ibge=<código IBGE>`; os endereços antigos `estado.html?uf=XX&cidade=<IBGE>` levam para lá.
 
@@ -48,7 +48,7 @@ Mandatos: o site mostra **quem está no cargo hoje** e marca quem foi **eleito/r
 
 1. **Mesma régua para todos.** Os mesmos campos, calculados do mesmo jeito, para todo mundo.
 2. **Fonte em tudo.** Todo bloco de informação tem `fonte` (órgão oficial: Câmara, Senado, TSE, IBGE, Planalto, Diário Oficial; ou imprensa quando não houver fonte oficial).
-3. **Ordem neutra.** Listas em ordem alfabética. Nada de ranking de "melhor" ou "pior".
+3. **Ordem neutra.** Listas em ordem alfabética, ou na ordem oficial da própria instituição quando ela existe (os ministros do STF aparecem como o STF os lista: o presidente, o vice e os outros por antiguidade, nunca agrupados por quem os indicou). Nada de ranking de "melhor" ou "pior".
 4. **Sem cores de partido.** Nenhum partido tem cor própria. No plenário, cada fatia é um partido e as fatias alternam dois tons neutros de azul só para separar uma da vizinha (do maior partido para o menor); o partido em destaque acende em amarelo.
 5. **Linguagem neutra.** Sem adjetivos de valor ("bom", "ruim", "polêmico", "importante"). Explicações simples dizem **o que a proposta faz**, nunca se é boa.
 6. **Quem fez de verdade.** Separar **autor(a) principal** de **coautor(a)** (quem só assinou junto).
@@ -60,7 +60,7 @@ Mandatos: o site mostra **quem está no cargo hoje** e marca quem foi **eleito/r
 ```
 index.html            página inicial (4 portas)
 entenda.html          mapa 3D da política + aulas de cada parada (lê conteudo/entenda/[en/]parte-N.json)
-brasil.html           política do Brasil (lê dados/executivo.json, dados/senado.json, dados/camara.json)
+brasil.html           política do Brasil (lê dados/executivo.json, dados/senado.json, dados/camara.json e dados/stf.json)
 estado.html           política do meu estado (lê dados/mapa-brasil.json, dados/estados/UF.json e dados/cidades/UF.json)
 cidade.html           política da minha cidade (lê dados/cidades.json e dados/cidades/UF/IBGE.json)
 pessoa.html           perfil de uma pessoa (lê dados/pessoas/<id>.json e dados/votacoes/<casa>.json)
@@ -76,12 +76,14 @@ css/mapa.css          o mundo 3D do mapa (chão, lotes, placas, câmera)
 css/entenda.css       as aulas (slides em 3D)
 css/votacoes.css      as duas páginas de votações e o bloco "Como o Congresso votou" do Brasil
 css/historico.css     a faixa "Você está vendo o passado" e o campo de mandatos
+css/stf.css           a seção do STF na página do Brasil e o perfil de cada ministro do STF
 js/comum.js           idioma, acessibilidade, janela, fontes, ouvir, Libras, formatação, listas com busca (EP.combo), compartilhar
 js/casa.js            monta uma Casa (Senado, Câmara, Assembleia, Câmara Municipal): plenário 3D com fatias e siglas por partido, filtros e lista de cartões
 js/brasil.js, js/estado.js, js/cidade.js, js/pessoa.js   as páginas do Brasil, do estado, da cidade e de cada pessoa
 js/votacoes.js        ajudas comuns das votações (EP.VOT), a lista de votações e o bloco do Brasil (#votos-recentes)
 js/votacao.js         a página de uma votação
 js/historico.js       mandatos anteriores: o campo "Ver outro mandato" e a página do passado (Brasil, estado e cidade)
+js/stf.js             ministros do STF (EP.stf): a seção #judiciario da página do Brasil e o perfil pessoa.html?id=stf-<slug>, montados no navegador a partir de dados/stf.json
 js/tres.js, js/tres-politica.js   montam as peças 3D (cada modelo tem modo "cena" e modo "mundo")
 js/mapa3d.js          monta o mapa 3D, câmera (voar até um lugar), girar, zoom, lista acessível
 js/entenda.js         carrega o conteúdo, liga o mapa e as aulas (especificação dos slides no topo do arquivo)
@@ -95,6 +97,7 @@ scripts/              coletores em Python (só biblioteca padrão + Pillow):
   mandatos.py         datas de posse e qual mandato está em curso em cada data (a regra da "virada" de mandato)
   simplificar.py, montar.py   explicações simples (IA) e a junção final (todo dia)
   historico.py, mapa.py       mandatos anteriores e mapa do Brasil (à mão)
+  stf.py                      ministros do STF (sites do STF e Dados Abertos do Senado): roda no robô diário, mas só lê uma vez por semana
   municipios/mapear.py        mapa das Câmaras Municipais e prefeituras (sites oficiais, sistema de propostas, Diário Oficial, pedido de informação)
   municipios/diarios.py       leis e vetos de cada prefeitura (Diários Oficiais e páginas oficiais de leis), só onde a contagem é segura
   atualizar_do_brasil.py      à mão, num computador no Brasil: lê de novo as Casas que os robôs do GitHub não conseguem ler e publica
@@ -113,6 +116,8 @@ Para ver no computador: `python -m http.server 8770` dentro da pasta e abra http
 - `python testes/interacao.py`: teclado, busca, listas com busca (estado, cidade, filtros), página da cidade, 4 portas, filtros, mapa e menu de acessibilidade.
 - `python testes/interacao_votacoes.py`: votações (lista, uma votação, bloco do Brasil e "Como votou" do perfil): teclado, filtros, "Mostrar mais" com o foco, números que batem com os dados, inglês, 320 px e axe-core depois de rolar e clicar.
 - `python testes/interacao_historico.py`: mandatos anteriores (campo pelo teclado, páginas do passado no Brasil, estado e cidade, "Voltar para hoje", cidade que ainda não existia, virada de mandato com o relógio adiantado).
+- `python testes/interacao_stf.py`: ministros do STF (a seção da página do Brasil: um cartão por ministro, na ordem oficial, a cadeira vazia, a presidência, as Turmas, as regras com fonte e o link para a parada 8; o perfil em português e em inglês, com o placar da CCJ e do Plenário do Senado, as datas, quem indicou, o decreto e as fontes, conferidos contra `dados/stf.json`; a busca; teclado, Voltar, 320 px, axe-core e nenhum erro de JavaScript).
+- `python testes/stf_robo.py` (sem servidor e sem rede): o que o `scripts/stf.py` faz quando os sites caem (o `dados/stf.json` não muda nem um byte; com o Senado fora do ar, cada ministro fica com o bloco do Senado de antes; uma página do STF quebrada é recusada), os avisos de mudança na composição e a leitura uma vez por semana.
 - `python testes/interacao_camaras.py`: Câmaras Municipais (capitais e Câmaras com SAPL; só as que o `montar.py` já juntou à página da cidade): lista oficial na página da cidade, perfil do vereador com propostas e filtros, perfil do prefeito ("Como contamos", "A lei mais recente na fonte"), textos em inglês, cidades só com a lista; votações nominais (São Paulo, Porto Alegre, Recife e uma Câmara com SAPL: resumo, a votação mais nova, placar, link oficial, "Mostrar mais votações") e os gastos de São Paulo, conferidos contra os dados.
 - `python testes/interacao_capitais_a.py`, `interacao_capitais_b.py` e `interacao_capitais_c.py`: as capitais cujas Câmaras são lidas em páginas do site (propostas, prefeito, notas, gastos e votações onde houver, inglês, 320 px).
 - `python testes/interacao_prefeituras.py`: leis e vetos das prefeituras pelos Diários Oficiais (perfil do prefeito com a contagem, vetos totais e parciais, fontes, "Como contamos", o motivo e o link em "Onde ver mais", inglês, 320 px e axe-core).
@@ -133,6 +138,8 @@ O robô das cidades (`.github/workflows/cidades.yml`, todo dia de madrugada, ant
 **Do Brasil, à mão.** Os robôs rodam no GitHub, fora do Brasil, e alguns sites oficiais de Assembleias e Câmaras Municipais não aceitam esse acesso (recusam, não respondem ou mandam regras que proíbem a leitura): essas Casas ficam com os dados da última leitura completa, e o site mostra essa data ("Última atualização dos dados", no quadro da Casa nas páginas do estado e da cidade, e "Dados da Assembleia/Câmara atualizados em" no topo do perfil; em amarelo quando tem mais de 8 dias). A data é o `conferido` de cada Casa em `dados/legislativos.json` (o dia da última leitura completa que deu certo, gravado pelo `scripts/legislativos.py`), que o `montar.py` leva para `infoCasa.conferido`. Para atualizar essas Casas, num computador no Brasil: `python scripts/atualizar_do_brasil.py --so-ver` (o que está atrasado e por quê) e `python scripts/atualizar_do_brasil.py --publicar` (lê de novo só as atrasadas, roda o `montar.py` e faz o commit e o push só dos dados; não roda com um robô do GitHub rodando). Opções: `--todas` (todas as Assembleias e capitais), `--casas BA RN 2111300`, `--mapa` (o mapa das cidades) e `--diarios` (as leis das prefeituras). Não há rotina automática: roda quando alguém pede (a skill `entendapolitica-atualizar` do Copilot, no computador do Lucas, faz isso).
 
 **Troca de mandato.** Ninguém precisa mexer no código quando um mandato acaba: `scripts/mandatos.py` sabe a data de posse de cada cargo (presidente em 5/1 e governadores em 6/1 a partir de 2027, pela EC 111/2021; Congresso em 1º/2; prefeitos e vereadores em 1º/1) e os coletores perguntam a ele qual mandato está em curso. No dia da posse, presidente, vice, governadores, deputados estaduais e as legislaturas da Câmara e do Senado trocam sozinhos, e os selos "Eleito em 2026" saem. As pesquisas à mão dizem de qual mandato são (`"eleicao": 2022` em `governadores.json`, `"eleicao": 2024` em `prefeitos.json`, `"mandatoInicio"` em `ministros.json`): quando um mandato novo começa, a de governadores deixa de valer (o site mostra quem ganhou, com "aConfirmar") e a de ministros ganha um aviso, até serem refeitas. Para as eleições municipais de 2028, `tse.py` ainda precisa aprender o ano novo (`ORDINARIAS`, `ID_DIVULGA` e a leitura de 2024).
+
+**Ministros do STF.** `scripts/stf.py` (no robô diário, antes de juntar tudo) lê os sites do STF (a página "O STF", as Pastas dos Ministros da Biblioteca do STF, as Turmas, a lista de presidentes e a de ministros por antiguidade) e a API de Dados Abertos do Senado (a mensagem de cada indicação, a CCJ e o Plenário) e grava `dados/stf.json` e as fotos `img/pessoas/stf-<slug>.jpg`. Roda todo dia, mas só lê os sites uma vez por semana: se o `conferido` do arquivo tem menos de 7 dias, sai sem pedir nada. Se um site estiver fora do ar ou a leitura vier incompleta (menos de 8 ministros, ou alguém sem nascimento, sem posse, sem quem indicou ou sem o placar do Senado), fica o arquivo de antes; se só o Senado cair, cada ministro fica com o bloco do Senado de antes; sem a foto nova, fica a de antes. Quando a composição muda (aposentadoria, posse, presidência, Turmas, indicação nova no Senado, cadeira vazia), o log mostra `⚠️ STF: ...` e o resumo do Actions ganha um aviso. Ninguém precisa mexer no código quando um ministro se aposenta ou toma posse: quem entra ganha o id `stf-<slug>`, e quem sai deixa a seção, a busca e o sitemap na mesma rodada (o `montar.py` refaz as entradas `stf-`). Para ler já: `python scripts/stf.py --agora`; para refazer o arquivo só com o que está no cache (`.cache/stf/`), sem rede: `python scripts/stf.py --cache` (a data `conferido` continua a da última leitura de verdade). O cache entra no cache "outros" do robô.
 
 **Depois de um 2º turno.** Os dados abertos de candidaturas do TSE (`consulta_cand`) levam alguns dias para trazer a situação depois do 2º turno (até lá, a linha do 2º turno vem com `#NULO`). Enquanto isso, o `tse.py` (`Base2026._completar_2turno`) lê a totalização final de cada 2º turno de presidente e de governador no sistema de resultados do TSE (`resultados.tse.jus.br/oficial/ele<ano>/<eleição do 2º turno>/dados/<uf>/<uf>-c<cargo>-e<eleição>-u.json`, só quando `"tf": "s"`) e põe esse arquivo como fonte junto com a candidatura. Quando os dados abertos chegam, eles passam a valer sozinhos. Depois do resultado final, rode `python scripts/historico.py` (o mandato seguinte entra no histórico).
 
@@ -395,10 +402,13 @@ Todo bloco de informação leva uma `fonte` (ou uma lista `fontes`):
 | `sen-<código Senado>` | senador(a) | `sen-5672` |
 | `pres-<slug>` / `vp-<slug>` | presidente / vice | `pres-lula` |
 | `min-<slug>` | ministro(a) | `min-saude` (slug do ministério) |
+| `stf-<slug>` | ministro(a) do Supremo Tribunal Federal | `stf-flavio-dino` (slug do nome que o STF usa; o id fica preso ao número do ministro no STF, `idStf`, e não muda se o STF mudar a grafia) |
 | `gov-<UF>` / `vgov-<UF>` | governador(a) / vice em exercício | `gov-BA` |
 | `dest-<UF>-<SQ_CANDIDATO TSE>` | deputado(a) estadual ou distrital | `dest-BA-50001603470` |
 | `pref-<IBGE>` / `vpref-<IBGE>` | prefeito(a) / vice | `pref-2927408` |
 | `ver-<IBGE>-<SQ_CANDIDATO TSE>` | vereador(a) | `ver-2927408-50002...` |
+
+Os ministros do STF não têm `dados/pessoas/<id>.json`: o perfil é montado no navegador a partir de `dados/stf.json` (`EP.stf.carregar`, em `js/stf.js`), com `tipo: "stf"`.
 
 ### `dados/pessoas/<id>.json` (perfil completo)
 
@@ -555,7 +565,7 @@ Na Câmara, a lista de votos traz só quem registrou voto (os ausentes não apar
 - `dados/cidades/<UF>.json`: lista para escolher a cidade: `[ {"ibge","nome","prefeito":"Nome (PARTIDO)"} ]`.
 - `dados/cidades/<UF>/<IBGE>.json`: `{ "ibge","nome","uf","prefeito":{...},"vice":{...},"vereadores":{"total","aviso","fonte","membros":[...]},"onde"?: {"camara":{...},"prefeitura":{...}},"atualizado" }`. `onde` vem do mapa das Câmaras e prefeituras (`dados/municipios/<UF>.json`, abaixo).
 - `dados/municipios/<UF>.json` (mapa das Câmaras Municipais e prefeituras, feito por `scripts/municipios/mapear.py`): `{ "uf", "atualizado", "fontes", "cidades": { "<IBGE>": { "camara": { "site", "sistema" (sapl | sagl | nopaper | outro | null), "api", "propostas" (página pública das proposições), "propostasOnline" (true | false | null), "sic" (pedido de informação), "conferido", "motivo"/"motivo_en" (por que não dá, quando não publica) }, "prefeitura": { "site", "transparencia", "sic", "diarioOficial": { "nome", "url", "plataforma" } } } } }`. Só endereços oficiais. É o que o perfil mostra no quadro **"Onde ver mais"** quando falta um dado.
-- `dados/busca.json`: `[[id, nome, cargo curto, UF, partido, cidade ou null], ...]` (sem vereadores; eles aparecem na página da cidade).
+- `dados/busca.json`: `[[id, nome, cargo curto, UF, partido, cidade ou null], ...]` (sem vereadores; eles aparecem na página da cidade). Os ministros do STF entram pelo `montar.py` (`_stf_busca`), com o cargo "Ministro do Supremo Tribunal Federal" ou "Ministra do Supremo Tribunal Federal" e UF, partido e cidade `null`.
 - `dados/simples/<00-99>.json`: cache das explicações simples: `{ "camara:2345678": { "pt": "Explicação simples", "en": "Simple explanation" }, ... }` (arquivo = 2 últimos dígitos do número). Escritas por `scripts/simplificar.py` só a partir da ementa oficial: no máximo 35 palavras, começando por um verbo (cria, muda, proíbe...), sem palavras de opinião. Quem quiser corrigir uma explicação edita o cache e roda `scripts/montar.py`.
 - `dados/tse/federais.json`: o que o TSE diz de cada pessoa do Congresso e do Executivo (eleição de 2022, bens declarados, resultado de 2026), juntado aos perfis por `scripts/montar.py`.
 
@@ -603,6 +613,57 @@ Quem foi **eleito** para cada mandato, segundo o TSE, com o **partido da eleiç�
 - `dados/manual/ministros-anteriores.json`: o mesmo formato, por governo inteiro (`"governos": [{ "id", "presidente", "inicio", "fim", "nota", "nota_en", "pastas", "fontes" }]`), mais `"sobre"`, `"semEfeito"` (o que é), `"tipos"` e `"atualizado"`.
 - Regras dos ministros: titular, interino e quadro "Interino" como a fonte diz; datas da fonte (no Diário Oficial, a data do decreto); saída sem data quando a fonte não traz; nomeação tornada sem efeito aparece no cartão com os dois decretos, sem contar como período; aviso de intervalo de mais de 15 dias sem ninguém na fonte. Entram os ministérios e os órgãos da Presidência que a fonte chama de ministro; o advogado-geral da União e o presidente do Banco Central não entram.
 - Limites combinados: até ~40 MB, ~400 arquivos e ~600 KB por arquivo (hoje: 252 arquivos, 20,9 MB, o maior com 407 KB). Por isso os vereadores vão sem o nome civil.
+
+### Ministros do STF (`dados/stf.json`, feito por `scripts/stf.py`)
+
+Quem está no Supremo Tribunal Federal hoje, na ordem oficial do tribunal (o presidente, o vice e os outros por antiguidade: a data da posse, depois a da nomeação, depois a idade, Regimento Interno do STF, art. 17), e como cada um chegou lá. Só fontes oficiais: STF (página "O STF", Pastas dos Ministros da Biblioteca, Turmas, Presidentes), Dados Abertos do Senado e a cópia do Diário Oficial guardada na Biblioteca do STF.
+
+```jsonc
+{
+  "tribunal": "Supremo Tribunal Federal", "sigla": "STF",
+  "cadeiras": 11, "cadeirasTurma": 5, "idadeLimite": 75, "maioriaSenado": 41,
+  "presidencia": { "presidente": "stf-...", "vice": "stf-...", "desde": "2025-09-29", "periodo": "2025–2027", "anos": 2, "fontes": [] },
+  "turmas": [ { "numero": 1, "nome": "Primeira Turma", "presidente": "stf-...", "membros": ["stf-..."], "cadeiras": 5 } ],
+  "fonteTurmas": [],
+  "ministros": [ {                                   // na ordem oficial
+    "id": "stf-flavio-dino", "idStf": 54,            // idStf: o número do ministro no STF (prende o id)
+    "pasta": "FlavioDino",                           // nome da pasta na Biblioteca do STF
+    "nome": "Flávio Dino", "nomeCivil": "Flávio Dino de Castro e Costa", "genero": "M",
+    "papel": null,                                   // "presidente" | "vice" | null
+    "decano": false, "turma": 1, "presideTurma": true,   // quem preside o STF: turma null
+    "foto": "img/pessoas/stf-flavio-dino.jpg", "fotoUrl": "https://portal.stf.jus.br/util/imagem.asp?id=...", "fotoCredito": "Supremo Tribunal Federal",
+    "nascimento": "1968-04-30", "naturalidade": "São Luís (MA)",
+    "aposentadoria": { "data": "2043-04-30", "idade": 75, "fontes": [] },            // 75 anos: EC 88/2015
+    "indicacao": { "presidente": "Luiz Inácio Lula da Silva", "presidenteGenero": "M", "data": "2023-11-27",
+                   "mensagem": "Mensagem nº 627, de 27 de novembro de 2023", "dou": "citação do DOU",
+                   "vaga": { "motivo": "aposentadoria", "de": "Rosa Maria Pires Weber", "nome": "Rosa Weber" },  // motivo: aposentadoria | falecimento
+                   "fontes": [] },
+    "senado": { "materia": "MSF 88/2023", "codigoMateria": 161290, "url": "página da matéria", "ementa": "texto oficial",
+                "chegou": "2023-11-27", "tramitando": false,
+                "ccj": { "data", "sim", "nao", "abstencao", "unanimidade", "aprovado", "texto" },
+                "plenario": { "data", "sim", "nao", "abstencao", "total", "resultado": "aprovada", "texto" },  // resultado: aprovada | rejeitada
+                "minimoSim": 41, "fontes": [] },     // "texto": o trecho oficial do resultado (null quando o placar veio só da votação estruturada)
+    "nomeacao": { "data": "2024-01-31", "decreto": "Decreto de 31 de janeiro de 2024", "aPartirDe": "2024-02-22",
+                  "dou": "citação do DOU", "douData": "2024-01-31", "fontes": [] },
+    "posse": { "data": "2024-02-22", "fontes": [] },
+    "presidencia": null,                             // de quem preside: { "posse": "2025-09-29" }
+    "links": { "gabinete", "pasta", "curriculo", "biografia" },   // páginas oficiais do STF ("Onde ver mais")
+    "fontes": []
+  } ],
+  "vagas": [ { "de": "Luís Roberto Barroso", "motivo": "aposentadoria", "desde": "2025-10-18", "pendente": false, "fontes": [],
+               "indicacoes": [ { "nome", "materia", "codigoMateria", "url", "ementa", "chegou", "tramitando", "ccj", "plenario", "minimoSim", "fontes" } ] } ],
+  "decisoes": { "total": 166339, "ano": 2025, "fonte": {} },   // o total do tribunal publicado na página "O STF" (null se sumir)
+  "links": { "corteAberta", "corteAbertaSobre", "composicao", "turmas", "ostf" },
+  "regras": { "fontes": [] },                         // Constituição, EC 122/2022, EC 88/2015, Regimento Interno do STF
+  "fontes": [],
+  "conferido": "2026-10-29",                          // a última leitura completa dos sites (o robô lê de novo 7 dias depois)
+  "atualizado": "2026-10-29"
+}
+```
+
+- `vagas`: uma por cadeira vazia (11 − número de ministros), com as indicações para o STF que o Senado recebeu neste ano e no anterior; `pendente: true` quando a cadeira não tem nenhuma indicação. O site mostra a vaga como mais um cartão, depois dos ministros.
+- O perfil `pessoa.html?id=stf-<slug>` é montado por `js/stf.js` a partir deste arquivo (não há `dados/pessoas/stf-*.json`).
+- Mesma régua: os mesmos campos para todos. Podem ser `null`: `papel`, `turma` (quem preside o STF não fica em Turma), `presidencia`, `nomeacao.aPartirDe` (só existe quando o decreto marca outra data para valer), `senado.ccj.abstencao` (os textos oficiais da CCJ não falam em abstenções: `null` para todos, e o site não mostra) e `senado.plenario.texto` (quando o placar veio só da votação estruturada da API). Os outros campos existem para os 10; se um faltar na fonte oficial, fica `null` e o site não mostra a linha.
 
 ---
 

@@ -134,6 +134,7 @@ def sitemap() -> int:
         for m in ind.get(nivel) or []:
             if m.get("fim") and m["fim"] <= hoje():
                 urls += [(f"{b}mandato={m['id']}", ind.get("atualizado")) for b in bases]
+    urls += _stf_sitemap()  # ministros do STF: perfis stf-
 
     def en(c: str) -> str:
         return c + ("&" if "?" in c else "?") + "lang=en"
@@ -367,6 +368,26 @@ def _lista_velha(a: dict, inicio: str) -> bool:
     return (a.get("atualizado") or "") < inicio
 
 
+# ministros do STF (dados/stf.json, feito por scripts/stf.py): busca e sitemap
+def _stf_busca() -> str:
+    """Os ministros do STF entram na busca (dados/busca.json) como "Ministro(a) do Supremo Tribunal Federal", sem estado,
+    partido nem cidade. Quem saiu do tribunal sai da busca na mesma rodada."""
+    d = ler_json(DADOS / "stf.json") or {}
+    b_arq = DADOS / "busca.json"
+    busca = [x for x in (ler_json(b_arq, []) or []) if not str(x[0]).startswith("stf-")]
+    novos = [[m["id"], m["nome"], ("Ministra" if m.get("genero") == "F" else "Ministro") + " do Supremo Tribunal Federal", None, None, None]
+             for m in d.get("ministros") or [] if m.get("id") and m.get("nome")]
+    busca += novos
+    busca.sort(key=lambda x: (chave_nome(x[1] or ""), x[0]))
+    salvar_json(b_arq, busca)
+    return f"{len(novos)} ministros" if novos else "sem dados/stf.json"
+
+
+def _stf_sitemap() -> list:
+    d = ler_json(DADOS / "stf.json") or {}
+    return [(f"pessoa.html?id={m['id']}", d.get("atualizado")) for m in d.get("ministros") or [] if m.get("id")]
+
+
 def juntar_legislativos() -> tuple[int, int]:
     """dados/assembleias/<UF>.json e dados/camaras/<IBGE>.json (scripts/legislativos.py) -> listas das páginas do estado e
     da cidade, no lugar da lista de eleitos do TSE. A busca (dados/busca.json) passa a ter quem está na lista oficial
@@ -543,6 +564,7 @@ def main() -> None:
     n_onde, n_ex = _onde_ver_cidades()
     log(f"cidades com \"onde ver\" (site oficial, pedido de informação, Diário Oficial) atualizado: {n_onde}")
     log(f"prefeitos com as leis e os vetos dos Diários Oficiais atualizados: {n_ex}")
+    log(f"ministros do STF na busca: {_stf_busca()}")  # ministros do STF
     log(f"dados/cidades.json: {indice_cidades()} cidades")
     log(f"sitemap.xml: {sitemap()} endereços")
     log("pronto")

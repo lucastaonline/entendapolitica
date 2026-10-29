@@ -21,15 +21,28 @@ Fontes:
 - Câmara e Senado (Dados Abertos): quem está no mandato hoje e CPF/nome civil/nascimento (para casar com o TSE).
 - dados/manual/governadores.json (pesquisa à mão): quem governa hoje, se já existir.
 - dados/manual/prefeitos.json (opcional, mesmo formato, chave = código IBGE): quem é prefeito(a)/vice hoje
-  quando não é quem o TSE mostra (ex.: morte, cassação sem eleição suplementar nos dados).
+  quando não é quem o TSE mostra (ex.: morte, cassação sem eleição suplementar nos dados). "conferido" é o dia da
+  pesquisa; "ate" (opcional) é o último dia em que ela vale (ex.: o dia marcado para a posse de quem ganhou uma eleição
+  suplementar). A pesquisa deixa de valer depois do "ate" ou se o TSE mostrar uma eleição suplementar feita depois do
+  "conferido": a ficha volta a mostrar o que vem do TSE e o log pede para rever a entrada.
 
 Casamento de pessoas entre eleições: CPF; se não houver CPF, nome civil + data de nascimento.
 Nunca só pelo nome.
+
+Os arquivos de uma eleição encerrada são baixados uma vez só, menos as candidaturas e os votos da eleição municipal do
+mandato em curso (2024, até a posse de 1º/1/2029): o TSE põe neles as eleições suplementares, e eles são baixados de novo
+uma vez por semana (se o TSE não responder, fica o arquivo de antes).
+
+Prefeitos que pediram registro de candidatura em 2026 (Constituição, art. 14, § 6º: para concorrer a outro cargo, o
+prefeito deixa a prefeitura até 6 meses antes da eleição): se a ficha da cidade ainda mostra a pessoa como prefeito(a) e
+não há pesquisa à mão feita depois do prazo, a ficha diz que ela deixou a prefeitura para concorrer e que quem governa hoje
+não foi conferido; o log lista essas cidades, para a pesquisa à mão em dados/manual/prefeitos.json.
 
 Uso:
     python scripts/tse.py              # tudo
     python scripts/tse.py --so-2026    # só atualiza "eleicao2026" (estados e dados/tse/federais.json)
     python scripts/tse.py --renovar    # baixa de novo todos os arquivos do TSE (ignora o cache)
+    python scripts/tse.py --cache      # sem rede: refaz as fichas só com o que já está em .cache/
 """
 from __future__ import annotations
 
@@ -37,6 +50,8 @@ import argparse
 import collections
 import concurrent.futures
 import csv
+import datetime as _dt
+import difflib
 import io
 import json
 import os
@@ -65,6 +80,12 @@ MANUAL_PREF = DADOS / "manual" / "prefeitos.json"
 IDADE_H = {2018: None, 2022: None, 2024: None, 2026: 20}
 IDADE_API_H = 20          # listas de Câmara/Senado e consultas ao DivulgaCandContas
 IDADE_DETALHE_H = 24 * 7  # CPF/nome civil/nascimento (quase nunca muda)
+# Eleição municipal do mandato em curso: o TSE põe nestes arquivos as eleições suplementares (marcadas quando a eleição de
+# uma cidade é anulada ou o prefeito perde o cargo) e os refaz depois de cada uma. Eles são baixados de novo uma vez por
+# semana (_zip_semanal); os outros arquivos de uma eleição encerrada, uma vez só.
+SEMANAIS = ("consulta_cand", "votacao_candidato_munzona")
+SEMANAL_REG = CACHE_TSE / "semanais.json"  # {arquivo: dia do último download que deu certo}
+SEM_REDE = False          # --cache: nenhum pedido à internet, só o que já está em .cache/
 
 # Código de cada eleição geral/municipal no DivulgaCandContas (fotos e páginas das candidaturas).
 ID_DIVULGA = {2018: "2022802018", 2022: "2040602022", 2024: "2045202024", 2026: "20322002026"}
@@ -187,6 +208,10 @@ def data_en(iso: str | None) -> str | None:
 
 
 def cpf_valido(s: str | None) -> str | None:
+    # o TSE escreve "-4" (ou "-1", "-3") quando não divulga o CPF: nos dados abertos de 2024, todas as linhas vêm assim.
+    # Isso não é um CPF (sem este cuidado, "-4" virava "00000000004" e ligava pessoas diferentes entre si).
+    if (s or "").strip().startswith(("-", "#")):
+        return None
     d = re.sub(r"\D", "", s or "")
     return d.zfill(11) if 0 < len(d) <= 11 and int(d) > 0 else None
 
@@ -205,16 +230,63 @@ def zip_tse(pasta: str, ano: int) -> Path:
     nome = f"{pasta}_{ano}.zip"
     idade = IDADE_H.get(ano, 20)
     if hoje() >= f"{ano + 1}-02-01":
+        if renova_semanal(pasta, ano):
+            return _zip_semanal(pasta, ano)
         idade = None  # eleição encerrada há meses (os eleitos já tomaram posse): baixa uma vez só
     return baixar_arquivo(f"{CDN}{pasta}/{nome}", f"tse/{nome}", max_idade_h=idade)
 
 
+def renova_semanal(pasta: str, ano: int) -> bool:
+    """O arquivo é baixado de novo toda semana? Só as candidaturas e os votos da eleição municipal do mandato em curso
+    (2024, até a posse de quem for eleito em 2028), por causa das eleições suplementares."""
+    return pasta in SEMANAIS and ano == vigente("prefeito")["eleicao"]
+
+
+def semana(iso: str) -> str:
+    """Semana do calendário (de segunda a domingo, ISO 8601) de uma data: '2026-10-29' -> '2026-44'."""
+    a, s, _ = _dt.date.fromisoformat(iso[:10]).isocalendar()
+    return f"{a}-{s:02d}"
+
+
+_FALHA_SEMANAL: list[str] = []  # um arquivo semanal não baixou: os outros desta rodada ficam como estavam (sem esperar de novo)
+
+
+def _zip_semanal(pasta: str, ano: int) -> Path:
+    """Baixa de novo, no máximo uma vez por semana do calendário, um arquivo de renova_semanal(). O dia do último download
+    que deu certo fica em .cache/tse/semanais.json, que vai junto com o arquivo no cache do robô (chave_cache muda toda
+    semana enquanto houver arquivo semanal). Se o TSE não responder, fica o arquivo de antes."""
+    nome = f"{pasta}_{ano}.zip"
+    destino = CACHE_TSE / nome
+    reg = ler_json(SEMANAL_REG, {}) or {}
+    tem = destino.exists() and destino.stat().st_size > 0
+    if tem and (SEM_REDE or _FALHA_SEMANAL or (IDADE_H.get(ano) != 0 and reg.get(nome) and semana(reg[nome]) == semana(hoje()))):
+        return destino
+    try:
+        p = baixar_arquivo(f"{CDN}{pasta}/{nome}", f"tse/{nome}", max_idade_h=0, tentativas=2, timeout=180)
+    except Exception as e:  # noqa: BLE001
+        if not tem:
+            raise
+        _FALHA_SEMANAL.append(nome)
+        log(f"  [aviso] {nome}: o TSE não respondeu ({e}); fica o arquivo de "
+            f"{reg.get(nome) or _dt.date.fromtimestamp(destino.stat().st_mtime).isoformat()}")
+        return destino
+    reg[nome] = hoje()
+    salvar_json(SEMANAL_REG, dict(sorted(reg.items())), indentado=True)
+    log(f"  {nome}: baixado de novo (eleição municipal do mandato em curso: as eleições suplementares entram toda semana)")
+    return p
+
+
 def chave_cache() -> str:
     """Nome do cache de .cache/tse no GitHub Actions. Muda quando uma eleição fecha (1º de fevereiro do ano seguinte):
-    aí os arquivos dela, que não mudam mais, entram no cache novo (o nome antigo não seria salvo de novo)."""
+    aí os arquivos dela, que não mudam mais, entram no cache novo (o nome antigo não seria salvo de novo). Enquanto houver
+    arquivo baixado de novo toda semana (renova_semanal), o nome muda também a cada semana do calendário (ex.:
+    "tse-2022-2024-s2026-44"): a primeira rodada da semana baixa o arquivo novo, e ele fica guardado para as outras."""
     h = hoje()
     fechadas = [a for a in range(2018, int(h[:4]) + 1, 2) if h >= f"{a + 1}-02-01"]
-    return "tse-" + "-".join(map(str, fechadas[-2:]))
+    chave = "tse-" + "-".join(map(str, fechadas[-2:]))
+    if any(renova_semanal(p, a) for p in SEMANAIS for a in fechadas):
+        chave += "-s" + semana(h)
+    return chave
 
 
 def membros_csv(z: zipfile.ZipFile) -> list[str]:
@@ -448,8 +520,10 @@ class Base2026:
         for r in ler_csv(zip_tse("consulta_cand_complementar", 2026)):
             comp[(r["SQ_CANDIDATO"], r["CD_ELEICAO"])] = (r["ST_CANDIDATO_INSERIDO_URNA"], r["DS_SITUACAO_JULGAMENTO"])
         self.data = None
+        self.turno1 = None  # dia do 1º turno da eleição geral (o prazo para deixar o cargo é 6 meses antes)
         self.por_sq = collections.defaultdict(list)
         self.por_cpf, self.por_nn = collections.defaultdict(set), collections.defaultdict(set)
+        self.por_nasc = collections.defaultdict(set)
         for r in ler_csv(zip_tse("consulta_cand", 2026)):
             self.data = self.data or data_iso(r["DT_GERACAO"])
             c = cand(r, 2026)
@@ -459,6 +533,9 @@ class Base2026:
                 self.por_cpf[c["cpf"]].add(c["sq"])
             if c["nasc"]:
                 self.por_nn[(chave_nome(c["nome"]), c["nasc"])].add(c["sq"])
+                self.por_nasc[c["nasc"]].add(c["sq"])
+            if c["turno"] == 1 and c["el"] in ORDINARIAS[2026] and c["dt"]:
+                self.turno1 = min(self.turno1 or c["dt"], c["dt"])
         self.fonte_2turno = {}
         self._completar_2turno()
 
@@ -490,6 +567,19 @@ class Base2026:
         if not sqs and nome and nasc:
             sqs = set(self.por_nn.get((chave_nome(nome), nasc), ()))
         return sorted(sqs)
+
+    def parecidos(self, nome: str | None, nasc: str | None, uf: str | None = None) -> list[str]:
+        """Candidaturas com a mesma data de nascimento e o nome quase igual, mas não igual (grafia diferente entre os anos,
+        como "Sirqueira" e "Siqueira"), no mesmo estado (ou para presidente). Servem só para o log pedir uma conferência à
+        mão: nunca ligam pessoas sozinhas."""
+        n = chave_nome(nome or "")
+        out = []
+        for sq in self.por_nasc.get(nasc or "", ()):
+            c = self.por_sq[sq][0]
+            outro = chave_nome(c["nome"])
+            if outro != n and (not uf or c["uf"] in (uf, "BR")) and difflib.SequenceMatcher(None, n, outro).ratio() >= 0.8:
+                out.append(sq)
+        return sorted(out)
 
     def melhor(self, sqs: list[str]) -> str:
         """Se a pessoa tem mais de um registro, vale o que foi para a urna e com resultado mais definido."""
@@ -1065,8 +1155,180 @@ def _pessoa_cidade(c: dict, pid: str, titular: dict | None, vot24: dict, data: s
     return out
 
 
+# ---------------------------------------------------------------- prefeitos que concorreram em 2026
+# Constituição, art. 14, § 6º: para concorrer a outro cargo, o prefeito renuncia até 6 meses antes da eleição. Quem a
+# ficha da cidade ainda mostra como prefeito(a) e pediu registro de candidatura em 2026 saiu da prefeitura (se o registro
+# não foi aceito, pode não ter saído). Sem pesquisa à mão feita depois do prazo, a ficha deixa de mostrar a pessoa como
+# prefeita, diz por quê (com as fontes) e que quem governa hoje não foi conferido; o log lista a cidade para a pesquisa à
+# mão (dados/manual/prefeitos.json). Ligação das pessoas: CPF; os dados abertos de 2024 não trazem o CPF (vem "-4", não
+# divulgado), então vale o nome civil + a data de nascimento, como no resto do site; nunca só o nome.
+URL_CF = "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm"
+CARGO_EN = {"PRESIDENTE": "president", "VICE-PRESIDENTE": "vice president", "GOVERNADOR": "governor",
+            "VICE-GOVERNADOR": "vice governor", "SENADOR": "senator", "1º SUPLENTE": "1st alternate senator",
+            "2º SUPLENTE": "2nd alternate senator", "DEPUTADO FEDERAL": "federal deputy",
+            "DEPUTADO ESTADUAL": "state deputy", "DEPUTADO DISTRITAL": "district deputy"}
+PARA_PESQUISAR: list[tuple] = []  # (IBGE, cidade, UF, quem, o que fez em 2026): para a pesquisa à mão
+PARECIDOS: list[tuple] = []       # mesma data de nascimento e nome quase igual: o log pede para conferir à mão
+MANUAL_FORA: list[tuple] = []     # (IBGE, cidade, UF, motivo): pesquisa à mão que deixou de valer (o site volta ao TSE)
+POSSE_A_CONFERIR: list[tuple] = []  # (IBGE, cidade, UF, data): pesquisa à mão de antes da posse dos eleitos numa suplementar
+
+
+def seis_meses_antes(iso: str) -> str:
+    """'2026-10-04' -> '2026-04-04' (o prazo do art. 14, § 6º, da Constituição)."""
+    a, m = int(iso[:4]), int(iso[5:7]) - 6
+    if m < 1:
+        a, m = a - 1, m + 12
+    return f"{a}-{m:02d}-{iso[8:10]}"
+
+
+def fonte_cf14() -> dict:
+    return fonte("Planalto", "Constituição Federal, art. 14, § 6º (para concorrer a outro cargo, o prefeito tem de renunciar "
+                 "até 6 meses antes da eleição)", URL_CF, "1988-10-05")
+
+
+def candidatura_2026(p: dict | None, c: dict | None, m: dict | None, b26: "Base2026", prazo: str,
+                     onde: tuple) -> tuple | None:
+    """(cpf, nome civil, nascimento) de quem a ficha mostra como prefeito(a), se a pessoa pediu registro de candidatura em
+    2026 e já era prefeita no prazo (6 meses antes da eleição); senão, None. p = a ficha; c = a linha do TSE de 2024
+    (eleição ordinária ou suplementar), quando a ficha veio do TSE; m = a pesquisa à mão, quando veio dela.
+    onde = (IBGE, cidade, UF), para o log."""
+    if not isinstance(p, dict) or p.get("vago") or not p.get("nome"):
+        return None
+    if m:
+        if max(m.get("conferido") or "", m.get("desde") or "") > prazo:
+            return None  # pesquisa à mão feita depois do prazo (ou de quem assumiu depois dele): vale a pesquisa
+        chaves = (None, m.get("nomeCivil"), (m.get("nascimento") or "")[:10] or None)
+    elif c:
+        if (c.get("dt") or "") > prazo:
+            return None  # escolhida numa eleição suplementar depois do prazo: não era prefeita durante a campanha
+        chaves = (c["cpf"], c["nome"], c["nasc"])
+    else:
+        return None
+    if not (chaves[0] or (chaves[1] and chaves[2])):
+        return None
+    if b26.achar(*chaves):
+        return chaves
+    if chaves[1] and chaves[2]:
+        for sq in b26.parecidos(chaves[1], chaves[2], onde[2]):
+            t1 = min(b26.por_sq[sq], key=lambda x: x["turno"])
+            PARECIDOS.append(onde + (p["nome"], f"{chaves[1]} ({chaves[2]}) x {t1['nome']}: {cargo_txt(t1['cargo'], t1['genero'])}",
+                                     url_cand(2026, sq, t1["uf"], t1["ue"])))
+    return None
+
+
+def deixou_prefeitura(p: dict, c: dict | None, m: dict | None, vice: dict | None, chaves: tuple, b26: "Base2026",
+                      prazo: str) -> tuple[dict, dict | None, tuple, str]:
+    """A ficha do prefeito sem a pessoa que deixou a prefeitura para concorrer em 2026 (quem governa hoje não foi
+    conferido), com o que ela fez em 2026, as fontes (TSE e Constituição) e a ficha de quem foi eleito ("eleito2024").
+    Devolve (prefeito, vice, (aviso, aviso_en), resumo para o log)."""
+    sq = b26.melhor(b26.achar(*chaves))
+    rs = sorted(b26.por_sq[sq], key=lambda x: x["turno"])
+    t1, t2 = rs[0], next((x for x in rs if x["turno"] == 2), None)
+    g = p.get("genero") or t1["genero"]
+    a = "a" if g == "F" else "o"
+    cargo, cargo_en = minusc1(cargo_txt(t1["cargo"], g)), CARGO_EN.get(t1["cargo"], minusc1(cargo_txt(t1["cargo"], g)))
+    julg = sem_acento(t1.get("julg") or "").upper()
+    if t2 and eleito(t2["sit"]):
+        res = (f"foi eleit{a} no 2º turno", "was elected in the runoff")
+    elif t2 and t2["sit"] == "NÃO ELEITO":
+        res = (f"disputou o 2º turno e não foi eleit{a}", "ran in the runoff and was not elected")
+    elif t1["sit"] == "2º TURNO":
+        res = ("disputou o 2º turno", "ran in the runoff")
+    elif eleito(t1["sit"]):
+        res = (f"foi eleit{a}", "was elected")
+    elif t1["sit"] == "SUPLENTE":
+        res = ("ficou como suplente", "became an alternate")
+    elif t1["sit"] == "NÃO ELEITO":
+        res = (f"não foi eleit{a}", "was not elected")
+    elif "RENUNCIA" in julg:
+        res = ("desistiu da candidatura", "withdrew the candidacy")
+    elif "INDEFERIDO" in julg:
+        res = ("teve o registro negado pela Justiça Eleitoral", "had the registration rejected by the electoral courts")
+    elif "CANCELADO" in julg:
+        res = ("teve o registro cancelado", "had the registration canceled")
+    else:
+        res = ("não foi para a urna", "was not on the ballot")
+    if m:
+        quando = ((f"que assumiu a prefeitura em {data_br(m['desde'])}", f"who became mayor on {data_en(m['desde'])}")
+                  if m.get("desde") else (f"que era prefeit{a}", "who was mayor"))
+    elif c and c["el"] not in ORDINARIAS[2024]:
+        quando = (f"eleit{a} prefeit{a} na eleição suplementar de {data_br(c['dt'])}",
+                  f"elected mayor in the special election held on {data_en(c['dt'])}")
+    else:
+        quando = (f"eleit{a} prefeit{a} em 2024", "elected mayor in 2024")
+    # registro aceito pela Justiça Eleitoral = a pessoa cumpriu o prazo para deixar a prefeitura
+    if julg.startswith("DEFERIDO"):
+        acao = (f"deixou a prefeitura para concorrer a {cargo} em 2026 e {res[0]}",
+                f"left office to run for {cargo_en} in 2026 and {res[1]}")
+    else:
+        acao = (f"pediu registro de candidatura a {cargo} em 2026 e {res[0]}",
+                f"filed to run for {cargo_en} in 2026 and {res[1]}")
+    quem = p["nome"] + (f" ({p['partido']})" if p.get("partido") else "")
+    txt = (f"{quem}, {quando[0]}, {acao[0]}.", f"{quem}, {quando[1]}, {acao[1]}.")
+    regra = (f"Pela Constituição (art. 14, § 6º), para concorrer a outro cargo, o prefeito tem de deixar a prefeitura até "
+             f"6 meses antes da eleição (até {data_br(prazo)}).",
+             f"Under the Federal Constitution (art. 14, § 6), a mayor who runs for another office must leave the post at "
+             f"least 6 months before the election (by {data_en(prazo)}).")
+    nao = ("Este site não conferiu quem governa a cidade hoje: veja no site oficial da prefeitura.",
+           "This site has not checked who runs the city today: see the city government's official website.")
+    fontes = [fonte_cand(t1, b26.data), fonte_cf14()]
+    eleito24 = {k: v for k, v in p.items() if k not in ("id", "aConfirmar")} if not m else p.get("eleito2024")
+    novo = limpar({
+        "id": p["id"], "aConfirmar": True,
+        "deixou": limpar({"nome": p.get("nome"), "nomeCivil": p.get("nomeCivil"), "partido": p.get("partido"), "genero": g,
+                          "cargo": cargo_txt(t1["cargo"], g), "situacao": b26.situacao(*chaves, None, g)["situacao"],
+                          "registro": "aceito" if julg.startswith("DEFERIDO") else "outro",
+                          "txt": txt[0], "txt_en": txt[1], "fonte": fontes[0]}),
+        "txt": f"{txt[0]} {nao[0]}", "txt_en": f"{txt[1]} {nao[1]}", "fontes": fontes, "eleito2024": eleito24,
+    }, manter=("eleito2024",))
+    if isinstance(vice, dict) and vice.get("nome") and not vice.get("vago"):
+        vice = dict(vice, aConfirmar=True,
+                    nota=f"Este site não conferiu se {vice['nome']} assumiu a prefeitura quando {p['nome']} saiu.",
+                    nota_en=f"This site has not checked whether {vice['nome']} became mayor when {p['nome']} left.")
+    return novo, vice, (f"{txt[0]} {regra[0]} {nao[0]}", f"{txt[1]} {regra[1]} {nao[1]}"), f"{t1['cargo']}: {t1['sit'] or julg}"
+
+
+def avisar_prefeitos_2026(prazo: str | None) -> None:
+    """O log (e o resumo do GitHub Actions) lista as cidades que precisam de pesquisa à mão em dados/manual/prefeitos.json:
+    a ficha mostrava como prefeito(a) alguém que pediu registro de candidatura em 2026, e os nomes quase iguais."""
+    if PARA_PESQUISAR:
+        txt = (f"{len(PARA_PESQUISAR)} cidades mostravam como prefeito(a) alguém que pediu registro de candidatura em 2026 "
+               f"(Constituição, art. 14, § 6º: deixar a prefeitura até {data_br(prazo)}) e não têm pesquisa à mão feita "
+               "depois do prazo. A ficha diz que quem governa hoje não foi conferido; pesquise e ponha em "
+               "dados/manual/prefeitos.json: ")
+        log("⚠️ Prefeitos: " + txt)
+        for cod, nome, uf, quem, res in PARA_PESQUISAR:
+            log(f"    {cod} {nome} ({uf}): {quem} ({res})")
+        if os.environ.get("GITHUB_ACTIONS") == "true":
+            lista = "; ".join(f"{cod} {nome} ({uf})" for cod, nome, uf, *_ in PARA_PESQUISAR)
+            print(f"::warning title=Prefeitos::{txt}{lista}", flush=True)
+    if PARECIDOS:
+        log(f"⚠️ Prefeitos: {len(PARECIDOS)} pessoas com a mesma data de nascimento e o nome quase igual ao de uma "
+            "candidatura de 2026 (a ficha não muda sozinha: confira à mão se é a mesma pessoa):")
+        for cod, nome, uf, quem, como, url in PARECIDOS:
+            log(f"    {cod} {nome} ({uf}): {quem}: {como} {url}")
+        if os.environ.get("GITHUB_ACTIONS") == "true":
+            print(f"::warning title=Prefeitos::{len(PARECIDOS)} prefeitos com nome quase igual ao de uma candidatura de "
+                  f"2026 (conferir à mão): " + "; ".join(f"{x[0]} {x[1]} ({x[2]})" for x in PARECIDOS), flush=True)
+    if MANUAL_FORA:
+        log(f"⚠️ Prefeitos: {len(MANUAL_FORA)} cidades com pesquisa à mão que deixou de valer (a ficha volta a mostrar o "
+            "que vem do TSE; refaça a pesquisa ou apague a entrada de dados/manual/prefeitos.json):")
+        for cod, nome, uf, motivo in MANUAL_FORA:
+            log(f"    {cod} {nome} ({uf}): {motivo}")
+    if POSSE_A_CONFERIR:
+        log(f"⚠️ Prefeitos: {len(POSSE_A_CONFERIR)} cidades com pesquisa à mão de antes da posse de quem foi eleito numa "
+            "eleição suplementar (a ficha mostra quem governa até a posse): depois da posse, apague a entrada de "
+            "dados/manual/prefeitos.json (ou ponha nela \"ate\": o dia da posse):")
+        for cod, nome, uf, dt in POSSE_A_CONFERIR:
+            log(f"    {cod} {nome} ({uf}): eleição suplementar de {data_br(dt)}")
+    if (MANUAL_FORA or POSSE_A_CONFERIR) and os.environ.get("GITHUB_ACTIONS") == "true":
+        print("::warning title=Prefeitos::Pesquisa à mão a rever em dados/manual/prefeitos.json: " +
+              "; ".join(f"{x[0]} {x[1]} ({x[2]})" for x in MANUAL_FORA + POSSE_A_CONFERIR), flush=True)
+
+
 def montar_cidade(ue: str, cod: str, nome: str, uf: str, rows: list[dict], vot24: dict, data: str, supl_ids: dict,
-                  contagem: collections.Counter, manual: dict | None = None) -> dict:
+                  contagem: collections.Counter, manual: dict | None = None, b26: "Base2026 | None" = None,
+                  prazo: str | None = None) -> dict:
     hoje_iso = hoje()
     ords = [c for c in rows if c["el"] in ORDINARIAS[2024]]
     supl = collections.defaultdict(list)
@@ -1104,7 +1366,7 @@ def montar_cidade(ue: str, cod: str, nome: str, uf: str, rows: list[dict], vot24
             pref, vice, origem, sit_div, aconf = ep[0], (ev[0] if len(ev) == 1 else None), "divulga", "ELEITO", True
             avisos.append(("Nos dados abertos do TSE, o resultado de 2024 desta cidade aparece sem definição "
                            "(pode estar sendo recalculado). O nome veio do DivulgaCandContas, do TSE.",
-                           "In the TSE open data, this city's 2024 result shows as undefined (it may be being "
+                           "In the TSE open data, this city's 2024 result appears without a final outcome (it may be being "
                            "recalculated). The name comes from DivulgaCandContas, the TSE candidate website."))
         else:
             avisos.append(("O TSE não mostra prefeito(a) eleito(a) em 2024 nesta cidade: a eleição pode ter sido "
@@ -1131,13 +1393,48 @@ def montar_cidade(ue: str, cod: str, nome: str, uf: str, rows: list[dict], vot24
 
     prefeito = _pessoa_cidade(pref, f"pref-{cod}", pref, vot24, data, supl_ids, aconf, sit_div) if pref else None
     vice_o = _pessoa_cidade(vice, f"vpref-{cod}", pref, vot24, data, supl_ids, aconf, sit_div) if vice else None
+    # prefeitos 2026: a pesquisa à mão vale até "ate" (se houver; ex.: o dia marcado para a posse de quem ganhou uma
+    # eleição suplementar) e perde para uma eleição suplementar feita depois dela ("conferido"); se a suplementar foi
+    # feita depois de a pessoa da pesquisa assumir, mas antes da pesquisa, a ficha diz que os eleitos tomam posse depois
+    aviso_posse = None
+    if manual:
+        conf = str(manual.get("conferido") or (manual.get("prefeito") or {}).get("conferido") or "")[:10]
+        ate = str(manual.get("ate") or "")[:10]
+        if ate and ate < hoje_iso:
+            MANUAL_FORA.append((cod, nome, uf, f"a pesquisa valia até {data_br(ate)}"))
+            manual = None
+        elif aplicada and aplicada > conf:
+            MANUAL_FORA.append((cod, nome, uf, f"eleição suplementar de {data_br(aplicada)}, depois da pesquisa"
+                                + (f" ({data_br(conf)})" if conf else "")))
+            manual = None
+        elif aplicada and aplicada > str((manual.get("prefeito") or {}).get("desde") or "")[:10]:
+            if not ate:
+                POSSE_A_CONFERIR.append((cod, nome, uf, aplicada))
+            quando = ((f"tomam posse em {data_br(ate)}", f"take office on {data_en(ate)}") if ate else
+                      ("tomam posse depois da diplomação pela Justiça Eleitoral",
+                       "take office after being certified by the Electoral Courts"))
+            aviso_posse = (f"Os eleitos na eleição suplementar de {data_br(aplicada)} {quando[0]}; até lá, governa a cidade "
+                           f"quem aparece abaixo" + (f", conferido à mão em {data_br(conf)}." if conf else "."),
+                           f"The winners of the special election held on {data_en(aplicada)} {quando[1]}; until then, the "
+                           f"city is run by the person shown below" + (f", checked by hand on {data_en(conf)}." if conf else "."))
     if manual:
         cands = [(pref, prefeito), (vice, vice_o)]
         prefeito, vice_o = (aplicar_manual_cidade(f"pref-{cod}", manual.get("prefeito"), prefeito, cands),
                             aplicar_manual_cidade(f"vpref-{cod}", manual.get("vice"), vice_o, cands[::-1]))
         avisos = [("Quem está no cargo hoje foi conferido à mão, com as fontes indicadas.",
-                   "Who is in office today was checked by hand, using the sources shown.")]
+                   "Who is in office today was checked by hand, using the sources shown.")] + ([aviso_posse] if aviso_posse else [])
         contagem["manual"] += 1
+    # prefeitos 2026: quem a ficha mostra como prefeito(a) e pediu registro de candidatura em 2026 (art. 14, § 6º)
+    if b26 is not None and prazo:
+        m_p = (manual or {}).get("prefeito")
+        m_p = (dict(m_p, conferido=m_p.get("conferido") or manual.get("conferido"))
+               if isinstance(m_p, dict) and m_p and not m_p.get("vago") else None)
+        chaves = candidatura_2026(prefeito, None if m_p else pref, m_p, b26, prazo, (cod, nome, uf))
+        if chaves:
+            prefeito, vice_o, av, res = deixou_prefeitura(prefeito, pref, m_p, vice_o, chaves, b26, prazo)
+            avisos = [av] + [x for x in avisos if x[0] != AVISO_PREF and not x[0].startswith("Quem está no cargo hoje foi")]
+            contagem["deixou-2026"] += 1
+            PARA_PESQUISAR.append((cod, nome, uf, prefeito["deixou"]["nome"], res))
 
     # vereadores: 2024 + eleições suplementares de vereador
     ver = [c for c in ords if c["cargo"] == "VEREADOR" and eleito(c["sit"])]
@@ -1168,7 +1465,7 @@ def montar_cidade(ue: str, cod: str, nome: str, uf: str, rows: list[dict], vot24
         if ver:
             aviso_ver.append(("Nos dados abertos do TSE, o resultado de 2024 desta cidade aparece sem definição "
                               "(pode estar sendo recalculado). Os nomes vieram do DivulgaCandContas, do TSE.",
-                              "In the TSE open data, this city's 2024 result shows as undefined (it may be being "
+                              "In the TSE open data, this city's 2024 result appears without a final outcome (it may be being "
                               "recalculated). The names come from DivulgaCandContas, the TSE candidate website."))
         else:
             aviso_ver.append(("O TSE ainda não mostra os vereadores eleitos em 2024 nesta cidade.",
@@ -1268,11 +1565,37 @@ def so_2026(b22: Base, b26: Base2026, fed: list[dict]) -> None:
     log(f"eleicao2026 atualizado: federais.json + {n} estados mudaram")
 
 
+def _sem_rede() -> None:
+    """--cache: nenhum pedido à internet. Cada arquivo vem do .cache/, qualquer que seja a idade; o que não estiver lá
+    conta como falha de rede (o script segue como seguiria com o site fora do ar)."""
+    global SEM_REDE
+    import comum
+    SEM_REDE = True
+    orig = comum.baixar
+
+    def baixar(url, destino=None, max_idade_h=20, **kw):
+        if destino is not None and Path(destino).exists() and Path(destino).stat().st_size > 0:
+            return orig(url, destino, max_idade_h=None, **kw)
+        raise RuntimeError(f"sem rede (--cache): {url} não está no cache")
+
+    def baixar_arq(url, nome_cache, max_idade_h=20, **kw):
+        destino = CACHE / nome_cache
+        if destino.exists() and destino.stat().st_size > 0:
+            return destino
+        raise RuntimeError(f"sem rede (--cache): {nome_cache} não está no cache")
+
+    comum.baixar = baixar
+    globals()["baixar_arquivo"] = baixar_arq
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--so-2026", action="store_true", help="só atualiza eleicao2026")
     ap.add_argument("--renovar", action="store_true", help="baixa de novo os arquivos do TSE")
+    ap.add_argument("--cache", action="store_true", help="sem rede: refaz tudo só com o que já está em .cache/")
     args = ap.parse_args()
+    if args.cache:
+        _sem_rede()
     if args.renovar:
         for k in IDADE_H:
             IDADE_H[k] = 0
@@ -1350,10 +1673,12 @@ def main():
     man_pref = manual_prefeitos()
     if man_pref:
         log(f"  dados/manual/prefeitos.json: {len(man_pref)} cidades")
+    prazo = seis_meses_antes(b26.turno1) if b26.turno1 else None  # para concorrer em 2026, deixar a prefeitura até aqui
     for ue, (uf, _) in sorted(ues24.items()):
         cod = mapa[ue]
         nome = municipios[cod]["nome"]
-        cid = montar_cidade(ue, cod, nome, uf, por_ue.get(ue, []), vot[2024], data24, supl_ids, contagem, man_pref.get(cod))
+        cid = montar_cidade(ue, cod, nome, uf, por_ue.get(ue, []), vot[2024], data24, supl_ids, contagem, man_pref.get(cod),
+                            b26, prazo)
         cidades[cod] = cid
         salvar(CIDADES / uf / f"{cod}.json", cid)
         p = cid["prefeito"]
@@ -1368,6 +1693,7 @@ def main():
     n_pref = sum(1 for c in cidades.values() if c["prefeito"] and c["prefeito"].get("nome"))
     n_ver = sum(c["vereadores"]["total"] for c in cidades.values())
     log(f"dados/cidades: {len(cidades)} cidades, {n_pref} prefeitos, {n_ver} vereadores; origem: {dict(contagem)}")
+    avisar_prefeitos_2026(prazo)
 
     # ---- busca
     busca = []

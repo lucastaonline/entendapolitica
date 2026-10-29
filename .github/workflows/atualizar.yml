@@ -107,15 +107,6 @@ jobs:
         run: python scripts/tse.py
         continue-on-error: true
 
-      # quem foi eleito em 2026 e ainda não tomou posse (dados/eleitos/): usa as candidaturas que o tse.py acabou de baixar,
-      # a votação por município e zona (baixada de novo a cada 7 dias; guarda só as somas em .cache/eleitos) e o
-      # DivulgaCandContas (eleições suplementares). Se o TSE não responder, ficam os arquivos de antes. Cada cargo sai dos
-      # arquivos no dia da posse.
-      - name: Eleitos em 2026 (até a posse)
-        run: python scripts/eleitos.py
-        continue-on-error: true
-        timeout-minutes: 20
-
       # cada Casa tem o seu coletor (scripts/assembleias/<uf>.py) e o seu servidor: rodam todas ao mesmo tempo, cada uma
       # respeitando o robots.txt e o intervalo pedido (60 s nos SAPL do Interlegis). Com o cache cheio: 6 a 13 min. Sem
       # cache (a primeira vez), cada Casa usa a rodada toda, guarda o que leu em .cache/ e só grava quando termina: as
@@ -150,6 +141,27 @@ jobs:
           MINUTOS: "60"
 
       - name: Juntar tudo
+        run: python scripts/montar.py
+
+      # selos "eleito/reeleito em 2026" de todos os deputados estaduais da lista oficial de cada Assembleia, que o
+      # montar.py acabou de pôr nas fichas dos estados (o tse.py, lá em cima, só conhece os eleitos de 2022: sem este
+      # passo, os suplentes que assumiram ficavam sem o selo). Usa os arquivos do TSE que o tse.py já baixou.
+      - name: Selos de 2026 nas listas oficiais
+        run: python scripts/tse.py --so-2026
+        continue-on-error: true
+
+      # quem foi eleito em 2026 e ainda não tomou posse (dados/eleitos/): roda depois do montar.py, porque liga os eleitos
+      # a quem tem cargo hoje pelas fichas das cidades e dos estados, e é o montar.py que põe nelas as listas oficiais
+      # das Câmaras e Assembleias (antes dele, as fichas têm as listas do TSE). Usa as candidaturas que o tse.py baixou, a
+      # votação por município e zona (baixada de novo a cada 7 dias; guarda só as somas em .cache/eleitos) e o
+      # DivulgaCandContas (eleições suplementares). Se o TSE não responder, ficam os arquivos de antes. Cada cargo sai dos
+      # arquivos no dia da posse. Depois, o montar.py roda de novo para levar os eleitos à busca, ao sitemap e às fichas.
+      - name: Eleitos em 2026 (até a posse)
+        run: python scripts/eleitos.py
+        continue-on-error: true
+        timeout-minutes: 20
+
+      - name: Juntar de novo (com os eleitos de hoje)
         run: python scripts/montar.py
 
       - name: Salvar no repositório

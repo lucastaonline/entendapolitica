@@ -339,10 +339,11 @@ def _marcar_extras_cidades() -> int:
     com_arquivo = {f.stem: f for f in EXTRAS_CIDADES.glob("*.json")}
     for c_arq in sorted((DADOS / "cidades").glob("*/*.json")):
         f = com_arquivo.get(c_arq.stem)
-        ids = set(((ler_json(f) or {}).get("pessoas") or {})) if f else set()
         c = ler_json(c_arq)
         if not isinstance(c, dict):
             continue
+        ex_p = ((ler_json(f) or {}).get("pessoas") or {}) if f else {}
+        ids = {i for i, x in ex_p.items() if not _extras_de_antes(c.get("prefeito"), i, x)}  # prefeitos 2026
         mudou = False
         for p in [c.get("prefeito"), c.get("vice")] + list((c.get("vereadores") or {}).get("membros") or []):
             if not isinstance(p, dict) or p.get("extras") is True:
@@ -357,6 +358,23 @@ def _marcar_extras_cidades() -> int:
             salvar_json(c_arq, sem_mudar_data(c, c_arq))
             n += 1
     return n
+
+
+# prefeitos 2026 (frente prefeitos-r7): os dados a mais do prefeito (o que o SAPL da Câmara contou) começam numa data. Se a
+# ficha da cidade mostra outra pessoa no cargo, assumida depois dessa data ("desde"), ou não mostra ninguém (quem governa
+# hoje não foi conferido), esses dados são de quem governava antes: o perfil não os pede até o coletor da Câmara contar de
+# novo, a partir do "desde" da ficha (scripts/camaras/_sapl.py, prefeito).
+def _extras_de_antes(pref, pid: str, x) -> bool:
+    if not isinstance(pref, dict) or pid != pref.get("id") or not str(pid).startswith("pref-") or not isinstance(x, dict):
+        return False
+    if not pref.get("nome"):
+        return True
+    desde = (pref.get("desde") or "")[:10]
+    ini = ((x.get("executivo") or {}).get("periodo") or {}).get("inicio")
+    if not ini:
+        m = re.search(r"data_apresentacao_0=(\d{2})%2F(\d{2})%2F(\d{4})", ((x.get("propostas") or {}).get("fonte") or {}).get("url") or "")
+        ini = f"{m.group(3)}-{m.group(2)}-{m.group(1)}" if m else None
+    return bool(desde and ini and ini < desde)
 
 
 def _lista_velha(a: dict, inicio: str) -> bool:

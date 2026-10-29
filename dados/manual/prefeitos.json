@@ -1,5 +1,5 @@
 {
- "atualizado": "2026-10-15",
+ "atualizado": "2026-10-29",
  "eleicao": 2024,
  "cidades": {
   "1200401": {
@@ -47,7 +47,8 @@
       "data": "2026-04-04"
      }
     ]
-   }
+   },
+   "conferido": "2026-10-15"
   },
   "2704302": {
    "nome": "Maceió",
@@ -94,7 +95,8 @@
       "data": "2026-04-05"
      }
     ]
-   }
+   },
+   "conferido": "2026-10-15"
   },
   "1302603": {
    "nome": "Manaus",
@@ -141,7 +143,8 @@
       "data": "2026-03-31"
      }
     ]
-   }
+   },
+   "conferido": "2026-10-15"
   },
   "1600303": {
    "nome": "Macapá",
@@ -240,7 +243,8 @@
       "data": "2026-10-13"
      }
     ]
-   }
+   },
+   "conferido": "2026-10-15"
   },
   "3205309": {
    "nome": "Vitória",
@@ -293,7 +297,8 @@
       "data": "2026-04-04"
      }
     ]
-   }
+   },
+   "conferido": "2026-10-15"
   },
   "2111300": {
    "nome": "São Luís",
@@ -346,7 +351,8 @@
       "data": "2026-03-31"
      }
     ]
-   }
+   },
+   "conferido": "2026-10-15"
   },
   "3106200": {
    "nome": "Belo Horizonte",
@@ -393,7 +399,8 @@
       "data": "2025-03-26"
      }
     ]
-   }
+   },
+   "conferido": "2026-10-15"
   },
   "2507507": {
    "nome": "João Pessoa",
@@ -454,7 +461,8 @@
       "data": "2026-04-06"
      }
     ]
-   }
+   },
+   "conferido": "2026-10-15"
   },
   "2611606": {
    "nome": "Recife",
@@ -507,7 +515,8 @@
       "data": "2026-04-06"
      }
     ]
-   }
+   },
+   "conferido": "2026-10-15"
   },
   "3304557": {
    "nome": "Rio de Janeiro",
@@ -560,7 +569,8 @@
       "data": "2026-03-21"
      }
     ]
-   }
+   },
+   "conferido": "2026-10-15"
   },
   "1400100": {
    "nome": "Boa Vista",
@@ -611,6 +621,3031 @@
       "titulo": "Quem é Marcelo Zeitoune, novo prefeito de Boa Vista após renúncia de Arthur Henrique",
       "url": "https://g1.globo.com/politica/eleicoes/2026/noticia/2026/04/02/quem-e-marcelo-zeitoune-novo-prefeito-de-boa-vista-apos-renuncia-de-arthur-henrique.ghtml",
       "data": "2026-04-02"
+     }
+    ]
+   },
+   "conferido": "2026-10-15"
+  },
+  "1100049": {
+   "nome": "Cacoal",
+   "uf": "RO",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Tony Pablo Castro Chaves",
+    "nomeCivil": "Tony Pablo de Castro Chaves",
+    "partido": "PSD",
+    "genero": "M",
+    "nascimento": "1977-08-03",
+    "desde": "2026-04-02",
+    "comoAssumiu": "Era vice-prefeito e assumiu a prefeitura em 02/04/2026, em solenidade na Câmara Municipal, depois que Adailton Fúria renunciou ao cargo para concorrer a governador na eleição de 2026.",
+    "comoAssumiu_en": "He was vice mayor and took over as mayor on April 2, 2026, in a ceremony at the City Council, after Mayor Adailton Fúria resigned to run for governor in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "Rondoniagora",
+      "titulo": "Adailton Fúria renuncia para concorrer ao Governo; Tony Pablo é o novo prefeito de Cacoal",
+      "url": "https://www.rondoniagora.com/politica/adailton-furia-renuncia-para-concorrer-ao-governo-tony-pablo-e-o-novo-prefeito-de-cacoal",
+      "data": "2026-04-03"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 02/04/2026, quando o vice Tony Pablo Castro Chaves assumiu a prefeitura.",
+    "nota_en": "The office of vice mayor has been vacant since April 2, 2026, when Vice Mayor Tony Pablo Castro Chaves became mayor.",
+    "fonte": [
+     {
+      "veiculo": "Rondoniagora",
+      "titulo": "Adailton Fúria renuncia para concorrer ao Governo; Tony Pablo é o novo prefeito de Cacoal",
+      "url": "https://www.rondoniagora.com/politica/adailton-furia-renuncia-para-concorrer-ao-governo-tony-pablo-e-o-novo-prefeito-de-cacoal",
+      "data": "2026-04-03"
+     }
+    ]
+   }
+  },
+  "1100296": {
+   "nome": "Santa Luzia D'Oeste",
+   "uf": "RO",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Ney",
+    "nomeCivil": "Uesnei Cleiton da Silva",
+    "partido": "PL",
+    "genero": "M",
+    "nascimento": "1982-10-29",
+    "desde": "2026-04-06",
+    "comoAssumiu": "Era vice-prefeito e tomou posse como prefeito em 06/04/2026, em sessão solene da Câmara Municipal, depois que Jurandir de Oliveira renunciou ao cargo, em 02/04/2026, para concorrer a deputado estadual na eleição de 2026.",
+    "comoAssumiu_en": "He was vice mayor and was sworn in as mayor on April 6, 2026, in a formal session of the City Council, after Mayor Jurandir de Oliveira resigned on April 2, 2026, to run for state deputy in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "Câmara Municipal de Santa Luzia D'Oeste",
+      "titulo": "Ata da sessão de posse do prefeito Uesnei Cleiton da Silva",
+      "url": "https://www.santaluziadoeste.ro.leg.br/processo-legislativo/ata-das-sessoes/ata-sessao-solene-posse-prefeito-uesnei.pdf",
+      "data": "2026-04-06"
+     },
+     {
+      "veiculo": "Prefeitura de Santa Luzia D'Oeste",
+      "titulo": "Prefeito e vice-prefeito",
+      "url": "https://www.santaluzia.ro.gov.br/prefeito-e-vice-prefeito",
+      "data": "2026-10-29"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 06/04/2026, quando o vice Ney tomou posse como prefeito.",
+    "nota_en": "The office of vice mayor has been vacant since April 6, 2026, when Vice Mayor Ney was sworn in as mayor.",
+    "fonte": [
+     {
+      "veiculo": "Câmara Municipal de Santa Luzia D'Oeste",
+      "titulo": "Ata da sessão de posse do prefeito Uesnei Cleiton da Silva",
+      "url": "https://www.santaluziadoeste.ro.leg.br/processo-legislativo/ata-das-sessoes/ata-sessao-solene-posse-prefeito-uesnei.pdf",
+      "data": "2026-04-06"
+     },
+     {
+      "veiculo": "Prefeitura de Santa Luzia D'Oeste",
+      "titulo": "Prefeito e vice-prefeito",
+      "url": "https://www.santaluzia.ro.gov.br/prefeito-e-vice-prefeito",
+      "data": "2026-10-29"
+     }
+    ]
+   }
+  },
+  "1200013": {
+   "nome": "Acrelândia",
+   "uf": "AC",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Graia",
+    "nomeCivil": "Eraides Caetano de Souza",
+    "partido": "UNIÃO",
+    "genero": "M",
+    "nascimento": "1957-08-26",
+    "desde": "2026-03-31",
+    "comoAssumiu": "Era vice-prefeito e tomou posse como prefeito em 31/03/2026, em sessão solene da Câmara Municipal, depois que Olavinho Boiadeiro renunciou ao cargo para concorrer a deputado estadual na eleição de 2026.",
+    "comoAssumiu_en": "He was vice mayor and was sworn in as mayor on March 31, 2026, in a formal session of the City Council, after Mayor Olavinho Boiadeiro resigned to run for state deputy in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "Câmara Municipal de Acrelândia",
+      "titulo": "Termo de Posse - Eraídes Caetano de Souza - Prefeito",
+      "url": "https://www.acrelandia.ac.leg.br/publicacoes-1/termo-de-posse---era%C3%ADdes-caetano-de-souza---prefeito",
+      "data": "2026-03-31"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 31/03/2026, quando o vice Graia tomou posse como prefeito.",
+    "nota_en": "The office of vice mayor has been vacant since March 31, 2026, when Vice Mayor Graia was sworn in as mayor.",
+    "fonte": [
+     {
+      "veiculo": "Câmara Municipal de Acrelândia",
+      "titulo": "Termo de Posse - Eraídes Caetano de Souza - Prefeito",
+      "url": "https://www.acrelandia.ac.leg.br/publicacoes-1/termo-de-posse---era%C3%ADdes-caetano-de-souza---prefeito",
+      "data": "2026-03-31"
+     }
+    ]
+   }
+  },
+  "1200252": {
+   "nome": "Epitaciolândia",
+   "uf": "AC",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Sérgio Mesquita",
+    "nomeCivil": "Sérgio Mesquita de Castro",
+    "partido": "REPUBLICANOS",
+    "genero": "M",
+    "nascimento": "1983-11-23",
+    "desde": "2026-04-02",
+    "comoAssumiu": "Era vice-prefeito e tomou posse como prefeito em 02/04/2026, na Câmara Municipal, depois que Sérgio Lopes renunciou ao cargo para concorrer a deputado estadual na eleição de 2026.",
+    "comoAssumiu_en": "He was vice mayor and was sworn in as mayor on April 2, 2026, at the City Council, after Mayor Sérgio Lopes resigned to run for state deputy in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Epitaciolândia",
+      "titulo": "Sérgio Lopes deixa Prefeitura e Sérgio Mesquita assume Executivo de Epitaciolândia",
+      "url": "https://www.epitaciolandia.ac.gov.br/post/s%C3%A9rgio-lopes-deixa-prefeitura-e-s%C3%A9rgio-mesquita-assume-executivo-de-epitaciol%C3%A2ndia",
+      "data": "2026-04-03"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 02/04/2026, quando o vice Sérgio Mesquita tomou posse como prefeito.",
+    "nota_en": "The office of vice mayor has been vacant since April 2, 2026, when Vice Mayor Sérgio Mesquita was sworn in as mayor.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Epitaciolândia",
+      "titulo": "Sérgio Lopes deixa Prefeitura e Sérgio Mesquita assume Executivo de Epitaciolândia",
+      "url": "https://www.epitaciolandia.ac.gov.br/post/s%C3%A9rgio-lopes-deixa-prefeitura-e-s%C3%A9rgio-mesquita-assume-executivo-de-epitaciol%C3%A2ndia",
+      "data": "2026-04-03"
+     }
+    ]
+   }
+  },
+  "1500800": {
+   "nome": "Ananindeua",
+   "uf": "PA",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Dr. Hugo",
+    "nomeCivil": "Hugo Fernando de Souza Atayde",
+    "partido": "PSB",
+    "genero": "M",
+    "nascimento": "1986-05-26",
+    "desde": "2026-04-02",
+    "comoAssumiu": "Era vice-prefeito e passou a comandar a prefeitura depois que Daniel Santos renunciou ao cargo, em 02/04/2026, para disputar a eleição de 2026 para governador do Pará. A renúncia foi publicada no Diário Oficial do município de 03/04/2026.",
+    "comoAssumiu_en": "He was vice mayor and took charge of the city government after Mayor Daniel Santos resigned on April 2, 2026, to run for governor of Pará state in the 2026 election. The resignation was published in the city's Official Gazette on April 3, 2026.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Ananindeua",
+      "titulo": "Prefeitura Municipal de Ananindeua: o prefeito",
+      "url": "https://www.ananindeua.pa.gov.br/orgao?id_orgao=25",
+      "data": "2026-10-29"
+     },
+     {
+      "veiculo": "g1",
+      "titulo": "Daniel Santos renuncia ao cargo de prefeito de Ananindeua",
+      "url": "https://g1.globo.com/pa/para/eleicoes/2026/noticia/2026/04/05/daniel-santos-renuncia-ao-cargo-de-prefeito-de-ananindeua.ghtml",
+      "data": "2026-04-05"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 02/04/2026, quando o vice Dr. Hugo assumiu a prefeitura.",
+    "nota_en": "The office of vice mayor has been vacant since April 2, 2026, when Vice Mayor Dr. Hugo became mayor.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Ananindeua",
+      "titulo": "Prefeitura Municipal de Ananindeua: o prefeito",
+      "url": "https://www.ananindeua.pa.gov.br/orgao?id_orgao=25",
+      "data": "2026-10-29"
+     },
+     {
+      "veiculo": "g1",
+      "titulo": "Daniel Santos renuncia ao cargo de prefeito de Ananindeua",
+      "url": "https://g1.globo.com/pa/para/eleicoes/2026/noticia/2026/04/05/daniel-santos-renuncia-ao-cargo-de-prefeito-de-ananindeua.ghtml",
+      "data": "2026-04-05"
+     }
+    ]
+   }
+  },
+  "1705508": {
+   "nome": "Colinas do Tocantins",
+   "uf": "TO",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Zé Nagru",
+    "nomeCivil": "José Batista Ferreira",
+    "partido": "REPUBLICANOS",
+    "genero": "M",
+    "nascimento": "1969-06-24",
+    "desde": "2026-04-03",
+    "comoAssumiu": "Era vice-prefeito e assumiu a prefeitura em 03/04/2026, em sessão solene da Câmara Municipal, depois que Kasarin (Josemar Carlos Casarin) renunciou ao cargo para concorrer a deputado estadual na eleição de 2026.",
+    "comoAssumiu_en": "He was vice mayor and took over as mayor on April 3, 2026, in a formal session of the City Council, after Mayor Kasarin (Josemar Carlos Casarin) resigned to run for state deputy in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "g1",
+      "titulo": "Prefeito de Colinas, Josemar Casarin, renuncia para disputar vaga de deputado estadual",
+      "url": "https://g1.globo.com/to/tocantins/eleicoes/2026/noticia/2026/04/04/prefeito-de-colinas-josemar-casarin-renuncia-para-disputar-vaga-de-deputado-estadual.ghtml",
+      "data": "2026-04-04"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 03/04/2026, quando o vice Zé Nagru assumiu a prefeitura.",
+    "nota_en": "The office of vice mayor has been vacant since April 3, 2026, when Vice Mayor Zé Nagru became mayor.",
+    "fonte": [
+     {
+      "veiculo": "g1",
+      "titulo": "Prefeito de Colinas, Josemar Casarin, renuncia para disputar vaga de deputado estadual",
+      "url": "https://g1.globo.com/to/tocantins/eleicoes/2026/noticia/2026/04/04/prefeito-de-colinas-josemar-casarin-renuncia-para-disputar-vaga-de-deputado-estadual.ghtml",
+      "data": "2026-04-04"
+     }
+    ]
+   }
+  },
+  "1707009": {
+   "nome": "Dianópolis",
+   "uf": "TO",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Hormides Rodrigues",
+    "nomeCivil": "Hormides Rodrigues Neto",
+    "partido": "UNIÃO",
+    "genero": "M",
+    "nascimento": "1966-06-30",
+    "desde": "2026-03-31",
+    "comoAssumiu": "Era vice-prefeito e tomou posse como prefeito em 31/03/2026, em sessão extraordinária da Câmara Municipal, depois que José Salomão renunciou ao cargo para concorrer a deputado federal na eleição de 2026.",
+    "comoAssumiu_en": "He was vice mayor and was sworn in as mayor on March 31, 2026, in a special session of the City Council, after Mayor José Salomão resigned to run for federal deputy in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "Câmara Municipal de Dianópolis",
+      "titulo": "Sessão de Posse marca transição em Dianópolis: prefeito Hormides assume cargo após renúncia de José Salomão",
+      "url": "https://www.dianopolis.to.leg.br/blog/artigo/sessao-de-posse-marca-transicao-em-dianopolis-prefeito-hormides-assume-cargo-apos-renuncia-de-jose-salomao",
+      "data": "2026-03-31"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 31/03/2026, quando o vice Hormides Rodrigues tomou posse como prefeito.",
+    "nota_en": "The office of vice mayor has been vacant since March 31, 2026, when Vice Mayor Hormides Rodrigues was sworn in as mayor.",
+    "fonte": [
+     {
+      "veiculo": "Câmara Municipal de Dianópolis",
+      "titulo": "Sessão de Posse marca transição em Dianópolis: prefeito Hormides assume cargo após renúncia de José Salomão",
+      "url": "https://www.dianopolis.to.leg.br/blog/artigo/sessao-de-posse-marca-transicao-em-dianopolis-prefeito-hormides-assume-cargo-apos-renuncia-de-jose-salomao",
+      "data": "2026-03-31"
+     }
+    ]
+   }
+  },
+  "2101509": {
+   "nome": "Barão de Grajaú",
+   "uf": "MA",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Antonio Carlos Resende",
+    "nomeCivil": "Antonio Carlos Resende da Silva",
+    "partido": "PSB",
+    "genero": "M",
+    "nascimento": "1972-09-13",
+    "desde": "2026-03-30",
+    "comoAssumiu": "Era vice-prefeito e assumiu a prefeitura depois que Gleydson Resende renunciou ao cargo (carta de renúncia de 29/03/2026, publicada no Diário Oficial do município de 30/03/2026), para disputar a eleição de 2026 para deputado estadual. No Diário Oficial de 30/03/2026, ele já assina como prefeito.",
+    "comoAssumiu_en": "He was vice mayor and took over as mayor after Mayor Gleydson Resende resigned (resignation letter dated March 29, 2026, published in the city's Official Gazette on March 30, 2026) to run for state deputy in the 2026 election. In the Official Gazette of March 30, 2026, he already signs as mayor.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Barão de Grajaú",
+      "titulo": "Diário Oficial do Município nº 1530/2026 (carta de renúncia do prefeito e Portaria nº 14/2026)",
+      "url": "https://www.baraodegrajau.ma.gov.br/anexos-dom/2026/a_3671_1530_EXECUTIVO_69cb39a2cdece.pdf",
+      "data": "2026-03-30"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 30/03/2026, quando o vice Antonio Carlos Resende assumiu a prefeitura.",
+    "nota_en": "The office of vice mayor has been vacant since March 30, 2026, when Vice Mayor Antonio Carlos Resende became mayor.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Barão de Grajaú",
+      "titulo": "Diário Oficial do Município nº 1530/2026 (carta de renúncia do prefeito e Portaria nº 14/2026)",
+      "url": "https://www.baraodegrajau.ma.gov.br/anexos-dom/2026/a_3671_1530_EXECUTIVO_69cb39a2cdece.pdf",
+      "data": "2026-03-30"
+     }
+    ]
+   }
+  },
+  "2206803": {
+   "nome": "Nossa Senhora dos Remédios",
+   "uf": "PI",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Cearense",
+    "nomeCivil": "Carlos Alberto Ribeiro",
+    "partido": "PP",
+    "genero": "M",
+    "nascimento": "1975-01-05",
+    "desde": "2025-07-23",
+    "comoAssumiu": "Era vice-prefeito e tomou posse como prefeito em 23/07/2025, em sessão solene da Câmara Municipal, quando Zé Fernando oficializou a renúncia ao cargo para se dedicar à pré-candidatura a deputado estadual na eleição de 2026.",
+    "comoAssumiu_en": "He was vice mayor and was sworn in as mayor on July 23, 2025, in a formal session of the City Council, when Mayor Zé Fernando made official his resignation to prepare to run for state deputy in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "Cidade Verde",
+      "titulo": "Após renúncia de Zé Fernando, vice toma posse como prefeito de N.S. dos Remédios",
+      "url": "https://cidadeverde.com/politica/438545/apos-renuncia-de-ze-fernando-vice-toma-posse-como-prefeito-de-ns-dos-remedios",
+      "data": "2025-07-22"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 23/07/2025, quando o vice Cearense tomou posse como prefeito.",
+    "nota_en": "The office of vice mayor has been vacant since July 23, 2025, when Vice Mayor Cearense was sworn in as mayor.",
+    "fonte": [
+     {
+      "veiculo": "Cidade Verde",
+      "titulo": "Após renúncia de Zé Fernando, vice toma posse como prefeito de N.S. dos Remédios",
+      "url": "https://cidadeverde.com/politica/438545/apos-renuncia-de-ze-fernando-vice-toma-posse-como-prefeito-de-ns-dos-remedios",
+      "data": "2025-07-22"
+     }
+    ]
+   }
+  },
+  "2309300": {
+   "nome": "Nova Russas",
+   "uf": "CE",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Anderson Pedrosa",
+    "nomeCivil": "José Anderson Pedrosa Magalhaes",
+    "partido": "PSB",
+    "genero": "M",
+    "nascimento": "1981-02-24",
+    "desde": "2026-04-01",
+    "comoAssumiu": "Era vice-prefeito e assumiu a prefeitura em 01/04/2026, depois que Giordanna Mano renunciou ao cargo para concorrer a deputada federal na eleição de 2026.",
+    "comoAssumiu_en": "He was vice mayor and took over as mayor on April 1, 2026, after Mayor Giordanna Mano resigned to run for federal deputy in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Nova Russas",
+      "titulo": "Gestores: José Anderson Pedrosa Magalhães, prefeito desde 01/04/2026",
+      "url": "https://www.novarussas.ce.gov.br/galeriagestores.php?id=7",
+      "data": "2026-10-29"
+     },
+     {
+      "veiculo": "Prefeitura de Nova Russas",
+      "titulo": "Gestores (prefeito e vice-prefeito atuais e anteriores)",
+      "url": "https://novarussas.ce.gov.br/gestores.php",
+      "data": "2026-10-29"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 01/04/2026, quando o vice Anderson Pedrosa assumiu a prefeitura.",
+    "nota_en": "The office of vice mayor has been vacant since April 1, 2026, when Vice Mayor Anderson Pedrosa became mayor.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Nova Russas",
+      "titulo": "Gestores: José Anderson Pedrosa Magalhães, prefeito desde 01/04/2026",
+      "url": "https://www.novarussas.ce.gov.br/galeriagestores.php?id=7",
+      "data": "2026-10-29"
+     },
+     {
+      "veiculo": "Prefeitura de Nova Russas",
+      "titulo": "Gestores (prefeito e vice-prefeito atuais e anteriores)",
+      "url": "https://novarussas.ce.gov.br/gestores.php",
+      "data": "2026-10-29"
+     }
+    ]
+   }
+  },
+  "2309508": {
+   "nome": "Orós",
+   "uf": "CE",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Tereza Cristina",
+    "nomeCivil": "Tereza Cristina Alves Pequeno",
+    "partido": "PSB",
+    "genero": "F",
+    "nascimento": "1951-09-07",
+    "desde": "2025-01-01",
+    "comoAssumiu": "Foi eleita vice-prefeita em 2024 e assumiu a prefeitura em 01/01/2025, no começo do mandato, porque o prefeito eleito, Simão Pedro, renunciou para continuar como deputado estadual na Assembleia Legislativa do Ceará, onde tinha tomado posse em dezembro de 2024 como suplente. Em 2026, Simão Pedro foi eleito deputado estadual.",
+    "comoAssumiu_en": "She was elected vice mayor in 2024 and became mayor on January 1, 2025, at the start of the term, because the mayor-elect, Simão Pedro, resigned to remain a state deputy in the Ceará Legislative Assembly, where he had taken a seat in December 2024 as an alternate. In 2026, Simão Pedro was elected state deputy.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Orós",
+      "titulo": "Galeria de Gestores: Tereza Cristina Alves Pequeno, prefeita de 01/01/2025 a 31/12/2028",
+      "url": "https://www.oros.ce.gov.br/galeriagestores.php?id=23",
+      "data": "2026-10-29"
+     },
+     {
+      "veiculo": "g1",
+      "titulo": "Prefeito eleito de cidade do Ceará toma posse como deputado; mãe dele vai assumir prefeitura",
+      "url": "https://g1.globo.com/ce/ceara/noticia/2024/12/28/prefeito-eleito-de-cidade-do-ceara-toma-posse-como-deputado-mae-dele-vai-assumir-prefeitura.ghtml",
+      "data": "2024-12-28"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 01/01/2025, quando a vice eleita, Tereza Cristina, assumiu a prefeitura.",
+    "nota_en": "The office of vice mayor has been vacant since January 1, 2025, when the vice mayor-elect, Tereza Cristina, became mayor.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Orós",
+      "titulo": "Galeria de Gestores: Tereza Cristina Alves Pequeno, prefeita de 01/01/2025 a 31/12/2028",
+      "url": "https://www.oros.ce.gov.br/galeriagestores.php?id=23",
+      "data": "2026-10-29"
+     },
+     {
+      "veiculo": "g1",
+      "titulo": "Prefeito eleito de cidade do Ceará toma posse como deputado; mãe dele vai assumir prefeitura",
+      "url": "https://g1.globo.com/ce/ceara/noticia/2024/12/28/prefeito-eleito-de-cidade-do-ceara-toma-posse-como-deputado-mae-dele-vai-assumir-prefeitura.ghtml",
+      "data": "2024-12-28"
+     }
+    ]
+   }
+  },
+  "2408003": {
+   "nome": "Mossoró",
+   "uf": "RN",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Marcos",
+    "nomeCivil": "Marcos Antonio Bezerra de Medeiros",
+    "partido": "PSD",
+    "genero": "M",
+    "nascimento": "1975-08-14",
+    "desde": "2026-03-27",
+    "comoAssumiu": "Era vice-prefeito e tomou posse como prefeito em 27/03/2026, em sessão solene da Câmara Municipal, depois que Allyson Bezerra renunciou ao cargo para concorrer a governador na eleição de 2026.",
+    "comoAssumiu_en": "He was vice mayor and was sworn in as mayor on March 27, 2026, in a formal session of the City Council, after Mayor Allyson Bezerra resigned to run for governor in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "Diário Oficial de Mossoró",
+      "titulo": "DOM nº 789: formalização da renúncia de Allyson Leandro Bezerra Silva ao cargo de prefeito",
+      "url": "https://dom.mossoro.rn.gov.br/dom/publicacao/1818",
+      "data": "2026-03-27"
+     },
+     {
+      "veiculo": "Diário Oficial de Mossoró",
+      "titulo": "Ato da Câmara Municipal: sessão solene de posse do vice-prefeito Marcos Antônio Bezerra de Medeiros no cargo de prefeito (27/03/2026)",
+      "url": "https://dom.mossoro.rn.gov.br/dom/ato/31849",
+      "data": "2026-03-25"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 27/03/2026, quando o vice Marcos tomou posse como prefeito.",
+    "nota_en": "The office of vice mayor has been vacant since March 27, 2026, when Vice Mayor Marcos was sworn in as mayor.",
+    "fonte": [
+     {
+      "veiculo": "Diário Oficial de Mossoró",
+      "titulo": "DOM nº 789: formalização da renúncia de Allyson Leandro Bezerra Silva ao cargo de prefeito",
+      "url": "https://dom.mossoro.rn.gov.br/dom/publicacao/1818",
+      "data": "2026-03-27"
+     },
+     {
+      "veiculo": "Diário Oficial de Mossoró",
+      "titulo": "Ato da Câmara Municipal: sessão solene de posse do vice-prefeito Marcos Antônio Bezerra de Medeiros no cargo de prefeito (27/03/2026)",
+      "url": "https://dom.mossoro.rn.gov.br/dom/ato/31849",
+      "data": "2026-03-25"
+     }
+    ]
+   }
+  },
+  "2510808": {
+   "nome": "Patos",
+   "uf": "PB",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Prof Jacob",
+    "nomeCivil": "Jacob Silva Souto",
+    "partido": "REDE",
+    "genero": "M",
+    "nascimento": "1962-04-18",
+    "desde": "2026-04-04",
+    "comoAssumiu": "Era vice-prefeito e tomou posse como prefeito em 04/04/2026, em sessão solene da Câmara Municipal, depois que Nabor Wanderley renunciou ao cargo, em 03/04/2026, para concorrer a senador na eleição de 2026.",
+    "comoAssumiu_en": "He was vice mayor and was sworn in as mayor on April 4, 2026, in a formal session of the City Council, after Mayor Nabor Wanderley resigned on April 3, 2026, to run for senator in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Patos",
+      "titulo": "Câmara de Patos empossa Jacob Souto e reúne autoridades em sessão solene",
+      "url": "https://patos.pb.gov.br/noticias/camara-de-patos-a16556.html",
+      "data": "2026-04-04"
+     },
+     {
+      "veiculo": "Prefeitura de Patos",
+      "titulo": "O Prefeito",
+      "url": "https://patos.pb.gov.br/governo_e_municipio/o_prefeito",
+      "data": "2026-10-29"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 04/04/2026, quando o vice Prof Jacob tomou posse como prefeito.",
+    "nota_en": "The office of vice mayor has been vacant since April 4, 2026, when Vice Mayor Prof Jacob was sworn in as mayor.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Patos",
+      "titulo": "Câmara de Patos empossa Jacob Souto e reúne autoridades em sessão solene",
+      "url": "https://patos.pb.gov.br/noticias/camara-de-patos-a16556.html",
+      "data": "2026-04-04"
+     },
+     {
+      "veiculo": "Prefeitura de Patos",
+      "titulo": "O Prefeito",
+      "url": "https://patos.pb.gov.br/governo_e_municipio/o_prefeito",
+      "data": "2026-10-29"
+     }
+    ]
+   }
+  },
+  "2602209": {
+   "nome": "Bom Jardim",
+   "uf": "PE",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Arsenio",
+    "nomeCivil": "Arsenio Medeiros de Oliveira",
+    "partido": "PL",
+    "genero": "M",
+    "nascimento": "1978-08-07",
+    "desde": "2026-04-01",
+    "comoAssumiu": "Era vice-prefeito e assumiu a prefeitura em 01/04/2026, depois que Janjão renunciou ao cargo para concorrer a deputado estadual na eleição de 2026.",
+    "comoAssumiu_en": "He was vice mayor and took over as mayor on April 1, 2026, after Mayor Janjão resigned to run for state deputy in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Bom Jardim",
+      "titulo": "O Prefeito (Arsênio Medeiros de Oliveira)",
+      "url": "http://bomjardim.pe.gov.br/o-prefeito/",
+      "data": "2026-10-29"
+     },
+     {
+      "veiculo": "Correio do Agreste",
+      "titulo": "Conheça os novos prefeitos de Casinhas e Bom Jardim",
+      "url": "https://www.correiodoagreste.com/2026/04/conheca-os-novos-prefeitos-de-casinhas-e-bom-jardim.html",
+      "data": "2026-04-02"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 01/04/2026, quando o vice Arsenio assumiu a prefeitura.",
+    "nota_en": "The office of vice mayor has been vacant since April 1, 2026, when Vice Mayor Arsenio became mayor.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Bom Jardim",
+      "titulo": "O Prefeito (Arsênio Medeiros de Oliveira)",
+      "url": "http://bomjardim.pe.gov.br/o-prefeito/",
+      "data": "2026-10-29"
+     },
+     {
+      "veiculo": "Correio do Agreste",
+      "titulo": "Conheça os novos prefeitos de Casinhas e Bom Jardim",
+      "url": "https://www.correiodoagreste.com/2026/04/conheca-os-novos-prefeitos-de-casinhas-e-bom-jardim.html",
+      "data": "2026-04-02"
+     }
+    ]
+   }
+  },
+  "2604155": {
+   "nome": "Casinhas",
+   "uf": "PE",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Lucio Silva",
+    "nomeCivil": "José Lucio da Silva",
+    "partido": "PSDB",
+    "genero": "M",
+    "nascimento": "1981-03-04",
+    "desde": "2026-04-01",
+    "comoAssumiu": "Era vice-prefeito e assumiu a prefeitura em 01/04/2026, depois que Juliana de Chaparral renunciou ao cargo para concorrer a deputada federal na eleição de 2026.",
+    "comoAssumiu_en": "He was vice mayor and took over as mayor on April 1, 2026, after Mayor Juliana de Chaparral resigned to run for federal deputy in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Casinhas",
+      "titulo": "Prefeito e vice-prefeito (José Lúcio da Silva, prefeito a partir de 01/04/2026)",
+      "url": "https://casinhas.pe.gov.br/prefeito-e-vice-prefeito/",
+      "data": "2026-10-29"
+     },
+     {
+      "veiculo": "Correio do Agreste",
+      "titulo": "Conheça os novos prefeitos de Casinhas e Bom Jardim",
+      "url": "https://www.correiodoagreste.com/2026/04/conheca-os-novos-prefeitos-de-casinhas-e-bom-jardim.html",
+      "data": "2026-04-02"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 01/04/2026, quando o vice Lucio Silva assumiu a prefeitura.",
+    "nota_en": "The office of vice mayor has been vacant since April 1, 2026, when Vice Mayor Lucio Silva became mayor.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Casinhas",
+      "titulo": "Prefeito e vice-prefeito (José Lúcio da Silva, prefeito a partir de 01/04/2026)",
+      "url": "https://casinhas.pe.gov.br/prefeito-e-vice-prefeito/",
+      "data": "2026-10-29"
+     },
+     {
+      "veiculo": "Correio do Agreste",
+      "titulo": "Conheça os novos prefeitos de Casinhas e Bom Jardim",
+      "url": "https://www.correiodoagreste.com/2026/04/conheca-os-novos-prefeitos-de-casinhas-e-bom-jardim.html",
+      "data": "2026-04-02"
+     }
+    ]
+   }
+  },
+  "2700409": {
+   "nome": "Atalaia",
+   "uf": "AL",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Nicollas",
+    "nomeCivil": "Nicollas von Meynard Theotonio Costa",
+    "partido": "PP",
+    "genero": "M",
+    "nascimento": "1987-07-27",
+    "desde": "2026-04-02",
+    "comoAssumiu": "Era vice-prefeito e assumiu a prefeitura em 02/04/2026, em solenidade na Câmara Municipal, depois que Ceci (Cecília Lima Herrmann) renunciou ao cargo para concorrer a deputada estadual na eleição de 2026.",
+    "comoAssumiu_en": "He was vice mayor and took over as mayor on April 2, 2026, in a ceremony at the City Council, after Mayor Ceci (Cecília Lima Herrmann) resigned to run for state deputy in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Atalaia",
+      "titulo": "Nicollas assume como prefeito de Atalaia após renúncia da prefeita Ceci",
+      "url": "https://www.atalaia.al.gov.br/noticias/nicollas-assume-como-prefeito-de-atalaia-apos-renuncia-da-prefeita-ceci",
+      "data": "2026-04-02"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 02/04/2026, quando o vice Nicollas assumiu a prefeitura.",
+    "nota_en": "The office of vice mayor has been vacant since April 2, 2026, when Vice Mayor Nicollas became mayor.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Atalaia",
+      "titulo": "Nicollas assume como prefeito de Atalaia após renúncia da prefeita Ceci",
+      "url": "https://www.atalaia.al.gov.br/noticias/nicollas-assume-como-prefeito-de-atalaia-apos-renuncia-da-prefeita-ceci",
+      "data": "2026-04-02"
+     }
+    ]
+   }
+  },
+  "2703304": {
+   "nome": "Inhapi",
+   "uf": "AL",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Gilson Tenório",
+    "nomeCivil": "Gilson Tenório Cavalcante",
+    "partido": "PP",
+    "genero": "M",
+    "nascimento": "1966-07-26",
+    "desde": "2026-04-02",
+    "comoAssumiu": "Era vice-prefeito e tomou posse como prefeito em 02/04/2026, na Câmara Municipal, depois que Tenorinho Malta renunciou ao cargo para concorrer a deputado estadual na eleição de 2026.",
+    "comoAssumiu_en": "He was vice mayor and was sworn in as mayor on April 2, 2026, at the City Council, after Mayor Tenorinho Malta resigned to run for state deputy in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "Tecla 1",
+      "titulo": "Prefeito de Inhapi renuncia para disputar eleição e vice assume comando da cidade",
+      "url": "https://tecla1.com.br/prefeito-de-inhapi-renuncia-para-disputar-eleicao-e-vice-assume-comando-da-cidade/",
+      "data": "2026-04-02"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 02/04/2026, quando o vice Gilson Tenório tomou posse como prefeito.",
+    "nota_en": "The office of vice mayor has been vacant since April 2, 2026, when Vice Mayor Gilson Tenório was sworn in as mayor.",
+    "fonte": [
+     {
+      "veiculo": "Tecla 1",
+      "titulo": "Prefeito de Inhapi renuncia para disputar eleição e vice assume comando da cidade",
+      "url": "https://tecla1.com.br/prefeito-de-inhapi-renuncia-para-disputar-eleicao-e-vice-assume-comando-da-cidade/",
+      "data": "2026-04-02"
+     }
+    ]
+   }
+  },
+  "2802908": {
+   "nome": "Itabaiana",
+   "uf": "SE",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Zequinha da Cenoura",
+    "nomeCivil": "José Paes dos Santos",
+    "partido": "PL",
+    "genero": "M",
+    "nascimento": "1974-08-12",
+    "desde": "2026-04-02",
+    "comoAssumiu": "Era vice-prefeito e tomou posse como prefeito em 02/04/2026, depois que Valmir de Francisquinho renunciou ao cargo para concorrer a governador na eleição de 2026.",
+    "comoAssumiu_en": "He was vice mayor and was sworn in as mayor on April 2, 2026, after Mayor Valmir de Francisquinho resigned to run for governor in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "Portal ITnet",
+      "titulo": "Zequinha da cenoura assume prefeitura de Itabaiana após renúncia de Valmir",
+      "url": "https://www.itnet.com.br/noticia/zequinha-da-cenoura-assume-prefeitura-de-itabaiana-apos-renuncia-de-valmir/019d4ec7-218a-7091-a4a7-bfdc6dca95dc",
+      "data": "2026-04-02"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 02/04/2026, quando o vice Zequinha da Cenoura tomou posse como prefeito.",
+    "nota_en": "The office of vice mayor has been vacant since April 2, 2026, when Vice Mayor Zequinha da Cenoura was sworn in as mayor.",
+    "fonte": [
+     {
+      "veiculo": "Portal ITnet",
+      "titulo": "Zequinha da cenoura assume prefeitura de Itabaiana após renúncia de Valmir",
+      "url": "https://www.itnet.com.br/noticia/zequinha-da-cenoura-assume-prefeitura-de-itabaiana-apos-renuncia-de-valmir/019d4ec7-218a-7091-a4a7-bfdc6dca95dc",
+      "data": "2026-04-02"
+     }
+    ]
+   }
+  },
+  "2908200": {
+   "nome": "Conceição da Feira",
+   "uf": "BA",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "João Lefundes",
+    "nomeCivil": "João Filipe Lefundes Silva",
+    "partido": "PT",
+    "genero": "M",
+    "nascimento": "1993-11-20",
+    "desde": "2026-03-03",
+    "comoAssumiu": "Era vice-prefeito e assumiu a prefeitura em 03/03/2026, depois que João de Furão renunciou ao cargo para concorrer a deputado estadual na eleição de 2026.",
+    "comoAssumiu_en": "He was vice mayor and took over as mayor on March 3, 2026, after Mayor João de Furão resigned to run for state deputy in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Conceição da Feira",
+      "titulo": "Página inicial (Governo Municipal: prefeito João Filipe Lefundes Silva)",
+      "url": "https://conceicaodafeira.ba.gov.br/",
+      "data": "2026-10-29"
+     },
+     {
+      "veiculo": "g1",
+      "titulo": "Ex-prefeito de cidade baiana é eleito deputado estadual pela primeira vez; conheça",
+      "url": "https://g1.globo.com/ba/bahia/eleicoes/2026/noticia/2026/10/05/ex-prefeito-de-cidade-baiana-e-eleito-deputado-estadual-pela-primeira-vez-conheca.ghtml",
+      "data": "2026-10-05"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 03/03/2026, quando o vice João Lefundes assumiu a prefeitura.",
+    "nota_en": "The office of vice mayor has been vacant since March 3, 2026, when Vice Mayor João Lefundes became mayor.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Conceição da Feira",
+      "titulo": "Página inicial (Governo Municipal: prefeito João Filipe Lefundes Silva)",
+      "url": "https://conceicaodafeira.ba.gov.br/",
+      "data": "2026-10-29"
+     },
+     {
+      "veiculo": "g1",
+      "titulo": "Ex-prefeito de cidade baiana é eleito deputado estadual pela primeira vez; conheça",
+      "url": "https://g1.globo.com/ba/bahia/eleicoes/2026/noticia/2026/10/05/ex-prefeito-de-cidade-baiana-e-eleito-deputado-estadual-pela-primeira-vez-conheca.ghtml",
+      "data": "2026-10-05"
+     }
+    ]
+   }
+  },
+  "2918001": {
+   "nome": "Jequié",
+   "uf": "BA",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Flavinho Santana",
+    "nomeCivil": "Flávio Gondim Oliva Santana",
+    "partido": "UNIÃO",
+    "genero": "M",
+    "nascimento": "1994-05-25",
+    "desde": "2026-04-02",
+    "comoAssumiu": "Era vice-prefeito e tomou posse como prefeito em 02/04/2026, na Câmara Municipal, depois que Zé Cocá renunciou ao cargo para concorrer a vice-governador na eleição de 2026.",
+    "comoAssumiu_en": "He was vice mayor and was sworn in as mayor on April 2, 2026, at the City Council, after Mayor Zé Cocá resigned to run for vice governor in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Jequié",
+      "titulo": "Prefeito cumpre transmissão de cargo para vice-prefeito e consolida ato democrático de transição na Prefeitura de Jequié",
+      "url": "https://www.jequie.ba.gov.br/noticias/2026/04/prefeito-cumpre-transmissao-de-cargo-para-vice-prefeito-e-consolida-ato-democratico-de-transicao-na-prefeitura-de-jequie",
+      "data": "2026-04-02"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 02/04/2026, quando o vice Flavinho Santana tomou posse como prefeito.",
+    "nota_en": "The office of vice mayor has been vacant since April 2, 2026, when Vice Mayor Flavinho Santana was sworn in as mayor.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Jequié",
+      "titulo": "Prefeito cumpre transmissão de cargo para vice-prefeito e consolida ato democrático de transição na Prefeitura de Jequié",
+      "url": "https://www.jequie.ba.gov.br/noticias/2026/04/prefeito-cumpre-transmissao-de-cargo-para-vice-prefeito-e-consolida-ato-democratico-de-transicao-na-prefeitura-de-jequie",
+      "data": "2026-04-02"
+     }
+    ]
+   }
+  },
+  "3109402": {
+   "nome": "Buritizeiro",
+   "uf": "MG",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Marcelo Osório",
+    "nomeCivil": "Marcelo Pereira Osório",
+    "partido": "AVANTE",
+    "genero": "M",
+    "nascimento": "1964-09-02",
+    "desde": "2026-03-30",
+    "comoAssumiu": "Era vice-prefeito e tomou posse como prefeito em 30/03/2026, em reunião da Câmara Municipal, depois que Pedro Braga renunciou ao cargo para concorrer a deputado federal na eleição de 2026.",
+    "comoAssumiu_en": "He was vice mayor and was sworn in as mayor on March 30, 2026, at a City Council meeting, after Mayor Pedro Braga resigned to run for federal deputy in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "Câmara Municipal de Buritizeiro",
+      "titulo": "6ª Reunião Ordinária da Câmara de Buritizeiro destaca renúncia de Pedro Braga e posse do prefeito Marcelo Osório",
+      "url": "https://camaradeburitizeiro.mg.gov.br/6a-reuniao-ordinaria-da-camara-de-buritizeiro-destaca-renuncia-de-pedro-braga-e-posse-do-prefeito-marcelo-osorio/",
+      "data": "2026-04-01"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 30/03/2026, quando o vice Marcelo Osório tomou posse como prefeito.",
+    "nota_en": "The office of vice mayor has been vacant since March 30, 2026, when Vice Mayor Marcelo Osório was sworn in as mayor.",
+    "fonte": [
+     {
+      "veiculo": "Câmara Municipal de Buritizeiro",
+      "titulo": "6ª Reunião Ordinária da Câmara de Buritizeiro destaca renúncia de Pedro Braga e posse do prefeito Marcelo Osório",
+      "url": "https://camaradeburitizeiro.mg.gov.br/6a-reuniao-ordinaria-da-camara-de-buritizeiro-destaca-renuncia-de-pedro-braga-e-posse-do-prefeito-marcelo-osorio/",
+      "data": "2026-04-01"
+     }
+    ]
+   }
+  },
+  "3111101": {
+   "nome": "Campina Verde",
+   "uf": "MG",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Alan Couto",
+    "nomeCivil": "Alan Borges de Oliveira",
+    "partido": "SOLIDARIEDADE",
+    "genero": "M",
+    "nascimento": "1979-07-02",
+    "desde": "2026-03-27",
+    "comoAssumiu": "Era vice-prefeito e assumiu a prefeitura em 27/03/2026, em solenidade no Centro Comunitário Dom José Carlos Melo, depois que Dr. Helder renunciou ao cargo para concorrer a deputado estadual na eleição de 2026.",
+    "comoAssumiu_en": "He was vice mayor and took over as mayor on March 27, 2026, in a ceremony at the Dom José Carlos Melo Community Center, after Mayor Dr. Helder resigned to run for state deputy in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "Regionalzão",
+      "titulo": "“A região está carente”, diz ex-prefeito de Campina Verde após renunciar",
+      "url": "https://regionalzao.com.br/poder/poder-entrevista/a-regiao-esta-carente-diz-ex-prefeito-de-campina-verde-apos-renunciar/",
+      "data": "2026-03-31"
+     },
+     {
+      "veiculo": "Veja Nóis",
+      "titulo": "Campina Verde vive momento histórico na política municipal",
+      "url": "https://vejanois.com/2026/03/31/campina-verde-vive-momento-historico-na-politica-municipal/",
+      "data": "2026-03-31"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 27/03/2026, quando o vice Alan Couto assumiu a prefeitura.",
+    "nota_en": "The office of vice mayor has been vacant since March 27, 2026, when Vice Mayor Alan Couto became mayor.",
+    "fonte": [
+     {
+      "veiculo": "Regionalzão",
+      "titulo": "“A região está carente”, diz ex-prefeito de Campina Verde após renunciar",
+      "url": "https://regionalzao.com.br/poder/poder-entrevista/a-regiao-esta-carente-diz-ex-prefeito-de-campina-verde-apos-renunciar/",
+      "data": "2026-03-31"
+     },
+     {
+      "veiculo": "Veja Nóis",
+      "titulo": "Campina Verde vive momento histórico na política municipal",
+      "url": "https://vejanois.com/2026/03/31/campina-verde-vive-momento-historico-na-politica-municipal/",
+      "data": "2026-03-31"
+     }
+    ]
+   }
+  },
+  "3112802": {
+   "nome": "Capitólio",
+   "uf": "MG",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Jaime Leonel",
+    "nomeCivil": "Jaime Leonel Sobrinho",
+    "partido": "NOVO",
+    "genero": "M",
+    "nascimento": "1955-03-23",
+    "desde": "2026-04-02",
+    "comoAssumiu": "Era vice-prefeito e tomou posse como prefeito em 02/04/2026, em sessão solene na Câmara Municipal, depois que Cristiano Gerardão renunciou ao cargo para concorrer a deputado federal na eleição de 2026.",
+    "comoAssumiu_en": "He was vice mayor and was sworn in as mayor on April 2, 2026, in a formal session at the City Council, after Mayor Cristiano Gerardão resigned to run for federal deputy in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Capitólio",
+      "titulo": "Prefeito: Jaime Leonel Sobrinho",
+      "url": "https://www.capitolio.mg.gov.br/portal/prefeito/13/1",
+      "data": "2026-10-29"
+     },
+     {
+      "veiculo": "Jornal Panorama",
+      "titulo": "Capitólio realiza posse de novo prefeito e reforça continuidade administrativa",
+      "url": "https://jornalpanoramaminas.com.br/capitolio-realiza-posse-de-novo-prefeito-e-reforca-continuidade-administrativa/",
+      "data": "2026-04-03"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 02/04/2026, quando o vice Jaime Leonel tomou posse como prefeito.",
+    "nota_en": "The office of vice mayor has been vacant since April 2, 2026, when Vice Mayor Jaime Leonel was sworn in as mayor.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Capitólio",
+      "titulo": "Prefeito: Jaime Leonel Sobrinho",
+      "url": "https://www.capitolio.mg.gov.br/portal/prefeito/13/1",
+      "data": "2026-10-29"
+     },
+     {
+      "veiculo": "Jornal Panorama",
+      "titulo": "Capitólio realiza posse de novo prefeito e reforça continuidade administrativa",
+      "url": "https://jornalpanoramaminas.com.br/capitolio-realiza-posse-de-novo-prefeito-e-reforca-continuidade-administrativa/",
+      "data": "2026-04-03"
+     }
+    ]
+   }
+  },
+  "3118601": {
+   "nome": "Contagem",
+   "uf": "MG",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Ricardo Faria",
+    "nomeCivil": "Ricardo Rocha de Faria",
+    "partido": "PSD",
+    "genero": "M",
+    "nascimento": "1980-08-26",
+    "desde": "2026-03-26",
+    "comoAssumiu": "Era vice-prefeito e tomou posse como prefeito em 26/03/2026, na Câmara Municipal, depois que Marília renunciou ao cargo para concorrer a senadora na eleição de 2026.",
+    "comoAssumiu_en": "He was vice mayor and was sworn in as mayor on March 26, 2026, at the City Council, after Mayor Marília resigned to run for senator in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Contagem",
+      "titulo": "Ricardo Faria é empossado prefeito de Contagem",
+      "url": "https://portal.contagem.mg.gov.br/portal/noticias/0/3/83496/ricardo-faria-e-empossado-prefeito-de-contagem",
+      "data": "2026-03-26"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 26/03/2026, quando o vice Ricardo Faria tomou posse como prefeito.",
+    "nota_en": "The office of vice mayor has been vacant since March 26, 2026, when Vice Mayor Ricardo Faria was sworn in as mayor.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Contagem",
+      "titulo": "Ricardo Faria é empossado prefeito de Contagem",
+      "url": "https://portal.contagem.mg.gov.br/portal/noticias/0/3/83496/ricardo-faria-e-empossado-prefeito-de-contagem",
+      "data": "2026-03-26"
+     }
+    ]
+   }
+  },
+  "3119302": {
+   "nome": "Coromandel",
+   "uf": "MG",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Nerso Chihara",
+    "nomeCivil": "Nerso Hissao Chihara",
+    "partido": "REPUBLICANOS",
+    "genero": "M",
+    "nascimento": "1958-02-15",
+    "desde": "2026-04-02",
+    "comoAssumiu": "Era vice-prefeito e tomou posse como prefeito em 02/04/2026, depois que Fernando Breno renunciou ao cargo para concorrer a deputado estadual na eleição de 2026.",
+    "comoAssumiu_en": "He was vice mayor and was sworn in as mayor on April 2, 2026, after Mayor Fernando Breno resigned to run for state deputy in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "Gerais FM",
+      "titulo": "Coromandel inicia novo capítulo administrativo com a posse de Nerso Chihara",
+      "url": "https://radiogeraisfm.com.br/noticias/coromandel-inicia-novo-capitulo-administrativo-com-a-posse-de-nerso-chihara/",
+      "data": "2026-04-02"
+     },
+     {
+      "veiculo": "Folha Uai",
+      "titulo": "Nerso Chihara assume a prefeitura de Coromandel",
+      "url": "https://folhauai.com/nerso-chihara-prefeito-coromandel-mg/",
+      "data": "2026-04-13"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 02/04/2026, quando o vice Nerso Chihara tomou posse como prefeito.",
+    "nota_en": "The office of vice mayor has been vacant since April 2, 2026, when Vice Mayor Nerso Chihara was sworn in as mayor.",
+    "fonte": [
+     {
+      "veiculo": "Gerais FM",
+      "titulo": "Coromandel inicia novo capítulo administrativo com a posse de Nerso Chihara",
+      "url": "https://radiogeraisfm.com.br/noticias/coromandel-inicia-novo-capitulo-administrativo-com-a-posse-de-nerso-chihara/",
+      "data": "2026-04-02"
+     },
+     {
+      "veiculo": "Folha Uai",
+      "titulo": "Nerso Chihara assume a prefeitura de Coromandel",
+      "url": "https://folhauai.com/nerso-chihara-prefeito-coromandel-mg/",
+      "data": "2026-04-13"
+     }
+    ]
+   }
+  },
+  "3120904": {
+   "nome": "Curvelo",
+   "uf": "MG",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Dr. Gustavo",
+    "nomeCivil": "Gustavo Nascimento",
+    "partido": "AVANTE",
+    "genero": "M",
+    "nascimento": "1983-12-27",
+    "desde": "2026-04-01",
+    "comoAssumiu": "Era vice-prefeito e tomou posse como prefeito em 01/04/2026, em cerimônia da Câmara Municipal, depois que Luiz Paulo renunciou ao cargo para concorrer a deputado estadual na eleição de 2026.",
+    "comoAssumiu_en": "He was vice mayor and was sworn in as mayor on April 1, 2026, in a City Council ceremony, after Mayor Luiz Paulo resigned to run for state deputy in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Curvelo",
+      "titulo": "Dr. Gustavo Nascimento toma posse como prefeito de Curvelo (notícias de 02/04/2026)",
+      "url": "https://curvelo.mg.gov.br/2026/04/02",
+      "data": "2026-04-02"
+     },
+     {
+      "veiculo": "Prefeitura de Curvelo",
+      "titulo": "O prefeito",
+      "url": "https://curvelo.mg.gov.br/o-prefeito",
+      "data": "2026-10-29"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 01/04/2026, quando o vice Dr. Gustavo tomou posse como prefeito.",
+    "nota_en": "The office of vice mayor has been vacant since April 1, 2026, when Vice Mayor Dr. Gustavo was sworn in as mayor.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Curvelo",
+      "titulo": "Dr. Gustavo Nascimento toma posse como prefeito de Curvelo (notícias de 02/04/2026)",
+      "url": "https://curvelo.mg.gov.br/2026/04/02",
+      "data": "2026-04-02"
+     },
+     {
+      "veiculo": "Prefeitura de Curvelo",
+      "titulo": "O prefeito",
+      "url": "https://curvelo.mg.gov.br/o-prefeito",
+      "data": "2026-10-29"
+     }
+    ]
+   }
+  },
+  "3122306": {
+   "nome": "Divinópolis",
+   "uf": "MG",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Janete Aparecida",
+    "nomeCivil": "Janete Aparecida Silva Oliveira",
+    "partido": "AVANTE",
+    "genero": "F",
+    "nascimento": "1975-05-03",
+    "desde": "2026-03-27",
+    "comoAssumiu": "Era vice-prefeita e tomou posse como prefeita em 27/03/2026, depois que Gleidson Azevedo renunciou ao cargo para concorrer a deputado federal na eleição de 2026.",
+    "comoAssumiu_en": "She was vice mayor and was sworn in as mayor on March 27, 2026, after Mayor Gleidson Azevedo resigned to run for federal deputy in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Divinópolis",
+      "titulo": "Janete Aparecida assume Prefeitura de Divinópolis e anuncia gestão humanizada com foco em pessoas, transparência e inovação",
+      "url": "https://www.divinopolis.mg.gov.br/portal/noticias/0/3/27557/",
+      "data": "2026-03-28"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 27/03/2026, quando a vice Janete Aparecida tomou posse como prefeita.",
+    "nota_en": "The office of vice mayor has been vacant since March 27, 2026, when Vice Mayor Janete Aparecida was sworn in as mayor.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Divinópolis",
+      "titulo": "Janete Aparecida assume Prefeitura de Divinópolis e anuncia gestão humanizada com foco em pessoas, transparência e inovação",
+      "url": "https://www.divinopolis.mg.gov.br/portal/noticias/0/3/27557/",
+      "data": "2026-03-28"
+     }
+    ]
+   }
+  },
+  "3135001": {
+   "nome": "Jaguaraçu",
+   "uf": "MG",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Masseno",
+    "nomeCivil": "Marco Valério de Oliveira Masseno",
+    "partido": "PL",
+    "genero": "M",
+    "nascimento": "1963-04-23",
+    "desde": "2026-03-31",
+    "comoAssumiu": "Era vice-prefeito e tomou posse como prefeito em 31/03/2026, depois que Márcio Lima renunciou ao cargo para concorrer a deputado estadual na eleição de 2026.",
+    "comoAssumiu_en": "He was vice mayor and was sworn in as mayor on March 31, 2026, after Mayor Márcio Lima resigned to run for state deputy in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "Agora Notícias",
+      "titulo": "Jaguaraçu: vice-prefeito assume Prefeitura e lideranças participam de posse do novo presidente do Consaúde",
+      "url": "https://agoranoticias.net.br/noticia/jaguaracu-vice-prefeito-assume-prefeitura-e-liderancas-participam-de-posse-do-novo-presidente-do-consaude",
+      "data": "2026-03-31"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 31/03/2026, quando o vice Masseno tomou posse como prefeito.",
+    "nota_en": "The office of vice mayor has been vacant since March 31, 2026, when Vice Mayor Masseno was sworn in as mayor.",
+    "fonte": [
+     {
+      "veiculo": "Agora Notícias",
+      "titulo": "Jaguaraçu: vice-prefeito assume Prefeitura e lideranças participam de posse do novo presidente do Consaúde",
+      "url": "https://agoranoticias.net.br/noticia/jaguaracu-vice-prefeito-assume-prefeitura-e-liderancas-participam-de-posse-do-novo-presidente-do-consaude",
+      "data": "2026-03-31"
+     }
+    ]
+   }
+  },
+  "3147006": {
+   "nome": "Paracatu",
+   "uf": "MG",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Pedro Adjuto",
+    "nomeCivil": "Pedro Aguiar Adjuto",
+    "partido": "PSD",
+    "genero": "M",
+    "nascimento": "1980-01-06",
+    "desde": "2026-03-31",
+    "comoAssumiu": "Era vice-prefeito e tomou posse como prefeito em 31/03/2026, em cerimônia presidida pela Câmara Municipal, depois que Igor Santos renunciou ao cargo para concorrer a deputado federal na eleição de 2026.",
+    "comoAssumiu_en": "He was vice mayor and was sworn in as mayor on March 31, 2026, in a ceremony led by the City Council, after Mayor Igor Santos resigned to run for federal deputy in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Paracatu",
+      "titulo": "Pedro Adjuto assume Prefeitura de Paracatu com compromisso de dar continuidade ao desenvolvimento",
+      "url": "https://www.paracatu.mg.gov.br/portal/noticias/0/3/3563/pedro-adjuto-assume-prefeitura-de-paracatu-com-compromisso-de-dar-continuidade-ao-desenvolvimento",
+      "data": "2026-04-07"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 31/03/2026, quando o vice Pedro Adjuto tomou posse como prefeito.",
+    "nota_en": "The office of vice mayor has been vacant since March 31, 2026, when Vice Mayor Pedro Adjuto was sworn in as mayor.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Paracatu",
+      "titulo": "Pedro Adjuto assume Prefeitura de Paracatu com compromisso de dar continuidade ao desenvolvimento",
+      "url": "https://www.paracatu.mg.gov.br/portal/noticias/0/3/3563/pedro-adjuto-assume-prefeitura-de-paracatu-com-compromisso-de-dar-continuidade-ao-desenvolvimento",
+      "data": "2026-04-07"
+     }
+    ]
+   }
+  },
+  "3147907": {
+   "nome": "Passos",
+   "uf": "MG",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Maurício Silva",
+    "nomeCivil": "Maurício Antônio da Silva",
+    "partido": "PP",
+    "genero": "M",
+    "nascimento": "1964-11-25",
+    "desde": "2026-04-01",
+    "comoAssumiu": "Era vice-prefeito e assumiu a prefeitura em 01/04/2026, depois que Diego Oliveira renunciou ao cargo para concorrer a deputado estadual na eleição de 2026.",
+    "comoAssumiu_en": "He was vice mayor and took over as mayor on April 1, 2026, after Mayor Diego Oliveira resigned to run for state deputy in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Passos",
+      "titulo": "Galeria de Prefeitos(as) (prefeito atual: Maurício Antônio da Silva, desde 01/04/2026)",
+      "url": "https://www.passos.mg.gov.br/portal/galeria-de-prefeitos/",
+      "data": "2026-10-29"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 01/04/2026, quando o vice Maurício Silva assumiu a prefeitura.",
+    "nota_en": "The office of vice mayor has been vacant since April 1, 2026, when Vice Mayor Maurício Silva became mayor.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Passos",
+      "titulo": "Galeria de Prefeitos(as) (prefeito atual: Maurício Antônio da Silva, desde 01/04/2026)",
+      "url": "https://www.passos.mg.gov.br/portal/galeria-de-prefeitos/",
+      "data": "2026-10-29"
+     }
+    ]
+   }
+  },
+  "3148004": {
+   "nome": "Patos de Minas",
+   "uf": "MG",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Sandra Gomes",
+    "nomeCivil": "Sandra Cristina Gomes da Silva",
+    "partido": "PL",
+    "genero": "F",
+    "nascimento": "1978-02-02",
+    "desde": "2026-04-06",
+    "comoAssumiu": "Era vice-prefeita e tomou posse como prefeita em 06/04/2026, na Câmara Municipal, depois que Luís Eduardo Falcão renunciou ao cargo para concorrer a vice-governador na eleição de 2026.",
+    "comoAssumiu_en": "She was vice mayor and was sworn in as mayor on April 6, 2026, at the City Council, after Mayor Luís Eduardo Falcão resigned to run for vice governor in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "g1",
+      "titulo": "Luís Eduardo Falcão deixa a prefeitura e Sandra Gomes toma posse em Patos de Minas como segunda prefeita da história",
+      "url": "https://g1.globo.com/mg/triangulo-mineiro/noticia/2026/04/06/luis-eduardo-falcao-deixa-a-prefeitura-e-sandra-gomes-toma-posse-em-patos-de-minas-como-segunda-prefeita-da-historia.ghtml",
+      "data": "2026-04-06"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 06/04/2026, quando a vice Sandra Gomes tomou posse como prefeita.",
+    "nota_en": "The office of vice mayor has been vacant since April 6, 2026, when Vice Mayor Sandra Gomes was sworn in as mayor.",
+    "fonte": [
+     {
+      "veiculo": "g1",
+      "titulo": "Luís Eduardo Falcão deixa a prefeitura e Sandra Gomes toma posse em Patos de Minas como segunda prefeita da história",
+      "url": "https://g1.globo.com/mg/triangulo-mineiro/noticia/2026/04/06/luis-eduardo-falcao-deixa-a-prefeitura-e-sandra-gomes-toma-posse-em-patos-de-minas-como-segunda-prefeita-da-historia.ghtml",
+      "data": "2026-04-06"
+     }
+    ]
+   }
+  },
+  "3168002": {
+   "nome": "Taiobeiras",
+   "uf": "MG",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Danilo Mendes",
+    "nomeCivil": "Danilo Mendes Rodrigues",
+    "partido": "UNIÃO",
+    "genero": "M",
+    "nascimento": "1976-05-31",
+    "desde": "2026-04-02",
+    "comoAssumiu": "Era vice-prefeito e assumiu a prefeitura em 02/04/2026, depois que Denerval renunciou ao cargo para concorrer a deputado estadual na eleição de 2026.",
+    "comoAssumiu_en": "He was vice mayor and took over as mayor on April 2, 2026, after Mayor Denerval resigned to run for state deputy in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Taiobeiras",
+      "titulo": "Galeria de Prefeitos(as) (prefeito atual: Danilo Mendes Rodrigues, desde 02/04/2026)",
+      "url": "https://www.taiobeiras.mg.gov.br/portal/galeria-de-prefeitos/",
+      "data": "2026-10-29"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 02/04/2026, quando o vice Danilo Mendes assumiu a prefeitura.",
+    "nota_en": "The office of vice mayor has been vacant since April 2, 2026, when Vice Mayor Danilo Mendes became mayor.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Taiobeiras",
+      "titulo": "Galeria de Prefeitos(as) (prefeito atual: Danilo Mendes Rodrigues, desde 02/04/2026)",
+      "url": "https://www.taiobeiras.mg.gov.br/portal/galeria-de-prefeitos/",
+      "data": "2026-10-29"
+     }
+    ]
+   }
+  },
+  "3203403": {
+   "nome": "Mimoso do Sul",
+   "uf": "ES",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Paulinho",
+    "nomeCivil": "Paulo Renato Barros",
+    "partido": "PSB",
+    "genero": "M",
+    "nascimento": "1980-10-05",
+    "desde": "2026-04-02",
+    "comoAssumiu": "Era vice-prefeito e tomou posse como prefeito em 02/04/2026, em cerimônia na praça central da cidade, depois que Peter Costa renunciou ao cargo para concorrer a deputado estadual na eleição de 2026.",
+    "comoAssumiu_en": "He was vice mayor and was sworn in as mayor on April 2, 2026, in a ceremony in the town's main square, after Mayor Peter Costa resigned to run for state deputy in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Mimoso do Sul",
+      "titulo": "Paulinho Barros toma posse como prefeito de Mimoso do Sul",
+      "url": "https://mimosodosul.es.gov.br/paulinho-barros-toma-posse-como-prefeito-de-mimoso-do-sul",
+      "data": "2026-04-03"
+     },
+     {
+      "veiculo": "Prefeitura de Mimoso do Sul",
+      "titulo": "Evento que dará posse a Paulinho Barros será na praça central de Mimoso do Sul",
+      "url": "https://mimosodosul.es.gov.br/evento-que-dara-posse-a-paulinho-barros-sera-na-praca-central-de-mimoso-do-sul",
+      "data": "2026-03-25"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 02/04/2026, quando o vice Paulinho tomou posse como prefeito.",
+    "nota_en": "The office of vice mayor has been vacant since April 2, 2026, when Vice Mayor Paulinho was sworn in as mayor.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Mimoso do Sul",
+      "titulo": "Paulinho Barros toma posse como prefeito de Mimoso do Sul",
+      "url": "https://mimosodosul.es.gov.br/paulinho-barros-toma-posse-como-prefeito-de-mimoso-do-sul",
+      "data": "2026-04-03"
+     },
+     {
+      "veiculo": "Prefeitura de Mimoso do Sul",
+      "titulo": "Evento que dará posse a Paulinho Barros será na praça central de Mimoso do Sul",
+      "url": "https://mimosodosul.es.gov.br/evento-que-dara-posse-a-paulinho-barros-sera-na-praca-central-de-mimoso-do-sul",
+      "data": "2026-03-25"
+     }
+    ]
+   }
+  },
+  "3300456": {
+   "nome": "Belford Roxo",
+   "uf": "RJ",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Mariana Malta",
+    "nomeCivil": "Mariana Malta Monteiro da Silva",
+    "partido": "UNIÃO",
+    "genero": "F",
+    "nascimento": "1991-11-29",
+    "desde": "2026-04-03",
+    "comoAssumiu": "Era vice-prefeita e assumiu a prefeitura em 03/04/2026, depois que Márcio Canella renunciou ao cargo para concorrer a deputado estadual na eleição de 2026.",
+    "comoAssumiu_en": "She was vice mayor and took over as mayor on April 3, 2026, after Mayor Márcio Canella resigned to run for state deputy in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Belford Roxo",
+      "titulo": "Prefeita (Mariana Malta assumiu o cargo de prefeita em 03/04/2026)",
+      "url": "https://prefeituradebelfordroxo.rj.gov.br/prefeitura-belford-roxo/prefeita/",
+      "data": "2026-10-29"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 03/04/2026, quando a vice Mariana Malta assumiu a prefeitura.",
+    "nota_en": "The office of vice mayor has been vacant since April 3, 2026, when Vice Mayor Mariana Malta became mayor.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Belford Roxo",
+      "titulo": "Prefeita (Mariana Malta assumiu o cargo de prefeita em 03/04/2026)",
+      "url": "https://prefeituradebelfordroxo.rj.gov.br/prefeitura-belford-roxo/prefeita/",
+      "data": "2026-10-29"
+     }
+    ]
+   }
+  },
+  "3301009": {
+   "nome": "Campos dos Goytacazes",
+   "uf": "RJ",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Frederico Paes",
+    "nomeCivil": "Frederico Rangel Paes",
+    "partido": "MDB",
+    "genero": "M",
+    "nascimento": "1969-07-25",
+    "desde": "2026-04-02",
+    "comoAssumiu": "Era vice-prefeito e assumiu a prefeitura em 02/04/2026, em cerimônia no Teatro Municipal Trianon, depois que Wladimir Garotinho renunciou ao cargo para concorrer a deputado federal na eleição de 2026.",
+    "comoAssumiu_en": "He was vice mayor and took over as mayor on April 2, 2026, in a ceremony at the Trianon Municipal Theater, after Mayor Wladimir Garotinho resigned to run for federal deputy in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "Campos 24 Horas",
+      "titulo": "Frederico Paes assume Prefeitura de Campos após renúncia de Wladimir Garotinho",
+      "url": "https://campos24horas.com.br/noticia/frederico-paes-assume-prefeitura-de-campos-apos-renuncia-de-wladimir-garotinho",
+      "data": "2026-04-02"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 02/04/2026, quando o vice Frederico Paes assumiu a prefeitura.",
+    "nota_en": "The office of vice mayor has been vacant since April 2, 2026, when Vice Mayor Frederico Paes became mayor.",
+    "fonte": [
+     {
+      "veiculo": "Campos 24 Horas",
+      "titulo": "Frederico Paes assume Prefeitura de Campos após renúncia de Wladimir Garotinho",
+      "url": "https://campos24horas.com.br/noticia/frederico-paes-assume-prefeitura-de-campos-apos-renuncia-de-wladimir-garotinho",
+      "data": "2026-04-02"
+     }
+    ]
+   }
+  },
+  "3302502": {
+   "nome": "Magé",
+   "uf": "RJ",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Jamille Cozzolino",
+    "nomeCivil": "Jamille Cozzolino Harb Menezes",
+    "partido": "MDB",
+    "genero": "F",
+    "nascimento": "1987-10-29",
+    "desde": "2026-04-08",
+    "comoAssumiu": "Era vice-prefeita e tomou posse como prefeita em 08/04/2026, na Câmara Municipal, depois que Renato Cozzolino renunciou ao cargo (com efeito a partir de 04/04/2026) para concorrer a deputado federal na eleição de 2026.",
+    "comoAssumiu_en": "She was vice mayor and was sworn in as mayor on April 8, 2026, at the City Council, after Mayor Renato Cozzolino resigned (effective April 4, 2026) to run for federal deputy in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Magé",
+      "titulo": "Jamille Cozzolino toma posse como prefeita de Magé em cerimônia na Câmara Municipal",
+      "url": "https://mage.rj.gov.br/informacoes/jamille-cozzolino-toma-posse-como-prefeita-de-mage-em-cerimonia-na-camara-municipal/",
+      "data": "2026-04-08"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 08/04/2026, quando a vice Jamille Cozzolino tomou posse como prefeita.",
+    "nota_en": "The office of vice mayor has been vacant since April 8, 2026, when Vice Mayor Jamille Cozzolino was sworn in as mayor.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Magé",
+      "titulo": "Jamille Cozzolino toma posse como prefeita de Magé em cerimônia na Câmara Municipal",
+      "url": "https://mage.rj.gov.br/informacoes/jamille-cozzolino-toma-posse-como-prefeita-de-mage-em-cerimonia-na-camara-municipal/",
+      "data": "2026-04-08"
+     }
+    ]
+   }
+  },
+  "3305752": {
+   "nome": "Tanguá",
+   "uf": "RJ",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "André Paixão",
+    "nomeCivil": "Andre Luiz Paixão Santos",
+    "partido": "UNIÃO",
+    "genero": "M",
+    "nascimento": "1974-06-05",
+    "desde": "2026-04-02",
+    "comoAssumiu": "Era vice-prefeito e tomou posse como prefeito em 02/04/2026, no plenário da Câmara Municipal, depois que Rodrigo Medeiros renunciou ao cargo, em 01/04/2026, para concorrer a deputado estadual na eleição de 2026.",
+    "comoAssumiu_en": "He was vice mayor and was sworn in as mayor on April 2, 2026, in the City Council chamber, after Mayor Rodrigo Medeiros resigned on April 1, 2026, to run for state deputy in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "Câmara Municipal de Tanguá",
+      "titulo": "Edital de convocação (posse do vice-prefeito André Luiz Paixão Santos no cargo de prefeito, em 02/04/2026)",
+      "url": "https://cmtangua.rj.gov.br/edital-de-convocacao/",
+      "data": "2026-04-01"
+     },
+     {
+      "veiculo": "Folha1",
+      "titulo": "André Paixão toma posse como Prefeito de Tanguá",
+      "url": "https://folha1rj.com.br/2026/07/06/andre-paixao-toma-posse-como-prefeito-de-tangua/",
+      "data": "2026-07-06"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 02/04/2026, quando o vice André Paixão tomou posse como prefeito.",
+    "nota_en": "The office of vice mayor has been vacant since April 2, 2026, when Vice Mayor André Paixão was sworn in as mayor.",
+    "fonte": [
+     {
+      "veiculo": "Câmara Municipal de Tanguá",
+      "titulo": "Edital de convocação (posse do vice-prefeito André Luiz Paixão Santos no cargo de prefeito, em 02/04/2026)",
+      "url": "https://cmtangua.rj.gov.br/edital-de-convocacao/",
+      "data": "2026-04-01"
+     },
+     {
+      "veiculo": "Folha1",
+      "titulo": "André Paixão toma posse como Prefeito de Tanguá",
+      "url": "https://folha1rj.com.br/2026/07/06/andre-paixao-toma-posse-como-prefeito-de-tangua/",
+      "data": "2026-07-06"
+     }
+    ]
+   }
+  },
+  "3515103": {
+   "nome": "Embu-Guaçu",
+   "uf": "SP",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Neguinho do Conselho",
+    "nomeCivil": "Francisco Jose do Nascimento",
+    "partido": "PSB",
+    "genero": "M",
+    "nascimento": "1985-05-18",
+    "desde": "2025-07-22",
+    "comoAssumiu": "Era vice-prefeito e tomou posse como prefeito em 22/07/2025, na Câmara Municipal, depois que o Supremo Tribunal Federal (STF) restabeleceu o ato da Câmara que tinha declarado extinto o mandato do prefeito Sargento Neres (André George Neres de Farias), por causa de uma condenação criminal definitiva. Em 2026, Sargento Neres pediu registro de candidatura a deputado federal, e a Justiça Eleitoral negou o registro.",
+    "comoAssumiu_en": "He was vice mayor and was sworn in as mayor on July 22, 2025, at the City Council, after the Federal Supreme Court (STF) reinstated the City Council's act that had declared the term of Mayor Sargento Neres (André George Neres de Farias) terminated because of a final criminal conviction. In 2026, Sargento Neres filed to run for federal deputy, and the electoral courts rejected the registration.",
+    "fonte": [
+     {
+      "veiculo": "Supremo Tribunal Federal (STF)",
+      "titulo": "STF restabelece extinção de mandato de prefeito condenado de Embu-Guaçu (SP)",
+      "url": "https://noticias.stf.jus.br/postsnoticias/stf-restabelece-extincao-de-mandato-de-prefeito-condenado-de-embu-guacu-sp/",
+      "data": "2025-07-21"
+     },
+     {
+      "veiculo": "Verbo Online",
+      "titulo": "Empossado prefeito de Embu-Guaçu, Neguinho fala em 'cuidar de pessoas' e indica que vai priorizar saúde",
+      "url": "https://verboonline.com.br/2025/07/26/empossado-prefeito-de-embu-guacu-neguinho-fala-em-cuidar-de-pessoas-e-indica-que-vai-priorizar-saude/",
+      "data": "2025-07-26"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 22/07/2025, quando o vice Neguinho do Conselho tomou posse como prefeito.",
+    "nota_en": "The office of vice mayor has been vacant since July 22, 2025, when Vice Mayor Neguinho do Conselho was sworn in as mayor.",
+    "fonte": [
+     {
+      "veiculo": "Supremo Tribunal Federal (STF)",
+      "titulo": "STF restabelece extinção de mandato de prefeito condenado de Embu-Guaçu (SP)",
+      "url": "https://noticias.stf.jus.br/postsnoticias/stf-restabelece-extincao-de-mandato-de-prefeito-condenado-de-embu-guacu-sp/",
+      "data": "2025-07-21"
+     },
+     {
+      "veiculo": "Verbo Online",
+      "titulo": "Empossado prefeito de Embu-Guaçu, Neguinho fala em 'cuidar de pessoas' e indica que vai priorizar saúde",
+      "url": "https://verboonline.com.br/2025/07/26/empossado-prefeito-de-embu-guacu-neguinho-fala-em-cuidar-de-pessoas-e-indica-que-vai-priorizar-saude/",
+      "data": "2025-07-26"
+     }
+    ]
+   }
+  },
+  "3535804": {
+   "nome": "Paranapanema",
+   "uf": "SP",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Oseias Rosa",
+    "nomeCivil": "Oseias Rosa Junior",
+    "partido": "PSD",
+    "genero": "M",
+    "nascimento": "1989-11-28",
+    "desde": "2026-04-02",
+    "comoAssumiu": "Era vice-prefeito e tomou posse como prefeito em 02/04/2026, na Câmara Municipal, depois que Rodolfo Fanganiello renunciou ao cargo para concorrer a deputado estadual na eleição de 2026.",
+    "comoAssumiu_en": "He was vice mayor and was sworn in as mayor on April 2, 2026, at the City Council, after Mayor Rodolfo Fanganiello resigned to run for state deputy in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Paranapanema",
+      "titulo": "Galeria de Prefeitos(as) (prefeito atual: Oséias Rosa Júnior)",
+      "url": "https://www.paranapanema.sp.gov.br/portal/galeria-de-prefeitos/",
+      "data": "2026-10-29"
+     },
+     {
+      "veiculo": "O Progresso de Tatuí",
+      "titulo": "Oséias Rosa Júnior assume a prefeitura de Paranapanema",
+      "url": "https://oprogressodetatui.com.br/oseias-rosa-junior-assume-a-prefeitura-de-paranapanema/",
+      "data": "2026-04-01"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 02/04/2026, quando o vice Oseias Rosa tomou posse como prefeito.",
+    "nota_en": "The office of vice mayor has been vacant since April 2, 2026, when Vice Mayor Oseias Rosa was sworn in as mayor.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Paranapanema",
+      "titulo": "Galeria de Prefeitos(as) (prefeito atual: Oséias Rosa Júnior)",
+      "url": "https://www.paranapanema.sp.gov.br/portal/galeria-de-prefeitos/",
+      "data": "2026-10-29"
+     },
+     {
+      "veiculo": "O Progresso de Tatuí",
+      "titulo": "Oséias Rosa Júnior assume a prefeitura de Paranapanema",
+      "url": "https://oprogressodetatui.com.br/oseias-rosa-junior-assume-a-prefeitura-de-paranapanema/",
+      "data": "2026-04-01"
+     }
+    ]
+   }
+  },
+  "4118006": {
+   "nome": "Paraíso do Norte",
+   "uf": "PR",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Fernando Marinelo",
+    "nomeCivil": "Walisson Fernando Marinelo",
+    "partido": "MDB",
+    "genero": "M",
+    "nascimento": "1981-09-28",
+    "desde": "2026-04-01",
+    "comoAssumiu": "Era vice-prefeito e assumiu a prefeitura em 01/04/2026, depois que Beto Vizzotto renunciou ao cargo para concorrer a deputado estadual na eleição de 2026.",
+    "comoAssumiu_en": "He was vice mayor and took over as mayor on April 1, 2026, after Mayor Beto Vizzotto resigned to run for state deputy in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Paraíso do Norte",
+      "titulo": "Walisson Fernando Marinelo assume Prefeitura de Paraíso do Norte",
+      "url": "https://paraisodonorte.atende.net/cidadao/noticia/walisson-fernando-marinelo-assume-prefeitura-de-paraiso-do-norte",
+      "data": "2026-04-01"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 01/04/2026, quando o vice Fernando Marinelo assumiu a prefeitura.",
+    "nota_en": "The office of vice mayor has been vacant since April 1, 2026, when Vice Mayor Fernando Marinelo became mayor.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Paraíso do Norte",
+      "titulo": "Walisson Fernando Marinelo assume Prefeitura de Paraíso do Norte",
+      "url": "https://paraisodonorte.atende.net/cidadao/noticia/walisson-fernando-marinelo-assume-prefeitura-de-paraiso-do-norte",
+      "data": "2026-04-01"
+     }
+    ]
+   }
+  },
+  "4122206": {
+   "nome": "Rio Branco do Sul",
+   "uf": "PR",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Airton Nodari",
+    "nomeCivil": "Ailton Luiz Nodary",
+    "partido": "REPUBLICANOS",
+    "genero": "M",
+    "nascimento": "1962-07-26",
+    "desde": "2026-04-04",
+    "comoAssumiu": "Era vice-prefeito e assumiu a prefeitura depois que Karime Fayad renunciou ao cargo para disputar a eleição de 2026 para deputada federal. A posse, em sessão solene da Câmara Municipal no Casarão Furquim, foi marcada para 04/04/2026.",
+    "comoAssumiu_en": "He was vice mayor and became mayor after Mayor Karime Fayad resigned to run for federal deputy in the 2026 election. The swearing-in, in a formal session of the City Council at the Casarão Furquim, was scheduled for April 4, 2026.",
+    "fonte": [
+     {
+      "veiculo": "Portal Rio Branco do Sul",
+      "titulo": "Airton Nodari será o novo prefeito de Rio Branco do Sul",
+      "url": "https://riobrancodosul.com.br/airton-nodari-sera-o-novo-prefeito-de-rio-branco-do-sul/",
+      "data": "2026-04-03"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 04/04/2026, quando o vice Airton Nodari tomou posse como prefeito.",
+    "nota_en": "The office of vice mayor has been vacant since April 4, 2026, when Vice Mayor Airton Nodari was sworn in as mayor.",
+    "fonte": [
+     {
+      "veiculo": "Portal Rio Branco do Sul",
+      "titulo": "Airton Nodari será o novo prefeito de Rio Branco do Sul",
+      "url": "https://riobrancodosul.com.br/airton-nodari-sera-o-novo-prefeito-de-rio-branco-do-sul/",
+      "data": "2026-04-03"
+     }
+    ]
+   }
+  },
+  "4128005": {
+   "nome": "Ubiratã",
+   "uf": "PR",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Alexandre Molina",
+    "nomeCivil": "Alexandre Antonio Molina",
+    "partido": "MDB",
+    "genero": "M",
+    "nascimento": "1977-05-16",
+    "desde": "2026-04-04",
+    "comoAssumiu": "Era vice-prefeito e assumiu a prefeitura em 04/04/2026, depois que Fábio D'Alécio renunciou ao cargo para concorrer a deputado estadual na eleição de 2026.",
+    "comoAssumiu_en": "He was vice mayor and took over as mayor on April 4, 2026, after Mayor Fábio D'Alécio resigned to run for state deputy in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "Portal CR3",
+      "titulo": "Prefeito de Ubiratã renuncia para disputar eleição para deputado",
+      "url": "https://www.centralr3.com.br/2026/04/prefeito-de-ubirata-renuncia-para.html",
+      "data": "2026-04-06"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 04/04/2026, quando o vice Alexandre Molina assumiu a prefeitura.",
+    "nota_en": "The office of vice mayor has been vacant since April 4, 2026, when Vice Mayor Alexandre Molina became mayor.",
+    "fonte": [
+     {
+      "veiculo": "Portal CR3",
+      "titulo": "Prefeito de Ubiratã renuncia para disputar eleição para deputado",
+      "url": "https://www.centralr3.com.br/2026/04/prefeito-de-ubirata-renuncia-para.html",
+      "data": "2026-04-06"
+     }
+    ]
+   }
+  },
+  "4201950": {
+   "nome": "Balneário Arroio do Silva",
+   "uf": "SC",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Jorge Freitas",
+    "nomeCivil": "Jorge Luiz Freitas",
+    "partido": "PSD",
+    "genero": "M",
+    "nascimento": "1956-11-09",
+    "desde": "2026-03-31",
+    "comoAssumiu": "Era vice-prefeito e tomou posse como prefeito em 31/03/2026, em sessão solene da Câmara de Vereadores, depois que Evandro Scaini renunciou ao cargo para concorrer a deputado estadual na eleição de 2026.",
+    "comoAssumiu_en": "He was vice mayor and was sworn in as mayor on March 31, 2026, in a formal session of the City Council, after Mayor Evandro Scaini resigned to run for state deputy in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "Portal Agora",
+      "titulo": "Em Balneário Arroio do Silva, Câmara dá posse a Jorge Freitas após renúncia de Evandro Scaini",
+      "url": "https://agorasul.com.br/em-balneario-arroio-do-silva-camara-da-posse-a-jorge-freitas-apos-renuncia-de-evandro-scaini/",
+      "data": "2026-03-31"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 31/03/2026, quando o vice Jorge Freitas tomou posse como prefeito.",
+    "nota_en": "The office of vice mayor has been vacant since March 31, 2026, when Vice Mayor Jorge Freitas was sworn in as mayor.",
+    "fonte": [
+     {
+      "veiculo": "Portal Agora",
+      "titulo": "Em Balneário Arroio do Silva, Câmara dá posse a Jorge Freitas após renúncia de Evandro Scaini",
+      "url": "https://agorasul.com.br/em-balneario-arroio-do-silva-camara-da-posse-a-jorge-freitas-apos-renuncia-de-evandro-scaini/",
+      "data": "2026-03-31"
+     }
+    ]
+   }
+  },
+  "4202305": {
+   "nome": "Biguaçu",
+   "uf": "SC",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Alexandre",
+    "nomeCivil": "Alexandre Martins de Souza",
+    "partido": "PODE",
+    "genero": "M",
+    "nascimento": "1975-04-13",
+    "desde": "2026-03-30",
+    "comoAssumiu": "Era vice-prefeito e tomou posse como prefeito em 30/03/2026, em sessão solene da Câmara de Vereadores, depois que Salmir da Silva renunciou ao cargo para concorrer a deputado estadual na eleição de 2026.",
+    "comoAssumiu_en": "He was vice mayor and was sworn in as mayor on March 30, 2026, in a formal session of the City Council, after Mayor Salmir da Silva resigned to run for state deputy in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "O Catarinense",
+      "titulo": "Alexandre Martins de Souza toma posse definitiva como prefeito de Biguaçu",
+      "url": "https://jornalcatarinense.com.br/alexandre-martins-de-souza-assume-oficialmente-a-prefeitura-de-biguacu/",
+      "data": "2026-03-31"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 30/03/2026, quando o vice Alexandre tomou posse como prefeito.",
+    "nota_en": "The office of vice mayor has been vacant since March 30, 2026, when Vice Mayor Alexandre was sworn in as mayor.",
+    "fonte": [
+     {
+      "veiculo": "O Catarinense",
+      "titulo": "Alexandre Martins de Souza toma posse definitiva como prefeito de Biguaçu",
+      "url": "https://jornalcatarinense.com.br/alexandre-martins-de-souza-assume-oficialmente-a-prefeitura-de-biguacu/",
+      "data": "2026-03-31"
+     }
+    ]
+   }
+  },
+  "4203808": {
+   "nome": "Canoinhas",
+   "uf": "SC",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Zenilda Lemos",
+    "nomeCivil": "Zenilda Lemos de Souza",
+    "partido": "UNIÃO",
+    "genero": "F",
+    "nascimento": "1975-06-02",
+    "desde": "2026-03-31",
+    "comoAssumiu": "Era vice-prefeita e tomou posse como prefeita em 31/03/2026, na Câmara de Vereadores, depois que Juliana Maciel renunciou ao cargo para concorrer a deputada estadual na eleição de 2026.",
+    "comoAssumiu_en": "She was vice mayor and was sworn in as mayor on March 31, 2026, at the City Council, after Mayor Juliana Maciel resigned to run for state deputy in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "NSC Total",
+      "titulo": "Prefeita de Canoinhas renuncia ao cargo no segundo mandato; veja quem assume",
+      "url": "https://www.nsctotal.com.br/politica/prefeita-de-canoinhas-renuncia-ao-cargo-no-segundo-mandato-veja-quem-assume",
+      "data": "2026-03-31"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 31/03/2026, quando a vice Zenilda Lemos tomou posse como prefeita.",
+    "nota_en": "The office of vice mayor has been vacant since March 31, 2026, when Vice Mayor Zenilda Lemos was sworn in as mayor.",
+    "fonte": [
+     {
+      "veiculo": "NSC Total",
+      "titulo": "Prefeita de Canoinhas renuncia ao cargo no segundo mandato; veja quem assume",
+      "url": "https://www.nsctotal.com.br/politica/prefeita-de-canoinhas-renuncia-ao-cargo-no-segundo-mandato-veja-quem-assume",
+      "data": "2026-03-31"
+     }
+    ]
+   }
+  },
+  "4204202": {
+   "nome": "Chapecó",
+   "uf": "SC",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Valmor Scolari",
+    "nomeCivil": "Valmor Júnior Scolari",
+    "partido": "PSD",
+    "genero": "M",
+    "nascimento": "1979-09-23",
+    "desde": "2026-04-06",
+    "comoAssumiu": "Era vice-prefeito e tomou posse como prefeito em 06/04/2026, em cerimônia da Câmara Municipal, depois que João Rodrigues renunciou ao cargo para concorrer a governador na eleição de 2026.",
+    "comoAssumiu_en": "He was vice mayor and was sworn in as mayor on April 6, 2026, in a City Council ceremony, after Mayor João Rodrigues resigned to run for governor in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "Câmara Municipal de Chapecó",
+      "titulo": "Câmara de Chapecó empossa Valmor Scolari como prefeito em cerimônia oficial",
+      "url": "https://www.cmc.sc.gov.br/noticia/camara-de-chapeco-empossa-valmor-scolari-como-prefeito-em-cerimonia-oficial/5d6bf9595bee60b66d38ba769bc2cff0",
+      "data": "2026-04-06"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 06/04/2026, quando o vice Valmor Scolari tomou posse como prefeito.",
+    "nota_en": "The office of vice mayor has been vacant since April 6, 2026, when Vice Mayor Valmor Scolari was sworn in as mayor.",
+    "fonte": [
+     {
+      "veiculo": "Câmara Municipal de Chapecó",
+      "titulo": "Câmara de Chapecó empossa Valmor Scolari como prefeito em cerimônia oficial",
+      "url": "https://www.cmc.sc.gov.br/noticia/camara-de-chapeco-empossa-valmor-scolari-como-prefeito-em-cerimonia-oficial/5d6bf9595bee60b66d38ba769bc2cff0",
+      "data": "2026-04-06"
+     }
+    ]
+   }
+  },
+  "4204301": {
+   "nome": "Concórdia",
+   "uf": "SC",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Ferri",
+    "nomeCivil": "Fabio Luis Ferri",
+    "partido": "PL",
+    "genero": "M",
+    "nascimento": "1974-04-21",
+    "desde": "2026-03-31",
+    "comoAssumiu": "Era vice-prefeito e tomou posse como prefeito em 31/03/2026, em sessão extraordinária da Câmara de Vereadores, depois que Edilson Massocco renunciou ao cargo para concorrer a deputado estadual na eleição de 2026.",
+    "comoAssumiu_en": "He was vice mayor and was sworn in as mayor on March 31, 2026, in a special session of the City Council, after Mayor Edilson Massocco resigned to run for state deputy in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "Atual FM",
+      "titulo": "Fábio Ferri é o novo prefeito da segunda maior cidade do Oeste de Santa Catarina",
+      "url": "https://atualfm.com.br/fabio-ferri-e-o-novo-prefeito-da-segunda-maior-cidade-do-oeste-de-sc/",
+      "data": "2026-04-01"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 31/03/2026, quando o vice Ferri tomou posse como prefeito.",
+    "nota_en": "The office of vice mayor has been vacant since March 31, 2026, when Vice Mayor Ferri was sworn in as mayor.",
+    "fonte": [
+     {
+      "veiculo": "Atual FM",
+      "titulo": "Fábio Ferri é o novo prefeito da segunda maior cidade do Oeste de Santa Catarina",
+      "url": "https://atualfm.com.br/fabio-ferri-e-o-novo-prefeito-da-segunda-maior-cidade-do-oeste-de-sc/",
+      "data": "2026-04-01"
+     }
+    ]
+   }
+  },
+  "4209102": {
+   "nome": "Joinville",
+   "uf": "SC",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Rejane Gambin",
+    "nomeCivil": "Rejane Gambin",
+    "partido": "NOVO",
+    "genero": "F",
+    "nascimento": "1967-05-11",
+    "desde": "2026-04-02",
+    "comoAssumiu": "Era vice-prefeita e tomou posse como prefeita em 02/04/2026, em sessão extraordinária da Câmara de Vereadores, depois que Adriano Silva renunciou ao cargo para concorrer a vice-governador na eleição de 2026.",
+    "comoAssumiu_en": "She was vice mayor and was sworn in as mayor on April 2, 2026, in a special session of the City Council, after Mayor Adriano Silva resigned to run for vice governor in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Joinville",
+      "titulo": "Rejane Gambin toma posse como primeira mulher prefeita de Joinville",
+      "url": "https://www.joinville.sc.gov.br/noticias/rejane-gambin-toma-posse-como-primeira-mulher-prefeita-de-joinville/",
+      "data": "2026-04-03"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 02/04/2026, quando a vice Rejane Gambin tomou posse como prefeita.",
+    "nota_en": "The office of vice mayor has been vacant since April 2, 2026, when Vice Mayor Rejane Gambin was sworn in as mayor.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Joinville",
+      "titulo": "Rejane Gambin toma posse como primeira mulher prefeita de Joinville",
+      "url": "https://www.joinville.sc.gov.br/noticias/rejane-gambin-toma-posse-como-primeira-mulher-prefeita-de-joinville/",
+      "data": "2026-04-03"
+     }
+    ]
+   }
+  },
+  "4210100": {
+   "nome": "Mafra",
+   "uf": "SC",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Carlos Nitz",
+    "nomeCivil": "Carlos Alberto Nitz",
+    "partido": "REPUBLICANOS",
+    "genero": "M",
+    "nascimento": "1974-11-16",
+    "desde": "2026-04-02",
+    "comoAssumiu": "Era vice-prefeito e tomou posse como prefeito em 02/04/2026, na Câmara de Vereadores, depois que Emerson Maas renunciou ao cargo para concorrer a deputado estadual na eleição de 2026.",
+    "comoAssumiu_en": "He was vice mayor and was sworn in as mayor on April 2, 2026, at the City Council, after Mayor Emerson Maas resigned to run for state deputy in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "NSC Total",
+      "titulo": "Prefeito de Mafra renuncia ao cargo no sexto ano de mandato; veja quem assume",
+      "url": "https://www.nsctotal.com.br/politica/prefeito-de-mafra-renuncia-ao-cargo-no-sexto-ano-de-mandato-veja-quem-assume",
+      "data": "2026-04-02"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 02/04/2026, quando o vice Carlos Nitz tomou posse como prefeito.",
+    "nota_en": "The office of vice mayor has been vacant since April 2, 2026, when Vice Mayor Carlos Nitz was sworn in as mayor.",
+    "fonte": [
+     {
+      "veiculo": "NSC Total",
+      "titulo": "Prefeito de Mafra renuncia ao cargo no sexto ano de mandato; veja quem assume",
+      "url": "https://www.nsctotal.com.br/politica/prefeito-de-mafra-renuncia-ao-cargo-no-sexto-ano-de-mandato-veja-quem-assume",
+      "data": "2026-04-02"
+     }
+    ]
+   }
+  },
+  "4211306": {
+   "nome": "Navegantes",
+   "uf": "SC",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Ricardo Ventura",
+    "nomeCivil": "Ricardo Muniz Ventura",
+    "partido": "PP",
+    "genero": "M",
+    "nascimento": "1981-08-30",
+    "desde": "2026-04-02",
+    "comoAssumiu": "Era vice-prefeito e assumiu a prefeitura em 02/04/2026, em ato no gabinete da prefeitura, depois que Liba Fronza renunciou ao cargo para concorrer a deputado estadual na eleição de 2026.",
+    "comoAssumiu_en": "He was vice mayor and took over as mayor on April 2, 2026, in a ceremony at the mayor's office, after Mayor Liba Fronza resigned to run for state deputy in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "Jornal nos Bairros",
+      "titulo": "Ricardo assume Prefeitura de Navegantes e reforça compromisso com continuidade da gestão",
+      "url": "https://jornalnosbairros.com.br/wp/2026/04/ricardo-assume-prefeitura-de-navegantes-e-reforca-compromisso-com-continuidade-da-gestao/",
+      "data": "2026-04-03"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 02/04/2026, quando o vice Ricardo Ventura assumiu a prefeitura.",
+    "nota_en": "The office of vice mayor has been vacant since April 2, 2026, when Vice Mayor Ricardo Ventura became mayor.",
+    "fonte": [
+     {
+      "veiculo": "Jornal nos Bairros",
+      "titulo": "Ricardo assume Prefeitura de Navegantes e reforça compromisso com continuidade da gestão",
+      "url": "https://jornalnosbairros.com.br/wp/2026/04/ricardo-assume-prefeitura-de-navegantes-e-reforca-compromisso-com-continuidade-da-gestao/",
+      "data": "2026-04-03"
+     }
+    ]
+   }
+  },
+  "4302105": {
+   "nome": "Bento Gonçalves",
+   "uf": "RS",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Amarildo Lucatelli",
+    "nomeCivil": "Amarildo Lucatelli",
+    "partido": "PP",
+    "genero": "M",
+    "nascimento": "1966-04-16",
+    "desde": "2026-03-30",
+    "comoAssumiu": "Era vice-prefeito e tomou posse como prefeito em 30/03/2026, no Salão Nobre da Prefeitura, depois que Diogo Siqueira renunciou ao cargo para concorrer a deputado federal na eleição de 2026.",
+    "comoAssumiu_en": "He was vice mayor and was sworn in as mayor on March 30, 2026, in City Hall's main hall, after Mayor Diogo Siqueira resigned to run for federal deputy in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Bento Gonçalves",
+      "titulo": "Amarildo Lucatelli assume como o 33º Prefeito de Bento Gonçalves",
+      "url": "https://www.bentogoncalves.rs.gov.br/amarildo-lucatelli-assume-como-o-33o-prefeito-de-bento-goncalves/",
+      "data": "2026-03-30"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 30/03/2026, quando o vice Amarildo Lucatelli tomou posse como prefeito.",
+    "nota_en": "The office of vice mayor has been vacant since March 30, 2026, when Vice Mayor Amarildo Lucatelli was sworn in as mayor.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Bento Gonçalves",
+      "titulo": "Amarildo Lucatelli assume como o 33º Prefeito de Bento Gonçalves",
+      "url": "https://www.bentogoncalves.rs.gov.br/amarildo-lucatelli-assume-como-o-33o-prefeito-de-bento-goncalves/",
+      "data": "2026-03-30"
+     }
+    ]
+   }
+  },
+  "4309308": {
+   "nome": "Guaíba",
+   "uf": "RS",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Claudinha Jardim",
+    "nomeCivil": "Claudia Pelegrino Jardim Pereira",
+    "partido": "PL",
+    "genero": "F",
+    "nascimento": "1981-12-26",
+    "desde": "2026-04-04",
+    "comoAssumiu": "Era vice-prefeita e assumiu a prefeitura em 04/04/2026, depois que Marcelo Maranata renunciou ao cargo para concorrer a governador na eleição de 2026.",
+    "comoAssumiu_en": "She was vice mayor and took over as mayor on April 4, 2026, after Mayor Marcelo Maranata resigned to run for governor in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "Jornal do Comércio",
+      "titulo": "Claudinha Jardim assume prefeitura de Guaíba após renúncia de Maranata",
+      "url": "https://www.jornaldocomercio.com/politica/2026/04/1243579-claudinha-jardim-substitui-maranata-e-assume-a-prefeitura-de-guaiba.html",
+      "data": "2026-04-05"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 04/04/2026, quando a vice Claudinha Jardim assumiu a prefeitura.",
+    "nota_en": "The office of vice mayor has been vacant since April 4, 2026, when Vice Mayor Claudinha Jardim became mayor.",
+    "fonte": [
+     {
+      "veiculo": "Jornal do Comércio",
+      "titulo": "Claudinha Jardim assume prefeitura de Guaíba após renúncia de Maranata",
+      "url": "https://www.jornaldocomercio.com/politica/2026/04/1243579-claudinha-jardim-substitui-maranata-e-assume-a-prefeitura-de-guaiba.html",
+      "data": "2026-04-05"
+     }
+    ]
+   }
+  },
+  "4312609": {
+   "nome": "Muçum",
+   "uf": "RS",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Amarildo Baldasso",
+    "nomeCivil": "Amarildo Baldasso",
+    "partido": "PSD",
+    "genero": "M",
+    "nascimento": "1965-10-15",
+    "desde": "2026-04-02",
+    "comoAssumiu": "Era vice-prefeito e assumiu a prefeitura em 02/04/2026, depois que Mateus Trojan renunciou ao cargo para concorrer a deputado estadual na eleição de 2026.",
+    "comoAssumiu_en": "He was vice mayor and took over as mayor on April 2, 2026, after Mayor Mateus Trojan resigned to run for state deputy in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "Eco Regional",
+      "titulo": "Prefeito de Muçum renuncia para disputar eleição e vice assume comando do município",
+      "url": "https://ecoregional.com.br/geral/prefeito-de-mucum-renuncia-para-disputar-eleicao-e-vice-assume-comando-do-municipio",
+      "data": "2026-04-02"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 02/04/2026, quando o vice Amarildo Baldasso assumiu a prefeitura.",
+    "nota_en": "The office of vice mayor has been vacant since April 2, 2026, when Vice Mayor Amarildo Baldasso became mayor.",
+    "fonte": [
+     {
+      "veiculo": "Eco Regional",
+      "titulo": "Prefeito de Muçum renuncia para disputar eleição e vice assume comando do município",
+      "url": "https://ecoregional.com.br/geral/prefeito-de-mucum-renuncia-para-disputar-eleicao-e-vice-assume-comando-do-municipio",
+      "data": "2026-04-02"
+     }
+    ]
+   }
+  },
+  "4317103": {
+   "nome": "Sant'Ana do Livramento",
+   "uf": "RS",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Evandro Gutebier",
+    "nomeCivil": "Evandro Gutebier Machado",
+    "partido": "REPUBLICANOS",
+    "genero": "M",
+    "nascimento": "1979-03-30",
+    "desde": "2026-03-25",
+    "comoAssumiu": "Era vice-prefeito e tomou posse como prefeito em 25/03/2026, em sessão solene da Câmara Municipal, depois que Delegada Ana Tarouco renunciou ao cargo, em 24/03/2026, para concorrer a deputada estadual na eleição de 2026.",
+    "comoAssumiu_en": "He was vice mayor and was sworn in as mayor on March 25, 2026, in a formal session of the City Council, after Mayor Delegada Ana Tarouco resigned on March 24, 2026, to run for state deputy in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "A Plateia",
+      "titulo": "“O projeto continua, o legado continua”, diz Evandro ao assumir Prefeitura de Livramento",
+      "url": "https://www.aplateia.com.br/2026/03/o-projeto-continua-o-legado-continua-diz-evandro-ao-assumir-prefeitura-de-livramento/",
+      "data": "2026-03-25"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 25/03/2026, quando o vice Evandro Gutebier tomou posse como prefeito.",
+    "nota_en": "The office of vice mayor has been vacant since March 25, 2026, when Vice Mayor Evandro Gutebier was sworn in as mayor.",
+    "fonte": [
+     {
+      "veiculo": "A Plateia",
+      "titulo": "“O projeto continua, o legado continua”, diz Evandro ao assumir Prefeitura de Livramento",
+      "url": "https://www.aplateia.com.br/2026/03/o-projeto-continua-o-legado-continua-diz-evandro-ao-assumir-prefeitura-de-livramento/",
+      "data": "2026-03-25"
+     }
+    ]
+   }
+  },
+  "4320008": {
+   "nome": "Sapucaia do Sul",
+   "uf": "RS",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Nestor Bernardes",
+    "nomeCivil": "Jose Nestor de Oliveira Bernardes",
+    "partido": "UNIÃO",
+    "genero": "M",
+    "nascimento": "1949-10-20",
+    "desde": "2026-03-31",
+    "comoAssumiu": "Era vice-prefeito e assumiu a prefeitura em 31/03/2026, em cerimônia na Câmara de Vereadores, depois que Volmir Rodrigues Gordo renunciou ao cargo para concorrer a deputado estadual na eleição de 2026.",
+    "comoAssumiu_en": "He was vice mayor and took over as mayor on March 31, 2026, in a ceremony at the City Council, after Mayor Volmir Rodrigues Gordo resigned to run for state deputy in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Sapucaia do Sul",
+      "titulo": "Nestor Bernardes assume o cargo de Prefeito de Sapucaia do Sul",
+      "url": "https://www.sapucaiadosul.rs.gov.br/noticias/nestor-bernardes-assume-o-cargo-de-prefeito-de-sapucaia-do-sul/",
+      "data": "2026-04-01"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 31/03/2026, quando o vice Nestor Bernardes assumiu a prefeitura.",
+    "nota_en": "The office of vice mayor has been vacant since March 31, 2026, when Vice Mayor Nestor Bernardes became mayor.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Sapucaia do Sul",
+      "titulo": "Nestor Bernardes assume o cargo de Prefeito de Sapucaia do Sul",
+      "url": "https://www.sapucaiadosul.rs.gov.br/noticias/nestor-bernardes-assume-o-cargo-de-prefeito-de-sapucaia-do-sul/",
+      "data": "2026-04-01"
+     }
+    ]
+   }
+  },
+  "5106653": {
+   "nome": "Pontal do Araguaia",
+   "uf": "MT",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Luciano Costa",
+    "nomeCivil": "Luciano Napolis Costa",
+    "partido": "PSD",
+    "genero": "M",
+    "nascimento": "1976-09-21",
+    "desde": "2026-03-31",
+    "comoAssumiu": "Era vice-prefeito e assumiu a prefeitura em 31/03/2026, em solenidade na sede da prefeitura, depois que Adelcino Lopo renunciou ao cargo para concorrer a deputado estadual na eleição de 2026.",
+    "comoAssumiu_en": "He was vice mayor and took over as mayor on March 31, 2026, in a ceremony at City Hall, after Mayor Adelcino Lopo resigned to run for state deputy in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Pontal do Araguaia",
+      "titulo": "Prefeitura realiza solenidade de prestação de contas e transmissão de cargo",
+      "url": "https://www.pontaldoaraguaia.mt.gov.br/prefeitura-realiza-solenidade-de-prestacao-de-contas-e-transmissao-de-cargo/",
+      "data": "2026-03-30"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 31/03/2026, quando o vice Luciano Costa assumiu a prefeitura.",
+    "nota_en": "The office of vice mayor has been vacant since March 31, 2026, when Vice Mayor Luciano Costa became mayor.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Pontal do Araguaia",
+      "titulo": "Prefeitura realiza solenidade de prestação de contas e transmissão de cargo",
+      "url": "https://www.pontaldoaraguaia.mt.gov.br/prefeitura-realiza-solenidade-de-prestacao-de-contas-e-transmissao-de-cargo/",
+      "data": "2026-03-30"
+     }
+    ]
+   }
+  },
+  "5204854": {
+   "nome": "Campo Limpo de Goiás",
+   "uf": "GO",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Alzemar",
+    "nomeCivil": "Alzemar Teixeira Barbosa Neto",
+    "partido": "PL",
+    "genero": "M",
+    "nascimento": "1990-01-15",
+    "desde": "2026-03-31",
+    "comoAssumiu": "Era vice-prefeito e tomou posse como prefeito em 31/03/2026, em sessão extraordinária da Câmara Municipal, depois que Graciele da Arte Trigo renunciou ao cargo para concorrer a deputada estadual na eleição de 2026.",
+    "comoAssumiu_en": "He was vice mayor and was sworn in as mayor on March 31, 2026, in a special session of the City Council, after Mayor Graciele da Arte Trigo resigned to run for state deputy in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "Câmara Municipal de Campo Limpo de Goiás",
+      "titulo": "O Vice-Prefeito Alzemar Neto assumiu como Prefeito devido ao afastamento da Prefeita Graciele Marta para cumprir exigências legais de sua candidatura a Deputada",
+      "url": "https://campolimpodegoias.go.leg.br/49302-2/",
+      "data": "2026-04-08"
+     },
+     {
+      "veiculo": "Portal 6",
+      "titulo": "Graciele da Arte Trigo renuncia à Prefeitura de Campo Limpo e Câmara marca posse do vice-prefeito",
+      "url": "https://portal6.com.br/2026/03/27/graciele-da-arte-trigo-renuncia-a-prefeitura-de-campo-de-limpo-e-camara-marca-posse-do-vice-prefeito/",
+      "data": "2026-03-27"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 31/03/2026, quando o vice Alzemar tomou posse como prefeito.",
+    "nota_en": "The office of vice mayor has been vacant since March 31, 2026, when Vice Mayor Alzemar was sworn in as mayor.",
+    "fonte": [
+     {
+      "veiculo": "Câmara Municipal de Campo Limpo de Goiás",
+      "titulo": "O Vice-Prefeito Alzemar Neto assumiu como Prefeito devido ao afastamento da Prefeita Graciele Marta para cumprir exigências legais de sua candidatura a Deputada",
+      "url": "https://campolimpodegoias.go.leg.br/49302-2/",
+      "data": "2026-04-08"
+     },
+     {
+      "veiculo": "Portal 6",
+      "titulo": "Graciele da Arte Trigo renuncia à Prefeitura de Campo Limpo e Câmara marca posse do vice-prefeito",
+      "url": "https://portal6.com.br/2026/03/27/graciele-da-arte-trigo-renuncia-a-prefeitura-de-campo-de-limpo-e-camara-marca-posse-do-vice-prefeito/",
+      "data": "2026-03-27"
+     }
+    ]
+   }
+  },
+  "5217609": {
+   "nome": "Planaltina",
+   "uf": "GO",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Zezinho do Planalto",
+    "nomeCivil": "José Venceslau de Sousa",
+    "partido": "UNIÃO",
+    "genero": "M",
+    "nascimento": "1971-08-21",
+    "desde": "2026-04-02",
+    "comoAssumiu": "Era vice-prefeito e tomou posse como prefeito em 02/04/2026, em sessão solene da Câmara Municipal, depois que Delegado Cristiomário renunciou ao cargo para concorrer a deputado estadual na eleição de 2026.",
+    "comoAssumiu_en": "He was vice mayor and was sworn in as mayor on April 2, 2026, in a formal session of the City Council, after Mayor Delegado Cristiomário resigned to run for state deputy in the 2026 election.",
+    "fonte": [
+     {
+      "veiculo": "Jornal Opção",
+      "titulo": "Prefeito Delegado Cristiomário renuncia e vice assume comando da Prefeitura de Planaltina",
+      "url": "https://entorno.jornalopcao.com.br/politica/prefeito-delegado-cristiomario-renuncia-e-vice-assume-comando-da-prefeitura-de-planaltina-31023/",
+      "data": "2026-04-02"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 02/04/2026, quando o vice Zezinho do Planalto tomou posse como prefeito.",
+    "nota_en": "The office of vice mayor has been vacant since April 2, 2026, when Vice Mayor Zezinho do Planalto was sworn in as mayor.",
+    "fonte": [
+     {
+      "veiculo": "Jornal Opção",
+      "titulo": "Prefeito Delegado Cristiomário renuncia e vice assume comando da Prefeitura de Planaltina",
+      "url": "https://entorno.jornalopcao.com.br/politica/prefeito-delegado-cristiomario-renuncia-e-vice-assume-comando-da-prefeitura-de-planaltina-31023/",
+      "data": "2026-04-02"
+     }
+    ]
+   }
+  },
+  "1709005": {
+   "nome": "Goiatins",
+   "uf": "TO",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Lilian Maria Ribeiro",
+    "nomeCivil": "Lilian Maria Rodrigues Ribeiro",
+    "partido": "REPUBLICANOS",
+    "genero": "F",
+    "nascimento": "1981-02-27",
+    "foto": "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/2045202024/270002128890/95338",
+    "desde": "2026-07-21",
+    "comoAssumiu": "Presidente da Câmara Municipal, assumiu a prefeitura de forma interina em 21/07/2026, depois que a Justiça Eleitoral afastou o prefeito Manoel Natalino e o vice Zé Américo Filho, que tiveram os mandatos cassados em abril de 2026. Na eleição suplementar de 25/10/2026, foram eleitos Max Luz (SOLIDARIEDADE), prefeito, e Dominguim do Peixe (MDB), vice; eles tomam posse depois da diplomação pela Justiça Eleitoral.",
+    "comoAssumiu_en": "As president of the City Council, she became acting mayor on July 21, 2026, after the Electoral Courts removed Mayor Manoel Natalino and Vice Mayor Zé Américo Filho, whose terms were revoked in April 2026. In the special election held on October 25, 2026, Max Luz (SOLIDARIEDADE) was elected mayor and Dominguim do Peixe (MDB) vice mayor; they take office after being certified by the Electoral Courts.",
+    "fonte": [
+     {
+      "veiculo": "g1",
+      "titulo": "Presidente da Câmara de Goiatins assume prefeitura após cassação do prefeito e vice",
+      "url": "https://g1.globo.com/to/tocantins/noticia/2026/07/21/presidente-da-camara-de-goiatins-assume-prefeitura-apos-cassacao-do-prefeito-e-vice.ghtml",
+      "data": "2026-07-21"
+     },
+     {
+      "veiculo": "g1",
+      "titulo": "Max Luz (Solidariedade) vence eleição suplementar e é eleito prefeito de Goiatins",
+      "url": "https://g1.globo.com/to/tocantins/eleicoes/2026/noticia/2026/10/25/max-luz-solidariedade-vence-eleicao-suplementar-e-e-eleito-prefeito-de-goiatins.ghtml",
+      "data": "2026-10-25"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde julho de 2026, quando a Justiça Eleitoral afastou o prefeito e o vice eleitos em 2024. Dominguim do Peixe (MDB), eleito vice-prefeito na eleição suplementar de 25/10/2026, toma posse junto com o prefeito eleito.",
+    "nota_en": "The office of vice mayor has been vacant since July 2026, when the Electoral Courts removed the mayor and vice mayor elected in 2024. Dominguim do Peixe (MDB), elected vice mayor in the special election held on October 25, 2026, takes office together with the mayor-elect.",
+    "fonte": [
+     {
+      "veiculo": "g1",
+      "titulo": "Presidente da Câmara de Goiatins assume prefeitura após cassação do prefeito e vice",
+      "url": "https://g1.globo.com/to/tocantins/noticia/2026/07/21/presidente-da-camara-de-goiatins-assume-prefeitura-apos-cassacao-do-prefeito-e-vice.ghtml",
+      "data": "2026-07-21"
+     },
+     {
+      "veiculo": "g1",
+      "titulo": "Max Luz (Solidariedade) vence eleição suplementar e é eleito prefeito de Goiatins",
+      "url": "https://g1.globo.com/to/tocantins/eleicoes/2026/noticia/2026/10/25/max-luz-solidariedade-vence-eleicao-suplementar-e-e-eleito-prefeito-de-goiatins.ghtml",
+      "data": "2026-10-25"
+     }
+    ]
+   }
+  },
+  "3528205": {
+   "nome": "Macedônia",
+   "uf": "SP",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Rodrigo Marcomini",
+    "nomeCivil": "Rodrigo Marcomini dos Reis",
+    "partido": "REPUBLICANOS",
+    "genero": "M",
+    "nascimento": "1984-05-05",
+    "foto": "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/2045202024/250002019126/66656",
+    "desde": "2026-06-18",
+    "comoAssumiu": "Presidente da Câmara Municipal, tomou posse como prefeito interino em 18/06/2026, depois que a Justiça Eleitoral cassou os mandatos do prefeito Reginaldo Marcomini e da vice Vanja Sabino, eleitos em 2024. Na eleição suplementar de 25/10/2026, foram eleitos Vado (PSD), prefeito, e Pedro Antônio (PSD), vice; eles tomam posse depois da diplomação pela Justiça Eleitoral.",
+    "comoAssumiu_en": "As president of the City Council, he was sworn in as acting mayor on June 18, 2026, after the Electoral Courts revoked the terms of Mayor Reginaldo Marcomini and Vice Mayor Vanja Sabino, elected in 2024. In the special election held on October 25, 2026, Vado (PSD) was elected mayor and Pedro Antônio (PSD) vice mayor; they take office after being certified by the Electoral Courts.",
+    "fonte": [
+     {
+      "veiculo": "Rádio Alvorada 95.3 FM",
+      "titulo": "Prefeito interino toma posse em Macedônia após afastamento de prefeito e vice",
+      "url": "https://alvorada95fm.com.br/2026/06/18/prefeito-interino-toma-posse-em-macedonia-apos-afastamento-de-prefeito-e-vice",
+      "data": "2026-06-18"
+     },
+     {
+      "veiculo": "g1",
+      "titulo": "Eleição suplementar em Macedônia: Vado (PSD) é eleito prefeito",
+      "url": "https://g1.globo.com/sp/sao-jose-do-rio-preto-aracatuba/eleicoes/2026/noticia/2026/10/25/resultado-eleicao-suplementar-macedonia.ghtml",
+      "data": "2026-10-25"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde junho de 2026, quando a Justiça Eleitoral cassou os mandatos do prefeito e da vice eleitos em 2024. Pedro Antônio (PSD), eleito vice-prefeito na eleição suplementar de 25/10/2026, toma posse junto com o prefeito eleito.",
+    "nota_en": "The office of vice mayor has been vacant since June 2026, when the Electoral Courts revoked the terms of the mayor and vice mayor elected in 2024. Pedro Antônio (PSD), elected vice mayor in the special election held on October 25, 2026, takes office together with the mayor-elect.",
+    "fonte": [
+     {
+      "veiculo": "Rádio Alvorada 95.3 FM",
+      "titulo": "Prefeito interino toma posse em Macedônia após afastamento de prefeito e vice",
+      "url": "https://alvorada95fm.com.br/2026/06/18/prefeito-interino-toma-posse-em-macedonia-apos-afastamento-de-prefeito-e-vice",
+      "data": "2026-06-18"
+     },
+     {
+      "veiculo": "g1",
+      "titulo": "Eleição suplementar em Macedônia: Vado (PSD) é eleito prefeito",
+      "url": "https://g1.globo.com/sp/sao-jose-do-rio-preto-aracatuba/eleicoes/2026/noticia/2026/10/25/resultado-eleicao-suplementar-macedonia.ghtml",
+      "data": "2026-10-25"
+     }
+    ]
+   }
+  },
+  "3529203": {
+   "nome": "Martinópolis",
+   "uf": "SP",
+   "conferido": "2026-10-29",
+   "ate": "2026-11-26",
+   "prefeito": {
+    "nome": "Gabriel Valões",
+    "nomeCivil": "Gabriel Valões Santos",
+    "partido": "MDB",
+    "genero": "M",
+    "nascimento": "1984-07-07",
+    "foto": "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/2045202024/250002063186/66850",
+    "desde": "2026-06-17",
+    "comoAssumiu": "Presidente da Câmara Municipal, assumiu a prefeitura de forma interina em 17/06/2026, em sessão solene da Câmara que declarou vagos os cargos de prefeito e vice, depois que a Justiça Eleitoral cassou a chapa eleita em 2024. Na eleição suplementar de 25/10/2026, foram eleitos Beto Leite (UNIÃO), prefeito, e Fernanda Crepaldi (UNIÃO), vice, com posse marcada para 26/11/2026.",
+    "comoAssumiu_en": "As president of the City Council, he became acting mayor on June 17, 2026, in a formal session of the City Council that declared the offices of mayor and vice mayor vacant, after the Electoral Courts revoked the ticket elected in 2024. In the special election held on October 25, 2026, Beto Leite (UNIÃO) was elected mayor and Fernanda Crepaldi (UNIÃO) vice mayor; their swearing-in is scheduled for November 26, 2026.",
+    "fonte": [
+     {
+      "veiculo": "Clara Destaque",
+      "titulo": "Martinópolis: presidente da Câmara Municipal assume interinamente cargo de prefeito",
+      "url": "https://claradestaque.com.br/2026/06/17/martinopolis-presidente-da-camara-municipal-assume-interinamente-cargo-de-prefeito/",
+      "data": "2026-06-17"
+     },
+     {
+      "veiculo": "O Imparcial",
+      "titulo": "Posse do novo prefeito e da vice de Martinópolis é marcada para 26 de novembro",
+      "url": "https://www.imparcial.com.br/noticias/posse-do-novo-prefeito-e-da-vice-de-martinopolis-e-marcada-para-26-de-novembro,84254",
+      "data": "2026-10-27"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde 17/06/2026, quando a Câmara Municipal declarou vagos os cargos de prefeito e vice. Fernanda Crepaldi (UNIÃO), eleita vice-prefeita na eleição suplementar de 25/10/2026, toma posse em 26/11/2026.",
+    "nota_en": "The office of vice mayor has been vacant since June 17, 2026, when the City Council declared the offices of mayor and vice mayor vacant. Fernanda Crepaldi (UNIÃO), elected vice mayor in the special election held on October 25, 2026, takes office on November 26, 2026.",
+    "fonte": [
+     {
+      "veiculo": "Clara Destaque",
+      "titulo": "Martinópolis: presidente da Câmara Municipal assume interinamente cargo de prefeito",
+      "url": "https://claradestaque.com.br/2026/06/17/martinopolis-presidente-da-camara-municipal-assume-interinamente-cargo-de-prefeito/",
+      "data": "2026-06-17"
+     },
+     {
+      "veiculo": "O Imparcial",
+      "titulo": "Posse do novo prefeito e da vice de Martinópolis é marcada para 26 de novembro",
+      "url": "https://www.imparcial.com.br/noticias/posse-do-novo-prefeito-e-da-vice-de-martinopolis-e-marcada-para-26-de-novembro,84254",
+      "data": "2026-10-27"
+     }
+    ]
+   }
+  },
+  "4124004": {
+   "nome": "Santana do Itararé",
+   "uf": "PR",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Naldo Motorista",
+    "nomeCivil": "Reinaldo de Oliveira Amador Oliveira",
+    "partido": "PDT",
+    "genero": "M",
+    "nascimento": "1985-09-07",
+    "foto": "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/2045202024/160002371303/78557",
+    "desde": "2026-08-27",
+    "comoAssumiu": "Presidente da Câmara Municipal, tomou posse como prefeito interino em 27/08/2026, depois que a Justiça Eleitoral afastou o prefeito Calé Vidal e o vice Joás Ferraz Michetti, que tiveram os mandatos cassados. Na eleição suplementar de 25/10/2026, foram eleitos Zé Izac (PT), prefeito, e Joaquim do Venerando (PT), vice; eles tomam posse depois da diplomação pela Justiça Eleitoral.",
+    "comoAssumiu_en": "As president of the City Council, he was sworn in as acting mayor on August 27, 2026, after the Electoral Courts removed Mayor Calé Vidal and Vice Mayor Joás Ferraz Michetti, whose terms were revoked. In the special election held on October 25, 2026, Zé Izac (PT) was elected mayor and Joaquim do Venerando (PT) vice mayor; they take office after being certified by the Electoral Courts.",
+    "fonte": [
+     {
+      "veiculo": "Folha Extra",
+      "titulo": "Decisão judicial afasta prefeito de Santana do Itararé; presidente da câmara assume nesta quinta",
+      "url": "https://folhaextra.com/noticia/40227/decisao-judicial-afasta-prefeito-de-santana-do-itarare-presidente-da-camara-assume-nesta-quinta",
+      "data": "2026-08-27"
+     },
+     {
+      "veiculo": "Folha Extra",
+      "titulo": "Presidente da câmara de Santana do Itararé ficará menos de três meses como prefeito",
+      "url": "https://folhaextra.com/noticia/40292/presidente-da-camara-de-santana-do-itarare-ficara-menos-de-tres-meses-como-prefeito",
+      "data": "2026-08-31"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde agosto de 2026, quando a Justiça Eleitoral afastou o prefeito e o vice eleitos em 2024. Joaquim do Venerando (PT), eleito vice-prefeito na eleição suplementar de 25/10/2026, toma posse junto com o prefeito eleito.",
+    "nota_en": "The office of vice mayor has been vacant since August 2026, when the Electoral Courts removed the mayor and vice mayor elected in 2024. Joaquim do Venerando (PT), elected vice mayor in the special election held on October 25, 2026, takes office together with the mayor-elect.",
+    "fonte": [
+     {
+      "veiculo": "Folha Extra",
+      "titulo": "Decisão judicial afasta prefeito de Santana do Itararé; presidente da câmara assume nesta quinta",
+      "url": "https://folhaextra.com/noticia/40227/decisao-judicial-afasta-prefeito-de-santana-do-itarare-presidente-da-camara-assume-nesta-quinta",
+      "data": "2026-08-27"
+     },
+     {
+      "veiculo": "Folha Extra",
+      "titulo": "Presidente da câmara de Santana do Itararé ficará menos de três meses como prefeito",
+      "url": "https://folhaextra.com/noticia/40292/presidente-da-camara-de-santana-do-itarare-ficara-menos-de-tres-meses-como-prefeito",
+      "data": "2026-08-31"
+     }
+    ]
+   }
+  },
+  "4301057": {
+   "nome": "Arroio do Sal",
+   "uf": "RS",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Vera Rejane",
+    "nomeCivil": "Vera Rejane Braga dos Santos",
+    "partido": "PSD",
+    "genero": "F",
+    "nascimento": "1957-04-23",
+    "foto": "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/2045202024/210002250652/85308",
+    "desde": "2026-09-11",
+    "comoAssumiu": "Presidente da Câmara Municipal, assumiu a prefeitura de forma interina em 11/09/2026, com a assinatura da ata de posse, depois que a Justiça Eleitoral cassou os mandatos do prefeito Luciano Pinto da Silva e do vice eleitos em 2024. Na eleição suplementar de 25/10/2026, foram eleitos Felipe Valim (MDB), prefeito, e Alemão do Mercado (PSDB), vice; eles tomam posse depois da diplomação pela Justiça Eleitoral.",
+    "comoAssumiu_en": "As president of the City Council, she became acting mayor on September 11, 2026, when the record of her swearing-in was signed, after the Electoral Courts revoked the terms of Mayor Luciano Pinto da Silva and the vice mayor elected in 2024. In the special election held on October 25, 2026, Felipe Valim (MDB) was elected mayor and Alemão do Mercado (PSDB) vice mayor; they take office after being certified by the Electoral Courts.",
+    "fonte": [
+     {
+      "veiculo": "Da Praia News",
+      "titulo": "Presidente do Legislativo de Arroio do Sal assume como prefeita interina de Arroio do Sal",
+      "url": "https://dapraianews.com.br/noticia/9504/presidente-do-legislativo-de-arroio-do-sal-assume-como-prefeita-interina-de-arroio-do-sal",
+      "data": "2026-09-11"
+     },
+     {
+      "veiculo": "GZH / Pioneiro",
+      "titulo": "Após afastamento de prefeito e vice, presidente da Câmara de Vereadores assume Arroio do Sal",
+      "url": "https://gauchazh.clicrbs.com.br/pioneiro/politica/noticia/2026/09/apos-afastamento-de-prefeito-e-vice-presidente-da-camara-de-vereadores-assume-arroio-do-sal-cmu198ws3002m01594vc7usjm.html",
+      "data": "2026-09-14"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde setembro de 2026, quando a Justiça Eleitoral afastou o prefeito e o vice eleitos em 2024. Alemão do Mercado (PSDB), eleito vice-prefeito na eleição suplementar de 25/10/2026, toma posse junto com o prefeito eleito.",
+    "nota_en": "The office of vice mayor has been vacant since September 2026, when the Electoral Courts removed the mayor and vice mayor elected in 2024. Alemão do Mercado (PSDB), elected vice mayor in the special election held on October 25, 2026, takes office together with the mayor-elect.",
+    "fonte": [
+     {
+      "veiculo": "Da Praia News",
+      "titulo": "Presidente do Legislativo de Arroio do Sal assume como prefeita interina de Arroio do Sal",
+      "url": "https://dapraianews.com.br/noticia/9504/presidente-do-legislativo-de-arroio-do-sal-assume-como-prefeita-interina-de-arroio-do-sal",
+      "data": "2026-09-11"
+     },
+     {
+      "veiculo": "GZH / Pioneiro",
+      "titulo": "Após afastamento de prefeito e vice, presidente da Câmara de Vereadores assume Arroio do Sal",
+      "url": "https://gauchazh.clicrbs.com.br/pioneiro/politica/noticia/2026/09/apos-afastamento-de-prefeito-e-vice-presidente-da-camara-de-vereadores-assume-arroio-do-sal-cmu198ws3002m01594vc7usjm.html",
+      "data": "2026-09-14"
+     }
+    ]
+   }
+  },
+  "3532207": {
+   "nome": "Narandiba",
+   "uf": "SP",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Pedro de Barros",
+    "nomeCivil": "Pedro de Barros",
+    "partido": "PRD",
+    "genero": "M",
+    "nascimento": "1980-06-29",
+    "foto": "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/2045202024/250001993475/67458",
+    "desde": "2026-07-17",
+    "comoAssumiu": "Presidente da Câmara Municipal, tomou posse como prefeito em exercício em 17/07/2026, depois que uma decisão do TSE restabeleceu a cassação dos diplomas do prefeito Danillo Carvalho dos Santos e da vice Joana Ribas, eleitos em 2024 (Joana morreu em agosto de 2025). Na eleição suplementar de 25/10/2026, os votos do candidato mais votado, Cláudio Damacena (UNIÃO), constam como anulados sub judice, e a definição do novo prefeito depende da Justiça Eleitoral.",
+    "comoAssumiu_en": "As president of the City Council, he was sworn in as acting mayor on July 17, 2026, after a TSE decision reinstated the revocation of the certificates of Mayor Danillo Carvalho dos Santos and Vice Mayor Joana Ribas, elected in 2024 (Joana died in August 2025). In the special election held on October 25, 2026, the votes for the candidate with the most votes, Cláudio Damacena (UNIÃO), are listed as annulled pending appeal (sub judice), and the choice of the new mayor depends on the Electoral Courts.",
+    "fonte": [
+     {
+      "veiculo": "O Imparcial",
+      "titulo": "Presidente da Câmara toma posse como prefeito em exercício de Narandiba",
+      "url": "https://www.imparcial.com.br/noticias/presidente-da-camara-toma-posse-como-prefeito-em-exercicio-de-narandiba,82112",
+      "data": "2026-07-17"
+     },
+     {
+      "veiculo": "g1",
+      "titulo": "Eleição suplementar em Narandiba: entenda por que disputa pela Prefeitura está ‘sub judice’",
+      "url": "https://g1.globo.com/sp/presidente-prudente-e-regiao/noticia/2026/10/27/eleicao-suplementar-em-narandiba-entenda-por-que-disputa-pela-prefeitura-esta-sub-judice.ghtml",
+      "data": "2026-10-27"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago: a vice eleita em 2024, Joana Ribas, morreu em agosto de 2025, e a cassação da chapa eleita em 2024 foi restabelecida pelo TSE em julho de 2026.",
+    "nota_en": "The office of vice mayor is vacant: the vice mayor elected in 2024, Joana Ribas, died in August 2025, and the revocation of the ticket elected in 2024 was reinstated by the TSE in July 2026.",
+    "fonte": [
+     {
+      "veiculo": "O Imparcial",
+      "titulo": "Presidente da Câmara toma posse como prefeito em exercício de Narandiba",
+      "url": "https://www.imparcial.com.br/noticias/presidente-da-camara-toma-posse-como-prefeito-em-exercicio-de-narandiba,82112",
+      "data": "2026-07-17"
+     }
+    ]
+   }
+  },
+  "2107357": {
+   "nome": "Nova Olinda do Maranhão",
+   "uf": "MA",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Zé Alberto",
+    "nomeCivil": "José Alberto Lopes Sousa",
+    "partido": "PRD",
+    "genero": "M",
+    "nascimento": "1968-09-30",
+    "foto": "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/2045202024/100002333309/08001",
+    "desde": "2026-08-17",
+    "comoAssumiu": "Presidente da Câmara Municipal, assumiu a prefeitura de forma interina na noite de 17/08/2026, por determinação da Justiça Eleitoral, depois que o TRE do Maranhão manteve a cassação dos mandatos do prefeito Ary Menezes e do vice Ronildo da Farmácia, eleitos em 2024. A eleição suplementar para prefeito e vice está marcada para 06/12/2026.",
+    "comoAssumiu_en": "As president of the City Council, he became acting mayor on the night of August 17, 2026, by order of the Electoral Courts, after the Maranhão Regional Electoral Court upheld the revocation of the terms of Mayor Ary Menezes and Vice Mayor Ronildo da Farmácia, elected in 2024. The special election for mayor and vice mayor is scheduled for December 6, 2026.",
+    "fonte": [
+     {
+      "veiculo": "Imirante",
+      "titulo": "Presidente da Câmara assume Prefeitura de Nova Olinda do Maranhão",
+      "url": "https://imirante.com/noticias/nova-olinda-do-maranhao/2026/08/18/ipolitica-presidente-da-camara-assume-prefeitura-de-nova-olinda",
+      "data": "2026-08-18"
+     },
+     {
+      "veiculo": "Imirante",
+      "titulo": "Nova Olinda do Maranhão terá novas eleições para prefeito e vice em 6 de dezembro",
+      "url": "https://imirante.com/noticias/sao-luis/2026/09/04/ipolitica-nova-olinda-do-maranhao-tera-novas-eleicoes-para-prefeito-e-vice-em-6-de-dezembro",
+      "data": "2026-09-04"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde agosto de 2026, com a cassação dos mandatos do prefeito e do vice eleitos em 2024. A eleição suplementar para prefeito e vice está marcada para 06/12/2026.",
+    "nota_en": "The office of vice mayor has been vacant since August 2026, after the terms of the mayor and vice mayor elected in 2024 were revoked. The special election for mayor and vice mayor is scheduled for December 6, 2026.",
+    "fonte": [
+     {
+      "veiculo": "Imirante",
+      "titulo": "Presidente da Câmara assume Prefeitura de Nova Olinda do Maranhão",
+      "url": "https://imirante.com/noticias/nova-olinda-do-maranhao/2026/08/18/ipolitica-presidente-da-camara-assume-prefeitura-de-nova-olinda",
+      "data": "2026-08-18"
+     },
+     {
+      "veiculo": "Imirante",
+      "titulo": "Nova Olinda do Maranhão terá novas eleições para prefeito e vice em 6 de dezembro",
+      "url": "https://imirante.com/noticias/sao-luis/2026/09/04/ipolitica-nova-olinda-do-maranhao-tera-novas-eleicoes-para-prefeito-e-vice-em-6-de-dezembro",
+      "data": "2026-09-04"
+     }
+    ]
+   }
+  },
+  "2412559": {
+   "nome": "São Miguel do Gostoso",
+   "uf": "RN",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Jean dos Morros",
+    "nomeCivil": "Jean Ribeiro da Silva",
+    "partido": "PSD",
+    "genero": "M",
+    "nascimento": "1988-10-26",
+    "foto": "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/2045202024/200002056684/16063",
+    "desde": "2026-07-21",
+    "comoAssumiu": "Presidente da Câmara Municipal, tomou posse como prefeito interino em 21/07/2026, em sessão solene da Câmara, depois da cassação dos mandatos do prefeito Léo de Doquinha e do vice João Eudes, eleitos em 2024. A eleição suplementar para prefeito e vice está marcada para 06/12/2026.",
+    "comoAssumiu_en": "As president of the City Council, he was sworn in as acting mayor on July 21, 2026, in a formal session of the City Council, after the terms of Mayor Léo de Doquinha and Vice Mayor João Eudes, elected in 2024, were revoked. The special election for mayor and vice mayor is scheduled for December 6, 2026.",
+    "fonte": [
+     {
+      "veiculo": "g1",
+      "titulo": "TRE-RN define data de eleição suplementar para prefeito e vice de São Miguel do Gostoso",
+      "url": "https://g1.globo.com/rn/rio-grande-do-norte/noticia/2026/09/15/tre-rn-define-data-de-eleicao-suplementar-para-prefeito-e-vice-de-sao-miguel-do-gostoso.ghtml",
+      "data": "2026-09-15"
+     },
+     {
+      "veiculo": "Blog de Assis",
+      "titulo": "Presidente da Câmara de São Miguel do Gostoso assume prefeitura interinamente até nova eleição",
+      "url": "https://www.blogdeassis.com.br/2026/07/21/presidente-da-camara-de-sao-miguel-do-gostoso-assume-prefeitura-interinamente-ate-nova-eleicao/474385/",
+      "data": "2026-07-21"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde julho de 2026, com a cassação dos mandatos do prefeito e do vice eleitos em 2024. A eleição suplementar para prefeito e vice está marcada para 06/12/2026.",
+    "nota_en": "The office of vice mayor has been vacant since July 2026, after the terms of the mayor and vice mayor elected in 2024 were revoked. The special election for mayor and vice mayor is scheduled for December 6, 2026.",
+    "fonte": [
+     {
+      "veiculo": "g1",
+      "titulo": "TRE-RN define data de eleição suplementar para prefeito e vice de São Miguel do Gostoso",
+      "url": "https://g1.globo.com/rn/rio-grande-do-norte/noticia/2026/09/15/tre-rn-define-data-de-eleicao-suplementar-para-prefeito-e-vice-de-sao-miguel-do-gostoso.ghtml",
+      "data": "2026-09-15"
+     }
+    ]
+   }
+  },
+  "3551207": {
+   "nome": "Sarutaiá",
+   "uf": "SP",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Rodrigo Fuloni",
+    "nomeCivil": "Rodrigo Dulicia Fuloni",
+    "partido": "REPUBLICANOS",
+    "genero": "M",
+    "nascimento": "1981-10-05",
+    "foto": "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/2045202024/250002316210/71250",
+    "desde": "2026-08-04",
+    "comoAssumiu": "Presidente da Câmara Municipal, assumiu a prefeitura de forma interina em 04/08/2026, depois da execução da decisão do TRE de São Paulo que cassou os mandatos do prefeito João Antônio Fuloni e do vice Alessandro José de Lova, eleitos em 2024, por compra de votos. A eleição suplementar para prefeito e vice está marcada para 06/12/2026.",
+    "comoAssumiu_en": "As president of the City Council, he became acting mayor on August 4, 2026, after the São Paulo Regional Electoral Court's decision revoking the terms of Mayor João Antônio Fuloni and Vice Mayor Alessandro José de Lova, elected in 2024, for vote buying, was carried out. The special election for mayor and vice mayor is scheduled for December 6, 2026.",
+    "fonte": [
+     {
+      "veiculo": "g1",
+      "titulo": "Presidente da Câmara de Sarutaiá assume prefeitura após cassação dos mandatos do prefeito e vice",
+      "url": "https://g1.globo.com/sp/itapetininga-regiao/noticia/2026/08/04/presidente-da-camara-de-sarutaia-assume-prefeitura-apos-cassacao-dos-mandatos-do-prefeito-e-vice-entenda.ghtml",
+      "data": "2026-08-04"
+     },
+     {
+      "veiculo": "TRE-SP",
+      "titulo": "Sarutaiá e Conchas terão novas eleições municipais em 6 de dezembro",
+      "url": "https://www.tre-sp.jus.br/comunicacao/noticias/2026/Outubro/sarutaia-e-conchas-terao-novas-eleicoes-municipais-em-6-de-dezembro",
+      "data": "2026-10-20"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde agosto de 2026, com a cassação dos mandatos do prefeito e do vice eleitos em 2024. A eleição suplementar para prefeito e vice está marcada para 06/12/2026.",
+    "nota_en": "The office of vice mayor has been vacant since August 2026, after the terms of the mayor and vice mayor elected in 2024 were revoked. The special election for mayor and vice mayor is scheduled for December 6, 2026.",
+    "fonte": [
+     {
+      "veiculo": "g1",
+      "titulo": "Presidente da Câmara de Sarutaiá assume prefeitura após cassação dos mandatos do prefeito e vice",
+      "url": "https://g1.globo.com/sp/itapetininga-regiao/noticia/2026/08/04/presidente-da-camara-de-sarutaia-assume-prefeitura-apos-cassacao-dos-mandatos-do-prefeito-e-vice-entenda.ghtml",
+      "data": "2026-08-04"
+     },
+     {
+      "veiculo": "TRE-SP",
+      "titulo": "Sarutaiá e Conchas terão novas eleições municipais em 6 de dezembro",
+      "url": "https://www.tre-sp.jus.br/comunicacao/noticias/2026/Outubro/sarutaia-e-conchas-terao-novas-eleicoes-municipais-em-6-de-dezembro",
+      "data": "2026-10-20"
+     }
+    ]
+   }
+  },
+  "1504901": {
+   "nome": "Muaná",
+   "uf": "PA",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Birizinho",
+    "nomeCivil": "Marcos Paulo Barbosa Pantoja",
+    "partido": "PSD",
+    "genero": "M",
+    "nascimento": "1989-06-30",
+    "comoAssumiu": "Eleito prefeito em 2024. Em 2025, o TRE do Pará afastou do cargo o prefeito e o vice; em 27/09/2025, uma decisão liminar do TSE os reconduziu e suspendeu a eleição suplementar marcada para 05/10/2025. O site oficial da prefeitura o apresenta como prefeito.",
+    "comoAssumiu_en": "Elected mayor in 2024. In 2025, the Pará Regional Electoral Court removed the mayor and vice mayor from office; on September 27, 2025, a preliminary TSE decision reinstated them and suspended the special election scheduled for October 5, 2025. The city government's official website lists him as mayor.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Muaná",
+      "titulo": "Prefeito (Birizinho)",
+      "url": "https://muana.pa.gov.br/o-governo/prefeito/",
+      "data": "2026-10-29"
+     },
+     {
+      "veiculo": "Diário do Pará",
+      "titulo": "TSE suspende eleições em Muaná e reconduz prefeito e vice afastados pelo TRE",
+      "url": "https://diariodopara.com.br/para/tse-suspende-eleicoes-em-muana-e-reconduz-prefeito-e-vice-afastados-pelo-tre/",
+      "data": "2025-09-27"
+     }
+    ]
+   },
+   "vice": {
+    "nome": "Gilmar Nunes",
+    "nomeCivil": "Gilmar Nunes Vale",
+    "partido": "PSDB",
+    "genero": "M",
+    "nascimento": "1972-03-22",
+    "comoAssumiu": "Eleito vice-prefeito em 2024, na chapa de Birizinho; reconduzido ao cargo junto com o prefeito pela decisão liminar do TSE de 27/09/2025. O site oficial da prefeitura o apresenta como vice-prefeito.",
+    "comoAssumiu_en": "Elected vice mayor in 2024 on Birizinho's ticket; reinstated together with the mayor by the preliminary TSE decision of September 27, 2025. The city government's official website lists him as vice mayor.",
+    "fonte": [
+     {
+      "veiculo": "Prefeitura de Muaná",
+      "titulo": "Vice-Prefeito (Gilmar Nunes Vale)",
+      "url": "https://muana.pa.gov.br/o-governo/vice-prefeito/",
+      "data": "2026-10-29"
+     },
+     {
+      "veiculo": "Diário do Pará",
+      "titulo": "TSE suspende eleições em Muaná e reconduz prefeito e vice afastados pelo TRE",
+      "url": "https://diariodopara.com.br/para/tse-suspende-eleicoes-em-muana-e-reconduz-prefeito-e-vice-afastados-pelo-tre/",
+      "data": "2025-09-27"
+     }
+    ]
+   }
+  },
+  "3512308": {
+   "nome": "Conchas",
+   "uf": "SP",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Felipe Silveira",
+    "nomeCivil": "Felipe dos Reis Silveira",
+    "partido": "PSD",
+    "genero": "M",
+    "nascimento": "1993-11-17",
+    "foto": "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/2045202024/250002251141/63479",
+    "desde": "2026-08-10",
+    "comoAssumiu": "Presidente da Câmara Municipal, assumiu a chefia da prefeitura em 10/08/2026, depois da renúncia do vice-prefeito Sandro Roberto Del Bem, que estava no comando da prefeitura desde que a Câmara Municipal cassou o mandato do prefeito eleito em 2024, Paulo Nunes de Almeida. A eleição suplementar para prefeito e vice está marcada para 06/12/2026.",
+    "comoAssumiu_en": "As president of the City Council, he took over as head of the city government on August 10, 2026, after the resignation of Vice Mayor Sandro Roberto Del Bem, who had been running the city since the City Council removed the mayor elected in 2024, Paulo Nunes de Almeida, from office. The special election for mayor and vice mayor is scheduled for December 6, 2026.",
+    "fonte": [
+     {
+      "veiculo": "Câmara Municipal de Conchas",
+      "titulo": "Conchas passa por mudanças no Poder Executivo e no Poder Legislativo",
+      "url": "https://www.camaraconchas.sp.gov.br/Noticias/Details?id=404",
+      "data": "2026-08-12"
+     },
+     {
+      "veiculo": "TSE",
+      "titulo": "Calendário das eleições suplementares 2026",
+      "url": "https://www.tse.jus.br/eleicoes/eleicoes-suplementares/calendarios/calendario-das-eleicoes-suplementares-2026",
+      "data": "2026-10-29"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde agosto de 2026, quando o vice Sandro Roberto Del Bem renunciou. A eleição suplementar para prefeito e vice está marcada para 06/12/2026.",
+    "nota_en": "The office of vice mayor has been vacant since August 2026, when Vice Mayor Sandro Roberto Del Bem resigned. The special election for mayor and vice mayor is scheduled for December 6, 2026.",
+    "fonte": [
+     {
+      "veiculo": "Câmara Municipal de Conchas",
+      "titulo": "Conchas passa por mudanças no Poder Executivo e no Poder Legislativo",
+      "url": "https://www.camaraconchas.sp.gov.br/Noticias/Details?id=404",
+      "data": "2026-08-12"
+     },
+     {
+      "veiculo": "TSE",
+      "titulo": "Calendário das eleições suplementares 2026",
+      "url": "https://www.tse.jus.br/eleicoes/eleicoes-suplementares/calendarios/calendario-das-eleicoes-suplementares-2026",
+      "data": "2026-10-29"
+     }
+    ]
+   }
+  },
+  "3126703": {
+   "nome": "Francisco Sá",
+   "uf": "MG",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Fabiano de Braz",
+    "nomeCivil": "Ronilson Fabiano Gonçalves",
+    "partido": "PRD",
+    "genero": "M",
+    "nascimento": "1977-05-19",
+    "foto": "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/2045202024/130002034661/45330",
+    "desde": "2026-10-13",
+    "comoAssumiu": "Presidente da Câmara Municipal, tomou posse como prefeito interino em 13/10/2026, em reunião extraordinária da Câmara, depois que a Justiça Eleitoral indeferiu o registro de candidatura da prefeita eleita em 2024, Alini Bicalho, e cassou os mandatos dela e do vice, Geraldo Antônio Bicalho. A eleição suplementar para prefeito e vice está marcada para 06/12/2026.",
+    "comoAssumiu_en": "As president of the City Council, he was sworn in as acting mayor on October 13, 2026, at a special session of the City Council, after the Electoral Courts rejected the candidacy registration of the mayor elected in 2024, Alini Bicalho, and revoked her term and that of Vice Mayor Geraldo Antônio Bicalho. The special election for mayor and vice mayor is scheduled for December 6, 2026.",
+    "fonte": [
+     {
+      "veiculo": "g1",
+      "titulo": "Presidente da Câmara de Francisco Sá assume prefeitura após cassação dos mandatos da prefeita e do vice",
+      "url": "https://g1.globo.com/mg/grande-minas/noticia/2026/10/14/presidente-da-camara-de-francisco-sa-assume-prefeitura-apos-cassacao-dos-mandatos-da-prefeita-e-do-vice.ghtml",
+      "data": "2026-10-14"
+     },
+     {
+      "veiculo": "TRE-MG",
+      "titulo": "Quatro municípios mineiros terão eleições suplementares em dezembro",
+      "url": "https://www.tre-mg.jus.br/comunicacao/noticias/2026/Outubro/tres-municipios-mineiros-terao-eleicoes-suplementares-em-dezembro",
+      "data": "2026-10-14"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde outubro de 2026, com a cassação dos mandatos da prefeita e do vice eleitos em 2024. A eleição suplementar para prefeito e vice está marcada para 06/12/2026.",
+    "nota_en": "The office of vice mayor has been vacant since October 2026, after the terms of the mayor and vice mayor elected in 2024 were revoked. The special election for mayor and vice mayor is scheduled for December 6, 2026.",
+    "fonte": [
+     {
+      "veiculo": "g1",
+      "titulo": "Presidente da Câmara de Francisco Sá assume prefeitura após cassação dos mandatos da prefeita e do vice",
+      "url": "https://g1.globo.com/mg/grande-minas/noticia/2026/10/14/presidente-da-camara-de-francisco-sa-assume-prefeitura-apos-cassacao-dos-mandatos-da-prefeita-e-do-vice.ghtml",
+      "data": "2026-10-14"
+     },
+     {
+      "veiculo": "TRE-MG",
+      "titulo": "Quatro municípios mineiros terão eleições suplementares em dezembro",
+      "url": "https://www.tre-mg.jus.br/comunicacao/noticias/2026/Outubro/tres-municipios-mineiros-terao-eleicoes-suplementares-em-dezembro",
+      "data": "2026-10-14"
+     }
+    ]
+   }
+  },
+  "3127909": {
+   "nome": "Grupiara",
+   "uf": "MG",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "Maria Izabel Bernardes",
+    "nomeCivil": "Maria Izabel Bernardes",
+    "partido": "MDB",
+    "genero": "F",
+    "nascimento": "1965-01-19",
+    "foto": "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/2045202024/130002269920/45578",
+    "desde": "2026-09-18",
+    "comoAssumiu": "Presidente da Câmara Municipal, foi empossada prefeita em sessão extraordinária da Câmara em 18/09/2026, depois que a Justiça Eleitoral cassou os mandatos do prefeito Rogério Honorato Machado e do vice Ismar José Leandro (Mazinho), eleitos em 2024; a cassação foi mantida pelo TRE de Minas Gerais em julho de 2026. A eleição suplementar para prefeito e vice está marcada para 06/12/2026.",
+    "comoAssumiu_en": "As president of the City Council, she was sworn in as mayor at a special session of the City Council on September 18, 2026, after the Electoral Courts revoked the terms of Mayor Rogério Honorato Machado and Vice Mayor Ismar José Leandro (Mazinho), elected in 2024; the Minas Gerais Regional Electoral Court upheld the decision in July 2026. The special election for mayor and vice mayor is scheduled for December 6, 2026.",
+    "fonte": [
+     {
+      "veiculo": "Rádio Gerais FM",
+      "titulo": "Vereadora Maria Izabel Bernardes assume Prefeitura de Grupiara após cassação da chapa eleita",
+      "url": "https://radiogeraisfm.com.br/noticias/11564/",
+      "data": "2026-09-18"
+     },
+     {
+      "veiculo": "TRE-MG",
+      "titulo": "Quatro municípios mineiros terão eleições suplementares em dezembro",
+      "url": "https://www.tre-mg.jus.br/comunicacao/noticias/2026/Outubro/tres-municipios-mineiros-terao-eleicoes-suplementares-em-dezembro",
+      "data": "2026-10-14"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde setembro de 2026, com a cassação dos mandatos do prefeito e do vice eleitos em 2024. A eleição suplementar para prefeito e vice está marcada para 06/12/2026.",
+    "nota_en": "The office of vice mayor has been vacant since September 2026, after the terms of the mayor and vice mayor elected in 2024 were revoked. The special election for mayor and vice mayor is scheduled for December 6, 2026.",
+    "fonte": [
+     {
+      "veiculo": "Rádio Gerais FM",
+      "titulo": "Vereadora Maria Izabel Bernardes assume Prefeitura de Grupiara após cassação da chapa eleita",
+      "url": "https://radiogeraisfm.com.br/noticias/11564/",
+      "data": "2026-09-18"
+     },
+     {
+      "veiculo": "TRE-MG",
+      "titulo": "Quatro municípios mineiros terão eleições suplementares em dezembro",
+      "url": "https://www.tre-mg.jus.br/comunicacao/noticias/2026/Outubro/tres-municipios-mineiros-terao-eleicoes-suplementares-em-dezembro",
+      "data": "2026-10-14"
+     }
+    ]
+   }
+  },
+  "3160504": {
+   "nome": "Santo Antônio do Rio Abaixo",
+   "uf": "MG",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "nome": "José Cláudio Ferreira",
+    "nomeCivil": "José Cláudio Ferreira da Silva",
+    "partido": "PODE",
+    "genero": "M",
+    "nascimento": "1976-05-18",
+    "foto": "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/2045202024/130002095996/52094",
+    "desde": "2026-10-12",
+    "comoAssumiu": "Presidente da Câmara Municipal, assumiu a prefeitura de forma interina em 12/10/2026, depois que a Justiça Eleitoral determinou o cumprimento da decisão que cassou os mandatos do prefeito Alexandre Rodrigues e do vice Rilton Carlos, eleitos em 2024. A eleição suplementar para prefeito e vice está marcada para 06/12/2026.",
+    "comoAssumiu_en": "As president of the City Council, he became acting mayor on October 12, 2026, after the Electoral Courts ordered the enforcement of the decision revoking the terms of Mayor Alexandre Rodrigues and Vice Mayor Rilton Carlos, elected in 2024. The special election for mayor and vice mayor is scheduled for December 6, 2026.",
+    "fonte": [
+     {
+      "veiculo": "DeFato Online",
+      "titulo": "Após cassação de prefeito e vice, Santo Antônio do Rio Abaixo terá nova eleição em dezembro",
+      "url": "https://defatoonline.com.br/apos-cassacao-de-prefeito-e-vice-santo-antonio-do-rio-abaixo-tera-nova-eleicao-em-dezembro/",
+      "data": "2026-10-16"
+     },
+     {
+      "veiculo": "TRE-MG",
+      "titulo": "Quatro municípios mineiros terão eleições suplementares em dezembro",
+      "url": "https://www.tre-mg.jus.br/comunicacao/noticias/2026/Outubro/tres-municipios-mineiros-terao-eleicoes-suplementares-em-dezembro",
+      "data": "2026-10-14"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde outubro de 2026, com a cassação dos mandatos do prefeito e do vice eleitos em 2024. A eleição suplementar para prefeito e vice está marcada para 06/12/2026.",
+    "nota_en": "The office of vice mayor has been vacant since October 2026, after the terms of the mayor and vice mayor elected in 2024 were revoked. The special election for mayor and vice mayor is scheduled for December 6, 2026.",
+    "fonte": [
+     {
+      "veiculo": "DeFato Online",
+      "titulo": "Após cassação de prefeito e vice, Santo Antônio do Rio Abaixo terá nova eleição em dezembro",
+      "url": "https://defatoonline.com.br/apos-cassacao-de-prefeito-e-vice-santo-antonio-do-rio-abaixo-tera-nova-eleicao-em-dezembro/",
+      "data": "2026-10-16"
+     },
+     {
+      "veiculo": "TRE-MG",
+      "titulo": "Quatro municípios mineiros terão eleições suplementares em dezembro",
+      "url": "https://www.tre-mg.jus.br/comunicacao/noticias/2026/Outubro/tres-municipios-mineiros-terao-eleicoes-suplementares-em-dezembro",
+      "data": "2026-10-14"
+     }
+    ]
+   }
+  },
+  "3109303": {
+   "nome": "Buritis",
+   "uf": "MG",
+   "conferido": "2026-10-29",
+   "prefeito": {
+    "vago": true,
+    "nota": "Os cargos de prefeito e de vice-prefeito estão vagos desde o fim de setembro de 2026, quando o TSE revogou a liminar que mantinha no cargo o prefeito Rufino Folador (PL), que teve o mandato cassado pelo TRE de Minas Gerais por compra de votos na eleição de 2024. Até a posse de quem for eleito na eleição suplementar de 06/12/2026, quem preside a Câmara Municipal responde pela prefeitura, segundo o TRE-MG; este site não conferiu o nome dessa pessoa.",
+    "nota_en": "The offices of mayor and vice mayor have been vacant since late September 2026, when the TSE revoked the injunction that kept Mayor Rufino Folador (PL) in office; his term had been revoked by the Minas Gerais Regional Electoral Court for vote buying in the 2024 election. Until the winners of the special election of December 6, 2026 take office, the president of the City Council runs the city government, according to the TRE-MG; this site has not checked that person's name.",
+    "fonte": [
+     {
+      "veiculo": "g1",
+      "titulo": "TRE marca novas eleições para prefeito em Buritis e Francisco Sá",
+      "url": "https://g1.globo.com/mg/grande-minas/noticia/2026/10/14/tre-marca-novas-eleicoes-para-prefeito-em-buritis-e-francisco-sa.ghtml",
+      "data": "2026-10-14"
+     },
+     {
+      "veiculo": "TRE-MG",
+      "titulo": "Quatro municípios mineiros terão eleições suplementares em dezembro",
+      "url": "https://www.tre-mg.jus.br/comunicacao/noticias/2026/Outubro/tres-municipios-mineiros-terao-eleicoes-suplementares-em-dezembro",
+      "data": "2026-10-14"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago desde o fim de setembro de 2026, com a cassação da chapa eleita em 2024. A eleição suplementar para prefeito e vice está marcada para 06/12/2026.",
+    "nota_en": "The office of vice mayor has been vacant since late September 2026, after the ticket elected in 2024 was removed from office. The special election for mayor and vice mayor is scheduled for December 6, 2026.",
+    "fonte": [
+     {
+      "veiculo": "g1",
+      "titulo": "TRE marca novas eleições para prefeito em Buritis e Francisco Sá",
+      "url": "https://g1.globo.com/mg/grande-minas/noticia/2026/10/14/tre-marca-novas-eleicoes-para-prefeito-em-buritis-e-francisco-sa.ghtml",
+      "data": "2026-10-14"
+     },
+     {
+      "veiculo": "TRE-MG",
+      "titulo": "Quatro municípios mineiros terão eleições suplementares em dezembro",
+      "url": "https://www.tre-mg.jus.br/comunicacao/noticias/2026/Outubro/tres-municipios-mineiros-terao-eleicoes-suplementares-em-dezembro",
+      "data": "2026-10-14"
      }
     ]
    }

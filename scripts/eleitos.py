@@ -260,6 +260,20 @@ def _sq_2024(p: dict) -> str | None:
     return None
 
 
+def _sem_particulas(k: str) -> str:
+    """prefeitos 2026: a chave do nome sem "de", "da", "do", "das", "dos" e "e" ("JURANDIR DE OLIVEIRA ARAUJO" em 2024 e
+    "JURANDIR OLIVEIRA ARAUJO" em 2026); só para achar quem deixou a prefeitura, com o mesmo nascimento e a mesma UF."""
+    return " ".join(w for w in k.split() if w not in ("DE", "DA", "DO", "DAS", "DOS", "E"))
+
+
+def _inicio_e24(e24: dict) -> str:
+    """prefeitos 2026: desde quando quem a ficha guarda em "eleito2024" podia governar: a posse do mandato (1º/1/2025) ou,
+    se foi eleito numa eleição suplementar, o dia dela (quem governa desde antes, como um presidente da Câmara interino
+    à espera da posse dos eleitos, não está no lugar de alguém que saiu)."""
+    m = re.search(r"suplementar de (\d{2})/(\d{2})/(\d{4})", e24.get("situacao") or "")
+    return f"{m.group(3)}-{m.group(2)}-{m.group(1)}" if m else mandatos.vigente("prefeito")["inicio"]
+
+
 def cargos_de_hoje(b18: tse.Base, b22: tse.Base) -> tuple[dict, dict, dict, list]:
     """Quem tem um cargo hoje segundo as listas que o site mostra (Brasil, estados e cidades), com o CPF (ou nome civil e
     nascimento) da candidatura no TSE, para ligar com quem foi eleito em 2026.
@@ -267,7 +281,7 @@ def cargos_de_hoje(b18: tse.Base, b22: tse.Base) -> tuple[dict, dict, dict, list
     cargo = {"id", "tipo", "cargo", "onde", "uf", "ibge"?, "nome", "partido", "foto", "genero"}"""
     lista = []
 
-    def junta(pid, tipo, cargo, onde, uf, ficha, cpf, nome, nasc, ibge_=None):
+    def junta(pid, tipo, cargo, onde, uf, ficha, cpf, nome, nasc, ibge_=None, saiu=False):
         if not (cpf or (nome and nasc)):
             return
         d = {"id": pid, "tipo": tipo, "cargo": cargo, "onde": onde, "uf": uf, "nome": ficha.get("nome"),
@@ -275,6 +289,8 @@ def cargos_de_hoje(b18: tse.Base, b22: tse.Base) -> tuple[dict, dict, dict, list
              "_cpf": tse.cpf_valido(cpf), "_nn": (chave_nome(nome), nasc[:10]) if nome and nasc else None}
         if ibge_:
             d["ibge"] = ibge_
+        if saiu:
+            d["saiu"] = True  # prefeitos 2026: deixou a prefeitura (a ficha da cidade não mostra mais a pessoa)
         lista.append(d)
 
     # federais: as mesmas consultas do tse.py (Câmara, Senado e Planalto), já guardadas no cache por ele
@@ -325,6 +341,17 @@ def cargos_de_hoje(b18: tse.Base, b22: tse.Base) -> tuple[dict, dict, dict, list
                 junta(p["id"], tipo, cargo, onde, uf, p, None, p["nomeCivil"], p["nascimento"], cod)
             elif sq:
                 quer[sq] = (p["id"], tipo, cargo, onde, uf, p, cod)
+        # prefeitos 2026: quem foi eleito prefeito em 2024 e deixou a prefeitura (a ficha mostra outra pessoa, ou diz que
+        # quem governa hoje não foi conferido) entra como "saiu": a pessoa aparece na seção da cidade ("Era prefeita") e,
+        # se foi eleita em 2026, ganha o perfil e26- (o pref- da cidade é de quem governa hoje)
+        p = c.get("prefeito") if isinstance(c.get("prefeito"), dict) else {}
+        e24 = p.get("eleito2024")
+        if isinstance(e24, dict) and e24.get("nome") and not (p.get("nome") and chave_nome(p.get("nomeCivil") or p["nome"]) ==
+                                                             chave_nome(e24.get("nomeCivil") or e24["nome"])) and \
+                (not p.get("nome") or (p.get("desde") or "") > _inicio_e24(e24)):  # tomou posse e saiu
+            sq = _sq_2024(e24)
+            if sq and sq not in quer:
+                quer[sq] = (p["id"], "pref", "Prefeit" + a_(e24.get("genero")), onde, uf, e24, cod, True)
         for v in (c.get("vereadores") or {}).get("membros") or []:
             sq = v["id"].rsplit("-", 1)[1]
             if sq.isdigit():
@@ -334,7 +361,7 @@ def cargos_de_hoje(b18: tse.Base, b22: tse.Base) -> tuple[dict, dict, dict, list
         x = quer.get(r["SQ_CANDIDATO"])
         if x:
             junta(x[0], x[1], x[2], x[3], x[4], x[5], r.get("NR_CPF_CANDIDATO"), limpa(r["NM_CANDIDATO"]),
-                  data_iso(r["DT_NASCIMENTO"]), x[6])
+                  data_iso(r["DT_NASCIMENTO"]), x[6], saiu=len(x) > 7)  # prefeitos 2026: x[7] = deixou a prefeitura
     por_cpf, por_nn = collections.defaultdict(list), collections.defaultdict(list)
     for d in lista:
         cpf, nn = d.pop("_cpf"), d.pop("_nn")
@@ -342,6 +369,8 @@ def cargos_de_hoje(b18: tse.Base, b22: tse.Base) -> tuple[dict, dict, dict, list
             por_cpf[cpf].append(d)
         if nn:
             por_nn[nn].append(d)
+        if nn and d.get("saiu"):  # prefeitos 2026: o nome civil às vezes vem sem o "de"/"da" num dos anos
+            por_nn[("~" + _sem_particulas(nn[0]), nn[1])].append(d)
     log(f"  cargos de hoje: {len(lista)} pessoas nas listas do site ({dict(collections.Counter(d['tipo'] for d in lista))})")
     return por_cpf, por_nn, ibge.casar_tse(ues), fed
 
@@ -401,6 +430,14 @@ def situacao(c: dict, tipo: str, tit: dict | None) -> tuple[str, str]:
 def cargo_hoje(c: dict, tipo: str, por_cpf: dict, por_nn: dict) -> tuple[dict | None, dict | None, str]:
     """(cargo que a pessoa tem hoje, cargo que ela deixou para concorrer, chegada).
     chegada: "reeleicao" (o mesmo cargo de hoje), "troca" (tem outro cargo hoje) ou "novo" (sem cargo eletivo hoje)."""
+    # prefeitos 2026: quem foi eleito prefeito em 2024, tomou posse e deixou a prefeitura ("saiu") não tem cargo eletivo
+    # hoje; a vaga de deputado de 2022 que a lista do TSE de algumas Assembleias ainda mostra ficou para trás na posse
+    # como prefeito (Constituição, art. 54, II, "d", e art. 27, § 1º)
+    k = chave_nome(c["nome"])
+    saiu = [d for d in (por_nn.get((k, c["nasc"])) or []) if d.get("saiu")] or \
+        [d for d in (por_nn.get(("~" + _sem_particulas(k), c["nasc"])) or []) if d.get("uf") == c["uf"]]
+    if saiu:
+        return None, saiu[0], "novo"
     cands = por_cpf.get(c["cpf"] or "") or por_nn.get((chave_nome(c["nome"]), c["nasc"])) or []
     cands = list({d["id"]: d for d in cands}.values())
     if not cands:
@@ -428,11 +465,12 @@ def pessoa(c: dict, ctx: dict) -> dict:
     uf_posse = uf if tipo == "dest" else None
     eid = f"e26-{uf}-{sq}"
     atual, antes, chegada = cargo_hoje(c, tipo, ctx["por_cpf"], ctx["por_nn"])
-    link = (atual or antes or {}).get("id") or eid
+    # prefeitos 2026: quem deixou a prefeitura e a ficha da cidade não mostra mais ("saiu") não tem perfil pref-: vai ao e26-
+    ficha = atual or (antes if antes and not antes.get("saiu") else None) or {}
+    link = ficha.get("id") or eid
     sit, sit_en = situacao(c, tipo, tit)
     quem = tit or c  # vice e suplentes: os votos são os da chapa
     votos = ctx["votos"].get(f"{quem['sq']}|{quem['turno']}")
-    ficha = atual or antes or {}
     d = {
         "id": eid, "link": link, "tipo": tipo, "cargo": tse.cargo_txt(c["cargo"], g), "uf": uf,
         "nome": ficha.get("nome") or tse.nome_tse(c["urna"]), "partido": c["partido"], "genero": g,

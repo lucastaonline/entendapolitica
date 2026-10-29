@@ -135,6 +135,8 @@
         else if (tipo === "vpref") p = c.vice;
         else p = ((c.vereadores || {}).membros || []).filter(function (x) { return x.id === id; })[0];
         if (!p) throw new Error("não achei");
+        // prefeitos 2026: cargo vago, ou quem governa hoje não foi conferido (a página da cidade explica por quê)
+        if (!p.nome && (tipo === "pref" || tipo === "vpref")) { var semNome = new Error("não achei"); semNome.cidade = { c: c, p: p, tipo: tipo, uf: uf }; throw semNome; }
         var cargo = tipo === "pref" ? EP.gen(p.genero, "Prefeito", "Prefeita") : tipo === "vpref" ? EP.gen(p.genero, "Vice-prefeito", "Vice-prefeita") : EP.gen(p.genero, "Vereador", "Vereadora");
         var v = c.vereadores || {};
         return Object.assign({ tipo: tipo, uf: uf, municipio: { ibge: c.ibge, nome: c.nome }, cargo: cargo,
@@ -971,7 +973,27 @@
   carregar().then(render).catch(function (err) {
     if (window.console && err && !/não achei|id inválido|^\d{3} /.test(err.message || "")) console.warn(err);
     if (/^e26-/.test(id) && EP.eleitos) { EP.eleitos.semPerfil(raiz); return; }  // eleitos 2026: endereço de antes da posse
+    if (err && err.cidade) { semPessoaCidade(err.cidade); return; }  // prefeitos 2026: cargo vago ou não conferido
     erro(EP.tr("Não encontramos essa pessoa", "We could not find this person"),
       EP.tr("Pode ser que ela não esteja mais no cargo, ou que os dados ainda estejam sendo atualizados.", "They may no longer be in office, or the data may still be being updated."));
   });
+
+  // prefeitos 2026 (frente prefeitos-r7): o endereço pref-/vpref- de uma cidade em que o cargo está vago, ou em que quem
+  // governa hoje não foi conferido (a pessoa que aparecia deixou a prefeitura para concorrer em 2026): diz isso, com o
+  // motivo da ficha da cidade, e leva à página da cidade
+  function semPessoaCidade(o) {
+    var c = o.c, p = o.p, pref = o.tipo === "pref", lugar = c.nome + " (" + o.uf + ")";
+    var tit = pref ? EP.tr("Prefeitura de " + lugar, "Mayor of " + lugar) : EP.tr("Vice-prefeitura de " + lugar, "Vice mayor of " + lugar);
+    var txt = p.vago ? EP.tr("O cargo está vago.", "The office is vacant.") + " " + D.traduz(p.txt || p.nota, null, p.txt_en || p.nota_en) :
+      D.traduz(p.txt, null, p.txt_en);
+    var t = document.querySelector("title");
+    if (t) t.removeAttribute("data-en");
+    document.title = tit + EP.tr(" | Entenda Política", " | Understand Politics");
+    var o2 = document.getElementById("onde");
+    if (o2) { o2.removeAttribute("data-en"); o2.textContent = tit; }
+    raiz.innerHTML = '<div class="vazio"><span class="grande" aria-hidden="true">🏢</span><h1>' + esc(tit) + "</h1><p>" + txt + "</p>" +
+      ((p.fontes || p.fonte) ? "<p>" + EP.botaoFontes([].concat(p.fontes || p.fonte)) + "</p>" : "") +
+      '<p><a class="btn" href="cidade.html?ibge=' + encodeURIComponent(c.ibge) + (EP.en ? "&lang=en" : "") + '">' +
+      esc(EP.tr("Ver a política de " + c.nome, "See the politics of " + c.nome)) + "</a></p></div>";
+  }
 })();

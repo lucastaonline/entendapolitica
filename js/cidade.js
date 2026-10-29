@@ -33,6 +33,19 @@
       EP.tr("Não foi possível carregar " + pt + " agora. Tente de novo daqui a pouco.", "Could not load " + en + " right now. Please try again in a little while.") + "</div></div>";
   }
   function aviso(html) { return html ? '<p class="aviso"><span aria-hidden="true">ℹ️ </span>' + html + "</p>" : ""; }
+  // prefeitos 2026: quem a ficha mostrava como prefeito(a) pediu registro de candidatura em 2026 e não há pesquisa à mão
+  // feita depois do prazo para deixar o cargo (scripts/tse.py, deixou_prefeitura): no lugar da pessoa, um cartão que diz
+  // isso e leva ao site oficial da prefeitura, onde se vê quem governa hoje
+  function naoConferido(p) { return !!(p && !p.nome && !p.vago && p.deixou); }
+  function cartaoNaoConferido(p, c) {
+    var d = p.deixou || {}, site = ((c.onde || {}).prefeitura || {}).site;
+    return '<div class="pessoa-grande"><span class="av av-letra" aria-hidden="true">?</span><span><span class="cargo">' +
+      EP.tr("Prefeito(a)", "Mayor") + "</span><b>" + EP.tr("Quem governa hoje: não conferido", "Current mayor: not checked") + "</b>" +
+      (d.txt ? "<small>" + D.traduz(d.txt, null, d.txt_en) + "</small>" : "") +
+      (/^https?:\/\//.test(site || "") ? '<small style="margin-top:6px"><a href="' + esc(site) + '" target="_blank" rel="noopener" hreflang="pt-BR">' +
+        EP.tr("Ver no site oficial da prefeitura", "See the city government's official website") + ' <span aria-hidden="true">↗</span><span class="sr"> ' +
+        EP.tr("(abre em outra aba)", "(opens in a new tab)") + "</span></a></small>" : "") + "</span></div>";
+  }
   function fontesDe() {
     var l = [];
     [].forEach.call(arguments, function (p) { if (p) l = l.concat(p.fontes || p.fonte || []); });
@@ -98,17 +111,18 @@
     EP.tr("Quem governa " + c.nome + " (" + uf + ") e quem faz as leis da cidade: prefeito, vice e vereadores. Tudo com fonte.",
       "Who governs " + c.nome + " (" + uf + "), Brazil, and who makes the city's laws: the mayor, the vice mayor and the city councilors. Everything with sources."), c.nome);
     function sit(x) { return x && x.situacao ? "<small>" + D.situacao(x.situacao, x.situacao_en) + "</small>" : ""; }
-    var conferir = (p && p.aConfirmar) || (vi && vi.aConfirmar);
+    var nc = naoConferido(p);  // prefeitos 2026
+    var conferir = !nc && ((p && p.aConfirmar) || (vi && vi.aConfirmar));
     var fp = fontesDe(c, p, vi);
     caixa.innerHTML =
       '<section class="miolo bloco" aria-labelledby="nome-cidade"><div class="cab-bloco rev"><span class="ic-bloco" aria-hidden="true">🏙️</span><div>' +
         '<h2 id="nome-cidade" tabindex="-1">' + esc(c.nome) + "</h2>" +
         '<p class="muted">' + esc(EP.tr("Uma cidade " + EP.doEstado(uf) + " (" + uf + ")", "A city in " + (EP.UFS[uf] || uf) + " (" + uf + "), Brazil")) + "</p></div></div>" +
         '<div class="mandato-lugar" id="mandato-lugar"></div>' +
-        aviso(D.aviso(c.aviso, c.aviso_en)) +
+        (nc ? '<p class="aviso"><span aria-hidden="true">⚠️ </span>' + D.aviso(c.aviso, c.aviso_en) + "</p>" : aviso(D.aviso(c.aviso, c.aviso_en))) +
         (conferir ? '<p class="aviso"><span aria-hidden="true">⚠️ </span>' + EP.tr("Estamos conferindo se quem aparece aqui ainda está no cargo.", "We are checking whether the people shown here are still in office.") + "</p>" : "") +
         '<h3 class="sub"><span aria-hidden="true">🏢 </span>' + EP.tr("Quem governa a cidade", "Who governs the city") + "</h3>" +
-        '<div class="exec-topo">' + (EP.cartaoGrande(p, EP.tr(EP.gen(p && p.genero, "Prefeito", "Prefeita"), "Mayor"), sit(p)) +
+        '<div class="exec-topo">' + ((nc ? cartaoNaoConferido(p, c) : EP.cartaoGrande(p, EP.tr(EP.gen(p && p.genero, "Prefeito", "Prefeita"), "Mayor"), sit(p))) +
           EP.cartaoGrande(vi, EP.tr(EP.gen(vi && vi.genero, "Vice-prefeito", "Vice-prefeita"), "Vice Mayor"), sit(vi)) ||
           '<div class="vazio">' + EP.tr("O TSE não mostra quem governa esta cidade.", "The TSE does not show who governs this city.") + "</div>") + "</div>" +
         (fp.length ? '<p style="margin-top:8px">' + EP.botaoFontes(fp) + "</p>" : "") + "</section>" +

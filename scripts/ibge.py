@@ -5,7 +5,8 @@ do IBGE é feita por nome + UF normalizados (chave_nome). Os nomes que são escr
 diferente no TSE e no IBGE ficam no dicionário EXCECOES_TSE, conferido à mão.
 
 Uso:
-    python scripts/ibge.py          # baixa/atualiza o cache (.cache/ibge) e mostra um resumo
+    python scripts/ibge.py          # baixa/atualiza o cache (.cache/ibge) e a cópia do repositório
+                                    # (scripts/ibge_localidades.json) e mostra um resumo
 
 Outros scripts usam:
     import ibge
@@ -16,8 +17,11 @@ Outros scripts usam:
 """
 from __future__ import annotations
 
+import datetime as dt
 import functools
+import json
 import sys
+from pathlib import Path
 
 from comum import *
 
@@ -25,6 +29,11 @@ URL_MUNICIPIOS = "https://servicodados.ibge.gov.br/api/v1/localidades/municipios
 URL_ESTADOS = "https://servicodados.ibge.gov.br/api/v1/localidades/estados"
 PAGINA_CODIGOS = "https://www.ibge.gov.br/explica/codigos-dos-municipios.php"
 IDADE_CACHE_H = 24 * 7
+# Cópia reduzida da API (código e nome de cada município; sigla e nome de cada estado), que vai no repositório. O robô do
+# GitHub roda fora do Brasil, e a API do IBGE não respondeu a ele de 26 a 28/10/2026 (tempo esgotado): sem a lista, o
+# tse.py parava antes de refazer estados, cidades e busca. `python scripts/ibge.py` (de um computador que alcança o IBGE)
+# baixa a lista e atualiza esta cópia.
+RESERVA = Path(__file__).with_name("ibge_localidades.json")
 
 UF_CODIGO = {
     "11": "RO", "12": "AC", "13": "AM", "14": "RR", "15": "PA", "16": "AP", "17": "TO",
@@ -70,10 +79,26 @@ EXCECOES_TSE = {
 }
 
 
+def _api_ou_guardada(url: str, cache: str, chave: str) -> list:
+    """A lista da API do IBGE; se a API não responder, a guardada no cache (.cache/<cache>, qualquer idade) e, sem ela, a
+    cópia do repositório (RESERVA). Municípios quase nunca mudam: uma lista de alguns dias ou meses atrás serve."""
+    try:
+        return baixar_json(url, cache=cache, max_idade_h=IDADE_CACHE_H, tentativas=2, timeout=60)
+    except RuntimeError as erro:
+        arq = CACHE / cache
+        if arq.exists() and arq.stat().st_size > 0:
+            log(f"  [aviso] a API do IBGE não respondeu ({str(erro)[:120]}); vale a lista guardada em .cache/{cache}")
+            return json.loads(arq.read_text(encoding="utf-8"))
+        r = json.loads(RESERVA.read_text(encoding="utf-8"))
+        log(f"  [aviso] a API do IBGE não respondeu ({str(erro)[:120]}); vale a cópia do repositório "
+            f"(scripts/{RESERVA.name}, lida no IBGE em {r['data']})")
+        return r[chave]
+
+
 @functools.lru_cache(maxsize=1)
 def _localidades():
-    mun = baixar_json(URL_MUNICIPIOS, cache="ibge/municipios.json", max_idade_h=IDADE_CACHE_H)
-    est = baixar_json(URL_ESTADOS, cache="ibge/estados.json", max_idade_h=IDADE_CACHE_H)
+    mun = _api_ou_guardada(URL_MUNICIPIOS, "ibge/municipios.json", "municipios")
+    est = _api_ou_guardada(URL_ESTADOS, "ibge/estados.json", "estados")
     return mun, est
 
 
@@ -134,6 +159,16 @@ def casar_tse(tse: dict) -> dict:
     return out
 
 
+def guardar_reserva() -> None:
+    """Atualiza a cópia reduzida do repositório (RESERVA) com a lista que acabou de vir da API (só o que os scripts usam)."""
+    mun, est = _localidades()
+    arq = CACHE / "ibge" / "municipios.json"
+    data = (dt.date.fromtimestamp(arq.stat().st_mtime).isoformat() if arq.exists() else hoje())
+    salvar_json(RESERVA, {"fonte": URL_MUNICIPIOS, "data": data,
+                          "municipios": [{"id": m["id"], "nome": m["nome"]} for m in mun],
+                          "estados": [{"sigla": e["sigla"], "nome": e["nome"]} for e in est]})
+
+
 def main():
     est = estados()
     locs = todas_localidades()
@@ -146,6 +181,8 @@ def main():
     for m in mun.values():
         porUF[m["uf"]] = porUF.get(m["uf"], 0) + 1
     log("Municípios por UF:", ", ".join(f"{uf} {n}" for uf, n in sorted(porUF.items())))
+    guardar_reserva()
+    log(f"cópia do repositório atualizada: scripts/{RESERVA.name}")
 
 
 if __name__ == "__main__":

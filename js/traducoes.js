@@ -185,7 +185,7 @@
     [/^Prefeito\(a\) e vice eleitos em 2024, segundo o TSE$/i, "Mayor and vice mayor elected in 2024, according to the TSE (Brazil's Superior Electoral Court)"],
     [/^Pode ter havido mudanças depois \(cassação, renúncia, morte ou eleição suplementar\)$/i, "There may have been changes since then (removal from office, resignation, death or a special election)"],
     [re("^Prefeito\\(a\\) e vice escolhidos na eleição suplementar de DATA$"), function (m) { return "Mayor and vice mayor chosen in the special election of " + dataBr(m[1]); }],
-    [/^Nos dados abertos do TSE, o resultado de 2024 desta cidade aparece sem definição \(pode estar sendo recalculado\)$/i, "In the TSE's open data, this city's 2024 result shows as undefined (it may be being recalculated)"],
+    [/^Nos dados abertos do TSE, o resultado de 2024 desta cidade aparece sem definição \(pode estar sendo recalculado\)$/i, "In the TSE's open data, this city's 2024 result appears without a final outcome (it may be being recalculated)"],
     [/^O nome veio do DivulgaCandContas, do TSE$/i, "The name came from DivulgaCandContas, a TSE website"],
     [/^Os nomes vieram do DivulgaCandContas, do TSE$/i, "The names came from DivulgaCandContas, a TSE website"],
     [/^O TSE não mostra prefeito\(a\) eleito\(a\) em 2024 nesta cidade: a eleição pode ter sido anulada ou ainda estar em julgamento na Justiça Eleitoral$/i,

@@ -456,9 +456,12 @@ def divulga_json(caminho: str, cache: str):
 # repositório, não para o site) e vale quando ele recusar: sem isso, as cidades com o resultado de 2024 "sem definição"
 # nos dados abertos ficavam sem prefeito e sem vereadores, e quem foi eleito numa suplementar ficava sem foto. O que o robô
 # pediu e não tinha guardado fica em "_faltam"; scripts/atualizar_do_brasil.py (tse.py --so-divulga) pede tudo de novo.
+# Cada resposta guarda o dia em que ele respondeu ("_datas"): é esse dia que vai na fonte das fichas feitas com ela (no
+# robô, nunca o dia da rodada), e uma resposta mais antiga (ex.: --cache com um cache velho) não troca uma mais nova.
 RESERVA_DIVULGA = SAIDA_TSE / "divulga_2024.json"
 _RESERVA_DIV: dict = {}
 _RESERVA_DIV_MUDOU: list[bool] = []
+_DATA_USADA: dict[str, str | None] = {}  # chave -> dia da resposta que valeu nesta rodada
 
 
 def _reserva_divulga() -> dict:
@@ -469,12 +472,50 @@ def _reserva_divulga() -> dict:
     return _RESERVA_DIV
 
 
-def _guarda_divulga(chave: str, valor) -> None:
+def _dia_da_resposta(cache: str) -> str:
+    """Dia (hora de Brasília) da resposta que está em .cache/tse/divulga/<cache>: o cache vale 20 horas (com --cache,
+    qualquer idade), então a resposta pode ser de ontem."""
+    try:
+        t = (CACHE_TSE / "divulga" / cache).stat().st_mtime
+    except OSError:
+        return hoje()
+    return _dt.datetime.fromtimestamp(t, _dt.timezone(_dt.timedelta(hours=-3))).date().isoformat()
+
+
+def _resposta_divulga(chave: str, valor, cache: str):
+    """O DivulgaCandContas respondeu: guarda a resposta com o dia e devolve o que vale nesta rodada (a guardada, se ela
+    for de um dia posterior ao desta resposta)."""
     r = _reserva_divulga()
-    if r.get(chave) != valor:
-        r[chave] = valor
+    datas = r.setdefault("_datas", {})
+    dia = _dia_da_resposta(cache)
+    if chave in r and (datas.get(chave) or "") > dia:
+        _DATA_USADA[chave] = datas[chave]
+        return r[chave]
+    if r.get(chave) != valor or datas.get(chave) != dia:
+        r[chave], datas[chave] = valor, dia
         _RESERVA_DIV_MUDOU.append(True)
     _falta_divulga(chave, False)
+    _DATA_USADA[chave] = dia
+    return valor
+
+
+def _sem_resposta_divulga(chave: str, erro: Exception, o_que: str):
+    """O DivulgaCandContas não respondeu: vale o que ficou guardado (e o dia daquela resposta); sem nada guardado, None,
+    e o pedido fica anotado em "_faltam"."""
+    r = _reserva_divulga()
+    guardado, dia = r.get(chave), (r.get("_datas") or {}).get(chave)
+    log(f"  [aviso] {o_que}: {erro}" + (f"; vale o que ficou guardado em dados/tse/{RESERVA_DIVULGA.name}"
+                                       + (f" (resposta de {data_br(dia)})" if dia else "") if guardado is not None else ""))
+    if guardado is None:
+        _falta_divulga(chave, True)
+    else:
+        _DATA_USADA[chave] = dia
+    return guardado
+
+
+def divulga_data(ue: str, cod_cargo: int) -> str | None:
+    """Dia da resposta do DivulgaCandContas (resultado de 2024 da cidade, no cargo) que valeu nesta rodada."""
+    return _DATA_USADA.get(f"totalizacao/{ue}/{cod_cargo}")
 
 
 def _falta_divulga(chave: str, falta: bool) -> None:
@@ -491,27 +532,23 @@ def _falta_divulga(chave: str, falta: bool) -> None:
 
 def salvar_reserva_divulga() -> None:
     if _RESERVA_DIV_MUDOU:
-        salvar_json(RESERVA_DIVULGA, dict(sorted(_RESERVA_DIV.items())))
+        r = dict(_RESERVA_DIV)
+        if "_datas" in r:
+            r["_datas"] = dict(sorted(r["_datas"].items()))
+        salvar_json(RESERVA_DIVULGA, dict(sorted(r.items())))
         _RESERVA_DIV_MUDOU.clear()
 
 
 def divulga_totalizacao_2024(ue: str, cod_cargo: int) -> dict | None:
     """{SQ: situação (como no CSV: 'ELEITO', 'ELEITO POR QP'...)} de quem foi eleito, no DivulgaCandContas; se ele não
-    responder, o que ficou guardado (RESERVA_DIVULGA); sem nada guardado, None."""
-    chave = f"totalizacao/{ue}/{cod_cargo}"
+    responder, o que ficou guardado (RESERVA_DIVULGA); sem nada guardado, None. O dia da resposta: divulga_data()."""
+    chave, cache = f"totalizacao/{ue}/{cod_cargo}", f"listar_2024_{ue}_{cod_cargo}.json"
     try:
-        d = divulga_json(f"candidatura/listar/2024/{ue}/{ID_DIVULGA[2024]}/{cod_cargo}/candidatos",
-                         f"listar_2024_{ue}_{cod_cargo}.json")
+        d = divulga_json(f"candidatura/listar/2024/{ue}/{ID_DIVULGA[2024]}/{cod_cargo}/candidatos", cache)
     except Exception as e:
-        guardado = _reserva_divulga().get(chave)
-        log(f"  [aviso] DivulgaCandContas {ue}/{cod_cargo}: {e}"
-            + (f"; vale o que ficou guardado em dados/tse/{RESERVA_DIVULGA.name}" if guardado is not None else ""))
-        if guardado is None:
-            _falta_divulga(chave, True)
-        return guardado
-    out = {str(c["id"]): (c.get("descricaoTotalizacao") or "").upper() for c in d.get("candidatos") or []}
-    _guarda_divulga(chave, {k: v for k, v in sorted(out.items()) if v.startswith("ELEITO")})
-    return out
+        return _sem_resposta_divulga(chave, e, f"DivulgaCandContas {ue}/{cod_cargo}")
+    sit = {str(c["id"]): (c.get("descricaoTotalizacao") or "").upper() for c in d.get("candidatos") or []}
+    return _resposta_divulga(chave, {k: v for k, v in sorted(sit.items()) if v.startswith("ELEITO")}, cache)
 
 
 def ids_suplementares_2024(ufs) -> dict:
@@ -519,18 +556,13 @@ def ids_suplementares_2024(ufs) -> dict:
     foto de quem foi eleito numa suplementar). Se o DivulgaCandContas não responder, vale o que ficou guardado."""
     out = {}
     for uf in sorted(ufs):
-        chave = f"suplementares/{uf}"
+        chave, cache = f"suplementares/{uf}", f"suplementares_2024_{uf}.json"
         try:
             ids = [[str(e.get("siglaUF")), str(e.get("dataEleicao"))[:10], str(e["id"])]
-                   for e in divulga_json(f"eleicao/suplementares/2024/{uf}", f"suplementares_2024_{uf}.json") or []]
-            _guarda_divulga(chave, ids)
+                   for e in divulga_json(f"eleicao/suplementares/2024/{uf}", cache) or []]
+            ids = _resposta_divulga(chave, ids, cache)
         except Exception as e:
-            ids = _reserva_divulga().get(chave)
-            log(f"  [aviso] eleições suplementares de {uf} no DivulgaCandContas: {e}"
-                + (f"; vale o que ficou guardado em dados/tse/{RESERVA_DIVULGA.name}" if ids is not None else ""))
-            if ids is None:
-                _falta_divulga(chave, True)
-            ids = ids or []
+            ids = _sem_resposta_divulga(chave, e, f"eleições suplementares de {uf} no DivulgaCandContas") or []
         for ue, data, i in ids:
             out[(ue, data)] = i
     return out
@@ -1221,7 +1253,7 @@ def ler_2024(chaves_fed: set) -> tuple:
 
 
 def _pessoa_cidade(c: dict, pid: str, titular: dict | None, vot24: dict, data: str, supl_ids: dict, aconf: bool,
-                   sit_divulga: str | None = None) -> dict:
+                   sit_divulga: str | None = None, data_divulga: str | None = None) -> dict:
     id_el = None if c["el"] in ORDINARIAS[2024] else supl_ids.get((c["ue"], c["dt"]))
     b = bloco_eleito_exec(c, titular, vot24, data, 2024, c["ue"], id_el)
     if c["el"] not in ORDINARIAS[2024] and not id_el:
@@ -1231,6 +1263,9 @@ def _pessoa_cidade(c: dict, pid: str, titular: dict | None, vot24: dict, data: s
     if sit_divulga:
         a = "a" if c["genero"] == "F" else "o"
         b["situacao"] = f"Eleit{a} em 2024 (segundo o DivulgaCandContas)"
+        if data_divulga:
+            # a candidatura no DivulgaCandContas é a fonte do "eleito": vale o dia da resposta (no robô, a guardada)
+            b["fontes"][0] = dict(b["fontes"][0], data=data_divulga)
         if not b.get("votos"):
             # nos dados abertos, os votos de quem concorreu sub judice ficam como "Anulado sub judice" (0 válidos):
             # "0 votos" estaria errado; sem número, a ficha mostra só a situação (ex.: Equador, RN, em 29/10/2026)
@@ -1479,8 +1514,10 @@ def montar_cidade(ue: str, cod: str, nome: str, uf: str, rows: list[dict], vot24
                            + ("The person in office may be someone else." if pref else "")))
     contagem[origem or "sem"] += 1
 
-    prefeito = _pessoa_cidade(pref, f"pref-{cod}", pref, vot24, data, supl_ids, aconf, sit_div) if pref else None
-    vice_o = _pessoa_cidade(vice, f"vpref-{cod}", pref, vot24, data, supl_ids, aconf, sit_div) if vice else None
+    prefeito = _pessoa_cidade(pref, f"pref-{cod}", pref, vot24, data, supl_ids, aconf, sit_div,
+                              divulga_data(ue, 11) if sit_div else None) if pref else None
+    vice_o = _pessoa_cidade(vice, f"vpref-{cod}", pref, vot24, data, supl_ids, aconf, sit_div,
+                            divulga_data(ue, 12) if sit_div else None) if vice else None
     # prefeitos 2026: a pesquisa à mão vale até "ate" (se houver; ex.: o dia marcado para a posse de quem ganhou uma
     # eleição suplementar) e perde para uma eleição suplementar feita depois dela ("conferido"); se a suplementar foi
     # feita depois de a pessoa da pesquisa assumir, mas antes da pesquisa, a ficha diz que os eleitos tomam posse depois
@@ -1575,7 +1612,7 @@ def montar_cidade(ue: str, cod: str, nome: str, uf: str, rows: list[dict], vot24
     fonte_ver = fonte_resultados(2024, vot24["data"], f"Dados Abertos: vereadores eleitos em 2024 em {nome} ({uf}) e votos")
     if origem_ver == "divulga":
         fonte_ver = fonte("TSE", f"DivulgaCandContas: candidaturas a vereador em {nome} ({uf}), 2024",
-                          f"{DIVULGA}/#/candidato/{REGIAO[uf]}/{uf}/{ID_DIVULGA[2024]}", hoje())
+                          f"{DIVULGA}/#/candidato/{REGIAO[uf]}/{uf}/{ID_DIVULGA[2024]}", divulga_data(ue, 13))
     cid = {
         "ibge": cod, "nome": nome, "uf": uf, "prefeito": prefeito, "vice": vice_o,
         "aviso": " ".join(a[0].strip() for a in avisos if a[0].strip()),

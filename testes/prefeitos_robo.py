@@ -4,6 +4,8 @@ responde (e os outros da rodada nem tentam), sem arquivo e sem rede o erro sobe,
 do GitHub Actions muda com a semana. Sem servidor e sem rede: tudo numa pasta à parte (.cache/teste-prefeitos-robo,
 apagada no fim); o .cache/tse de verdade não é tocado.
 Uso: python testes/prefeitos_robo.py"""
+import datetime as _dt
+import os
 import shutil
 import sys
 from pathlib import Path
@@ -106,6 +108,8 @@ def main():
     tse.RESERVA_DIVULGA = PASTA / "divulga_2024.json"
     tse._RESERVA_DIV.clear()
     tse._RESERVA_DIV_MUDOU.clear()
+    tse._DATA_USADA.clear()
+    dia[0] = "2026-10-29"
     resp = {"candidatura/listar/2024/16675/2045202024/11/candidatos": {"candidatos": [
                 {"id": 200001889942, "descricaoTotalizacao": "Eleito"},
                 {"id": 200002198765, "descricaoTotalizacao": "Não eleito"}]},
@@ -123,14 +127,20 @@ def main():
     t1, s1 = tse.divulga_totalizacao_2024("16675", 11), tse.ids_suplementares_2024({"MA"})
     tse.salvar_reserva_divulga()
     guardado = tse.ler_json(tse.RESERVA_DIVULGA, {})
-    ok("o DivulgaCandContas respondeu: guarda quem foi eleito e os ids das eleições suplementares",
+    ok("o DivulgaCandContas respondeu: guarda quem foi eleito e os ids das eleições suplementares, com o dia da resposta",
        t1.get("200001889942") == "ELEITO" and guardado.get("totalizacao/16675/11") == {"200001889942": "ELEITO"}
-       and guardado.get("suplementares/MA") == [["08850", "2026-12-06", "10652002026"]], str(guardado))
-    tse._RESERVA_DIV.clear()  # outra rodada (o robô): começa lendo o arquivo
+       and guardado.get("suplementares/MA") == [["08850", "2026-12-06", "10652002026"]]
+       and guardado.get("_datas") == {"suplementares/MA": "2026-10-29", "totalizacao/16675/11": "2026-10-29"}
+       and tse.divulga_data("16675", 11) == "2026-10-29", str(guardado))
+    tse._RESERVA_DIV.clear()  # outra rodada (o robô, no dia seguinte): começa lendo o arquivo
+    tse._DATA_USADA.clear()
+    dia[0] = "2026-10-30"
     recusa[0] = True
     t2, s2 = tse.divulga_totalizacao_2024("16675", 11), tse.ids_suplementares_2024({"MA"})
     ok("o DivulgaCandContas recusou: vale o que ficou guardado (o mesmo eleito e o mesmo id da suplementar)",
        t2 == {"200001889942": "ELEITO"} and s2 == s1 == {("08850", "2026-12-06"): "10652002026"}, f"{t2} | {s2}")
+    ok("... e a data da fonte é a da resposta guardada (29/10), não a do dia da rodada do robô (30/10)",
+       tse.divulga_data("16675", 11) == "2026-10-29", str(tse.divulga_data("16675", 11)))
     antes = tse.RESERVA_DIVULGA.read_bytes()
     tse.salvar_reserva_divulga()
     ok("recusou com tudo guardado: o arquivo guardado não muda",
@@ -141,6 +151,32 @@ def main():
     ok("recusou sem nada guardado: None e nenhuma suplementar (como antes), e o pedido fica anotado em _faltam",
        falta_t is None and falta_s == {} and g.get("_faltam") == ["suplementares/AC", "totalizacao/99999/11"],
        str(g.get("_faltam")))
+    # uma resposta mais antiga que a guardada (ex.: --cache com um cache velho) não troca a guardada; uma mais nova troca
+    recusa[0] = False
+    chave16675 = "candidatura/listar/2024/16675/2045202024/11/candidatos"
+    cache_div = PASTA / "divulga" / "listar_2024_16675_11.json"
+    cache_div.parent.mkdir(parents=True, exist_ok=True)
+    cache_div.write_text("{}", encoding="utf-8")
+
+    def meio_dia(iso):
+        t = _dt.datetime.fromisoformat(iso + "T12:00:00-03:00").timestamp()
+        return t, t
+
+    os.utime(cache_div, meio_dia("2026-10-20"))
+    certa = resp[chave16675]
+    resp[chave16675] = {"candidatos": [{"id": 200001889942, "descricaoTotalizacao": "Não eleito"}]}
+    tse._DATA_USADA.clear()
+    t3 = tse.divulga_totalizacao_2024("16675", 11)
+    ok("resposta do cache de 20/10, com a guardada de 29/10: vale a guardada (o eleito e o dia), e ela não muda",
+       t3 == {"200001889942": "ELEITO"} and tse.divulga_data("16675", 11) == "2026-10-29" and not tse._RESERVA_DIV_MUDOU,
+       f"{t3} | {tse.divulga_data('16675', 11)}")
+    os.utime(cache_div, meio_dia("2026-10-31"))
+    resp[chave16675] = certa
+    t4 = tse.divulga_totalizacao_2024("16675", 11)
+    ok("resposta de 31/10 (o cache é do dia em que ele respondeu): troca a guardada, e o dia vai junto",
+       t4 == {"200001889942": "ELEITO"} and tse.divulga_data("16675", 11) == "2026-10-31"
+       and tse._reserva_divulga()["_datas"]["totalizacao/16675/11"] == "2026-10-31", str(tse.divulga_data("16675", 11)))
+    cache_div.unlink()
     # do Brasil (scripts/atualizar_do_brasil.py): tse.py --so-divulga pede de novo tudo o que está guardado e o que falta
     recusa[0] = False
     resp["candidatura/listar/2024/99999/2045202024/11/candidatos"] = {"candidatos": [{"id": 1, "descricaoTotalizacao": "Eleito"}]}
@@ -148,10 +184,11 @@ def main():
     pedidos_div.clear()
     tse.renovar_reserva_divulga()
     g = tse.ler_json(tse.RESERVA_DIVULGA, {})
-    ok("--so-divulga (do Brasil): pede tudo de novo, guarda o que faltava e limpa _faltam",
+    ok("--so-divulga (do Brasil): pede tudo de novo, guarda o que faltava (com o dia) e limpa _faltam",
        "_faltam" not in g and g.get("totalizacao/99999/11") == {"1": "ELEITO"} and g.get("suplementares/AC") == []
-       and g.get("totalizacao/16675/11") == {"200001889942": "ELEITO"} and len(pedidos_div) == 4,
-       f"{len(pedidos_div)} pedidos | {sorted(k for k in g if k != '_')}")
+       and g.get("totalizacao/16675/11") == {"200001889942": "ELEITO"} and len(pedidos_div) == 4
+       and g.get("_datas", {}).get("totalizacao/99999/11") == "2026-10-30",
+       f"{len(pedidos_div)} pedidos | {sorted(k for k in g if k != '_')} | {g.get('_datas')}")
     # 11. eleito segundo o DivulgaCandContas, com os votos "Anulado sub judice" nos dados abertos (0 válidos): a ficha
     # não diz "0 votos" (Equador, RN, em 29/10/2026)
     base = {"el": "619", "ue": "16675", "uf": "RN", "dt": "2024-10-06", "turno": 1, "genero": "M"}
@@ -167,6 +204,11 @@ def main():
     ok("eleito segundo o DivulgaCandContas: sem '0 votos' (nem 'da chapa'); com votos válidos, o número fica",
        p["votos"] is None and v["votos"] is None and "votosDaChapa" not in v and p2["votos"] == 2216
        and p["situacao"] == "Eleito em 2024 (segundo o DivulgaCandContas)", f"{p['votos']} | {v['votos']} | {p2['votos']}")
+    pd = tse._pessoa_cidade(pref, "pref-2403400", pref, v0, "2026-11-02", {}, True, "ELEITO", "2026-10-29")
+    pn = tse._pessoa_cidade(pref, "pref-2403400", pref, v0, "2026-11-02", {}, True)
+    ok("a fonte da candidatura (DivulgaCandContas) leva o dia da resposta dele (29/10), não o dos dados abertos (02/11)",
+       pd["fontes"][0]["titulo"].startswith("DivulgaCandContas") and pd["fontes"][0]["data"] == "2026-10-29"
+       and pn["fontes"][0]["data"] == "2026-11-02", f"{pd['fontes'][0]['data']} | {pn['fontes'][0]['data']}")
     shutil.rmtree(PASTA, ignore_errors=True)
     print(f"\n{sum(RES)}/{len(RES)} ok")
     sys.exit(0 if all(RES) else 1)

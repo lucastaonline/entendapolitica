@@ -128,7 +128,9 @@ def situacao_divulga() -> str:
     r = ler(RESERVA_DIV)
     n = sum(1 for k in r if not k.startswith("_"))
     falta = r.get("_faltam") or []
+    velha = min((r.get("_datas") or {}).values(), default=None)
     return (f"DivulgaCandContas (TSE): {n} respostas guardadas para o robô"
+            + (f" (a mais antiga é de {velha[8:10]}/{velha[5:7]}/{velha[:4]})" if velha else "")
             + (f"; o robô pediu e não tinha: {', '.join(falta)}" if falta else ""))
 
 
@@ -196,8 +198,8 @@ def main() -> int:
     log(f"RESUMO: {len(lidas)} de {len(alvo)} Casas lidas por completo hoje" + (f": {', '.join(lidas)}" if lidas else ""))
     for d in faltam:
         log(f"   ainda atrasada: {d['chave']} {str(d['nome'])[:48]} ({'; '.join(d['motivos']) or 'leitura incompleta'})")
-    log(situacao_divulga() + ("; renovadas hoje (mudaram: o robô diário refaz as cidades com elas)" if div_mudou
-                              else "; renovadas hoje (iguais às de antes)"))
+    log(situacao_divulga() + ("; renovadas hoje (o robô diário seguinte refaz as cidades com elas)" if div_mudou
+                              else "; iguais às de antes (já renovadas hoje)"))
 
     if not a.publicar:
         log("Sem publicar (use --publicar para enviar ao GitHub).")

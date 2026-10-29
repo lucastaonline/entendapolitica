@@ -111,7 +111,8 @@
    ],
    "ilustracao": "urna",
    "coruja": "O teste público para as eleições de 2026 foi de 1º a 5 de dezembro de 2025.",
-   "fontes": ["cf-art14", "tse-urna", "lei9504", "tse-calendario-2026"]
+   "fontes": ["cf-art14", "tse-urna", "lei9504", "tse-calendario-2026"],
+   "link": { "url": "entenda.html#parte-10", "ic": "🔐", "txt": "Ver a urna por dentro ▶" }
   },
   {
    "tipo": "comparar",

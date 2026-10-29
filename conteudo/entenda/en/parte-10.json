@@ -1,0 +1,497 @@
+{
+ "parte": 10,
+ "ic": "🔐",
+ "nome": "Inside the voting machine",
+ "resumo": "How your vote goes from the voting machine to the result, who checks each step and what someone would have to get past to change a vote without being noticed.",
+ "fontes": [
+  { "id": "je-detalhes", "veiculo": "TSE (Portal da Justiça Eleitoral)", "titulo": "Technical details of the 2020 and 2022 electronic voting machines (guidelines, Uenux, chain of security, security chip, keypad, printer, battery) (in Portuguese)", "url": "https://www.justicaeleitoral.jus.br/urna-eletronica/detalhes-tecnicos-da-urna.html", "data": "2026-10-29", "lang": "en" },
+  { "id": "je-auditoria", "veiculo": "TSE (Portal da Justiça Eleitoral)", "titulo": "Audit and oversight opportunities (before, during and after the election) (in Portuguese)", "url": "https://www.justicaeleitoral.jus.br/urna-eletronica/oportunidades-de-auditoria-e-fiscalizacao.html", "data": "2026-10-29", "lang": "en" },
+  { "id": "je-evolucoes", "veiculo": "TSE (Portal da Justiça Eleitoral)", "titulo": "Technical changes in the electronic voting machine and the electoral process (1996 to 2026) (in Portuguese)", "url": "https://www.justicaeleitoral.jus.br/urna-eletronica/evolucoes.html", "data": "2026-10-29", "lang": "en" },
+  { "id": "je-impressao", "veiculo": "TSE (Portal da Justiça Eleitoral)", "titulo": "Analysis of printing the vote (the 2002 experience) (in Portuguese)", "url": "https://www.justicaeleitoral.jus.br/urna-eletronica/impressao-do-voto.html", "data": "2026-10-29", "lang": "en" },
+  { "id": "res-23673", "veiculo": "TSE", "titulo": "TSE Resolution 23,673/2021 (oversight and audit of the electronic voting system), consolidated text with the changes up to Resolution 23,769/2026: arts. 2, 6, 9, 10, 19 to 26, 37, 40, 46, 48, 53 to 79 (in Portuguese)", "url": "https://www.tse.jus.br/legislacao/compilada/res/2021/resolucao-no-23-673-14-de-dezembro-de-2021", "data": "2021-12-14", "lang": "en" },
+  { "id": "res-23751", "veiculo": "TSE", "titulo": "TSE Resolution 23,751/2026 (general acts of the electoral process for the 2026 Elections): arts. 99 to 102, 117, 121, 122, 127, 133, 134, 137, 140, 160, 162, 204, 209 to 211, 223, 230, 231, 234, 262 and 263 (in Portuguese)", "url": "https://www.tse.jus.br/legislacao/compilada/res/2026/resolucao-no-23-751-de-26-de-fevereiro-de-2026", "data": "2026-02-26", "lang": "en" },
+  { "id": "lei9504", "veiculo": "Planalto", "titulo": "Law 9,504/1997 (Elections Law), arts. 59, 59-A, 61, 66 and 68 (in Portuguese)", "url": "https://www.planalto.gov.br/ccivil_03/leis/l9504.htm", "data": "1997-09-30", "lang": "en" },
+  { "id": "cf", "veiculo": "Planalto", "titulo": "Federal Constitution, arts. 14 (secret vote), 48 (Congress makes the laws), 60, § 2 (votes needed to pass a PEC), 66, § 5 (overridden veto) and 102 (the STF guards the Constitution) (in Portuguese)", "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm", "data": "1988-10-05", "lang": "en" },
+  { "id": "lcp78", "veiculo": "Planalto", "titulo": "Complementary Law 78/1993, art. 1 (number of federal deputies: 513) (in Portuguese)", "url": "https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp78.htm", "data": "1993-12-30", "lang": "en" },
+  { "id": "lei10408", "veiculo": "Planalto", "titulo": "Law 10,408/2002 (printing the vote) (in Portuguese)", "url": "https://www.planalto.gov.br/ccivil_03/leis/2002/l10408.htm", "data": "2002-01-10", "lang": "en" },
+  { "id": "lei10740", "veiculo": "Planalto", "titulo": "Law 10,740/2003 (digital record of the vote) (in Portuguese)", "url": "https://www.planalto.gov.br/ccivil_03/leis/2003/l10.740.htm", "data": "2003-10-01", "lang": "en" },
+  { "id": "lei12034", "veiculo": "Planalto", "titulo": "Law 12,034/2009, art. 5 (printed vote starting in 2014) (in Portuguese)", "url": "https://www.planalto.gov.br/ccivil_03/_ato2007-2010/2009/lei/l12034.htm", "data": "2009-09-29", "lang": "en" },
+  { "id": "lei13165", "veiculo": "Planalto", "titulo": "Law 13,165/2015, art. 2 (art. 59-A of Law 9,504/1997, vetoed and later promulgated on 11/25/2015) (in Portuguese)", "url": "https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2015/lei/l13165.htm", "data": "2015-11-25", "lang": "en" },
+  { "id": "stf-adi4543-2011", "veiculo": "STF", "titulo": "Rule that creates the printed vote starting in 2014 is suspended (ADI 4543, preliminary injunction) (in Portuguese)", "url": "https://noticias.stf.jus.br/postsnoticias/suspensa-norma-que-institui-voto-impresso-a-partir-de-2014/", "data": "2011-10-19", "lang": "en" },
+  { "id": "stf-adi4543-2013", "veiculo": "STF", "titulo": "Rule that creates the printed vote starting in 2014 is unconstitutional, STF decides (ADI 4543) (in Portuguese)", "url": "https://noticias.stf.jus.br/postsnoticias/norma-que-institui-voto-impresso-a-partir-de-2014-e-inconstitucional-decide-stf/", "data": "2013-11-06", "lang": "en" },
+  { "id": "stf-adi5889-2018", "veiculo": "STF", "titulo": "Injunction suspends the rule of the electoral mini-reform that provides for the printed vote (ADI 5889) (in Portuguese)", "url": "https://portal.stf.jus.br/noticias/verNoticiaDetalhe.asp?idConteudo=380571", "data": "2018-06-06", "lang": "en" },
+  { "id": "stf-adi5889-2020", "veiculo": "STF", "titulo": "Printing a record puts the secrecy and freedom of the vote at risk (ADI 5889, virtual session ended on 9/14/2020) (in Portuguese)", "url": "https://portal.stf.jus.br/noticias/verNoticiaDetalhe.asp?idConteudo=451785", "data": "2020-09-16", "lang": "en" },
+  { "id": "camara-pec135", "veiculo": "Câmara dos Deputados", "titulo": "PEC 135/2019: legislative history (rejected in the 1st round in the Plenary on 8/10/2021; shelved) (in Portuguese)", "url": "https://www.camara.leg.br/propostas-legislativas/2220292", "data": "2021-08-10", "lang": "en" },
+  { "id": "camara-pec135-votacao", "veiculo": "Câmara dos Deputados", "titulo": "Open Data: Plenary vote 2220292-229 (PEC 135/2019, 1st round) (in Portuguese)", "url": "https://dadosabertos.camara.leg.br/api/v2/votacoes/2220292-229", "data": "2021-08-10", "lang": "en" },
+  { "id": "tse-tpu", "veiculo": "TSE", "titulo": "Public Voting Machine Test (Public Security Test of the Electoral Systems): what it is, who takes part, editions (in Portuguese)", "url": "https://www.tse.jus.br/eleicoes/tpu", "data": "2026-10-29", "lang": "en" },
+  { "id": "tse-tps2009", "veiculo": "TSE", "titulo": "TPS 2009: what happened in the first edition of the Public Security Test (in Portuguese)", "url": "https://www.tse.jus.br/comunicacao/noticias/2021/Setembro/tps-2009-saiba-o-que-aconteceu-na-primeira-edicao-do-teste-publico-de-seguranca", "data": "2021-09-06", "lang": "en" },
+  { "id": "tse-tps2012", "veiculo": "TSE", "titulo": "TPS 2012: everything that happened in the second edition of the Public Security Test (in Portuguese)", "url": "https://www.tse.jus.br/comunicacao/noticias/2021/Setembro/tps-2012-saiba-tudo-o-que-aconteceu-na-segunda-edicao-do-teste-publico-de-seguranca", "data": "2021-09-09", "lang": "en" },
+  { "id": "tse-tps2016", "veiculo": "TSE", "titulo": "TPS 2016: everything that happened in the third edition of the Public Security Test (in Portuguese)", "url": "https://www.tse.jus.br/comunicacao/noticias/2021/Setembro/tps-2016-saiba-tudo-que-aconteceu-na-terceira-edicao-do-teste-publico-de-seguranca", "data": "2021-09-13", "lang": "en" },
+  { "id": "tse-tps2017", "veiculo": "TSE", "titulo": "TPS 2017: everything that happened in the fourth edition of the Public Security Test (in Portuguese)", "url": "https://www.tse.jus.br/comunicacao/noticias/2021/Setembro/tps-2017-saiba-tudo-que-aconteceu-na-quarta-edicao-do-teste-publico-de-seguranca", "data": "2021-09-16", "lang": "en" },
+  { "id": "tse-tps2019", "veiculo": "TSE", "titulo": "TPS 2019: everything that happened in the fifth edition of the Public Security Test (in Portuguese)", "url": "https://www.tse.jus.br/comunicacao/noticias/2021/Setembro/tps-2019-saiba-tudo-que-aconteceu-na-quinta-edicao-do-teste-publico-de-seguranca", "data": "2021-09-20", "lang": "en" },
+  { "id": "tse-tps2021", "veiculo": "TSE", "titulo": "TPS 2021: Evaluation Committee releases its final report (in Portuguese)", "url": "https://www.tse.jus.br/comunicacao/noticias/2022/Maio/tps-2021-comissao-avaliadora-divulga-relatorio-final", "data": "2022-05-30", "lang": "en" },
+  { "id": "tse-tps2021-conf", "veiculo": "TSE", "titulo": "TPS 2021 Confirmation Test ends with no attacks able to get past the reinforcements in the system's security (in Portuguese)", "url": "https://www.tse.jus.br/comunicacao/noticias/2022/Maio/teste-de-confirmacao-do-tps-2021-chega-ao-fim-sem-ataques-capazes-de-ultrapassar-reforcos-na-seguranca-do-sistema", "data": "2022-05-13", "lang": "en" },
+  { "id": "tse-tps2023", "veiculo": "TSE", "titulo": "Voting Machine Test 2023: general evaluation report of the 7th edition is released (in Portuguese)", "url": "https://www.tse.jus.br/comunicacao/noticias/2023/Dezembro/teste-da-urna-2023-divulgado-relatorio-de-avaliacao-geral-da-7a-edicao-do-evento", "data": "2023-12-22", "lang": "en" },
+  { "id": "tse-tps2023-conf", "veiculo": "TSE", "titulo": "2024 Elections: Federal Police and UFMS confirm that changes made by the TSE made the voting machines even more secure (in Portuguese)", "url": "https://www.tse.jus.br/comunicacao/noticias/2024/Maio/eleicoes-2024-pf-e-ufms-confirmam-que-evolucoes-promovidas-pelo-tse-tornaram-urnas-ainda-mais-seguras", "data": "2024-05-17", "lang": "en" },
+  { "id": "tse-tpu2025", "veiculo": "TSE", "titulo": "Voting Machine Test 2025 confirms the security of the electoral systems (reports of the Evaluation and Regulatory Committees) (in Portuguese)", "url": "https://www.tse.jus.br/comunicacao/noticias/2025/Dezembro/teste-da-urna-2025-confirma-seguranca-dos-sistemas-eleitorais", "data": "2025-12-18", "lang": "en" },
+  { "id": "tse-tpu2025-conf", "veiculo": "TSE", "titulo": "2026 Elections: tests confirm, once again, the security of the Brazilian electoral system (Confirmation Test, May 13 to 15, 2026) (in Portuguese)", "url": "https://www.tse.jus.br/comunicacao/noticias/2026/Maio/eleicoes-2026-testes-confirmam-mais-uma-vez-a-seguranca-do-sistema-eleitoral-brasileiro", "data": "2026-05-15", "lang": "en" },
+  { "id": "tse-tpu2025-relatorio", "veiculo": "TSE", "titulo": "Final Report of the Evaluation Committee of the 2025 Public Voting Machine Test (PDF) (in Portuguese)", "url": "https://www.tse.jus.br/eleicoes/arquivos/tpu-relatorio-final-da-comissao-avaliadora/@@display-file/file/final-relatorio-comissao-avaliadora.pdf", "data": "2026-06-26", "lang": "en" },
+  { "id": "tse-codigo-2026", "veiculo": "TSE", "titulo": "TSE opens the Democratic Transparency Cycle – 2026 Elections (source code opened on 10/2/2025) (in Portuguese)", "url": "https://www.tse.jus.br/comunicacao/noticias/2025/Outubro/tse-inaugura-ciclo-de-transparencia-democratica-2013-eleicoes-2026-com-abertura-dos-codigos-fonte-dos-sistemas-eleitorais", "data": "2025-10-01", "lang": "en" },
+  { "id": "tse-lacracao-2026", "veiculo": "TSE", "titulo": "Systems for the 2026 General Elections are digitally signed and sealed by the TSE (in Portuguese)", "url": "https://www.tse.jus.br/comunicacao/noticias/2026/Setembro/sistemas-das-eleicoes-gerais-de-2026-sao-assinados-digitalmente-e-lacrados-pelo-tse", "data": "2026-09-04", "lang": "en" },
+  { "id": "tse-hashes-2026", "veiculo": "TSE", "titulo": "Digital summaries (hashes) of the 2026 Elections – 1st and 2nd rounds (in Portuguese)", "url": "https://www.tse.jus.br/eleicoes/urna-eletronica/seguranca-da-urna/hash/resumos-digitais-hashes-das-eleicoes-2026-1o-e-2o-turnos", "data": "2026-10-29", "lang": "en" },
+  { "id": "tse-hashes-u22", "veiculo": "TSE", "titulo": "List of digital summaries for the 2022 model voting machine, 2026 General Elections (SHA-512 file in base64, dated 9/2/2026) (in Portuguese)", "url": "https://www.tse.jus.br/eleicoes/urna-eletronica/seguranca-da-urna/hash/arquivos/2026/sistemas-em-ambiente-urna-eletronica/path1u22", "data": "2026-09-02", "lang": "en" },
+  { "id": "tse-urnas-2026", "veiculo": "TSE", "titulo": "Redistribution of voting machines ensures more efficiency at polling places (2026 Elections in numbers) (in Portuguese)", "url": "https://www.tse.jus.br/comunicacao/noticias/2026/Agosto/redistribuicao-de-urnas-garante-mais-eficiencia-nos-locais-de-votacao", "data": "2026-08-20", "lang": "en" },
+  { "id": "tse-eleitorado-2026", "veiculo": "TSE", "titulo": "2026 Elections in numbers: 158.7 million voters are eligible to vote (in Portuguese)", "url": "https://www.tse.jus.br/comunicacao/noticias/2026/Outubro/eleicoes-2026-em-numeros-158-7-milhoes-de-eleitores-estao-aptos-a-votar", "data": "2026-10-04", "lang": "en" },
+  { "id": "tse-biometria-2026", "veiculo": "TSE", "titulo": "2026 Elections: electoral courts reach 158 million voters and 88% with biometrics (in Portuguese)", "url": "https://www.tse.jus.br/comunicacao/noticias/2026/Maio/eleicoes-2026-justica-eleitoral-atinge-158-milhoes-de-eleitores-e-88-de-biometria", "data": "2026-05-07", "lang": "en" },
+  { "id": "tse-integridade-2026", "veiculo": "TSE", "titulo": "How the Integrity Test works, the voting machine's “proof of nine” (in Portuguese)", "url": "https://www.tse.jus.br/comunicacao/noticias/2026/Agosto/como-funciona-o-teste-de-integridade-a-prova-dos-nove-da-urna-eletronica", "data": "2026-08-06", "lang": "en" },
+  { "id": "tse-integridade-df-2026", "veiculo": "TSE", "titulo": "Integrity Test at the TSE confirms that ballots and votes recorded in the machines match (1st round of 2026) (in Portuguese)", "url": "https://www.tse.jus.br/comunicacao/noticias/2026/Outubro/teste-de-integridade-no-tse-confirma-correspondencia-entre-cedulas-e-votos-registrados-nas-urnas", "data": "2026-10-04", "lang": "en" },
+  { "id": "tse-tcu-2026", "veiculo": "TSE", "titulo": "2026 Elections will have the TCU following the Integrity Tests of the electronic voting machines (in Portuguese)", "url": "https://www.tse.jus.br/comunicacao/noticias/2026/Outubro/eleicoes-de-2026-terao-acompanhamento-do-tcu-nos-testes-de-integridade-das-urnas-eletronicas", "data": "2026-10-02", "lang": "en" },
+  { "id": "tse-apps", "veiculo": "TSE", "titulo": "Electoral courts apps (Boletim na Mão, Resultados, e-Título) (in Portuguese)", "url": "https://www.tse.jus.br/eleicoes/aplicativos-justica-eleitoral", "data": "2026-10-29", "lang": "en" },
+  { "id": "tse-doc-tecnica", "veiculo": "TSE", "titulo": "Technical documentation of the electronic voting machine software – 2022 Elections (formats of the report, the RDV, the signatures and the log) (in Portuguese)", "url": "https://www.tse.jus.br/eleicoes/eleicoes-2022/documentacao-tecnica-do-software-da-urna-eletronica", "data": "2026-10-29", "lang": "en" },
+  { "id": "tse-doc-bu", "veiculo": "TSE", "titulo": "Format of the report (BU), RDV and digital signature files (ZIP file with the README and examples in Python) (in Portuguese)", "url": "https://www.tse.jus.br/eleicoes/eleicoes-2022/arquivos/formato-dos-arquivos-de-bu-rdv-e-assinatura-digital-17-9-22", "data": "2022-09-17", "lang": "en" },
+  { "id": "tse-dados-bu-2026", "veiculo": "TSE (Portal de Dados Abertos)", "titulo": "Results - 2026 - Voting machine reports (1st and 2nd rounds, by state, with the SHA-2 hash of each file) (in Portuguese)", "url": "https://dadosabertos.tse.jus.br/dataset/resultados-2026-boletim-de-urna", "data": "2026-10-26", "lang": "en" },
+  { "id": "tse-dados-arquivos-2026", "veiculo": "TSE (Portal de Dados Abertos)", "titulo": "Results 2026 - Files transmitted for tallying (bu, log, rdv, vota) (in Portuguese)", "url": "https://dadosabertos.tse.jus.br/dataset/resultados-2026-arquivos-transmitidos-para-totalizacao", "data": "2026-10-29", "lang": "en" }
+ ],
+ "glossario": [
+  { "termo": "electronic voting machine", "simples": "The computer we vote on. In Portuguese: {{urna eletrônica}}." },
+  { "termo": "source code", "simples": "The instructions of a program, written by people. They become the program the computer runs. In Portuguese: {{código-fonte}}." },
+  { "termo": "hash", "simples": "A short code calculated from a file. If the file changes, the code changes. It is also called a digital summary." },
+  { "termo": "digital summary", "simples": "The same as a hash: a short code that identifies a file. In Portuguese: {{resumo digital}}." },
+  { "termo": "digital seal", "simples": "On this site, another name for the hash: it shows whether someone changed a file. In Portuguese: {{lacre digital}}." },
+  { "termo": "digital signature", "simples": "A way, using math, to show who made a file and that no one changed the file afterwards. In Portuguese: {{assinatura digital}}." },
+  { "termo": "private key", "simples": "The secret part of a digital signature. Only the owner knows it. In Portuguese: {{chave privada}}." },
+  { "termo": "public key", "simples": "The part of a digital signature that can be shown to everyone, to check the signature. In Portuguese: {{chave pública}}." },
+  { "termo": "cryptography", "simples": "Math techniques to protect information, for example by scrambling what is sent. In Portuguese: {{criptografia}}." },
+  { "termo": "sealing", "simples": "When the programs are stored in a way that shows whether someone has tampered with them. In Portuguese: {{lacração}}." },
+  { "termo": "seal", "simples": "A tag that shows whether someone opened or tampered with something. In Portuguese: {{lacre}}." },
+  { "termo": "zero report", "simples": "A paper the voting machine prints before voting starts, showing that it has no votes. In Portuguese: {{zerésima}}." },
+  { "termo": "voting machine report", "simples": "A paper the voting machine prints at the end of voting, with the votes from that polling station. In Portuguese: {{boletim de urna}}." },
+  { "termo": "QR Code", "simples": "A little square of dots that a phone camera can read." },
+  { "termo": "biometrics", "simples": "Recognizing a person by a part of the body, like a fingerprint. In Portuguese: {{biometria}}." },
+  { "termo": "RDV", "simples": "Digital Vote Record ({{Registro Digital do Voto}}): the machine's file with each vote, shuffled and without the name of who voted." },
+  { "termo": "log", "simples": "The machine's diary: a file that writes down what happens in it, with the time." },
+  { "termo": "polling station", "simples": "The place, usually a school classroom, where a group of voters votes. In Portuguese: {{seção eleitoral}}." },
+  { "termo": "poll worker", "simples": "A person called to work at the polling station on election day. In Portuguese: {{mesário}}." },
+  { "termo": "party monitor", "simples": "A person named by a party, federation or coalition to watch the voting. In Portuguese: {{fiscal}}." },
+  { "termo": "oversight bodies", "simples": "Institutions that the rules allow to check the steps of the election, such as parties, the Bar Association (OAB) and the Public Prosecutor's Office. In Portuguese: {{entidades fiscalizadoras}}." },
+  { "termo": "tallying", "simples": "Adding up the votes from all polling stations. In Portuguese: {{totalização}}." },
+  { "termo": "integrity test", "simples": "A test in which chosen or drawn voting machines receive votes from paper ballots, to see if the result matches. In Portuguese: {{teste de integridade}}." },
+  { "termo": "BIOS", "simples": "The first program that runs when a computer is turned on." },
+  { "termo": "TSE", "simples": "{{Tribunal Superior Eleitoral}} (Superior Electoral Court): the highest court of the electoral courts. It organizes the elections." },
+  { "termo": "PEC", "simples": "Proposed amendment to the Constitution ({{Proposta de Emenda à Constituição}}): a proposal to change the Constitution." },
+  { "termo": "unconstitutional", "simples": "Against the Constitution. When the STF (Supreme Federal Court) decides this, the rule stops being valid. In Portuguese: {{inconstitucional}}." },
+  { "termo": "veto", "simples": "When the President rejects a law, or part of it, passed by Congress." }
+ ],
+ "slides": [
+  {
+   "tipo": "abertura",
+   "titulo": "The electronic voting machine, bit by bit",
+   "texto": "Let's follow the path of a vote: before the election, on election day and afterwards. At each step, you will see **who checks** and how.",
+   "ilustracao": "urna-boletim"
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "THE MACHINE",
+   "titulo": "What is the electronic voting machine?",
+   "texto": "It is a computer made only for voting. Brazil has used electronic voting machines since 1996. In 2000, the election was electronic across the whole country for the first time.",
+   "itens": [
+    { "ic": "🧑‍💻", "txt": "The machine's programs are made by the technical team of the TSE (Superior Electoral Court)." },
+    { "ic": "📵", "txt": "It **does not connect** to the internet or to any network: it has no Wi-Fi and no Bluetooth." },
+    { "ic": "🐧", "txt": "Its system is Uenux, a version of Linux made by the TSE with only what voting needs." },
+    { "ic": "🔐", "txt": "Every time it is turned on, a security chip checks whether the programs are the official ones. If they are not, it locks and shuts down." },
+    { "ic": "⌨️", "txt": "In the voting booth, you only have access to the keypad and the screen." },
+    { "ic": "🔋", "txt": "It has a battery, so it works even where the power goes out." }
+   ],
+   "ilustracao": "urna",
+   "coruja": "For 2026, the electoral courts had 563,910 voting machines ready to use, of four models: 2013, 2015, 2020 and 2022.",
+   "fontes": ["je-detalhes", "je-auditoria", "je-evolucoes", "tse-urnas-2026"]
+  },
+  {
+   "tipo": "simulador",
+   "id": "caminho-voto",
+   "titulo": "The path of a vote, step by step",
+   "texto": "Press **Next step** and follow the vote. Each stop shows when it happens and who can check it.",
+   "fases": [
+    { "id": "antes", "ic": "📅", "nome": "Before the election" },
+    { "id": "dia", "ic": "🗳️", "nome": "On election day" },
+    { "id": "depois", "ic": "📊", "nome": "Afterwards" }
+   ],
+   "etapas": [
+    { "fase": "antes", "ic": "📂", "titulo": "Open code", "quando": "12 months before (for 2026, since Oct 2, 2025)", "txt": "The election programs are open for the oversight bodies to examine, in a TSE room with no internet.", "quem": "Oversight bodies: parties, the Bar Association (OAB), the Public Prosecutor's Office, the Federal Police, the Federal Court of Accounts (TCU), universities and others." },
+    { "fase": "antes", "ic": "🕵️", "titulo": "Public Voting Machine Test", "quando": "The year before (Dec 1 to 5, 2025)", "txt": "People from outside the TSE carry out attack plans against the machine and the systems, to find flaws.", "quem": "Any Brazilian aged 18 or over can sign up. A committee with people from the electoral courts and from outside them evaluates the results." },
+    { "fase": "antes", "ic": "🔁", "titulo": "Confirmation Test", "quando": "In May (May 13 to 15, 2026)", "txt": "Whoever found a problem comes back to the TSE to redo the test on the fixed version.", "quem": "The investigators themselves and the evaluation committee." },
+    { "fase": "antes", "ic": "✍️", "titulo": "Signing and sealing", "quando": "Up to 20 days before (for 2026, Sept 4)", "txt": "The programs are digitally signed and recorded on sealed media, kept in a TSE vault. Each file gets a digital seal (hash), published on the internet.", "quem": "The oversight bodies watch and can sign too." },
+    { "fase": "antes", "ic": "💾", "titulo": "Preparing the machines", "quando": "About 1 month before", "txt": "Each machine receives the sealed programs and the data of its polling station. At the end, it gets signed physical seals.", "quem": "Parties, federations, coalitions, the Public Prosecutor's Office and the OAB are called and can check the programs." },
+    { "fase": "antes", "ic": "🎲", "titulo": "Choosing machines for the tests", "quando": "The day before", "txt": "Some machines that are already prepared are chosen or drawn for the integrity and authenticity tests.", "quem": "Each oversight body present picks one polling station; the rest are drawn at random." },
+    { "fase": "dia", "ic": "🧾", "titulo": "Zero report", "quando": "Before 8 a.m.", "txt": "Before the first vote, the machine prints a paper showing zero votes for everyone: the zero report ({{zerésima}}).", "quem": "The poll workers sign it (party monitors too, if they wish). The first 2 people in line are invited to watch." },
+    { "fase": "dia", "ic": "👆", "titulo": "Identification", "quando": "From 8 a.m. to 5 p.m.", "txt": "The poll worker checks your details and your photo, and the machine checks your fingerprint.", "quem": "The poll workers and the party monitors at the polling station." },
+    { "fase": "dia", "ic": "🗳️", "titulo": "The vote", "quando": "From 8 a.m. to 5 p.m.", "txt": "In the booth, it is just you (a voter with a disability or reduced mobility may be helped by a person of their choice): you type the numbers and confirm. The vote is stored without your name.", "quem": "No one: the vote is secret." },
+    { "fase": "dia", "ic": "🧾", "titulo": "Voting machine report", "quando": "5 p.m.", "txt": "The machine adds up the polling station's votes and prints the voting machine report ({{boletim de urna}}). A signed copy is posted at the polling station.", "quem": "Anyone can look at the posted copy. Parties, federations, coalitions, the press and the Public Prosecutor's Office can ask for a copy when voting closes." },
+    { "fase": "depois", "ic": "📡", "titulo": "Transmission and tallying", "quando": "Right after", "txt": "The signed files leave the machine on a storage device and travel over the electoral courts' own network. The systems check and add everything up: this is the tallying.", "quem": "Candidates, parties, federations, coalitions, the OAB and the Public Prosecutor's Office oversee it. Other interested people can also follow it." },
+    { "fase": "depois", "ic": "🌐", "titulo": "Everything published", "quando": "During the count and in the following days", "txt": "The TSE publishes the report of each machine as it receives them. The vote files (RDV) and the machines' diaries (logs) also go online, within 3 days.", "quem": "Anyone can download them and compare." }
+   ],
+   "fontes": ["res-23673", "res-23751", "lei9504", "je-auditoria", "tse-codigo-2026", "tse-tpu2025", "tse-tpu2025-conf", "tse-lacracao-2026", "tse-eleitorado-2026"]
+  },
+  {
+   "tipo": "cards",
+   "etiqueta": "BEFORE THE ELECTION",
+   "titulo": "Open, attack, check and seal",
+   "texto": "Long before voting day, the programs go through four steps. Flip the cards to learn more.",
+   "cards": [
+    { "ic": "📂", "titulo": "Open code", "txt": "Starting 12 months before the 1st round, the programs are open for the oversight bodies to examine, in a TSE room with no internet.", "dados": [ { "rot": "In 2026", "val": "since Oct 2, 2025" }, { "rot": "Bodies that examined it", "val": "8" } ], "mais": "Those allowed to examine it: parties, federations and coalitions, the OAB, the Public Prosecutor's Office, the Public Defender's Office, the National Congress, the CGU (Office of the Comptroller General), the Federal Police, the Brazilian Computer Society, Confea, the CNJ, the CNMP, the TCU, CNI and the S System, and entities and universities registered with the TSE. For 2026, those that examined it were: União Brasil, the Federal Senate, CNC, SBC, CNMP, PV, MPF and CGU." },
+    { "ic": "🕵️", "titulo": "Public Voting Machine Test", "txt": "In the year before the election, the selected people carry out attack plans against the machine and the systems, at the TSE, to find flaws.", "dados": [ { "rot": "In 2025", "val": "December 1 to 5" }, { "rot": "Plans carried out", "val": "29" } ], "mais": "Any Brazilian aged 18 or over can sign up with a test plan. In 2025, the evaluation committee had professors and representatives of the Brazilian Computer Society, the TCU, Inpe (the national space research institute), the TSE, the Federal Police, the Public Prosecution Service of the Union (MPU) and the OAB." },
+    { "ic": "🔁", "titulo": "Confirmation Test", "txt": "Whoever found a problem comes back to the TSE to redo the same test on the fixed version.", "dados": [ { "rot": "In 2026", "val": "May 13 to 15" } ], "mais": "In May 2026, according to the evaluation committee's final report, 4 plans were checked (the 3 findings plus one that had pointed out outdated software): in 3, the fixes were confirmed; the 4th was considered resolved with the TSE's explanations, without a new test." },
+    { "ic": "✍️", "titulo": "Signing and sealing", "txt": "Up to 20 days before the election, the programs are compiled, digitally signed and recorded on sealed media, kept in a TSE vault.", "dados": [ { "rot": "In 2026", "val": "September 4" } ], "mais": "The oversight bodies can sign too. The TSE calculates the digital seal (hash) of each file and publishes the list on the internet. After that, if a program needs to change, the oversight bodies are notified and everything is analyzed, signed and sealed again." }
+   ],
+   "fontes": ["res-23673", "tse-codigo-2026", "tse-tpu", "tse-tpu2025", "tse-tpu2025-relatorio", "tse-lacracao-2026"]
+  },
+  {
+   "tipo": "historia",
+   "etiqueta": "PUBLIC VOTING MACHINE TEST",
+   "titulo": "What the Public Test has found, and what was fixed",
+   "quadros": [
+    { "ic": "📻", "txt": "**2009**: an investigator tried to pick up the keypad's signal with a radio. He got only 1 key right, 5 cm (2 inches) from the machine. The TSE started encrypting what goes from the keypad to the machine." },
+    { "ic": "🔀", "txt": "**2012**: a group managed to put the votes stored in the RDV in order. According to the TSE, this weakened secrecy, but the group did not find out who voted for whom. The TSE strengthened the shuffling." },
+    { "ic": "🧾", "txt": "**2016**: an investigator changed the result in a report and used it to get into the machine's counting system, which is used only in special cases. Another group recorded the audio that helps visually impaired voters, with the keys and the vote. The TSE changed the report's verification code, added a QR Code with a digital signature and started turning on the audio only for those who need it, with a warning on the screen." },
+    { "ic": "🔑", "txt": "**2017**: they found the key that protected the machine's storage media and flaws in how signatures were checked. In the test, they changed how the machine's program behaved. The TSE removed the keys from the code and fixed the checking." },
+    { "ic": "💻", "txt": "**2019**: they opened the encrypted disk of computers that prepare the machines and made the preparation system generate modified settings for the machine, but did not reach the machine's program or change voter and candidate data. The TSE started using the TPM security chip to strengthen digital signatures and encryption, and the attack did not work again in the retest." },
+    { "ic": "📡", "txt": "**2021**: 5 of the 29 plans had some finding, most of them in the transmission systems. In the 2022 retest, no attack got past the reinforcements." },
+    { "ic": "🚀", "txt": "**2023**: 5 tests went back for a retest. The TSE changed the way the machine starts up and added more protection to the preparation computers. In 2024, the teams from the Federal Police and UFMS (a federal university) attested that the attacks no longer worked." },
+    { "ic": "🧰", "txt": "**2025**: 3 findings in 29 plans, in the transmission and preparation systems. The reports say they do not compromise integrity, the secrecy of the vote or the result. In 2026, two were tested again and the fixes were confirmed; the third was considered resolved with the TSE's explanations." }
+   ],
+   "moral": "Finding flaws is the goal of the test: the TSE fixes them, and whoever found them comes back to check.",
+   "fontes": ["tse-tps2009", "tse-tps2012", "tse-tps2016", "tse-tps2017", "tse-tps2019", "tse-tps2021", "tse-tps2021-conf", "tse-tps2023", "tse-tps2023-conf", "tse-tpu2025", "tse-tpu2025-relatorio"]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "DIGITAL SEAL",
+   "titulo": "What is a digital seal (hash)?",
+   "texto": "It is a code calculated from a file, like the file's fingerprint. Any change in the file produces a different code.",
+   "itens": [
+    { "ic": "🧮", "txt": "At the sealing ceremony, the TSE calculates the **hash** (also called a digital summary) of each program." },
+    { "ic": "🌐", "txt": "The list with all these hashes is published on the internet." },
+    { "ic": "🔎", "txt": "During preparation and on election day, the hashes of the programs in selected machines are checked against the published list." },
+    { "ic": "⚖️", "txt": "If they match, the program is the same one that was sealed at the TSE. If they don't, it is a sign that the file was changed." }
+   ],
+   "emoji": "🔏",
+   "coruja": "In the next game, you calculate a real hash. You can choose SHA-512, the same type used in the TSE's lists.",
+   "fontes": ["res-23673", "je-auditoria", "tse-hashes-2026", "tse-hashes-u22"]
+  },
+  {
+   "tipo": "simulador",
+   "id": "lacre-digital",
+   "titulo": "Game: the digital seal",
+   "texto": "Write a sentence and see its seal. Then save the seal, change **just one letter** and compare.",
+   "inicial": "The machine counts every vote.",
+   "explica": "Notice: changing one letter changes almost the whole seal. That is why a tampered program does not pass the hash check.",
+   "fontes": ["res-23673", "tse-hashes-2026", "tse-hashes-u22"]
+  },
+  {
+   "tipo": "quiz",
+   "pergunta": "You changed just one letter of the text. What happens to the digital seal (hash)?",
+   "opcoes": [
+    "Only a small piece changes, where the letter is",
+    "It becomes another seal, almost completely different",
+    "It stays the same"
+   ],
+   "certa": 1,
+   "explica": "Any change in the file produces a different digital summary. That is how the hash check shows whether a program was changed.",
+   "fontes": ["res-23673"]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "PREPARATION",
+   "titulo": "Preparing each machine",
+   "texto": "After the sealing, the regional electoral courts prepare the machines, in public ceremonies.",
+   "itens": [
+    { "ic": "💾", "txt": "The sealed programs and the election data (candidates and voters of each polling station) are recorded on storage media and loaded into the machines." },
+    { "ic": "📢", "txt": "Parties, federations, coalitions, the Public Prosecutor's Office and the OAB are called to watch." },
+    { "ic": "🔎", "txt": "The oversight bodies can randomly choose up to 6% of the machines prepared in each electoral zone to check the programs right there." },
+    { "ic": "🏷️", "txt": "At the end, each machine gets signed **physical seals**, which show whether someone tried to open it." },
+    { "ic": "📋", "txt": "A table says which machine goes to which polling station, and it is published by the day before. A report from a machine that is not in the table stays pending until a judge decides." }
+   ],
+   "emoji": "🏷️",
+   "fontes": ["je-auditoria", "res-23673", "res-23751"]
+  },
+  {
+   "tipo": "passos",
+   "titulo": "On election day: from the table to the booth",
+   "texto": "Voting runs from 8 a.m. to 5 p.m., Brasília time.",
+   "passos": [
+    { "ic": "⏰", "titulo": "7 a.m.: the poll workers get ready", "txt": "The poll workers check the materials and the machine's seals, and test the keypad." },
+    { "ic": "🧾", "titulo": "Zero report", "txt": "The machine prints that it has zero votes. The poll workers sign it (party monitors too, if they wish), and a summary is posted at the polling station." },
+    { "ic": "🪪", "titulo": "Your details", "txt": "The poll worker types your CPF (taxpayer number) or voter card number and checks your photo." },
+    { "ic": "👆", "titulo": "Your fingerprint", "txt": "The machine checks your fingerprint, in up to 4 tries. Without biometrics, your year of birth is used." },
+    { "ic": "📵", "titulo": "Booth", "txt": "Phones and cameras stay outside." },
+    { "ic": "🗳️", "titulo": "Vote", "txt": "You type the numbers, see the photo of the person you chose and confirm." },
+    { "ic": "🔏", "titulo": "Stored and signed", "txt": "The vote goes into the RDV, without your name, and the file is signed again." }
+   ],
+   "fontes": ["res-23751", "je-evolucoes", "lei9504", "tse-eleitorado-2026"]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "5 P.M.",
+   "titulo": "The voting machine report",
+   "texto": "At 5 p.m., if there is no one left in line, voting ends. The machine adds up the polling station's votes and prints the **voting machine report** ({{boletim de urna}}).",
+   "itens": [
+    { "ic": "🖨️", "txt": "There are 5 mandatory copies and up to 5 extra copies." },
+    { "ic": "✍️", "txt": "The poll workers and the party monitors present sign all the copies." },
+    { "ic": "📌", "txt": "A signed copy is posted in a visible place at the polling station." },
+    { "ic": "📑", "txt": "The report shows how many people voted, the votes for each candidate and each party, and the blank and invalid votes ({{votos nulos}})." },
+    { "ic": "📲", "txt": "It has a **QR Code**. The TSE's {{Boletim na Mão}} app reads the code and keeps a copy on the phone." },
+    { "ic": "💾", "txt": "The report, the RDV and the other files are recorded on a storage device and digitally signed." }
+   ],
+   "ilustracao": "urna-boletim",
+   "coruja": "Parties can ask for a copy of the report up to 1 hour after it is printed. This is in the Elections Law.",
+   "fontes": ["res-23751", "lei9504", "tse-apps"]
+  },
+  {
+   "tipo": "simulador",
+   "id": "confira-boletim",
+   "titulo": "Game: check the report",
+   "texto": "Compare the report posted at the polling station with the published result and find the line that is different.",
+   "aviso": "EXAMPLE: made-up data, just for practice.",
+   "secao": { "municipio": "Make-Believe Town", "zona": "0001", "secao": "0123", "local": "Example School" },
+   "aptos": 300,
+   "linhas": [
+    { "nome": "Candidate Circle", "papel": 98, "site": 98 },
+    { "nome": "Candidate Square", "papel": 87, "site": 78 },
+    { "nome": "Candidate Triangle", "papel": 41, "site": 41 },
+    { "nome": "Blank votes", "papel": 9, "site": 9 },
+    { "nome": "Invalid votes", "papel": 12, "site": 12 }
+   ],
+   "acerto": "You found it! The paper says 87 and the website says 78. The total doesn't match either. Since the report is printed and posted at the polling station before the data travel, a difference like this shows up when someone compares them.",
+   "erro": "This line is the same in both. Try another one.",
+   "qr": "The TSE app would read this QR Code and show the same numbers as the paper. It is a digital copy of the report, to compare later.",
+   "fontes": ["res-23751", "je-auditoria", "tse-apps"]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "THE JOURNEY",
+   "titulo": "How the result gets to the TSE",
+   "itens": [
+    { "ic": "💾", "txt": "The machine sends nothing over the internet. The files leave it on a **results storage device**, which is taken to be transmitted." },
+    { "ic": "🔐", "txt": "The files travel over the electoral courts' own network. Where the computer does not belong to the electoral courts, JE-Connect, a secure connection system, is used." },
+    { "ic": "✅", "txt": "The systems check whether the files are authentic and complete." },
+    { "ic": "📋", "txt": "A report from a machine that was not in the table for that polling station stays pending until the judge decides." },
+    { "ic": "➕", "txt": "The computers add up the reports of all polling stations: this is the **tallying**." },
+    { "ic": "🌐", "txt": "While receiving them, the TSE publishes the reports on the internet. Afterwards, anyone can compare them with the paper at the polling station." }
+   ],
+   "emoji": "📡",
+   "fontes": ["res-23751", "je-auditoria"]
+  },
+  {
+   "tipo": "cards",
+   "etiqueta": "AUDITS",
+   "titulo": "Checking again, in several ways",
+   "texto": "On election day and afterwards, there are other checks. Flip the cards.",
+   "cards": [
+    { "ic": "🧪", "titulo": "Integrity Test", "txt": "The day before, prepared machines are chosen or drawn and taken to a public place. On election day, votes from paper ballots are typed into them, from 8 a.m. to 5 p.m., in front of cameras.", "dados": [ { "rot": "Since", "val": "2002" }, { "rot": "Per state (general election)", "val": "20 to 33 machines" }, { "rot": "In the Federal District, 1st round of 2026", "val": "20 machines" } ], "mais": "At the end, the machine's report has to match the ballots. An auditing company or institution follows the test, and everything is streamed live. According to the TSE, since 2002 there has never been a result different from what was typed. For 2026, the TSE announced that the TCU would follow the tests in all 27 federative units." },
+    { "ic": "👆", "titulo": "Test with biometrics", "txt": "Volunteer voters, after voting, use their fingerprint to unlock a test machine at the polling place itself.", "dados": [ { "rot": "Started in", "val": "2022" }, { "rot": "In 2026", "val": "in all states and the Federal District" } ], "mais": "This way, the test also goes through the fingerprint reader, as in a real vote. Those who agree to take part sign a consent form." },
+    { "ic": "🔎", "titulo": "Authenticity Test", "txt": "At the polling station itself, before the zero report, the hashes of the programs in a chosen or drawn machine are checked.", "dados": [ { "rot": "Per state (general election)", "val": "3 to 10 machines" } ], "mais": "The report with the hashes is printed and signed, to compare with the list published by the TSE." },
+    { "ic": "📜", "titulo": "RDV and log", "txt": "The RDV stores each vote as it was typed, separated by office and shuffled, without the name of who voted. The log is the machine's diary: it writes down what happens, with the time.", "dados": [ { "rot": "Published", "val": "within 3 days" } ], "mais": "With these files, published together with the reports, the results and the operation of the machines all over the country can be audited." }
+   ],
+   "fontes": ["res-23673", "res-23751", "tse-integridade-2026", "tse-integridade-df-2026", "tse-tcu-2026", "je-auditoria"]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "WHAT WOULD HAVE TO BE BEATEN",
+   "titulo": "What would someone have to get past to commit fraud?",
+   "texto": "According to the TSE, the security of the election comes from many protections added together and from checks made by different people. These are the layers, and who checks each one:",
+   "itens": [
+    { "ic": "🔐", "txt": "**Sealed programs**: the machine only runs programs with the right signature. Checked by: the oversight bodies, at the sealing and the preparation." },
+    { "ic": "📵", "txt": "**No network**: the machine does not connect to the internet, so it cannot be reached from far away." },
+    { "ic": "🏷️", "txt": "**Physical seals**: they show whether someone opened the machine. Checked by: poll workers and party monitors." },
+    { "ic": "🧾", "txt": "**Zero report**: it shows that the machine started with no votes. Checked by: poll workers, party monitors and the first people in line." },
+    { "ic": "📌", "txt": "**Report on the wall**: the result of each polling station is printed before it travels. Checked by: anyone." },
+    { "ic": "✍️", "txt": "**Signed files**: the systems check whether the files are authentic and complete before adding them up." },
+    { "ic": "🌐", "txt": "**Everything published**: reports, RDVs and logs go on the internet. Checked by: anyone." },
+    { "ic": "🧪", "txt": "**Tests on election day**: chosen or drawn machines receive votes from paper ballots, in public. Checked by: parties, the Public Prosecutor's Office, the OAB, an external audit and, in 2026, the TCU." }
+   ],
+   "emoji": "🧱",
+   "coruja": "This does not mean flaws are never found: the Public Test exists precisely to find them. It means that every step has someone checking.",
+   "fontes": ["je-detalhes", "je-auditoria", "res-23673", "res-23751", "tse-tcu-2026", "tse-lacracao-2026"]
+  },
+  {
+   "tipo": "numeros",
+   "titulo": "The size of the 2026 election",
+   "texto": "Each machine prints its own report and leaves a copy posted at the polling station.",
+   "numeros": [
+    { "val": "158,745,463", "rot": "eligible voters", "ic": "🧑‍🤝‍🧑" },
+    { "val": "516,785", "rot": "polling stations", "ic": "🏫" },
+    { "val": "563,910", "rot": "voting machines ready to use (including spares)", "ic": "🗳️" },
+    { "val": "40", "rot": "audit and oversight opportunities in each election cycle", "ic": "🔍" }
+   ],
+   "nota": "In May 2026, according to the TSE, biometric collection had reached 88.78% of the target group: about 140 million people.",
+   "fontes": ["tse-eleitorado-2026", "tse-urnas-2026", "tse-lacracao-2026", "tse-biometria-2026"]
+  },
+  {
+   "tipo": "quiz",
+   "pergunta": "Where does a copy of the voting machine report go after voting ends?",
+   "opcoes": [
+    "Posted in a visible place at the polling station, for anyone to see",
+    "Only inside the TSE's computer",
+    "The report is not printed"
+   ],
+   "certa": 0,
+   "explica": "The machine prints 5 mandatory copies, and a signed copy is posted at the polling station. With it (or with its QR Code), you can compare it with the published result.",
+   "fontes": ["res-23751"]
+  },
+  {
+   "tipo": "cards",
+   "etiqueta": "QUESTIONS",
+   "titulo": "Questions many people ask",
+   "texto": "Answers with facts and sources only. Flip the cards to read more.",
+   "cards": [
+    { "ic": "🌐", "titulo": "Can someone break into the machine over the internet?", "txt": "The machine does not connect to the internet or to any network: no Wi-Fi, no Bluetooth. The results leave it on a storage device and are transmitted only afterwards, already signed and with the report printed at the polling station.", "mais": "The systems that transmit and add up the votes also go through the Public Test. In 2021, most of the findings were in the systems that transmit and receive the results; in the 2022 retest, no attack got past the reinforcements." },
+    { "ic": "🔍", "titulo": "Can I check my own vote?", "txt": "In the booth, you see the number and the photo on the screen before confirming. After that, the vote is stored without your name, so it cannot be looked up again.", "mais": "What you can check is your polling station's report: compare the copy posted on the wall (or its QR Code) with the result published by the TSE." },
+    { "ic": "📄", "titulo": "Why is there no printed vote?", "txt": "Congress passed laws with a printed vote in 2002, 2009 and 2015. In 2003, another law replaced the printing with the digital record of the vote. The 2009 and 2015 rules were declared unconstitutional by the STF (Supreme Federal Court).", "mais": "In 2021, the Chamber of Deputies voted on a proposed amendment to the Constitution (PEC) with physical ballots: 229 votes yes, 218 no and 1 abstention. It needed 308 yes votes and was shelved. The timeline is on the next slide." },
+    { "ic": "🤫", "titulo": "Can anyone find out who I voted for?", "txt": "The law requires each vote to be stored protecting anonymity. In the RDV, the votes are separated by office and shuffled, without anyone's name. Phones and cameras are not allowed in the booth.", "mais": "In 2012, investigators in the Public Test managed to put the RDV votes in order, but did not find out who voted for whom. The TSE strengthened the shuffling." }
+   ],
+   "fontes": ["je-detalhes", "je-auditoria", "tse-tpu", "tse-tps2021", "tse-tps2021-conf", "res-23751", "lei9504", "cf", "lei10408", "lei10740", "lei12034", "lei13165", "stf-adi4543-2013", "stf-adi5889-2020", "camara-pec135", "lcp78", "res-23673", "tse-tps2012"]
+  },
+  {
+   "tipo": "historia",
+   "etiqueta": "PRINTED VOTE: JUST THE FACTS",
+   "titulo": "Printed vote: what has been voted and decided",
+   "quadros": [
+    { "ic": "🖨️", "txt": "**2002**: Law 10,408 requires the machine to print the vote for the voter to check. In the 2002 elections, this was tested in 150 cities near the state capitals and in all polling stations of the Federal District and Sergipe." },
+    { "ic": "💾", "txt": "**2003**: Law 10,740 replaces the printing with a digital record of each vote, with a digital signature. The machine starts recording the RDV in 2004." },
+    { "ic": "📄", "txt": "**2009**: Law 12,034 creates, starting in 2014, a printed vote checked by the voter." },
+    { "ic": "⚖️", "txt": "**2011 and 2013**: the STF suspends this rule and then declares it unconstitutional, unanimously both times (ADI 4543). The reason given: it compromised the secrecy and inviolability of the vote." },
+    { "ic": "🔁", "txt": "**2015**: Law 13,165 again provides for printing the record of each vote. The President vetoed this article, and Congress overrode the veto." },
+    { "ic": "⚖️", "txt": "**2018 and 2020**: the STF suspends the article (by majority) and then declares it unconstitutional (unanimously, ADI 5889), because of the risk to the secrecy and freedom of the vote." },
+    { "ic": "🏛️", "txt": "**2021**: the Chamber of Deputies votes on PEC 135/2019, with physical ballots that voters could check: 229 yes, 218 no and 1 abstention. A PEC needed 308 yes votes (three fifths of the 513 deputies). It was rejected and shelved." }
+   ],
+   "moral": "Under the Constitution, Congress makes laws and amendments to the Constitution, and the STF checks whether they respect the Constitution. This slide only tells what was decided.",
+   "fontes": ["lei10408", "je-impressao", "lei10740", "je-evolucoes", "lei12034", "stf-adi4543-2011", "stf-adi4543-2013", "lei13165", "cf", "stf-adi5889-2018", "stf-adi5889-2020", "camara-pec135", "camara-pec135-votacao", "lcp78"]
+  },
+  {
+   "tipo": "quiz",
+   "pergunta": "Does the electronic voting machine connect to the internet during voting?",
+   "opcoes": [
+    "Yes, through the school's Wi-Fi",
+    "No: it does not connect to any network",
+    "Only at 5 p.m., to send the result"
+   ],
+   "certa": 1,
+   "explica": "The machine has no internet, Wi-Fi or Bluetooth. The result leaves it on a storage device and is transmitted later, by other computers, already signed and with the report printed at the polling station.",
+   "fontes": ["je-detalhes", "je-auditoria", "res-23751"]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "WANT TO KNOW MORE · TECHNICAL PART",
+   "titulo": "Want to know more: the technical part",
+   "texto": "From here on, the slides are more technical, for those who like computing. If you prefer, skip to the end.",
+   "itens": [
+    { "ic": "🧮", "txt": "Hash and digital signature" },
+    { "ic": "⛓️", "txt": "The chain of trust: what happens when the machine turns on" },
+    { "ic": "🧾", "txt": "The signature of the report and of the QR Code" },
+    { "ic": "🔀", "txt": "The shuffled RDV and the log" },
+    { "ic": "📲", "txt": "How to check a report using the QR Code" },
+    { "ic": "📦", "txt": "Where to download the official files from the machines" }
+   ],
+   "emoji": "🧑‍💻",
+   "pular": true,
+   "fontes": ["je-detalhes", "tse-doc-tecnica"]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "TECHNICAL · CRYPTOGRAPHY",
+   "titulo": "Hash and digital signature",
+   "itens": [
+    { "ic": "🧮", "txt": "**Hash** (digital summary): a short sequence calculated from a file that identifies it beyond doubt. Any change produces another hash. The TSE's 2026 lists use SHA-512, written in base64." },
+    { "ic": "🔑", "txt": "**Digital signature**: it uses a pair of keys. The **private key**, which only the owner knows, signs. The **public key**, which can be shared widely, checks the signature." },
+    { "ic": "🏛️", "txt": "At the sealing, TSE staff compile and sign the systems with ICP-Brasil certificates (Brazil's public key infrastructure). Representatives of the oversight bodies can sign too." },
+    { "ic": "📝", "txt": "The file with the hashes of all programs is signed by the TSE's presidency, by its technology department and by the representatives who wish to." },
+    { "ic": "🪪", "txt": "Each machine's security chip stores keys and certificates. The Electoral Justice Certificate Authority, in a TSE vault room, has already issued more than 4 million certificates for the machines." }
+   ],
+   "emoji": "🔑",
+   "fontes": ["res-23673", "je-detalhes", "tse-hashes-2026", "tse-hashes-u22"]
+  },
+  {
+   "tipo": "passos",
+   "titulo": "Chain of trust: what happens when the machine turns on",
+   "texto": "Each part checks the next one before letting it run. If any check fails, the machine locks and shuts down.",
+   "passos": [
+    { "ic": "⚡", "titulo": "Power on", "txt": "Only the security chip and the BIOS receive power." },
+    { "ic": "🔎", "titulo": "Checks the BIOS", "txt": "The chip checks the digital signature of the BIOS." },
+    { "ic": "🥾", "titulo": "Checks the start-up", "txt": "Then the signature of the bootloader, the program that starts the system." },
+    { "ic": "🐧", "titulo": "Checks the system", "txt": "Then the signature of the operating system, Uenux." },
+    { "ic": "❓", "titulo": "Challenge", "txt": "Uenux sends a challenge to the chip. The right answer shows that it is running on a machine of the electoral courts." },
+    { "ic": "✅", "titulo": "Only signed programs", "txt": "Uenux only runs programs signed at the public ceremony and with a valid signature." }
+   ],
+   "fontes": ["je-detalhes", "tse-tps2023-conf"]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "TECHNICAL · REPORT",
+   "titulo": "The signature of the report and of the QR Code",
+   "itens": [
+    { "ic": "✍️", "txt": "At the end of voting, the machine generates the report, the RDV and the other files and signs them digitally, with the time written in the log." },
+    { "ic": "📁", "txt": "The results storage device carries, among others, these types of file: the report (bu), the RDV (rdv), the log (logjez), the image of the printed report (imgbu) and the signatures of the files (vscmr)." },
+    { "ic": "🔏", "txt": "The signature file stores the hash and the signature of each file, made with the machine's software keys and hardware keys. For the hardware signatures, it also carries the certificate that allows them to be checked." },
+    { "ic": "🧩", "txt": "In the technical documentation the TSE published for 2022, each line of votes in the report has an Ed25519 signature over the SHA-512 of the line's data." },
+    { "ic": "📲", "txt": "The QR Code on the printed report has a digital signature, to check that it is authentic and complete. It was added after the 2016 Public Test." },
+    { "ic": "🔒", "txt": "In the 2020 and 2022 models, the keypad, the fingerprint reader and the printer have cryptography chips: the keypad encrypts each key press (each time with a different code), the reader encrypts the fingerprint, and what goes to the printer is also encrypted." }
+   ],
+   "emoji": "🧾",
+   "fontes": ["res-23751", "lei9504", "tse-doc-tecnica", "tse-doc-bu", "tse-tps2016", "je-detalhes"]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "TECHNICAL · RDV AND LOG",
+   "titulo": "The shuffled RDV and the log",
+   "itens": [
+    { "ic": "🗃️", "txt": "The RDV records each vote as it was typed, separated by office, in a single file per polling station." },
+    { "ic": "🔀", "txt": "The votes are not in the order in which people voted: the TSE resolution says “randomly ordered”, and the 2022 documentation shows the votes grouped by type and by the number typed." },
+    { "ic": "🔏", "txt": "Each time a voter confirms their vote, the RDV is updated and signed, with the time written in the log." },
+    { "ic": "📓", "txt": "The log is the machine's diary: it records the events, with the time. The TSE publishes the format specification, with examples." },
+    { "ic": "🔐", "txt": "In 2012, the Public Test found a way to put the RDV votes in order. The TSE strengthened the shuffling." }
+   ],
+   "emoji": "🔀",
+   "fontes": ["res-23751", "res-23673", "tse-doc-tecnica", "tse-doc-bu", "tse-tps2012"]
+  },
+  {
+   "tipo": "passos",
+   "titulo": "How to check a report using the QR Code",
+   "texto": "Anyone can do this, at any polling station in the country.",
+   "passos": [
+    { "ic": "📲", "titulo": "Download the app", "txt": "Install {{Boletim na Mão}}, the TSE's official app (Android and iPhone)." },
+    { "ic": "🕔", "titulo": "After 5 p.m.", "txt": "Go to the polling station when the report is posted." },
+    { "ic": "📷", "titulo": "Point the camera", "txt": "Read the QR Code. The app keeps the digital copy of that machine's result." },
+    { "ic": "🌐", "titulo": "Compare", "txt": "Look at the result published by the TSE for the same polling station and compare the numbers." },
+    { "ic": "🛠️", "titulo": "Or make your own", "txt": "The TSE publishes how to read the QR Code, and anyone can create their own tool." }
+   ],
+   "fontes": ["tse-apps", "res-23751", "je-auditoria"]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "TECHNICAL · OPEN DATA",
+   "titulo": "Where to download the official files from the machines",
+   "texto": "The addresses are in the **Where does this come from?** button, below.",
+   "itens": [
+    { "ic": "📊", "txt": "**{{Resultados 2026 – Boletim de Urna}}** (2026 results – voting machine reports), on the TSE Open Data Portal: the reports of each state, in both rounds, with the SHA-2 hash of each file." },
+    { "ic": "📦", "txt": "**{{Resultados 2026 – Arquivos transmitidos para totalização}}** (2026 results – files transmitted for tallying): the bu, log, rdv and vota files of the machines, by state." },
+    { "ic": "🌐", "txt": "On election day, you can already access the machines' data, including the RDV, on the TSE results website (resultados.tse.jus.br)." },
+    { "ic": "🔏", "txt": "**{{Resumos digitais (hashes) das Eleições 2026}}** (digital summaries of the 2026 elections): the list of the hashes of all systems." },
+    { "ic": "📘", "txt": "**{{Documentação técnica do software da urna}}** (technical documentation of the machine's software, published for the 2022 elections): the format of the report, the RDV, the signatures and the log, with examples in Python." },
+    { "ic": "📨", "txt": "The oversight bodies can request other files and reports for up to 100 days after the 1st round." }
+   ],
+   "emoji": "📦",
+   "fontes": ["tse-dados-bu-2026", "tse-dados-arquivos-2026", "je-auditoria", "tse-hashes-2026", "tse-doc-tecnica", "tse-doc-bu", "res-23673"]
+  },
+  {
+   "tipo": "quiz",
+   "pergunta": "When it is turned on, what does the machine do if the BIOS, the bootloader or the system does not have the right digital signature?",
+   "opcoes": [
+    "It runs the program anyway",
+    "It locks and shuts down",
+    "It turns on the internet to download another program"
+   ],
+   "certa": 1,
+   "explica": "In the chain of trust, each part checks the signature of the next one. If any check fails, the machine locks and shuts down by itself. Once it is on, it only runs programs with a valid signature; otherwise, it stops working.",
+   "fontes": ["je-detalhes"]
+  }
+ ]
+}

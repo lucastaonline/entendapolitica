@@ -214,6 +214,28 @@
     return '<div class="ancora3d no-mundo urna-mesa3d">' + caixa("mesa") + '<div class="urna-pe">' + urna + "</div>" + emoji("🧓", 120, -40, 40, 60) + "</div>";
   };
 
+  // ---------------------------------------------------------------- urna com o boletim saindo (parada 10, "a urna por dentro")
+  // pedestal com o selo 🔐, a urna, o boletim de urna saindo por cima (com QR Code) e a lupa de quem confere
+  function soUrna() {
+    if (!T.urna) return "";
+    var tmp = document.createElement("div");
+    tmp.innerHTML = T.urna({ peq: true });
+    var u = tmp.querySelector(".urna3d");
+    return u ? u.outerHTML : "";
+  }
+  function boletimPapel() {
+    var en = window.EP && EP.en, qr = "", mapa = "1110101101011010110101100111011100101101001011010";
+    for (var k = 0; k < 49; k++) qr += "<i" + (mapa.charAt(k) === "1" ? ' class="p"' : "") + "></i>";
+    return '<div class="bu-papel"><b>' + (en ? "REPORT" : "BOLETIM") + '</b><i class="l"></i><i class="l c"></i><i class="l"></i><i class="l c"></i><i class="l"></i>' +
+      '<span class="bu-qr">' + qr + "</span></div>";
+  }
+  T.urnaBoletim = function (o) {
+    o = o || {};
+    return modelo(o, "cena-urna-boletim", "urna-boletim3d",
+      (o.mundo ? "" : '<div class="sombra-chao"></div>') + caixa("pedestal-u", { fr: "<span>🔐 ✅</span>" }) +
+      '<div class="urna-pe">' + soUrna() + '</div><div class="bu-sai">' + boletimPapel() + "</div>" + emoji("🔍", 96, -300, 60, 54));
+  };
+
   // ---------------------------------------------------------------- cubo com emoji (substitui o "selo" plano)
   T.cuboEmoji = function (e) {
     return cena("cena-cubo-emoji", T.cubo ? T.cubo(e, e, "lento", 150) : '<div class="selo-emoji">' + e + "</div>");
@@ -239,6 +261,7 @@
       case "tres-poderes": return T.tresPoderes();
       case "niveis": return T.niveis({ entra: true });
       case "urna": return T.urna ? T.urna({ auto: true, tela: window.EP && EP.en ? "YOUR VOTE" : "SEU VOTO" }) : T.cuboEmoji("🗳️");
+      case "urna-boletim": return T.urnaBoletim();
       case "constituicao": return T.livro();
       case "balanca": return T.balanca();
       case "lei": return T.lei();

@@ -1,5 +1,5 @@
 /* ====== Mapa da Política: o mundo 3D da página "Entenda a política" ======
-   Coordenadas do chão: 1000 x 1000. Os modelos ficam "de pé" (rotateX(-90deg)).
+   Coordenadas do chão: 1000 x 1000, mais uma faixa ao norte de --norte (y negativo; lá fica a parada 10). Os modelos ficam "de pé" (rotateX(-90deg)).
    As placas ficam sempre de frente para a câmera (giram ao contrário do mundo). */
 @property --ax { syntax: "<angle>"; inherits: true; initial-value: 56deg; }
 @property --az { syntax: "<angle>"; inherits: true; initial-value: 42deg; }
@@ -25,7 +25,7 @@ body.mapa-pag { height: 100vh; height: 100dvh; overflow: hidden; display: grid; 
 
 /* ---------- chão ---------- */
 .chao { position: absolute; inset: 0; transform-style: preserve-3d; }
-.grama { position: absolute; inset: 0; border-radius: 26px;
+.grama { position: absolute; left: 0; top: calc(-1 * var(--norte, 0px)); width: 1000px; height: calc(1000px + var(--norte, 0px)); border-radius: 26px;
   background:
     radial-gradient(circle at 18% 22%, rgba(255, 255, 255, .35) 0 2%, transparent 2.2%),
     radial-gradient(circle at 72% 64%, rgba(255, 255, 255, .3) 0 1.6%, transparent 1.8%),
@@ -34,13 +34,13 @@ body.mapa-pag { height: 100vh; height: 100dvh; overflow: hidden; display: grid; 
   box-shadow: inset 0 0 0 10px rgba(255, 255, 255, .35); }
 .rim { position: absolute; }
 .rim.s { left: 26px; top: 1000px; width: 948px; height: 54px; transform-origin: 50% 0; transform: rotateX(-90deg); background: linear-gradient(#c4d8a2 0 12px, #b49a6c 12px, #9d8358); }
-.rim.e { left: 1000px; top: 26px; width: 54px; height: 948px; transform-origin: 0 50%; transform: rotateY(90deg); background: linear-gradient(90deg, #b9cf96 0 12px, #a68b5f 12px, #8f7650); }
-.rim.n { left: 26px; top: -54px; width: 948px; height: 54px; transform-origin: 50% 100%; transform: rotateX(90deg); background: linear-gradient(0deg, #c4d8a2 0 12px, #b49a6c 12px); }
-.rim.w { left: -54px; top: 26px; width: 54px; height: 948px; transform-origin: 100% 50%; transform: rotateY(-90deg); background: linear-gradient(270deg, #b9cf96 0 12px, #a68b5f 12px); }
-.estrada { position: absolute; left: 0; top: 0; width: 1000px; height: 1000px; transform: translateZ(1px); pointer-events: none; overflow: visible; }
+.rim.e { left: 1000px; top: calc(26px - var(--norte, 0px)); width: 54px; height: calc(948px + var(--norte, 0px)); transform-origin: 0 50%; transform: rotateY(90deg); background: linear-gradient(90deg, #b9cf96 0 12px, #a68b5f 12px, #8f7650); }
+.rim.n { left: 26px; top: calc(-54px - var(--norte, 0px)); width: 948px; height: 54px; transform-origin: 50% 100%; transform: rotateX(90deg); background: linear-gradient(0deg, #c4d8a2 0 12px, #b49a6c 12px); }
+.rim.w { left: -54px; top: calc(26px - var(--norte, 0px)); width: 54px; height: calc(948px + var(--norte, 0px)); transform-origin: 100% 50%; transform: rotateY(-90deg); background: linear-gradient(270deg, #b9cf96 0 12px, #a68b5f 12px); }
+.estrada { position: absolute; left: 0; top: calc(-1 * var(--norte, 0px)); width: 1000px; height: calc(1000px + var(--norte, 0px)); transform: translateZ(1px); pointer-events: none; overflow: visible; }
 .lagoa { position: absolute; left: 300px; top: 318px; width: 110px; height: 76px; border-radius: 50%; transform: translateZ(1px);
   background: radial-gradient(ellipse at 40% 35%, #e3f3fb, #9fd0ea 70%); box-shadow: 0 0 0 6px #cfe6b4; }
-.sombra-mundo { position: absolute; left: 60px; top: 60px; width: 880px; height: 880px; border-radius: 50%; transform: translateZ(-60px); background: radial-gradient(rgba(60, 40, 0, .25), transparent 65%); filter: blur(6px); }
+.sombra-mundo { position: absolute; left: 60px; top: calc(60px - var(--norte, 0px)); width: 880px; height: calc(880px + var(--norte, 0px)); border-radius: 50%; transform: translateZ(-60px); background: radial-gradient(rgba(60, 40, 0, .25), transparent 65%); filter: blur(6px); }
 
 /* ---------- placas e enfeites (sempre de frente para a câmera) ---------- */
 .cartaz, .placa, .seta-prox { position: absolute; left: 0; top: 0; transform-origin: 0 0; }

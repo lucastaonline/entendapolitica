@@ -1,0 +1,497 @@
+{
+ "parte": 10,
+ "ic": "🔐",
+ "nome": "A urna eletrônica por dentro",
+ "resumo": "Como o seu voto vai da urna até o resultado, quem confere cada passo e o que alguém teria de vencer para mudar um voto sem ser percebido.",
+ "fontes": [
+  { "id": "je-detalhes", "veiculo": "TSE (Portal da Justiça Eleitoral)", "titulo": "Detalhes técnicos das urnas eletrônicas 2020 e 2022 (diretrizes, Uenux, cadeia de segurança, chip de segurança, teclado, impressora, bateria)", "url": "https://www.justicaeleitoral.jus.br/urna-eletronica/detalhes-tecnicos-da-urna.html", "data": "2026-10-29" },
+  { "id": "je-auditoria", "veiculo": "TSE (Portal da Justiça Eleitoral)", "titulo": "Oportunidades de auditoria e fiscalização (antes, durante e depois da eleição)", "url": "https://www.justicaeleitoral.jus.br/urna-eletronica/oportunidades-de-auditoria-e-fiscalizacao.html", "data": "2026-10-29" },
+  { "id": "je-evolucoes", "veiculo": "TSE (Portal da Justiça Eleitoral)", "titulo": "Evoluções técnicas na urna eletrônica e no processo eleitoral (1996 a 2026)", "url": "https://www.justicaeleitoral.jus.br/urna-eletronica/evolucoes.html", "data": "2026-10-29" },
+  { "id": "je-impressao", "veiculo": "TSE (Portal da Justiça Eleitoral)", "titulo": "Análise sobre a impressão do voto (a experiência de 2002)", "url": "https://www.justicaeleitoral.jus.br/urna-eletronica/impressao-do-voto.html", "data": "2026-10-29" },
+  { "id": "res-23673", "veiculo": "TSE", "titulo": "Resolução 23.673/2021 (fiscalização e auditoria do sistema eletrônico de votação), texto consolidado, com as mudanças até a Resolução 23.769/2026: arts. 2º, 6º, 9º, 10, 19 a 26, 37, 40, 46, 48, 53 a 79", "url": "https://www.tse.jus.br/legislacao/compilada/res/2021/resolucao-no-23-673-14-de-dezembro-de-2021", "data": "2021-12-14" },
+  { "id": "res-23751", "veiculo": "TSE", "titulo": "Resolução 23.751/2026 (atos gerais do processo eleitoral das Eleições 2026): arts. 99 a 102, 117, 121, 122, 127, 133, 134, 137, 140, 160, 162, 204, 209 a 211, 223, 230, 231, 234, 262 e 263", "url": "https://www.tse.jus.br/legislacao/compilada/res/2026/resolucao-no-23-751-de-26-de-fevereiro-de-2026", "data": "2026-02-26" },
+  { "id": "lei9504", "veiculo": "Planalto", "titulo": "Lei 9.504/1997 (Lei das Eleições), arts. 59, 59-A, 61, 66 e 68", "url": "https://www.planalto.gov.br/ccivil_03/leis/l9504.htm", "data": "1997-09-30" },
+  { "id": "cf", "veiculo": "Planalto", "titulo": "Constituição Federal, arts. 14 (voto secreto), 48 (o Congresso faz as leis), 60, § 2º (votos para aprovar uma PEC), 66, § 5º (veto derrubado) e 102 (o STF guarda a Constituição)", "url": "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm", "data": "1988-10-05" },
+  { "id": "lcp78", "veiculo": "Planalto", "titulo": "Lei Complementar 78/1993, art. 1º (número de deputados federais: 513)", "url": "https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp78.htm", "data": "1993-12-30" },
+  { "id": "lei10408", "veiculo": "Planalto", "titulo": "Lei 10.408/2002 (impressão do voto)", "url": "https://www.planalto.gov.br/ccivil_03/leis/2002/l10408.htm", "data": "2002-01-10" },
+  { "id": "lei10740", "veiculo": "Planalto", "titulo": "Lei 10.740/2003 (registro digital do voto)", "url": "https://www.planalto.gov.br/ccivil_03/leis/2003/l10.740.htm", "data": "2003-10-01" },
+  { "id": "lei12034", "veiculo": "Planalto", "titulo": "Lei 12.034/2009, art. 5º (voto impresso a partir de 2014)", "url": "https://www.planalto.gov.br/ccivil_03/_ato2007-2010/2009/lei/l12034.htm", "data": "2009-09-29" },
+  { "id": "lei13165", "veiculo": "Planalto", "titulo": "Lei 13.165/2015, art. 2º (art. 59-A da Lei 9.504/1997, vetado e depois promulgado em 25/11/2015)", "url": "https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2015/lei/l13165.htm", "data": "2015-11-25" },
+  { "id": "stf-adi4543-2011", "veiculo": "STF", "titulo": "Suspensa norma que institui voto impresso a partir de 2014 (ADI 4543, liminar)", "url": "https://noticias.stf.jus.br/postsnoticias/suspensa-norma-que-institui-voto-impresso-a-partir-de-2014/", "data": "2011-10-19" },
+  { "id": "stf-adi4543-2013", "veiculo": "STF", "titulo": "Norma que institui voto impresso a partir de 2014 é inconstitucional, decide STF (ADI 4543)", "url": "https://noticias.stf.jus.br/postsnoticias/norma-que-institui-voto-impresso-a-partir-de-2014-e-inconstitucional-decide-stf/", "data": "2013-11-06" },
+  { "id": "stf-adi5889-2018", "veiculo": "STF", "titulo": "Liminar suspende regra da minirreforma eleitoral que prevê voto impresso (ADI 5889)", "url": "https://portal.stf.jus.br/noticias/verNoticiaDetalhe.asp?idConteudo=380571", "data": "2018-06-06" },
+  { "id": "stf-adi5889-2020", "veiculo": "STF", "titulo": "Impressão de registro põe em risco sigilo e liberdade de voto (ADI 5889, sessão virtual encerrada em 14/9/2020)", "url": "https://portal.stf.jus.br/noticias/verNoticiaDetalhe.asp?idConteudo=451785", "data": "2020-09-16" },
+  { "id": "camara-pec135", "veiculo": "Câmara dos Deputados", "titulo": "PEC 135/2019: ficha de tramitação (rejeitada em 1º turno no Plenário em 10/8/2021; arquivada)", "url": "https://www.camara.leg.br/propostas-legislativas/2220292", "data": "2021-08-10" },
+  { "id": "camara-pec135-votacao", "veiculo": "Câmara dos Deputados", "titulo": "Dados Abertos: votação 2220292-229 do Plenário (PEC 135/2019, 1º turno)", "url": "https://dadosabertos.camara.leg.br/api/v2/votacoes/2220292-229", "data": "2021-08-10" },
+  { "id": "tse-tpu", "veiculo": "TSE", "titulo": "Teste Público da Urna (Teste Público de Segurança dos Sistemas Eleitorais): o que é, quem participa, edições", "url": "https://www.tse.jus.br/eleicoes/tpu", "data": "2026-10-29" },
+  { "id": "tse-tps2009", "veiculo": "TSE", "titulo": "TPS 2009: saiba o que aconteceu na primeira edição do Teste Público de Segurança", "url": "https://www.tse.jus.br/comunicacao/noticias/2021/Setembro/tps-2009-saiba-o-que-aconteceu-na-primeira-edicao-do-teste-publico-de-seguranca", "data": "2021-09-06" },
+  { "id": "tse-tps2012", "veiculo": "TSE", "titulo": "TPS 2012: saiba tudo o que aconteceu na segunda edição do Teste Público de Segurança", "url": "https://www.tse.jus.br/comunicacao/noticias/2021/Setembro/tps-2012-saiba-tudo-o-que-aconteceu-na-segunda-edicao-do-teste-publico-de-seguranca", "data": "2021-09-09" },
+  { "id": "tse-tps2016", "veiculo": "TSE", "titulo": "TPS 2016: saiba tudo que aconteceu na terceira edição do Teste Público de Segurança", "url": "https://www.tse.jus.br/comunicacao/noticias/2021/Setembro/tps-2016-saiba-tudo-que-aconteceu-na-terceira-edicao-do-teste-publico-de-seguranca", "data": "2021-09-13" },
+  { "id": "tse-tps2017", "veiculo": "TSE", "titulo": "TPS 2017: saiba tudo que aconteceu na quarta edição do Teste Público de Segurança", "url": "https://www.tse.jus.br/comunicacao/noticias/2021/Setembro/tps-2017-saiba-tudo-que-aconteceu-na-quarta-edicao-do-teste-publico-de-seguranca", "data": "2021-09-16" },
+  { "id": "tse-tps2019", "veiculo": "TSE", "titulo": "TPS 2019: saiba tudo que aconteceu na quinta edição do Teste Público de Segurança", "url": "https://www.tse.jus.br/comunicacao/noticias/2021/Setembro/tps-2019-saiba-tudo-que-aconteceu-na-quinta-edicao-do-teste-publico-de-seguranca", "data": "2021-09-20" },
+  { "id": "tse-tps2021", "veiculo": "TSE", "titulo": "TPS 2021: Comissão Avaliadora divulga relatório final", "url": "https://www.tse.jus.br/comunicacao/noticias/2022/Maio/tps-2021-comissao-avaliadora-divulga-relatorio-final", "data": "2022-05-30" },
+  { "id": "tse-tps2021-conf", "veiculo": "TSE", "titulo": "Teste de Confirmação do TPS 2021 chega ao fim sem ataques capazes de ultrapassar reforços na segurança do sistema", "url": "https://www.tse.jus.br/comunicacao/noticias/2022/Maio/teste-de-confirmacao-do-tps-2021-chega-ao-fim-sem-ataques-capazes-de-ultrapassar-reforcos-na-seguranca-do-sistema", "data": "2022-05-13" },
+  { "id": "tse-tps2023", "veiculo": "TSE", "titulo": "Teste da Urna 2023: divulgado relatório de avaliação geral da 7ª edição do evento", "url": "https://www.tse.jus.br/comunicacao/noticias/2023/Dezembro/teste-da-urna-2023-divulgado-relatorio-de-avaliacao-geral-da-7a-edicao-do-evento", "data": "2023-12-22" },
+  { "id": "tse-tps2023-conf", "veiculo": "TSE", "titulo": "Eleições 2024: PF e UFMS confirmam que evoluções promovidas pelo TSE tornaram urnas ainda mais seguras", "url": "https://www.tse.jus.br/comunicacao/noticias/2024/Maio/eleicoes-2024-pf-e-ufms-confirmam-que-evolucoes-promovidas-pelo-tse-tornaram-urnas-ainda-mais-seguras", "data": "2024-05-17" },
+  { "id": "tse-tpu2025", "veiculo": "TSE", "titulo": "Teste da Urna 2025 confirma segurança dos sistemas eleitorais (relatórios das Comissões Avaliadora e Reguladora)", "url": "https://www.tse.jus.br/comunicacao/noticias/2025/Dezembro/teste-da-urna-2025-confirma-seguranca-dos-sistemas-eleitorais", "data": "2025-12-18" },
+  { "id": "tse-tpu2025-conf", "veiculo": "TSE", "titulo": "Eleições 2026: testes confirmam, mais uma vez, a segurança do sistema eleitoral brasileiro (Teste de Confirmação, 13 a 15/5/2026)", "url": "https://www.tse.jus.br/comunicacao/noticias/2026/Maio/eleicoes-2026-testes-confirmam-mais-uma-vez-a-seguranca-do-sistema-eleitoral-brasileiro", "data": "2026-05-15" },
+  { "id": "tse-tpu2025-relatorio", "veiculo": "TSE", "titulo": "Relatório Final da Comissão Avaliadora do Teste Público da Urna 2025 (PDF)", "url": "https://www.tse.jus.br/eleicoes/arquivos/tpu-relatorio-final-da-comissao-avaliadora/@@display-file/file/final-relatorio-comissao-avaliadora.pdf", "data": "2026-06-26" },
+  { "id": "tse-codigo-2026", "veiculo": "TSE", "titulo": "TSE inaugura Ciclo de Transparência Democrática – Eleições 2026 (abertura dos códigos-fonte em 2/10/2025)", "url": "https://www.tse.jus.br/comunicacao/noticias/2025/Outubro/tse-inaugura-ciclo-de-transparencia-democratica-2013-eleicoes-2026-com-abertura-dos-codigos-fonte-dos-sistemas-eleitorais", "data": "2025-10-01" },
+  { "id": "tse-lacracao-2026", "veiculo": "TSE", "titulo": "Sistemas das Eleições Gerais de 2026 são assinados digitalmente e lacrados pelo TSE", "url": "https://www.tse.jus.br/comunicacao/noticias/2026/Setembro/sistemas-das-eleicoes-gerais-de-2026-sao-assinados-digitalmente-e-lacrados-pelo-tse", "data": "2026-09-04" },
+  { "id": "tse-hashes-2026", "veiculo": "TSE", "titulo": "Resumos digitais (hashes) das Eleições 2026 – 1º e 2º turnos", "url": "https://www.tse.jus.br/eleicoes/urna-eletronica/seguranca-da-urna/hash/resumos-digitais-hashes-das-eleicoes-2026-1o-e-2o-turnos", "data": "2026-10-29" },
+  { "id": "tse-hashes-u22", "veiculo": "TSE", "titulo": "Lista de resumos digitais da urna modelo 2022, Eleições Gerais 2026 (arquivo SHA-512 em base64, de 2/9/2026)", "url": "https://www.tse.jus.br/eleicoes/urna-eletronica/seguranca-da-urna/hash/arquivos/2026/sistemas-em-ambiente-urna-eletronica/path1u22", "data": "2026-09-02" },
+  { "id": "tse-urnas-2026", "veiculo": "TSE", "titulo": "Redistribuição de urnas garante mais eficiência nos locais de votação (Números das Eleições 2026)", "url": "https://www.tse.jus.br/comunicacao/noticias/2026/Agosto/redistribuicao-de-urnas-garante-mais-eficiencia-nos-locais-de-votacao", "data": "2026-08-20" },
+  { "id": "tse-eleitorado-2026", "veiculo": "TSE", "titulo": "Eleições 2026 em números: 158,7 milhões de eleitores estão aptos a votar", "url": "https://www.tse.jus.br/comunicacao/noticias/2026/Outubro/eleicoes-2026-em-numeros-158-7-milhoes-de-eleitores-estao-aptos-a-votar", "data": "2026-10-04" },
+  { "id": "tse-biometria-2026", "veiculo": "TSE", "titulo": "Eleições 2026: Justiça Eleitoral atinge 158 milhões de eleitores e 88% de biometria", "url": "https://www.tse.jus.br/comunicacao/noticias/2026/Maio/eleicoes-2026-justica-eleitoral-atinge-158-milhoes-de-eleitores-e-88-de-biometria", "data": "2026-05-07" },
+  { "id": "tse-integridade-2026", "veiculo": "TSE", "titulo": "Como funciona o Teste de Integridade, “a prova dos nove” da urna eletrônica", "url": "https://www.tse.jus.br/comunicacao/noticias/2026/Agosto/como-funciona-o-teste-de-integridade-a-prova-dos-nove-da-urna-eletronica", "data": "2026-08-06" },
+  { "id": "tse-integridade-df-2026", "veiculo": "TSE", "titulo": "Teste de Integridade no TSE confirma correspondência entre cédulas e votos registrados nas urnas (1º turno de 2026)", "url": "https://www.tse.jus.br/comunicacao/noticias/2026/Outubro/teste-de-integridade-no-tse-confirma-correspondencia-entre-cedulas-e-votos-registrados-nas-urnas", "data": "2026-10-04" },
+  { "id": "tse-tcu-2026", "veiculo": "TSE", "titulo": "Eleições de 2026 terão acompanhamento do TCU nos Testes de Integridade das Urnas Eletrônicas", "url": "https://www.tse.jus.br/comunicacao/noticias/2026/Outubro/eleicoes-de-2026-terao-acompanhamento-do-tcu-nos-testes-de-integridade-das-urnas-eletronicas", "data": "2026-10-02" },
+  { "id": "tse-apps", "veiculo": "TSE", "titulo": "Aplicativos da Justiça Eleitoral (Boletim na Mão, Resultados, e-Título)", "url": "https://www.tse.jus.br/eleicoes/aplicativos-justica-eleitoral", "data": "2026-10-29" },
+  { "id": "tse-doc-tecnica", "veiculo": "TSE", "titulo": "Documentação técnica do software da urna eletrônica – Eleições 2022 (formatos do boletim, do RDV, das assinaturas e do log)", "url": "https://www.tse.jus.br/eleicoes/eleicoes-2022/documentacao-tecnica-do-software-da-urna-eletronica", "data": "2026-10-29" },
+  { "id": "tse-doc-bu", "veiculo": "TSE", "titulo": "Formato dos arquivos de BU, RDV e assinatura digital (arquivo ZIP com o README e exemplos em Python)", "url": "https://www.tse.jus.br/eleicoes/eleicoes-2022/arquivos/formato-dos-arquivos-de-bu-rdv-e-assinatura-digital-17-9-22", "data": "2022-09-17" },
+  { "id": "tse-dados-bu-2026", "veiculo": "TSE (Portal de Dados Abertos)", "titulo": "Resultados - 2026 - Boletim de Urna (1º e 2º turnos, por UF, com o hash SHA-2 de cada arquivo)", "url": "https://dadosabertos.tse.jus.br/dataset/resultados-2026-boletim-de-urna", "data": "2026-10-26" },
+  { "id": "tse-dados-arquivos-2026", "veiculo": "TSE (Portal de Dados Abertos)", "titulo": "Resultados 2026 - Arquivos transmitidos para totalização (bu, log, rdv, vota)", "url": "https://dadosabertos.tse.jus.br/dataset/resultados-2026-arquivos-transmitidos-para-totalizacao", "data": "2026-10-29" }
+ ],
+ "glossario": [
+  { "termo": "urna eletrônica", "simples": "O computador onde a gente vota." },
+  { "termo": "código-fonte", "simples": "As instruções de um programa, escritas por pessoas. Elas viram o programa que o computador roda." },
+  { "termo": "hash", "simples": "Um código curto calculado a partir de um arquivo. Se o arquivo muda, o código muda. Também se chama resumo digital." },
+  { "termo": "resumo digital", "simples": "O mesmo que hash: um código curto que identifica um arquivo." },
+  { "termo": "lacre digital", "simples": "Neste site, outro nome para o hash: ele mostra se alguém mexeu num arquivo." },
+  { "termo": "assinatura digital", "simples": "Um jeito, com matemática, de mostrar quem fez um arquivo e que ninguém mudou o arquivo depois." },
+  { "termo": "chave privada", "simples": "A parte secreta de uma assinatura digital. Só o dono conhece." },
+  { "termo": "chave pública", "simples": "A parte de uma assinatura digital que pode ser mostrada a todos, para conferir a assinatura." },
+  { "termo": "criptografia", "simples": "Técnicas de matemática para proteger informações, por exemplo embaralhando o que é enviado." },
+  { "termo": "lacração", "simples": "Quando os programas são guardados de um jeito que mostra se alguém mexeu neles." },
+  { "termo": "lacre", "simples": "Selo que mostra se alguém abriu ou mexeu em alguma coisa." },
+  { "termo": "zerésima", "simples": "Papel que a urna imprime antes da votação, mostrando que ela não tem nenhum voto." },
+  { "termo": "boletim de urna", "simples": "Papel que a urna imprime no fim da votação, com os votos daquela seção." },
+  { "termo": "QR Code", "simples": "Um quadradinho de pontos que a câmera do celular consegue ler." },
+  { "termo": "biometria", "simples": "Reconhecer a pessoa por uma parte do corpo, como a impressão digital." },
+  { "termo": "RDV", "simples": "Registro Digital do Voto: o arquivo da urna com cada voto, embaralhado e sem o nome de quem votou." },
+  { "termo": "log", "simples": "O diário da urna: um arquivo que anota o que acontece nela, com a hora." },
+  { "termo": "seção eleitoral", "simples": "O lugar, em geral uma sala de escola, onde um grupo de eleitores vota." },
+  { "termo": "mesário", "simples": "Pessoa convocada para trabalhar na seção no dia da eleição." },
+  { "termo": "fiscal", "simples": "Pessoa indicada por um partido, federação ou coligação para acompanhar a votação." },
+  { "termo": "entidades fiscalizadoras", "simples": "Instituições que as regras deixam conferir as etapas da eleição, como partidos, OAB e Ministério Público." },
+  { "termo": "totalização", "simples": "A soma dos votos de todas as seções." },
+  { "termo": "teste de integridade", "simples": "Teste em que urnas escolhidas ou sorteadas recebem votos de cédulas de papel, para ver se o resultado bate." },
+  { "termo": "BIOS", "simples": "O primeiro programa que roda quando um computador liga." },
+  { "termo": "TSE", "simples": "Tribunal Superior Eleitoral: o tribunal mais alto da Justiça Eleitoral. Ele organiza as eleições." },
+  { "termo": "PEC", "simples": "Proposta de Emenda à Constituição: uma proposta para mudar a Constituição." },
+  { "termo": "inconstitucional", "simples": "Que vai contra a Constituição. Quando o STF decide isso, a regra deixa de valer." },
+  { "termo": "veto", "simples": "Quando o presidente recusa uma lei, ou parte dela, aprovada pelo Congresso." }
+ ],
+ "slides": [
+  {
+   "tipo": "abertura",
+   "titulo": "A urna eletrônica, tim-tim por tim-tim",
+   "texto": "Vamos seguir o caminho do voto: antes da eleição, no dia e depois. Em cada passo, você vai ver **quem confere** e como.",
+   "ilustracao": "urna-boletim"
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "A MÁQUINA",
+   "titulo": "O que é a urna eletrônica?",
+   "texto": "É um computador feito só para votar. O Brasil usa urnas eletrônicas desde 1996. Em 2000, a eleição foi eletrônica no país inteiro pela primeira vez.",
+   "itens": [
+    { "ic": "🧑‍💻", "txt": "Os programas da urna são feitos pela equipe técnica do TSE." },
+    { "ic": "📵", "txt": "Ela **não se liga** à internet nem a rede nenhuma: não tem wi-fi nem bluetooth." },
+    { "ic": "🐧", "txt": "O sistema dela é o Uenux, uma versão do Linux feita pelo TSE só com o que a votação precisa." },
+    { "ic": "🔐", "txt": "Um chip de segurança confere, toda vez que ela liga, se os programas são os oficiais. Se não forem, ela trava e desliga." },
+    { "ic": "⌨️", "txt": "Na cabine, você só tem acesso ao teclado e à tela." },
+    { "ic": "🔋", "txt": "Tem bateria, para funcionar mesmo onde falta luz." }
+   ],
+   "ilustracao": "urna",
+   "coruja": "Para 2026, a Justiça Eleitoral tinha 563.910 urnas prontas para usar, de quatro modelos: 2013, 2015, 2020 e 2022.",
+   "fontes": ["je-detalhes", "je-auditoria", "je-evolucoes", "tse-urnas-2026"]
+  },
+  {
+   "tipo": "simulador",
+   "id": "caminho-voto",
+   "titulo": "O caminho do voto, etapa por etapa",
+   "texto": "Aperte **Próxima etapa** e acompanhe o voto. Cada parada mostra quando acontece e quem pode conferir.",
+   "fases": [
+    { "id": "antes", "ic": "📅", "nome": "Antes da eleição" },
+    { "id": "dia", "ic": "🗳️", "nome": "No dia" },
+    { "id": "depois", "ic": "📊", "nome": "Depois" }
+   ],
+   "etapas": [
+    { "fase": "antes", "ic": "📂", "titulo": "Código aberto", "quando": "12 meses antes (em 2026, desde 2/10/2025)", "txt": "Os programas da eleição ficam abertos para as entidades fiscalizadoras olharem, numa sala do TSE sem internet.", "quem": "Entidades fiscalizadoras: partidos, OAB, Ministério Público, Polícia Federal, TCU, universidades e outras." },
+    { "fase": "antes", "ic": "🕵️", "titulo": "Teste Público da Urna", "quando": "No ano anterior (1º a 5/12/2025)", "txt": "Pessoas de fora do TSE executam planos de ataque contra a urna e os sistemas, para achar falhas.", "quem": "Qualquer brasileira ou brasileiro com 18 anos ou mais pode se inscrever. Uma comissão com gente da Justiça Eleitoral e de fora dela avalia os resultados." },
+    { "fase": "antes", "ic": "🔁", "titulo": "Teste de Confirmação", "quando": "Em maio (13 a 15/5/2026)", "txt": "Quem achou um problema volta ao TSE para refazer o teste na versão corrigida.", "quem": "Os próprios investigadores e a comissão avaliadora." },
+    { "fase": "antes", "ic": "✍️", "titulo": "Assinatura e lacração", "quando": "Até 20 dias antes (em 2026, 4/9)", "txt": "Os programas são assinados digitalmente e gravados em mídias lacradas, guardadas num cofre do TSE. Cada arquivo ganha um lacre digital (hash), publicado na internet.", "quem": "As entidades fiscalizadoras acompanham e podem assinar junto." },
+    { "fase": "antes", "ic": "💾", "titulo": "Preparação das urnas", "quando": "Cerca de 1 mês antes", "txt": "Cada urna recebe os programas lacrados e os dados da sua seção. No fim, ganha lacres físicos assinados.", "quem": "Partidos, federações, coligações, Ministério Público e OAB são chamados e podem conferir os programas." },
+    { "fase": "antes", "ic": "🎲", "titulo": "Escolha para os testes", "quando": "Na véspera", "txt": "Algumas urnas já prontas são escolhidas ou sorteadas para os testes de integridade e de autenticidade.", "quem": "Cada entidade fiscalizadora presente escolhe uma seção; o que faltar é sorteado." },
+    { "fase": "dia", "ic": "🧾", "titulo": "Zerésima", "quando": "Antes das 8h", "txt": "Antes do primeiro voto, a urna imprime um papel mostrando zero votos para todos.", "quem": "Os mesários assinam (os fiscais também, se quiserem). As 2 primeiras pessoas da fila são convidadas a acompanhar." },
+    { "fase": "dia", "ic": "👆", "titulo": "Identificação", "quando": "Das 8h às 17h", "txt": "O mesário confere seus dados e sua foto, e a urna confere a sua digital.", "quem": "Mesários e fiscais da seção." },
+    { "fase": "dia", "ic": "🗳️", "titulo": "O voto", "quando": "Das 8h às 17h", "txt": "Na cabine, só você (quem tem deficiência ou mobilidade reduzida pode ter a ajuda de uma pessoa de sua escolha): digita os números e confirma. O voto é guardado sem o seu nome.", "quem": "Ninguém: o voto é secreto." },
+    { "fase": "dia", "ic": "🧾", "titulo": "Boletim de urna", "quando": "17h", "txt": "A urna soma os votos da seção e imprime o boletim de urna. Uma via assinada fica pregada na seção.", "quem": "Qualquer pessoa pode ver a via pregada. Partidos, federações, coligações, imprensa e Ministério Público podem pedir uma via na hora do encerramento." },
+    { "fase": "depois", "ic": "📡", "titulo": "Transmissão e soma", "quando": "Logo depois", "txt": "Os arquivos assinados saem da urna numa mídia e viajam pela rede da Justiça Eleitoral. Os sistemas conferem e somam tudo: é a totalização.", "quem": "Candidatos, partidos, federações, coligações, OAB e Ministério Público fiscalizam. Outras pessoas interessadas também podem acompanhar." },
+    { "fase": "depois", "ic": "🌐", "titulo": "Tudo publicado", "quando": "Durante a apuração e nos dias seguintes", "txt": "O TSE publica os boletins de cada urna enquanto os recebe. Os arquivos de votos (RDV) e os diários das urnas (logs) também vão para a internet, em até 3 dias.", "quem": "Qualquer pessoa pode baixar e comparar." }
+   ],
+   "fontes": ["res-23673", "res-23751", "lei9504", "je-auditoria", "tse-codigo-2026", "tse-tpu2025", "tse-tpu2025-conf", "tse-lacracao-2026", "tse-eleitorado-2026"]
+  },
+  {
+   "tipo": "cards",
+   "etiqueta": "ANTES DA ELEIÇÃO",
+   "titulo": "Abrir, atacar, conferir e lacrar",
+   "texto": "Bem antes da votação, os programas passam por quatro etapas. Vire os cartões para saber mais.",
+   "cards": [
+    { "ic": "📂", "titulo": "Código aberto", "txt": "A partir de 12 meses antes do 1º turno, os programas ficam abertos para as entidades fiscalizadoras olharem, numa sala do TSE sem internet.", "dados": [ { "rot": "Em 2026", "val": "desde 2/10/2025" }, { "rot": "Entidades que olharam", "val": "8" } ], "mais": "Podem olhar: partidos, federações e coligações, OAB, Ministério Público, Defensoria Pública, Congresso Nacional, CGU, Polícia Federal, Sociedade Brasileira de Computação, Confea, CNJ, CNMP, TCU, CNI e Sistema S, e entidades e universidades credenciadas no TSE. Para 2026, olharam: União Brasil, Senado, CNC, SBC, CNMP, PV, MPF e CGU." },
+    { "ic": "🕵️", "titulo": "Teste Público da Urna", "txt": "No ano antes da eleição, as pessoas selecionadas executam planos de ataque contra a urna e os sistemas, no TSE, para achar falhas.", "dados": [ { "rot": "Em 2025", "val": "1º a 5 de dezembro" }, { "rot": "Planos executados", "val": "29" } ], "mais": "Qualquer brasileira ou brasileiro com 18 anos ou mais pode se inscrever com um plano de teste. Em 2025, a comissão avaliadora teve professores e representantes da Sociedade Brasileira de Computação, do TCU, do Inpe, do TSE, da Polícia Federal, do Ministério Público da União e da OAB." },
+    { "ic": "🔁", "titulo": "Teste de Confirmação", "txt": "Quem achou um problema volta ao TSE para refazer o mesmo teste na versão corrigida.", "dados": [ { "rot": "Em 2026", "val": "13 a 15 de maio" } ], "mais": "Em maio de 2026, segundo o relatório final da comissão avaliadora, foram conferidos 4 planos (os 3 achados e mais um que tinha apontado programas desatualizados): em 3, as correções foram confirmadas; o 4º foi considerado resolvido com as explicações do TSE, sem novo teste." },
+    { "ic": "✍️", "titulo": "Assinatura e lacração", "txt": "Até 20 dias antes da eleição, os programas são compilados, assinados digitalmente e gravados em mídias lacradas, guardadas num cofre do TSE.", "dados": [ { "rot": "Em 2026", "val": "4 de setembro" } ], "mais": "As entidades fiscalizadoras podem assinar junto. O TSE calcula o lacre digital (hash) de cada arquivo e publica a lista na internet. Depois disso, se for preciso mudar um programa, as entidades são avisadas e tudo é analisado, assinado e lacrado de novo." }
+   ],
+   "fontes": ["res-23673", "tse-codigo-2026", "tse-tpu", "tse-tpu2025", "tse-tpu2025-relatorio", "tse-lacracao-2026"]
+  },
+  {
+   "tipo": "historia",
+   "etiqueta": "TESTE PÚBLICO DA URNA",
+   "titulo": "O que o Teste Público já achou, e o que foi consertado",
+   "quadros": [
+    { "ic": "📻", "txt": "**2009**: um investigador tentou captar o sinal do teclado com um rádio. Acertou só 1 tecla, a 5 cm da urna. O TSE passou a cifrar o que vai do teclado para a urna." },
+    { "ic": "🔀", "txt": "**2012**: um grupo conseguiu pôr em ordem os votos guardados no RDV. Segundo o TSE, isso fragilizava o sigilo, mas o grupo não descobriu quem votou em quem. O TSE reforçou o embaralhamento." },
+    { "ic": "🧾", "txt": "**2016**: um investigador alterou o resultado de um boletim e o usou para entrar no sistema de apuração da urna, usado só em casos especiais. Outro grupo gravou o áudio que ajuda quem tem deficiência visual, com as teclas e o voto. O TSE mudou o código de conferência do boletim, incluiu um QR Code com assinatura digital e passou a ligar o áudio só para quem precisa, com aviso na tela." },
+    { "ic": "🔑", "txt": "**2017**: descobriram a chave que protegia as mídias da urna e falhas na conferência de assinaturas. No teste, mudaram o comportamento do programa da urna. O TSE tirou as chaves do código e corrigiu a conferência." },
+    { "ic": "💻", "txt": "**2019**: abriram o disco cifrado de computadores que preparam as urnas e fizeram o sistema de preparação gerar configurações modificadas para a urna, mas não chegaram ao programa da urna nem mudaram dados de eleitores e candidatos. O TSE passou a usar o chip de segurança TPM para reforçar a assinatura digital e a criptografia, e o ataque não se repetiu no reteste." },
+    { "ic": "📡", "txt": "**2021**: 5 dos 29 planos tiveram algum achado, a maioria nos sistemas de transmissão. No reteste de 2022, nenhum ataque passou pelos reforços." },
+    { "ic": "🚀", "txt": "**2023**: 5 testes voltaram para reteste. O TSE mudou o jeito de a urna ligar e protegeu mais os computadores de preparação. Em 2024, as equipes da PF e da UFMS atestaram que os ataques não funcionavam mais." },
+    { "ic": "🧰", "txt": "**2025**: 3 achados em 29 planos, nos sistemas de transmissão e de preparação. Os relatórios dizem que eles não comprometem a integridade, o sigilo do voto nem o resultado. Em 2026, dois foram testados de novo e as correções, confirmadas; o terceiro foi dado como resolvido com as explicações do TSE." }
+   ],
+   "moral": "Achar falhas é o objetivo do teste: o TSE corrige, e quem achou volta para conferir.",
+   "fontes": ["tse-tps2009", "tse-tps2012", "tse-tps2016", "tse-tps2017", "tse-tps2019", "tse-tps2021", "tse-tps2021-conf", "tse-tps2023", "tse-tps2023-conf", "tse-tpu2025", "tse-tpu2025-relatorio"]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "LACRE DIGITAL",
+   "titulo": "O que é um lacre digital (hash)?",
+   "texto": "É um código calculado a partir de um arquivo, como uma impressão digital dele. Qualquer mudança no arquivo gera outro código.",
+   "itens": [
+    { "ic": "🧮", "txt": "Na cerimônia de lacração, o TSE calcula o **hash** (também chamado de resumo digital) de cada programa." },
+    { "ic": "🌐", "txt": "A lista com todos esses hashes é publicada na internet." },
+    { "ic": "🔎", "txt": "Na preparação e no dia da eleição, os hashes dos programas de urnas escolhidas são conferidos com a lista publicada." },
+    { "ic": "⚖️", "txt": "Se bate, o programa é o mesmo que foi lacrado no TSE. Se não bate, é sinal de que o arquivo foi mudado." }
+   ],
+   "emoji": "🔏",
+   "coruja": "No próximo joguinho, você calcula um hash de verdade. Dá para escolher o SHA-512, o mesmo tipo das listas do TSE.",
+   "fontes": ["res-23673", "je-auditoria", "tse-hashes-2026", "tse-hashes-u22"]
+  },
+  {
+   "tipo": "simulador",
+   "id": "lacre-digital",
+   "titulo": "Joguinho: o lacre digital",
+   "texto": "Escreva uma frase e veja o lacre dela. Depois, guarde o lacre, troque **uma letra só** e compare.",
+   "inicial": "A urna conta cada voto.",
+   "explica": "Repare: trocar uma letra muda quase o lacre inteiro. Por isso, um programa mexido não passa na conferência dos hashes.",
+   "fontes": ["res-23673", "tse-hashes-2026", "tse-hashes-u22"]
+  },
+  {
+   "tipo": "quiz",
+   "pergunta": "Você trocou uma letra só do texto. O que acontece com o lacre digital (hash)?",
+   "opcoes": [
+    "Muda só um pedacinho, no lugar da letra",
+    "Vira outro lacre, quase todo diferente",
+    "Continua igual"
+   ],
+   "certa": 1,
+   "explica": "Qualquer mudança no arquivo gera outro resumo digital. É assim que a conferência dos hashes mostra se um programa foi mudado.",
+   "fontes": ["res-23673"]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "PREPARAÇÃO",
+   "titulo": "Preparando cada urna",
+   "texto": "Depois da lacração, os tribunais regionais eleitorais preparam as urnas, em cerimônias públicas.",
+   "itens": [
+    { "ic": "💾", "txt": "Os programas lacrados e os dados da eleição (candidatos e eleitores de cada seção) são gravados em mídias e carregados nas urnas." },
+    { "ic": "📢", "txt": "Partidos, federações, coligações, Ministério Público e OAB são chamados para acompanhar." },
+    { "ic": "🔎", "txt": "As entidades podem escolher, ao acaso, até 6% das urnas preparadas em cada zona eleitoral para conferir os programas ali mesmo." },
+    { "ic": "🏷️", "txt": "No fim, cada urna ganha **lacres físicos** assinados, que mostram se alguém tentou abrir." },
+    { "ic": "📋", "txt": "Uma tabela diz qual urna vai para qual seção, e é publicada até a véspera. Boletim de uma urna fora da tabela fica pendente até um juiz decidir." }
+   ],
+   "emoji": "🏷️",
+   "fontes": ["je-auditoria", "res-23673", "res-23751"]
+  },
+  {
+   "tipo": "passos",
+   "titulo": "No dia: da mesa até a cabine",
+   "texto": "A votação vai das 8h às 17h, no horário de Brasília.",
+   "passos": [
+    { "ic": "⏰", "titulo": "7h: a mesa se prepara", "txt": "Os mesários conferem o material e os lacres da urna, e testam o teclado." },
+    { "ic": "🧾", "titulo": "Zerésima", "txt": "A urna imprime que tem zero votos. Os mesários assinam (os fiscais também, se quiserem), e um resumo fica pregado na seção." },
+    { "ic": "🪪", "titulo": "Seus dados", "txt": "O mesário digita seu CPF ou título e confere a sua foto." },
+    { "ic": "👆", "titulo": "Sua digital", "txt": "A urna confere a digital, em até 4 tentativas. Sem biometria, vale o ano de nascimento." },
+    { "ic": "📵", "titulo": "Cabine", "txt": "Celular e câmera ficam guardados do lado de fora." },
+    { "ic": "🗳️", "titulo": "Voto", "txt": "Você digita os números, vê a foto de quem escolheu e confirma." },
+    { "ic": "🔏", "titulo": "Guardado e assinado", "txt": "O voto entra no RDV, sem o seu nome, e o arquivo é assinado de novo." }
+   ],
+   "fontes": ["res-23751", "je-evolucoes", "lei9504", "tse-eleitorado-2026"]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "17H",
+   "titulo": "O boletim de urna",
+   "texto": "Às 17h, se não houver mais ninguém na fila, a votação acaba. A urna soma os votos da seção e imprime o **boletim de urna**.",
+   "itens": [
+    { "ic": "🖨️", "txt": "São 5 vias obrigatórias e até 5 vias a mais." },
+    { "ic": "✍️", "txt": "Mesários e fiscais presentes assinam todas as vias." },
+    { "ic": "📌", "txt": "Uma via assinada fica pregada num lugar visível da seção." },
+    { "ic": "📑", "txt": "O boletim mostra quantas pessoas votaram, os votos de cada candidato e de cada partido, os brancos e os nulos." },
+    { "ic": "📲", "txt": "Ele tem um **QR Code**. O app Boletim na Mão, do TSE, lê o código e guarda uma cópia no celular." },
+    { "ic": "💾", "txt": "O boletim, o RDV e os outros arquivos são gravados numa mídia e assinados digitalmente." }
+   ],
+   "ilustracao": "urna-boletim",
+   "coruja": "Os partidos podem pedir uma cópia do boletim até 1 hora depois de ele ser impresso. Está na Lei das Eleições.",
+   "fontes": ["res-23751", "lei9504", "tse-apps"]
+  },
+  {
+   "tipo": "simulador",
+   "id": "confira-boletim",
+   "titulo": "Joguinho: confira o boletim",
+   "texto": "Compare o boletim pregado na seção com o resultado publicado e ache a linha diferente.",
+   "aviso": "EXEMPLO: dados inventados, só para treinar.",
+   "secao": { "municipio": "Cidade de Mentirinha", "zona": "0001", "secao": "0123", "local": "Escola Exemplo" },
+   "aptos": 300,
+   "linhas": [
+    { "nome": "Candidata Círculo", "papel": 98, "site": 98 },
+    { "nome": "Candidato Quadrado", "papel": 87, "site": 78 },
+    { "nome": "Candidata Triângulo", "papel": 41, "site": 41 },
+    { "nome": "Votos em branco", "papel": 9, "site": 9 },
+    { "nome": "Votos nulos", "papel": 12, "site": 12 }
+   ],
+   "acerto": "Achou! O papel diz 87 e o site, 78. A soma também não bate. Como o boletim é impresso e pregado na seção antes de os dados viajarem, uma diferença assim aparece quando alguém compara.",
+   "erro": "Essa linha está igual nos dois. Tente outra.",
+   "qr": "O app do TSE leria este QR Code e mostraria os mesmos números do papel. É uma cópia digital do boletim, para comparar depois.",
+   "fontes": ["res-23751", "je-auditoria", "tse-apps"]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "A VIAGEM",
+   "titulo": "Como o resultado chega ao TSE",
+   "itens": [
+    { "ic": "💾", "txt": "A urna não manda nada pela internet. Os arquivos saem numa **mídia de resultado**, que é levada para a transmissão." },
+    { "ic": "🔐", "txt": "Os arquivos viajam pela rede própria da Justiça Eleitoral. Onde o computador não é da Justiça Eleitoral, usa-se o JE-Connect, um sistema de conexão segura." },
+    { "ic": "✅", "txt": "Os sistemas conferem se os arquivos são autênticos e estão inteiros." },
+    { "ic": "📋", "txt": "Boletim de uma urna que não estava na tabela daquela seção fica pendente até o juiz decidir." },
+    { "ic": "➕", "txt": "Os computadores somam os boletins de todas as seções: é a **totalização**." },
+    { "ic": "🌐", "txt": "Enquanto recebe, o TSE publica os boletins na internet. Depois, qualquer pessoa pode comparar com o papel da seção." }
+   ],
+   "emoji": "📡",
+   "fontes": ["res-23751", "je-auditoria"]
+  },
+  {
+   "tipo": "cards",
+   "etiqueta": "AUDITORIAS",
+   "titulo": "Conferir de novo, de vários jeitos",
+   "texto": "No dia da eleição e depois, há outras conferências. Vire os cartões.",
+   "cards": [
+    { "ic": "🧪", "titulo": "Teste de Integridade", "txt": "Na véspera, urnas prontas são escolhidas ou sorteadas e levadas para um lugar público. No dia, votos de cédulas de papel são digitados nelas, das 8h às 17h, diante de câmeras.", "dados": [ { "rot": "Desde", "val": "2002" }, { "rot": "Por estado (eleição geral)", "val": "20 a 33 urnas" }, { "rot": "No DF, 1º turno de 2026", "val": "20 urnas" } ], "mais": "No fim, o boletim da urna tem de bater com as cédulas. Uma empresa ou instituição de auditoria acompanha, e tudo é transmitido ao vivo. Segundo o TSE, desde 2002 nunca houve resultado diferente do que foi digitado. Para 2026, o TSE anunciou que o TCU acompanharia os testes nas 27 unidades da Federação." },
+    { "ic": "👆", "titulo": "Teste com biometria", "txt": "Eleitores voluntários, depois de votar, usam a digital para liberar uma urna de teste, no próprio local de votação.", "dados": [ { "rot": "Começou em", "val": "2022" }, { "rot": "Em 2026", "val": "em todos os estados e no DF" } ], "mais": "Assim, o teste também passa pelo leitor de digital, como numa votação de verdade. Quem aceita participar assina um termo de consentimento." },
+    { "ic": "🔎", "titulo": "Teste de Autenticidade", "txt": "Na própria seção, antes da zerésima, os hashes dos programas de uma urna escolhida ou sorteada são conferidos.", "dados": [ { "rot": "Por estado (eleição geral)", "val": "3 a 10 urnas" } ], "mais": "O relatório com os hashes é impresso e assinado, para comparar com a lista publicada pelo TSE." },
+    { "ic": "📜", "titulo": "RDV e log", "txt": "O RDV guarda cada voto como foi digitado, separado por cargo e embaralhado, sem o nome de quem votou. O log é o diário da urna: anota o que acontece, com a hora.", "dados": [ { "rot": "Publicados", "val": "em até 3 dias" } ], "mais": "Com esses arquivos, publicados junto com os boletins, dá para auditar os resultados e o funcionamento das urnas do país inteiro." }
+   ],
+   "fontes": ["res-23673", "res-23751", "tse-integridade-2026", "tse-integridade-df-2026", "tse-tcu-2026", "je-auditoria"]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "O QUE TERIA DE SER VENCIDO",
+   "titulo": "O que alguém teria de vencer para fraudar?",
+   "texto": "Segundo o TSE, a segurança da eleição vem da soma de várias proteções e de conferências feitas por gente diferente. Estas são as camadas, e quem confere cada uma:",
+   "itens": [
+    { "ic": "🔐", "txt": "**Programas lacrados**: a urna só liga programa com a assinatura certa. Conferem: as entidades fiscalizadoras, na lacração e na preparação." },
+    { "ic": "📵", "txt": "**Sem rede**: a urna não se liga à internet, então não dá para chegar nela de longe." },
+    { "ic": "🏷️", "txt": "**Lacres físicos**: mostram se alguém abriu a urna. Conferem: mesários e fiscais." },
+    { "ic": "🧾", "txt": "**Zerésima**: mostra que a urna começou sem votos. Conferem: mesários, fiscais e as primeiras pessoas da fila." },
+    { "ic": "📌", "txt": "**Boletim na parede**: o resultado de cada seção fica impresso antes de viajar. Confere: qualquer pessoa." },
+    { "ic": "✍️", "txt": "**Arquivos assinados**: os sistemas conferem se os arquivos são autênticos e inteiros antes de somar." },
+    { "ic": "🌐", "txt": "**Tudo publicado**: boletins, RDVs e logs vão para a internet. Confere: qualquer pessoa." },
+    { "ic": "🧪", "txt": "**Testes no dia**: urnas escolhidas ou sorteadas recebem votos de cédulas de papel, em público. Conferem: partidos, Ministério Público, OAB, auditoria externa e, em 2026, o TCU." }
+   ],
+   "emoji": "🧱",
+   "coruja": "Isso não quer dizer que nunca acham falhas: o Teste Público existe justamente para achar. Quer dizer que cada passo tem alguém conferindo.",
+   "fontes": ["je-detalhes", "je-auditoria", "res-23673", "res-23751", "tse-tcu-2026", "tse-lacracao-2026"]
+  },
+  {
+   "tipo": "numeros",
+   "titulo": "O tamanho da eleição de 2026",
+   "texto": "Cada urna imprime o seu boletim e deixa uma via pregada na seção.",
+   "numeros": [
+    { "val": "158.745.463", "rot": "eleitoras e eleitores aptos", "ic": "🧑‍🤝‍🧑" },
+    { "val": "516.785", "rot": "seções eleitorais", "ic": "🏫" },
+    { "val": "563.910", "rot": "urnas prontas para usar (com as de reserva)", "ic": "🗳️" },
+    { "val": "40", "rot": "oportunidades de auditoria e fiscalização em cada ciclo eleitoral", "ic": "🔍" }
+   ],
+   "nota": "Em maio de 2026, segundo o TSE, a coleta da biometria tinha alcançado 88,78% do público-alvo: cerca de 140 milhões de pessoas.",
+   "fontes": ["tse-eleitorado-2026", "tse-urnas-2026", "tse-lacracao-2026", "tse-biometria-2026"]
+  },
+  {
+   "tipo": "quiz",
+   "pergunta": "Onde fica uma via do boletim de urna depois que a votação acaba?",
+   "opcoes": [
+    "Pregada num lugar visível da seção, para qualquer pessoa ver",
+    "Só dentro do computador do TSE",
+    "O boletim não é impresso"
+   ],
+   "certa": 0,
+   "explica": "A urna imprime 5 vias obrigatórias, e uma via assinada fica pregada na seção. Com ela (ou com o QR Code dela), dá para comparar com o resultado publicado.",
+   "fontes": ["res-23751"]
+  },
+  {
+   "tipo": "cards",
+   "etiqueta": "PERGUNTAS",
+   "titulo": "Perguntas que muita gente faz",
+   "texto": "Respostas só com fatos e fontes. Vire os cartões para ler mais.",
+   "cards": [
+    { "ic": "🌐", "titulo": "Dá para invadir a urna pela internet?", "txt": "A urna não se liga à internet nem a rede nenhuma: nem wi-fi, nem bluetooth. Os resultados saem dela numa mídia e só depois são transmitidos, já assinados e com o boletim impresso na seção.", "mais": "Os sistemas que transmitem e somam os votos também passam pelo Teste Público. Em 2021, a maioria dos achados foi nos sistemas de transmissão e recepção dos resultados; no reteste de 2022, nenhum ataque passou pelos reforços." },
+    { "ic": "🔍", "titulo": "Dá para conferir o meu voto?", "txt": "Na cabine, você vê na tela o número e a foto antes de confirmar. Depois, o voto fica guardado sem o seu nome, então não dá para buscá-lo de novo.", "mais": "O que dá para conferir é o boletim da sua seção: compare a via pregada na parede (ou o QR Code dela) com o resultado publicado pelo TSE." },
+    { "ic": "📄", "titulo": "Por que não tem voto impresso?", "txt": "O Congresso aprovou leis com voto impresso em 2002, 2009 e 2015. Em 2003, outra lei trocou a impressão pelo registro digital do voto. As regras de 2009 e de 2015 foram declaradas inconstitucionais pelo STF.", "mais": "Em 2021, a Câmara votou uma proposta de emenda à Constituição (PEC) com cédulas físicas: 229 votos sim, 218 não e 1 abstenção. Precisava de 308 votos sim e foi arquivada. A linha do tempo está no próximo slide." },
+    { "ic": "🤫", "titulo": "Alguém consegue saber em quem eu votei?", "txt": "A lei manda guardar cada voto resguardando o anonimato. No RDV, os votos ficam separados por cargo e embaralhados, sem o nome de ninguém. Celular e câmera não entram na cabine.", "mais": "Em 2012, investigadores do Teste Público conseguiram pôr os votos do RDV em ordem, mas não descobriram quem votou em quem. O TSE reforçou o embaralhamento." }
+   ],
+   "fontes": ["je-detalhes", "je-auditoria", "tse-tpu", "tse-tps2021", "tse-tps2021-conf", "res-23751", "lei9504", "cf", "lei10408", "lei10740", "lei12034", "lei13165", "stf-adi4543-2013", "stf-adi5889-2020", "camara-pec135", "lcp78", "res-23673", "tse-tps2012"]
+  },
+  {
+   "tipo": "historia",
+   "etiqueta": "VOTO IMPRESSO: SÓ OS FATOS",
+   "titulo": "Voto impresso: o que já foi votado e decidido",
+   "quadros": [
+    { "ic": "🖨️", "txt": "**2002**: a Lei 10.408 manda a urna imprimir o voto para o eleitor conferir. Nas eleições de 2002, isso foi testado em 150 cidades perto das capitais e em todas as seções do DF e de Sergipe." },
+    { "ic": "💾", "txt": "**2003**: a Lei 10.740 troca a impressão pelo registro digital de cada voto, com assinatura digital. A urna passa a gravar o RDV a partir de 2004." },
+    { "ic": "📄", "txt": "**2009**: a Lei 12.034 cria, a partir de 2014, o voto impresso conferido pelo eleitor." },
+    { "ic": "⚖️", "txt": "**2011 e 2013**: o STF suspende essa regra e depois a declara inconstitucional, nas duas vezes por unanimidade (ADI 4543). Motivo dado: ela comprometia o sigilo e a inviolabilidade do voto." },
+    { "ic": "🔁", "txt": "**2015**: a Lei 13.165 volta a prever a impressão do registro de cada voto. A presidente vetou esse artigo, e o Congresso derrubou o veto." },
+    { "ic": "⚖️", "txt": "**2018 e 2020**: o STF suspende o artigo (por maioria) e depois o declara inconstitucional (por unanimidade, ADI 5889), por risco ao sigilo e à liberdade do voto." },
+    { "ic": "🏛️", "txt": "**2021**: a Câmara vota a PEC 135/2019, com cédulas físicas conferíveis pelo eleitor: 229 sim, 218 não e 1 abstenção. Uma PEC precisava de 308 votos sim (três quintos dos 513 deputados). Foi rejeitada e arquivada." }
+   ],
+   "moral": "Pela Constituição, o Congresso faz as leis e as emendas à Constituição, e o STF confere se elas respeitam a Constituição. Este slide só conta o que foi decidido.",
+   "fontes": ["lei10408", "je-impressao", "lei10740", "je-evolucoes", "lei12034", "stf-adi4543-2011", "stf-adi4543-2013", "lei13165", "cf", "stf-adi5889-2018", "stf-adi5889-2020", "camara-pec135", "camara-pec135-votacao", "lcp78"]
+  },
+  {
+   "tipo": "quiz",
+   "pergunta": "A urna eletrônica se liga à internet durante a votação?",
+   "opcoes": [
+    "Sim, pelo wi-fi da escola",
+    "Não: ela não se liga a rede nenhuma",
+    "Só às 17h, para mandar o resultado"
+   ],
+   "certa": 1,
+   "explica": "A urna não tem internet, wi-fi nem bluetooth. O resultado sai numa mídia e é transmitido depois, por outros computadores, já assinado e com o boletim impresso na seção.",
+   "fontes": ["je-detalhes", "je-auditoria", "res-23751"]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "QUERO SABER MAIS · PARTE TÉCNICA",
+   "titulo": "Quero saber mais: a parte técnica",
+   "texto": "Daqui em diante, os slides são mais técnicos, para quem gosta de computação. Se preferir, pule para o fim.",
+   "itens": [
+    { "ic": "🧮", "txt": "Hash e assinatura digital" },
+    { "ic": "⛓️", "txt": "A cadeia de confiança: o que acontece quando a urna liga" },
+    { "ic": "🧾", "txt": "A assinatura do boletim e do QR Code" },
+    { "ic": "🔀", "txt": "O RDV embaralhado e o log" },
+    { "ic": "📲", "txt": "Como conferir um boletim pelo QR Code" },
+    { "ic": "📦", "txt": "Onde baixar os arquivos oficiais das urnas" }
+   ],
+   "emoji": "🧑‍💻",
+   "pular": true,
+   "fontes": ["je-detalhes", "tse-doc-tecnica"]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "TÉCNICO · CRIPTOGRAFIA",
+   "titulo": "Hash e assinatura digital",
+   "itens": [
+    { "ic": "🧮", "txt": "**Hash** (resumo digital): uma sequência curta calculada de um arquivo, que o identifica sem dúvida. Qualquer alteração gera outro hash. As listas do TSE de 2026 usam o SHA-512, escrito em base64." },
+    { "ic": "🔑", "txt": "**Assinatura digital**: usa um par de chaves. A **chave privada**, que só o dono conhece, assina. A **chave pública**, que pode ser espalhada, confere a assinatura." },
+    { "ic": "🏛️", "txt": "Na lacração, servidores do TSE compilam e assinam os sistemas com certificados da ICP-Brasil. Representantes das entidades fiscalizadoras podem assinar também." },
+    { "ic": "📝", "txt": "O arquivo com os hashes de todos os programas é assinado pela presidência do TSE, pela área de tecnologia e pelos representantes que quiserem." },
+    { "ic": "🪪", "txt": "O chip de segurança de cada urna guarda chaves e certificados. A Autoridade Certificadora da Justiça Eleitoral, numa sala-cofre do TSE, já emitiu mais de 4 milhões de certificados para as urnas." }
+   ],
+   "emoji": "🔑",
+   "fontes": ["res-23673", "je-detalhes", "tse-hashes-2026", "tse-hashes-u22"]
+  },
+  {
+   "tipo": "passos",
+   "titulo": "Cadeia de confiança: o que acontece quando a urna liga",
+   "texto": "Cada peça confere a próxima antes de deixá-la funcionar. Se qualquer conferência falhar, a urna trava e se desliga.",
+   "passos": [
+    { "ic": "⚡", "titulo": "Liga", "txt": "Só o chip de segurança e a BIOS recebem energia." },
+    { "ic": "🔎", "titulo": "Confere a BIOS", "txt": "O chip confere a assinatura digital da BIOS." },
+    { "ic": "🥾", "titulo": "Confere a partida", "txt": "Depois, a do bootloader, o programa que dá a partida no sistema." },
+    { "ic": "🐧", "titulo": "Confere o sistema", "txt": "Depois, a do sistema operacional, o Uenux." },
+    { "ic": "❓", "titulo": "Desafio", "txt": "O Uenux faz um desafio ao chip. A resposta certa mostra que ele está numa urna da Justiça Eleitoral." },
+    { "ic": "✅", "titulo": "Só programa assinado", "txt": "O Uenux só roda programas assinados na cerimônia pública e com assinatura válida." }
+   ],
+   "fontes": ["je-detalhes", "tse-tps2023-conf"]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "TÉCNICO · BOLETIM",
+   "titulo": "A assinatura do boletim e do QR Code",
+   "itens": [
+    { "ic": "✍️", "txt": "No fim da votação, a urna gera o boletim, o RDV e os outros arquivos e os assina digitalmente, com o horário anotado no log." },
+    { "ic": "📁", "txt": "Na mídia de resultado vão, entre outros, estes tipos de arquivo: o boletim (bu), o RDV (rdv), o log (logjez), a imagem do boletim impresso (imgbu) e as assinaturas dos arquivos (vscmr)." },
+    { "ic": "🔏", "txt": "O arquivo de assinaturas guarda o hash e a assinatura de cada arquivo, feitas com chaves de software e com chaves de hardware da urna. Para as assinaturas de hardware, vai junto o certificado que permite conferi-las." },
+    { "ic": "🧩", "txt": "Na documentação técnica que o TSE publicou para 2022, cada linha de votos do boletim tem uma assinatura Ed25519 sobre o SHA-512 dos dados da linha." },
+    { "ic": "📲", "txt": "O QR Code do boletim impresso tem assinatura digital, para conferir se ele é autêntico e inteiro. Ele entrou depois do Teste Público de 2016." },
+    { "ic": "🔒", "txt": "Nas urnas 2020 e 2022, teclado, leitor de digital e impressora têm chips de criptografia: o teclado cifra cada tecla apertada (cada vez com um código diferente), o leitor cifra a digital e o que vai para a impressora também segue cifrado." }
+   ],
+   "emoji": "🧾",
+   "fontes": ["res-23751", "lei9504", "tse-doc-tecnica", "tse-doc-bu", "tse-tps2016", "je-detalhes"]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "TÉCNICO · RDV E LOG",
+   "titulo": "O RDV embaralhado e o log",
+   "itens": [
+    { "ic": "🗃️", "txt": "O RDV grava cada voto como foi digitado, separado por cargo, num arquivo único por seção." },
+    { "ic": "🔀", "txt": "Os votos ficam fora da ordem em que as pessoas votaram: a resolução do TSE diz “ordenados aleatoriamente”, e a documentação de 2022 mostra os votos agrupados por tipo e pelo número digitado." },
+    { "ic": "🔏", "txt": "A cada eleitor que confirma o voto, o RDV é atualizado e assinado, com o horário anotado no log." },
+    { "ic": "📓", "txt": "O log é o diário da urna: registra os eventos, com o horário. O TSE publica a especificação do formato, com exemplos." },
+    { "ic": "🔐", "txt": "Em 2012, o Teste Público achou um jeito de pôr os votos do RDV em ordem. O TSE reforçou o embaralhamento." }
+   ],
+   "emoji": "🔀",
+   "fontes": ["res-23751", "res-23673", "tse-doc-tecnica", "tse-doc-bu", "tse-tps2012"]
+  },
+  {
+   "tipo": "passos",
+   "titulo": "Como conferir um boletim pelo QR Code",
+   "texto": "Qualquer pessoa pode fazer isso, em qualquer seção do país.",
+   "passos": [
+    { "ic": "📲", "titulo": "Baixe o app", "txt": "Instale o Boletim na Mão, o app oficial do TSE (Android e iPhone)." },
+    { "ic": "🕔", "titulo": "Depois das 17h", "txt": "Vá à seção quando o boletim estiver pregado." },
+    { "ic": "📷", "titulo": "Aponte a câmera", "txt": "Leia o QR Code. O app guarda a cópia digital do resultado daquela urna." },
+    { "ic": "🌐", "titulo": "Compare", "txt": "Veja o resultado publicado pelo TSE para a mesma seção e compare os números." },
+    { "ic": "🛠️", "titulo": "Ou faça o seu", "txt": "O TSE publica como ler o QR Code, e qualquer pessoa pode criar a sua ferramenta." }
+   ],
+   "fontes": ["tse-apps", "res-23751", "je-auditoria"]
+  },
+  {
+   "tipo": "explica",
+   "etiqueta": "TÉCNICO · DADOS ABERTOS",
+   "titulo": "Onde baixar os arquivos oficiais das urnas",
+   "texto": "Os endereços estão no botão **De onde veio isso?**, aqui embaixo.",
+   "itens": [
+    { "ic": "📊", "txt": "**Resultados 2026 – Boletim de Urna**, no Portal de Dados Abertos do TSE: os boletins de cada estado, nos dois turnos, com o hash SHA-2 de cada arquivo." },
+    { "ic": "📦", "txt": "**Resultados 2026 – Arquivos transmitidos para totalização**: os arquivos bu, log, rdv e vota das urnas, por estado." },
+    { "ic": "🌐", "txt": "No dia da eleição, já dá para acessar os dados das urnas, inclusive o RDV, no site de resultados do TSE (resultados.tse.jus.br)." },
+    { "ic": "🔏", "txt": "**Resumos digitais (hashes) das Eleições 2026**: a lista dos hashes de todos os sistemas." },
+    { "ic": "📘", "txt": "**Documentação técnica do software da urna** (publicada para as Eleições 2022): o formato do boletim, do RDV, das assinaturas e do log, com exemplos em Python." },
+    { "ic": "📨", "txt": "As entidades fiscalizadoras podem pedir outros arquivos e relatórios por até 100 dias depois do 1º turno." }
+   ],
+   "emoji": "📦",
+   "fontes": ["tse-dados-bu-2026", "tse-dados-arquivos-2026", "je-auditoria", "tse-hashes-2026", "tse-doc-tecnica", "tse-doc-bu", "res-23673"]
+  },
+  {
+   "tipo": "quiz",
+   "pergunta": "Ao ligar, o que a urna faz se a BIOS, o bootloader ou o sistema não tiverem a assinatura digital certa?",
+   "opcoes": [
+    "Roda o programa mesmo assim",
+    "Trava e se desliga",
+    "Liga a internet para baixar outro programa"
+   ],
+   "certa": 1,
+   "explica": "Na cadeia de confiança, cada parte confere a assinatura da próxima. Se alguma conferência falhar, a urna trava e se desliga sozinha. Depois de ligada, ela só roda programas com assinatura válida; se não, para de funcionar.",
+   "fontes": ["je-detalhes"]
+  }
+ ]
+}

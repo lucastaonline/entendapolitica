@@ -281,6 +281,40 @@ html.alto-contraste .plenario.cheio i.aceso { background: #000; box-shadow: 0 0 
 .urna-mesa3d .mesa { --w: 300px; --h: 70px; --d: 140px; --c1: #c9a77a; --c2: #b08c5e; --c3: #96764d; --c4: #dcc29c; transform: translate3d(-150px, -70px, 0); }
 .urna-mesa3d .urna-pe { position: absolute; left: -125px; top: -235px; transform-style: preserve-3d; }
 
+/* urna com o boletim saindo (parada 10, "a urna por dentro"): pedestal, urna, boletim com QR Code e a lupa */
+.cena-urna-boletim { height: 400px; }
+.cena3d .urna-boletim3d { top: 175px; transform: rotateX(-12deg) rotateY(-28deg); }
+.urna-boletim3d.auto { animation: congressoBalanca 12s ease-in-out infinite; }
+.urna-boletim3d .pedestal-u { --w: 280px; --h: 56px; --d: 130px; --c1: #1f3a5f; --c2: #16304f; --c3: #142640; --c4: #8fb3d9; transform: translate3d(-140px, -56px, 0); }
+.urna-boletim3d .pedestal-u > .fr { display: grid; place-items: center; font-size: 22px; letter-spacing: .2em; }
+.urna-boletim3d .urna-pe { position: absolute; left: -125px; top: -221px; transform-style: preserve-3d; }
+.urna-boletim3d .urna3d { transform: none; animation: none; }
+.urna-boletim3d .bu-sai { position: absolute; left: 6px; top: -372px; width: 92px; height: 152px; transform: translateZ(4px); transform-origin: 50% 100%; }
+.bu-papel { position: absolute; inset: 0; display: flex; flex-direction: column; gap: 5px; padding: 7px 8px; border: 2px solid #d9d2c3; border-bottom: 0; border-radius: 4px 4px 0 0;
+  background: #fff; box-shadow: 0 6px 14px rgba(0, 0, 0, .12); }
+.bu-papel b { font-size: 10px; letter-spacing: .08em; color: #1d2430; text-align: center; }
+.bu-papel .l { display: block; height: 5px; border-radius: 3px; background: #c9cfd8; }
+.bu-papel .l.c { width: 70%; }
+.bu-qr { margin-top: auto; align-self: center; display: grid; grid-template-columns: repeat(7, 7px); gap: 1px; padding: 3px; background: #fff; border: 1px solid #e5e0d4; }
+.bu-qr i { width: 7px; height: 7px; background: #fff; }
+.bu-qr i.p { background: #1d2430; }
+.cena-urna-boletim .bu-sai { animation: buImprime 6s ease-in-out infinite; }
+@keyframes buImprime {
+  0% { transform: translateZ(4px) translateY(110px) scaleY(.12); opacity: 0; }
+  10% { opacity: 1; }
+  35%, 88% { transform: translateZ(4px); opacity: 1; }
+  100% { transform: translateZ(4px); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cena-urna-boletim .bu-sai, .urna-boletim3d.auto { animation: none; }
+}
+html.sem-movimento .cena-urna-boletim .bu-sai { animation: none; opacity: 1; transform: translateZ(4px); }
+/* no celular e no tablet, a ilustração do slide tem 210 px de altura: o modelo (372 px de altura) encolhe para caber inteiro */
+@media (max-width: 860px) {
+  .slide .ilu .cena3d.cena-urna-boletim { height: 210px; }
+  .slide .ilu .cena3d.cena-urna-boletim .ancora3d.urna-boletim3d { scale: .56; top: 102px; }
+}
+
 /* cubo com emoji (ilustração de reserva) */
 .cena-cubo-emoji { height: 250px; }
 .cena-cubo-emoji .cubo-num { margin: 0 auto; }

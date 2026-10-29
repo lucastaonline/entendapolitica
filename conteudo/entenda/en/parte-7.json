@@ -409,7 +409,12 @@
     "tse-urna",
     "lei9504",
     "tse-calendario-2026"
-   ]
+   ],
+   "link": {
+    "url": "entenda.html#parte-10",
+    "ic": "🔐",
+    "txt": "See inside the voting machine ▶"
+   }
   },
   {
    "tipo": "comparar",

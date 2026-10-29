@@ -35,7 +35,7 @@ def urls_aulas() -> list[str]:
     raiz = Path(__file__).resolve().parent.parent
     out = []
     for pasta, q in (("", ""), ("en/", "?lang=en")):
-        for n in range(1, 10):
+        for n in range(1, 11):
             arq = raiz / "conteudo" / "entenda" / f"{pasta}parte-{n}.json"
             if arq.exists():
                 total = len(json.loads(arq.read_text(encoding="utf-8"))["slides"]) + 1

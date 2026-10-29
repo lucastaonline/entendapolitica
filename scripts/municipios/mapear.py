@@ -182,6 +182,52 @@ def nomes_curtos(cidades: list) -> dict[str, list[str]]:
     return out
 
 
+# Endereço com o nome de outra cidade: o cadastro do Interlegis de algumas Câmaras traz o e-mail ou o domínio da Câmara
+# vizinha (ex.: São José do Rio Preto com o e-mail da Câmara de Nova Aliança). Um endereço assim só vale se a página
+# disser no topo o nome da cidade, e um bloco publicado com ele não é mantido.
+SLUGS_UF: dict[str, dict[str, list[str]]] = {}   # {UF: {IBGE: formas do nome nos endereços}} (preparar_slugs)
+
+
+def preparar_slugs(cidades: list):
+    SLUGS_UF.clear()
+    curtos = nomes_curtos(cidades)
+    for ibge, nome, uf in cidades:
+        formas = P.slugs_cidade(nome) + [P.compacto(c) for c in curtos.get(ibge) or []]
+        SLUGS_UF.setdefault(uf, {})[ibge] = [f for f in dict.fromkeys(formas) if f]
+
+
+def _host_nome(endereco: str | None) -> str:
+    h = urllib.parse.urlsplit(endereco if "//" in (endereco or "") else "https://" + (endereco or "")).hostname or ""
+    return h.lower().replace("-", "")
+
+
+def proprio(endereco: str | None, uf: str | None, ibge: str | None) -> bool:
+    """O endereço tem uma forma do nome desta cidade."""
+    h = _host_nome(endereco)
+    return bool(h) and any(m in h for m in (SLUGS_UF.get(uf or "") or {}).get(ibge) or [])
+
+
+def alheio(endereco: str | None, uf: str | None, ibge: str | None) -> str | None:
+    """O endereço tem o nome de outra cidade do estado, e nenhuma forma do nome desta: devolve o IBGE da outra cidade.
+    Só nomes com 6 letras ou mais, e não conta o nome de outra cidade que é parte do nome desta ("Divino" em
+    "Divinolândia de Minas", "São Luís" em "São Luís Gonzaga do Maranhão")."""
+    formas = SLUGS_UF.get(uf or "") or {}
+    if not endereco or not formas or ibge not in formas:
+        return None
+    h = _host_nome(endereco)
+    meus = formas[ibge]
+    if not h or any(m in h for m in meus):
+        return None
+    achado, tam = None, 0
+    for outro, sl in formas.items():
+        if outro == ibge:
+            continue
+        for s in sl:
+            if len(s) >= 6 and len(s) > tam and s in h and not any(s in m for m in meus):
+                achado, tam = outro, len(s)
+    return achado
+
+
 def oficial(host: str) -> bool:
     return host.endswith(".leg.br") or host.endswith(".gov.br") or host.endswith(".jus.br")
 
@@ -236,7 +282,7 @@ def resolver_todos(rede: _rede.Rede, dns_pool: cf.ThreadPoolExecutor, hosts: lis
 
 
 def achar_site(rede, dns_pool, nome: str, cands: list[tuple[str, str]], tipo: str, max_visitas: int = 6,
-               curto: list[str] | None = None) -> dict:
+               curto: list[str] | None = None, uf: str | None = None, ibge: str | None = None) -> dict:
     """Testa os endereços na ordem e devolve o primeiro que é mesmo da Câmara (ou da prefeitura) da cidade."""
     ips = resolver_todos(rede, dns_pool, [h for h, _ in cands])
     visitas = []
@@ -269,6 +315,10 @@ def achar_site(rede, dns_pool, nome: str, cands: list[tuple[str, str]], tipo: st
             meu, outro = (d["camara"], d["prefeitura"]) if tipo == "camara" else (d["prefeitura"], d["camara"])
             if origem == "curto":   # endereço com o nome curto da cidade (único no estado): a página tem de dizer o nome
                 cidade_ok = d["cidade"] or any(P.tem_cidade(pg.cabeca(), c) for c in (curto or []))
+            elif origem == "interlegis-email" and not d["cidade"] and not proprio(host, uf, ibge):
+                # o e-mail cadastrado no Interlegis às vezes é de outra Câmara (a da capital, a vizinha): o endereço tirado
+                # dele só vale se a página falar da cidade ou se ele tiver o nome dela
+                cidade_ok = False
             else:
                 cidade_ok = forte or d["cidadeNoTopo"] or (d["cidade"] and meu >= 10)
             ok = not d["estacionada"] and not d["vazia"] and meu >= 3 and meu > outro and cidade_ok
@@ -276,9 +326,16 @@ def achar_site(rede, dns_pool, nome: str, cands: list[tuple[str, str]], tipo: st
                     and (not d["vazia"] or d["spa"]) and (d["cidadeNoTopo"] or d["cidade"]) and outro < 10):
                 ok = True   # endereço com o nome da cidade (reservado ao município) e a página fala da cidade
             if (not ok and d["spa"] and not d["estacionada"] and meu >= 10 and meu > outro
-                    and (d["cidadeNoTopo"] or (forte and origem != "curto"))):
+                    and (d["cidadeNoTopo"] or (forte and origem != "curto"
+                                               and (origem != "interlegis-email" or proprio(host, uf, ibge))))):
                 ok = True   # site montado no navegador: vale o título (que diz de quem é)
                 info["spa"] = True
+            final = _rede.host_de(v["url"])   # o endereço final só vira o site publicado se for oficial (origem_site)
+            outra = alheio(host, uf, ibge) or (alheio(final, uf, ibge) if final and oficial(final) else None)
+            if outra:
+                info["outraCidade"] = outra
+                if not d["cidadeNoTopo"]:
+                    ok = False   # endereço de outra cidade (cadastro errado) e a página não diz o nome desta no topo
             info["ok"] = ok
             if ok:
                 visitas.append(info)
@@ -322,7 +379,7 @@ def mapear_cidade(rede: _rede.Rede, dns_pool, cidade: tuple, sigi: dict, curto: 
     # prefeitura primeiro: o site dela às vezes tem o link da Câmara
     pref = {"site": None}
     cands_p = hosts_prefeitura(uf, slugs, curto)
-    r = achar_site(rede, dns_pool, nome, cands_p, "prefeitura", curto=curto)
+    r = achar_site(rede, dns_pool, nome, cands_p, "prefeitura", curto=curto, uf=uf, ibge=ibge)
     pref["visitas"] = r["visitas"]
     links_camara = []
     if r["achado"]:
@@ -339,7 +396,7 @@ def mapear_cidade(rede: _rede.Rede, dns_pool, cidade: tuple, sigi: dict, curto: 
         h = _rede.host_de(u)
         if h and h not in {x[0] for x in cands} and h.endswith((f".{uf.lower()}.leg.br", f".{uf.lower()}.gov.br")):
             cands.append((h, "link"))
-    r = achar_site(rede, dns_pool, nome, cands, "camara", curto=curto)
+    r = achar_site(rede, dns_pool, nome, cands, "camara", curto=curto, uf=uf, ibge=ibge)
     cam["visitas"] = r["visitas"]
     if r["achado"]:
         host, v, pg = r["achado"]
@@ -354,7 +411,7 @@ def mapear_cidade(rede: _rede.Rede, dns_pool, cidade: tuple, sigi: dict, curto: 
               and _rede.host_de(u) not in ja and _rede.host_de(u).endswith(f".{uf.lower()}.gov.br")]
         if lp:
             hc = [(_rede.host_de(lp[0]), "link")]
-            r2 = achar_site(rede, dns_pool, nome, hc, "prefeitura", max_visitas=1)
+            r2 = achar_site(rede, dns_pool, nome, hc, "prefeitura", max_visitas=1, uf=uf, ibge=ibge)
             pref["visitas"] += r2["visitas"]
             if r2["achado"]:
                 host, v, pg = r2["achado"]
@@ -753,6 +810,9 @@ def montar_uf(uf: str, cidades: list, sigi: dict, diarios: dict, nomes_assoc: di
             if f["url"] == F.SIGI_URL:
                 f["url"] = f"{F.SIGI_URL}{uf}/"
             fs.append(f)
+        # uma lista que não abriu nesta rodada continua citada: os endereços que vieram dela continuam no mapa
+        urls = {f["url"] for f in fs}
+        fs += [f for f in (ler_json(destino) or {}).get("fontes") or [] if f.get("url") not in urls]
         out["fontes"] = fs
         out["nota"] = ("Cada endereço foi conferido no próprio site oficial (Câmara, prefeitura, sistema de proposições ou "
                        "Diário Oficial) na data de \"conferido\". As listas acima só indicam onde procurar.")
@@ -792,37 +852,71 @@ def _leu(parte: str, x: dict) -> bool:
     return x.get("lido") is not False
 
 
+CAMPOS_PROPOSTAS = ("sistema", "plataforma", "api", "propostas", "propostasOnline", "motivo", "motivo_en")
+
+
+def _so_sapl(x: dict) -> bool:
+    """O "site" da Câmara no bloco é só o endereço do SAPL: a rodada não achou (ou não conseguiu ler) o site da Câmara e
+    pôs o do sistema de proposições no lugar (montar_cidade)."""
+    return (bool(x.get("site")) and x.get("sistema") == "sapl"
+            and _host(x["site"]) == _host(x.get("api") or x.get("propostas")))
+
+
+def _com_sapl(v: dict, n: dict) -> dict:
+    """Fica o bloco publicado da Câmara (o site dela e o pedido de informação); as proposições passam a ser as do SAPL só
+    quando ele tem a legislatura atual e o publicado não tinha proposições na internet."""
+    if n.get("propostasOnline") is not True or v.get("propostasOnline") is True:
+        return v
+    out = {k: x for k, x in v.items() if k not in CAMPOS_PROPOSTAS}
+    out.update({k: n[k] for k in CAMPOS_PROPOSTAS if k in n})
+    return out
+
+
 def manter_publicado(novo: dict, velho: dict | None, b: dict) -> dict:
     """O robô do GitHub roda fora do Brasil, e muitos sites de prefeituras e Câmaras bloqueiam esse acesso (ou demoram);
     ele também pode começar com o cache vazio. Por isso, um bloco já publicado em dados/municipios/ (Câmara ou prefeitura)
     só é trocado quando a rodada nova achou pelo menos o mesmo tanto (_pontos), quando o site mudou de endereço e o novo foi
-    lido, quando o endereço publicado não existe mais (erro de DNS) ou quando o publicado tem mais de MANTER_PUBLICADO_DIAS
-    dias. Senão fica o bloco publicado, com a data em que foi conferido."""
+    lido, quando o endereço publicado não existe mais (erro de DNS), quando o publicado tem mais de MANTER_PUBLICADO_DIAS
+    dias ou quando o endereço publicado é de outra cidade (alheio). Se a rodada nova só achou o SAPL da Câmara (e o pôs
+    como site), o site e o pedido de informação publicados continuam, e as proposições do SAPL entram se forem melhores
+    (_com_sapl). Senão fica o bloco publicado, com a data em que foi conferido."""
     if not velho:
         return novo
     limite = (dt.date.fromisoformat(hoje()) - dt.timedelta(days=MANTER_PUBLICADO_DIAS)).isoformat()
+    uf, ibge = b.get("uf"), b.get("ibge")
     for parte in ("camara", "prefeitura"):
         n, v = novo.get(parte) or {}, velho.get(parte) or {}
-        if not v.get("site") or (v.get("conferido") or "") < limite or _pontos(parte, n) >= _pontos(parte, v):
-            continue
-        if n.get("site") and _host(n["site"]) != _host(v["site"]) and _leu(parte, n):
+        if not v.get("site") or (v.get("conferido") or "") < limite or alheio(v["site"], uf, ibge):
             continue
         h = _host(v["site"])
         if any(x.get("erro") == "dns" and _host("https://" + (x.get("host") or "")) == h
                for x in (b.get(parte) or {}).get("visitas") or []):
+            continue
+        if parte == "camara" and _so_sapl(n) and not _so_sapl(v):
+            novo[parte] = _com_sapl(v, n)
+            continue
+        if _pontos(parte, n) >= _pontos(parte, v):
+            continue
+        if n.get("site") and _host(n["site"]) != h and _leu(parte, n):
             continue
         novo[parte] = v
     return novo
 
 
 def juntar_com_antigo(novo: dict, antigo: dict | None) -> dict:
-    """Se o site não abriu agora (fora do ar, tempo esgotado) mas abriu há pouco, vale o que foi conferido antes."""
+    """Se o site não abriu agora (fora do ar, tempo esgotado) mas abriu há pouco, vale o que foi conferido antes. Não volta
+    um site que esta rodada abriu e viu que não é da cidade, nem um com o nome de outra cidade (alheio)."""
     if not antigo:
         return novo
     limite = (dt.date.fromisoformat(hoje()) - dt.timedelta(days=MANTER_DIAS)).isoformat()
     for parte in ("camara", "prefeitura"):
         n, a = novo.get(parte) or {}, antigo.get(parte) or {}
         if n.get("site") or not a.get("site") or (a.get("conferido") or "") < limite:
+            continue
+        h = _host(a["site"])
+        if alheio(a["site"], novo.get("uf"), novo.get("ibge")) or any(
+                x.get("ok") is False and not x.get("erro") and _host("https://" + (x.get("host") or "")) == h
+                for x in n.get("visitas") or []):
             continue
         erros = [x.get("erro") for x in n.get("visitas") or []]
         transitorio = any(e in ("timeout", "conexao", "tls", "redirecionamentos", "suspenso", "http 403", "http 429")
@@ -892,6 +986,7 @@ def main() -> int:
 
     cidades = ler_json(DADOS / "cidades.json", []) or []
     nomes = F.Nomes(cidades)
+    preparar_slugs(cidades)
     if a.rodizio:
         ufs = grupos_rodizio(cidades)[dt.date.fromisoformat(hoje()).weekday()]
     elif a.ibge:

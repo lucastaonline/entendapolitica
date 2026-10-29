@@ -27,6 +27,7 @@ import _paginas as P  # noqa: E402
 
 PASTA = CACHE / "municipios" / "fontes"
 DIAS_LISTAS = 7
+TEMPO_LISTAS = 180   # segundos: o Interlegis leva uns 25 s só para começar a mandar a lista (gerada na hora)
 SO_CACHE = False   # True: não baixa nada (mapear.py --montar)
 
 SIGI_URL = "https://sigi.interlegis.leg.br/servicos/casasatendidas/"
@@ -51,7 +52,7 @@ def _baixar(rede, url: str, arquivo: Path, dias: float = DIAS_LISTAS, aceitar: s
     if SO_CACHE:
         return None
     kw = {"aceitar": aceitar} if aceitar else {}
-    r = rede.pagina(url, max_bytes=20_000_000, **kw)
+    r = rede.pagina(url, max_bytes=20_000_000, tempo=TEMPO_LISTAS, **kw)
     if not r.ok or not r.corpo:
         log(f"  [fontes] falhou {url}: {r.erro or r.status}")
         return arquivo.read_bytes() if arquivo.exists() else None

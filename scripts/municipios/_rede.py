@@ -170,19 +170,20 @@ class Rede:
 
     # ------------------------------------------------------------------ um pedido (sem seguir redirecionamento)
     def _um(self, url: str, ua: str, aceitar: str, max_bytes: int, extra: dict | None = None,
-            conta: bool = True) -> Resposta:
+            conta: bool = True, tempo: float | None = None) -> Resposta:
         host = host_de(url)
         ip = self.ip(host)
         if ip and ip in self.suspensos:
             return Resposta(url=url, final=url, erro="suspenso")
         if ip:
             self._esperar_ip(ip)
-        r = self._um_cru(url, ua, aceitar, max_bytes, extra)
+        r = self._um_cru(url, ua, aceitar, max_bytes, extra, tempo)
         if ip and (conta or r.erro in ("timeout", "conexao")):
             self._anotar(ip, r)
         return r
 
-    def _um_cru(self, url: str, ua: str, aceitar: str, max_bytes: int, extra: dict | None = None) -> Resposta:
+    def _um_cru(self, url: str, ua: str, aceitar: str, max_bytes: int, extra: dict | None = None,
+                tempo: float | None = None) -> Resposta:
         r = Resposta(url=url, final=url)
         host = host_de(url)
         ip = self.ip(host)
@@ -200,7 +201,7 @@ class Rede:
                 inicio = time.time()
                 try:
                     req = urllib.request.Request(url, headers=hdr)
-                    with _OPENERS[modo].open(req, timeout=TIMEOUT) as resp:
+                    with _OPENERS[modo].open(req, timeout=tempo or TIMEOUT) as resp:
                         r.status = resp.status
                         r.tipo = resp.headers.get("Content-Type") or ""
                         r.charset = resp.headers.get_content_charset()
@@ -211,7 +212,7 @@ class Rede:
                                 break
                             partes.append(bloco)
                             n += len(bloco)
-                            if n >= max_bytes or time.time() - inicio > TOTAL:
+                            if n >= max_bytes or time.time() - inicio > (tempo or TOTAL):
                                 r.cortado = True
                                 break
                         corpo = b"".join(partes)
@@ -342,7 +343,10 @@ class Rede:
 
     # ------------------------------------------------------------------ uma página, com redirecionamentos e robots
     def pagina(self, url: str, ua: str = UA, aceitar: str = "text/html,application/xhtml+xml,*/*;q=0.8",
-               max_bytes: int = MAX_BYTES, respeitar_robots: bool = True, extra: dict | None = None) -> Resposta:
+               max_bytes: int = MAX_BYTES, respeitar_robots: bool = True, extra: dict | None = None,
+               tempo: float | None = None) -> Resposta:
+        """tempo: segundos de espera para um pedido que demora (uma lista oficial grande, gerada na hora pelo servidor);
+        sem ele, valem TIMEOUT e TOTAL."""
         atual = url
         caminho = []
         for _ in range(MAX_REDIRECIONAMENTOS):
@@ -355,7 +359,7 @@ class Rede:
             if not self.ip(host):
                 return Resposta(url=url, final=atual, erro="dns", caminho=caminho)
             self._esperar_vez(host, atraso)
-            r = self._um(atual, ua, aceitar, max_bytes, extra)
+            r = self._um(atual, ua, aceitar, max_bytes, extra, tempo=tempo)
             if r.erro == "redir" and r.final and r.final != atual:
                 caminho.append(r.final)
                 atual = r.final

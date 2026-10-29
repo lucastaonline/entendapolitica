@@ -116,6 +116,11 @@
         '<h2 id="t-camara-mun">' + EP.tr("A Câmara Municipal", "The City Council") + " <small>(" + EP.num(n) + " " + EP.tr(n === 1 ? "vereador" : "vereadores", n === 1 ? "councilor" : "councilors") + ")</small></h2>" +
         '<p class="muted">' + EP.tr("Os vereadores fazem as leis da cidade e fiscalizam o prefeito.", "City councilors (<span lang=\"pt-BR\">vereadores</span>) make the city's laws and oversee the mayor.") + "</p></div></div>" +
         aviso(D.aviso(v.aviso, v.aviso_en)) + '<div id="casa-ver"></div>' + EP.infoCasa(v.infoCasa) + "</section>" +
+      // a próxima eleição da cidade e as eleições suplementares (js/proximos.js)
+      '<section class="miolo bloco" id="proxima-eleicao" aria-labelledby="t-proxima-eleicao"><div class="cab-bloco rev"><span class="ic-bloco" aria-hidden="true">🗳️</span><div>' +
+        '<h2 id="t-proxima-eleicao">' + EP.tr("A próxima eleição", "The next election") + "</h2>" +
+        '<p class="muted">' + EP.tr("Quando a cidade escolhe de novo o prefeito, o vice e os vereadores.", "When the city chooses its mayor, vice mayor and city councilors again.") + "</p></div></div>" +
+        '<div id="proximos-cidade"><div class="carregando">' + EP.tr("Carregando…", "Loading…") + "</div></div></section>" +
       '<section class="miolo bloco" aria-label="' + EP.tr("Ver mais", "See more") + '"><div class="links-cidade rev">' +
         '<a class="btn claro" href="estado.html?uf=' + uf + (EP.en ? "&lang=en" : "") + '"><span aria-hidden="true">📍 </span>' +
           esc(EP.tr("Ver a política " + EP.doEstado(uf), "See the politics " + EP.doEstado(uf))) + "</a>" +
@@ -128,6 +133,7 @@
         return m.votos != null ? EP.tr(EP.num(m.votos) + " votos em 2024", EP.num(m.votos) + " votes in 2024") : "";
       } });
     if (EP.hist) EP.hist.seletor(document.getElementById("mandato-lugar"), "cidades");  // "Ver outro mandato" (js/historico.js)
+    if (EP.eleitos) EP.eleitos.cidade(document.getElementById("proximos-cidade"), c.ibge, uf, c.nome);
     depois(caixa, focar);
   }
 

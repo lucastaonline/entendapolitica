@@ -96,6 +96,7 @@
   casa("senado", "dados/senado.json", { um: EP.tr("senador", "senator"), uma: EP.tr("senadora", "senator"), varios: EP.tr("senadores", "senators"), varias: EP.tr("senadoras", "senators") },
     function (m) { return m.fimMandato ? EP.tr("Mandato até ", "Term ends in ") + String(m.fimMandato).slice(0, 4) : ""; });
   casa("camara", "dados/camara.json", { um: EP.tr("deputado", "deputy"), uma: EP.tr("deputada", "deputy"), varios: EP.tr("deputados", "deputies"), varias: EP.tr("deputadas", "deputies") });
+  if (EP.eleitos) EP.eleitos.brasil(document.getElementById("proximos-brasil"));  // eleitos 2026 (até a posse): "Quem assume em 2027"
 
   // ---------- busca e rodapé ----------
   EP.ligaBusca(document.getElementById("busca"), document.getElementById("resultados"));

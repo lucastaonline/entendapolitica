@@ -158,6 +158,7 @@
       chipAtalho("#governo", "🏢", EP.tr("Quem governa", "Who governs")) + chipAtalho("#senadores", "🏛️", EP.tr("Senadores", "Senators")) +
       chipAtalho("#federais", "🏛️", EP.tr("Deputados federais", "Federal deputies")) +
       chipAtalho("#estaduais", "🏛️", ehDF ? EP.tr("Deputados distritais", "District deputies") : EP.tr("Deputados estaduais", "State deputies")) +
+      chipAtalho("#quem-assume", "📅", EP.tr("Quem assume em 2027", "Who takes office in 2027")) +
       (ehDF ? "" : chipAtalho("#cidade", "🏘️", EP.tr("Minha cidade", "Cities"))) + "</nav>" +
       secao("governo", "🏢", esc(EP.tr("Quem governa " + (ehDF ? "o Distrito Federal" : "o estado"), "Who governs " + (ehDF ? "the Federal District" : "the state"))),
         esc(EP.tr("O governador e o vice comandam o Poder Executivo " + de + ".", "The governor and the vice governor lead the executive branch " + de + ".")),
@@ -172,6 +173,10 @@
         EP.tr("A Assembleia Legislativa: deputados estaduais", "The Legislative Assembly: state deputies")),
         esc(EP.tr("Eles fazem as leis " + de + " e fiscalizam o governador.", (ehDF ? "District deputies (the Federal District's legislators)" : "State deputies (Brazil's state legislators)") + " make the laws " + de + " and oversee the governor.")),
         '<div id="aviso-est"></div><div class="casa-corpo" id="casa-est"><div class="carregando">' + EP.tr("Carregando…", "Loading…") + "</div></div>") +
+      // quem foi eleito em 2026 e quando toma posse (js/proximos.js); a seção some sozinha depois das posses
+      secao("quem-assume", "📅", esc(EP.tr("Quem assume em 2027", "Who takes office in 2027")),
+        esc(EP.tr("Quem foi eleito em 2026 " + EP.noEstado(uf) + " e quando cada um toma posse.", "Who was elected in 2026 " + EP.noEstado(uf) + " and when each one takes office.")),
+        '<div id="proximos-estado"><div class="carregando">' + EP.tr("Carregando…", "Loading…") + "</div></div>") +
       (ehDF ? '<section class="miolo bloco" aria-label="' + EP.tr("Cidades", "Cities") + '"><div class="aviso azul" id="aviso-df"><span aria-hidden="true">ℹ️ </span>' +
         esc(EP.tr("O Distrito Federal não é dividido em cidades com prefeito e vereadores. Quem cuida dessas coisas é o próprio governo do DF, e as leis são feitas pela Câmara Legislativa.",
           "The Federal District is not divided into cities with mayors and city councilors. The Federal District's own government takes care of those things, and its laws are made by the Legislative Chamber.")) + "</div></section>" :
@@ -182,6 +187,7 @@
           '<p id="capital-cid" class="links-cidade"></p></div>'));
     EP.revelar(el);
     if (EP.hist) EP.hist.seletor(document.getElementById("mandato-lugar"), "estados");  // "Ver outro mandato" (js/historico.js)
+    if (EP.eleitos) EP.eleitos.estado(document.getElementById("proximos-estado"), uf);
 
     // governo + Assembleia (arquivo do estado)
     EP.json("dados/estados/" + uf + ".json").then(function (e) {

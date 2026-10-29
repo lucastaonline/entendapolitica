@@ -149,6 +149,7 @@
         return EP.avisoMinistros(d).then(function (t) { return Object.assign({ tipo: "min", avisoLista: t, avisoLista_en: t }, p); });
       });
     }
+    if (/^e26-/.test(id)) return EP.eleitos ? EP.eleitos.perfil(id) : Promise.reject(new Error("id inválido"));  // eleitos 2026 (até a posse): js/proximos.js
     if (/^stf-[a-z0-9-]+$/.test(id)) return EP.stf ? EP.stf.carregar(id) : Promise.reject(new Error("id inválido"));  // ministros do STF: js/stf.js
     return Promise.reject(new Error("id inválido"));
   }
@@ -747,6 +748,7 @@
     return '<li><span class="ic-onde" aria-hidden="true">' + ic + "</span><span>" + linkFora(url, txt, true) + (desc ? "<small>" + desc + "</small>" : "") + "</span></li>";
   }
   function ondeVerHtml(p) {
+    if (p.e26) return "";  // eleitos 2026 (até a posse): ainda sem o cargo, não há o que procurar na Casa
     var t = p.tipo, ex = p.executivo || {};
     var semProp = !p.propostas, semExec = ex.leisSancionadas == null && ex.vetos == null;
     if (!((t === "dest" || t === "ver") && semProp) && !((t === "gov" || t === "pref") && (semProp || semExec))) return "";
@@ -910,7 +912,7 @@
 
     if (p.tipo === "stf" && EP.stf) { raiz.innerHTML = EP.stf.perfilHtml(p); return; }  // ministros do STF: o perfil vem do js/stf.js
     var todas = coletarFontes(p);
-    raiz.innerHTML = topoHtml(p) + fatosHtml(p) + anterioresHtml(p) + contatosHtml(p) + oqueFazHtml(p) +
+    raiz.innerHTML = topoHtml(p) + fatosHtml(p) + (p.e26 && EP.eleitos ? EP.eleitos.perfilHtml(p) : "") + anterioresHtml(p) + contatosHtml(p) + oqueFazHtml(p) +
       (p.propostas ? propostasHtml(p) : "") + executivoHtml(p) + votacoesHtml(p) + gastosHtml(p) + comissoesHtml(p) + avisoEMinisterio(p) +
       (todas.length && p.tipo !== "min" ? '<section class="secao-perfil" aria-labelledby="t-fontes"><h2 id="t-fontes"><span class="ic" aria-hidden="true">📚</span>' + EP.tr("Todas as fontes desta página", "All the sources on this page") + "</h2>" + EP.fontesHtml(todas) +
         (p.atualizado ? '<p class="muted" style="margin-top:10px">' + EP.tr("Dados atualizados em ", "Data updated on ") + EP.data(p.atualizado) + ".</p>" : "") + "</section>" : "");
@@ -968,6 +970,7 @@
   }
   carregar().then(render).catch(function (err) {
     if (window.console && err && !/não achei|id inválido|^\d{3} /.test(err.message || "")) console.warn(err);
+    if (/^e26-/.test(id) && EP.eleitos) { EP.eleitos.semPerfil(raiz); return; }  // eleitos 2026: endereço de antes da posse
     erro(EP.tr("Não encontramos essa pessoa", "We could not find this person"),
       EP.tr("Pode ser que ela não esteja mais no cargo, ou que os dados ainda estejam sendo atualizados.", "They may no longer be in office, or the data may still be being updated."));
   });

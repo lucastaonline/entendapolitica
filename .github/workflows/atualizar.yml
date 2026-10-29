@@ -107,6 +107,15 @@ jobs:
         run: python scripts/tse.py
         continue-on-error: true
 
+      # quem foi eleito em 2026 e ainda não tomou posse (dados/eleitos/): usa as candidaturas que o tse.py acabou de baixar,
+      # a votação por município e zona (baixada de novo a cada 7 dias; guarda só as somas em .cache/eleitos) e o
+      # DivulgaCandContas (eleições suplementares). Se o TSE não responder, ficam os arquivos de antes. Cada cargo sai dos
+      # arquivos no dia da posse.
+      - name: Eleitos em 2026 (até a posse)
+        run: python scripts/eleitos.py
+        continue-on-error: true
+        timeout-minutes: 20
+
       # cada Casa tem o seu coletor (scripts/assembleias/<uf>.py) e o seu servidor: rodam todas ao mesmo tempo, cada uma
       # respeitando o robots.txt e o intervalo pedido (60 s nos SAPL do Interlegis). Com o cache cheio: 6 a 13 min. Sem
       # cache (a primeira vez), cada Casa usa a rodada toda, guarda o que leu em .cache/ e só grava quando termina: as

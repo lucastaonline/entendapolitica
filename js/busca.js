@@ -1,5 +1,5 @@
 /* Busca de políticos (lê dados/busca.json na primeira vez que a pessoa digita).
-   Linhas do arquivo: [id, nome, cargo curto, UF, partido, cidade|null]
+   Linhas do arquivo: [id, nome, cargo curto, UF, partido, cidade|null, cargo em inglês (opcional)]
    Acessibilidade: a lista de resultados não é "ao vivo" (seria lida inteira a cada letra); um aviso escondido diz quantos foram achados.
    Teclado: seta para baixo vai do campo para os resultados; setas andam entre eles; Esc volta para o campo. */
 (function () {
@@ -14,8 +14,9 @@
         return linhas.map(function (l) {
           var uf = l[3] || "";
           var extra = [l[2], uf, EP.UFS[uf], l[4], l[5]];
-          if (EP.en) extra.push(EP.cargo(l[2]));
-          return { id: l[0], nome: l[1], cargo: l[2], uf: uf, partido: l[4], cidade: l[5], n: EP.norm(l[1]), resto: EP.norm(extra.join(" ")) };
+          if (EP.en) extra.push(l[6] || EP.cargo(l[2]));
+          // l[6]: o cargo já em inglês, quando o EP.cargo não sabe traduzir (ex.: "Deputada federal eleita", dos eleitos em 2026)
+          return { id: l[0], nome: l[1], cargo: l[2], cargoEn: l[6] || null, uf: uf, partido: l[4], cidade: l[5], n: EP.norm(l[1]), resto: EP.norm(extra.join(" ")) };
         });
       });
       promessa.catch(function () { promessa = null; });
@@ -46,7 +47,7 @@
   function linhaHtml(p) {
     var onde = p.cidade ? p.cidade + " (" + p.uf + ")" : (EP.UFS[p.uf] || p.uf || EP.tr("Brasil", "Brazil"));
     return '<li><a href="pessoa.html?id=' + encodeURIComponent(p.id) + '">' + EP.av(null, p.nome) +
-      "<span><b>" + EP.esc(p.nome) + "</b><small>" + EP.esc(EP.cargo(p.cargo)) + (p.partido ? " · " + EP.pt(EP.esc(p.partido)) : "") + " · " + EP.esc(onde) + "</small></span></a></li>";
+      "<span><b>" + EP.esc(p.nome) + "</b><small>" + EP.esc(EP.en && p.cargoEn ? p.cargoEn : EP.cargo(p.cargo)) + (p.partido ? " · " + EP.pt(EP.esc(p.partido)) : "") + " · " + EP.esc(onde) + "</small></span></a></li>";
   }
 
   EP.ligaBusca = function (input, saida) {

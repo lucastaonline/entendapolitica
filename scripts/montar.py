@@ -134,6 +134,7 @@ def sitemap() -> int:
         for m in ind.get(nivel) or []:
             if m.get("fim") and m["fim"] <= hoje():
                 urls += [(f"{b}mandato={m['id']}", ind.get("atualizado")) for b in bases]
+    urls += _eleitos_sitemap()  # eleitos 2026 (até a posse): perfis e26-
     urls += _stf_sitemap()  # ministros do STF: perfis stf-
 
     def en(c: str) -> str:
@@ -368,6 +369,24 @@ def _lista_velha(a: dict, inicio: str) -> bool:
     return (a.get("atualizado") or "") < inicio
 
 
+# eleitos 2026 (até a posse): frente "quem assume" (dados/eleitos/, feitos por scripts/eleitos.py)
+def _eleitos_2026() -> str:
+    """Quem foi eleito em 2026 e ainda não tomou posse entra na busca (os perfis e26- e os vereadores eleitos) e ganha o
+    selo "eleito em 2026" nas fichas das cidades. O trabalho fica em scripts/eleitos.py (busca_e_selos)."""
+    if not any((DADOS / "eleitos").glob("*.json")):
+        return "sem dados/eleitos"
+    import eleitos
+    return eleitos.busca_e_selos()
+
+
+# eleitos 2026 (até a posse): os perfis e26- no sitemap.xml
+def _eleitos_sitemap() -> list:
+    if not any((DADOS / "eleitos").glob("*.json")):
+        return []
+    import eleitos
+    return eleitos.urls_sitemap()
+
+
 # ministros do STF (dados/stf.json, feito por scripts/stf.py): busca e sitemap
 def _stf_busca() -> str:
     """Os ministros do STF entram na busca (dados/busca.json) como "Ministro(a) do Supremo Tribunal Federal", sem estado,
@@ -564,6 +583,7 @@ def main() -> None:
     n_onde, n_ex = _onde_ver_cidades()
     log(f"cidades com \"onde ver\" (site oficial, pedido de informação, Diário Oficial) atualizado: {n_onde}")
     log(f"prefeitos com as leis e os vetos dos Diários Oficiais atualizados: {n_ex}")
+    log(f"eleitos em 2026 (até a posse): {_eleitos_2026()}")
     log(f"ministros do STF na busca: {_stf_busca()}")  # ministros do STF
     log(f"dados/cidades.json: {indice_cidades()} cidades")
     log(f"sitemap.xml: {sitemap()} endereços")

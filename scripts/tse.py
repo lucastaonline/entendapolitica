@@ -16,7 +16,9 @@ Fontes:
   depois da totalização), consulta_cand_complementar (se a candidatura de 2026 foi para a urna),
   votacao_candidato_munzona (votos por município e zona, somados aqui) e bem_candidato (bens).
 - TSE, DivulgaCandContas: foto (URL pública), página de cada candidatura, códigos das eleições
-  suplementares e o resultado de 2024 das cidades que aparecem sem definição nos dados abertos.
+  suplementares e o resultado de 2024 das cidades que aparecem sem definição nos dados abertos. Ele recusa o robô do
+  GitHub (fora do Brasil): as respostas de uma rodada que deu certo ficam em dados/tse/divulga_2024.json e valem quando
+  ele recusar; --so-divulga (de um computador no Brasil) pede tudo de novo.
 - IBGE (scripts/ibge.py): código e nome oficial dos municípios.
 - Câmara e Senado (Dados Abertos): quem está no mandato hoje e CPF/nome civil/nascimento (para casar com o TSE).
 - dados/manual/governadores.json (pesquisa à mão): quem governa hoje, se já existir.
@@ -41,6 +43,7 @@ não foi conferido; o log lista essas cidades, para a pesquisa à mão em dados/
 Uso:
     python scripts/tse.py              # tudo
     python scripts/tse.py --so-2026    # só atualiza "eleicao2026" (estados e dados/tse/federais.json)
+    python scripts/tse.py --so-divulga # só pede de novo ao DivulgaCandContas o que fica em dados/tse/divulga_2024.json
     python scripts/tse.py --renovar    # baixa de novo todos os arquivos do TSE (ignora o cache)
     python scripts/tse.py --cache      # sem rede: refaz as fichas só com o que já está em .cache/
 """
@@ -448,27 +451,107 @@ def divulga_json(caminho: str, cache: str):
                        headers=H_DIVULGA, tentativas=3, timeout=60)
 
 
+# O DivulgaCandContas recusa o robô do GitHub, que roda fora do Brasil (HTTP 403, conferido em 29/10/2026). O que ele
+# respondeu numa rodada que deu certo (de um computador no Brasil) fica guardado em dados/tse/divulga_2024.json (vai para o
+# repositório, não para o site) e vale quando ele recusar: sem isso, as cidades com o resultado de 2024 "sem definição"
+# nos dados abertos ficavam sem prefeito e sem vereadores, e quem foi eleito numa suplementar ficava sem foto. O que o robô
+# pediu e não tinha guardado fica em "_faltam"; scripts/atualizar_do_brasil.py (tse.py --so-divulga) pede tudo de novo.
+RESERVA_DIVULGA = SAIDA_TSE / "divulga_2024.json"
+_RESERVA_DIV: dict = {}
+_RESERVA_DIV_MUDOU: list[bool] = []
+
+
+def _reserva_divulga() -> dict:
+    if not _RESERVA_DIV:
+        _RESERVA_DIV.update(ler_json(RESERVA_DIVULGA, {}) or {})
+        _RESERVA_DIV.setdefault("_", {"fonte": DIVULGA, "uso": "respostas do DivulgaCandContas que o tse.py usa quando ele "
+                                                               "recusa o pedido (robô fora do Brasil)"})
+    return _RESERVA_DIV
+
+
+def _guarda_divulga(chave: str, valor) -> None:
+    r = _reserva_divulga()
+    if r.get(chave) != valor:
+        r[chave] = valor
+        _RESERVA_DIV_MUDOU.append(True)
+    _falta_divulga(chave, False)
+
+
+def _falta_divulga(chave: str, falta: bool) -> None:
+    r = _reserva_divulga()
+    antes = set(r.get("_faltam") or [])
+    depois = antes | {chave} if falta else antes - {chave}
+    if depois != antes:
+        if depois:
+            r["_faltam"] = sorted(depois)
+        else:
+            r.pop("_faltam", None)
+        _RESERVA_DIV_MUDOU.append(True)
+
+
+def salvar_reserva_divulga() -> None:
+    if _RESERVA_DIV_MUDOU:
+        salvar_json(RESERVA_DIVULGA, dict(sorted(_RESERVA_DIV.items())))
+        _RESERVA_DIV_MUDOU.clear()
+
+
 def divulga_totalizacao_2024(ue: str, cod_cargo: int) -> dict | None:
-    """{SQ: situação (como no CSV: 'ELEITO', 'ELEITO POR QP'...)} do DivulgaCandContas, ou None se falhar."""
+    """{SQ: situação (como no CSV: 'ELEITO', 'ELEITO POR QP'...)} de quem foi eleito, no DivulgaCandContas; se ele não
+    responder, o que ficou guardado (RESERVA_DIVULGA); sem nada guardado, None."""
+    chave = f"totalizacao/{ue}/{cod_cargo}"
     try:
         d = divulga_json(f"candidatura/listar/2024/{ue}/{ID_DIVULGA[2024]}/{cod_cargo}/candidatos",
                          f"listar_2024_{ue}_{cod_cargo}.json")
     except Exception as e:
-        log(f"  [aviso] DivulgaCandContas {ue}/{cod_cargo}: {e}")
-        return None
-    return {str(c["id"]): (c.get("descricaoTotalizacao") or "").upper() for c in d.get("candidatos") or []}
+        guardado = _reserva_divulga().get(chave)
+        log(f"  [aviso] DivulgaCandContas {ue}/{cod_cargo}: {e}"
+            + (f"; vale o que ficou guardado em dados/tse/{RESERVA_DIVULGA.name}" if guardado is not None else ""))
+        if guardado is None:
+            _falta_divulga(chave, True)
+        return guardado
+    out = {str(c["id"]): (c.get("descricaoTotalizacao") or "").upper() for c in d.get("candidatos") or []}
+    _guarda_divulga(chave, {k: v for k, v in sorted(out.items()) if v.startswith("ELEITO")})
+    return out
 
 
 def ids_suplementares_2024(ufs) -> dict:
-    """{(código TSE do município, 'AAAA-MM-DD'): id da eleição suplementar no DivulgaCandContas}."""
+    """{(código TSE do município, 'AAAA-MM-DD'): id da eleição suplementar no DivulgaCandContas} (o id vai no endereço da
+    foto de quem foi eleito numa suplementar). Se o DivulgaCandContas não responder, vale o que ficou guardado."""
     out = {}
     for uf in sorted(ufs):
+        chave = f"suplementares/{uf}"
         try:
-            for e in divulga_json(f"eleicao/suplementares/2024/{uf}", f"suplementares_2024_{uf}.json") or []:
-                out[(str(e.get("siglaUF")), str(e.get("dataEleicao"))[:10])] = str(e["id"])
+            ids = [[str(e.get("siglaUF")), str(e.get("dataEleicao"))[:10], str(e["id"])]
+                   for e in divulga_json(f"eleicao/suplementares/2024/{uf}", f"suplementares_2024_{uf}.json") or []]
+            _guarda_divulga(chave, ids)
         except Exception as e:
-            log(f"  [aviso] eleições suplementares de {uf} no DivulgaCandContas: {e}")
+            ids = _reserva_divulga().get(chave)
+            log(f"  [aviso] eleições suplementares de {uf} no DivulgaCandContas: {e}"
+                + (f"; vale o que ficou guardado em dados/tse/{RESERVA_DIVULGA.name}" if ids is not None else ""))
+            if ids is None:
+                _falta_divulga(chave, True)
+            ids = ids or []
+        for ue, data, i in ids:
+            out[(ue, data)] = i
     return out
+
+
+def renovar_reserva_divulga() -> None:
+    """--so-divulga (de um computador no Brasil: scripts/atualizar_do_brasil.py): pede de novo ao DivulgaCandContas tudo o
+    que está guardado e o que o robô pediu sem ter guardado ("_faltam"). Não refaz as fichas: o robô seguinte as refaz
+    com o que ficou guardado. Rápido (uns 60 pedidos) e sem os arquivos grandes do TSE."""
+    r = _reserva_divulga()
+    chaves = sorted({k for k in r if not k.startswith("_")} | set(r.get("_faltam") or []))
+    for k in chaves:
+        tipo, a, *b = k.split("/")
+        if tipo == "totalizacao" and b:
+            divulga_totalizacao_2024(a, int(b[0]))
+        elif tipo == "suplementares":
+            ids_suplementares_2024({a})
+    salvar_reserva_divulga()
+    falta = r.get("_faltam") or []
+    log(f"dados/tse/{RESERVA_DIVULGA.name}: {len(chaves)} pedidos ao DivulgaCandContas"
+        + (f"; continuam sem resposta: {', '.join(falta)}" if falta else "; todos responderam"))
 
 
 # ---------------------------------------------------------------- 2026
@@ -1148,6 +1231,11 @@ def _pessoa_cidade(c: dict, pid: str, titular: dict | None, vot24: dict, data: s
     if sit_divulga:
         a = "a" if c["genero"] == "F" else "o"
         b["situacao"] = f"Eleit{a} em 2024 (segundo o DivulgaCandContas)"
+        if not b.get("votos"):
+            # nos dados abertos, os votos de quem concorreu sub judice ficam como "Anulado sub judice" (0 válidos):
+            # "0 votos" estaria errado; sem número, a ficha mostra só a situação (ex.: Equador, RN, em 29/10/2026)
+            b["votos"] = None
+            b.pop("votosDaChapa", None)
     out = {"id": pid}
     out.update(b)
     if aconf:
@@ -1591,9 +1679,14 @@ def _sem_rede() -> None:
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--so-2026", action="store_true", help="só atualiza eleicao2026")
+    ap.add_argument("--so-divulga", action="store_true",
+                    help="só pede de novo ao DivulgaCandContas o que fica guardado em dados/tse/divulga_2024.json (do Brasil)")
     ap.add_argument("--renovar", action="store_true", help="baixa de novo os arquivos do TSE")
     ap.add_argument("--cache", action="store_true", help="sem rede: refaz tudo só com o que já está em .cache/")
     args = ap.parse_args()
+    if args.so_divulga:
+        renovar_reserva_divulga()
+        return
     if args.cache:
         _sem_rede()
     if args.renovar:
@@ -1694,6 +1787,7 @@ def main():
     n_ver = sum(c["vereadores"]["total"] for c in cidades.values())
     log(f"dados/cidades: {len(cidades)} cidades, {n_pref} prefeitos, {n_ver} vereadores; origem: {dict(contagem)}")
     avisar_prefeitos_2026(prazo)
+    salvar_reserva_divulga()
 
     # ---- busca
     busca = []

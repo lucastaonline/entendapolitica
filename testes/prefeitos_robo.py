@@ -100,6 +100,73 @@ def main():
        and tse.cpf_valido("123.456.789-01") == "12345678901")
     # 9. o prazo do art. 14, § 6º
     ok("seis_meses_antes: 04/10/2026 -> 04/04/2026", tse.seis_meses_antes("2026-10-04") == "2026-04-04")
+    # 10. o DivulgaCandContas recusa o robô do GitHub (HTTP 403 fora do Brasil): vale o que ficou guardado numa rodada
+    # que deu certo (dados/tse/divulga_2024.json); sem isso, as cidades com o resultado de 2024 "sem definição" ficavam
+    # sem prefeito e sem vereadores, e quem foi eleito numa suplementar ficava sem foto (robô de 29/10/2026)
+    tse.RESERVA_DIVULGA = PASTA / "divulga_2024.json"
+    tse._RESERVA_DIV.clear()
+    tse._RESERVA_DIV_MUDOU.clear()
+    resp = {"candidatura/listar/2024/16675/2045202024/11/candidatos": {"candidatos": [
+                {"id": 200001889942, "descricaoTotalizacao": "Eleito"},
+                {"id": 200002198765, "descricaoTotalizacao": "Não eleito"}]},
+            "eleicao/suplementares/2024/MA": [{"siglaUF": "08850", "dataEleicao": "2026-12-06T08:00:00", "id": 10652002026}]}
+    recusa = [False]
+    pedidos_div = []
+
+    def divulga(caminho, cache):
+        pedidos_div.append(caminho)
+        if recusa[0]:
+            raise RuntimeError(f"Falha ao baixar {caminho}: HTTP Error 403: Forbidden (simulado)")
+        return resp[caminho]
+
+    tse.divulga_json = divulga
+    t1, s1 = tse.divulga_totalizacao_2024("16675", 11), tse.ids_suplementares_2024({"MA"})
+    tse.salvar_reserva_divulga()
+    guardado = tse.ler_json(tse.RESERVA_DIVULGA, {})
+    ok("o DivulgaCandContas respondeu: guarda quem foi eleito e os ids das eleições suplementares",
+       t1.get("200001889942") == "ELEITO" and guardado.get("totalizacao/16675/11") == {"200001889942": "ELEITO"}
+       and guardado.get("suplementares/MA") == [["08850", "2026-12-06", "10652002026"]], str(guardado))
+    tse._RESERVA_DIV.clear()  # outra rodada (o robô): começa lendo o arquivo
+    recusa[0] = True
+    t2, s2 = tse.divulga_totalizacao_2024("16675", 11), tse.ids_suplementares_2024({"MA"})
+    ok("o DivulgaCandContas recusou: vale o que ficou guardado (o mesmo eleito e o mesmo id da suplementar)",
+       t2 == {"200001889942": "ELEITO"} and s2 == s1 == {("08850", "2026-12-06"): "10652002026"}, f"{t2} | {s2}")
+    antes = tse.RESERVA_DIVULGA.read_bytes()
+    tse.salvar_reserva_divulga()
+    ok("recusou com tudo guardado: o arquivo guardado não muda",
+       not tse._RESERVA_DIV_MUDOU and tse.RESERVA_DIVULGA.read_bytes() == antes)
+    falta_t, falta_s = tse.divulga_totalizacao_2024("99999", 11), tse.ids_suplementares_2024({"AC"})
+    tse.salvar_reserva_divulga()
+    g = tse.ler_json(tse.RESERVA_DIVULGA, {})
+    ok("recusou sem nada guardado: None e nenhuma suplementar (como antes), e o pedido fica anotado em _faltam",
+       falta_t is None and falta_s == {} and g.get("_faltam") == ["suplementares/AC", "totalizacao/99999/11"],
+       str(g.get("_faltam")))
+    # do Brasil (scripts/atualizar_do_brasil.py): tse.py --so-divulga pede de novo tudo o que está guardado e o que falta
+    recusa[0] = False
+    resp["candidatura/listar/2024/99999/2045202024/11/candidatos"] = {"candidatos": [{"id": 1, "descricaoTotalizacao": "Eleito"}]}
+    resp["eleicao/suplementares/2024/AC"] = []
+    pedidos_div.clear()
+    tse.renovar_reserva_divulga()
+    g = tse.ler_json(tse.RESERVA_DIVULGA, {})
+    ok("--so-divulga (do Brasil): pede tudo de novo, guarda o que faltava e limpa _faltam",
+       "_faltam" not in g and g.get("totalizacao/99999/11") == {"1": "ELEITO"} and g.get("suplementares/AC") == []
+       and g.get("totalizacao/16675/11") == {"200001889942": "ELEITO"} and len(pedidos_div) == 4,
+       f"{len(pedidos_div)} pedidos | {sorted(k for k in g if k != '_')}")
+    # 11. eleito segundo o DivulgaCandContas, com os votos "Anulado sub judice" nos dados abertos (0 válidos): a ficha
+    # não diz "0 votos" (Equador, RN, em 29/10/2026)
+    base = {"el": "619", "ue": "16675", "uf": "RN", "dt": "2024-10-06", "turno": 1, "genero": "M"}
+    pref = dict(base, cargo="PREFEITO", urna="PROFESSOR CLETSON", civil="CLETSON RIVALDO DE OLIVEIRA",
+                sq="200001889942", partido="MDB")
+    vice = dict(base, cargo="VICE-PREFEITO", urna="CAIO SABINO", civil="CAIO CESAR FERREIRA DE OLIVEIRA",
+                sq="200002366738", partido="PODE")
+    v0 = {"votos": {"200001889942|1": 0}, "data": "2026-10-29"}
+    p = tse._pessoa_cidade(pref, "pref-2403400", pref, v0, "2026-10-29", {}, True, "ELEITO")
+    v = tse._pessoa_cidade(vice, "vpref-2403400", pref, v0, "2026-10-29", {}, True, "ELEITO")
+    p2 = tse._pessoa_cidade(pref, "pref-2403400", pref, {"votos": {"200001889942|1": 2216}, "data": "2026-10-29"},
+                            "2026-10-29", {}, True, "ELEITO")
+    ok("eleito segundo o DivulgaCandContas: sem '0 votos' (nem 'da chapa'); com votos válidos, o número fica",
+       p["votos"] is None and v["votos"] is None and "votosDaChapa" not in v and p2["votos"] == 2216
+       and p["situacao"] == "Eleito em 2024 (segundo o DivulgaCandContas)", f"{p['votos']} | {v['votos']} | {p2['votos']}")
     shutil.rmtree(PASTA, ignore_errors=True)
     print(f"\n{sum(RES)}/{len(RES)} ok")
     sys.exit(0 if all(RES) else 1)

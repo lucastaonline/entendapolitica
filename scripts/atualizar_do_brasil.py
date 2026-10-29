@@ -18,6 +18,11 @@ do GitHub rodando).
 
 Atrasada: a última tentativa falhou, ou a última leitura completa é de mais de 1 dia (Assembleias e capitais, que o robô
 diário lê todo dia) ou de mais de 8 dias (as outras Câmaras com SAPL, que o robô das cidades lê uma vez por semana).
+
+Toda rodada (menos --so-ver) também pede de novo ao DivulgaCandContas, do TSE, o que fica guardado em
+dados/tse/divulga_2024.json (scripts/tse.py --so-divulga, uns 60 pedidos, segundos): ele recusa o robô do GitHub, que usa
+essas respostas para as cidades com o resultado de 2024 "sem definição" nos dados abertos e para as fotos de quem foi eleito
+numa eleição suplementar. O robô diário seguinte refaz as fichas das cidades com elas.
 """
 from __future__ import annotations
 
@@ -31,6 +36,7 @@ from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent.parent
 INDICE = RAIZ / "dados" / "legislativos.json"
+RESERVA_DIV = RAIZ / "dados" / "tse" / "divulga_2024.json"  # respostas do DivulgaCandContas (scripts/tse.py)
 DIAS_DIARIO = 1     # Assembleias e capitais: o robô diário lê todo dia
 DIAS_SEMANA = 8     # Câmaras com SAPL: o robô das cidades lê cada uma uma vez por semana
 PUBLICAVEIS = ("dados/", "img/pessoas/", "sitemap")  # o que este programa pode publicar (nunca código)
@@ -118,6 +124,14 @@ def rodar(cmd: list[str]) -> int:
     return subprocess.run([sys.executable, *cmd], cwd=RAIZ).returncode
 
 
+def situacao_divulga() -> str:
+    r = ler(RESERVA_DIV)
+    n = sum(1 for k in r if not k.startswith("_"))
+    falta = r.get("_faltam") or []
+    return (f"DivulgaCandContas (TSE): {n} respostas guardadas para o robô"
+            + (f"; o robô pediu e não tinha: {', '.join(falta)}" if falta else ""))
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("--so-ver", action="store_true")
@@ -154,8 +168,12 @@ def main() -> int:
     alvo = [c["chave"] for c in casas if c["rodar"]]
     if a.so_ver:
         log(f"Para ler de novo: {len(alvo)} Casas" + (f" ({', '.join(alvo[:30])}{'…' if len(alvo) > 30 else ''})" if alvo else ""))
+        log(situacao_divulga())
         return 0
 
+    antes_div = RESERVA_DIV.read_bytes() if RESERVA_DIV.exists() else b""
+    rodar(["scripts/tse.py", "--so-divulga"])
+    div_mudou = (RESERVA_DIV.read_bytes() if RESERVA_DIV.exists() else b"") != antes_div
     if alvo:
         rodar(["scripts/legislativos.py", *alvo, "--paralelo", str(a.paralelo), "--minutos", str(a.minutos)])
     else:
@@ -164,9 +182,11 @@ def main() -> int:
         rodar(["scripts/municipios/mapear.py"])
     if a.diarios:
         rodar(["scripts/municipios/diarios.py", "--minutos", "120"])
-    if not (alvo or a.mapa or a.diarios):
+    if alvo or a.mapa or a.diarios:
+        rodar(["scripts/montar.py"])
+    elif not div_mudou:
+        log("RESULTADO: nada mudou nos dados; nada a publicar.")
         return 0
-    rodar(["scripts/montar.py"])
 
     # o que esta rodada conseguiu
     depois = {(c["grupo"], c["chave"]): c for c in situacao(False, set())}
@@ -176,6 +196,8 @@ def main() -> int:
     log(f"RESUMO: {len(lidas)} de {len(alvo)} Casas lidas por completo hoje" + (f": {', '.join(lidas)}" if lidas else ""))
     for d in faltam:
         log(f"   ainda atrasada: {d['chave']} {str(d['nome'])[:48]} ({'; '.join(d['motivos']) or 'leitura incompleta'})")
+    log(situacao_divulga() + ("; renovadas hoje (mudaram: o robô diário refaz as cidades com elas)" if div_mudou
+                              else "; renovadas hoje (iguais às de antes)"))
 
     if not a.publicar:
         log("Sem publicar (use --publicar para enviar ao GitHub).")
@@ -186,8 +208,9 @@ def main() -> int:
         log("RESULTADO: nada mudou nos dados; nada a publicar.")
         return 0
     msg = (f"Dados atualizados do Brasil em {hoje}\n\nLidas de novo, de um computador no Brasil (scripts/atualizar_do_brasil.py): "
-           f"{', '.join(lidas) or 'nenhuma Casa por completo'}.\n\n"
-           "Co-authored-by: Copilot App <223556219+Copilot@users.noreply.github.com>\n")
+           f"{', '.join(lidas) or 'nenhuma Casa por completo'}."
+           + ("\n\nRespostas do DivulgaCandContas (TSE) renovadas em dados/tse/divulga_2024.json." if div_mudou else "")
+           + "\n\nCo-authored-by: Copilot App <223556219+Copilot@users.noreply.github.com>\n")
     git("commit", "-q", "-m", msg)
     for tentativa in range(3):
         if not git("pull", "--rebase", "-X", "theirs", "-q", "origin", "main", ok=True).returncode and \

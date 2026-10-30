@@ -165,6 +165,16 @@ def hosts_prefeitura(uf: str, slugs: list[str], curto: list[str] | None = None) 
     return out
 
 
+def publicado_primeiro(cands: list[tuple[str, str]], site: str | None) -> list[tuple[str, str]]:
+    """O endereço já publicado (dados/municipios/) vai na frente, se estiver entre os candidatos: um site oficial que
+    continua valendo não é trocado por outro (um Portal Modelo abandonado, por exemplo) só porque o outro vem antes na
+    lista. Se ele não abrir ou não for mais da cidade, os outros são tentados como sempre."""
+    h = _host(site)
+    if not h:
+        return cands
+    return sorted(cands, key=lambda x: _host("https://" + x[0]) != h)
+
+
 def nomes_curtos(cidades: list) -> dict[str, list[str]]:
     """{ibge: [nomes curtos]} só os que nenhuma outra cidade do estado tem (como nome ou como parte do nome)."""
     por_uf: dict[str, list[tuple[str, str]]] = {}
@@ -370,15 +380,17 @@ def checar_pagina(rede, url: str, estrito: bool = False) -> dict:
 
 
 # ---------------------------------------------------------------------------------------------------- uma cidade
-def mapear_cidade(rede: _rede.Rede, dns_pool, cidade: tuple, sigi: dict, curto: list[str] | None = None) -> dict:
+def mapear_cidade(rede: _rede.Rede, dns_pool, cidade: tuple, sigi: dict, curto: list[str] | None = None,
+                  publicado: dict | None = None) -> dict:
     ibge, nome, uf = cidade
     t0 = time.time()
     slugs = P.slugs_cidade(nome)
     bruto = {"ibge": ibge, "nome": nome, "uf": uf, "data": hoje(), "versao": VERSAO}
+    publicado = publicado or {}
 
     # prefeitura primeiro: o site dela às vezes tem o link da Câmara
     pref = {"site": None}
-    cands_p = hosts_prefeitura(uf, slugs, curto)
+    cands_p = publicado_primeiro(hosts_prefeitura(uf, slugs, curto), (publicado.get("prefeitura") or {}).get("site"))
     r = achar_site(rede, dns_pool, nome, cands_p, "prefeitura", curto=curto, uf=uf, ibge=ibge)
     pref["visitas"] = r["visitas"]
     links_camara = []
@@ -391,7 +403,7 @@ def mapear_cidade(rede: _rede.Rede, dns_pool, cidade: tuple, sigi: dict, curto: 
     bruto["prefeitura"] = pref
 
     cam = {"site": None}
-    cands = hosts_camara(ibge, uf, slugs, sigi, curto)
+    cands = publicado_primeiro(hosts_camara(ibge, uf, slugs, sigi, curto), (publicado.get("camara") or {}).get("site"))
     for u in links_camara[:3]:
         h = _rede.host_de(u)
         if h and h not in {x[0] for x in cands} and h.endswith((f".{uf.lower()}.leg.br", f".{uf.lower()}.gov.br")):
@@ -844,12 +856,19 @@ def _pontos(parte: str, x: dict) -> int:
 
 
 def _leu(parte: str, x: dict) -> bool:
-    """A rodada conseguiu ler o site (não ficou só no endereço, por bloqueio ou erro)."""
+    """A rodada conseguiu ler o site (não ficou só no endereço, por bloqueio, robots.txt ou erro)."""
     if not x.get("site"):
         return False
     if parte == "camara":
-        return x.get("motivo") not in (MOTIVOS["bloqueio"][0], MOTIVOS["fora_do_ar"][0])
+        return x.get("motivo") not in (MOTIVOS["bloqueio"][0], MOTIVOS["fora_do_ar"][0], MOTIVOS["robots"][0])
     return x.get("lido") is not False
+
+
+def _nao_abriu(h: str, visitas: list) -> bool:
+    """O endereço publicado foi tentado nesta rodada e não abriu (tempo esgotado, bloqueio, robots.txt, erro do servidor):
+    não dá para dizer que ele deixou de valer. Erro de DNS (o endereço não existe mais) não conta."""
+    return any(x.get("erro") and x.get("erro") != "dns" and _host("https://" + (x.get("host") or "")) == h
+               for x in visitas or [])
 
 
 CAMPOS_PROPOSTAS = ("sistema", "plataforma", "api", "propostas", "propostasOnline", "motivo", "motivo_en")
@@ -876,7 +895,8 @@ def manter_publicado(novo: dict, velho: dict | None, b: dict) -> dict:
     """O robô do GitHub roda fora do Brasil, e muitos sites de prefeituras e Câmaras bloqueiam esse acesso (ou demoram);
     ele também pode começar com o cache vazio. Por isso, um bloco já publicado em dados/municipios/ (Câmara ou prefeitura)
     só é trocado quando a rodada nova achou pelo menos o mesmo tanto (_pontos), quando o site mudou de endereço e o novo foi
-    lido, quando o endereço publicado não existe mais (erro de DNS), quando o publicado tem mais de MANTER_PUBLICADO_DIAS
+    lido (e o publicado, tentado antes dele, não deixou de abrir: publicado_primeiro e _nao_abriu), quando o endereço
+    publicado não existe mais (erro de DNS), quando o publicado tem mais de MANTER_PUBLICADO_DIAS
     dias ou quando o endereço publicado é de outra cidade (alheio). Se a rodada nova só achou o SAPL da Câmara (e o pôs
     como site), o site e o pedido de informação publicados continuam, e as proposições do SAPL entram se forem melhores
     (_com_sapl). Senão fica o bloco publicado, com a data em que foi conferido."""
@@ -897,7 +917,8 @@ def manter_publicado(novo: dict, velho: dict | None, b: dict) -> dict:
             continue
         if _pontos(parte, n) >= _pontos(parte, v):
             continue
-        if n.get("site") and _host(n["site"]) != h and _leu(parte, n):
+        if n.get("site") and _host(n["site"]) != h and _leu(parte, n) and not _nao_abriu(
+                h, ((b.get(parte) or {}).get("visitas") or []) + ((b.get(parte) or {}).get("visitasHoje") or [])):
             continue
         novo[parte] = v
     return novo
@@ -1035,8 +1056,9 @@ def main() -> int:
     if a.ibge:
         c = next(x for x in cidades if x[0] == a.ibge)
         curtos = nomes_curtos(cidades)
+        pub = ((ler_json(SAIDA / f"{c[2]}.json") or {}).get("cidades") or {}).get(c[0])
         with cf.ThreadPoolExecutor(32) as dns_pool:
-            b = mapear_cidade(rede, dns_pool, tuple(c), sigi, curtos.get(c[0]))
+            b = mapear_cidade(rede, dns_pool, tuple(c), sigi, curtos.get(c[0]), pub)
         b = juntar_com_antigo(b, ler_json(PASTA_CIDADES / c[2] / f"{c[0]}.json"))
         salvar_bruto(b)
         for h in sapl_pendentes([b], sigi):
@@ -1109,8 +1131,10 @@ def main() -> int:
             for c in fila:
                 for x in diarios.get(c[0]) or []:
                     fila_ativ.put(x)
+            pub = (ler_json(SAIDA / f"{uf}.json") or {}).get("cidades") or {}
             with cf.ThreadPoolExecutor(48) as dns_pool, cf.ThreadPoolExecutor(a.paralelo) as ex:
-                futuros = {ex.submit(mapear_cidade, rede, dns_pool, c, sigi, curtos.get(c[0])): c for c in fila}
+                futuros = {ex.submit(mapear_cidade, rede, dns_pool, c, sigi, curtos.get(c[0]), pub.get(c[0])): c
+                           for c in fila}
                 for i, fut in enumerate(cf.as_completed(futuros), 1):
                     c = futuros[fut]
                     try:

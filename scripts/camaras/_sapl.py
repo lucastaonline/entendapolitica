@@ -333,10 +333,15 @@ class Sapl:
         return d
 
     def todos(self, caminho: str, params: dict | None = None, cache: str | None = None, idade_h: float | None = 20,
-              max_paginas: int | None = None, checar=None) -> list:
+              max_paginas: int | None = None, checar=None, inteira: bool = False, _de_novo: bool = False) -> list:
         """Todas as páginas de uma lista da API (100 por página). max_paginas e checar (função aplicada aos itens da
-        primeira página) protegem contra um SAPL antigo que ignora um filtro e devolveria a lista inteira."""
-        out, pagina = [], 1
+        primeira página) protegem contra um SAPL antigo que ignora um filtro e devolveria a lista inteira.
+        inteira=True (a lista das matérias, que substitui a guardada): as páginas guardadas no cache podem ser de dias
+        diferentes, e se a lista mudou no meio (uma matéria nova, apagada ou de outro tipo), os itens andam de uma página
+        para a outra: uns se repetiriam e outros sumiriam. Por isso, no fim, o tamanho tem de bater com o total da lista e
+        com cada id uma vez; se não bater, as páginas guardadas são jogadas fora e a lista é lida de novo, de uma vez (e,
+        se ainda assim não bater, a cidade fica para a próxima rodada, com o que já estava publicado)."""
+        out, pagina, totais = [], 1, set()
         while True:
             p = dict(params or {}, page=pagina, page_size=LOTE)
             d = self.get(caminho, p, cache=f"{cache}-p{pagina}" if cache else None, idade_h=idade_h)
@@ -349,10 +354,24 @@ class Sapl:
                     raise FiltroIgnorado(f"{caminho}: o SAPL ignorou o filtro {params}")
                 if max_paginas and (pag.get("total_pages") or 1) > max_paginas:
                     raise MuitasPaginas(f"{caminho} {params}: {pag.get('total_pages')} páginas (filtro ignorado?)")
+            totais.add(pag.get("total_entries"))
             out += res
             if pagina >= (pag.get("total_pages") or 1):
-                return out
+                break
             pagina += 1
+        ids = [x.get("id") for x in out]
+        if (not (inteira and cache) or None in totais or None in ids
+                or (len(totais) == 1 and len(set(ids)) == len(ids) == next(iter(totais)))):
+            return out
+        if _de_novo:
+            raise RuntimeError(f"{caminho}: a lista mudou durante a leitura ({len(set(ids))} itens diferentes; total "
+                               f"{sorted(totais)}); fica para a próxima rodada")
+        log(f"  {self.sigla} {self.ibge}: {caminho}: as páginas guardadas não batem ({len(set(ids))} itens diferentes; "
+            f"total {sorted(totais)}): lê a lista de novo")
+        for arq in (self.pasta / "http").glob(f"{cache}-p*.json"):
+            if re.fullmatch(rf"{re.escape(cache)}-p\d+\.json", arq.name):
+                arq.unlink()
+        return self.todos(caminho, params, cache, idade_h, max_paginas, checar, inteira, _de_novo=True)
 
     def por_lotes(self, caminho: str, campo: str, ids: list[int], extra: dict | None = None, cache: str | None = None) -> list:
         """Busca por lotes de ids (campo__in=1,2,3). Se um id sumiu do SAPL (o servidor responde erro 500), divide o lote.
@@ -605,7 +624,7 @@ class Sapl:
             if exato:
                 raise FiltroIgnorado("filtros exatos")
             return self.todos(MAT, {"tipo__in": ",".join(map(str, sorted(tipos))), "data_apresentacao__gte": inicio},
-                              max_paginas=max_paginas, cache=cache, idade_h=idade_h,
+                              max_paginas=max_paginas, cache=cache, idade_h=idade_h, inteira=True,
                               checar=lambda m: m.get("tipo") in tipos and (m.get("data_apresentacao") or "") >= inicio)
         except FiltroIgnorado as erro:
             if not isinstance(erro, MuitasPaginas):
@@ -614,7 +633,7 @@ class Sapl:
             for t in sorted(tipos):
                 for ano in range(int(inicio[:4]), int(h[:4]) + 1):
                     out += self.todos(MAT, {"tipo": t, "ano": ano}, max_paginas=max_paginas,
-                                      cache=f"{cache}-t{t}-a{ano}" if cache else None, idade_h=idade_h,
+                                      cache=f"{cache}-t{t}-a{ano}" if cache else None, idade_h=idade_h, inteira=True,
                                       checar=lambda m, t=t, ano=ano: m.get("tipo") == t and m.get("ano") == ano)
             return [m for m in out if (m.get("data_apresentacao") or "") >= inicio]
 

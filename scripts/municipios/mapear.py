@@ -872,6 +872,8 @@ def _nao_abriu(h: str, visitas: list) -> bool:
 
 
 CAMPOS_PROPOSTAS = ("sistema", "plataforma", "api", "propostas", "propostasOnline", "motivo", "motivo_en")
+# endereços soltos de cada bloco: um que a rodada nova não achou no mesmo site continua (_com_publicados)
+CAMPOS_SOLTOS = {"camara": ("sic",), "prefeitura": ("transparencia", "sic", "diarioOficial")}
 
 
 def _so_sapl(x: dict) -> bool:
@@ -891,6 +893,20 @@ def _com_sapl(v: dict, n: dict) -> dict:
     return out
 
 
+def _com_publicados(parte: str, n: dict, v: dict) -> dict:
+    """O bloco novo, com o mesmo site do publicado, troca o publicado; um endereço publicado que a rodada nova não achou
+    (transparência, pedido de informação, Diário Oficial: o link saiu da página inicial, ou a página dele não abriu daqui)
+    continua, e o bloco fica com a data em que o publicado foi conferido: passados MANTER_PUBLICADO_DIAS dessa data, vale
+    só o que a rodada achar."""
+    faltam = [k for k in CAMPOS_SOLTOS[parte] if v.get(k) and not n.get(k)]
+    if not faltam or not n.get("site") or _host(n["site"]) != _host(v["site"]):
+        return n
+    out = dict(n)
+    out.update({k: v[k] for k in faltam})
+    out["conferido"] = v.get("conferido")
+    return out
+
+
 def manter_publicado(novo: dict, velho: dict | None, b: dict) -> dict:
     """O robô do GitHub roda fora do Brasil, e muitos sites de prefeituras e Câmaras bloqueiam esse acesso (ou demoram);
     ele também pode começar com o cache vazio. Por isso, um bloco já publicado em dados/municipios/ (Câmara ou prefeitura)
@@ -899,7 +915,8 @@ def manter_publicado(novo: dict, velho: dict | None, b: dict) -> dict:
     publicado não existe mais (erro de DNS), quando o publicado tem mais de MANTER_PUBLICADO_DIAS
     dias ou quando o endereço publicado é de outra cidade (alheio). Se a rodada nova só achou o SAPL da Câmara (e o pôs
     como site), o site e o pedido de informação publicados continuam, e as proposições do SAPL entram se forem melhores
-    (_com_sapl). Senão fica o bloco publicado, com a data em que foi conferido."""
+    (_com_sapl). Com o mesmo site, um endereço publicado que a rodada nova não achou continua (_com_publicados). Senão
+    fica o bloco publicado, com a data em que foi conferido."""
     if not velho:
         return novo
     limite = (dt.date.fromisoformat(hoje()) - dt.timedelta(days=MANTER_PUBLICADO_DIAS)).isoformat()
@@ -916,6 +933,7 @@ def manter_publicado(novo: dict, velho: dict | None, b: dict) -> dict:
             novo[parte] = _com_sapl(v, n)
             continue
         if _pontos(parte, n) >= _pontos(parte, v):
+            novo[parte] = _com_publicados(parte, n, v)
             continue
         if n.get("site") and _host(n["site"]) != h and _leu(parte, n) and not _nao_abriu(
                 h, ((b.get(parte) or {}).get("visitas") or []) + ((b.get(parte) or {}).get("visitasHoje") or [])):

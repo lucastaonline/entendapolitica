@@ -641,10 +641,19 @@ class Sapl:
         """e["mats"] = {id: matéria (campos que o site usa)} dos tipos pedidos, desde 1º/1/2025. A primeira vez (e a cada
         LISTA_COMPLETA_DIAS), a lista inteira: numa cidade grande ela leva mais de uma rodada (as páginas lidas ficam
         guardadas por uma semana e a rodada seguinte continua dali). Nas outras rodadas, só as matérias alteradas desde a
-        última vez (data_ultima_atualizacao__gte); SAPL antigo, sem esse filtro: só as matérias do ano, por tipo e ano."""
+        última vez (data_ultima_atualizacao__gte); SAPL antigo, sem esse filtro: só as matérias do ano, por tipo e ano.
+        Se uma proposta publicada não está na lista guardada (uma lista inteira lida com páginas de dias diferentes, antes
+        de todos(..., inteira=True), por exemplo), a lista inteira é lida de novo: o "o que mudou" não traz de volta uma
+        matéria que não mudou, e ela sumiria do site a cada rodada até a próxima lista inteira."""
         h = hoje()
         desde = e.get("desde_mat")
         velha = (e.get("mats_lista_em") or "") < _menos_dias(h, LISTA_COMPLETA_DIAS)
+        if not velha and e["mats"] and desde:
+            fora = self.publicadas_fora(e)
+            if fora:
+                log(f"  {self.sigla} {self.ibge}: {len(fora)} propostas publicadas não estão na lista guardada "
+                    f"({', '.join(fora[:5])}{'...' if len(fora) > 5 else ''}): lê a lista inteira de novo")
+                velha = True
         if not e["mats"] or not desde or velha or sorted(tipos) != e.get("mats_tipos"):
             ini = e.setdefault("mats_lista_ini", h)  # "o que mudou" vai contar a partir do dia em que a lista começou
             self.filtro_exato = False
@@ -674,6 +683,15 @@ class Sapl:
                 e["mats"][str(m["id"])] = _compacta_materia(m)
         e["desde_mat"] = h
         return e["mats"]
+
+    def publicadas_fora(self, e: dict) -> list[str]:
+        """Ids do SAPL das propostas publicadas em dados/camaras/extras/<IBGE>.json (vereadores e prefeito) que não estão
+        na lista guardada das matérias."""
+        d = ler_json(EXTRAS_CIDADES / f"{self.ibge}.json", {}) or {}
+        pre = f"{self.prefixo}:"
+        ids = {str(p.get("id"))[len(pre):] for x in (d.get("pessoas") or {}).values()
+               for p in ((x.get("propostas") or {}).get("lista") or []) if str(p.get("id")).startswith(pre)}
+        return sorted((i for i in ids if i not in e["mats"]), key=lambda i: (len(i), i))
 
     # ------------------------------------------------------------ autoria e tramitações
     def autorias(self, e: dict, mats: dict[str, dict]) -> None:
@@ -928,9 +946,10 @@ class Sapl:
 
     def tipos_de(self, ids: list[int], parar: bool = False) -> dict[int, int]:
         """{id da matéria: id do tipo}, guardado para sempre em .cache/camaras/<IBGE>/tipos-materias.json (o tipo de uma
-        matéria não muda). Pede 100 por vez (id__in); SAPL antigo que ignora o filtro: não pede uma por uma (custaria um
-        minuto cada) e devolve só o que já sabe. Sem orçamento: guarda o que veio e para (parar=True: a cidade fica para a
-        próxima rodada) ou devolve o que deu."""
+        matéria não muda). Pede 100 por vez (id__in); SAPL antigo que ignora o filtro: uma por uma (/materialegislativa/<id>/,
+        um minuto cada com o intervalo do Interlegis; só na primeira vez, que pode levar mais de uma rodada). Sem
+        orçamento: guarda o que veio e para (parar=True: a cidade fica para a próxima rodada, com o que já estava publicado)
+        ou devolve o que deu. Matéria que não existe mais (404): sem tipo (None)."""
         arq = self.pasta / "tipos-materias.json"
         mapa = ler_json(arq, {}) or {}
         faltam = [i for i in ids if str(i) not in mapa]
@@ -943,10 +962,25 @@ class Sapl:
                 for r in rows:
                     mapa[str(r["id"])] = r.get("tipo")
         except FiltroIgnorado:
-            for x in faltam:  # o que já veio, de rodadas antigas, um por um
-                velho = self.pasta / "http" / f"materia-{x}.json"
-                if velho.exists() and str(x) not in mapa:
-                    mapa[str(x)] = json.loads(velho.read_text(encoding="utf-8")).get("tipo")
+            try:
+                for x in faltam:
+                    if str(x) in mapa:
+                        continue
+                    velho = self.pasta / "http" / f"materia-{x}.json"  # o que já veio, de rodadas antigas
+                    if velho.exists():
+                        mapa[str(x)] = json.loads(velho.read_text(encoding="utf-8")).get("tipo")
+                        continue
+                    try:
+                        mapa[str(x)] = self.get(f"{MAT}{x}/").get("tipo")
+                    except RuntimeError as erro:
+                        if "HTTP Error 404" not in str(erro):
+                            raise
+                        mapa[str(x)] = None
+            except SemOrcamento as erro:
+                sem_orcamento = erro
+            finally:  # um erro de rede para a cidade nesta rodada, mas o que já veio fica guardado
+                if faltam:
+                    salvar_json(arq, mapa)
         except SemOrcamento as erro:
             sem_orcamento = erro
         if faltam:

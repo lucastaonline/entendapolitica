@@ -6251,7 +6251,7 @@
    "casa": "CMC",
    "nome": "Câmara Municipal de Cajazeiras",
    "membros": 0,
-   "propostas": 203,
+   "propostas": 208,
    "cobertura": {
     "lista": false,
     "propostas": true,
@@ -15092,7 +15092,7 @@
    "prefeito": {
     "propostas": 93,
     "leis": null,
-    "vetos": null
+    "vetos": 9
    },
    "requisicoes": 49,
    "semTse": 0,

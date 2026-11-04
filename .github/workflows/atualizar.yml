@@ -1,11 +1,18 @@
-# Atualiza os dados todos os dias (6h de Brasília) e publica: cada commit na main faz a Vercel publicar sozinha.
-# Também dá para rodar à mão: aba Actions > "Atualizar dados" > Run workflow.
+# Atualiza os dados todos os dias (6h de Brasília) e guarda no repositório. O site só é PUBLICADO (Vercel) no dia 1º de
+# cada mês, nos dias de posse e quando alguém pede (scripts/publicar_hoje.py; o vercel.json só publica commits com
+# [publicar] na mensagem): cada publicação guarda uma cópia inteira do site na Vercel, e publicar todo dia encheu o espaço.
+# Também dá para rodar à mão: aba Actions > "Atualizar dados" > Run workflow (marque "publicar" para publicar já).
 name: Atualizar dados
 
 on:
   schedule:
     - cron: "0 9 * * *"
   workflow_dispatch:
+    inputs:
+      publicar:
+        description: "Publicar o site no fim desta rodada"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -165,14 +172,19 @@ jobs:
         run: python scripts/montar.py
 
       - name: Salvar no repositório
+        env:
+          PUBLICAR: ${{ inputs.publicar }}
         run: |
           git config user.name "lucastaonline"
           git config user.email "31556507+lucastaonline@users.noreply.github.com"
           git add -A dados img/pessoas 'sitemap*.xml'
-          if git diff --cached --quiet; then
+          # o site só é publicado no dia 1º do mês, num dia de posse ou quando pedido (scripts/publicar_hoje.py)
+          if [ "$(python scripts/publicar_hoje.py)" = "sim" ]; then marca=" [publicar]"; else marca=""; fi
+          if git diff --cached --quiet && [ -z "$marca" ]; then
             echo "Nada mudou."
           else
-            git commit -m "Dados atualizados em $(date -u +%Y-%m-%d)"
+            # num dia de publicar, publica mesmo sem mudança nesta rodada (as dos dias anteriores ainda não foram ao ar)
+            git commit --allow-empty -m "Dados atualizados em $(date -u +%Y-%m-%d)$marca"
             # alguém pode ter publicado outra mudança enquanto esta rodada corria (ela leva de minutos a horas):
             # junta com o que está no GitHub antes de enviar; num conflito em dados/, valem os dados desta rodada
             for tentativa in 1 2 3; do

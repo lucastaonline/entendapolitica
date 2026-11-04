@@ -209,7 +209,7 @@ def main() -> int:
     if not git("diff", "--cached", "--quiet", ok=True).returncode:
         log("RESULTADO: nada mudou nos dados; nada a publicar.")
         return 0
-    msg = (f"Dados atualizados do Brasil em {hoje}\n\nLidas de novo, de um computador no Brasil (scripts/atualizar_do_brasil.py): "
+    msg = (f"Dados atualizados do Brasil em {hoje} [publicar]\n\nLidas de novo, de um computador no Brasil (scripts/atualizar_do_brasil.py): "
            f"{', '.join(lidas) or 'nenhuma Casa por completo'}."
            + ("\n\nRespostas do DivulgaCandContas (TSE) renovadas em dados/tse/divulga_2024.json." if div_mudou else "")
            + "\n\nCo-authored-by: Copilot App <223556219+Copilot@users.noreply.github.com>\n")

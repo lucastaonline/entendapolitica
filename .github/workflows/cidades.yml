@@ -1,8 +1,9 @@
 # Atualiza o que é de cada cidade, num robô separado do diário: o mapa das Câmaras Municipais e prefeituras (sites
 # oficiais, sistema de propostas da Câmara, Diário Oficial e pedido de informação) e as leis e os vetos de cada prefeitura
 # (Diários Oficiais e páginas oficiais de leis dos municípios), um grupo de estados por dia: cada estado é conferido uma
-# vez por semana. Cada commit na main faz a Vercel publicar sozinha.
-# Também dá para rodar à mão: aba Actions > "Atualizar cidades" > Run workflow.
+# vez por semana. O que ele lê vai para o repositório; o site só é publicado pelo robô diário (dia 1º do mês, dias de
+# posse ou quando pedido: scripts/publicar_hoje.py e vercel.json).
+# Também dá para rodar à mão: aba Actions > "Atualizar cidades" > Run workflow (marque "publicar" para publicar já).
 name: Atualizar cidades
 
 on:
@@ -11,6 +12,11 @@ on:
     # este robô pode levar umas 5 horas
     - cron: "0 3 * * *"
   workflow_dispatch:
+    inputs:
+      publicar:
+        description: "Publicar o site no fim desta rodada"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -90,7 +96,7 @@ jobs:
           if git diff --cached --quiet; then
             echo "Nada mudou."
           else
-            git commit -m "Cidades atualizadas em $(date -u +%Y-%m-%d)"
+            git commit -m "Cidades atualizadas em $(date -u +%Y-%m-%d)$([ "${{ inputs.publicar }}" = "true" ] && echo ' [publicar]')"
             # o robô diário pode ter publicado enquanto esta rodada corria: junta com o que está no GitHub antes de
             # enviar; num conflito em dados/, valem os dados desta rodada
             for tentativa in 1 2 3; do

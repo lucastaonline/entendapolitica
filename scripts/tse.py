@@ -545,6 +545,8 @@ def divulga_totalizacao_2024(ue: str, cod_cargo: int) -> dict | None:
     chave, cache = f"totalizacao/{ue}/{cod_cargo}", f"listar_2024_{ue}_{cod_cargo}.json"
     try:
         d = divulga_json(f"candidatura/listar/2024/{ue}/{ID_DIVULGA[2024]}/{cod_cargo}/candidatos", cache)
+        if not d.get("candidatos"):  # toda cidade teve candidatos em 2024: resposta vazia é falha, não resultado
+            raise RuntimeError("resposta sem candidatos")
     except Exception as e:
         return _sem_resposta_divulga(chave, e, f"DivulgaCandContas {ue}/{cod_cargo}")
     sit = {str(c["id"]): (c.get("descricaoTotalizacao") or "").upper() for c in d.get("candidatos") or []}
@@ -560,6 +562,8 @@ def ids_suplementares_2024(ufs) -> dict:
         try:
             ids = [[str(e.get("siglaUF")), str(e.get("dataEleicao"))[:10], str(e["id"])]
                    for e in divulga_json(f"eleicao/suplementares/2024/{uf}", cache) or []]
+            if not ids and _reserva_divulga().get(chave):  # a lista só cresce: vazia, com eleições guardadas, é falha
+                raise RuntimeError("resposta sem nenhuma eleição suplementar")
             ids = _resposta_divulga(chave, ids, cache)
         except Exception as e:
             ids = _sem_resposta_divulga(chave, e, f"eleições suplementares de {uf} no DivulgaCandContas") or []

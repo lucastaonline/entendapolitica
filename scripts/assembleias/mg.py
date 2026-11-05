@@ -167,23 +167,36 @@ def _dias_atras(n: int) -> str:
     return (_dt.date.fromisoformat(hoje()) - _dt.timedelta(days=n)).isoformat()
 
 
+def _publicadas() -> set[str]:
+    """Chaves ('PLC-101-2026') das proposições da ALMG que estão nos perfis publicados (deputados de MG e governo)."""
+    out = set()
+    for arq in [*PESSOAS.glob(f"dest-{UF}-*.json"), PESSOAS / f"gov-{UF}.json"]:
+        for p in ((ler_json(arq, {}) or {}).get("propostas") or {}).get("lista") or []:
+            m = re.fullmatch(r"almg:([A-Z]+)-(\d+)-(\d{4})", str(p.get("id") or ""))
+            if m and m.group(1) in TIPOS:
+                out.add(f"{m.group(1)}-{m.group(2)}-{m.group(3)}")
+    return out
+
+
 def _proposicoes(rede: Rede) -> list[dict]:
     """Proposições da legislatura (PL, PLC, PEC, PRE e os vetos, VET) pela API de Dados Abertos. O robots.txt da ALMG
     deixa robôs lerem a API, mas não paginar a pesquisa (p=, tp=, ord=) nem baixar os arquivos (/arquivo/): então, a
     cada rodada, (1) a 1ª página da pesquisa de cada tipo no ano de hoje (as 20 mais novas) e os números seguintes ao
     maior conhecido (pesquisa por número), e (2) o detalhe de cada proposição já conhecida, quando vence o prazo de
-    conferir de novo (_vence), até ALMG_SEGUNDOS segundos (420). O resumo de cada uma fica em proposicoes.json."""
+    conferir de novo (_vence), até ALMG_SEGUNDOS segundos (420). O resumo de cada uma fica em proposicoes.json.
+    Uma proposição publicada nos perfis que não está no estado guardado é pedida de novo pelo detalhe (_publicadas)."""
     hj, atual = hoje(), hoje()[:4]
     est = rede.estado("proposicoes.json", {}) or {}
     if est.get("inicio") != INICIO:  # legislatura nova: a numeração recomeça; o que é da anterior sai
         est = {"itens": {k: l for k, l in (est.get("itens") or {}).items()
-                         if (data_iso(l.get("DataPublicacao")) or "") >= INICIO}, "sem": {}, "desce": {}}
+                         if (data_iso(l.get("DataPublicacao")) or "") >= INICIO}, "sem": {}, "desce": {}, "fora": {}}
     itens: dict[str, dict] = est.get("itens") or {}
     desce: dict[str, int] = est.get("desce") or {}  # próximo número a procurar, de cima para baixo, até o 1
     if not itens:
         itens = _semente()
         desce = {s: 0 for s in list(TIPOS) + ["VET"]} if itens else {}  # com os arquivos, não falta nenhum número
     sem: dict[str, str] = est.get("sem") or {}  # detalhe que voltou 404 (número que não existe naquele ano)
+    fora: dict[str, str] = est.get("fora") or {}  # publicada que a API não achou (dia em que foi procurada)
     # primeira carga (como no robô, que começa sem os arquivos anuais no cache): números por achar ou muitas proposições
     # ainda sem o detalhe. Aí o limite é a rodada toda (_carga.py) e nada vai para dados/ enquanto ela não termina.
     primeira = any(n > 0 for n in desce.values()) or not itens or \
@@ -222,12 +235,36 @@ def _proposicoes(rede: Rede) -> list[dict]:
                         guarda(x, False)
                     vazios = 0 if achou else vazios + 1
                     n += 1
-                if sig not in desce:  # sem os arquivos: os números de baixo vêm aos poucos, um pedido por número
-                    desce[sig] = min((int(k.split("-")[1]) for k in itens if k.startswith(f"{sig}-")), default=n) - 1
+                if sig not in desce:  # sem os arquivos: os números de baixo vêm aos poucos, um pedido por número,
+                    # do maior para baixo (a 1ª página não vem em ordem de número: em 5/11/2026, PLC 99 a 91 e 118 a 106)
+                    desce[sig] = n - 1
             except SemTempo:
                 raise
             except Exception as e:  # um tipo fora do ar não derruba a coleta
                 log(f"  MG: pesquisa de {sig}: {e}")
+        if not primeira:  # publicada nos perfis e fora do estado guardado: o detalhe de novo, antes de ela sair do site
+            for k in sorted(_publicadas() - set(itens) - set(sem)):
+                if (fora.get(k) or "") > _dias_atras(30) or time.time() - t0 >= limite or k[-4:] < INICIO[:4]:
+                    continue
+                sig, num, ano = k.split("-")
+                try:
+                    d = rede.json(f"{API}/proposicoes/{sig}/{num}/{ano}?formato=json", None)
+                    achou = (d.get("resultado") or {}).get("listaItem") or []
+                    for x in achou:
+                        guarda(x, True)
+                    if k in itens:
+                        fora.pop(k, None)
+                    else:
+                        fora[k] = hj
+                except SemTempo:
+                    raise
+                except Exception as e:
+                    if "404" in str(e):
+                        fora[k] = hj
+                    else:
+                        log(f"  MG: {sig} {num}/{ano} (publicada): {e}")
+            if fora:
+                log(f"  MG: {len(fora)} proposições publicadas que a API não achou: {', '.join(sorted(fora)[:10])}")
         vencidos = sorted((_vence(l), k) for k, l in itens.items() if _vence(l) <= hj)
         for _, k in vencidos:  # (2) a conferência dos já conhecidos, os mais atrasados primeiro
             if time.time() - t0 >= limite:
@@ -247,9 +284,13 @@ def _proposicoes(rede: Rede) -> list[dict]:
                 else:
                     log(f"  MG: {sig} {num}/{ano}: {e}")
             if primeira and lidos % 200 == 0:  # primeira carga: o progresso fica guardado de tempos em tempos
-                rede.guardar({"inicio": INICIO, "itens": itens, "sem": sem, "desce": desce}, "proposicoes.json")
+                rede.guardar({"inicio": INICIO, "itens": itens, "sem": sem, "desce": desce, "fora": fora}, "proposicoes.json")
         for sig in list(desce):  # (3) os números que faltam, de cima para baixo (só sem os arquivos da 1ª carga)
+            conhecidos = {k.split("-")[1] for k in itens if k.startswith(f"{sig}-")}
             while desce[sig] >= 1 and time.time() - t0 < limite:
+                if str(desce[sig]) in conhecidos:  # a numeração é uma só na legislatura: este número já está lido
+                    desce[sig] -= 1
+                    continue
                 try:
                     for x in pesquisa(f"tipo={sig}&num={desce[sig]}"):
                         if str(x.get("ano")) >= INICIO[:4]:
@@ -261,7 +302,7 @@ def _proposicoes(rede: Rede) -> list[dict]:
                     break
                 desce[sig] -= 1
                 if desce[sig] % 200 == 0:
-                    rede.guardar({"inicio": INICIO, "itens": itens, "sem": sem, "desce": desce}, "proposicoes.json")
+                    rede.guardar({"inicio": INICIO, "itens": itens, "sem": sem, "desce": desce, "fora": fora}, "proposicoes.json")
     except SemTempo:  # o fim da rodada chegou: o que foi lido fica guardado
         pass
     if len(vencidos) > lidos:
@@ -269,7 +310,7 @@ def _proposicoes(rede: Rede) -> list[dict]:
     faltam = sum(max(0, n) for n in desce.values())
     if faltam:
         log(f"  MG: {faltam} números de proposição ficam para as próximas rodadas (pesquisa por número)")
-    rede.guardar({"inicio": INICIO, "itens": itens, "sem": sem, "desce": desce}, "proposicoes.json")
+    rede.guardar({"inicio": INICIO, "itens": itens, "sem": sem, "desce": desce, "fora": fora}, "proposicoes.json")
     sem_detalhe = sum(1 for l in itens.values() if (l.get("visto") or "2000-01-01") <= "2000-01-01")
     completo = not faltam and bool(itens) and sem_detalhe <= 0.01 * len(itens)
     return [l for k, l in itens.items() if k not in sem and (data_iso(l.get("DataPublicacao")) or "") >= INICIO], completo

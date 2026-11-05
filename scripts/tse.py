@@ -14,9 +14,11 @@ dos federais (o orquestrador junta estes nos perfis):
 Fontes:
 - TSE, Portal de Dados Abertos (https://dadosabertos.tse.jus.br/): consulta_cand (candidaturas e situação
   depois da totalização), consulta_cand_complementar (se a candidatura de 2026 foi para a urna),
-  votacao_candidato_munzona (votos por município e zona, somados aqui) e bem_candidato (bens).
+  votacao_candidato_munzona (votos por município e zona, somados aqui; também a situação de cassação e do registro de
+  cada candidatura) e bem_candidato (bens).
 - TSE, DivulgaCandContas: foto (URL pública), página de cada candidatura, códigos das eleições
-  suplementares e o resultado de 2024 das cidades que aparecem sem definição nos dados abertos. Ele recusa o robô do
+  suplementares, o resultado de 2024 das cidades que aparecem sem definição nos dados abertos e, nas cidades sem
+  prefeito eleito, o número do processo de cassação de quem teve mais votos. Ele recusa o robô do
   GitHub (fora do Brasil): as respostas de uma rodada que deu certo ficam em dados/tse/divulga_2024.json e valem quando
   ele recusar; --so-divulga (de um computador no Brasil) pede tudo de novo.
 - IBGE (scripts/ibge.py): código e nome oficial dos municípios.
@@ -26,7 +28,12 @@ Fontes:
   quando não é quem o TSE mostra (ex.: morte, cassação sem eleição suplementar nos dados). "conferido" é o dia da
   pesquisa; "ate" (opcional) é o último dia em que ela vale (ex.: o dia marcado para a posse de quem ganhou uma eleição
   suplementar). A pesquisa deixa de valer depois do "ate" ou se o TSE mostrar uma eleição suplementar feita depois do
-  "conferido": a ficha volta a mostrar o que vem do TSE e o log pede para rever a entrada.
+  "conferido": a ficha volta a mostrar o que vem do TSE e o log pede para rever a entrada. "interino": true marca quem
+  governa de forma temporária (ex.: o presidente da Câmara, depois da cassação do prefeito e do vice).
+
+Cidade sem prefeito eleito em 2024 nos dados do TSE: "maisVotado2024" diz quem teve mais votos e por que não aparece como
+eleito (cassação ou registro negado, segundo os dados abertos; processo e motivo do DivulgaCandContas), com as fontes; o
+aviso da cidade troca o texto genérico ("pode ter sido anulada ou ainda estar em julgamento") por esse. Automático.
 
 Casamento de pessoas entre eleições: CPF; se não houver CPF, nome civil + data de nascimento.
 Nunca só pelo nome.
@@ -121,6 +128,7 @@ CARGOS = {  # DS_CARGO do TSE -> (masculino, feminino)
     "DEPUTADO ESTADUAL": ("Deputado estadual", "Deputada estadual"),
     "DEPUTADO DISTRITAL": ("Deputado distrital", "Deputada distrital"),
     "PREFEITO": ("Prefeito", "Prefeita"),
+    "PREFEITO INTERINO": ("Prefeito interino", "Prefeita interina"),  # pesquisa à mão (dados/manual/prefeitos.json)
     "VICE-PREFEITO": ("Vice-prefeito", "Vice-prefeita"),
     "VEREADOR": ("Vereador", "Vereadora"),
 }
@@ -371,6 +379,34 @@ def votos_ou_nada(ano: int) -> dict:
         return {"votos": {}, "data": None}
 
 
+def situacao_prefeitos_2024() -> dict:
+    """Candidaturas a prefeito nas eleições ordinárias de 2024, nos votos por município e zona (dados abertos do TSE):
+    {"data": geração, "sq": {SQ: [turno, votos nominais (contando os anulados), situação da cassação, situação do
+    julgamento do registro, destino dos votos]}}. Os votos anulados não entram em votos() (só os válidos); aqui entram,
+    para saber quem teve mais votos numa cidade que ficou sem prefeito eleito. Se o arquivo faltar: vazio."""
+    try:
+        z = zip_tse("votacao_candidato_munzona", 2024)
+    except Exception as e:  # noqa: BLE001
+        log(f"  [aviso] situação das candidaturas a prefeito de 2024 indisponível ({e})")
+        return {"data": None, "sq": {}}
+
+    def calcular():
+        out, data = {}, None
+        for r in ler_csv(z):
+            if r["DS_CARGO"].upper() != "PREFEITO" or r["CD_ELEICAO"] not in ORDINARIAS[2024]:
+                continue
+            data = data or data_iso(r["DT_GERACAO"])
+            sq, turno = r["SQ_CANDIDATO"], int(r["NR_TURNO"])
+            x = out.get(sq)
+            if x is None or x[0] < turno:
+                x = out[sq] = [turno, 0, r["DS_SITUACAO_CASSACAO"], r["DS_SITUACAO_JULGAMENTO"], r["NM_TIPO_DESTINACAO_VOTOS"]]
+            if x[0] == turno:
+                x[1] += int(r["QT_VOTOS_NOMINAIS"] or 0)
+        return {"data": data, "sq": out}
+
+    return _cache_derivado("prefeitos_2024_situacao.json", z, calcular)
+
+
 def bens(ano: int) -> dict:
     """{"data": geração, "bens": {SQ: total declarado}}."""
     z = zip_tse("bem_candidato", ano)
@@ -572,6 +608,39 @@ def ids_suplementares_2024(ufs) -> dict:
     return out
 
 
+def fmt_processo(n: str | None) -> str | None:
+    """'06003211020246200024' -> '0600321-10.2024.6.20.0024' (numeração única do CNJ)."""
+    d = re.sub(r"\D", "", n or "")
+    return f"{d[:7]}-{d[7:9]}.{d[9:13]}.{d[13]}.{d[14:16]}.{d[16:20]}" if len(d) == 20 else None
+
+
+def url_processo(proc: str) -> str:
+    """Consulta pública unificada do PJe da Justiça Eleitoral (o mesmo endereço que o DivulgaCandContas abre na aba
+    Processos; a página pede um clique em "Sou humano" antes de mostrar o processo)."""
+    return f"https://consultaunificadapje.tse.jus.br/#/public/resultado/{proc}"
+
+
+def divulga_candidato_2024(ue: str, sq: str) -> dict | None:
+    """O que a página de uma candidatura de 2024 no DivulgaCandContas diz sobre cassação: {"totalizacao", "candidatura",
+    "atualizado", "cassacao": [{"processo", "situacao"}], "fundamentos": [...], "vices": [{"sq", "nome", "totalizacao"}]}.
+    Se ele não responder (ou responder outra candidatura), vale o que ficou guardado; sem nada guardado, None."""
+    chave, cache = f"candidato/{ue}/{sq}", f"buscar_2024_{ue}_{sq}.json"
+    try:
+        d = divulga_json(f"candidatura/buscar/2024/{ue}/{ID_DIVULGA[2024]}/candidato/{sq}", cache)
+        if str((d or {}).get("id")) != str(sq):  # resposta vazia ou de outra pessoa é falha, não troca a guardada
+            raise RuntimeError("resposta sem a candidatura pedida")
+    except Exception as e:
+        return _sem_resposta_divulga(chave, e, f"DivulgaCandContas: candidatura {sq} ({ue})")
+    proc = [{"processo": fmt_processo(p.get("nrProcesso")) or p.get("nrProcesso"), "situacao": p.get("nomeSituacao")}
+            for p in d.get("processosCassacao") or [] if p.get("nrProcesso")]
+    out = {"totalizacao": d.get("descricaoTotalizacao"), "candidatura": d.get("descricaoSituacao"),
+           "atualizado": (d.get("dataUltimaAtualizacao") or "")[:10] or None, "cassacao": proc,
+           "fundamentos": [f["fundamentoLegal"] for f in d.get("fundamentosLegais") or [] if f.get("fundamentoLegal")],
+           "vices": [{"sq": str(v.get("sq_CANDIDATO")), "nome": v.get("nm_URNA"), "totalizacao": v.get("descricaoTotalizacao")}
+                     for v in d.get("vices") or [] if v.get("sq_CANDIDATO")]}
+    return _resposta_divulga(chave, limpar(out), cache)
+
+
 def renovar_reserva_divulga() -> None:
     """--so-divulga (de um computador no Brasil: scripts/atualizar_do_brasil.py): pede de novo ao DivulgaCandContas tudo o
     que está guardado e o que o robô pediu sem ter guardado ("_faltam"). Não refaz as fichas: o robô seguinte as refaz
@@ -584,6 +653,8 @@ def renovar_reserva_divulga() -> None:
             divulga_totalizacao_2024(a, int(b[0]))
         elif tipo == "suplementares":
             ids_suplementares_2024({a})
+        elif tipo == "candidato" and b:
+            divulga_candidato_2024(a, b[0])
     salvar_reserva_divulga()
     falta = r.get("_faltam") or []
     log(f"dados/tse/{RESERVA_DIVULGA.name}: {len(chaves)} pedidos ao DivulgaCandContas"
@@ -1089,8 +1160,8 @@ def aplicar_manual_cidade(pid: str, m, bloco: dict | None, candidatos: list) -> 
             foto, g = b.get("foto"), c["genero"]
             break
     d = {"id": pid, "nome": m.get("nome"), "nomeCivil": m.get("nomeCivil"), "partido": m.get("partido"),
-         "genero": m.get("genero") or g, "foto": m.get("foto") or foto, "desde": m.get("desde"),
-         "comoAssumiu": m.get("comoAssumiu")}
+         "genero": m.get("genero") or g, "foto": m.get("foto") or foto, "interino": True if m.get("interino") else None,
+         "desde": m.get("desde"), "comoAssumiu": m.get("comoAssumiu")}
     d.update(_textos_manual(m))
     d.update({"fontes": _fontes_manual(m), "eleito2024": eleito})
     return limpar(d, manter=CAMPOS_PESSOA + ("desde", "comoAssumiu", "eleito2024"))
@@ -1282,6 +1353,85 @@ def _pessoa_cidade(c: dict, pid: str, titular: dict | None, vot24: dict, data: s
     return out
 
 
+# Cidade sem prefeito eleito em 2024 nos dados do TSE: quem teve mais votos (os votos por município e zona contam também os
+# anulados) e por que não aparece como eleito, quando os dados abertos dizem: cassação ("CASSADO", "CASSADO COM RECURSO")
+# ou registro negado ("INDEFERIDO..."). O número do processo de cassação e o motivo vêm do DivulgaCandContas (a página
+# da candidatura, aba Processos), quando ele responde (do robô do GitHub, o que ficou guardado em dados/tse/divulga_2024.json).
+# Sem causa nos dados, nada (fica o aviso de antes: "pode ter sido anulada ou ainda estar em julgamento").
+def mais_votado_2024(ue: str, nome: str, uf: str, ords: list[dict], sitp: dict, pendentes: list[str],
+                     data_cand: str | None) -> dict | None:
+    sq_sit = (sitp or {}).get("sq") or {}
+    cands = [c for c in ords if c["cargo"] == "PREFEITO" and c["sq"] in sq_sit]
+    if not cands:
+        return None
+    turno = max(sq_sit[c["sq"]][0] for c in cands)
+    cands = sorted((c for c in cands if sq_sit[c["sq"]][0] == turno), key=lambda c: -sq_sit[c["sq"]][1])
+    c = cands[0]
+    if len(cands) > 1 and sq_sit[cands[1]["sq"]][1] == sq_sit[c["sq"]][1]:
+        return None  # empate: não dá para dizer quem teve mais votos
+    _, n, cass, julg, destino = sq_sit[c["sq"]]
+    cass, julg, destino = (cass or "").upper(), (julg or "").upper(), (destino or "").upper()
+    if cass.startswith("CASSADO"):
+        tipo, recurso = "cassacao", "RECURSO" in cass
+    elif julg.startswith("INDEFERIDO"):
+        tipo, recurso = "registro-negado", "RECURSO" in julg
+    else:
+        return None
+    if "ANULADO" not in destino:
+        return None
+    sub_judice = "SUB JUDICE" in destino
+    g = c["genero"]
+    a, dele, seu_en = ("a", "dela", "her") if g == "F" else ("o", "dele", "his")
+    nm = nome_tse(c["urna"])
+    dv = divulga_candidato_2024(ue, c["sq"]) or {}
+    dia_dv = _DATA_USADA.get(f"candidato/{ue}/{c['sq']}")
+    proc = next((p for p in dv.get("cassacao") or []), None) if tipo == "cassacao" else None
+    vice = next((v for v in ords if v["cargo"] == "VICE-PREFEITO" and v["num"] == c["num"] and v["turno"] <= turno), None)
+    sit_fonte = (f"Dados Abertos: votos de 2024 em {nome} ({uf}), com a situação de cada candidatura "
+                 "(cassação, registro) e o destino dos votos")
+    sitp_data = (sitp or {}).get("data")
+    fontes = [fonte("TSE", f"DivulgaCandContas: candidatura de {nm} (2024), aba Processos",
+                    url_cand(2024, c["sq"], uf, ue), dia_dv or sitp_data),
+              fonte_resultados(2024, sitp_data, sit_fonte)]
+    if proc and proc.get("processo") and re.match(r"^\d{7}-\d{2}\.\d{4}\.\d\.\d{2}\.\d{4}$", proc["processo"]):
+        fontes.insert(1, fonte("Justiça Eleitoral", f"Consulta pública do processo nº {proc['processo']} (PJe)",
+                               url_processo(proc["processo"]), dia_dv))
+    quem = f"{nm} ({c['partido']})" if c.get("partido") else nm
+    votos_txt = f"{n:,}".replace(",", ".")
+    num = f" (processo nº {proc['processo']})" if proc and proc.get("processo") else ""
+    num_en = f" (case no. {proc['processo']})" if proc and proc.get("processo") else ""
+    if tipo == "cassacao":
+        o_que, o_que_en = f"foi cassad{a} pela Justiça Eleitoral{num}", f"the Electoral Courts revoked {seu_en} election{num_en}"
+    else:
+        o_que = f"a Justiça Eleitoral negou o registro da candidatura {dele}"
+        o_que_en = f"the Electoral Courts rejected {seu_en} candidacy registration"
+    txt = (f"{quem} foi {'a candidata' if g == 'F' else 'o candidato'} a prefeit{a} mais votad{a} em 2024 "
+           f"({votos_txt} votos), mas {o_que}.")
+    txt_en = f"{quem} got the most votes for mayor in 2024 ({f'{n:,}'} votes), but {o_que_en}."
+    if recurso:
+        txt += " Ainda pode haver recurso (pedido para a Justiça rever a decisão)."
+        txt_en += " The decision may still be appealed."
+    if sub_judice:
+        txt += f" Por isso, os votos {dele} não estão valendo enquanto a Justiça decide"
+        txt_en += f" For this reason, {seu_en} votes do not count while the courts decide"
+    else:
+        txt += f" Por isso, os votos {dele} foram anulados"
+        txt_en += f" For this reason, {seu_en} votes were annulled"
+    txt += ", e o TSE não mostra ninguém eleito para prefeito em 2024 nesta cidade."
+    txt_en += ", and the TSE shows no one elected mayor in 2024 in this city."
+    if pendentes and data_cand:
+        fontes.append(fonte_candidatos(2024, data_cand, f"Dados Abertos: candidaturas de 2024 e eleições suplementares ({c['nm_ue']})"))
+    mv = {"tipo": tipo, "recurso": recurso,
+          "prefeito": limpar({"nome": nm, "nomeCivil": nome_tse(c["civil"]), "partido": c["partido"], "genero": g,
+                              "foto": url_foto(2024, c["sq"], ue), "votos": n}),
+          "vice": limpar({"nome": nome_tse(vice["urna"]), "nomeCivil": nome_tse(vice["civil"]), "partido": vice["partido"],
+                          "genero": vice["genero"], "foto": url_foto(2024, vice["sq"], ue)}) if vice else None,
+          "processo": proc.get("processo") if proc else None, "processoSituacao": proc.get("situacao") if proc else None,
+          "motivos": dv.get("fundamentos") if tipo == "cassacao" else None,
+          "txt": txt, "txt_en": txt_en, "fontes": fontes}
+    return limpar(mv)
+
+
 # ---------------------------------------------------------------- prefeitos que concorreram em 2026
 # Constituição, art. 14, § 6º: para concorrer a outro cargo, o prefeito renuncia até 6 meses antes da eleição. Quem a
 # ficha da cidade ainda mostra como prefeito(a) e pediu registro de candidatura em 2026 saiu da prefeitura (se o registro
@@ -1455,8 +1605,9 @@ def avisar_prefeitos_2026(prazo: str | None) -> None:
 
 def montar_cidade(ue: str, cod: str, nome: str, uf: str, rows: list[dict], vot24: dict, data: str, supl_ids: dict,
                   contagem: collections.Counter, manual: dict | None = None, b26: "Base2026 | None" = None,
-                  prazo: str | None = None) -> dict:
+                  prazo: str | None = None, sitp: dict | None = None) -> dict:
     hoje_iso = hoje()
+    mv = None  # quem teve mais votos em 2024 e por que não aparece como eleito (mais_votado_2024)
     ords = [c for c in rows if c["el"] in ORDINARIAS[2024]]
     supl = collections.defaultdict(list)
     for c in rows:
@@ -1496,7 +1647,9 @@ def montar_cidade(ue: str, cod: str, nome: str, uf: str, rows: list[dict], vot24
                            "In the TSE open data, this city's 2024 result appears without a final outcome (it may be being "
                            "recalculated). The name comes from DivulgaCandContas, the TSE candidate website."))
         else:
-            avisos.append(("O TSE não mostra prefeito(a) eleito(a) em 2024 nesta cidade: a eleição pode ter sido "
+            mv = mais_votado_2024(ue, nome, uf, ords, sitp, pendentes, data) if sitp else None
+            avisos.append((mv["txt"], mv["txt_en"]) if mv else
+                          ("O TSE não mostra prefeito(a) eleito(a) em 2024 nesta cidade: a eleição pode ter sido "
                            "anulada ou ainda estar em julgamento na Justiça Eleitoral.",
                            "The TSE shows no mayor elected in 2024 in this city: the election may have been "
                            "annulled or may still be under review by the Electoral Courts."))
@@ -1551,7 +1704,8 @@ def montar_cidade(ue: str, cod: str, nome: str, uf: str, rows: list[dict], vot24
         prefeito, vice_o = (aplicar_manual_cidade(f"pref-{cod}", manual.get("prefeito"), prefeito, cands),
                             aplicar_manual_cidade(f"vpref-{cod}", manual.get("vice"), vice_o, cands[::-1]))
         avisos = [("Quem está no cargo hoje foi conferido à mão, com as fontes indicadas.",
-                   "Who is in office today was checked by hand, using the sources shown.")] + ([aviso_posse] if aviso_posse else [])
+                   "Who is in office today was checked by hand, using the sources shown.")] + ([aviso_posse] if aviso_posse else []) + \
+            ([(mv["txt"], mv["txt_en"])] if mv else [])
         contagem["manual"] += 1
     # prefeitos 2026: quem a ficha mostra como prefeito(a) e pediu registro de candidatura em 2026 (art. 14, § 6º)
     if b26 is not None and prazo:
@@ -1621,10 +1775,14 @@ def montar_cidade(ue: str, cod: str, nome: str, uf: str, rows: list[dict], vot24
         "ibge": cod, "nome": nome, "uf": uf, "prefeito": prefeito, "vice": vice_o,
         "aviso": " ".join(a[0].strip() for a in avisos if a[0].strip()),
         "aviso_en": " ".join(a[1].strip() for a in avisos if a[1].strip()),
+    }
+    if mv:
+        cid["maisVotado2024"] = mv
+    cid.update({
         "vereadores": {"total": len(membros), "aviso": " ".join(a[0] for a in aviso_ver),
                        "aviso_en": " ".join(a[1] for a in aviso_ver), "fonte": fonte_ver, "membros": membros},
         "atualizado": hoje(),
-    }
+    })
     return cid
 
 
@@ -1808,16 +1966,19 @@ def main():
     if man_pref:
         log(f"  dados/manual/prefeitos.json: {len(man_pref)} cidades")
     prazo = seis_meses_antes(b26.turno1) if b26.turno1 else None  # para concorrer em 2026, deixar a prefeitura até aqui
+    sitp = situacao_prefeitos_2024()  # quem teve mais votos para prefeito e se foi cassado (cidades sem eleito)
     for ue, (uf, _) in sorted(ues24.items()):
         cod = mapa[ue]
         nome = municipios[cod]["nome"]
         cid = montar_cidade(ue, cod, nome, uf, por_ue.get(ue, []), vot[2024], data24, supl_ids, contagem, man_pref.get(cod),
-                            b26, prazo)
+                            b26, prazo, sitp)
         cidades[cod] = cid
         salvar(CIDADES / uf / f"{cod}.json", cid)
         p = cid["prefeito"]
-        listas[uf].append({"ibge": cod, "nome": nome,
-                           "prefeito": f"{p['nome']} ({p['partido']})" if p and p.get("nome") else None})
+        listas[uf].append(limpar({"ibge": cod, "nome": nome,
+                                  "prefeito": f"{p['nome']} ({p['partido']})" if p and p.get("nome") else None,
+                                  "interino": True if p and p.get("nome") and p.get("interino") else None},
+                                 manter=("prefeito",)))
     for uf in UFS:
         salvar(CIDADES / f"{uf}.json", sorted(listas.get(uf, []), key=lambda x: chave_ord(x["nome"], x["ibge"])))
     # arquivos de cidades que não existem mais (ex.: código que mudou)
@@ -1846,7 +2007,8 @@ def main():
         for papel, cargo in (("prefeito", "PREFEITO"), ("vice", "VICE-PREFEITO")):
             p = cid[papel]
             if p and p.get("nome"):
-                busca.append(item_busca(p["id"], p["nome"], cargo, p.get("genero"), cid["uf"], p.get("partido"), cid["nome"]))
+                cargo_b = "PREFEITO INTERINO" if papel == "prefeito" and p.get("interino") else cargo
+                busca.append(item_busca(p["id"], p["nome"], cargo_b, p.get("genero"), cid["uf"], p.get("partido"), cid["nome"]))
     busca.sort(key=lambda x: (chave_nome(x[1] or ""), x[0]))
     salvar(DADOS / "busca.json", busca)
     log(f"dados/busca.json: {len(busca)} pessoas")

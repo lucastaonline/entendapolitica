@@ -1,5 +1,5 @@
 {
- "atualizado": "2026-10-29",
+ "atualizado": "2026-11-05",
  "eleicao": 2024,
  "cidades": {
   "1200401": {
@@ -155,6 +155,7 @@
     "partido": "UNIÃO",
     "genero": "M",
     "nascimento": "1977-06-07",
+    "interino": true,
     "desde": "2026-03-04",
     "comoAssumiu": "É vereador e presidente da Câmara Municipal. Assumiu a prefeitura de forma interina em 04/03/2026, depois que o ministro Flávio Dino, do Supremo Tribunal Federal (STF), afastou do cargo o prefeito Dr. Furlan e o vice-prefeito Mário Neto, a pedido da Polícia Federal, numa investigação sobre suspeita de desvio de recursos federais. Em 05/03/2026, Dr. Furlan renunciou ao mandato para disputar a eleição de 2026 para governador do Amapá.",
     "comoAssumiu_en": "He is a city councilor and the president of the City Council (the city's legislature). He became acting mayor on March 4, 2026, after Justice Flávio Dino of the Federal Supreme Court (STF, Brazil's highest court) suspended Mayor Dr. Furlan and Vice Mayor Mário Neto from office at the request of the Federal Police, in an investigation into suspected misuse of federal funds. On March 5, 2026, Dr. Furlan resigned to run for governor of Amapá state in the 2026 election.",
@@ -2941,6 +2942,7 @@
     "genero": "F",
     "nascimento": "1981-02-27",
     "foto": "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/2045202024/270002128890/95338",
+    "interino": true,
     "desde": "2026-07-21",
     "comoAssumiu": "Presidente da Câmara Municipal, assumiu a prefeitura de forma interina em 21/07/2026, depois que a Justiça Eleitoral afastou o prefeito Manoel Natalino e o vice Zé Américo Filho, que tiveram os mandatos cassados em abril de 2026. Na eleição suplementar de 25/10/2026, foram eleitos Max Luz (SOLIDARIEDADE), prefeito, e Dominguim do Peixe (MDB), vice; eles tomam posse depois da diplomação pela Justiça Eleitoral.",
     "comoAssumiu_en": "As president of the City Council, she became acting mayor on July 21, 2026, after the Electoral Courts removed Mayor Manoel Natalino and Vice Mayor Zé Américo Filho, whose terms were revoked in April 2026. In the special election held on October 25, 2026, Max Luz (SOLIDARIEDADE) was elected mayor and Dominguim do Peixe (MDB) vice mayor; they take office after being certified by the Electoral Courts.",
@@ -2990,6 +2992,7 @@
     "genero": "M",
     "nascimento": "1984-05-05",
     "foto": "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/2045202024/250002019126/66656",
+    "interino": true,
     "desde": "2026-06-18",
     "comoAssumiu": "Presidente da Câmara Municipal, tomou posse como prefeito interino em 18/06/2026, depois que a Justiça Eleitoral cassou os mandatos do prefeito Reginaldo Marcomini e da vice Vanja Sabino, eleitos em 2024. Na eleição suplementar de 25/10/2026, foram eleitos Vado (PSD), prefeito, e Pedro Antônio (PSD), vice; eles tomam posse depois da diplomação pela Justiça Eleitoral.",
     "comoAssumiu_en": "As president of the City Council, he was sworn in as acting mayor on June 18, 2026, after the Electoral Courts revoked the terms of Mayor Reginaldo Marcomini and Vice Mayor Vanja Sabino, elected in 2024. In the special election held on October 25, 2026, Vado (PSD) was elected mayor and Pedro Antônio (PSD) vice mayor; they take office after being certified by the Electoral Courts.",
@@ -3040,6 +3043,7 @@
     "genero": "M",
     "nascimento": "1984-07-07",
     "foto": "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/2045202024/250002063186/66850",
+    "interino": true,
     "desde": "2026-06-17",
     "comoAssumiu": "Presidente da Câmara Municipal, assumiu a prefeitura de forma interina em 17/06/2026, em sessão solene da Câmara que declarou vagos os cargos de prefeito e vice, depois que a Justiça Eleitoral cassou a chapa eleita em 2024. Na eleição suplementar de 25/10/2026, foram eleitos Beto Leite (UNIÃO), prefeito, e Fernanda Crepaldi (UNIÃO), vice, com posse marcada para 26/11/2026.",
     "comoAssumiu_en": "As president of the City Council, he became acting mayor on June 17, 2026, in a formal session of the City Council that declared the offices of mayor and vice mayor vacant, after the Electoral Courts revoked the ticket elected in 2024. In the special election held on October 25, 2026, Beto Leite (UNIÃO) was elected mayor and Fernanda Crepaldi (UNIÃO) vice mayor; their swearing-in is scheduled for November 26, 2026.",
@@ -3089,6 +3093,7 @@
     "genero": "M",
     "nascimento": "1985-09-07",
     "foto": "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/2045202024/160002371303/78557",
+    "interino": true,
     "desde": "2026-08-27",
     "comoAssumiu": "Presidente da Câmara Municipal, tomou posse como prefeito interino em 27/08/2026, depois que a Justiça Eleitoral afastou o prefeito Calé Vidal e o vice Joás Ferraz Michetti, que tiveram os mandatos cassados. Na eleição suplementar de 25/10/2026, foram eleitos Zé Izac (PT), prefeito, e Joaquim do Venerando (PT), vice; eles tomam posse depois da diplomação pela Justiça Eleitoral.",
     "comoAssumiu_en": "As president of the City Council, he was sworn in as acting mayor on August 27, 2026, after the Electoral Courts removed Mayor Calé Vidal and Vice Mayor Joás Ferraz Michetti, whose terms were revoked. In the special election held on October 25, 2026, Zé Izac (PT) was elected mayor and Joaquim do Venerando (PT) vice mayor; they take office after being certified by the Electoral Courts.",
@@ -3138,6 +3143,7 @@
     "genero": "F",
     "nascimento": "1957-04-23",
     "foto": "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/2045202024/210002250652/85308",
+    "interino": true,
     "desde": "2026-09-11",
     "comoAssumiu": "Presidente da Câmara Municipal, assumiu a prefeitura de forma interina em 11/09/2026, com a assinatura da ata de posse, depois que a Justiça Eleitoral cassou os mandatos do prefeito Luciano Pinto da Silva e do vice eleitos em 2024. Na eleição suplementar de 25/10/2026, foram eleitos Felipe Valim (MDB), prefeito, e Alemão do Mercado (PSDB), vice; eles tomam posse depois da diplomação pela Justiça Eleitoral.",
     "comoAssumiu_en": "As president of the City Council, she became acting mayor on September 11, 2026, when the record of her swearing-in was signed, after the Electoral Courts revoked the terms of Mayor Luciano Pinto da Silva and the vice mayor elected in 2024. In the special election held on October 25, 2026, Felipe Valim (MDB) was elected mayor and Alemão do Mercado (PSDB) vice mayor; they take office after being certified by the Electoral Courts.",
@@ -3230,6 +3236,7 @@
     "genero": "M",
     "nascimento": "1968-09-30",
     "foto": "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/2045202024/100002333309/08001",
+    "interino": true,
     "desde": "2026-08-17",
     "comoAssumiu": "Presidente da Câmara Municipal, assumiu a prefeitura de forma interina na noite de 17/08/2026, por determinação da Justiça Eleitoral, depois que o TRE do Maranhão manteve a cassação dos mandatos do prefeito Ary Menezes e do vice Ronildo da Farmácia, eleitos em 2024. A eleição suplementar para prefeito e vice está marcada para 06/12/2026.",
     "comoAssumiu_en": "As president of the City Council, he became acting mayor on the night of August 17, 2026, by order of the Electoral Courts, after the Maranhão Regional Electoral Court upheld the revocation of the terms of Mayor Ary Menezes and Vice Mayor Ronildo da Farmácia, elected in 2024. The special election for mayor and vice mayor is scheduled for December 6, 2026.",
@@ -3279,6 +3286,7 @@
     "genero": "M",
     "nascimento": "1988-10-26",
     "foto": "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/2045202024/200002056684/16063",
+    "interino": true,
     "desde": "2026-07-21",
     "comoAssumiu": "Presidente da Câmara Municipal, tomou posse como prefeito interino em 21/07/2026, em sessão solene da Câmara, depois da cassação dos mandatos do prefeito Léo de Doquinha e do vice João Eudes, eleitos em 2024. A eleição suplementar para prefeito e vice está marcada para 06/12/2026.",
     "comoAssumiu_en": "As president of the City Council, he was sworn in as acting mayor on July 21, 2026, in a formal session of the City Council, after the terms of Mayor Léo de Doquinha and Vice Mayor João Eudes, elected in 2024, were revoked. The special election for mayor and vice mayor is scheduled for December 6, 2026.",
@@ -3322,6 +3330,7 @@
     "genero": "M",
     "nascimento": "1981-10-05",
     "foto": "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/2045202024/250002316210/71250",
+    "interino": true,
     "desde": "2026-08-04",
     "comoAssumiu": "Presidente da Câmara Municipal, assumiu a prefeitura de forma interina em 04/08/2026, depois da execução da decisão do TRE de São Paulo que cassou os mandatos do prefeito João Antônio Fuloni e do vice Alessandro José de Lova, eleitos em 2024, por compra de votos. A eleição suplementar para prefeito e vice está marcada para 06/12/2026.",
     "comoAssumiu_en": "As president of the City Council, he became acting mayor on August 4, 2026, after the São Paulo Regional Electoral Court's decision revoking the terms of Mayor João Antônio Fuloni and Vice Mayor Alessandro José de Lova, elected in 2024, for vote buying, was carried out. The special election for mayor and vice mayor is scheduled for December 6, 2026.",
@@ -3471,6 +3480,7 @@
     "genero": "M",
     "nascimento": "1977-05-19",
     "foto": "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/2045202024/130002034661/45330",
+    "interino": true,
     "desde": "2026-10-13",
     "comoAssumiu": "Presidente da Câmara Municipal, tomou posse como prefeito interino em 13/10/2026, em reunião extraordinária da Câmara, depois que a Justiça Eleitoral indeferiu o registro de candidatura da prefeita eleita em 2024, Alini Bicalho, e cassou os mandatos dela e do vice, Geraldo Antônio Bicalho. A eleição suplementar para prefeito e vice está marcada para 06/12/2026.",
     "comoAssumiu_en": "As president of the City Council, he was sworn in as acting mayor on October 13, 2026, at a special session of the City Council, after the Electoral Courts rejected the candidacy registration of the mayor elected in 2024, Alini Bicalho, and revoked her term and that of Vice Mayor Geraldo Antônio Bicalho. The special election for mayor and vice mayor is scheduled for December 6, 2026.",
@@ -3569,6 +3579,7 @@
     "genero": "M",
     "nascimento": "1976-05-18",
     "foto": "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/2045202024/130002095996/52094",
+    "interino": true,
     "desde": "2026-10-12",
     "comoAssumiu": "Presidente da Câmara Municipal, assumiu a prefeitura de forma interina em 12/10/2026, depois que a Justiça Eleitoral determinou o cumprimento da decisão que cassou os mandatos do prefeito Alexandre Rodrigues e do vice Rilton Carlos, eleitos em 2024. A eleição suplementar para prefeito e vice está marcada para 06/12/2026.",
     "comoAssumiu_en": "As president of the City Council, he became acting mayor on October 12, 2026, after the Electoral Courts ordered the enforcement of the decision revoking the terms of Mayor Alexandre Rodrigues and Vice Mayor Rilton Carlos, elected in 2024. The special election for mayor and vice mayor is scheduled for December 6, 2026.",
@@ -3646,6 +3657,193 @@
       "titulo": "Quatro municípios mineiros terão eleições suplementares em dezembro",
       "url": "https://www.tre-mg.jus.br/comunicacao/noticias/2026/Outubro/tres-municipios-mineiros-terao-eleicoes-suplementares-em-dezembro",
       "data": "2026-10-14"
+     }
+    ]
+   }
+  },
+  "2403400": {
+   "nome": "Equador",
+   "uf": "RN",
+   "conferido": "2026-11-05",
+   "prefeito": {
+    "nome": "Pedro Neto",
+    "nomeCivil": "Pedro Miguel de Medeiros Neto",
+    "partido": "PODE",
+    "genero": "M",
+    "nascimento": "1996-01-08",
+    "foto": "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/2045202024/200001894205/16675",
+    "interino": true,
+    "desde": "2026-10-27",
+    "comoAssumiu": "Presidente da Câmara Municipal, passou a governar a cidade de forma interina (temporária) depois que a Justiça Eleitoral cassou o prefeito eleito em 2024, Professor Cletson. O primeiro ato que ele assinou como prefeito no Diário Oficial é de 27/10/2026.",
+    "comoAssumiu_en": "As president of the City Council, he began running the city on an acting (temporary) basis after the Electoral Courts revoked the election of the mayor elected in 2024, Professor Cletson. The first act he signed as mayor in the Official Gazette is dated October 27, 2026.",
+    "fonte": [
+     {
+      "veiculo": "Diário Oficial dos Municípios do Rio Grande do Norte (FEMURN)",
+      "titulo": "Prefeitura de Equador: Portaria nº 089/2026, de 27/10/2026, assinada por Pedro Miguel de Medeiros Neto como prefeito (edição 3907, publicada em 28/10/2026)",
+      "url": "https://www.diariomunicipal.com.br/femurn/materia/0606DF9B",
+      "data": "2026-10-28"
+     },
+     {
+      "veiculo": "Prefeitura de Equador",
+      "titulo": "Equador tem um novo prefeito! O município de Equador passa a contar com Pedro Neto à frente da Prefeitura Municipal",
+      "url": "https://www.equador.rn.gov.br/informa/139/equador-tem-um-novo-prefeito-o-munic-pio-de-equado",
+      "data": "2026-11-03"
+     },
+     {
+      "veiculo": "Câmara Municipal de Equador",
+      "titulo": "SAPL: Portaria-GPRES nº 45/2026 (02/06/2026), diária ao vereador presidente Pedro Miguel de Medeiros Neto",
+      "url": "https://sapl.equador.rn.leg.br/norma/480",
+      "data": "2026-06-02"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "O cargo de vice-prefeito está vago: Caio Sabino, vice na chapa de Professor Cletson, também aparece no TSE como não eleito, e quem assumiu a prefeitura foi o presidente da Câmara Municipal.",
+    "nota_en": "The office of vice mayor is vacant: Caio Sabino, Professor Cletson's running mate, also appears in the TSE records as not elected, and the person who took over the city government was the president of the City Council.",
+    "fonte": [
+     {
+      "veiculo": "TSE",
+      "titulo": "DivulgaCandContas: candidatura de Caio Sabino a vice-prefeito (2024), que aparece como não eleito",
+      "url": "https://divulgacandcontas.tse.jus.br/divulga/#/candidato/NORDESTE/RN/2045202024/200002366738/2024/16675",
+      "data": "2026-11-05"
+     },
+     {
+      "veiculo": "Diário Oficial dos Municípios do Rio Grande do Norte (FEMURN)",
+      "titulo": "Prefeitura de Equador: Portaria nº 089/2026, de 27/10/2026, assinada por Pedro Miguel de Medeiros Neto como prefeito (edição 3907, publicada em 28/10/2026)",
+      "url": "https://www.diariomunicipal.com.br/femurn/materia/0606DF9B",
+      "data": "2026-10-28"
+     }
+    ]
+   }
+  },
+  "3141603": {
+   "nome": "Mercês",
+   "uf": "MG",
+   "conferido": "2026-11-05",
+   "prefeito": {
+    "nome": "Lili do Gás",
+    "nomeCivil": "José Elizio Ribeiro Coelho",
+    "partido": "PSD",
+    "genero": "M",
+    "nascimento": "1991-03-19",
+    "foto": "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/2045202024/130002274240/48313",
+    "interino": true,
+    "desde": "2026-01-01",
+    "comoAssumiu": "Presidente da Câmara Municipal em 2026, tomou posse como prefeito interino em 01/01/2026, em sessão solene da Câmara, porque uma decisão da Justiça Eleitoral suspendeu a diplomação do candidato mais votado em 2024, Donizete Calixto, que teve o registro da candidatura negado e recorreu. Em 2025, quem governou de forma interina foi o presidente da Câmara daquele ano, Carlos Henrique Faria da Silva.",
+    "comoAssumiu_en": "As president of the City Council in 2026, he was sworn in as acting mayor on January 1, 2026, in a formal session of the City Council, because a decision of the Electoral Courts suspended the certification of the candidate who got the most votes in 2024, Donizete Calixto, whose candidacy registration was rejected and who appealed. In 2025, the city was run on an acting basis by that year's City Council president, Carlos Henrique Faria da Silva.",
+    "fonte": [
+     {
+      "veiculo": "Câmara Municipal de Mercês",
+      "titulo": "Ata da sessão solene de posse de prefeito interino (01/01/2026): José Elizio Ribeiro Coelho, presidente da Câmara, assume a prefeitura de forma interina",
+      "url": "https://camaramerces.mg.gov.br/uploads/publicacoes/Ata_e_Termo_de_Posse_Prefeito_Interino_-_01-012026.pdf",
+      "data": "2026-01-01"
+     },
+     {
+      "veiculo": "Prefeitura de Mercês",
+      "titulo": "Decreto nº 310/2026, de 23/10/2026, assinado por José Elízio Ribeiro Coelho, prefeito municipal interino",
+      "url": "https://www.merces.mg.gov.br/portal/decreto.php?getLink=208",
+      "data": "2026-10-23"
+     },
+     {
+      "veiculo": "Câmara Municipal de Mercês",
+      "titulo": "Ata de posse de prefeito interino (01/01/2025): Carlos Henrique Faria da Silva, presidente da Câmara em 2025",
+      "url": "https://camaramerces.mg.gov.br/uploads/publicacoes/Ata_de_Posse_de_Prefeito_Interino.pdf",
+      "data": "2025-01-01"
+     }
+    ]
+   },
+   "vice": {
+    "vago": true,
+    "nota": "Não há vice-prefeito no cargo: Dra. Mercesinha, vice na chapa de Donizete Calixto, aparece no TSE como não eleita, e quem governa de forma interina é o presidente da Câmara Municipal.",
+    "nota_en": "There is no vice mayor in office: Dra. Mercesinha, Donizete Calixto's running mate, appears in the TSE records as not elected, and the city is run on an acting basis by the president of the City Council.",
+    "fonte": [
+     {
+      "veiculo": "TSE",
+      "titulo": "DivulgaCandContas: candidatura de Dra. Mercesinha a vice-prefeita (2024), que aparece como não eleita",
+      "url": "https://divulgacandcontas.tse.jus.br/divulga/#/candidato/SUDESTE/MG/2045202024/130002367752/2024/48313",
+      "data": "2026-11-05"
+     },
+     {
+      "veiculo": "Câmara Municipal de Mercês",
+      "titulo": "Ata da sessão solene de posse de prefeito interino (01/01/2026): José Elizio Ribeiro Coelho, presidente da Câmara, assume a prefeitura de forma interina",
+      "url": "https://camaramerces.mg.gov.br/uploads/publicacoes/Ata_e_Termo_de_Posse_Prefeito_Interino_-_01-012026.pdf",
+      "data": "2026-01-01"
+     }
+    ]
+   }
+  },
+  "1508100": {
+   "nome": "Tucuruí",
+   "uf": "PA",
+   "conferido": "2026-11-05",
+   "prefeito": {
+    "nome": "Alexandre Siqueira",
+    "nomeCivil": "Alexandre França Siqueira",
+    "partido": "MDB",
+    "genero": "M",
+    "nascimento": "1985-12-02",
+    "foto": "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/2045202024/140001880947/05614",
+    "desde": "2025-07-16",
+    "comoAssumiu": "Foi o mais votado para prefeito em 2024. Em 2025, o TSE negou o registro da candidatura dele e mandou fazer uma eleição suplementar. Em 16/07/2025, a Câmara Municipal o reintegrou ao cargo, cumprindo uma decisão provisória (liminar) do STF que suspendeu a eleição suplementar. Em 18/08/2026, o ministro Gilmar Mendes, do STF, restabeleceu o registro da candidatura dele; ainda há recurso contra essa decisão no STF.",
+    "comoAssumiu_en": "He got the most votes for mayor in 2024. In 2025, the TSE rejected his candidacy registration and ordered a special election. On July 16, 2025, the City Council reinstated him in office, following a provisional decision (injunction) of the Federal Supreme Court (STF) that suspended the special election. On August 18, 2026, STF Justice Gilmar Mendes restored his candidacy registration; there is still an appeal against that decision at the STF.",
+    "nota": "Os dados do TSE ainda mostram o registro como negado (última atualização no DivulgaCandContas: 07/07/2026, antes da decisão do STF de 18/08/2026).",
+    "nota_en": "The TSE records still show the registration as rejected (last update on DivulgaCandContas: July 7, 2026, before the STF decision of August 18, 2026).",
+    "fonte": [
+     {
+      "veiculo": "Câmara Municipal de Tucuruí",
+      "titulo": "Termo de reintegração de Alexandre França Siqueira e Cláudia Gonçalves Ferreira aos cargos de prefeito e vice-prefeita (16/07/2025), em cumprimento à decisão liminar do STF na ADPF 1233",
+      "url": "https://camaratucurui.pa.gov.br/site/arquivos/1347733911.pdf",
+      "data": "2025-07-16"
+     },
+     {
+      "veiculo": "STF",
+      "titulo": "STF suspende eleições suplementares de Tucuruí (PA)",
+      "url": "https://noticias.stf.jus.br/postsnoticias/stf-suspende-eleicoes-suplementares-de-tucurui-pa/",
+      "data": "2025-07-17"
+     },
+     {
+      "veiculo": "STF",
+      "titulo": "ARE 1.567.086 (Alexandre França Siqueira e Cláudia Gonçalves Ferreira): decisão do ministro Gilmar Mendes de 18/08/2026 (provido) e agravos regimentais de 25/08/2026",
+      "url": "https://portal.stf.jus.br/processos/detalhe.asp?incidente=7354297",
+      "data": "2026-11-05"
+     },
+     {
+      "veiculo": "Diário Oficial dos Municípios do Pará (FAMEP)",
+      "titulo": "Prefeitura de Tucuruí: Decreto Municipal nº 039/2026, de 27/10/2026, assinado por Alexandre França Siqueira, prefeito (edição 4122, publicada em 30/10/2026)",
+      "url": "https://www.diariomunicipal.com.br/famep/materia/2B1B7BEF",
+      "data": "2026-10-30"
+     }
+    ]
+   },
+   "vice": {
+    "nome": "Claudinha",
+    "nomeCivil": "Cláudia Gonçalves Ferreira",
+    "partido": "MDB",
+    "genero": "F",
+    "nascimento": "1996-05-20",
+    "foto": "https://divulgacandcontas.tse.jus.br/divulga/rest/arquivo/img/2045202024/140001880946/05614",
+    "desde": "2025-07-16",
+    "comoAssumiu": "Foi candidata a vice-prefeita em 2024 na chapa de Alexandre Siqueira. Foi reintegrada ao cargo pela Câmara Municipal em 16/07/2025, junto com ele, cumprindo a decisão liminar do STF.",
+    "comoAssumiu_en": "She ran for vice mayor in 2024 on Alexandre Siqueira's ticket. She was reinstated in office by the City Council on July 16, 2025, together with him, following the STF injunction.",
+    "fonte": [
+     {
+      "veiculo": "Câmara Municipal de Tucuruí",
+      "titulo": "Termo de reintegração de Alexandre França Siqueira e Cláudia Gonçalves Ferreira aos cargos de prefeito e vice-prefeita (16/07/2025), em cumprimento à decisão liminar do STF na ADPF 1233",
+      "url": "https://camaratucurui.pa.gov.br/site/arquivos/1347733911.pdf",
+      "data": "2025-07-16"
+     },
+     {
+      "veiculo": "Prefeitura de Tucuruí",
+      "titulo": "Portal da transparência: estrutura organizacional, vice-prefeita Cláudia Gonçalves Ferreira",
+      "url": "https://www.portalcr2.com.br/detalhes-estrutura/pm-tucurui-vice-prefeita",
+      "data": "2026-11-05"
+     },
+     {
+      "veiculo": "STF",
+      "titulo": "ARE 1.567.086 (Alexandre França Siqueira e Cláudia Gonçalves Ferreira): decisão do ministro Gilmar Mendes de 18/08/2026 (provido) e agravos regimentais de 25/08/2026",
+      "url": "https://portal.stf.jus.br/processos/detalhe.asp?incidente=7354297",
+      "data": "2026-11-05"
      }
     ]
    }

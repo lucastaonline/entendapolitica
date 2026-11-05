@@ -413,7 +413,7 @@
       nada: EP.tr("Nenhuma cidade com esse nome " + EP.noEstado(uf) + ".", "No city with that name " + EP.noEstado(uf) + "."),
       itens: function () {
         return EP.json("dados/cidades/" + uf + ".json").then(function (l) {
-          return l.map(function (c) { return { v: c.ibge, t: c.nome, sub: c.prefeito ? EP.tr("Prefeito(a): ", "Mayor: ") + c.prefeito : null }; });
+          return l.map(function (c) { return { v: c.ibge, t: c.nome, sub: c.prefeito ? (c.interino ? EP.tr("Prefeito(a) interino(a): ", "Acting mayor: ") : EP.tr("Prefeito(a): ", "Mayor: ")) + c.prefeito : null }; });
         });
       },
       aoEscolher: function (it) { location.href = "cidade.html?ibge=" + it.v + (EP.en ? "&lang=en" : ""); }

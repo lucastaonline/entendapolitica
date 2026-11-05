@@ -134,10 +134,17 @@
         if (tipo === "pref") p = c.prefeito;
         else if (tipo === "vpref") p = c.vice;
         else p = ((c.vereadores || {}).membros || []).filter(function (x) { return x.id === id; })[0];
+        // cidade sem prefeito eleito em 2024 (cassação ou registro negado de quem teve mais votos): a página diz por quê
+        if (!p && (tipo === "pref" || tipo === "vpref") && c.maisVotado2024 && c.maisVotado2024.txt) {
+          var semEleito = new Error("não achei");
+          semEleito.cidade = { c: c, p: { txt: c.maisVotado2024.txt, txt_en: c.maisVotado2024.txt_en, fontes: c.maisVotado2024.fontes }, tipo: tipo, uf: uf };
+          throw semEleito;
+        }
         if (!p) throw new Error("não achei");
         // prefeitos 2026: cargo vago, ou quem governa hoje não foi conferido (a página da cidade explica por quê)
         if (!p.nome && (tipo === "pref" || tipo === "vpref")) { var semNome = new Error("não achei"); semNome.cidade = { c: c, p: p, tipo: tipo, uf: uf }; throw semNome; }
-        var cargo = tipo === "pref" ? EP.gen(p.genero, "Prefeito", "Prefeita") : tipo === "vpref" ? EP.gen(p.genero, "Vice-prefeito", "Vice-prefeita") : EP.gen(p.genero, "Vereador", "Vereadora");
+        var cargo = tipo === "pref" ? (p.interino ? EP.gen(p.genero, "Prefeito interino", "Prefeita interina") : EP.gen(p.genero, "Prefeito", "Prefeita")) :
+          tipo === "vpref" ? EP.gen(p.genero, "Vice-prefeito", "Vice-prefeita") : EP.gen(p.genero, "Vereador", "Vereadora");
         var v = c.vereadores || {};
         return Object.assign({ tipo: tipo, uf: uf, municipio: { ibge: c.ibge, nome: c.nome }, cargo: cargo,
           avisoLista: tipo === "ver" ? v.aviso : c.aviso, avisoLista_en: tipo === "ver" ? v.aviso_en : c.aviso_en,
@@ -237,7 +244,7 @@
     if (md && md.como === "suplente") chips.push('<span class="chip amarelo"><span aria-hidden="true">🔑 </span>' + EP.tr("Suplente que assumiu", "Alternate who took office") + "</span>");
     if (p.eleicao2026) chips.push(EP.chip2026(p.eleicao2026, p.genero, true));
     if (m.obs) chips.push('<span class="chip amarelo"><span aria-hidden="true">ℹ️ </span>' + D.obs(m.obs, m.obs_en) + "</span>");
-    if (p.interino) chips.push('<span class="chip amarelo">' + EP.tr(EP.gen(p.genero, "Interino", "Interina"), "Acting") + "</span>");
+    if (p.interino && !/interin/i.test(p.cargo || "")) chips.push('<span class="chip amarelo">' + EP.tr(EP.gen(p.genero, "Interino", "Interina"), "Acting") + "</span>");
     // suplente que assumiu a vaga (listas oficiais das Assembleias e Câmaras Municipais)
     if (p.exercicio) chips.push('<span class="chip amarelo"><span aria-hidden="true">🔑 </span>' + esc(EP.tr(p.exercicio, p.exercicio_en || p.exercicio)) + "</span>");
     // dados que vêm do site oficial da Assembleia ou da Câmara Municipal: a data da última leitura completa (infoCasa.conferido)

@@ -51,6 +51,44 @@
     [].forEach.call(arguments, function (p) { if (p) l = l.concat(p.fontes || p.fonte || []); });
     return l;
   }
+  // cidade sem prefeito eleito em 2024 nos dados do TSE (scripts/tse.py, mais_votado_2024): quem teve mais votos e por que
+  // não aparece como eleito (cassação ou registro negado), com o processo, o motivo registrado e a fonte ao lado do texto
+  var MOTIVOS = {
+    "abuso de poder politico": ["usar o cargo público para ganhar a eleição", "abuse of political power: using public office to win the election"],
+    "abuso de poder economico": ["usar dinheiro de forma irregular para ganhar a eleição", "abuse of economic power: using money irregularly to win the election"],
+    "uso indevido de meios de comunicacao": ["usar rádio, TV, internet ou jornal de forma irregular na campanha", "misuse of the media: using radio, TV, the internet or newspapers irregularly in the campaign"],
+    "captacao ilicita de sufragio": ["compra de votos", "vote buying"],
+    "conduta vedada": ["algo que a lei proíbe quem está no governo de fazer na campanha", "something the law forbids public officials from doing during a campaign"]
+  };
+  function motivoTxt(m) {
+    var x = MOTIVOS[EP.norm(m).replace(/\s+/g, " ").trim()];
+    if (EP.en) return x ? esc(x[1]) : EP.pt(esc(m));
+    return esc(m.charAt(0).toLowerCase() + m.slice(1)) + (x ? " (" + esc(x[0]) + ")" : "");
+  }
+  function linkFonte(f) {
+    if (!f || !/^https?:\/\//.test(f.url || "")) return "";
+    return '<a href="' + esc(f.url) + '" target="_blank" rel="noopener"' + (EP.en ? ' hreflang="pt-BR"' : "") + ">" +
+      EP.tr("fonte: ", "source: ") + EP.pt(esc(f.veiculo || "")) + ' <span aria-hidden="true">↗</span><span class="sr"> ' +
+      EP.tr("(abre em outra aba)", "(opens in a new tab)") + "</span></a>";
+  }
+  function blocoMaisVotado(mv) {
+    if (!mv || !mv.txt) return "";
+    var mot = (mv.motivos || []).filter(Boolean);
+    return '<div class="aviso azul mais-votado" role="note"><p><span aria-hidden="true">⚖️ </span><b>' + EP.tr("Eleição de 2024", "2024 election") + ":</b> " +
+      D.traduz(mv.txt, null, mv.txt_en) + " " + linkFonte((mv.fontes || [])[0]) + "</p>" +
+      (mot.length ? "<p>" + EP.tr(mot.length === 1 ? "Motivo registrado no processo: " : "Motivos registrados no processo: ",
+        mot.length === 1 ? "Ground recorded in the case: " : "Grounds recorded in the case: ") + mot.map(motivoTxt).join("; ") + ".</p>" : "") +
+      ((mv.fontes || []).length > 1 ? "<p>" + EP.botaoFontes(mv.fontes, EP.tr("Ver todas as fontes", "See all sources")) + "</p>" : "") + "</div>";
+  }
+  // tira do aviso de cima o texto que já aparece no quadro da eleição de 2024
+  function semMaisVotado(txt, mv, en) {
+    var t = mv && (en ? mv.txt_en : mv.txt);
+    return txt && t ? txt.replace(t, "").replace(/\s{2,}/g, " ").trim() : txt;
+  }
+  function rotuloPrefeito(p) {
+    return p && p.interino ? EP.tr(EP.gen(p.genero, "Prefeito interino", "Prefeita interina"), "Acting Mayor") :
+      EP.tr(EP.gen(p && p.genero, "Prefeito", "Prefeita"), "Mayor");
+  }
   // título da aba, descrição e o "onde estou" do topo mudam com a cidade escolhida
   function poeTitulo(t, desc, onde) {
     var te = document.querySelector("title");
@@ -205,6 +243,7 @@
       "Who governs " + c.nome + " (" + uf + "), Brazil, and who makes the city's laws: the mayor, the vice mayor and the city councilors. Everything with sources."), c.nome);
     function sit(x) { return x && x.situacao ? "<small>" + D.situacao(x.situacao, x.situacao_en) + "</small>" : ""; }
     var nc = naoConferido(p);  // prefeitos 2026
+    var mv = c.maisVotado2024;
     var conferir = !nc && ((p && p.aConfirmar) || (vi && vi.aConfirmar));
     var fp = fontesDe(c, p, vi);
     // site-d-r16: leis e vetos do prefeito (o arquivo só é baixado quando o bloco abre) e "Onde ver mais" (os sites oficiais
@@ -220,11 +259,16 @@
       { ic: "✉️", t: EP.tr("Pedir uma informação à Câmara", "Ask the City Council for information"), href: cm.sic, sub: EP.tr("Lei de Acesso à Informação", "Access to Information Law") }]);
     var quando = esqueleto(caixa, {
       nome: c.nome, uf: uf, nVer: n,
-      avisos: (nc ? '<p class="aviso"><span aria-hidden="true">⚠️ </span>' + D.aviso(c.aviso, c.aviso_en) + "</p>" : aviso(D.aviso(c.aviso, c.aviso_en))) +
+      avisos: (nc ? '<p class="aviso"><span aria-hidden="true">⚠️ </span>' + D.aviso(c.aviso, c.aviso_en) + "</p>" :
+        aviso(D.aviso(semMaisVotado(c.aviso, mv, false), semMaisVotado(c.aviso_en, mv, true)))) +
         (conferir ? '<p class="aviso"><span aria-hidden="true">⚠️ </span>' + EP.tr("Estamos conferindo se quem aparece aqui ainda está no cargo.", "We are checking whether the people shown here are still in office.") + "</p>" : ""),
-      gov: (nc ? cartaoNaoConferido(p, c) : EP.cartaoGrande(p, EP.tr(EP.gen(p && p.genero, "Prefeito", "Prefeita"), "Mayor"), sit(p))) +
+      gov: (nc ? cartaoNaoConferido(p, c) : EP.cartaoGrande(p, rotuloPrefeito(p), sit(p))) +
         EP.cartaoGrande(vi, EP.tr(EP.gen(vi && vi.genero, "Vice-prefeito", "Vice-prefeita"), "Vice Mayor"), sit(vi)),
-      govNotas: fp.length ? '<p style="margin-top:8px">' + EP.botaoFontes(fp) + "</p>" : "", govMais: govMais, camMais: camMais,
+      govNotas: (p && p.interino && p.nome ? '<p class="muted fonte-interino" style="margin-top:10px">' + EP.pt(esc(p.nome)) + ": " +
+          EP.tr(EP.gen(p.genero, "prefeito interino", "prefeita interina"), "acting mayor") +
+          (p.desde ? EP.tr(" desde ", " since ") + esc(EP.data(p.desde)) : "") + " · " + linkFonte((p.fontes || [])[0]) + "</p>" : "") +
+        blocoMaisVotado(mv) +
+        (fp.length ? '<p style="margin-top:8px">' + EP.botaoFontes(fp) + "</p>" : ""), govMais: govMais, camMais: camMais,
       nTxt: EP.num(n) + " " + EP.tr(n === 1 ? "vereador" : "vereadores", n === 1 ? "councilor" : "councilors"),
       camAviso: aviso(D.aviso(v.aviso, v.aviso_en)), info: EP.infoCasa(v.infoCasa)
     }).quando, comAbas = !!(EP.abas && EP.abas.ativa());

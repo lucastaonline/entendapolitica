@@ -1,7 +1,7 @@
 """O que o scripts/tse.py faz com os arquivos de 2024 do TSE que são baixados de novo toda semana (as eleições
 suplementares entram neles): no máximo uma vez por semana do calendário, o arquivo de antes fica quando o TSE não
 responde (e os outros da rodada nem tentam), sem arquivo e sem rede o erro sobe, --cache não pede nada, e o nome do cache
-do GitHub Actions muda com a semana. Sem servidor e sem rede: tudo numa pasta à parte (.cache/teste-prefeitos-robo,
+do GitHub Actions muda com a semana; e a cidade sem prefeito eleito em 2024 (mais_votado_2024). Sem servidor e sem rede: tudo numa pasta à parte (.cache/teste-prefeitos-robo,
 apagada no fim); o .cache/tse de verdade não é tocado.
 Uso: python testes/prefeitos_robo.py"""
 import datetime as _dt
@@ -209,6 +209,62 @@ def main():
     ok("a fonte da candidatura (DivulgaCandContas) leva o dia da resposta dele (29/10), não o dos dados abertos (02/11)",
        pd["fontes"][0]["titulo"].startswith("DivulgaCandContas") and pd["fontes"][0]["data"] == "2026-10-29"
        and pn["fontes"][0]["data"] == "2026-11-02", f"{pd['fontes'][0]['data']} | {pn['fontes'][0]['data']}")
+    # 12. cidade sem prefeito eleito em 2024 (cassados-r19): quem teve mais votos e por que não aparece como eleito, dos
+    # votos por município e zona (dados abertos); o processo de cassação vem do DivulgaCandContas (guardado se ele recusar)
+    noe = dict(base, cargo="PREFEITO", urna="NOEIDE", civil="NOEIDE CLEMENS FERREIRA DE MORAIS", sq="200002198765",
+               partido="SOLIDARIEDADE", genero="F", num="77")
+    pref, vice = dict(pref, num="15"), dict(vice, num="15")
+    sitp = {"data": "2026-11-03", "sq": {"200001889942": [1, 2216, "CASSADO COM RECURSO", "DEFERIDO", "Anulado sub judice"],
+                                         "200002198765": [1, 1901, "#NULO", "DEFERIDO", "Válido"]}}
+    rota = "candidatura/buscar/2024/16675/2045202024/candidato/200001889942"
+    resp[rota] = {"id": 200001889942, "descricaoTotalizacao": "Não eleito", "descricaoSituacao": "Deferido",
+                  "dataUltimaAtualizacao": "2026-10-27 11:22",
+                  "processosCassacao": [{"nrProcesso": "06003211020246200024", "nomeSituacao": "Cassado em prazo recursal ou com recurso"}],
+                  "fundamentosLegais": [{"fundamentoLegal": "Abuso de poder político"}],
+                  "vices": [{"sq_CANDIDATO": 200002366738, "nm_URNA": "CAIO SABINO", "descricaoTotalizacao": "Não eleito"}]}
+    recusa[0] = False
+    dia[0] = "2026-11-05"
+    mv = tse.mais_votado_2024("16675", "Equador", "RN", [pref, vice, noe], sitp, [], "2026-11-03")
+    ok("cassado com recurso: o texto diz quem teve mais votos, a cassação, o processo e o recurso",
+       mv and mv["tipo"] == "cassacao" and mv["recurso"] and mv["processo"] == "0600321-10.2024.6.20.0024"
+       and mv["txt"].startswith("Professor Cletson (MDB) foi o candidato a prefeito mais votado em 2024 (2.216 votos), "
+                                "mas foi cassado pela Justiça Eleitoral (processo nº 0600321-10.2024.6.20.0024).")
+       and "Ainda pode haver recurso" in mv["txt"] and "não estão valendo enquanto a Justiça decide" in mv["txt"]
+       and mv["vice"]["nome"] == "Caio Sabino" and mv["motivos"] == ["Abuso de poder político"]
+       and "case no. 0600321-10.2024.6.20.0024" in mv["txt_en"], mv and mv["txt"])
+    ok("... com as fontes oficiais: a candidatura no DivulgaCandContas, o processo no PJe e os dados abertos",
+       mv and [f["url"] for f in mv["fontes"]] == [
+           "https://divulgacandcontas.tse.jus.br/divulga/#/candidato/NORDESTE/RN/2045202024/200001889942/2024/16675",
+           "https://consultaunificadapje.tse.jus.br/#/public/resultado/0600321-10.2024.6.20.0024",
+           "https://dadosabertos.tse.jus.br/dataset/resultados-2024"] and mv["fontes"][0]["data"] == "2026-11-05",
+       mv and str([f["url"] for f in mv["fontes"]]))
+    tse.salvar_reserva_divulga()
+    tse._RESERVA_DIV.clear()
+    tse._DATA_USADA.clear()
+    dia[0] = "2026-11-06"
+    recusa[0] = True
+    mv2 = tse.mais_votado_2024("16675", "Equador", "RN", [pref, vice, noe], sitp, [], "2026-11-03")
+    recusa[0] = False
+    resp[rota] = {}
+    mv3 = tse.mais_votado_2024("16675", "Equador", "RN", [pref, vice, noe], sitp, [], "2026-11-03")
+    ok("o DivulgaCandContas recusou ou respondeu vazio: fica o processo guardado (com o dia da resposta guardada)",
+       mv2 and mv3 and mv2["processo"] == mv3["processo"] == "0600321-10.2024.6.20.0024"
+       and mv3["fontes"][0]["data"] == "2026-11-05", f"{mv2 and mv2.get('processo')} | {mv3 and mv3.get('processo')}")
+    neg = {"data": "2026-11-03", "sq": {"200001889942": [1, 2216, "#NULO", "INDEFERIDO EM PRAZO RECURSAL OU COM RECURSO",
+                                                         "Anulado sub judice"], "200002198765": [1, 1901, "#NULO", "DEFERIDO", "Válido"]}}
+    mv4 = tse.mais_votado_2024("16675", "Equador", "RN", [pref, vice, noe], neg, [], "2026-11-03")
+    ok("registro negado: o texto diz isso (sem número de processo de cassação)",
+       mv4 and mv4["tipo"] == "registro-negado" and "a Justiça Eleitoral negou o registro da candidatura dele" in mv4["txt"]
+       and "processo" not in mv4, mv4 and mv4["txt"])
+    sem = {"data": "2026-11-03", "sq": {"200001889942": [1, 2216, "#NULO", "DEFERIDO", "Válido"],
+                                        "200002198765": [1, 1901, "#NULO", "DEFERIDO", "Válido"]}}
+    emp = {"data": "2026-11-03", "sq": {"200001889942": [1, 1901, "CASSADO", "DEFERIDO", "Anulado"],
+                                        "200002198765": [1, 1901, "#NULO", "DEFERIDO", "Válido"]}}
+    ok("sem causa nos dados (ou empate): nada (fica o aviso genérico)",
+       tse.mais_votado_2024("16675", "Equador", "RN", [pref, vice, noe], sem, [], "2026-11-03") is None
+       and tse.mais_votado_2024("16675", "Equador", "RN", [pref, vice, noe], emp, [], "2026-11-03") is None)
+    ok("fmt_processo: 20 dígitos -> numeração única; outra coisa, None",
+       tse.fmt_processo("06003211020246200024") == "0600321-10.2024.6.20.0024" and tse.fmt_processo("123") is None)
     shutil.rmtree(PASTA, ignore_errors=True)
     print(f"\n{sum(RES)}/{len(RES)} ok")
     sys.exit(0 if all(RES) else 1)

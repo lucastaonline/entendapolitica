@@ -12,6 +12,8 @@ from pathlib import Path
 
 from playwright.async_api import async_playwright
 
+from ajuda_abas import liga  # ui-r9
+
 BASE = os.environ.get("EP_BASE", "http://127.0.0.1:8770/")
 RAIZ = Path(__file__).resolve().parent.parent
 sys.stdout.reconfigure(encoding="utf-8")
@@ -77,10 +79,12 @@ async def main():
         nav = await p.chromium.launch(channel="msedge")
         ctx = await nav.new_context(viewport={"width": 1280, "height": 860})
         pg = await ctx.new_page()
+        liga(pg)  # ui-r9: estado, cidade e perfil em abas (testes/ajuda_abas.py)
         erros = []
         pg.on("pageerror", lambda e: erros.append(str(e)))
         cel = await nav.new_context(viewport={"width": 320, "height": 740}, device_scale_factor=2, is_mobile=True, has_touch=True)
         pc = await cel.new_page()
+        liga(pc)  # ui-r9: estado, cidade e perfil em abas (testes/ajuda_abas.py)
         pc.on("pageerror", lambda e: erros.append(str(e)))
 
         for ibge, (uf, padrao, nota_pt, nota_en) in CIDADES.items():
@@ -144,7 +148,8 @@ async def main():
             hrefs = await pg.locator("#lista-prop li.prop a.fora, #lista-prop li.prop a[target=_blank]").evaluate_all(
                 "els => els.map(e => e.href)")
             oficiais = [h for h in hrefs if re.search(padrao, h)]
-            ok(f"{nome}: cada proposta tem o link da página oficial", len(oficiais) >= min(20, n_co), f"{len(oficiais)} links")
+            # ui-r9: o perfil começa com um resumo de 6 propostas (antes, 20) e o "Mostrar mais" põe mais 20
+            ok(f"{nome}: cada proposta tem o link da página oficial", len(oficiais) >= min(6, n_co), f"{len(oficiais)} links")
             # a proposta mais nova da lista é a dos dados (sigla e situação)
             primeira = next(x for x in lista if x["papel"] == "coautor")
             t0 = await pg.locator("#lista-prop li.prop").first.inner_text()
@@ -180,7 +185,7 @@ async def main():
                 corpo = await pg.locator("#perfil").inner_text()
                 n_l = await pg.locator("#lista-prop li.prop").count()
                 ok(f"{nome}: o prefeito mostra os projetos que mandou à Câmara ({bp['resumo']['total']})",
-                   n_l == min(20, bp["resumo"]["total"]) and "Projetos que a prefeitura mandou" in corpo, f"{n_l} na tela")
+                   n_l == min(6, bp["resumo"]["total"]) and "Projetos que a prefeitura mandou" in corpo, f"{n_l} na tela")
                 await pg.goto(BASE + f"pessoa.html?id={pref['id']}&lang=en", wait_until="networkidle")
                 await pg.wait_for_timeout(1000)
                 ok(f"{nome}: o prefeito em inglês", "mayor's office sent" in await pg.locator("#propostas").inner_text())
@@ -214,7 +219,8 @@ async def main():
             leg = (await pg.locator("#votacoes .legenda-votos").inner_text()).replace(".", "")
             ok(f"Porto Alegre: as votações nominais continuam (total {vv['resumo']['total']})", f"Total: {vv['resumo']['total']}" in leg)
             n = await pg.locator("#lista-votos > li").count()
-            ok("Porto Alegre: a lista de votações aparece (15 por vez)", n == min(15, len(vv["votos"])), f"{n}")
+            # ui-r9: a lista começa com 8 votações no computador (antes, 15) e o "Mostrar mais" põe mais 15
+            ok("Porto Alegre: a lista de votações aparece (8 no começo)", n == min(8, len(vv["votos"])), f"{n}")
             await pg.goto(BASE + f"pessoa.html?id={pid}&lang=en", wait_until="networkidle")
             await pg.locator("#gastos").scroll_into_view_if_needed()
             await pg.wait_for_timeout(1000)

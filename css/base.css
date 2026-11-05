@@ -5,7 +5,7 @@
   --bg: #fdf8ef;
   --card: #fff;
   --ink: #1d2430;
-  --muted: #5b6573;
+  --muted: #46505d;  /* ui-r9: era #5b6573 (5,6:1 no creme); agora 7,6:1 (AA com folga; perto do AAA) */
   --line: #ebe2d0;
   --brand: #1f3a5f;
   --brand-2: #2a4c7a;
@@ -45,26 +45,19 @@ p { margin: 0 0 .7em; }
   padding: 8px 14px; background: rgba(255, 255, 255, .96); border-bottom: 2px solid var(--line);
   font-size: 16px; backdrop-filter: blur(6px);
 }
-.topo a, .topo button {
-  display: inline-flex; align-items: center; gap: 6px; text-decoration: none; color: var(--ink);
-  border: 2px solid var(--line); background: #fff; border-radius: 12px; padding: 7px 12px; font-weight: 800; font-size: 16px; white-space: nowrap;
-}
-.topo a:hover, .topo button:hover { background: var(--bg); }
-.topo button[aria-pressed="true"] { background: var(--brand); color: #fff; border-color: var(--brand); }
 .topo .onde { flex: 1; min-width: 0; font-weight: 800; color: var(--brand); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.topo .marca { border: 0; padding: 4px 6px; font-weight: 900; color: var(--brand); }
-@media (max-width: 600px) {
-  .topo { gap: 6px; padding: 6px 8px; }
-  .topo .rotulo { display: none; }
-  .topo a, .topo button { padding: 7px 10px; }
-  .topo .marca { font-size: 15px; padding: 4px 2px; }
-  .selo-topo { font-size: .66rem; letter-spacing: .03em; }
-}
-/* telas bem estreitas (320px, ou zoom de 400%): tudo cabe sem rolar para os lados */
-@media (max-width: 360px) {
-  .topo { gap: 4px; padding: 6px; }
-  .topo a, .topo button { padding: 7px 7px; }
-}
+/* ui-r9: os botões e os menus da barra são componentes do Basecoat: o visual está em css/componentes.css */
+@media (max-width: 600px) { .selo-topo { font-size: .74rem; letter-spacing: .03em; } }
+
+/* ---------- caminho ("Você está aqui": Início › Bahia › Salvador › pessoa), logo abaixo da barra ---------- */
+.trilha { padding-top: 8px; padding-bottom: 0; font-size: .82rem; position: relative; }
+.trilha ol { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 0 2px; }
+.trilha li { display: inline-flex; align-items: center; min-width: 0; max-width: 100%; }
+.trilha li + li::before { content: "›" / ""; color: #4a5361; font-weight: 900; margin: 0 6px 0 4px; }
+.trilha a { display: inline-flex; align-items: center; gap: 4px; min-height: 32px; padding: 2px 4px; font-weight: 800; text-underline-offset: 3px; }
+.trilha [aria-current] { display: block; padding: 2px 4px; font-weight: 800; color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* com o caminho embaixo, o nome da página na barra fica só como espaço (no celular nem cabia) */
+html.tem-trilha .topo .onde { visibility: hidden; }
 
 /* ---------- selos e etiquetas ---------- */
 .selo-topo {
@@ -77,23 +70,10 @@ p { margin: 0 0 .7em; }
 }
 .chip.neutro { background: #f3efe6; color: #4a4f57; border-color: #e3dccd; }
 .chip.amarelo { background: var(--creme-forte); color: #6b4a00; border-color: #f2d48a; }
-.chip.verde { background: #e3f4e8; color: #1f6b3a; border-color: #bfe3ca; }
+.chip.verde { background: #e3f4e8; color: #17552e; border-color: #bfe3ca; }  /* ui-r9: 5,7:1 → 7,6:1 */
 
 /* ---------- botões ---------- */
-.btn {
-  display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; border: 0;
-  border-radius: 16px; padding: 14px 24px; font-weight: 900; font-size: 1.05rem; line-height: 1.2;
-  background: var(--amarelo); color: #2a1d00; box-shadow: 0 5px 0 var(--amarelo-esc); transition: transform .1s, box-shadow .1s;
-}
-.btn:active { transform: translateY(3px); box-shadow: 0 2px 0 var(--amarelo-esc); }
-.btn.azul { background: var(--brand); color: #fff; box-shadow: 0 5px 0 #142640; }
-.btn.azul:active { box-shadow: 0 2px 0 #142640; }
-.btn.claro { background: #eef3fa; color: var(--brand); box-shadow: 0 5px 0 #b9cde6; }
-.btn.bege { background: #efe7d6; color: var(--ink); box-shadow: 0 5px 0 #cdbf9f; }
-.btn.peq { padding: 9px 16px; font-size: .9rem; border-radius: 12px; box-shadow: 0 3px 0 var(--amarelo-esc); }
-.btn.peq.claro { box-shadow: 0 3px 0 #b9cde6; }
-.btn.peq.bege { box-shadow: 0 3px 0 #cdbf9f; }
-.btn[disabled], .btn.em-breve { opacity: .55; cursor: default; box-shadow: none; transform: none; }
+/* ui-r9: o visual dos botões (.btn, .azul, .claro, .bege, .peq) está em css/componentes.css (o "button" do Basecoat) */
 .botoes { display: flex; flex-wrap: wrap; gap: 14px; }
 .link-seta { font-weight: 800; text-decoration: none; }
 .link-seta:hover { text-decoration: underline; }
@@ -112,7 +92,7 @@ p { margin: 0 0 .7em; }
 .av-letra { display: inline-flex; align-items: center; justify-content: center; font-weight: 900; color: #fff; background: #8a94a3; font-size: 1.3rem; }
 
 /* ---------- carimbos de situação (propostas) ---------- */
-.carimbo { display: inline-flex; gap: 6px; align-items: center; font-size: .7rem; font-weight: 900; text-transform: uppercase; letter-spacing: .03em; border: 2px solid currentColor; border-radius: 999px; padding: 2px 10px; white-space: nowrap; }
+.carimbo { display: inline-flex; gap: 6px; align-items: center; font-size: .74rem; font-weight: 900; text-transform: uppercase; letter-spacing: .03em; border: 2px solid currentColor; border-radius: 999px; padding: 2px 10px; white-space: nowrap; }
 .carimbo.s-lei { color: #fff; background: #1f3a5f; border-color: #1f3a5f; }
 .carimbo.s-aprovada { color: #1f3a5f; background: #e6eef8; border-color: #1f3a5f; }
 .carimbo.s-andando { color: #1f4b7a; background: #f3f7fc; border-color: #b9cce4; }
@@ -134,58 +114,9 @@ p { margin: 0 0 .7em; }
 .fontes-lista b { display: block; }
 .fontes-lista small { color: var(--muted); }
 
-/* ---------- janela (modal) ---------- */
-.janela-fundo { position: fixed; inset: 0; background: rgba(20, 20, 30, .55); z-index: 100; display: flex; align-items: center; justify-content: center; padding: 14px; }
-.janela-fundo[hidden] { display: none; }
-.janela {
-  background: #fff; border-radius: 24px; width: 100%; max-width: 760px; max-height: 90vh; max-height: 90dvh; overflow: auto;
-  padding: 0 24px 22px; box-shadow: 0 20px 60px rgba(0, 0, 0, .35); animation: sobe .3s cubic-bezier(.2, .8, .2, 1);
-}
-@keyframes sobe { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
-.janela-cab {
-  position: sticky; top: 0; z-index: 2; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
-  background: #fff; margin: 0 -24px 12px; padding: 18px 24px 12px; border-bottom: 2px solid #f1ece0;
-}
-.janela-cab h2 { font-size: 1.3rem; margin: 0; }
-.fechar { flex-shrink: 0; border: 0; background: #efe7d6; border-radius: 12px; padding: 8px 14px; font-weight: 800; }
-.janela h3 { color: var(--brand); font-size: 1.05rem; margin: 18px 0 8px; }
-
+/* ---------- janela (modal): o "dialog" do Basecoat, em css/componentes.css (ui-r9) ---------- */
 /* ---------- busca e filtros ---------- */
-.busca { position: relative; }
-.busca input {
-  width: 100%; font: inherit; font-size: 1.05rem; padding: 14px 18px 14px 52px; border-radius: 18px; border: 3px solid #9c8d6e;
-  background: #fff; box-shadow: var(--sombra); color: var(--ink);
-}
-.busca input:focus { outline: none; border-color: var(--amarelo); }
-/* ---------- campo de escolha com busca (combobox): usado no lugar de todo "select" ---------- */
-/* borda com contraste de 3:1 com o fundo (WCAG 1.4.11), igual à das buscas */
-.combo { position: relative; min-width: 0; }
-.combo-campo { position: relative; }
-.combo-campo input {
-  width: 100%; font: inherit; font-size: 1rem; min-height: 48px; padding: 11px 40px 11px 14px; border-radius: 16px; border: 3px solid #9c8d6e;
-  background: #fff; color: var(--ink); text-overflow: ellipsis;
-}
-.combo-campo input::placeholder { color: var(--muted); opacity: 1; }
-.combo-campo input:focus { outline: none; border-color: var(--brand); }
-.combo-seta { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); pointer-events: none; color: var(--muted); font-size: .9rem; }
-.combo-lista {
-  position: absolute; left: 0; right: 0; top: calc(100% + 6px); z-index: 40; margin: 0; padding: 6px; list-style: none; max-height: min(330px, 55vh); overflow-y: auto;
-  background: #fff; border: 2px solid #9c8d6e; border-radius: 16px; box-shadow: 0 14px 30px rgba(31, 58, 95, .2); text-align: left; overscroll-behavior: contain;
-}
-.combo-lista li { display: flex; align-items: center; flex-wrap: wrap; gap: 2px 10px; min-height: 44px; padding: 8px 12px; border-radius: 10px; cursor: pointer; line-height: 1.25; }
-.combo-lista li:hover { background: #f3f7fd; }
-.combo-lista li.ativo { background: #e6eef8; box-shadow: inset 0 0 0 2px var(--brand); }
-.combo-lista .combo-t { font-weight: 700; }
-.combo-lista li.escolhido .combo-t { font-weight: 900; }
-.combo-lista small { color: var(--muted); font-size: .82rem; }
-.combo-lista .combo-ok { margin-left: auto; color: var(--brand); font-weight: 900; }
-.combo-nada { margin: 6px 2px 0; font-size: .9rem; color: var(--muted); }
-/* versão grande, com lupa (busca da cidade) */
-.combo.grande .combo-campo input { font-size: 1.1rem; min-height: 58px; padding: 14px 44px 14px 52px; border-radius: 18px; box-shadow: var(--sombra); }
-.combo.grande .combo-campo::before { content: "🔎"; position: absolute; left: 18px; top: 50%; transform: translateY(-50%); font-size: 1.2rem; pointer-events: none; z-index: 1; }
-html.alto-contraste .combo-campo input, html.alto-contraste .combo-lista { border-color: #000; }
-html.alto-contraste .combo-lista li.ativo { background: #ffdd00; color: #000; box-shadow: inset 0 0 0 3px #000; }
-.busca::before { content: "🔎"; position: absolute; left: 18px; top: 50%; transform: translateY(-50%); font-size: 1.2rem; pointer-events: none; }
+/* ui-r9: as buscas (.busca input) e o campo de escolha (EP.combo, o "combobox" do Basecoat) estão em css/componentes.css */
 .filtros { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
 .filtro {
   border: 2px solid var(--line); background: #fff; border-radius: 999px; padding: 6px 14px; font-weight: 800; font-size: .85rem;
@@ -194,7 +125,7 @@ html.alto-contraste .combo-lista li.ativo { background: #ffdd00; color: #000; bo
 select.filtro { appearance: auto; }
 
 /* ---------- grade de pessoas ---------- */
-.grade-pessoas { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; }
+.grade-pessoas { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(150px, 100%), 1fr)); gap: 14px; }
 .pessoa-card {
   display: flex; flex-direction: column; align-items: center; text-align: center; gap: 6px; text-decoration: none; color: var(--ink);
   background: #fff; border: 2px solid var(--line); border-radius: 18px; padding: 14px 10px 12px; box-shadow: 0 3px 0 #e6dcc7;
@@ -204,7 +135,7 @@ select.filtro { appearance: auto; }
 .pessoa-card .av { width: 84px; height: 84px; }
 .pessoa-card b { font-size: .95rem; line-height: 1.2; }
 .pessoa-card small { color: var(--muted); font-size: .78rem; line-height: 1.3; }
-.pessoa-card .chip { font-size: .66rem; padding: 2px 8px; white-space: normal; }
+.pessoa-card .chip { font-size: .74rem; padding: 2px 8px; white-space: normal; }
 .contagem { font-weight: 800; color: var(--muted); font-size: .9rem; margin: 8px 0 12px; }
 .vazio { text-align: center; padding: 30px 10px; color: var(--muted); }
 .vazio .grande { font-size: 3rem; display: block; }
@@ -219,7 +150,10 @@ select.filtro { appearance: auto; }
 .ic-bloco { font-size: 2.8rem; line-height: 1; flex-shrink: 0; }
 .lead { font-size: 1.15rem; color: #384150; }
 .destaque { background: linear-gradient(transparent 60%, #ffe08a 60%); padding: 0 4px; }
-.rodape { padding-top: 30px; padding-bottom: 40px; font-size: .85rem; color: var(--muted); border-top: 2px dashed var(--line); margin-top: 30px; }
+.rodape { padding-top: 30px; padding-bottom: 40px; font-size: .88rem; color: var(--muted); border-top: 2px dashed var(--line); margin-top: 30px; }
+/* ui-r9: linhas de texto corrido com no máximo ~75 letras (mais fácil de ler e de não se perder na volta da linha) */
+.rodape p, .lead, .bloco > p, .bloco .cab-bloco p, .secao-perfil > p, .secao-perfil > .aviso, .info-casa p, .notas-casa, .explica-p, .dica-coruja p,
+.nota-ia p, .sabia, .faixa-passado p, .aviso, .papeis-cidade + p { max-width: 75ch; }
 .rodape a { font-weight: 700; }
 
 /* ---------- animação ao rolar ---------- */
@@ -234,7 +168,7 @@ select.filtro { appearance: auto; }
   html { font-size: calc(18px * var(--escala)); }
   .janela { padding: 0 16px 18px; }
   .janela-cab { margin: 0 -16px 12px; padding: 14px 16px 10px; }
-  .grade-pessoas { grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); gap: 10px; }
+  .grade-pessoas { grid-template-columns: repeat(auto-fill, minmax(min(132px, 100%), 1fr)); gap: 10px; }
   .pessoa-card .av { width: 72px; height: 72px; }
   .bloco { padding-top: 30px; padding-bottom: 30px; }
   .ic-bloco { font-size: 2.2rem; }
@@ -248,20 +182,7 @@ select.filtro { appearance: auto; }
 
 /* ====== Acessibilidade ====== */
 /* menu ♿ */
-.menu-a11y { display: grid; gap: 10px; }
-.grupo-a11y { background: #f7f3ea; border-radius: 16px; padding: 10px 14px; }
-.tamanhos { display: flex; gap: 8px; margin-top: 8px; }
-.tamanhos button { flex: 1; min-height: 48px; border: 3px solid var(--line); background: #fff; border-radius: 12px; font-weight: 900; }
-.tamanhos button[aria-pressed="true"] { border-color: var(--brand); background: var(--brand); color: #fff; }
-.opcao-a11y { display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; border: 2px solid var(--line); background: #fff; border-radius: 16px; padding: 10px 14px; min-height: 56px; }
-.opcao-a11y:hover { background: #f3f7fd; }
-.opcao-a11y .oa-ic { font-size: 1.6rem; width: 1.6em; text-align: center; flex-shrink: 0; }
-.opcao-a11y b { display: block; }
-.opcao-a11y small { display: block; color: var(--muted); font-size: .82rem; }
-.oa-chave { margin-left: auto; flex-shrink: 0; width: 52px; height: 30px; border-radius: 99px; background: #cfd5dd; position: relative; transition: background .2s; }
-.oa-chave i { position: absolute; top: 3px; left: 3px; width: 24px; height: 24px; border-radius: 50%; background: #fff; box-shadow: 0 2px 4px rgba(0, 0, 0, .25); transition: left .2s; }
-.opcao-a11y[aria-checked="true"] .oa-chave { background: var(--ok); }
-.opcao-a11y[aria-checked="true"] .oa-chave i { left: 25px; }
+/* ui-r9: o menu Leitura (tamanhos da letra e interruptores) está em css/componentes.css */
 .atalhos-teclado summary { cursor: pointer; font-weight: 800; padding: 8px 4px; }
 .atalhos-teclado ul { margin: 4px 0 0; padding-left: 1.2em; display: grid; gap: 4px; font-size: .9rem; }
 kbd { display: inline-block; min-width: 1.6em; text-align: center; border: 2px solid #b8ad96; border-bottom-width: 4px; border-radius: 6px; padding: 0 5px; font: inherit; font-size: .8em; font-weight: 800; background: #fff; }

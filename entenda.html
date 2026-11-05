@@ -27,11 +27,14 @@
   <link rel="icon" href="img/icone.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
   <link rel="manifest" href="site.webmanifest">
-  <link rel="stylesheet" href="css/base.css?v=11">
+  <link rel="stylesheet" href="vendor/basecoat/basecoat.css?v=3">
+  <link rel="stylesheet" href="css/base.css?v=15">
   <link rel="stylesheet" href="css/tres.css?v=10">
-  <link rel="stylesheet" href="css/tres-politica.css?v=11">
+  <link rel="stylesheet" href="css/tres-politica.css?v=12">
   <link rel="stylesheet" href="css/mapa.css?v=11">
-  <link rel="stylesheet" href="css/entenda.css?v=11">
+  <link rel="stylesheet" href="css/entenda.css?v=13">
+  <link rel="stylesheet" href="css/componentes.css?v=5">
+  <link rel="stylesheet" href="css/casca.css?v=3">
 </head>
 <body class="mapa-pag">
 <a class="pular" href="#mapa-tela" data-en="Skip to the map">Pular para o mapa</a>
@@ -44,10 +47,10 @@
     <div class="barra-prog so-aula" aria-hidden="true"><i id="progresso"></i></div>
   </div>
   <span class="progresso-topo so-mapa" id="progresso-mapa"></span>
-  <a id="btn-idioma" href="?lang=en">🌐 EN</a>
-  <button id="btn-a11y" type="button"><span aria-hidden="true">♿</span><span class="rotulo" data-en=" Accessibility"> Acessibilidade</span></button>
-  <button id="btn-ouvir" type="button" aria-pressed="false"><span aria-hidden="true">🔊</span><span class="rotulo" data-en=" Listen"> Ouvir</span></button>
-  <button id="btn-letra" type="button">A+</button>
+  <div class="ferramentas-topo">
+    <button type="button" class="btn busca-btn" data-variant="outline" data-abre-busca aria-haspopup="dialog" aria-keyshortcuts="Control+K Meta+K"><svg class="lucide lupa" aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7.5"/><path d="m20.5 20.5-4.3-4.3"/></svg><span class="busca-rot" data-en="Search for a politician, state, city…">Buscar político, estado, cidade…</span><kbd class="kbd atalho" aria-hidden="true">Ctrl K</kbd></button>
+    <button id="btn-ouvir" class="btn" data-variant="outline" type="button" aria-pressed="false"><span aria-hidden="true">🔊</span><span class="rotulo" data-en="Listen">Ouvir</span></button>
+  </div>
 </header>
 
 <div class="area">
@@ -85,10 +88,12 @@
 
 <noscript><p style="padding:20px">Esta página precisa de JavaScript ligado no navegador. / This page needs JavaScript.</p></noscript>
 <script src="js/config.js?v=10"></script>
-<script src="js/comum.js?v=11"></script>
+<script src="vendor/basecoat/basecoat.js?v=2"></script>
+<script src="js/comum.js?v=19"></script>
+<script src="js/casca.js?v=2"></script>
 <script src="js/tres.js?v=10"></script>
-<script src="js/tres-politica.js?v=11"></script>
+<script src="js/tres-politica.js?v=12"></script>
 <script src="js/mapa3d.js?v=11"></script>
-<script src="js/entenda.js?v=11"></script>
+<script src="js/entenda.js?v=12"></script>
 </body>
 </html>

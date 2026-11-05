@@ -13,6 +13,8 @@ from pathlib import Path
 
 from playwright.async_api import async_playwright
 
+from ajuda_abas import liga  # ui-r9
+
 BASE = __import__("os").environ.get("EP_BASE", "http://127.0.0.1:8770/")
 RAIZ = Path(__file__).resolve().parent.parent
 sys.stdout.reconfigure(encoding="utf-8")
@@ -129,10 +131,12 @@ async def main():
         nav = await pw.chromium.launch(channel="msedge")
         ctx = await nav.new_context(viewport={"width": 1280, "height": 860})
         pg = await ctx.new_page()
+        liga(pg)  # ui-r9: estado, cidade e perfil em abas (testes/ajuda_abas.py)
         erros = []
         pg.on("pageerror", lambda e: erros.append(str(e)))
         cel = await nav.new_context(viewport={"width": 320, "height": 700}, is_mobile=True)
         pc = await cel.new_page()
+        liga(pc)  # ui-r9: estado, cidade e perfil em abas (testes/ajuda_abas.py)
         pc.on("pageerror", lambda e: erros.append(str(e)))
 
         for ibge, (uf, nome) in CIDADES.items():

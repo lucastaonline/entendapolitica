@@ -151,7 +151,7 @@
   function predioMiolo(o, extra) {
     var janelas = "";
     for (var k = 0; k < 8; k++) janelas += "<span></span>";
-    return (o.mundo ? "" : '<div class="sombra-chao"></div>') + caixa("corpo", { fr: (extra && extra.placa ? '<em class="placa-predio">' + extra.placa + "</em>" : "") + janelas + '<span class="porta"></span>' }) +
+    return (o.mundo ? "" : '<div class="sombra-chao"></div>') + caixa("corpo", { fr: (extra && extra.placa ? '<em class="placa-predio">' + extra.placa + "</em>" : "") + janelas + '<span class="porta3d"></span>' }) +
       '<div class="frontao"></div><div class="mastro"></div><div class="bandeira"></div>' + (extra && extra.mais ? extra.mais : "");
   }
   T.predio = function (o) { return modelo(o, "cena-predio", "predio3d", predioMiolo(o || {})); };

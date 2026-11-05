@@ -1,4 +1,4 @@
-"""Testes de "Quem assume" (eleitos em 2026, até a posse): a seção nova do Brasil (#quem-assume), a do estado, a próxima
+"""Testes de "Quem assume" (eleitos em 2026, até a posse): o mandato 2027 do Brasil e do estado (desde a mandatos-r11, as mesmas\nabas da página de hoje; os endereços antigos #quem-assume levam para lá), a próxima
 eleição da cidade (#proxima-eleicao), o perfil e26- de quem foi eleito e não tem cargo hoje, o selo de quem já tem cargo,
 a busca e o sitemap. Números da página x dados/eleitos/, filtros pelo teclado, links, inglês, 320 px, axe-core e nenhum
 erro de JavaScript. Também simula o dia seguinte às posses (scripts/eleitos.py --hoje) e um arquivo que não existe mais.
@@ -72,9 +72,13 @@ async def rola_tudo(pg):
 
 async def ir(pg, url, ate=None):
     if "lang=" not in url:  # a escolha do idioma fica salva no navegador: as páginas em português pedem lang=pt
-        url += ("&" if "?" in url else "?") + "lang=pt"
+        base, _, aba = url.partition("#")  # o endereço da aba (brasil.html#quem-assume) fica no fim
+        url = base + ("&" if "?" in base else "?") + "lang=pt" + ("#" + aba if aba else "")
     await pg.goto(BASE + url, wait_until="networkidle")
     await pg.wait_for_timeout(900)
+    # ui-r9: estado, cidade e perfil em abas: abre a aba de onde está o que se quer ver (como quem clica nela)
+    if ate and await pg.evaluate("s => !!(window.EP && EP.abas && EP.abas.ativa() && EP.abas.mostra(s.slice(1)))", ate):
+        await pg.wait_for_timeout(1200)
     if ate and await pg.locator(ate).count():
         await pg.locator(ate).first.scroll_into_view_if_needed()
         await pg.wait_for_timeout(500)
@@ -104,6 +108,9 @@ def contas_txt(c):
 async def filtra(pg, sel_casa, n_combo, texto):
     """Escolhe uma opção num campo com busca da Casa só com o teclado (Tab até ele, digita, Enter)."""
     campo = pg.locator(sel_casa + " .combo input").nth(n_combo)
+    # ui-r9: com abas, os filtros de cada Casa do "Quem assume" (também no estado) ficam num bloco que abre
+    await pg.evaluate("s => { const d = document.querySelector(s + ' details.casa-recolhe'); if (d) d.open = true; }", sel_casa)
+    await pg.wait_for_timeout(300)
     await campo.focus()
     await pg.keyboard.press("Control+a")
     await pg.keyboard.type(texto, delay=35)
@@ -134,9 +141,17 @@ async def main():
         await pg.goto(BASE + "index.html?lang=pt", wait_until="networkidle")
 
         # ------------------------------------------------------------ 1. Brasil: "Quem assume em 2027"
-        await ir(pg, "brasil.html", "#quem-assume")
-        sec = pg.locator("#quem-assume")
-        ok("Brasil: a seção aparece e o atalho leva a ela", await sec.is_visible() and await pg.locator('.atalhos a[href="#quem-assume"]').is_visible())
+        # ui-r9 (decisão do Lucas): deixou de ser aba; é o mandato 2027 do "Ver outro mandato" (brasil.html?mandato=2027), com um
+        # aviso curto nas abas de hoje; o endereço antigo (brasil.html#quem-assume) leva para lá
+        # mandatos-r11 (pedido do Lucas, 3/11): o mandato 2027 tem as mesmas abas da página de hoje (Quem governa, Senado, Câmara...),
+        # com a faixa amarela "Você está vendo"; cada parte do antigo "Quem assume" está na aba do mesmo assunto
+        await ir(pg, "brasil.html")
+        ok("Brasil (hoje): o aviso “Veja quem assume em 2027” leva ao mandato 2027, na mesma aba",
+           (await pg.locator("#executivo .aviso-futuro a").get_attribute("href") or "").endswith("mandato=2027#executivo"))
+        await ir(pg, "brasil.html#quem-assume")
+        sec = pg.locator("#executivo")
+        ok("Brasil: o endereço antigo leva ao mandato 2027 (as mesmas abas, com a faixa)", await sec.is_visible() and "mandato=2027" in pg.url
+           and await pg.locator("#faixa-mandato").is_visible(), pg.url.split("/")[-1])
         pres = br["presidencia"]["presidente"]
         cards = sec.locator(".exec-topo .pessoa-grande")
         hrefs = await cards.evaluate_all("l => l.map(a => a.getAttribute('href'))")
@@ -144,14 +159,22 @@ async def main():
         ok("Brasil: presidente e vice eleitos, com votos e posse, levam ao perfil de hoje",
            hrefs == [f"pessoa.html?id={pres['link']}", f"pessoa.html?id={br['presidencia']['vice']['link']}"] and num(pres["votos"]) in txt and "5 de janeiro de 2027" in txt,
            f"{hrefs} | {txt[:120]!r}")
-        contas = await sec.locator(".contas-e26").inner_text()
         c = br["contas"]
-        ok("Brasil: as contagens são as dos dados (Câmara, Senado, Assembleias)",
-           all(contas_txt(c[k]) in contas for k in ("camara", "senado", "assembleias")) and "não é bom nem ruim" in contas, contas[:240])
-        datas = await sec.locator(".posses > li").count()
-        ok("Brasil: linha do tempo com uma data por item", datas >= 3, str(datas))
-        # Câmara a partir de 1º/2/2027
-        cam = sec.locator("#qa-casa-cam")
+        contas = ""
+        for a in ("senado", "camara"):
+            await ir(pg, f"brasil.html?mandato=2027#{a}", f"#{a}")
+            contas += await pg.locator(f"#{a} .contas-e26").inner_text()
+        ok("Brasil: as contagens de cada aba são as dos dados (Senado e Câmara)",
+           all(contas_txt(c[k]) in contas for k in ("camara", "senado")) and "não é bom nem ruim" in contas, contas[:240])
+        datas = await pg.locator(".nota-mandato .posses > li").count()
+        ok("Brasil: linha do tempo com uma data por item (no bloco “Quando cada um toma posse”, em cima das abas)", datas >= 3, str(datas))
+        # Câmara a partir de 1º/2/2027 (com abas, a lista começa com um resumo e o plenário, os partidos e os filtros ficam num
+        # bloco que abre: abre o bloco antes de usar os filtros)
+        await ir(pg, "brasil.html?mandato=2027#camara", "#camara")
+        cam = pg.locator("#qa-casa-cam")
+        if await cam.locator("details.casa-recolhe").count():
+            await cam.locator("details.casa-recolhe").evaluate("d => { d.open = true; }")
+            await pg.wait_for_timeout(700)
         n_cad = await cam.locator(".plenario i[data-g]").count()
         cont = await cam.locator(".contagem").inner_text()
         ok("Câmara 2027: 513 cadeiras no plenário e na contagem", n_cad == len(br["camara"]["membros"]) == 513 and "513" in cont, f"{n_cad} | {cont}")
@@ -159,16 +182,18 @@ async def main():
         for m in br["camara"]["membros"]:
             pp[m["partido"]] = pp.get(m["partido"], 0) + 1
         maior = max(pp.items(), key=lambda x: (x[1], x[0]))
-        n0 = await cam.locator('.barra-partido[data-g="0"] .n-p').inner_text()
+        n0 = await cam.locator('.d-partido', has=pg.locator("b", has_text=maior[0])).first.locator("span:not(.sr)").inner_text()  # site-d-r14: etiquetas
         ok("Câmara 2027: o maior partido na lista tem o número dos dados", n0 == num(maior[1]), f"{n0} x {maior}")
         valor = await filtra(pg, "#qa-casa-cam", 1, maior[0])
         cont = await cam.locator(".contagem").inner_text()
-        ok("Câmara 2027: filtro de partido pelo teclado", valor.startswith(maior[0]) and f"Mostrando {num(maior[1])} de 513" in cont, f"{valor} | {cont}")
+        ok("Câmara 2027: filtro de partido pelo teclado", valor.startswith(maior[0]) and (f"Mostrando {num(maior[1])} de 513" in cont or
+                                                                                          f"de {num(maior[1])} encontrados (de 513)" in cont), f"{valor} | {cont}")
         await filtra(pg, "#qa-casa-cam", 1, "todos")
         n_uf = sum(1 for m in br["camara"]["membros"] if m["uf"] == "SP")
         valor = await filtra(pg, "#qa-casa-cam", 0, "são paulo")
         cont = await cam.locator(".contagem").inner_text()
-        ok("Câmara 2027: filtro de estado pelo teclado", valor == "São Paulo" and f"Mostrando {n_uf} de 513" in cont, f"{valor} | {cont}")
+        ok("Câmara 2027: filtro de estado pelo teclado", valor == "São Paulo" and (f"Mostrando {n_uf} de 513" in cont or f"de {n_uf} encontrados (de 513)" in cont),
+           f"{valor} | {cont}")
         await filtra(pg, "#qa-casa-cam", 0, "todos")
         # cartões: quem tem cargo leva ao perfil de hoje; quem não tem, ao perfil e26-
         primeiro = br["camara"]["membros"][0]
@@ -182,14 +207,19 @@ async def main():
            h0 == f"pessoa.html?id={primeiro['link']}" and h1 == f"pessoa.html?id={novo['id']}" and "Sem cargo eletivo hoje" in chip, f"{h0} | {h1} | {chip!r}")
         await pg.fill("#qa-casa-cam .f-nome", "")
         await pg.wait_for_timeout(600)
-        # "Mostrar mais": o foco vai para o primeiro cartão novo
+        # "Mostrar mais" (com abas, "Ver todos"): o foco vai para o primeiro cartão novo
+        antes = await cam.locator(".pessoa-card").count()
         await cam.locator(".ver-mais").focus()
         await pg.keyboard.press("Enter")
         await pg.wait_for_timeout(600)
         foco = await pg.evaluate("document.activeElement && document.activeElement.closest('#qa-casa-cam .pessoa-card') ? [...document.querySelectorAll('#qa-casa-cam .pessoa-card')].indexOf(document.activeElement) : -1")
-        ok("Câmara 2027: “Mostrar mais” pelo teclado leva o foco ao 61º cartão", foco == 60, str(foco))
-        # Senado a partir de 1º/2/2027
-        sen = sec.locator("#qa-casa-sen")
+        ok(f"Câmara 2027: “Mostrar mais” pelo teclado leva o foco ao {antes + 1}º cartão", foco == antes, str(foco))
+        # Senado a partir de 1º/2/2027 (com abas, "Ver todos" antes de contar os cartões)
+        await ir(pg, "brasil.html?mandato=2027#senado", "#senado")
+        sen = pg.locator("#qa-casa-sen")
+        if await sen.locator(".ver-mais").count():
+            await sen.locator(".ver-mais").click()
+            await pg.wait_for_timeout(600)
         n_sen = await sen.locator(".plenario i[data-g]").count()
         cont = await sen.locator(".contagem").inner_text()
         saem = [m for m in br["senado"]["continuam"] if m.get("eleito2026") and m.get("assume")]
@@ -197,52 +227,59 @@ async def main():
         ok("Senado 2027: 81 cadeiras (54 eleitos + 27 que continuam) e os suplentes que assumem", n_sen == 81 and "81" in cont and len(br["senado"]["eleitos"]) == 54
            and assume == len(saem), f"{n_sen} | {cont} | assume {assume}/{len(saem)}")
         await rola_tudo(pg)
-        await axe(pg, "brasil.html, seção #quem-assume", "#quem-assume")
+        await axe(pg, "brasil.html?mandato=2027, aba Senado", "main")
 
         # ------------------------------------------------------------ 2. Brasil em inglês
-        await ir(pg, "brasil.html?lang=en", "#quem-assume")
-        sec = pg.locator("#quem-assume")
-        tit = await sec.locator("h2").first.inner_text()
-        contas = await sec.locator(".contas-e26").inner_text()
+        await ir(pg, "brasil.html?lang=en#quem-assume")
+        await ir(pg, "brasil.html?lang=en&mandato=2027#camara", "#camara")
+        tit = await pg.locator("#faixa-mandato").inner_text()
+        contas = await pg.locator("#camara .contas-e26").inner_text()
         cc = c["camara"]
-        ok("Brasil em inglês: título e contagem", tit == "Who takes office in 2027" and f"{num_en(cc['total'])} elected. {num_en(cc['reeleicao'])} were re-elected" in contas,
+        ok("Brasil em inglês: faixa e contagem", "the next term, 2027–2030" in tit and f"{num_en(cc['total'])} elected. {num_en(cc['reeleicao'])} were re-elected" in contas,
            f"{tit} | {contas[:160]!r}")
         await rola_tudo(pg)
-        await texto_en(pg, "brasil.html?lang=en")
-        await axe(pg, "brasil.html?lang=en, seção #quem-assume", "#quem-assume")
+        await texto_en(pg, "brasil.html?lang=en&mandato=2027")
+        await axe(pg, "brasil.html?lang=en&mandato=2027, aba Câmara", "main")
 
         # ------------------------------------------------------------ 3. estado
-        await ir(pg, f"estado.html?uf={UF}", "#quem-assume")
-        sec = pg.locator("#quem-assume")
+        await ir(pg, f"estado.html?uf={UF}&mandato=2027", "#governo")
+        sec = pg.locator("#estado")
         gv = uf["governo"]["governador"]
         txt = await sec.locator(".exec-topo").inner_text()
         hrefs = await sec.locator(".exec-topo .pessoa-grande").evaluate_all("l => l.map(a => a.getAttribute('href'))")
         ok("estado: governador e vice eleitos, com a posse (6/1/2027)", gv["nome"] in txt and "6 de janeiro de 2027" in txt and
            hrefs[0] == f"pessoa.html?id={gv['link']}", f"{hrefs} | {txt[:100]!r}")
+        await ir(pg, f"estado.html?uf={UF}&mandato=2027#senadores", "#senadores")
         sup = await sec.locator(".suplentes-e26 a").evaluate_all("l => l.map(a => a.getAttribute('href'))")
         esperado = [f"pessoa.html?id={x['link']}" for s in uf["senado"]["eleitos"] for x in s.get("suplentes") or []]
-        ok("estado: senadores eleitos com os 2 suplentes (links)", sup == esperado and len(sup) == 2 * len(uf["senado"]["eleitos"]), str(sup))
-        cont_fed = await sec.locator("#qa-casa-fed .contagem").inner_text()
-        cont_est = await sec.locator("#qa-casa-est .contagem").inner_text()
-        ok("estado: deputados federais e Assembleia com o número dos dados", f"todos os {len(uf['camara']['membros'])}" in cont_fed and
-           f"todos os {len(uf['assembleia']['membros'])}" in cont_est, f"{cont_fed} | {cont_est}")
+        # mandatos-r11: na aba Senadores, os eleitos e quem continua ficam em ordem alfabética, como na página de hoje
+        ok("estado: senadores eleitos com os 2 suplentes (links)", sorted(sup) == sorted(esperado) and len(sup) == 2 * len(uf["senado"]["eleitos"]), str(sup))
+        await ir(pg, f"estado.html?uf={UF}&mandato=2027#federais", "#federais")
+        cont_fed = await sec.locator("#casa-fed .contagem").inner_text()
+        txt = await sec.locator("#federais .contas-e26").inner_text()
+        await ir(pg, f"estado.html?uf={UF}&mandato=2027#estaduais", "#estaduais")
+        cont_est = await sec.locator("#casa-est .contagem").inner_text()
+        # ui-r9: com abas, a lista começa com um resumo ("Mostrando os 6 primeiros de 70 deputados")
+        # mandatos-r11: o resumo é o de hoje (12); com 12 ou menos, a contagem diz "todos os N"
+        ok("estado: deputados federais e Assembleia com o número dos dados", any(f"{x} {len(uf['camara']['membros'])} " in cont_fed for x in ("de", "todos os")) and
+           any(f"{x} {len(uf['assembleia']['membros'])} " in cont_est for x in ("de", "todos os")), f"{cont_fed} | {cont_est}")
         pe = {}
         for m in uf["assembleia"]["membros"]:
             pe[m["partido"]] = pe.get(m["partido"], 0) + 1
         part, n_p = max(pe.items(), key=lambda x: (x[1], x[0]))
-        valor = await filtra(pg, "#qa-casa-est", 0, part)
-        cont = await sec.locator("#qa-casa-est .contagem").inner_text()
+        valor = await filtra(pg, "#casa-est", 0, part)
+        cont = await sec.locator("#casa-est .contagem").inner_text()
         ok("estado: filtro de partido da Assembleia pelo teclado", valor.startswith(part) and f"{n_p} de {len(uf['assembleia']['membros'])}" in cont, f"{valor} | {cont}")
-        txt = await sec.locator(".contas-e26").inner_text()
-        ok("estado: contagens da Câmara e da Assembleia", contas_txt(uf["contas"]["camara"]) in txt and contas_txt(uf["contas"]["assembleia"]) in txt, txt[:200])
+        txt += await sec.locator("#estaduais .contas-e26").inner_text()
+        ok("estado: contagens da Câmara e da Assembleia (cada uma na sua aba)", contas_txt(uf["contas"]["camara"]) in txt and contas_txt(uf["contas"]["assembleia"]) in txt, txt[:200])
         await rola_tudo(pg)
         await axe(pg, f"estado.html?uf={UF}")
-        await ir(pg, f"estado.html?uf={UF}&lang=en", "#quem-assume")
+        await ir(pg, f"estado.html?uf={UF}&lang=en&mandato=2027", "#governo")
         await rola_tudo(pg)
         await texto_en(pg, f"estado.html?uf={UF}&lang=en")
         await axe(pg, f"estado.html?uf={UF}&lang=en")
-        await ir(pg, "estado.html?uf=DF", "#quem-assume")
-        txt = await pg.locator("#quem-assume").inner_text()
+        await ir(pg, "estado.html?uf=DF&mandato=2027#estaduais", "#estaduais")
+        txt = await pg.locator("#estaduais").inner_text()
         ok("DF: Câmara Legislativa e posse em 6 de janeiro (Lei Orgânica)", "Câmara Legislativa" in txt and "deputados distritais" in txt and "6 de janeiro de 2027" in txt)
 
         # ------------------------------------------------------------ 4. cidade: a próxima eleição e as suplementares
@@ -269,10 +306,17 @@ async def main():
         ok("cidade em inglês: data americana", "October 1, 2028" in txt, txt[:120].replace("\n", " "))
         await texto_en(pg, f"cidade.html?ibge={cid_sup}&lang=en")
         await axe(pg, f"cidade.html?ibge={cid_sup}&lang=en")
-        await ir(pg, f"cidade.html?ibge={cid_e26}", "#pe-e26")
+        await ir(pg, f"cidade.html?ibge={cid_e26}", "#proxima-eleicao")  # ui-r9: a aba monta quando abre (o #pe-e26 vem depois)
+        await pg.wait_for_timeout(800)
         hrefs = await pg.locator("#proxima-eleicao .grade-pessoas .pessoa-card").evaluate_all("l => l.map(a => a.getAttribute('href'))")
         ok("cidade: quem tem cargo na cidade e foi eleito em 2026 leva ao perfil de hoje", f"pessoa.html?id={ver_e26['link']}" in hrefs and
            len(hrefs) == len(mun["cidades"][cid_e26]["eleitos2026"]), str(hrefs[:3]))
+        # ui-r9: a Câmara Municipal é outra aba da cidade, com um resumo de 12 e "Ver todos"
+        await pg.evaluate("EP.abas && EP.abas.mostra('camara-mun')")
+        await pg.wait_for_timeout(900)
+        if await pg.locator("#casa-ver .ver-mais").count():
+            await pg.locator("#casa-ver .ver-mais").click()
+            await pg.wait_for_timeout(500)
         chips = await pg.locator(f'#casa-ver a[href="pessoa.html?id={ver_e26["link"]}"] .chip').all_inner_texts()
         ok("cidade: o cartão do vereador na Câmara Municipal tem o selo de eleito em 2026", any("2026" in x for x in chips), str(chips))
 
@@ -282,7 +326,7 @@ async def main():
         ok("perfil e26: nome, “Eleita/Eleito <cargo> em 2026 · toma posse em <data>” e o partido",
            e26_dep["nome"] in topo and re.search(r"ELEIT[OA] DEPUTAD[OA] FEDERAL EM 2026 · TOMA POSSE EM 1º DE FEVEREIRO DE 2027", topo.upper()) and e26_dep["partido"] in topo,
            topo[:160].replace("\n", " | "))
-        fatos = await pg.locator(".fatos").inner_text()
+        fatos = await pg.locator(".fatos").first.inner_text()  # site-d-r14: o 1º bloco (à vista) tem a eleição
         ok("perfil e26: votos e situação da eleição de 2026", num(e26_dep["votos"]) in fatos and e26_dep["situacao"] in fatos, fatos[:200].replace("\n", " | "))
         n_itens = len(e26_dep["bens"]["itens"])
         vis = await pg.locator("#bens-e26 li:visible").count()
@@ -298,7 +342,7 @@ async def main():
         tse = await pg.locator(f'.e26-perfil a[href="{e26_dep["tse"]}"]').count()
         ok("perfil e26: link oficial da candidatura no TSE (abre em outra aba)", tse == 1 and await pg.locator(f'.e26-perfil a[href="{e26_dep["tse"]}"]').get_attribute("target") == "_blank")
         volta = await pg.get_attribute("#voltar-lista", "href")
-        ok("perfil e26 aberto direto: “Voltar” leva a “Quem assume” do estado", volta in (f"estado.html?uf={UF}#quem-assume", f"estado.html?uf={UF}&lang=pt#quem-assume"), volta)
+        ok("perfil e26 aberto direto: “Voltar” leva à aba Deputados federais do mandato 2027 do estado", volta in (f"estado.html?uf={UF}&mandato=2027#federais", f"estado.html?uf={UF}&mandato=2027&lang=pt#federais"), volta)
         await axe(pg, "perfil e26 (pt)")
         if e26_supl:
             await ir(pg, f"pessoa.html?id={e26_supl['id']}")
@@ -329,8 +373,10 @@ async def main():
         # ------------------------------------------------------------ 8. depois da posse: os arquivos somem e a seção também
         await pg.route("**/dados/eleitos/BR.json*", lambda r: r.fulfill(status=404, body="404"))
         await ir(pg, "brasil.html")
-        ok("sem dados/eleitos/BR.json (depois das posses): a seção e o atalho somem",
-           await pg.locator("#quem-assume").is_hidden() and await pg.locator('.atalhos a[href="#quem-assume"]').is_hidden())
+        ok("sem dados/eleitos/BR.json (depois das posses): a seção e os avisos somem",
+           await pg.locator("#quem-assume").is_hidden() and await pg.locator(".aviso-futuro").count() == 0)
+        await ir(pg, "brasil.html?mandato=2027")
+        ok("sem dados/eleitos/BR.json: o endereço do mandato 2027 leva para a página de hoje", "mandato" not in pg.url and await pg.locator("#quem-assume").is_hidden(), pg.url.split("/")[-1])
         await pg.unroute("**/dados/eleitos/BR.json*")
         await pg.route(f"**/dados/eleitos/{UF}.json*", lambda r: r.fulfill(status=404, body="404"))
         await ir(pg, f"pessoa.html?id={e26_dep['id']}")
@@ -365,14 +411,14 @@ async def main():
         cel = await nav.new_context(viewport={"width": 320, "height": 740})
         pc = await cel.new_page()
         pc.on("pageerror", lambda e: erros.append(str(e)))
-        for url, ate in (("brasil.html", "#quem-assume"), (f"estado.html?uf={UF}", "#quem-assume"), (f"pessoa.html?id={e26_dep['id']}", None),
+        for url, ate in (("brasil.html#quem-assume", "#camara"), (f"estado.html?uf={UF}&mandato=2027", "#estaduais"), (f"pessoa.html?id={e26_dep['id']}", None),
                          (f"cidade.html?ibge={cid_sup}", "#proxima-eleicao")):
             await ir(pc, url, ate)
             await rola_tudo(pc)
             await sem_rolar_de_lado(pc, url)
-        await ir(pc, "brasil.html", "#quem-assume")
+        await ir(pc, "brasil.html?mandato=2027#senado", "#senado")
         await rola_tudo(pc)
-        await axe(pc, "brasil.html (320 px), seção #quem-assume", "#quem-assume")
+        await axe(pc, "brasil.html?mandato=2027 (320 px), aba Senado", "main")
         await ir(pc, f"pessoa.html?id={e26_dep['id']}")
         await axe(pc, "perfil e26 (320 px)")
         await cel.close()

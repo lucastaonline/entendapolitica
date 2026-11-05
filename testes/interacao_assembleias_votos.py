@@ -13,6 +13,8 @@ from pathlib import Path
 
 from playwright.async_api import async_playwright
 
+from ajuda_abas import liga  # ui-r9
+
 BASE = __import__("os").environ.get("EP_BASE", "http://127.0.0.1:8770/")
 RAIZ = Path(__file__).resolve().parents[1]
 AXE = RAIZ.parent / "ferramentas" / "node_modules" / "axe-core" / "axe.min.js"
@@ -127,6 +129,7 @@ async def main():
         nav = await p.chromium.launch(channel="msedge")
         ctx = await nav.new_context(viewport={"width": 1280, "height": 860})
         pg = await ctx.new_page()
+        liga(pg)  # ui-r9: estado, cidade e perfil em abas (testes/ajuda_abas.py)
         erros_js = []
         pg.on("pageerror", lambda e: erros_js.append(f"{pg.url}: {e}"))
 
@@ -164,7 +167,8 @@ async def main():
             itens = pg.locator("#lista-votos > li")
             n0 = await itens.count()
             cont = limpo(await pg.locator("#contagem-votos").inner_text())
-            ok(f"{uf}: lista carregada ({min(15, r['total'])} de {r['total']})", n0 == min(15, r["total"]) and
+            # ui-r9: o perfil começa com 8 votações no computador (antes, 15); "Mostrar mais votações" põe mais 15
+            ok(f"{uf}: lista carregada ({min(8, r['total'])} de {r['total']})", n0 == min(8, r["total"]) and
                f"de {num_pt(r['total'])} " in cont, cont)
             x = v["lista"][0]
             primeiro = limpo(await itens.first.inner_text())
@@ -173,12 +177,12 @@ async def main():
             ok(f"{uf}: 1ª votação igual ao arquivo (voto, o que foi votado, link oficial)",
                chip.endswith(VOTO_CURTO.get(x["voto"], x["voto"])) and (not x.get("proposta") or x["proposta"] in primeiro)
                and link == x.get("url"), f"{x.get('proposta')} · {x['voto']} · {x.get('data')}")
-            if r["total"] > 15:
+            if r["total"] > 8:
                 await pg.click("#ver-mais-votos")
                 await pg.wait_for_timeout(500)
                 n1 = await itens.count()
                 foco = await pg.evaluate("() => { const a = document.activeElement; return !!a && a.parentElement && a.parentElement.id === 'lista-votos'; }")
-                ok(f"{uf}: 'Mostrar mais votações' mostra mais e leva o foco", n1 == min(30, r["total"]) and foco, f"{n0} -> {n1}")
+                ok(f"{uf}: 'Mostrar mais votações' mostra mais e leva o foco", n1 == min(23, r["total"]) and foco, f"{n0} -> {n1}")
             if uf in ("RN", "CE"):
                 await axe(pg, f"perfil {uf} com as votações abertas e 'Mostrar mais'")
             # em inglês: escopo traduzido, nenhum "undefined"
@@ -229,6 +233,7 @@ async def main():
         await axe(pg, "perfil CE em inglês com os gastos")
         ctx2 = await nav.new_context(viewport={"width": 320, "height": 700}, is_mobile=True, has_touch=True)
         pg2 = await ctx2.new_page()
+        liga(pg2)  # ui-r9: estado, cidade e perfil em abas (testes/ajuda_abas.py)
         for uf in ["RN", "CE", "RS", "AP"]:
             com = [(m, p) for m, p in perfis(uf) if p.get("votacoes") or p.get("gastos")]
             if not com:

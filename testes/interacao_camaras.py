@@ -13,6 +13,8 @@ from pathlib import Path
 
 from playwright.async_api import async_playwright
 
+from ajuda_abas import liga, pagina_inteira  # ui-r9; site-d-r13
+
 BASE = __import__("os").environ.get("EP_BASE", "http://127.0.0.1:8770/")
 RAIZ = Path(__file__).resolve().parent.parent
 sys.stdout.reconfigure(encoding="utf-8")
@@ -93,6 +95,7 @@ async def main():
         nav = await p.chromium.launch(channel="msedge")
         ctx = await nav.new_context(viewport={"width": 1280, "height": 860})
         pg = await ctx.new_page()
+        liga(pg)  # ui-r9: estado, cidade e perfil em abas (testes/ajuda_abas.py)
         erros = []
         pg.on("pageerror", lambda e: erros.append(str(e)))
 
@@ -111,11 +114,13 @@ async def main():
         card = pg.locator(f'#casa-ver a.pessoa-card[href*="{m["id"]}"]')
         await card.focus()
         await pg.keyboard.press("Enter")
+        await pagina_inteira(pg, teclado=True)  # site-d-r13: o cartão abre a gaveta; o perfil fica no “Ver a página inteira”
         await pg.wait_for_url("**/pessoa.html?id=*", timeout=15000)
         await pg.wait_for_load_state("networkidle")
         await pg.wait_for_timeout(1000)
         n_prop = await pg.locator("#lista-prop li.prop").count()
-        ok("perfil do vereador mostra propostas (20 por vez)", n_prop == 20, f"{n_prop} na tela")
+        # ui-r9: o perfil começa com um resumo de 6 propostas (antes, 20); "Mostrar mais" põe mais 20
+        ok("perfil do vereador mostra propostas (6 no começo)", n_prop == 6, f"{n_prop} na tela")
         cont0 = await pg.locator("#contagem-prop").inner_text()
         chip = pg.locator("#status-chips button[data-status]").first
         await chip.focus()
@@ -253,7 +258,8 @@ async def main():
                                                                               for k in ("Sim", "Não") if vv["resumo"].get(k)), leg.replace("\n", " ")[:120])
             itens = pg.locator("#lista-votos > li")
             n = await itens.count()
-            ok(f"{ibge}: a lista mostra as votações 15 por vez", n == min(15, len(vv["votos"])), f"{n}")
+            # ui-r9: começa com 8 votações no computador (antes, 15); "Mostrar mais votações" põe mais 15
+            ok(f"{ibge}: a lista mostra as votações (8 no começo)", n == min(8, len(vv["votos"])), f"{n}")
             k0, voto0 = vv["votos"][0]
             x0 = cat.get(k0) or {}
             t0 = await itens.first.inner_text()
@@ -264,12 +270,12 @@ async def main():
             pl = x0.get("placar") or {}
             ok(f"{ibge}: o placar guardado é o publicado (Sim + Não + Abstenção = total)",
                all(sum(c["placar"][a] for a in ("Sim", "Não", "Abstenção")) == c["placar"]["total"] for c in cat.values()) and pl)
-            if len(vv["votos"]) > 15:
+            if len(vv["votos"]) > 8:
                 b = pg.locator("#ver-mais-votos")
                 await b.focus()
                 await pg.keyboard.press("Enter")
                 await pg.wait_for_timeout(500)
-                ok(f"{ibge}: \"Mostrar mais votações\" com o teclado", await itens.count() == min(30, len(vv["votos"])))
+                ok(f"{ibge}: \"Mostrar mais votações\" com o teclado", await itens.count() == min(23, len(vv["votos"])))
             g = p.get("gastos")
             if g:
                 gs = sem_nbsp(await pg.locator("#gastos").inner_text())

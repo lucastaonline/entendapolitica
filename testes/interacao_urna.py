@@ -3,10 +3,14 @@
 - Mapa: 10 placas, nenhum lote encavalado, a placa 10 visível (computador, 390 px e 320 px), a lista com as 10 paradas,
   o progresso de quem já tinha feito as 9 paradas e o fim do mapa ("visitou as 10 paradas").
 - A parada 10 abre pelo mapa (teclado) e pelo botão "Ver a urna por dentro" da parada 7 (português e inglês).
-- Todos os slides pelo teclado; os joguinhos: o caminho do voto, o lacre digital (o hash da página confere com o SHA-256 e o
-  SHA-512 do Python, e uma letra trocada muda o lacre), o boletim de exemplo e os quizzes; o botão de pular a parte técnica.
-- Inglês sem palavras em português soltas (em todos os slides), 320 px sem rolar para os lados, "menos movimento",
-  axe-core nos estados dos joguinhos e nenhum erro de JavaScript.
+- O caminho simples (o padrão, ≈10 slides, como as outras paradas) e a parte avançada ("avancado" no JSON): o botão
+  "Quer ir a fundo na parte técnica?" no fim do caminho simples abre a parte avançada, com endereço próprio
+  (#parte-10-avancado, -avancado-2...), contagem própria, a faixa "Parte avançada" e o botão de voltar ao caminho simples;
+  os endereços antigos (#parte-10-15, #parte-10-22...) levam aos slides novos.
+- Todos os slides pelo teclado (nas duas trilhas); os joguinhos: o caminho do voto, o lacre digital (o hash da página confere
+  com o SHA-256 e o SHA-512 do Python, e uma letra trocada muda o lacre), o boletim de exemplo e os quizzes.
+- Inglês sem palavras em português soltas (em todos os slides das duas trilhas), 320 px sem rolar para os lados,
+  "menos movimento", axe-core nos estados dos joguinhos e nenhum erro de JavaScript.
 Uso: python testes/interacao_urna.py"""
 import asyncio
 import hashlib
@@ -26,20 +30,24 @@ ERROS = []
 
 PT = json.loads((RAIZ / "conteudo" / "entenda" / "parte-10.json").read_text(encoding="utf-8"))
 EN = json.loads((RAIZ / "conteudo" / "entenda" / "en" / "parte-10.json").read_text(encoding="utf-8"))
-N = len(PT["slides"]) + 1  # + o slide final da parada
+N = len(PT["slides"]) + 1  # caminho simples + o slide final da parada
+AV = PT["avancado"]["slides"]
+NA = len(AV) + 1  # parte avançada (começa com a sua abertura) + o slide final dela
+assert len(EN["slides"]) == len(PT["slides"]) and len(EN["avancado"]["slides"]) == len(AV), "o inglês tem de ter a mesma estrutura"
 
 
-def acha(pred):
-    return next(i for i, s in enumerate(PT["slides"]) if pred(s))
+def acha(pred, lista=None):
+    return next(i for i, s in enumerate(PT["slides"] if lista is None else lista) if pred(s))
 
 
 I_CV = acha(lambda s: s.get("id") == "caminho-voto")
-I_LACRE = acha(lambda s: s.get("id") == "lacre-digital")
+I_LACRE = acha(lambda s: s.get("id") == "lacre-digital", AV)  # na parte avançada
 I_CB = acha(lambda s: s.get("id") == "confira-boletim")
-I_PULAR = acha(lambda s: s.get("pular"))
 QUIZ = {i: s["certa"] for i, s in enumerate(PT["slides"]) if s["tipo"] == "quiz"}
+QUIZ_AV = {i: s["certa"] for i, s in enumerate(AV) if s["tipo"] == "quiz"}
 ETAPAS = len(PT["slides"][I_CV]["etapas"])
 LINHA_ERRADA = next(k for k, l in enumerate(PT["slides"][I_CB]["linhas"]) if l["papel"] != l["site"])
+I_FRAUDE = acha(lambda s: (s.get("titulo") or "").startswith("O que alguém teria de vencer"))
 
 
 def ok(nome, cond, extra=""):
@@ -123,6 +131,37 @@ async def axe(pg, rotulo):
     ok(f"axe-core sem problemas: {rotulo}", not v, "; ".join(v)[:300])
 
 
+SEM_TEXTO = {"fontes", "ic", "tipo", "id", "ilustracao", "emoji", "quem"}
+
+
+def tamanho(slides):
+    """caracteres do texto dos slides (a mesma conta do textoDoSlide do js/entenda.js)"""
+    def anda(v):
+        if isinstance(v, str):
+            return [v]
+        if isinstance(v, list):
+            return [x for y in v for x in anda(y)]
+        if isinstance(v, dict):
+            return [x for k, y in v.items() if k not in SEM_TEXTO for x in anda(y)]
+        return []
+    return sum(len(" ".join(anda(s))) for s in slides)
+
+
+async def confere_slide(pg, i, total, s, prefixo, fim_url):
+    cab = await pg.locator(".slide.ativo h1, .slide.ativo h2").count()
+    fontes = await pg.locator(".slide.ativo .pe-slide [data-fontes]").count()
+    cont = await pg.locator("#contador").inner_text()
+    ok(f"{prefixo}slide {i + 1} de {total} abre pela seta → (título{' e fontes' if s else ''}; {fim_url})",
+       cab > 0 and (fontes == 1 if s else True) and pg.url.endswith(fim_url) and cont == f"{i + 1} de {total}", f"{pg.url.split('#')[1]} | {cont}")
+    await termina_animacoes(pg)
+    lg = await pg.evaluate(JS_LARGURA)
+    if lg["fora"] or lg["rol"] > 1:
+        ok(f"{prefixo}slide {i + 1}: nada passa da largura da tela no computador", False, str(lg))
+    if s and s["tipo"] == "numeros":
+        cabe = await pg.evaluate("[...document.querySelectorAll('.slide.ativo .n-val')].every(v => v.getBoundingClientRect().width <= v.closest('.face-num').getBoundingClientRect().width)")
+        ok(f"{prefixo}slide {i + 1}: os números grandes cabem nos cartões", cabe)
+
+
 async def slide_ativo(pg):
     return await pg.evaluate("(() => { const s = document.querySelector('.slide.ativo'); return s ? +s.getAttribute('data-i') : -1; })()")
 
@@ -152,8 +191,8 @@ async def espera_codigo(pg, h):
     await pg.wait_for_function("h => { const c = document.querySelector('.slide.ativo .lacre-codigo:not(.g)'); return c && c.textContent.replace(/\\s/g, '') === h; }", arg=h, timeout=6000)
 
 
-async def responde_quiz(pg, i, rotulo):
-    await tecla(pg, f".slide.ativo .opcao[data-op=\"{QUIZ[i]}\"]")
+async def responde_quiz(pg, i, rotulo, quiz=None):
+    await tecla(pg, f".slide.ativo .opcao[data-op=\"{(quiz or QUIZ)[i]}\"]")
     await pg.wait_for_timeout(250)
     certa = await pg.locator(".slide.ativo .opcao.certa").count()
     resp = await pg.locator(".slide.ativo .resposta.ok").count()
@@ -289,28 +328,27 @@ async def fluxo_pt(nav):
     ok("Enter na placa 10 abre a parada 10 (Parada 10 de 10)", pg.url.endswith("#parte-10") and "PARADA 10 DE 10" in etq.upper(), etq)
     ok("a abertura mostra a urna com o boletim saindo (modelo 3D)", await pg.locator(".slide.ativo .urna-boletim3d .bu-papel").count() == 1)
 
-    # 3. todos os slides pelo teclado, com os joguinhos
+    # 3. o caminho simples: do tamanho das outras paradas, todos os slides pelo teclado, com os joguinhos
+    outras = [tamanho(json.loads((RAIZ / f"conteudo/entenda/parte-{k}.json").read_text(encoding="utf-8"))["slides"]) for k in range(1, 10)]
+    tam, tam_av = tamanho(PT["slides"]), tamanho(AV)
+    ok(f"caminho simples: {len(PT['slides'])} slides (≈10, como as outras paradas, que têm 9 a 11)", 9 <= len(PT["slides"]) <= 11)
+    ok(f"caminho simples: {tam} caracteres de texto, dentro do tamanho das outras paradas ({min(outras)} a {max(outras)}); a parte avançada tem {tam_av}",
+       tam <= max(outras) and tam_av > tam)
+    ok("caminho simples: abertura, explicações, joguinhos (caminho do voto e boletim), quizzes e o voto impresso",
+       PT["slides"][0]["tipo"] == "abertura" and len(QUIZ) >= 2 and any(s["tipo"] == "historia" for s in PT["slides"]) and not any(s.get("pular") for s in PT["slides"]))
+    ok("“O que alguém teria de vencer para fraudar?” está no caminho simples, com a avaliação atribuída ao TSE e as fontes (inclusive tse-lacracao-2026)",
+       PT["slides"][I_FRAUDE]["texto"].startswith("Segundo o TSE") and "tse-lacracao-2026" in PT["slides"][I_FRAUDE]["fontes"])
+    tit_av = " | ".join(s.get("titulo") or s.get("pergunta") or "" for s in AV)
+    ok("a parte avançada tem a parte técnica (hash, assinatura, cadeia de confiança, RDV e log, QR Code, arquivos) e os detalhes que saíram do caminho simples",
+       all(x in tit_av for x in ("lacre digital", "assinatura digital", "Cadeia de confiança", "RDV", "QR Code", "Onde baixar", "Teste Público", "Preparando", "2026", "Perguntas")), tit_av[:200])
     for i in range(1, N):
         await proximo(pg)
         await pg.wait_for_timeout(350)
-        s = PT["slides"][i] if i < len(PT["slides"]) else None
-        cab = await pg.locator(".slide.ativo h1, .slide.ativo h2").count()
-        fontes = await pg.locator(".slide.ativo .pe-slide [data-fontes]").count()
-        ok(f"slide {i + 1} de {N} abre pela seta → (título{' e fontes' if s else ''})", cab > 0 and (fontes == 1 if s else True) and pg.url.endswith(f"#parte-10-{i + 1}"))
-        await termina_animacoes(pg)
-        lg = await pg.evaluate(JS_LARGURA)
-        if lg["fora"] or lg["rol"] > 1:
-            ok(f"slide {i + 1}: nada passa da largura da tela no computador", False, str(lg))
-        if s and s["tipo"] == "numeros":
-            cabe = await pg.evaluate("[...document.querySelectorAll('.slide.ativo .n-val')].every(v => v.getBoundingClientRect().width <= v.closest('.face-num').getBoundingClientRect().width)")
-            ok(f"slide {i + 1}: os números grandes cabem nos cartões", cabe)
+        await confere_slide(pg, i, N, PT["slides"][i] if i < len(PT["slides"]) else None, "", f"#parte-10-{i + 1}")
         if i == I_CV:
             await joga_caminho(pg, "pt")
             await tecla(pg, ".slide.ativo [data-cv-prox]")
             await axe(pg, "caminho do voto")
-        elif i == I_LACRE:
-            await joga_lacre(pg, "pt", PT["slides"][I_LACRE]["inicial"])
-            await axe(pg, "lacre digital (guardado e comparado)")
         elif i == I_CB:
             await joga_boletim(pg, "pt")
             await axe(pg, "confira o boletim (achado)")
@@ -318,19 +356,98 @@ async def fluxo_pt(nav):
             await responde_quiz(pg, i, "pt")
             if i == max(QUIZ):
                 await axe(pg, "quiz respondido")
-        elif i == I_PULAR:
-            ok("o slide “Quero saber mais” tem o botão de pular a parte técnica", await pg.locator('.slide.ativo [data-acao="fim"]').count() == 1)
     fim = await pg.locator(".slide.ativo").inner_text()
     feitos = await pg.evaluate("JSON.parse(localStorage.getItem('ep-mapa-feitos') || '{}')")
     ok("o último slide é o fim da parada e marca a parada 10 como feita", "Parada concluída" in fim and feitos.get("10") is True, str(feitos))
+    bt = pg.locator('.slide.ativo .convite-avancado [data-acao="avancado"]')
+    desc = await pg.locator("#" + (await bt.get_attribute("aria-describedby"))).inner_text()
+    ok("no fim do caminho simples, o botão “Quer ir a fundo na parte técnica?” (com o que tem na parte avançada e quantas páginas)",
+       await bt.count() == 1 and "Quer ir a fundo na parte técnica?" in await bt.inner_text() and f"({NA - 1} páginas)" in desc, desc[-60:])
+    ok("o fim continua com a próxima parada e o mapa (quem não clica termina a parada como nas outras)",
+       await pg.locator(".slide.ativo [data-proxima]").count() == 1 and await pg.locator('.slide.ativo [data-acao="mapa"]').count() == 1)
+    await axe(pg, "fim do caminho simples, com o convite")
 
-    # 4. pular a parte técnica
-    await pg.goto("about:blank")
-    await pg.goto(BASE + f"entenda.html?lang=pt#parte-10-{I_PULAR + 1}", wait_until="networkidle")
-    await vai_para(pg, I_PULAR)
-    await tecla(pg, '.slide.ativo [data-acao="fim"]')
+    # 4. a parte avançada: endereço, contagem e faixa próprios, todos os slides, os joguinhos e a volta
+    await tecla(pg, '.slide.ativo [data-acao="avancado"]')
+    await vai_para(pg, 0)
+    await pg.wait_for_timeout(500)
+    etq = await pg.locator(".slide.ativo .etiqueta").first.inner_text()
+    ok("o botão abre a parte avançada: endereço próprio, contagem própria, “Parte avançada” no topo e na abertura",
+       pg.url.endswith("#parte-10-avancado") and await pg.locator("#contador").inner_text() == f"1 de {NA}"
+       and "Parte avançada" in await pg.locator("#nome-parte").inner_text() and "PARADA 10 · PARTE AVANÇADA" in etq.upper()
+       and await pg.locator("#aula.trilha-avancada").count() == 1, f"{pg.url.split('#')[1]} | {etq}")
+    ok("a abertura da parte avançada tem o botão de voltar ao caminho simples", await pg.locator('.slide.ativo [data-acao="simples"]').count() == 1)
+    foco = await pg.evaluate("!!(document.activeElement && document.activeElement.closest('.slide.ativo'))")
+    ok("o foco vai para o slide novo (leitor de tela)", foco)
+    sem_faixa = []
+    for i in range(1, NA):
+        await proximo(pg)
+        await pg.wait_for_timeout(350)
+        s = AV[i] if i < len(AV) else None
+        await confere_slide(pg, i, NA, s, "parte avançada: ", f"#parte-10-avancado-{i + 1}")
+        if s:
+            fx = pg.locator(".slide.ativo .faixa-avancada")
+            if not (await fx.count() == 1 and "PARTE AVANÇADA" in (await fx.inner_text()).upper() and await fx.locator('[data-acao="simples"]').count() == 1):
+                sem_faixa.append(i + 1)
+        if i == I_LACRE:
+            await joga_lacre(pg, "pt", AV[I_LACRE]["inicial"])
+            await axe(pg, "lacre digital (guardado e comparado)")
+        elif i in QUIZ_AV:
+            await responde_quiz(pg, i, "pt (parte avançada)", QUIZ_AV)
+    ok(f"a faixa “Parte avançada” e o botão de voltar estão em todos os {len(AV) - 1} slides da parte avançada (fora a abertura)", not sem_faixa, str(sem_faixa))
+    fim = await pg.locator(".slide.ativo").inner_text()
+    ok("o fim da parte avançada: concluída, voltar ao caminho simples, próxima parada e mapa",
+       "Parte avançada concluída" in fim and await pg.locator('.slide.ativo [data-acao="simples"]').count() == 1
+       and await pg.locator(".slide.ativo [data-proxima]").count() == 1 and await pg.locator('.slide.ativo [data-acao="mapa"]').count() == 1, fim[:80].replace("\n", " "))
+    await axe(pg, "fim da parte avançada")
+    await tecla(pg, '.slide.ativo [data-acao="simples"]')
     await vai_para(pg, N - 1)
-    ok("“Pular a parte técnica” vai para o fim da parada", pg.url.endswith(f"#parte-10-{N}"))
+    await pg.wait_for_timeout(300)
+    ok("“Voltar ao caminho simples” volta ao fim do caminho simples, de onde a pessoa veio (endereço e contagem do caminho simples)",
+       pg.url.endswith(f"#parte-10-{N}") and await pg.locator("#contador").inner_text() == f"{N} de {N}"
+       and await pg.locator("#aula.trilha-avancada").count() == 0 and "Parte avançada" not in await pg.locator("#nome-parte").inner_text())
+    # o menu ☰ Páginas também leva de uma trilha à outra
+    await pg.click("#btn-menu")
+    await pg.wait_for_timeout(300)
+    dlg = pg.locator('[role="dialog"]:visible').first
+    ok("menu ☰ do caminho simples: as páginas do caminho simples e o botão da parte avançada",
+       await dlg.locator("[data-ir]").count() == N and await dlg.locator('[data-acao="avancado"]').count() == 1)
+    await dlg.locator('[data-acao="avancado"]').click()
+    await vai_para(pg, 0)
+    await pg.click("#btn-menu")
+    await pg.wait_for_timeout(300)
+    dlg = pg.locator('[role="dialog"]:visible').first
+    ok("menu ☰ da parte avançada: “Páginas da parte avançada”, as páginas dela e o botão de voltar",
+       "Páginas da parte avançada" in await dlg.inner_text() and await dlg.locator("[data-ir]").count() == NA and await dlg.locator('[data-acao="simples"]').count() == 1)
+    await pg.keyboard.press("Escape")
+    await pg.wait_for_timeout(300)
+    # endereço direto da parte avançada (recarregar a página) e voltar ao caminho simples pela faixa
+    await pg.goto("about:blank")
+    await pg.goto(BASE + f"entenda.html?lang=pt#parte-10-avancado-{I_LACRE + 1}", wait_until="networkidle")
+    await vai_para(pg, I_LACRE)
+    ok("endereço direto (#parte-10-avancado-N) abre a parte avançada no slide certo", await pg.locator("#contador").inner_text() == f"{I_LACRE + 1} de {NA}"
+       and await pg.locator(".slide.ativo [data-lacre]").count() == 1)
+    await tecla(pg, '.slide.ativo .faixa-avancada [data-acao="simples"]')
+    await vai_para(pg, 0)
+    ok("quem chegou direto na parte avançada volta para o começo do caminho simples", pg.url.endswith("#parte-10") and await pg.locator("#contador").inner_text() == f"1 de {N}")
+    # endereços antigos (de quando a parada tinha 28 slides) levam aos slides novos
+    antigos = PT["enderecos_antigos"]
+    ok("os endereços antigos que passam do fim do caminho simples (até o fim antigo, 29) estão todos mapeados", all(str(k) in antigos for k in range(N + 1, 30)), str(antigos))
+    for velho, texto in ((15, "O que alguém teria de vencer"), (22, "Hash e assinatura digital"), (27, "Onde baixar os arquivos"), (29, "Parada concluída")):
+        alvo = antigos[str(velho)]
+        trilha, k = ("-avancado", int(alvo.split("-")[1]) - 1) if alvo.startswith("avancado-") else ("", int(alvo) - 1)
+        await pg.goto("about:blank")
+        await pg.goto(BASE + f"entenda.html?lang=pt#parte-10-{velho}", wait_until="networkidle")
+        await vai_para(pg, k)
+        txt = await pg.locator(".slide.ativo").inner_text()
+        ok(f"endereço antigo #parte-10-{velho} leva a #parte-10{trilha}-{k + 1} (“{texto}”)", texto in txt and pg.url.endswith(f"#parte-10{trilha}-{k + 1}"), pg.url.split("#")[1])
+    # o Esc e o Voltar do navegador fecham a parada também na parte avançada
+    await pg.goto("about:blank")
+    await pg.goto(BASE + "entenda.html?lang=pt#parte-10-avancado-3", wait_until="networkidle")
+    await vai_para(pg, 2)
+    await pg.keyboard.press("Escape")
+    await pg.wait_for_function("!document.body.classList.contains('modo-aula')", timeout=6000)
+    ok("Esc na parte avançada volta ao mapa (e o endereço fica sem #parte)", "#parte" not in pg.url and await pg.locator("#aula.trilha-avancada").count() == 0)
 
     # 5. quem já tinha feito as 9 paradas continua com as 9 marcadas; a 10 vira a próxima sugerida; o fim do mapa conta 10
     await pg.goto("about:blank")
@@ -347,6 +464,7 @@ async def fluxo_pt(nav):
     await vai_para(pg, N - 1)
     fim = await pg.locator(".slide.ativo").inner_text()
     ok("ao terminar a 10ª, o fim fala do mapa completo (e da urna)", "completou o Mapa da Política" in fim and "urna eletrônica" in fim, fim[:80].replace("\n", " "))
+    ok("o fim do mapa completo também tem o botão da parte avançada", await pg.locator('.slide.ativo .convite-avancado [data-acao="avancado"]').count() == 1)
     await pg.keyboard.press("Escape")
     await pg.wait_for_function("!document.body.classList.contains('modo-aula')", timeout=6000)
     await pg.wait_for_timeout(1200)
@@ -408,8 +526,6 @@ async def fluxo_en(nav):
             await pg.wait_for_timeout(300)
         if i == I_CV:
             await joga_caminho(pg, "en", auto=False)
-        elif i == I_LACRE:
-            await joga_lacre(pg, "en", EN["slides"][I_LACRE]["inicial"])
         elif i == I_CB:
             await joga_boletim(pg, "en", en=True)
             await axe(pg, "inglês: confira o boletim")
@@ -417,9 +533,35 @@ async def fluxo_en(nav):
             await responde_quiz(pg, i, "en")
         a = await pg.evaluate(JS_PT, ".slide.ativo, #nome-parte, .nav")
         achados += [f"slide {i + 1}: {x}" for x in a]
-    ok("inglês: nenhuma palavra em português solta em nenhum slide (nem nos joguinhos)", not achados, " | ".join(achados)[:400])
     fim = await pg.locator(".slide.ativo").inner_text()
     ok("inglês: o fim da parada", "Stop completed" in fim or "completed the Politics Map" in fim, fim[:60])
+    bt = pg.locator('.slide.ativo .convite-avancado [data-acao="avancado"]')
+    ok("inglês: no fim, o botão “Want to dig into the technical details?” (com as páginas)", "Want to dig into the technical details?" in await bt.inner_text()
+       and f"({NA - 1} pages)" in await pg.locator(".slide.ativo .convite-avancado p").inner_text())
+    await tecla(pg, '.slide.ativo [data-acao="avancado"]')
+    await vai_para(pg, 0)
+    await pg.wait_for_timeout(400)
+    ok("inglês: a parte avançada abre (Stop 10 · Advanced part, endereço e contagem próprios)",
+       pg.url.endswith("#parte-10-avancado") and "lang=en" in pg.url and "STOP 10 · ADVANCED PART" in (await pg.locator(".slide.ativo .etiqueta").first.inner_text()).upper()
+       and await pg.locator("#contador").inner_text() == f"1 of {NA}" and "Advanced part" in await pg.locator("#nome-parte").inner_text())
+    for i in range(0, NA):
+        if i:
+            await proximo(pg)
+            await pg.wait_for_timeout(300)
+        if i == I_LACRE:
+            await joga_lacre(pg, "en", EN["avancado"]["slides"][I_LACRE]["inicial"])
+        elif i in QUIZ_AV:
+            await responde_quiz(pg, i, "en (parte avançada)", QUIZ_AV)
+        elif 0 < i < len(AV) and i % 6 == 0:
+            await axe(pg, f"inglês: parte avançada, slide {i + 1}")
+        a = await pg.evaluate(JS_PT, ".slide.ativo, #nome-parte, .nav")
+        achados += [f"avançada {i + 1}: {x}" for x in a]
+    ok("inglês: nenhuma palavra em português solta em nenhum slide das duas trilhas (nem nos joguinhos)", not achados, " | ".join(achados)[:400])
+    fim = await pg.locator(".slide.ativo").inner_text()
+    ok("inglês: o fim da parte avançada", "Advanced part completed" in fim and "Back to the simple path" in fim, fim[:60])
+    await tecla(pg, '.slide.ativo [data-acao="simples"]')
+    await vai_para(pg, N - 1)
+    ok("inglês: “Back to the simple path” volta ao fim do caminho simples", pg.url.endswith(f"#parte-10-{N}") and await pg.locator("#contador").inner_text() == f"{N} of {N}")
     # o botão da parada 7 em inglês
     await pg.goto("about:blank")
     await pg.goto(BASE + "entenda.html?lang=en#parte-7-4", wait_until="networkidle")
@@ -451,28 +593,40 @@ async def fluxo_celular(nav, larg, lang):
     await pg.goto(BASE + f"entenda.html?lang={lang}#parte-10", wait_until="networkidle")
     await vai_para(pg, 0)
     ruins = []
-    for i in range(0, N):
-        if i:
-            await proximo(pg)
-        await pg.wait_for_timeout(750)
-        if i == I_LACRE:
-            await tecla(pg, ".slide.ativo [data-lacre-guarda]")
-            await tecla(pg, ".slide.ativo [data-lacre-troca]")
-            await pg.wait_for_timeout(300)
-        elif i == I_CB:
-            await tecla(pg, f".slide.ativo .cb-linha[data-cb-linha='{LINHA_ERRADA}']")
-            await pg.wait_for_timeout(200)
-        await termina_animacoes(pg)
-        r = await pg.evaluate(JS_LARGURA)
-        if r["fora"] or r["sx"] or r["rol"] > 1 or not r["nav"]:
-            ruins.append(f"slide {i + 1}: {r}")
-    ok(f"{larg} px ({lang}): nenhum slide da parada 10 passa da largura da tela (nem a barra de baixo)", not ruins, " | ".join(ruins)[:400])
+    for trilha, total in (("", N), ("-avancado", NA)):
+        if trilha:
+            await pg.goto("about:blank")
+            await pg.goto(BASE + f"entenda.html?lang={lang}#parte-10{trilha}", wait_until="networkidle")
+            await vai_para(pg, 0)
+        for i in range(0, total):
+            if i:
+                await proximo(pg)
+            await pg.wait_for_timeout(750)
+            if trilha and i == I_LACRE:
+                await tecla(pg, ".slide.ativo [data-lacre-guarda]")
+                await tecla(pg, ".slide.ativo [data-lacre-troca]")
+                await pg.wait_for_timeout(300)
+            elif not trilha and i == I_CB:
+                await tecla(pg, f".slide.ativo .cb-linha[data-cb-linha='{LINHA_ERRADA}']")
+                await pg.wait_for_timeout(200)
+            await termina_animacoes(pg)
+            r = await pg.evaluate(JS_LARGURA)
+            if r["fora"] or r["sx"] or r["rol"] > 1 or not r["nav"]:
+                ruins.append(f"{trilha or 'simples'} {i + 1}: {r}")
+    ok(f"{larg} px ({lang}): nenhum slide da parada 10 (caminho simples e parte avançada) passa da largura da tela (nem a barra de baixo)", not ruins, " | ".join(ruins)[:400])
     if larg == 390:
         await pg.goto("about:blank")
-        await pg.goto(BASE + f"entenda.html?lang={lang}#parte-10-{I_LACRE + 1}", wait_until="networkidle")
+        await pg.goto(BASE + f"entenda.html?lang={lang}#parte-10-avancado-{I_LACRE + 1}", wait_until="networkidle")
         await vai_para(pg, I_LACRE)
         await pg.wait_for_timeout(700)
-        await axe(pg, f"celular {lang}: lacre digital")
+        await axe(pg, f"celular {lang}: lacre digital (parte avançada)")
+        await pg.goto("about:blank")
+        await pg.goto(BASE + f"entenda.html?lang={lang}#parte-10-{N}", wait_until="networkidle")
+        await vai_para(pg, N - 1)
+        await pg.wait_for_timeout(700)
+        bt = await pg.evaluate("""() => { const b = document.querySelector('.slide.ativo [data-acao="avancado"]').getBoundingClientRect(); return b.left >= 0 && b.right <= innerWidth && b.height >= 44; }""")
+        ok(f"celular {lang}: o botão da parte avançada cabe na tela e é fácil de tocar (≥ 44 px)", bt)
+        await axe(pg, f"celular {lang}: fim do caminho simples, com o convite")
     await ctx.close()
 
 

@@ -3,7 +3,11 @@
    o.nomes = { um, uma, varios, varias } já no idioma da página (use EP.tr); o.nivel = nível do título "Quantos de cada partido" (3).
    Opcionais (mandatos anteriores, js/historico.js): o.cartao(m, extra) monta o cartão no lugar de EP.cartaoPessoa (ex.: sem link
    para perfil); o.sabia(mulheres, homens) devolve o HTML do "Você sabia?"; o.vazio = HTML de quando a lista não tem ninguém;
-   o.titPartidos = texto do título "Quantos de cada partido". */
+   o.titPartidos = texto do título "Quantos de cada partido".
+   Opcionais da página do Brasil com abas (js/brasil.js e js/proximos.js; as outras páginas continuam como antes):
+   o.lote = quantas pessoas aparecem de começo (60); o.verTodos = o botão do fim mostra todas de uma vez ("Ver todos os 81
+   senadores"), e quem volta de um perfil de alguém que estava depois do resumo encontra a lista inteira de novo;
+   o.recolher = texto do bloco que abre e fecha (EP.blocoAbre: <details> do Basecoat) com o plenário, os partidos e os filtros (fechado de começo). */
 (function () {
   "use strict";
   var EP = window.EP, T = window.TRES || {};
@@ -76,12 +80,57 @@
         ' <span aria-hidden="true">↗</span><span class="sr"> ' + EP.tr("(abre em outra aba)", "(opens in a new tab)") + "</span></a></p>" : "") + "</div>";
   };
 
+  // ---------------------------------------------------------------- visual D (site-d-r14)
+  // EP.casaD = true (a página do Brasil liga) ou o.d = true: o plenário fica em ordem alfabética dos partidos (os dois tons de
+  // azul alternados, os mesmos para todos), e no lugar das barras "Quantos de cada partido" aparecem as etiquetas dos partidos
+  // (botões de pelo menos 44 px, o caminho principal: as cadeiras são pequenas demais para tocar). Tocar numa etiqueta, numa
+  // cadeira ou na sigla abre a gaveta (EP.gaveta) com as pessoas do partido, com os filtros de nome e de estado; o endereço guarda
+  // a gaveta (?ver=partido:senado:PT). A tabela "partido × número" (o equivalente em texto do plenário), o que é um partido e o
+  // "Você sabia?" ficam no "💡 Saber mais". A lista com os filtros de sempre continua embaixo, na página.
+  var CASAS = {};
+  function listaPartido(el, l, o, nomes) {
+    var ufs = {};
+    l.forEach(function (m) { if (m.uf) ufs[m.uf] = 1; });
+    var listaUF = Object.keys(ufs).sort(function (a, b) { return EP.norm(EP.UFS[a] || a).localeCompare(EP.norm(EP.UFS[b] || b)); });
+    el.innerHTML = '<div class="filtros-casa gv-filtros"><div class="busca"><input type="search" class="f-nome" placeholder="' + EP.tr("Procurar pelo nome", "Search by name") + '" aria-label="' +
+      EP.tr("Procurar pelo nome", "Search by name") + '" autocomplete="off"></div>' +
+      (o.filtroUF !== false && listaUF.length > 1 ? '<select class="f-uf" aria-label="' + EP.tr("Filtrar por estado", "Filter by state") + '"><option value="">' + EP.tr("Todos os estados", "All states") + "</option>" +
+        listaUF.map(function (u) { return '<option value="' + u + '" data-busca="' + u + '">' + esc(EP.UFS[u] || u) + "</option>"; }).join("") + "</select>" : "") + "</div>" +
+      '<p class="contagem" aria-live="polite"></p><div class="grade-pessoas gv-grade"></div>';
+    var fNome = el.querySelector(".f-nome"), fUF = el.querySelector(".f-uf"), grade = el.querySelector(".grade-pessoas"), cont = el.querySelector(".contagem");
+    if (fUF) EP.comboSelect(fUF, { placeholder: EP.tr("Digite o estado…", "Type a state…") });
+    function desenha() {
+      var q = EP.norm(fNome.value), uf = fUF ? fUF.value : "";
+      var f = l.filter(function (m) { return (!q || EP.norm(m.nome).indexOf(q) > -1 || EP.norm(m.nomeCivil || "").indexOf(q) > -1) && (!uf || m.uf === uf); });
+      grade.innerHTML = f.length ? f.map(function (m) { return (o.cartao || EP.cartaoPessoa)(m, o.extra ? o.extra(m) : ""); }).join("") :
+        '<div class="vazio"><span class="grande" aria-hidden="true">🤷</span>' + EP.tr("Ninguém encontrado com esses filtros.", "No one found with these filters.") + "</div>";
+      var t = f.length === l.length ? EP.tr("Mostrando " + (l.length === 1 ? "1 " + nomes.um : "os " + EP.num(l.length) + " " + nomes.varios) + ", em ordem alfabética.",
+        "Showing " + (l.length === 1 ? "1 " + nomes.um : "all " + EP.num(l.length) + " " + nomes.varios) + ", in alphabetical order.") :
+        EP.tr("Mostrando " + EP.num(f.length) + " de " + EP.num(l.length) + ".", "Showing " + EP.num(f.length) + " of " + EP.num(l.length) + ".");
+      if (cont.textContent !== t) cont.textContent = t;
+    }
+    var tm = null;
+    fNome.addEventListener("input", function () { clearTimeout(tm); tm = setTimeout(desenha, 150); });
+    if (fUF) fUF.addEventListener("change", desenha);
+    desenha();
+  }
+  EP.gavetaVer.partido = function (v) {
+    var i = v.indexOf(":"), casa = v.slice(0, i), p = v.slice(i + 1), t0 = Date.now();
+    if (!casa || !p) return;
+    if (EP.abas && EP.abas.mostra) EP.abas.mostra(casa);
+    (function tenta() {
+      if (CASAS[casa]) CASAS[casa].abre(p);
+      else if (Date.now() - t0 < 8000) setTimeout(tenta, 150);
+    })();
+  };
+
   EP.montaCasa = function (el, o) {
     var uid = "casa" + (++conta);
     var membros = EP.alfabetica(o.membros || []);
     var nomes = o.nomes || { um: EP.tr("pessoa", "person"), uma: EP.tr("pessoa", "person"), varios: EP.tr("pessoas", "people"), varias: EP.tr("pessoas", "people") };
     var nivel = Math.min(6, Math.max(2, o.nivel || 3));
     var total = membros.length;
+    var modoD = o.d != null ? !!o.d : !!EP.casaD;
 
     if (!total) {
       el.innerHTML = '<div class="vazio"><span class="grande" aria-hidden="true">📭</span>' +
@@ -96,8 +145,9 @@
       membros.forEach(function (m) { var p = m.partido || SEM; cont[p] = (cont[p] || 0) + 1; });
       porPartido = Object.keys(cont).map(function (p) { return { partido: p, n: cont[p] }; });
     }
-    // do partido com mais cadeiras para o com menos (é só uma contagem); empate: ordem alfabética
-    porPartido = porPartido.slice().sort(function (a, b) { return b.n - a.n || EP.norm(a.partido).localeCompare(EP.norm(b.partido)); });
+    // do partido com mais cadeiras para o com menos (é só uma contagem); empate: ordem alfabética. No visual D, em ordem alfabética
+    porPartido = porPartido.slice().sort(modoD ? function (a, b) { return EP.norm(a.partido).localeCompare(EP.norm(b.partido)); } :
+      function (a, b) { return b.n - a.n || EP.norm(a.partido).localeCompare(EP.norm(b.partido)); });
     var idxPartido = {};
     porPartido.forEach(function (p, k) { idxPartido[p.partido] = k; });
     var maxN = porPartido.length ? porPartido[0].n : 1;
@@ -127,7 +177,7 @@
         EP.tr("Mostrando " + EP.num(n) + " de " + EP.num(total) + ", em ordem alfabética.", "Showing " + EP.num(n) + " of " + EP.num(total) + ", in alphabetical order.");
     }
 
-    el.innerHTML =
+    var topoHtml =
       '<div class="casa-resumo"><div class="plen-box rev"><div class="plen-area">' + plen + siglas + "</div><p>" + esc(cadeira) + (o.notaPlenario ? " " + esc(o.notaPlenario) : "") + "</p></div>" +
       '<div class="partidos rev" style="--i:1"><' + h + ' class="tit-p" id="' + uid + '-tit">' + esc(o.titPartidos || EP.tr("Quantos de cada partido", "Seats per party")) + "</" + h + ">" +
       '<div class="barras-p" role="group" aria-labelledby="' + uid + '-tit">' +
@@ -149,20 +199,70 @@
       '<select class="f-partido" aria-label="' + EP.tr("Filtrar por partido", "Filter by party") + '"><option value="">' + EP.tr("Todos os partidos", "All parties") + "</option>" +
       EP.alfabetica(porPartido, "partido").map(function (p) {
         return '<option value="' + esc(p.partido) + '"' + (EP.en && p.partido !== SEM ? ' lang="pt-BR"' : "") + ">" + esc(nomePartido(p.partido)) + " (" + EP.num(p.n) + ")</option>";
-      }).join("") + "</select></div>" +
+      }).join("") + "</select></div>";
+    // visual D: o plenário, as etiquetas dos partidos e o "Saber mais" com a tabela (o equivalente em texto do plenário)
+    var topoD = !modoD ? "" :
+      '<div class="casa-resumo d-casa"><p class="d-linha d-casa-linha">' + esc(EP.tr(EP.num(porPartido.length) + " " + (porPartido.length === 1 ? "partido" : "partidos") + ". Toque num partido para ver quem é dele.",
+        EP.num(porPartido.length) + " " + (porPartido.length === 1 ? "party" : "parties") + ". Tap a party to see its members.")) + "</p>" +
+      (plen ? '<div class="plen-box rev"><div class="plen-area">' + plen + siglas + "</div></div>" : "") +
+      '<div class="d-partidos" role="group" aria-labelledby="' + uid + '-tit"><' + h + ' class="sr" id="' + uid + '-tit">' +
+      esc(EP.tr("Os partidos, em ordem alfabética, com o número de " + nomes.varios + " (toque para ver quem é de cada um)", "The parties, in alphabetical order, with the number of " + nomes.varios + " (tap to see each party's members)")) + "</" + h + ">" +
+      porPartido.map(function (p, k) {
+        return '<button type="button" class="d-partido' + (k % 2 ? " b" : "") + '" data-g="' + k + '" aria-haspopup="dialog"><b>' + nomePartidoHtml(p.partido) + "</b><span>" + EP.num(p.n) +
+          '</span><span class="sr"> ' + esc(p.n === 1 ? nomes.um : nomes.varios) + "</span></button>";
+      }).join("") + "</div>" +
+      EP.d.saiba('<p>' + esc(cadeira) + (o.notaPlenario ? " " + esc(o.notaPlenario) : "") + "</p>" +
+        '<p class="explica-p">' + EP.tr("Partido é um grupo de pessoas que se juntam para disputar eleições e defender ideias parecidas. No plenário, cada fatia é um partido, em ordem alfabética. Nenhum partido tem cor própria, de propósito: os dois tons de azul só separam uma fatia da outra.",
+          "A party is a group of people who join together to run in elections and defend similar ideas. In the chamber, each slice is one party, in alphabetical order. No party has its own color, on purpose: the two shades of blue only separate one slice from the next.") + "</p>" +
+        (mulheres + homens ? '<p class="sabia"><span aria-hidden="true">💡 </span>' + (o.sabia ? o.sabia(mulheres, homens) :
+          (EP.en ? "Did you know? Right now there are <b>" + EP.num(mulheres) + (mulheres === 1 ? " woman" : " women") + "</b> and <b>" + EP.num(homens) + (homens === 1 ? " man" : " men") + "</b> in this list."
+            : "Você sabia? Hoje são <b>" + EP.plural(mulheres, nomes.uma, nomes.varias) + "</b> e <b>" + EP.plural(homens, nomes.um, nomes.varios) + "</b>.")) + "</p>" : "") +
+        '<table class="d-tab"><caption>' + esc(EP.tr("Quantos " + nomes.varios + " cada partido tem (ordem alfabética)", "How many " + nomes.varios + " each party has (alphabetical order)")) + "</caption>" +
+        '<thead><tr><th scope="col">' + EP.tr("Partido", "Party") + '</th><th scope="col">' + esc(nomes.varios.charAt(0).toUpperCase() + nomes.varios.slice(1)) + "</th></tr></thead><tbody>" +
+        porPartido.map(function (p) { return '<tr><th scope="row">' + nomePartidoHtml(p.partido) + "</th><td>" + EP.num(p.n) + "</td></tr>"; }).join("") + "</tbody></table>",
+        EP.tr("Como funciona e a tabela dos partidos", "How it works and the table of parties"), "d-saiba-casa") + "</div>" +
+      '<div class="filtros-casa"><div class="busca"><input type="search" class="f-nome" placeholder="' + EP.tr("Procurar pelo nome", "Search by name") + '" aria-label="' +
+      EP.tr("Procurar pelo nome", "Search by name") + '" autocomplete="off"></div>' +
+      (o.filtroUF !== false && listaUF.length > 1 ? '<select class="f-uf" aria-label="' + EP.tr("Filtrar por estado", "Filter by state") + '"><option value="">' + EP.tr("Todos os estados", "All states") + "</option>" +
+        listaUF.map(function (u) { return '<option value="' + u + '" data-busca="' + u + '">' + esc(EP.UFS[u] || u) + "</option>"; }).join("") + "</select>" : "<span></span>") +
+      '<select class="f-partido" aria-label="' + EP.tr("Filtrar por partido", "Filter by party") + '"><option value="">' + EP.tr("Todos os partidos", "All parties") + "</option>" +
+      porPartido.map(function (p) {
+        return '<option value="' + esc(p.partido) + '"' + (EP.en && p.partido !== SEM ? ' lang="pt-BR"' : "") + ">" + esc(nomePartido(p.partido)) + " (" + EP.num(p.n) + ")</option>";
+      }).join("") + "</select></div>";
+    if (modoD) topoHtml = topoD;
+    // o.recolher (página do Brasil, "Quem assume"): plenário, partidos e filtros num bloco que abre e fecha
+    el.innerHTML = (o.recolher ? EP.blocoAbre("casa-recolhe", '<span aria-hidden="true">🏛️</span><span>' + esc(o.recolher) + "</span>", topoHtml) : topoHtml) +
       '<p class="contagem" aria-live="polite">' + esc(textoContagem(total)) + '</p><div class="grade-pessoas"></div>' +
       (o.fonte ? '<p class="fonte-casa">' + EP.botaoFontes(o.fonte, EP.tr("De onde vem esta lista?", "Where does this list come from?")) +
         (o.atualizado ? ' <small class="muted">' + EP.tr("Atualizado em ", "Updated on ") + EP.data(o.atualizado) + "</small>" : "") + "</p>" : "");
 
     var fNome = el.querySelector(".f-nome"), fUF = el.querySelector(".f-uf"), fPart = el.querySelector(".f-partido");
+    // ui-r9: os filtros ficam no endereço (?senado-nome=ana&senado-partido=PT) e quantos "Mostrar mais"/"Ver todos" estavam
+    // abertos fica na memória do histórico (EP.memo, js/comum.js): voltando de um perfil, a lista aparece como estava
+    var M = o.chave || (el.id ? el.id.replace(/^casa-/, "") : ((el.closest && el.closest("section[id]")) || {}).id || uid);
+    function temOpcao(sel, v) { return !!sel && [].some.call(sel.options, function (op) { return op.value === v; }); }
+    var lidos = EP.memo ? { nome: EP.memo.url(M + "-nome"), uf: EP.memo.url(M + "-uf"), partido: EP.memo.url(M + "-partido"), n: EP.memo.le(M + "-n") } : {};
+    if (lidos.nome) fNome.value = lidos.nome;
+    if (lidos.uf && temOpcao(fUF, lidos.uf)) fUF.value = lidos.uf;
+    if (lidos.partido && temOpcao(fPart, lidos.partido)) fPart.value = lidos.partido;
+    if ((lidos.nome || fPart.value || (fUF && fUF.value)) && el.querySelector("details.casa-recolhe")) el.querySelector("details.casa-recolhe").open = true;
     // listas de escolha com busca: a pessoa digita e as opções vão aparecendo
     if (fUF) EP.comboSelect(fUF, { placeholder: EP.tr("Digite o estado…", "Type a state…") });
     EP.comboSelect(fPart, { placeholder: EP.tr("Digite o partido…", "Type a party…") });
     var grade = el.querySelector(".grade-pessoas"), contagem = el.querySelector(".contagem"), plenEl = el.querySelector(".plenario");
-    var LOTE = 60, mostrando = LOTE;
-    var area = el.querySelector(".plen-area"), barrasEl = el.querySelector(".barras-p");
+    var LOTE = o.lote || 60, mostrando = LOTE;
+    if (lidos.n === "todos") mostrando = Infinity;
+    else if (typeof lidos.n === "number" && lidos.n > LOTE) mostrando = lidos.n;
+    function lembra() {
+      if (!EP.memo) return;
+      EP.memo.poeUrl(M + "-nome", fNome.value.trim());
+      if (fUF) EP.memo.poeUrl(M + "-uf", fUF.value);
+      EP.memo.poeUrl(M + "-partido", fPart.value);
+      EP.memo.grava(M + "-n", mostrando === Infinity ? "todos" : mostrando > LOTE ? mostrando : null);
+    }
+    var area = el.querySelector(".plen-area"), barrasEl = el.querySelector(modoD ? ".d-partidos" : ".barras-p");
     var siglasEls = [].slice.call(el.querySelectorAll(".rot-p")), linhasEls = [].slice.call(el.querySelectorAll(".lin-p"));
-    var barras = [].slice.call(el.querySelectorAll(".barra-partido"));
+    var barras = [].slice.call(el.querySelectorAll(modoD ? ".d-partido" : ".barra-partido"));
     var cadeirasDe = {};
     if (plenEl) [].forEach.call(plenEl.querySelectorAll("i[data-g]"), function (c) { var g = c.getAttribute("data-g"); (cadeirasDe[g] = cadeirasDe[g] || []).push(c); });
 
@@ -187,7 +287,7 @@
       if (g !== espiando) { espiando = g; acende(); }
     }
     function grupoDe(alvo) {
-      var x = alvo && alvo.closest ? alvo.closest(".barra-partido, .plenario i[data-g], .rot-p") : null;
+      var x = alvo && alvo.closest ? alvo.closest(".barra-partido, .d-partido, .plenario i[data-g], .rot-p") : null;
       return x && el.contains(x) ? +x.getAttribute("data-g") : null;
     }
     // no toque não existe "passar por cima": tocar já escolhe o partido (ver o clique, mais abaixo)
@@ -202,7 +302,7 @@
     });
     if (barrasEl) {
       barrasEl.addEventListener("focusin", function (e) {
-        var b = e.target.closest(".barra-partido"), teclado = true;
+        var b = e.target.closest(".barra-partido, .d-partido"), teclado = true;
         try { teclado = b.matches(":focus-visible"); } catch (x) {}
         if (b && teclado) espia(+b.getAttribute("data-g"), "teclado");
       });
@@ -220,7 +320,8 @@
       function bate(c, lista) { return lista.some(function (q) { return c.l < q.r && c.r > q.l && c.t < q.b && c.b > q.t; }); }
       var cads = [].map.call(plenEl.querySelectorAll("i"), relativa), postas = [];
       var rc = relativa(mc), cx = rc.l, cy = rc.t;
-      siglasEls.forEach(function (s) {
+      // do maior partido para o menor (no visual D, a ordem dos grupos é a alfabética)
+      siglasEls.slice().sort(function (a, b) { return porPartido[+b.getAttribute("data-g")].n - porPartido[+a.getAttribute("data-g")].n; }).forEach(function (s) {
         var m = plenEl.querySelector('.marco[data-g="' + s.getAttribute("data-g") + '"]');
         if (!m) return;
         var rm = relativa(m), w = s.offsetWidth, h = s.offsetHeight, dx = rm.l - cx, dy = rm.t - cy, d = Math.sqrt(dx * dx + dy * dy) || 1;
@@ -268,6 +369,7 @@
       if ("ResizeObserver" in window) new ResizeObserver(pedeSiglas).observe(area);
       else window.addEventListener("resize", pedeSiglas);
       window.addEventListener("ep-a11y", pedeSiglas);
+      window.addEventListener("ep-aba", pedeSiglas);  // uma aba (js/abas.js) apareceu: o plenário que estava escondido já tem tamanho
       if (document.fonts && document.fonts.ready) document.fonts.ready.then(pedeSiglas);
       pedeSiglas();
     }
@@ -279,16 +381,30 @@
       });
     }
     function desenha(focarDe) {
+      lembra();
       var l = filtrados();
       var vis = l.slice(0, mostrando);
       grade.innerHTML = vis.length ? vis.map(function (m) { return (o.cartao || EP.cartaoPessoa)(m, o.extra ? o.extra(m) : ""); }).join("") :
         '<div class="vazio"><span class="grande" aria-hidden="true">🤷</span>' + EP.tr("Ninguém encontrado com esses filtros.", "No one found with these filters.") + "</div>";
       if (l.length > vis.length) {
         var n = Math.min(LOTE, l.length - vis.length);
+        // o.verTodos: o botão diz quantos são e mostra todos de uma vez ("Ver todos os 513 deputados"; com filtro, "os 14 encontrados")
+        var col = o.coletivo || nomes.varios, todos = /^pessoas/.test(col) ? "todas as " : "todos os ";
+        var rot = !o.verTodos ? EP.tr("Mostrar mais " + n, "Show " + n + " more") : l.length === total ?
+          EP.tr("Ver " + todos + EP.num(total) + " " + col, "See all " + EP.num(total) + " " + col) :
+          EP.tr("Ver " + todos + EP.num(l.length) + " encontrad" + (todos === "todas as " ? "as" : "os"), "See all " + EP.num(l.length) + " found");
         grade.insertAdjacentHTML("beforeend", '<div class="mais-lista" style="grid-column:1/-1"><button type="button" class="btn claro peq ver-mais">' +
-          EP.tr("Mostrar mais " + n, "Show " + n + " more") + ' <span aria-hidden="true">▾</span></button></div>');
+          esc(rot) + ' <span aria-hidden="true">▾</span></button></div>');
       }
       var txt = textoContagem(l.length);
+      // o.verTodos: enquanto só o resumo aparece, a contagem diz isso ("Mostrando os 12 primeiros de 81 senadores")
+      if (o.verTodos && vis.length < l.length) {
+        var fem = /^pessoas/.test(o.coletivo || nomes.varios);
+        txt = l.length === total ? EP.tr("Mostrando " + (fem ? "as " : "os ") + EP.num(vis.length) + (fem ? " primeiras" : " primeiros") + " de " + EP.num(total) + " " + (o.coletivo || nomes.varios) + ", em ordem alfabética.",
+          "Showing the first " + EP.num(vis.length) + " of " + EP.num(total) + " " + (o.coletivo || nomes.varios) + ", in alphabetical order.") :
+          EP.tr("Mostrando " + (fem ? "as " : "os ") + EP.num(vis.length) + (fem ? " primeiras" : " primeiros") + " de " + EP.num(l.length) + " encontrad" + (fem ? "as" : "os") + " (de " + EP.num(total) + "), em ordem alfabética.",
+            "Showing the first " + EP.num(vis.length) + " of the " + EP.num(l.length) + " found (out of " + EP.num(total) + "), in alphabetical order.");
+      }
       if (contagem.textContent !== txt) contagem.textContent = txt;
       // acende as cadeiras do partido escolhido
       var pa = fPart.value;
@@ -309,9 +425,41 @@
     fNome.addEventListener("input", function () { clearTimeout(t); t = setTimeout(function () { mostrando = LOTE; desenha(); }, 200); });
     if (fUF) fUF.addEventListener("change", function () { mostrando = LOTE; desenha(); });
     fPart.addEventListener("change", function () { mostrando = LOTE; desenha(); });
+    // visual D: a gaveta com as pessoas de um partido (os filtros de nome e de estado; Esc, ✕ e o Voltar fecham)
+    var secId = ((el.closest && el.closest("section[id]")) || {}).id || M;
+    function abrePartido(g, de) {
+      var pp = porPartido[g];
+      if (!pp) return;
+      var l = membros.filter(function (m) { return (m.partido || SEM) === pp.partido; });
+      // a gaveta cobre a página: o "passar o mouse" de antes não termina sozinho (o ponteiro sai por cima da gaveta)
+      espiando = null;
+      origemEspia = null;
+      acende();
+      var casaTxt = (el.closest && el.closest("section[id]") && el.closest("section[id]").querySelector("h2")) ? el.closest("section[id]").querySelector("h2").textContent.replace(/\s+/g, " ").trim() : "";
+      EP.gaveta({ tit: nomePartidoHtml(pp.partido), sub: [casaTxt, EP.tr("em ordem alfabética", "in alphabetical order")].filter(Boolean).join(" · "), ver: "partido:" + secId + ":" + pp.partido,
+        corpo: function (c) {
+          c.innerHTML = '<div class="d-g-conta"><b>' + EP.num(l.length) + "</b><span>" + esc(EP.tr("de " + EP.num(total) + " " + nomes.varios, "of " + EP.num(total) + " " + nomes.varios)) +
+            '</span><span class="d-g-prop" aria-hidden="true"><i style="width:' + (100 * l.length / Math.max(1, total)).toFixed(1) + '%"></i></span></div>' +
+            '<div class="gv-lista-partido"></div>' + (o.fonte ? '<p class="gv-fonte">' + EP.botaoFontes(o.fonte, EP.tr("De onde vem esta lista?", "Where does this list come from?")) + "</p>" : "");
+          listaPartido(c.querySelector(".gv-lista-partido"), l, o, nomes);
+        } }, de);
+    }
+    if (modoD) {
+      CASAS[secId] = { abre: function (p, de) {
+        var k = -1;
+        porPartido.some(function (x, i) { if (x.partido === p) { k = i; return true; } return false; });
+        if (k > -1) abrePartido(k, de || el.querySelector('.d-partido[data-g="' + k + '"]'));
+      } };
+    }
     el.addEventListener("click", function (e) {
-      // tocar ou clicar num partido (na lista, numa cadeira ou na sigla) mostra só quem é dele; de novo, mostra todos
-      var b = e.target.closest(".barra-partido, .plenario i[data-g], .rot-p");
+      // tocar ou clicar num partido (na lista, numa cadeira ou na sigla) mostra só quem é dele; de novo, mostra todos.
+      // No visual D, abre a gaveta com as pessoas do partido (o foco volta para a etiqueta quando ela fecha)
+      var b = e.target.closest(".barra-partido, .d-partido, .plenario i[data-g], .rot-p");
+      if (b && modoD) {
+        var g = +b.getAttribute("data-g");
+        abrePartido(g, b.classList.contains("d-partido") ? b : el.querySelector('.d-partido[data-g="' + g + '"]'));
+        return;
+      }
       if (b) {
         var p = porPartido[+b.getAttribute("data-g")].partido;
         fPart.value = fPart.value === p ? "" : p;
@@ -330,10 +478,25 @@
       }
       if (e.target.closest(".ver-mais")) {
         var de = mostrando;
-        mostrando += LOTE;
+        mostrando = o.verTodos ? Infinity : mostrando + LOTE;
         desenha(de);
       }
     });
+    // o.verTodos: quem volta de um perfil (js/comum.js, EP.voltaAlvo e o evento "ep-volta") encontra a pessoa mesmo se ela
+    // estava depois do resumo: a lista volta inteira, como estava quando a pessoa clicou
+    function revela(id) {
+      if (!id || mostrando === Infinity) return false;
+      var k = -1;
+      filtrados().some(function (m, i) { if (m.id === id || m.link === id) { k = i; return true; } return false; });
+      if (k < mostrando) return false;
+      mostrando = Infinity;
+      return true;
+    }
+    if (o.verTodos) {
+      var va = EP.voltaAlvo;
+      if (va && Date.now() - va.t < 15000) revela(va.id);
+      window.addEventListener("ep-volta", function (ev) { if (revela(ev.detail && ev.detail.id)) desenha(); });
+    }
     desenha();
 
     // anima o plenário e as barras quando aparecem na tela

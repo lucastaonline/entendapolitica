@@ -10,6 +10,8 @@ from pathlib import Path
 
 from playwright.async_api import async_playwright
 
+from ajuda_abas import liga  # ui-r9
+
 BASE = __import__("os").environ.get("EP_BASE", "http://127.0.0.1:8770/")  # outro servidor: EP_BASE=http://127.0.0.1:8771/
 RAIZ = Path(__file__).resolve().parents[1]
 AXE = RAIZ.parent / "ferramentas" / "node_modules" / "axe-core" / "axe.min.js"
@@ -90,6 +92,7 @@ async def main():
         nav = await p.chromium.launch(channel="msedge")
         ctx = await nav.new_context(viewport={"width": 1280, "height": 860})
         pg = await ctx.new_page()
+        liga(pg)  # ui-r9: estado, cidade e perfil em abas (testes/ajuda_abas.py)
         erros = []
         pg.on("pageerror", lambda e: erros.append(f"{pg.url}: {e}"))
         # o idioma escolhido fica salvo no aparelho: as páginas em português levam &lang=pt
@@ -139,6 +142,7 @@ async def main():
 
             # 320 px: nada vaza para os lados
             p320 = await ctx.new_page()
+            liga(p320)  # ui-r9: estado, cidade e perfil em abas (testes/ajuda_abas.py)
             await p320.set_viewport_size({"width": 320, "height": 800})
             await ir(p320, f"pessoa.html?id=pref-{ibge}&lang=pt")
             larg = await p320.evaluate("() => [document.documentElement.scrollWidth, innerWidth]")

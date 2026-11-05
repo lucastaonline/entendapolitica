@@ -13,6 +13,7 @@ import urllib.request
 from pathlib import Path
 
 from playwright.async_api import async_playwright
+from ajuda_abas import pagina_inteira  # site-d-r14
 
 BASE = os.environ.get("EP_BASE", "http://127.0.0.1:8770/")  # outro servidor: EP_BASE=http://127.0.0.1:8774/
 AXE = Path(__file__).resolve().parents[2] / "ferramentas" / "node_modules" / "axe-core" / "axe.min.js"
@@ -92,8 +93,8 @@ async def main():
         erros = []
         pg.on("pageerror", lambda e: erros.append(str(e)))
 
-        # 1. a seção da página do Brasil (português)
-        await pg.goto(BASE + "brasil.html", wait_until="networkidle")
+        # 1. a seção da página do Brasil (português); o STF é uma aba (brasil.html#judiciario)
+        await pg.goto(BASE + "brasil.html#judiciario", wait_until="networkidle")
         await pg.wait_for_selector("#stf a.stf-card", timeout=15000)
         hrefs = await pg.locator("#stf .stf-grade a.stf-card").evaluate_all("els => els.map(a => a.getAttribute('href'))")
         ids = [h.split("id=")[-1] for h in hrefs]
@@ -102,22 +103,36 @@ async def main():
         txt = await pg.locator("#judiciario").inner_text()
         ok("Brasil: o título diz quantos estão no tribunal", f"{len(ms)} de 11 cadeiras" in txt)
         m0 = por[pres]
-        cart0 = await pg.locator("#stf .stf-grade li").first.inner_text()
+        await pg.locator("#stf .stf-grade a.stf-card").first.click()  # site-d-r14: o resto do cartão está na gaveta
+        await pg.wait_for_timeout(700)
+        cart0 = await pg.locator("#stf .stf-grade li").first.inner_text() + "\n" + await pg.locator("#gaveta").inner_text()
+        await pg.keyboard.press("Escape")
+        await pg.wait_for_timeout(400)
         ok("Brasil: o 1º cartão é quem preside, com Turma, quem indicou, posse e aposentadoria",
            m0["nome"] in cart0 and "Presidente do STF" in cart0 and br(m0["posse"]["data"]) in cart0 and m0["indicacao"]["presidente"] in cart0
            and br(m0["aposentadoria"]["data"]) in cart0, cart0.replace("\n", " | ")[:200])
         dino = next((m for m in ms if m["id"] == "stf-flavio-dino"), ms[-1])
-        cart = await pg.locator(f'#stf a.stf-card[href="pessoa.html?id={dino["id"]}"]').inner_text()
+        await pg.locator(f'#stf a.stf-card[href="pessoa.html?id={dino["id"]}"]').click()  # site-d-r14: na gaveta
+        await pg.wait_for_timeout(700)
+        cart = await pg.locator("#gaveta").inner_text()
+        await pg.keyboard.press("Escape")
+        await pg.wait_for_timeout(400)
         ok(f"Brasil: cartão de {dino['nome']} com a {dino['turma']}ª Turma, quem indicou e as datas",
            f"{dino['turma']}ª Turma" in cart and dino["indicacao"]["presidente"] in cart and br(dino["posse"]["data"]) in cart and br(dino["aposentadoria"]["data"]) in cart)
         for v in d.get("vagas") or []:
-            vt = await pg.locator("#stf .stf-card.vaga").first.inner_text()
+            await pg.locator("#stf .stf-card.vaga").first.click()  # site-d-r14: o que o Senado fez está na gaveta da cadeira vazia
+            await pg.wait_for_timeout(700)
+            vt = await pg.locator("#stf .stf-card.vaga").first.inner_text() + "\n" + await pg.locator("#gaveta").inner_text()
+            await pg.keyboard.press("Escape")
+            await pg.wait_for_timeout(400)
             ok("Brasil: a cadeira vazia diz de quem era e o que o Senado fez", (v.get("de") or "") in vt and
                all(((s.get("nome") or "") in vt) for s in v.get("indicacoes") or []), vt.replace("\n", " | ")[:220])
             for s in v.get("indicacoes") or []:
                 pl = s.get("plenario") or {}
                 if pl.get("sim") is not None:
                     ok("Brasil: placar da indicação na cadeira vazia igual ao dos dados", f"{pl['sim']} votos sim" in vt and f"{pl['nao']} não" in vt)
+        await pg.locator("#stf details.stf-preside-det").evaluate("d => { d.open = true; }")  # site-d-r14: no "Saber mais"
+        await pg.wait_for_timeout(300)
         pr = await pg.locator("#stf .stf-presidencia").inner_text()
         ok("Brasil: quem preside e o vice, com a data da posse na presidência",
            por[pres]["nome"] in pr and por[vice]["nome"] in pr and longa(d["presidencia"]["desde"]) in pr, pr.replace("\n", " | ")[:160])
@@ -125,10 +140,14 @@ async def main():
             n = await pg.locator(f"#t-turma-{t['numero']}").locator("xpath=..").locator("li a").count()
             ok(f"Brasil: {t['numero']}ª Turma com {len(t['membros'])} ministros", n == len(t["membros"]))
         ok("Brasil: o link para a parada 8 do mapa continua", await pg.locator('#judiciario a[href="entenda.html#parte-8"]').count() == 1)
-        ok("Brasil: atalho do topo leva à seção", await pg.locator('nav.atalhos a[href="#judiciario"]').count() == 1)
+        ok("Brasil: a aba do topo leva à seção", await pg.locator('[role=tab][data-aba="judiciario"]').count() == 1 or await pg.locator('nav.atalhos a[href="#judiciario"]').count() == 1)
         ok("Brasil: 5 passos de como alguém chega ao STF", await pg.locator("#stf .stf-passos li").count() == 5)
         # a janela das fontes das regras (Constituição, EC 88, Regimento): abre, mostra os links e fecha com Esc
-        b = pg.locator("#stf .fontes-btn").first
+        # (com abas, os passos e a fonte ficam num bloco que abre: abre o bloco antes)
+        if await pg.locator("details.stf-como-det").count():
+            await pg.locator("details.stf-como-det").evaluate("d => { d.open = true; }")
+            await pg.wait_for_timeout(600)
+        b = pg.locator("#stf details.stf-como-det .fontes-btn").first  # site-d-r14: as regras estão no "Saber mais" (o 1º botão é o da lista)
         await b.focus()
         await pg.keyboard.press("Enter")
         await pg.wait_for_timeout(400)
@@ -143,11 +162,12 @@ async def main():
         await axe(pg, "Brasil, depois de rolar a seção do STF")
 
         # 2. teclado: cartão -> perfil -> Voltar (o foco volta ao cartão)
-        await pg.goto(BASE + "brasil.html", wait_until="networkidle")
+        await pg.goto(BASE + "brasil.html#judiciario", wait_until="networkidle")
         await pg.wait_for_selector("#stf a.stf-card")
         alvo = pg.locator(f'#stf a.stf-card[href="pessoa.html?id={dino["id"]}"]')
         await alvo.focus()
         await pg.keyboard.press("Enter")
+        await pagina_inteira(pg, teclado=True)  # site-d-r14: Enter na cadeira abre a gaveta; o perfil fica no “Ver a página inteira”
         await pg.wait_for_url(f"**/pessoa.html?id={dino['id']}", timeout=15000)
         await pg.wait_for_selector("#nome-pessoa")
         ok("Teclado: Enter no cartão abre o perfil", dino["nome"] in await pg.locator("#nome-pessoa").inner_text())
@@ -221,11 +241,11 @@ async def main():
             print("   ⚠️ pendente: CARGOS_EN do js/comum.js ainda não traduz o cargo dos ministros do STF")
 
         # 6. página do Brasil em inglês e de um mandato que já acabou
-        await pg.goto(BASE + "brasil.html?lang=en", wait_until="networkidle")
+        await pg.goto(BASE + "brasil.html?lang=en#judiciario", wait_until="networkidle")
         await pg.wait_for_selector("#stf a.stf-card")
         t = await pg.locator("#judiciario").inner_text()
         ok("Brasil (en): textos em inglês", "How someone gets to the STF" in t and "The justices" in t and ("Empty seat" in t if d.get("vagas") else True))
-        await pg.goto(BASE + "brasil.html?mandato=2019&lang=pt", wait_until="networkidle")
+        await pg.goto(BASE + "brasil.html?mandato=2019&lang=pt#judiciario", wait_until="networkidle")  # mandatos-r11: o mandato 2019 também tem abas (o STF é uma)
         await pg.wait_for_timeout(1500)
         t = await pg.locator("#judiciario").inner_text()
         ok("Mandato que acabou: só as regras, sem os ministros de hoje, com o link para hoje",
@@ -239,7 +259,7 @@ async def main():
         pg = await ctx.new_page()
         erros = []
         pg.on("pageerror", lambda e: erros.append(str(e)))
-        for u in ("brasil.html", "brasil.html?lang=en", f"pessoa.html?id={dino['id']}", f"pessoa.html?id={pres}&lang=en"):
+        for u in ("brasil.html#judiciario", "brasil.html?lang=en#judiciario", f"pessoa.html?id={dino['id']}", f"pessoa.html?id={pres}&lang=en"):
             await pg.goto(BASE + u, wait_until="networkidle")
             await pg.wait_for_timeout(1200)
             await rola(pg, "#judiciario" if u.startswith("brasil") else "#perfil")

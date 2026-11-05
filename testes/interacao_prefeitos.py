@@ -17,6 +17,8 @@ from pathlib import Path
 
 from playwright.async_api import async_playwright
 
+from ajuda_abas import liga  # ui-r9
+
 BASE = os.environ.get("EP_BASE", "http://127.0.0.1:8770/")  # outro servidor: EP_BASE=http://127.0.0.1:8775/
 RAIZ = Path(__file__).resolve().parent.parent
 sys.stdout.reconfigure(encoding="utf-8")
@@ -175,6 +177,7 @@ async def main():
         nav = await pw.chromium.launch(channel="msedge")
         ctx = await nav.new_context(viewport={"width": 1280, "height": 900})
         pg = await ctx.new_page()
+        liga(pg)  # ui-r9: estado, cidade e perfil em abas (testes/ajuda_abas.py)
         pg.on("pageerror", lambda e: erros.append(str(e)))
 
         # ------------------------------------------------------------ 1. Contagem: quem governa hoje
@@ -205,8 +208,11 @@ async def main():
         await texto(pg, f"cidade.html?ibge={CONTAGEM}&lang=en")
 
         # ------------------------------------------------------------ 2. MG: "Quem assume"
-        await ir(pg, "estado.html?uf=MG")
-        card = pg.locator(f'#quem-assume a.pessoa-card[href="pessoa.html?id={e26["id"]}"]')
+        await ir(pg, "estado.html?uf=MG&mandato=2027")  # ui-r9: "Quem assume" é o mandato 2027 do "Ver outro mandato"
+        # mandatos-r11: o mandato 2027 tem as mesmas abas de hoje; Marília (eleita senadora) está na aba Senadores
+        await pg.evaluate("window.EP && EP.abas && EP.abas.mostra('senadores')")
+        await pg.wait_for_timeout(800)
+        card = pg.locator(f'#senadores a.pessoa-card[href="pessoa.html?id={e26["id"]}"]')
         ctxt = await card.first.inner_text() if await card.count() else ""
         ok("MG, “Quem assume”: Marília leva ao perfil e26- e diz “Era prefeita em Contagem (MG)”",
            await card.count() >= 1 and "Era prefeita em Contagem (MG)" in ctxt, ctxt[:160].replace("\n", " | "))
@@ -253,6 +259,7 @@ async def main():
         ctx2 = await nav.new_context(viewport={"width": 1280, "height": 900})
         await ctx2.route(f"**/dados/cidades/MG/{CONTAGEM}.json", serve)
         pg2 = await ctx2.new_page()
+        liga(pg2)  # ui-r9: estado, cidade e perfil em abas (testes/ajuda_abas.py)
         pg2.on("pageerror", lambda e: erros.append(str(e)))
         await ir(pg2, f"cidade.html?ibge={CONTAGEM}")
         topo = await pg2.locator(".exec-topo").inner_text()

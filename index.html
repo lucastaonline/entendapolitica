@@ -29,89 +29,75 @@
   <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
   <link rel="manifest" href="site.webmanifest">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Entenda Política","alternateName":"Understand Politics","url":"https://entendapolitica.vercel.app/","inLanguage":["pt-BR","en"],"description":"A política brasileira explicada de um jeito fácil, com quem está no poder hoje e o que cada político propôs. Tudo com fonte."}</script>
-  <link rel="stylesheet" href="css/base.css?v=11">
+  <link rel="stylesheet" href="vendor/basecoat/basecoat.css?v=3">
+  <link rel="stylesheet" href="css/base.css?v=15">
   <link rel="stylesheet" href="css/tres.css?v=10">
-  <link rel="stylesheet" href="css/tres-politica.css?v=11">
-  <link rel="stylesheet" href="css/inicio.css?v=10">
+  <link rel="stylesheet" href="css/tres-politica.css?v=12">
+  <link rel="stylesheet" href="css/inicio.css?v=14">
+  <link rel="stylesheet" href="css/componentes.css?v=5">
+  <link rel="stylesheet" href="css/casca.css?v=3">
 </head>
 <body>
 <a class="pular" href="#conteudo" data-en="Skip to content">Pular para o conteúdo</a>
 <header class="topo">
-  <a class="marca" href="./" aria-label="Entenda Política, página inicial" data-en-aria-label="Understand Politics (Entenda Política), home page"><span aria-hidden="true">🏛️ </span><span data-en="Understand Politics">Entenda Política</span></a>
+  <a class="marca-cel" href="./"><span class="cl-logo" aria-hidden="true">🏛️</span><b data-en="Understand Politics">Entenda Política</b></a>
   <span class="onde" aria-hidden="true"></span>
-  <a id="btn-idioma" href="?lang=en">🌐 EN</a>
-  <button id="btn-a11y" type="button" aria-haspopup="dialog"><span aria-hidden="true">♿</span><span class="rotulo" data-en=" Accessibility"> Acessibilidade</span></button>
-  <button id="btn-ouvir" type="button" aria-pressed="false"><span aria-hidden="true">🔊</span><span class="rotulo" data-en=" Listen"> Ouvir</span></button>
-  <button id="btn-letra" type="button">A+</button>
+  <div class="ferramentas-topo">
+    <button type="button" class="btn busca-btn" data-variant="outline" data-abre-busca aria-haspopup="dialog" aria-keyshortcuts="Control+K Meta+K"><svg class="lucide lupa" aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7.5"/><path d="m20.5 20.5-4.3-4.3"/></svg><span class="busca-rot" data-en="Search for a politician, state, city…">Buscar político, estado, cidade…</span><kbd class="kbd atalho" aria-hidden="true">Ctrl K</kbd></button>
+    <button id="btn-ouvir" class="btn" data-variant="outline" type="button" aria-pressed="false"><span aria-hidden="true">🔊</span><span class="rotulo" data-en="Listen">Ouvir</span></button>
+  </div>
 </header>
 
 <main class="inicio" id="conteudo" data-ler>
-  <section class="miolo topo-inicio" aria-labelledby="titulo-inicio">
-    <div class="topo-txt rev">
+  <section class="miolo ini-hero rev" aria-labelledby="titulo-inicio">
+    <div class="ini-hero-txt">
       <span class="selo-topo" data-en="Brazil's politics · made easy">Política do Brasil · de um jeito fácil</span>
       <h1 id="titulo-inicio" data-en="Understand Brazilian politics, the easy way">Entenda a política sem complicação</h1>
-      <p class="lead" data-en-html="How Brazil is organized, who is in power today and what each politician has done. <b>Everything has a source</b>, and no one here tells you who to vote for.">Como o Brasil é organizado, quem está no poder hoje e o que cada político fez. <b>Tudo tem fonte</b>, e ninguém aqui diz em quem você deve votar.</p>
+      <p class="ini-lead" data-en-html="Choose where to start. <b>Everything has an official source</b>, and no one here tells you who to vote for.">Escolha por onde começar. <b>Tudo tem fonte oficial</b>, e ninguém aqui diz em quem você deve votar.</p>
+      <button type="button" class="ini-busca" data-abre-busca aria-haspopup="dialog"><svg class="lucide lupa" aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7.5"/><path d="m20.5 20.5-4.3-4.3"/></svg><span class="ini-busca-txt" data-en="Search for a politician, a city or a state">Procure um político, uma cidade ou um estado</span><kbd class="kbd atalho" aria-hidden="true">Ctrl K</kbd></button>
     </div>
-    <div class="topo-3d rev pop" style="--i:1" id="congresso" aria-hidden="true"></div>
+    <div class="ini-hero-3d" id="congresso" aria-hidden="true"></div>
   </section>
 
-  <nav class="miolo" aria-labelledby="titulo-portas">
-    <h2 class="escolha rev"><span id="titulo-portas" data-en="Where do you want to start?">Por onde você quer começar?</span> <span class="pula" aria-hidden="true">👇</span></h2>
+  <nav class="miolo ini-escolha" aria-labelledby="titulo-portas">
+    <h2 class="ini-escolha-tit"><span id="titulo-portas" data-en="Where do you want to start?">Por onde você quer começar?</span> <span class="pula" aria-hidden="true">👇</span></h2>
     <ul class="portas">
-      <li><a class="porta destaque-p rev" style="--i:1" href="entenda.html">
+      <li class="comece"><a class="porta rev" style="--i:1" href="entenda.html">
         <span class="fita"><span aria-hidden="true">⭐ </span><span data-en="Start here">Comece por aqui</span></span>
-        <span class="p-ic" data-cubo="1|🗺️" aria-hidden="true"></span>
+        <span class="p-topo" aria-hidden="true"><span class="p-cubo" data-cubo="1|🗺️"></span><span class="p-ilu" data-ilu="tresPoderes"></span></span>
         <span class="p-tit" data-en="Understand politics">Entenda a política</span>
-        <span class="p-txt" data-en="A 3D map to explore. Click on whatever you want to learn about: the three branches of government, each office, Congress, how a law is made, elections... With animations and games.">Um mapa 3D para explorar. Clique no que quiser aprender: os Três Poderes, cada cargo, o Congresso, como nasce uma lei, as eleições... Com animações e joguinhos.</span>
-        <span class="p-mini"><span aria-hidden="true">🗺️ </span><span data-en="3D map with 10 stops · can be read aloud">Mapa 3D com 10 paradas · dá para ouvir em voz alta</span></span>
-        <span class="btn"><span data-en="Start">Começar</span> <span aria-hidden="true">▶</span></span>
+        <span class="p-txt" data-en="How Brazil works, in short stops with 3D drawings.">Como o Brasil funciona, em paradas curtas com desenhos 3D.</span>
+        <span class="p-btn"><span data-en="Start">Começar</span> <span aria-hidden="true">▶</span></span>
       </a></li>
       <li><a class="porta rev" style="--i:2" href="brasil.html">
-        <span class="p-ic" data-cubo="2|🏛️" aria-hidden="true"></span>
+        <span class="p-topo" aria-hidden="true"><span class="p-cubo" data-cubo="2|🏛️"></span><span class="p-ilu" data-ilu="congresso"></span></span>
         <span class="p-tit" data-en="Brazil's politics">A política do Brasil</span>
-        <span class="p-txt" data-en="Who is in power in the country today: the President, the ministers, the 81 senators and the 513 federal deputies. See what each one proposed and what became law.">Quem está no poder no país hoje: presidente, ministros, os 81 senadores e os 513 deputados federais. Veja o que cada um propôs e o que virou lei.</span>
-        <span class="p-mini"><span aria-hidden="true">👥 </span><span data-en="President, Vice President, ministers and Congress">Presidente, vice, ministros e Congresso</span></span>
-        <span class="btn azul"><span data-en="See Brazil">Ver o Brasil</span> <span aria-hidden="true">▶</span></span>
+        <span class="p-txt" data-en="Who governs, who makes the laws and who judges in the country.">Quem governa, quem faz as leis e quem julga o país.</span>
+        <span class="p-btn azul"><span data-en="See Brazil">Ver o Brasil</span> <span aria-hidden="true">▶</span></span>
       </a></li>
       <li><a class="porta rev" style="--i:3" href="estado.html">
-        <span class="p-ic" data-cubo="3|📍" aria-hidden="true"></span>
-        <span class="p-tit" data-en="Politics in each state">A política do meu estado</span>
-        <span class="p-txt" data-en="Choose a state: the governor, the vice governor, the state deputies and who represents the state in the National Congress.">Escolha o seu estado: o governador, o vice, os deputados estaduais e quem representa o estado no Congresso.</span>
-        <span class="p-mini"><span aria-hidden="true">🗺️ </span><span data-en="26 states and the Federal District">26 estados e o Distrito Federal</span></span>
-        <span class="btn claro"><span data-en="See the states">Ver meu estado</span> <span aria-hidden="true">▶</span></span>
+        <span class="p-topo" aria-hidden="true"><span class="p-cubo" data-cubo="3|📍"></span><span class="p-ilu" data-ilu="niveis"></span></span>
+        <span class="p-tit" data-en="Politics in my state">A política do meu estado</span>
+        <span class="p-txt" data-en="The governor and the deputies of your state.">O governador e os deputados do seu estado.</span>
+        <span class="p-btn azul"><span data-en="See my state">Ver meu estado</span> <span aria-hidden="true">▶</span></span>
       </a></li>
       <li><a class="porta rev" style="--i:4" href="cidade.html">
-        <span class="p-ic" data-cubo="4|🏘️" aria-hidden="true"></span>
+        <span class="p-topo" aria-hidden="true"><span class="p-cubo" data-cubo="4|🏘️"></span><span class="p-ilu" data-ilu="prefeitura"></span></span>
         <span class="p-tit" data-en="Politics in my city">A política da minha cidade</span>
-        <span class="p-txt" data-en="Type the name of your city and see who governs it and who makes its laws: the mayor, the vice mayor and the city councilors.">Digite o nome da sua cidade e veja quem governa e quem faz as leis dela: o prefeito, o vice e os vereadores.</span>
-        <span class="p-mini"><span aria-hidden="true">🏘️ </span><span data-en="5,569 municipalities">5.569 cidades</span></span>
-        <span class="btn bege"><span data-en="See my city">Ver minha cidade</span> <span aria-hidden="true">▶</span></span>
+        <span class="p-txt" data-en="The mayor and the city councilors of your city.">O prefeito e os vereadores da sua cidade.</span>
+        <span class="p-btn azul"><span data-en="See my city">Ver minha cidade</span> <span aria-hidden="true">▶</span></span>
       </a></li>
     </ul>
+    <p class="ini-dica"><span aria-hidden="true">🦉</span> <span data-en="Before looking at your place, it helps to understand how politics works (door 1).">Antes de ver o seu lugar, vale entender como a política funciona (porta 1).</span></p>
   </nav>
 
-  <section class="miolo procurar rev" aria-labelledby="titulo-procurar">
-    <h2 id="titulo-procurar"><span aria-hidden="true">🔎 </span><span data-en="Search for a politician">Procurar um político</span></h2>
-    <p class="muted" id="dica-busca" data-en="Type the name of the person you want to know about. You can also search by city, state or party.">Digite o nome de quem você quer conhecer. Também dá para procurar pela cidade, pelo estado ou pelo partido.</p>
-    <label class="sr" for="busca" data-en="Search for a politician">Procurar um político</label>
-    <div class="busca"><input id="busca" type="search" placeholder="Ex.: nome, cidade ou partido" data-en-placeholder="E.g.: name, city or party" autocomplete="off" aria-describedby="dica-busca" aria-controls="resultados"></div>
-    <ul class="resultados" id="resultados"></ul>
-  </section>
-
-  <section class="miolo acoes-inicio rev" aria-labelledby="titulo-mais">
+  <section class="miolo ini-mais" aria-labelledby="titulo-mais">
     <h2 class="sr" id="titulo-mais" data-en="Learn more and share">Saiba mais e compartilhe</h2>
-    <a class="botao-acao" href="imparcialidade.html">
-      <span class="ic-grande" aria-hidden="true">⚖️</span>
-      <span><b data-en="How we stay impartial">Como cuidamos da imparcialidade</b><small data-en="The rules we follow to treat everyone the same way.">As regras que usamos para tratar todo mundo do mesmo jeito.</small></span>
-    </a>
-    <a class="botao-acao" href="dados.html">
-      <span class="ic-grande" aria-hidden="true">🗂️</span>
-      <span><b data-en="Where the data comes from">De onde vêm os dados</b><small data-en="Chamber of Deputies, Federal Senate, TSE (the electoral court), IBGE and other official bodies. And when they are updated.">Câmara, Senado, TSE, IBGE e outros órgãos oficiais. E quando são atualizados.</small></span>
-    </a>
-    <button class="botao-acao" type="button" id="btn-compartilhar" aria-haspopup="dialog">
-      <span class="ic-grande" aria-hidden="true">📤</span>
-      <span><b data-en="Share the site">Compartilhar o site</b><small data-en="Send it to family, friends and school.">Mande para a família, os amigos e a escola.</small></span>
-    </button>
+    <ul>
+      <li><a href="imparcialidade.html"><span class="ini-ic" aria-hidden="true">⚖️</span><span data-en="How we stay impartial">Como cuidamos da imparcialidade</span></a></li>
+      <li><a href="dados.html"><span class="ini-ic" aria-hidden="true">🗂️</span><span data-en="Where the data comes from">De onde vêm os dados</span></a></li>
+      <li><button type="button" id="btn-compartilhar" aria-haspopup="dialog"><span class="ini-ic" aria-hidden="true">📤</span><span data-en="Share the site">Compartilhar o site</span></button></li>
+    </ul>
   </section>
 </main>
 
@@ -123,10 +109,11 @@
 
 <noscript><p style="padding:20px">Esta página precisa de JavaScript ligado no navegador. / This page needs JavaScript.</p></noscript>
 <script src="js/config.js?v=10"></script>
-<script src="js/comum.js?v=11"></script>
+<script src="vendor/basecoat/basecoat.js?v=2"></script>
+<script src="js/comum.js?v=19"></script>
+<script src="js/casca.js?v=2"></script>
 <script src="js/tres.js?v=10"></script>
-<script src="js/tres-politica.js?v=11"></script>
-<script src="js/busca.js?v=11"></script>
-<script src="js/inicio.js?v=10"></script>
+<script src="js/tres-politica.js?v=12"></script>
+<script src="js/inicio.js?v=11"></script>
 </body>
 </html>

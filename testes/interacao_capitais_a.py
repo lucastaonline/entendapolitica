@@ -13,6 +13,8 @@ from pathlib import Path
 
 from playwright.async_api import async_playwright
 
+from ajuda_abas import liga  # ui-r9
+
 BASE = os.environ.get("EP_BASE", "http://127.0.0.1:8770/")
 RAIZ = Path(__file__).resolve().parent.parent
 sys.stdout.reconfigure(encoding="utf-8")
@@ -100,10 +102,12 @@ async def main():
         nav = await p.chromium.launch(channel="msedge")
         ctx = await nav.new_context(viewport={"width": 1280, "height": 860})
         pg = await ctx.new_page()
+        liga(pg)  # ui-r9: estado, cidade e perfil em abas (testes/ajuda_abas.py)
         erros = []
         pg.on("pageerror", lambda e: erros.append(str(e)))
         cel = await nav.new_context(viewport={"width": 320, "height": 740}, device_scale_factor=2, is_mobile=True, has_touch=True)
         pc = await cel.new_page()
+        liga(pc)  # ui-r9: estado, cidade e perfil em abas (testes/ajuda_abas.py)
         pc.on("pageerror", lambda e: erros.append(str(e)))
 
         for ibge, (uf, padrao) in AGAPE.items():
@@ -178,7 +182,8 @@ async def cidade_agape(pg, pc, ibge, uf, padrao):
     ok(f"{nome}: \"Assinou junto\" mostra as {n_co} em que assinou junto", f"de {num(n_co)}" in cont3, cont3)
     hrefs = await pg.locator("#lista-prop li.prop a.fora, #lista-prop li.prop a[target=_blank]").evaluate_all("els => els.map(e => e.href)")
     oficiais = [h for h in hrefs if re.search(padrao, h)]
-    ok(f"{nome}: cada proposta tem o link da página oficial", len(oficiais) >= min(20, n_co), f"{len(oficiais)} links")
+    # ui-r9: o perfil começa com um resumo de 6 propostas (antes, 20) e o "Mostrar mais" põe mais 20
+    ok(f"{nome}: cada proposta tem o link da página oficial", len(oficiais) >= min(6, n_co), f"{len(oficiais)} links")
     primeira = next(x for x in lista if x["papel"] == "coautor")
     t0 = await pg.locator("#lista-prop li.prop").first.inner_text()
     ok(f"{nome}: a primeira proposta da lista é a dos dados ({primeira['sigla']})", primeira["sigla"] in t0, t0[:80].replace("\n", " "))
@@ -211,7 +216,7 @@ async def cidade_agape(pg, pc, ibge, uf, padrao):
         corpo = await pg.locator("#perfil").inner_text()
         n_l = await pg.locator("#lista-prop li.prop").count()
         ok(f"{nome}: a página do prefeito mostra os projetos ({bp['resumo']['total']})",
-           n_l == min(20, bp["resumo"]["total"]) and "Projetos que a prefeitura mandou" in corpo, f"{n_l} na tela")
+           n_l == min(6, bp["resumo"]["total"]) and "Projetos que a prefeitura mandou" in corpo, f"{n_l} na tela")
         hrefs = await pg.locator("#lista-prop li.prop a.fora, #lista-prop li.prop a[target=_blank]").evaluate_all("els => els.map(e => e.href)")
         ok(f"{nome}: os projetos do prefeito levam à página oficial", any(re.search(padrao, h) for h in hrefs))
         await abrir(pg, f"pessoa.html?id={pref['id']}&lang=en", 1000)

@@ -188,7 +188,7 @@
         if (!vistas[v.url]) { vistas[v.url] = 1; lista.push(v); }
         return;
       }
-      Object.keys(v).forEach(function (k) { if (k !== "lista" && k !== "votos") anda(v[k]); });
+      Object.keys(v).forEach(function (k) { if (k !== "lista" && k !== "votos" && k.charAt(0) !== "_") anda(v[k]); });
     })(obj);
     return lista;
   }
@@ -226,11 +226,15 @@
     var anos = m.inicio ? m.inicio.slice(0, 4) + EP.tr(" a ", " to ") + (m.fim || "").slice(0, 4) : "";
     // começa e acaba no mesmo ano (ex.: suplente que assumiu por uns meses): mostra as datas inteiras
     if (m.inicio && m.fim && m.inicio.slice(0, 4) === m.fim.slice(0, 4)) anos = EP.data(m.inicio) + EP.tr(" a ", " to ") + EP.data(m.fim);
+    // perfil-mandato-r10: com o seletor de mandato, o período fica nele (e o chip some); num mandato antigo, o chip diz o período
+    var sel = seletorHtml(), md = p._md;
+    if (sel) anos = "";
     var chips = [];
     if (p.tipo === "min") { /* ministro não tem partido obrigatório: aparece na ficha */ }
-    if (p.partido) chips.push('<span class="chip"><span aria-hidden="true">🎗️ </span><span class="sr">' + EP.tr("Partido: ", "Party: ") + "</span>" +
+    if (p.partido) chips.push('<span class="chip"><span aria-hidden="true">🎗️ </span><span class="sr">' + (md ? EP.tr("Partido na época: ", "Party at the time: ") : EP.tr("Partido: ", "Party: ")) + "</span>" +
       (/^sem partido$/i.test(p.partido) ? esc(EP.tr("Sem partido", "No party")) : EP.pt(esc(p.partido))) + "</span>");
     if (anos) chips.push('<span class="chip neutro"><span aria-hidden="true">📅 </span>' + EP.tr("Mandato: ", "Term: ") + esc(anos) + "</span>");
+    if (md && md.como === "suplente") chips.push('<span class="chip amarelo"><span aria-hidden="true">🔑 </span>' + EP.tr("Suplente que assumiu", "Alternate who took office") + "</span>");
     if (p.eleicao2026) chips.push(EP.chip2026(p.eleicao2026, p.genero, true));
     if (m.obs) chips.push('<span class="chip amarelo"><span aria-hidden="true">ℹ️ </span>' + D.obs(m.obs, m.obs_en) + "</span>");
     if (p.interino) chips.push('<span class="chip amarelo">' + EP.tr(EP.gen(p.genero, "Interino", "Interina"), "Acting") + "</span>");
@@ -248,8 +252,35 @@
     return '<section class="perfil-topo" aria-labelledby="nome-pessoa"><div class="moldura">' + EP.av(p.foto, p.nome, null, true) + "</div><div>" +
       '<span class="cargo-p">' + cargoHtml(p) + (onde(p) ? " · " + esc(onde(p)) : "") + '</span><h1 id="nome-pessoa">' + EP.pt(esc(p.nome)) + "</h1>" +
       (p.nomeCivil && EP.norm(p.nomeCivil) !== EP.norm(p.nome) ? '<p class="muted" style="margin:-4px 0 8px">' + EP.tr("Nome completo: ", "Full name: ") + EP.pt(esc(p.nomeCivil)) + "</p>" : "") +
-      (chips.length ? '<div class="chips">' + chips.join("") + "</div>" : "") +
+      (chips.length ? '<div class="chips">' + chips.join("") + "</div>" : "") + sel +
       (p.fotoCredito ? '<p class="muted credito">' + EP.tr("Foto: ", "Photo: ") + (/licença/.test(p.fotoCredito) ? esc(EP.en ? p.fotoCredito.replace("licença", "license") : p.fotoCredito) : EP.pt(esc(p.fotoCredito))) + "</p>" : "") + "</div></section>";
+  }
+  // site-d-r14 (protótipo D): os números grandes embaixo do nome; cada um leva à aba dele. Os mesmos para todo tipo de perfil
+  // (o que existe para aquele cargo e aquele mandato); o número e o texto ficam escritos, o ícone é enfeite
+  function numerosHtml(p) {
+    if (!EP.d) return "";
+    var k = [], pr = p.propostas && p.propostas.lista ? p.propostas.lista : null, md = p._md;
+    if (pr) {
+      k.push({ ic: "📝", n: EP.num(pr.length), t: EP.tr(pr.length === 1 ? "proposta" : "propostas", pr.length === 1 ? "proposal" : "proposals") + (md ? EP.tr(" neste mandato", " in this term") : ""), href: "#propostas" });
+      var lei = pr.filter(function (x) { return x.status === "lei"; }).length;
+      k.push({ ic: "📜", n: EP.num(lei), t: EP.tr(lei === 1 ? "virou lei" : "viraram lei", "became law"), href: "#propostas" });
+    }
+    var e = p.executivo;
+    if (e && e.leisSancionadas != null) k.push({ ic: "✍️", n: EP.num(e.leisSancionadas), t: EP.tr("leis sancionadas", "laws signed"), href: "#leis" });
+    if (e && e.vetos != null) k.push({ ic: "✋", n: EP.num(e.vetos), t: EP.tr(e.vetos === 1 ? "veto" : "vetos", e.vetos === 1 ? "veto" : "vetoes"), href: "#leis" });
+    var v = p.votacoes, nv = v ? ((v.resumo || {}).total || (v.lista || []).length || (v.votos || []).length) : 0;
+    if (nv && !v._fr) k.push({ ic: "🗳️", n: EP.num(nv), t: EP.tr(nv === 1 ? "votação" : "votações", nv === 1 ? "vote" : "votes"), href: "#votacoes" });
+    if (p.gastos && p.gastos.total != null) k.push({ ic: "💸", n: EP.dinheiroCurto(p.gastos.total), t: EP.tr("gastos em ", "spent in ") + p.gastos.ano, href: "#gastos" });
+    var el = eleicaoDe(p);
+    if (md && md.it && md.it.k === "c" && md.it.v != null) k.push({ ic: "🗳️", n: EP.num(md.it.v), t: EP.tr("votos na eleição de " + md.it.a, "votes in the " + md.it.a + " election"), href: "#sobre" });
+    else if (!md && el && el.votos != null) k.push({ ic: "🗳️", n: EP.num(el.votos), t: EP.tr("votos", "votes") + (el.ano ? EP.tr(" na eleição de " + el.ano, " in the " + el.ano + " election") : ""), href: "#sobre" });
+    var idade = EP.idade(p.nascimento);
+    if (md && p.nascimento && /^\d{4}-\d{2}-\d{2}$/.test(md.i || "")) {
+      var a = +md.i.slice(0, 4) - +p.nascimento.slice(0, 4) - (md.i.slice(5) < p.nascimento.slice(5, 10) ? 1 : 0);
+      if (a > 0 && a < 120) k.push({ ic: "🎂", n: a, t: EP.tr("anos no começo do mandato", "years old at the start of the term"), href: "#sobre" });
+    } else if (!md && idade != null) k.push({ ic: "🎂", n: idade, t: EP.tr("anos de idade", "years old"), href: "#sobre" });
+    if (!k.length) return "";
+    return '<div class="d-numeros-perfil">' + EP.d.kpis(k.slice(0, 6), EP.tr("Números de ", "Numbers for ") + p.nome) + "</div>";
   }
   function fatosHtml(p) {
     var idade = EP.idade(p.nascimento);
@@ -264,22 +295,26 @@
     var noCargo = eleitoNoCargo(p);
     var outroEleito = noCargo && noCargo.e && !mesmaPessoa(noCargo.e, p) ? noCargo.e : null;
     var oc = p.ocupacao;
-    var h = fato("🎂", EP.tr("Idade", "Age"), idade != null ? EP.tr(idade + " anos", idade + " years old") + (p.nascimento ? "<br><small>" + EP.tr("nasceu em ", "born on ") + EP.dataLonga(p.nascimento) + "</small>" : "") : null) +
-      fato("📍", EP.tr("Nasceu em", "Born in"), p.naturalidade ? esc(p.naturalidade) : null) +
-      fato("🎓", EP.tr("Escolaridade (declarada ao TSE)", "Education (declared to the TSE)"), p.escolaridade ? D.escolaridade(p.escolaridade) : null, p.escolaridadeFonte) +
-      fato("💼", oc && oc.ano ? EP.tr("Ocupação declarada ao TSE (" + oc.ano + ")", "Occupation declared to the TSE (" + oc.ano + ")") : EP.tr("Ocupação", "Occupation"),
-        oc && oc.txt ? D.profissao(oc.txt) : null, oc && oc.fonte) +
-      fato("🗳️", el && el.ano ? EP.tr("Na eleição de " + el.ano, "In the " + el.ano + " election") : EP.tr("Na eleição", "In the election"), votoHtml, el && el.fonte) +
+    // site-d-r14: "Quem é" em blocos. À vista, o que é do cargo (a eleição, desde quando, como chegou, a idade, onde nasceu);
+    // o que a pessoa declarou ao TSE (escolaridade, ocupação, bens) fica em "Mais sobre ele/ela"
+    var h = fato("🗳️", el && el.ano ? EP.tr("Na eleição de " + el.ano, "In the " + el.ano + " election") : EP.tr("Na eleição", "In the election"), votoHtml, el && el.fonte) +
       (outroEleito ? fato("🗳️", EP.tr("Eleito(a) para este cargo em " + noCargo.ano, "Elected to this office in " + noCargo.ano),
         esc(outroEleito.nome) + (outroEleito.partido ? " (" + EP.pt(esc(outroEleito.partido)) + ")" : ""), outroEleito.fontes || outroEleito.fonte) : "") +
+      (p.desde ? fato("📅", EP.tr("No cargo desde", "In office since"), EP.dataLonga(p.desde)) : "") +
+      (p.comoAssumiu ? fato("🔑", EP.tr("Como chegou ao cargo", "How they took office"), D.traduz(p.comoAssumiu, null, p.comoAssumiu_en)) : "") +
+      fato("🎂", EP.tr("Idade", "Age"), idade != null ? EP.tr(idade + " anos", idade + " years old") + (p.nascimento ? "<br><small>" + EP.tr("nasceu em ", "born on ") + EP.dataLonga(p.nascimento) + "</small>" : "") : null) +
+      fato("📍", EP.tr("Nasceu em", "Born in"), p.naturalidade ? esc(p.naturalidade) : null) +
+      (p.nota && p.tipo !== "min" ? fato("📝", EP.tr("Observação", "Note"), D.traduz(p.nota, null, p.nota_en)) : "");
+    var mais = fato("🎓", EP.tr("Escolaridade (declarada ao TSE)", "Education (declared to the TSE)"), p.escolaridade ? D.escolaridade(p.escolaridade) : null, p.escolaridadeFonte) +
+      fato("💼", oc && oc.ano ? EP.tr("Ocupação declarada ao TSE (" + oc.ano + ")", "Occupation declared to the TSE (" + oc.ano + ")") : EP.tr("Ocupação", "Occupation"),
+        oc && oc.txt ? D.profissao(oc.txt) : null, oc && oc.fonte) +
       fato("🏠", EP.tr("Bens declarados à Justiça Eleitoral", "Assets declared to the electoral courts"), p.bens && p.bens.total != null ? EP.dinheiroCurto(p.bens.total) +
         (p.bens.ano ? " <small>(" + EP.tr("em ", "in ") + esc(p.bens.ano) + ")</small>" : "") +
         '<br><small class="nota-bens">' + EP.tr("Valor que a própria pessoa declarou ao se candidatar. É uma lista de bens: não mostra dívidas nem renda. Valores de anos diferentes não dão para comparar.",
-          "Amount the person declared when running for office. It is a list of assets: it does not show debts or income. Amounts from different years cannot be compared.") + "</small>" : null, p.bens && p.bens.fonte) +
-      (p.desde ? fato("📅", EP.tr("No cargo desde", "In office since"), EP.dataLonga(p.desde)) : "") +
-      (p.comoAssumiu ? fato("🔑", EP.tr("Como chegou ao cargo", "How they took office"), D.traduz(p.comoAssumiu, null, p.comoAssumiu_en)) : "") +
-      (p.nota && p.tipo !== "min" ? fato("📝", EP.tr("Observação", "Note"), D.traduz(p.nota, null, p.nota_en)) : "");
-    return h ? '<div class="fatos">' + h + "</div>" : "";
+          "Amount the person declared when running for office. It is a list of assets: it does not show debts or income. Amounts from different years cannot be compared.") + "</small>" : null, p.bens && p.bens.fonte);
+    if (!h) { h = mais; mais = ""; }
+    return (h ? '<div class="fatos">' + h + "</div>" : "") + (mais && EP.d ? EP.d.saiba('<div class="fatos">' + mais + "</div>", EP.tr("Mais sobre " + EP.gen(p.genero, "ele", "ela"), "More about " + dele(p)), "d-mais-sobre") :
+      mais ? '<div class="fatos">' + mais + "</div>" : "");
   }
   function anterioresHtml(p) {
     var l = (p.mandatosAnteriores || []).filter(function (m) { return m && m.cargo; });
@@ -310,12 +345,19 @@
     var t = tipoCargo(p), o = OQUE[t], q = QUEM[t];
     if (!o || !q) return "";
     var pergunta = EP.en ? "What does " + q[2] + " do?" : "O que faz " + (p.genero === "F" ? q[1] : q[0]) + "?";
+    // site-d-r14: a explicação do cargo fica no "💡 Saber mais" (a pergunta é o título)
+    if (EP.d) return EP.d.saiba('<p>' + EP.md(EP.tr(o[0], o[1])) + "</p><p>" + '<a class="link-seta" href="entenda.html#parte-4">' + EP.tr("Entenda os cargos", "Learn about each office") +
+      ' <span aria-hidden="true">›</span></a> ' + fonteBtn([CF], EP.tr("Fonte", "Source"), EP.tr("o que faz o cargo", "what the office does")) + "</p>", pergunta, "oque-faz");
     return '<div class="dica-coruja oque-faz"><span class="coruja" aria-hidden="true">🦉</span><div><p style="margin:0"><b>' + esc(pergunta) + "</b></p><p style=\"margin:4px 0 6px\">" + EP.md(EP.tr(o[0], o[1])) + "</p>" +
       '<a class="link-seta" href="entenda.html#parte-4">' + EP.tr("Entenda os cargos", "Learn about each office") + ' <span aria-hidden="true">›</span></a> ' + fonteBtn([CF], EP.tr("Fonte", "Source"), EP.tr("o que faz o cargo", "what the office does")) + "</div></div>";
   }
 
   // ---------------------------------------------------------------- propostas
-  var filtro = { papel: "autor", status: "", tema: "", q: "" }, mostrando = 20;
+  // ui-r9: as listas do perfil começam com um resumo (6 propostas; 8 votações no computador e 6 no celular) e "Mostrar mais"
+  // traz mais 20 propostas ou 15 votações de cada vez (com as abas, cada parte cabe em poucas telas)
+  var CELULAR = !!(window.matchMedia && matchMedia("(max-width: 600px)").matches);
+  var INI_PROP = 6, INI_VOTOS = CELULAR ? 6 : 8;
+  var filtro = { papel: "autor", status: "", tema: "", q: "" }, mostrando = INI_PROP;
   function contaPor(lista) {
     var c = { total: lista.length };
     Object.keys(EP.STATUS).forEach(function (s) { c[s] = 0; });
@@ -324,9 +366,11 @@
   }
   function daPapel(lista, papel) { return papel === "todas" ? lista : lista.filter(function (x) { return (x.papel || "coautor") === papel; }); }
   function escopoHtml(p, pr) {
-    // deputados e senadores: todas as propostas dos mandatos naquela Casa; diz de quando é a mais antiga
+    // deputados e senadores: todas as propostas dos mandatos naquela Casa; diz de quando é a mais antiga. Filtradas por
+    // mandato (perfil-mandato-r10, pr._md): diz de qual mandato são
     var anoMin = (pr.lista || []).reduce(function (m, x) { var a = (x.data || "").slice(0, 4); return a && (!m || a < m) ? a : m; }, null);
-    var extra = (p.tipo === "dep" || p.tipo === "sen") && anoMin ?
+    var extra = pr._md ? EP.tr(" no mandato de " + EP.trajetoria.periodo(pr._md), " in the " + EP.trajetoria.periodo(pr._md) + " term") :
+      (p.tipo === "dep" || p.tipo === "sen") && anoMin ?
       EP.tr(", em todos os mandatos (a mais antiga é de " + anoMin + ")", ", in all terms (the oldest is from " + anoMin + ")") : "";
     if (!EP.en) return esc((pr.escopo || "") + extra);
     if (pr.escopo_en) return esc(pr.escopo_en + extra);
@@ -338,7 +382,12 @@
     }[p.tipo];
     return t ? esc(t + extra) : D.ptHtml(pr.escopo);
   }
-  function outrosHtml(p, o) {
+  // perfil-mandato-r10: "outros documentos" e "assinaturas só de apoio" vêm somados de todos os mandatos na Casa; quando a
+  // lista de cima é de um mandato só, a frase diz isso
+  function somaTxt(p) {
+    return p.tipo === "sen" ? ["somando todos os mandatos no Senado", "adding up all terms in the Senate"] : ["somando todos os mandatos na Câmara", "adding up all terms in the Chamber"];
+  }
+  function outrosHtml(p, o, soma) {
     if (!o || !o.total) return "";
     var oque = EP.en ? (o.txt_en || {
       dep: "other documents (requests for information, motions, suggestions to the government and others)",
@@ -346,10 +395,17 @@
       pres: "other documents sent to Congress (messages such as nominations of authorities and agreements with other countries, radio and TV license renewals and others)"
     }[p.tipo]) : null;
     var txt = EP.en ? (oque ? esc(oque) : D.ptHtml(o.txt || "")) : esc((o.txt || "outros documentos").toLowerCase());
-    return '<p class="aviso azul"><span aria-hidden="true">📨 </span>' + EP.tr("Além disso, " + ele(p) + " apresentou", "Besides that, " + ele(p) + " filed") + " <b>" + EP.num(o.total) + "</b> " + txt + "." +
+    return '<p class="aviso azul"><span aria-hidden="true">📨 </span>' + EP.tr("Além disso, " + (soma ? somaTxt(p)[0] + ", " : "") + ele(p) + " apresentou",
+      "Besides that, " + (soma ? somaTxt(p)[1] + ", " : "") + ele(p) + " filed") + " <b>" + EP.num(o.total) + "</b> " + txt + "." +
       (o.url ? " " + linkFora(o.url, EP.tr("Ver a lista oficial", "See the official list"), true) : "") + "</p>";
   }
-  function apoiosHtml(p, a) {
+  // mandato antigo: só onde ver os outros documentos daquele período (a contagem do site soma todos os mandatos)
+  function outrosAntigoHtml(p, pr) {
+    if (!pr.outrosUrl) return "";
+    return '<p class="aviso azul"><span aria-hidden="true">📨 </span>' + EP.tr("Os outros documentos (como requerimentos e pedidos de informação) estão na lista oficial.",
+      "The other documents (such as motions and requests for information) are in the official list.") + " " + linkFora(pr.outrosUrl, EP.tr("Ver a lista oficial", "See the official list"), true) + "</p>";
+  }
+  function apoiosHtml(p, a, soma) {
     if (!a || !a.total) return "";
     var resto;
     if (EP.en) {
@@ -359,7 +415,8 @@
       var t = String(a.txt || "").replace(/^Assinaturas só de apoio:\s*/i, "");
       resto = esc(t.charAt(0).toUpperCase() + t.slice(1));
     }
-    return '<p class="muted apoios" style="font-size:.86rem"><span aria-hidden="true">🖊️ </span>' + EP.tr("Assinaturas só de apoio: ", "Support-only signatures: ") + "<b>" + EP.num(a.total) + "</b>. " + resto + "</p>";
+    return '<p class="muted apoios" style="font-size:.86rem"><span aria-hidden="true">🖊️ </span>' + EP.tr("Assinaturas só de apoio", "Support-only signatures") +
+      (soma ? " (" + EP.tr(somaTxt(p)[0], somaTxt(p)[1]) + ")" : "") + ": <b>" + EP.num(a.total) + "</b>. " + resto + "</p>";
   }
   function notaPresHtml(pr) {
     if (!pr.nota) return "";
@@ -373,6 +430,7 @@
     var nAutor = lista.filter(function (x) { return x.papel === "autor"; }).length, nCo = lista.length - nAutor;
     if (!nAutor && nCo) filtro.papel = "coautor";
     if (!lista.length || /^(pres|gov|pref)$/.test(p.tipo)) filtro.papel = "todas";
+    leFiltros(lista);
     var h = '<section class="secao-perfil" id="propostas" aria-labelledby="t-propostas"><h2 id="t-propostas"><span class="ic" aria-hidden="true">📜</span>' +
       EP.tr("O que " + ele(p) + " propôs", "What " + ele(p) + " proposed") + "</h2>" +
       '<p class="muted">' + escopoHtml(p, pr) + " " + (pr.fonte ? fonteBtn(pr.fonte, null, EP.tr("propostas", "proposals")) : "") + "</p>" + notaPresHtml(pr);
@@ -381,12 +439,16 @@
     } else {
       var temPapel = !/^(pres|gov|pref)$/.test(p.tipo);  // o Executivo é sempre o autor das propostas que manda
       var nS = lista.filter(function (x) { return EP.en ? x.s_en : x.s; }).length;
-      h += '<div class="nota-ia"><span aria-hidden="true">🤖</span><p>' + EP.tr(
+      // ui-r9: a nota da IA fica na coluna da direita, em cima dos filtros (no celular, logo depois do funil)
+      var notaIa = pr._semIa ? '<div class="nota-ia"><span aria-hidden="true">📄</span><p>' + EP.tr(
+        "Neste mandato antigo, cada proposta aparece com o texto oficial (a ementa), do jeito que a Casa publicou, e o link para a página dela.",
+        "For this past term, each bill appears with its official text (the ementa, in Portuguese), as the legislature published it, and a link to its page.") + "</p></div>" :
+        '<div class="nota-ia"><span aria-hidden="true">🤖</span><p>' + EP.tr(
         'As explicações em palavras simples são escritas por <b>inteligência artificial</b> a partir do texto oficial (a ementa), com regras para não puxar para nenhum lado. Como a IA pode errar, o texto oficial aparece sempre embaixo, com o link. <a href="imparcialidade.html#ia">Saiba mais</a>.',
         'The plain-language explanations are written by <b>artificial intelligence</b> from the official summary of each bill (the ementa), following rules so as not to take sides. Since AI can make mistakes, the official text (in Portuguese) always appears below, with a link. <a href="imparcialidade.html#ia">Learn more</a>.') +
         " " + EP.tr("Até agora, <b>" + EP.num(nS) + " de " + EP.num(lista.length) + "</b> propostas desta pessoa têm explicação em palavras simples; as outras mostram só o texto oficial. Elas são preparadas aos poucos, no mesmo ritmo para todo mundo.",
-          "So far, <b>" + EP.num(nS) + " of " + EP.num(lista.length) + "</b> of this person's proposals have a plain-language explanation; the others show only the official text. They are being prepared gradually, at the same pace for everyone.") + "</p></div>" +
-        '<div class="duas-p"><div>' +
+          "So far, <b>" + EP.num(nS) + " of " + EP.num(lista.length) + "</b> of this person's proposals have a plain-language explanation; the others show only the official text. They are being prepared gradually, at the same pace for everyone.") + "</p></div>";
+      h += '<div class="duas-p"><div>' +
         (temPapel ? '<div class="papeis" role="group" aria-label="' + EP.tr("Escolha o tipo de autoria", "Choose the type of authorship") + '">' +
           '<button type="button" class="papel-btn" data-papel="autor" aria-pressed="' + (filtro.papel === "autor") + '"><b>' + EP.num(nAutor) + '</b><span><span aria-hidden="true">✍️ </span>' +
           EP.tr(EP.gen(p.genero, "Autor principal", "Autora principal"), "Main author") + "</span><small>" +
@@ -395,18 +457,22 @@
           EP.tr("Assinou junto", "Co-signed") + "</span><small>" + EP.tr("Outra pessoa escreveu; " + ele(p) + " assinou como " + EP.gen(p.genero, "coautor", "coautora") + ".",
             "Someone else wrote it; " + ele(p) + " signed as a co-author.") + "</small></button></div>" : "") +
         '<div class="funil" id="funil"></div>' +
-        '<p class="muted nota-contexto" style="margin-top:10px"><span aria-hidden="true">📜 </span>' + EP.tr('"Virou lei" inclui também decretos legislativos e resoluções, que são outras normas.',
-          '"Became law" also includes legislative decrees and resolutions, which are other kinds of legal rules.') + "</p></div>" +
-        '<div><div class="status-chips" id="status-chips" role="group" aria-label="' + EP.tr("Filtrar pela situação", "Filter by status") + '"></div>' +
-        '<div class="temas-chips" id="temas-chips" role="group" aria-label="' + EP.tr("Filtrar pelo assunto", "Filter by topic") + '"></div>' +
-        '<div class="dica-coruja nota-contexto"><span class="coruja" aria-hidden="true">🦉</span><p>' + EP.tr(
+        // site-d-r14: a barra colorida da situação (cada cor é um botão que filtra a lista) e as barras dos assuntos
+        '<div class="status-chips d-status" id="status-chips" role="group" aria-label="' + EP.tr("Filtrar pela situação", "Filter by status") + '"></div></div>' +
+        '<div><div class="temas-chips d-temas" id="temas-chips" role="group" aria-label="' + EP.tr("Filtrar pelo assunto", "Filter by topic") + '"></div></div></div>' +
+        (EP.d ? EP.d.saiba('<p class="nota-contexto"><span aria-hidden="true">🦉 </span>' + EP.tr(
           'Quantidade não mede qualidade: um projeto pode ser bem simples ou muito grande. E o caminho até virar lei é longo, com muitas votações. <a href="entenda.html#parte-6">Veja como nasce uma lei</a>.',
-          'Quantity does not measure quality: a bill can be very simple or very big. And the road to becoming law is long, with many votes. <a href="entenda.html#parte-6">See how a law is made</a>.') + "</p></div></div></div>" +
+          'Quantity does not measure quality: a bill can be very simple or very big. And the road to becoming law is long, with many votes. <a href="entenda.html#parte-6">See how a law is made</a>.') + "</p>" +
+          '<p class="muted nota-contexto"><span aria-hidden="true">📜 </span>' + EP.tr('"Virou lei" inclui também decretos legislativos e resoluções, que são outras normas.',
+            '"Became law" also includes legislative decrees and resolutions, which are other kinds of legal rules.') + "</p>" + notaIa,
+          EP.tr("É só uma contagem: quantidade não mede qualidade", "It is just a count: quantity does not measure quality"), "d-saiba-prop") :
+          '<p class="muted nota-contexto"><span aria-hidden="true">📜 </span>' + EP.tr('"Virou lei" inclui também decretos legislativos e resoluções, que são outras normas.',
+            '"Became law" also includes legislative decrees and resolutions, which are other kinds of legal rules.') + "</p>" + notaIa) +
         '<label class="sr" for="busca-prop">' + EP.tr("Procurar nas propostas", "Search the proposals") + "</label>" +
         '<div class="busca busca-prop"><input type="search" id="busca-prop" placeholder="' + EP.tr("Procurar nas propostas (ex.: escola, saúde)", "Search the proposals (e.g. school, health)") + '" autocomplete="off" aria-controls="lista-prop"></div>' +
         '<p class="contagem" id="contagem-prop" aria-live="polite"></p><ol class="lista-prop" id="lista-prop"></ol><div class="mais-lista" id="mais-prop"></div>';
     }
-    h += apoiosHtml(p, pr.apoios) + outrosHtml(p, pr.outros);
+    h += pr._antigo ? outrosAntigoHtml(p, pr) : apoiosHtml(p, pr.apoios, pr._md) + outrosHtml(p, pr.outros, pr._md);
     return h + "</section>";
   }
   function desenhaFunil() {
@@ -426,14 +492,20 @@
   function desenhaChips() {
     var lista = daPapel(P.propostas.lista || [], filtro.papel), c = contaPor(lista);
     var ordem = ["lei", "aprovada", "andando", "junta", "arquivada", "rejeitada", "parada", "retirada", "outra"];
-    document.getElementById("status-chips").innerHTML = '<span class="rot-filtro" aria-hidden="true">' + EP.tr("Toque para filtrar:", "Tap to filter:") + "</span>" + ordem.filter(function (s) { return c[s]; }).map(function (s) {
-      return '<button type="button" data-status="' + s + '" aria-pressed="' + (filtro.status === s) + '">' + EP.carimbo(s, EP.STATUS[s].curto) + '<span class="q">' + EP.num(c[s]) + "</span></button>";
+    var tem = ordem.filter(function (s) { return c[s]; });
+    // site-d-r14: a barra colorida (só desenho) e, embaixo, um botão por cor, com o número escrito, que filtra a lista
+    document.getElementById("status-chips").innerHTML = (tem.length ? '<span class="d-status-barra" aria-hidden="true">' + tem.map(function (s) {
+      return '<i class="gv-st-' + s + '" style="flex:' + c[s] + '"></i>';
+    }).join("") + "</span>" : "") + '<span class="rot-filtro" aria-hidden="true">' + EP.tr("Toque numa cor para filtrar:", "Tap a color to filter:") + "</span>" + tem.map(function (s) {
+      return '<button type="button" data-status="' + s + '" aria-pressed="' + (filtro.status === s) + '"><i class="d-st-q gv-st-' + s + '" aria-hidden="true"></i>' + EP.carimbo(s, EP.STATUS[s].curto) + '<span class="q">' + EP.num(c[s]) + "</span></button>";
     }).join("");
     var temas = {};
     lista.forEach(function (x) { (x.temas || []).forEach(function (t) { temas[t] = (temas[t] || 0) + 1; }); });
-    var top = Object.keys(temas).sort(function (a, b) { return temas[b] - temas[a] || a.localeCompare(b); }).slice(0, 10);
-    document.getElementById("temas-chips").innerHTML = top.length ? '<span class="rot-filtro" aria-hidden="true">' + EP.tr("Assuntos que mais aparecem:", "Most common topics:") + "</span>" + top.map(function (t) {
-      return '<button type="button" data-tema="' + esc(t) + '" aria-pressed="' + (filtro.tema === t) + '"><span aria-hidden="true">🏷️ </span>' + esc(EP.tema(t)) + " (" + EP.num(temas[t]) + ")</button>";
+    var top = Object.keys(temas).sort(function (a, b) { return temas[b] - temas[a] || a.localeCompare(b); }).slice(0, 8);
+    var max = top.length ? temas[top[0]] : 1;
+    document.getElementById("temas-chips").innerHTML = top.length ? '<span class="rot-filtro d-h3" aria-hidden="true">' + EP.tr("Assuntos que mais aparecem (toque para filtrar):", "Most common topics (tap to filter):") + "</span>" + top.map(function (t) {
+      return '<button type="button" class="d-tema" data-tema="' + esc(t) + '" aria-pressed="' + (filtro.tema === t) + '"><span class="d-tema-nome"><span aria-hidden="true">🏷️ </span>' + esc(EP.tema(t)) + "</span>" +
+        '<b class="d-tema-n">' + EP.num(temas[t]) + '</b><span class="d-tema-trilho" aria-hidden="true"><i style="width:' + (100 * temas[t] / max).toFixed(1) + '%"></i></span></button>';
     }).join("") : "";
   }
   function propHtml(x, focavel) {
@@ -450,7 +522,7 @@
       '<p class="simples"><span class="rot-texto">' + EP.tr("Em palavras simples (feita por IA)", "In plain words (written by AI)") + "</span>" + esc(simples) + "</p>" +
       '<div class="oficial"><span class="rot-texto">' + EP.tr("Texto oficial (ementa)", "Official text (ementa, in Portuguese)") + "</span>" + ementa + "</div>" :
       '<div class="oficial so-oficial"><span class="rot-texto">' + EP.tr("Texto oficial (ementa)", "Official text (ementa, in Portuguese)") + "</span>" + ementa + "</div>" +
-      '<p class="muted preparando"><span aria-hidden="true">⏳ </span>' + EP.tr("A explicação em palavras simples desta proposta está sendo preparada.", "A plain-language explanation is being prepared.") + "</p>";
+      (P.propostas && P.propostas._semIa ? "" : '<p class="muted preparando"><span aria-hidden="true">⏳ </span>' + EP.tr("Explicação simples em preparo.", "Plain-language explanation in preparation.") + "</p>");
     return '<li class="prop s-' + s + '"><div class="prop-cab"><h3 class="sigla"' + (focavel ? ' tabindex="-1"' : "") + (EP.en ? ' lang="pt-BR"' : "") + ">" + esc(x.sigla || x.tipo || "") + "</h3>" +
       (x.data ? '<span class="data"><span class="sr">' + EP.tr("Apresentada em ", "Filed on ") + "</span>" + EP.data(x.data) + "</span>" : "") + EP.carimbo(s) +
       (P.tipo !== "pres" ? '<span class="papel' + (x.papel === "autor" ? "" : " coautor") + '">' + (x.papel === "autor" ? '<span aria-hidden="true">✍️ </span>' + EP.tr(EP.gen(P.genero, "Autor principal", "Autora principal"), "Main author") :
@@ -474,6 +546,7 @@
     });
   }
   function desenhaLista(focarDe) {
+    lembraProp();
     var l = filtradas(), vis = l.slice(0, mostrando);
     document.getElementById("lista-prop").innerHTML = vis.map(function (x, k) { return propHtml(x, focarDe != null && k === focarDe); }).join("") ||
       '<li class="vazio"><span class="grande" aria-hidden="true">🔍</span>' + EP.tr("Nenhuma proposta com esses filtros.", "No proposals with these filters.") + "</li>";
@@ -489,7 +562,41 @@
       if (alvo) alvo.focus();
     }
   }
-  function redesenhaTudo() { desenhaFunil(); desenhaChips(); mostrando = 20; desenhaLista(); }
+  function redesenhaTudo() { desenhaFunil(); desenhaChips(); mostrando = INI_PROP; desenhaLista(); }
+
+  // ---------------------------------------------------------------- memória (ui-r9): filtros, busca e "Mostrar mais" voltam como estavam
+  // Os filtros ficam no endereço (?prop-status=lei&prop-q=escola&voto-tipo=principal: dá para compartilhar) e quantos
+  // "Mostrar mais" estavam abertos fica na memória do histórico (EP.memo, js/comum.js). Voltando de uma votação ou de outra
+  // página, a lista aparece igual.
+  var LOTE_PROP = 20, LOTE_VOTOS = 15, nProp0 = null;
+  function leFiltros(lista) {
+    if (!EP.memo) return;
+    var pa = EP.memo.url("prop-papel"), st = EP.memo.url("prop-status"), tm = EP.memo.url("prop-tema"), q = EP.memo.url("prop-q");
+    if (/^(autor|coautor|todas)$/.test(pa || "") && filtro.papel !== "todas") filtro.papel = pa;
+    if (st && EP.STATUS[st]) filtro.status = st;
+    if (tm && lista.some(function (x) { return (x.temas || []).indexOf(tm) > -1; })) filtro.tema = tm;
+    if (q) filtro.q = q;
+    var n = EP.memo.le("prop-n");
+    if (typeof n === "number" && n > INI_PROP) nProp0 = n;
+    var v = EP.memo.url("voto-tipo");
+    if (CAT_VOTO[v]) filtroV = v;
+    var nv = EP.memo.le("voto-n");
+    if (typeof nv === "number" && nv > INI_VOTOS) mostrandoV = nv;
+  }
+  function lembraProp() {
+    if (!EP.memo || !P || !P.propostas) return;
+    var padrao = (P.propostas.lista || []).some(function (x) { return x.papel === "autor"; }) ? "autor" : "coautor";
+    EP.memo.poeUrl("prop-papel", filtro.papel === padrao || /^(pres|gov|pref)$/.test(P.tipo) ? "" : filtro.papel);
+    EP.memo.poeUrl("prop-status", filtro.status);
+    EP.memo.poeUrl("prop-tema", filtro.tema);
+    EP.memo.poeUrl("prop-q", (filtro.q || "").trim());
+    EP.memo.grava("prop-n", mostrando > INI_PROP ? mostrando : null);
+  }
+  function lembraVotos() {
+    if (!EP.memo) return;
+    EP.memo.poeUrl("voto-tipo", filtroV);
+    EP.memo.grava("voto-n", mostrandoV > INI_VOTOS ? mostrandoV : null);
+  }
 
   // ---------------------------------------------------------------- votações (formato antigo: lista; novo: votos + arquivo central)
   function escopoVotosHtml(p, v) {
@@ -509,21 +616,26 @@
     var chaves = ["Sim", "Não", "Abstenção", "Obstrução", "Outro"].filter(function (k) { return r[k]; });
     return '<section class="secao-perfil" id="votacoes" aria-labelledby="t-votacoes"><h2 id="t-votacoes"><span class="ic" aria-hidden="true">🗳️</span>' + EP.tr("Como " + ele(p) + " votou", "How " + ele(p) + " voted") + "</h2>" +
       '<p class="muted">' + escopoVotosHtml(p, v) + " " + (v.fonte ? fonteBtn(v.fonte, null, EP.tr("votações", "votes")) : "") + "</p>" +
-      (chaves.length ? '<div class="votos-barra" aria-hidden="true">' + chaves.map(function (k) { return '<i style="width:' + (100 * r[k] / tot).toFixed(2) + "%;background:" + COR_VOTO[k] + '"></i>'; }).join("") + "</div>" +
+      // site-d-r14: uma coluna por tipo de voto (só desenho, com o número em cima); a legenda embaixo é o mesmo em texto
+      (chaves.length ? '<div class="d-colunas" aria-hidden="true">' + chaves.map(function (k) {
+        return '<span class="d-coluna" style="--c:' + COR_VOTO[k] + '"><b>' + EP.num(r[k]) + "</b><i style=\"height:" + Math.max(4, Math.round(100 * r[k] / tot)) + '%"></i><small>' + esc(D.nomeVoto(k)) + "</small></span>";
+      }).join("") + "</div>" +
         '<ul class="legenda-votos">' + chaves.map(function (k) { return '<li><i style="background:' + COR_VOTO[k] + '" aria-hidden="true"></i>' + esc(D.nomeVoto(k)) + ": " + EP.num(r[k]) + "</li>"; }).join("") +
         "<li>" + EP.tr("Total: ", "Total: ") + EP.num(tot) + "</li></ul>" : "") +
-      (r.Outro ? '<p class="muted" style="font-size:.8rem;margin:6px 0 0">' + (p.tipo === "ver" ?
-        EP.tr('"Outro" quer dizer: não votou, estava ausente (com ou sem justificativa), representava a Câmara fora dela ou presidia a sessão.',
-          '"Other" means: did not vote, was absent (excused or not), was representing the City Council elsewhere or was presiding over the session.') :
-        EP.tr('"Outro" quer dizer: estava ausente, de licença, em missão oficial ou presidindo a sessão.',
-          '"Other" means: absent, on leave, on an official mission or presiding over the session.')) + "</p>" : "") +
       '<div class="dica-coruja nota-contexto" style="margin-top:12px"><span class="coruja" aria-hidden="true">🦉</span><p>' + EP.tr(
         'Votar "Sim" não é bom e votar "Não" não é ruim: depende do que estava sendo votado. Leia cada votação para entender.',
-        'Voting "Yes" is not good and voting "No" is not bad: it depends on what was being voted on. Read each vote to understand it.') +
-      // "Obstrução" é um recurso das regras do Congresso: a explicação só aparece para quem tem votos assim
-      (r["Obstrução"] ? " " + EP.tr(
-        '"Obstrução" é um recurso previsto nas regras da Casa: o líder anuncia que o partido está em obstrução, e os parlamentares dele deixam de contar para o número mínimo de presentes, para adiar ou evitar aquela votação.',
-        '"Obstruction" is a tool allowed by the rules: the party leader announces it, and the party\'s members stop counting toward the minimum number of members present, in order to delay or prevent that vote.') : "") + "</p></div>" +
+        'Voting "Yes" is not good and voting "No" is not bad: it depends on what was being voted on. Read each vote to understand it.') + "</p></div>" +
+      (r.Outro || r["Obstrução"] ? (EP.d ? EP.d.saiba : function (x) { return x; })(
+        (r.Outro ? '<p class="muted" style="font-size:.85rem;margin:0 0 6px">' + (p.tipo === "ver" ?
+          EP.tr('"Outro" quer dizer: não votou, estava ausente (com ou sem justificativa), representava a Câmara fora dela ou presidia a sessão.',
+            '"Other" means: did not vote, was absent (excused or not), was representing the City Council elsewhere or was presiding over the session.') :
+          EP.tr('"Outro" quer dizer: estava ausente, de licença, em missão oficial ou presidindo a sessão.',
+            '"Other" means: absent, on leave, on an official mission or presiding over the session.')) + "</p>" : "") +
+        // "Obstrução" é um recurso das regras do Congresso: a explicação só aparece para quem tem votos assim
+        (r["Obstrução"] ? "<p>" + EP.tr(
+          '"Obstrução" é um recurso previsto nas regras da Casa: o líder anuncia que o partido está em obstrução, e os parlamentares dele deixam de contar para o número mínimo de presentes, para adiar ou evitar aquela votação.',
+          '"Obstruction" is a tool allowed by the rules: the party leader announces it, and the party\'s members stop counting toward the minimum number of members present, in order to delay or prevent that vote.') + "</p>" : ""),
+        EP.tr("O que quer dizer cada tipo de voto", "What each type of vote means")) : "") +
       (EP.en ? '<p class="muted" style="font-size:.85rem;margin:10px 0 0">The descriptions of each vote are official texts in Portuguese.</p>' : "") +
       '<div class="temas-chips" id="filtro-votos" role="group" aria-label="' + EP.tr("Filtrar as votações pelo tipo", "Filter the votes by type") + '" style="margin-top:14px" hidden></div>' +
       '<p class="muted nota-contexto" id="nota-tipos-votos" style="margin:0" hidden><span aria-hidden="true">💬 </span>' + EP.tr(
@@ -532,7 +644,7 @@
       '<p class="contagem" id="contagem-votos" aria-live="polite"></p>' +
       '<ul class="lista-votos" id="lista-votos"><li class="carregando">' + EP.tr("Carregando as votações…", "Loading the votes…") + '</li></ul><div class="mais-lista" id="mais-votos"></div></section>';
   }
-  var VOTOS = null, mostrandoV = 15, filtroV = "";
+  var VOTOS = null, mostrandoV = INI_VOTOS, filtroV = "";
   // tipos de votação (classificados por scripts/votacoes.py a partir da descrição oficial; mais em votacoes.html)
   // [ícone, nome no filtro (pt, en), nome na etiqueta (pt, en)]
   var CAT_VOTO = { principal: ["📜", "Texto principal", "Main text", "Texto principal", "Main text"],
@@ -567,15 +679,17 @@
     document.getElementById("nota-tipos-votos").hidden = false;
   }
   function listaVotos(v) {
-    if ((v.lista || []).length) return Promise.resolve(v.lista);
+    // perfil-mandato-r10: só as votações do período do mandato escolhido (v._fr = [de, até])
+    var fr = v._fr, dentro = function (l) { return fr ? l.filter(function (x) { return !x.data || (x.data >= fr[0] && x.data.slice(0, 10) <= fr[1]); }) : l; };
+    if ((v.lista || []).length) return Promise.resolve(dentro(v.lista));
     if (!(v.votos || []).length || !v.arquivo) return Promise.resolve([]);
     return EP.json(v.arquivo).then(function (arq) {
       var tab = arq.votacoes || {};
-      return v.votos.map(function (par) {
+      return dentro(v.votos.map(function (par) {
         var k = String(par[0]);
         var info = tab[k] || tab["camara-vot:" + k] || tab["senado-vot:" + k] || tab[k.replace(/^(camara|senado)-vot:/, "")] || {};
         return Object.assign({ id: k, voto: par[1], ori: par[2] || null, oriDe: par[3] || null }, info);
-      }).sort(function (a, b) { return (b.data || "").localeCompare(a.data || ""); });
+      }).sort(function (a, b) { return (b.data || "").localeCompare(a.data || ""); }));
     });
   }
   function carregaVotos() {
@@ -604,6 +718,7 @@
   function desenhaVotos(focarDe) {
     var el = document.getElementById("lista-votos");
     if (!el || !VOTOS) return;
+    lembraVotos();
     var lista = filtroV ? VOTOS.filter(function (x) { return x.categoria === filtroV; }) : VOTOS;
     var vis = lista.slice(0, mostrandoV);
     el.innerHTML = vis.map(function (x, k) {
@@ -613,7 +728,7 @@
       var tit = "<b>" + (x.proposta ? EP.pt(esc(x.proposta)) : EP.tr("Votação", "Vote")) + "</b>" + (x.data ? "\u00a0·\u00a0" + EP.data(x.data) : "");
       return "<li" + (focarDe != null && k === focarDe ? ' tabindex="-1"' : "") + '><span class="voto-chip" style="--cv:' + (COR_VOTO[vt.cat] || COR_VOTO.Outro) + '"><span class="sr">' + EP.tr("Voto: ", "Vote: ") + "</span>" + esc(vt.curto) + "</span>" +
         '<span class="v-txt">' + (u ? '<a href="' + u + '">' + tit + '<span class="sr"> (' + EP.tr("ver como todos votaram", "see how everyone voted") + ")</span></a>" : tit) + res +
-        (cat ? ' <span class="chip neutro" style="font-size:.7rem;padding:1px 8px;white-space:normal"><span aria-hidden="true">' + cat[0] + " </span>" +
+        (cat ? ' <span class="chip neutro" style="font-size:.75rem;padding:1px 8px;white-space:normal"><span aria-hidden="true">' + cat[0] + " </span>" +
           esc(EP.tr(cat[3], cat[4])) + "</span>" : "") +
         (vt.longo ? "<small>" + esc(vt.longo) + "</small>" : "") + oriVotoHtml(x) +
         (x.descricao ? '<span class="desc-voto" style="display:block">' + EP.pt(esc(x.descricao)) + "</span>" : "") +
@@ -659,9 +774,11 @@
     return '<section class="secao-perfil" id="gastos" aria-labelledby="t-gastos"><h2 id="t-gastos"><span class="ic" aria-hidden="true">💰</span>' +
       (regional ? EP.tr("Gastos do mandato", "Office spending") : EP.tr("Gastos da cota do mandato", "Spending from the office allowance")) + "</h2>" +
       (g.nome ? '<p class="muted">' + EP.tr("O que entra aqui: ", "What is counted here: ") + "<b>" + (EP.en && g.nome_en ? esc(g.nome_en) : EP.pt(esc(g.nome))) + "</b></p>" : "") +
-      '<div class="dica-coruja"><span class="coruja" aria-hidden="true">🦉</span><p>' + explica + "</p></div>" +
-      '<div class="grandes-n" style="margin-top:14px"><div class="grande-n"><b>' + EP.dinheiroCurto(g.total) + "</b><span>" + rotAno + "</span></div>" +
-      (g.mandatoTotal != null ? '<div class="grande-n"><b>' + EP.dinheiroCurto(g.mandatoTotal) + "</b><span>" + desdeMes(g.desde || "2023-02") + "</span></div>" : "") + "</div>" +
+      '<div class="grandes-n d-grandes" style="margin-top:14px"><div class="grande-n"><span class="d-ic peq" aria-hidden="true">💰</span><b>' + EP.dinheiroCurto(g.total) + "</b><span>" + rotAno + "</span></div>" +
+      (g.mandatoTotal != null ? '<div class="grande-n"><span class="d-ic peq" aria-hidden="true">🧾</span><b>' + EP.dinheiroCurto(g.mandatoTotal) + "</b><span>" + desdeMes(g.desde || "2023-02") + "</span></div>" : "") + "</div>" +
+      // site-d-r14: a frase essencial fica à vista; a explicação inteira, no "Saber mais"
+      '<div class="dica-coruja"><span class="coruja" aria-hidden="true">🦉</span><p>' + EP.tr("É uma verba para as despesas do trabalho. <b>Não é salário.</b>", "It is an allowance for work expenses. <b>It is not a salary.</b>") + "</p></div>" +
+      (EP.d ? EP.d.saiba("<p>" + explica + "</p>", EP.tr("Como funciona esta verba", "How this allowance works")) : '<div class="dica-coruja"><span class="coruja" aria-hidden="true">🦉</span><p>' + explica + "</p></div>") +
       ((g.porTipo || []).length ? '<h3 style="margin-top:16px">' + EP.tr("Com o que gastou em ", "What the money was spent on in ") + esc(g.ano) + '</h3><ul class="gastos-lista" style="list-style:none;padding:0">' + g.porTipo.slice(0, 8).map(function (x) {
         return '<li class="gasto"><span>' + D.gasto(x.tipo) + "</span><b>" + EP.dinheiro(x.valor) + '</b><span class="tr" aria-hidden="true"><i style="width:' + (100 * x.valor / max).toFixed(1) + '%"></i></span></li>';
       }).join("") + "</ul>" : regional ? '<p class="muted" style="margin-top:10px">' + EP.tr("A Casa não separa estes gastos por tipo: aqui aparecem só os totais.",
@@ -705,21 +822,24 @@
       p.tipo === "pref" ? ["na Lei Orgânica do município", "the city's Organic Law"] : ["na Constituição", "the Constitution"];
     return '<section class="secao-perfil" aria-labelledby="t-exec"><h2 id="t-exec"><span class="ic" aria-hidden="true">✍️</span>' + EP.tr("Leis sancionadas e vetos", "Laws signed and vetoes") + "</h2>" +
       '<p class="muted">' + EP.tr(casa[0] + " aprova as leis; " + chefe[0] + " assina (sanciona) ou recusa (veta), no todo ou em parte. " + casa[0] + " pode derrubar o veto.",
-        mai(casa[3]) + " passes laws; " + chefe[2] + " signs them (sanction) or rejects them (veto), in whole or in part. " + mai(casa[3]) + " can override a veto.") + '</p><div class="grandes-n">' +
-      (e.leisSancionadas != null ? '<div class="grande-n"><b>' + EP.num(e.leisSancionadas) + "</b><span>" + EP.tr("leis sancionadas desde " + desde, "laws signed since " + desde) + "</span></div>" : "") +
-      (e.leisPromulgadasPelaCasa ? '<div class="grande-n"><b>' + EP.num(e.leisPromulgadasPelaCasa) + "</b><span>" + EP.tr("leis promulgadas " + casa[1] + " desde " + desde, "laws promulgated by " + casa[3] + " itself since " + desde) + "</span></div>" : "") +
-      (e.vetos != null ? '<div class="grande-n"><b>' + EP.num(e.vetos) + "</b><span>" + (e.vetosTotais != null && e.vetosParciais != null ?
+        mai(casa[3]) + " passes laws; " + chefe[2] + " signs them (sanction) or rejects them (veto), in whole or in part. " + mai(casa[3]) + " can override a veto.") + '</p><div class="grandes-n d-grandes">' +
+      (e.leisSancionadas != null ? '<div class="grande-n"><span class="d-ic peq" aria-hidden="true">✍️</span><b>' + EP.num(e.leisSancionadas) + "</b><span>" + EP.tr("leis sancionadas desde " + desde, "laws signed since " + desde) + "</span></div>" : "") +
+      (e.leisPromulgadasPelaCasa ? '<div class="grande-n"><span class="d-ic peq" aria-hidden="true">📜</span><b>' + EP.num(e.leisPromulgadasPelaCasa) + "</b><span>" + EP.tr("leis promulgadas " + casa[1] + " desde " + desde, "laws promulgated by " + casa[3] + " itself since " + desde) + "</span></div>" : "") +
+      (e.vetos != null ? '<div class="grande-n"><span class="d-ic peq" aria-hidden="true">✋</span><b>' + EP.num(e.vetos) + "</b><span>" + (e.vetosTotais != null && e.vetosParciais != null ?
         EP.tr("vetos desde " + desde + ": " + EP.num(e.vetosTotais) + (e.vetosTotais === 1 ? " total" : " totais") + " e " + EP.num(e.vetosParciais) + (e.vetosParciais === 1 ? " parcial" : " parciais"),
           "vetoes since " + desde + ": " + EP.num(e.vetosTotais) + " full and " + EP.num(e.vetosParciais) + " partial") :
         EP.tr("vetos (totais ou parciais) desde " + desde, "vetoes (full or partial) since " + desde)) + "</span></div>" : "") +
-      "</div>" + (e.leisSancionadas != null && ultima ? '<p class="muted" style="margin-top:8px">' + esc(EP.tr("A lei mais recente na fonte é de " + EP.dataLonga(ultima) + ".", "The most recent law in the source is from " + EP.dataLonga(ultima) + ".")) + "</p>" : "") +
-      '<p class="muted nota-contexto" style="margin-top:10px"><span aria-hidden="true">🦉 </span>' + (e.leisSancionadas != null ? EP.tr(
+      "</div>" + (e.vetosTotais != null && e.vetosParciais != null && (e.vetosTotais + e.vetosParciais) ? '<div class="d-dupla" aria-hidden="true"><span class="d-dupla-barra"><i style="flex:' + e.vetosTotais +
+        '"></i><i class="b" style="flex:' + e.vetosParciais + '"></i></span><span class="d-dupla-leg"><span><i></i>' + esc(EP.tr("vetos à lei inteira", "full vetoes")) + '</span><span><i class="b"></i>' +
+        esc(EP.tr("vetos a uma parte", "partial vetoes")) + "</span></span></div>" : "") + (e.leisSancionadas != null && ultima ? '<p class="muted" style="margin-top:8px">' + esc(EP.tr("A lei mais recente na fonte é de " + EP.dataLonga(ultima) + ".", "The most recent law in the source is from " + EP.dataLonga(ultima) + ".")) + "</p>" : "") +
+      (EP.d ? EP.d.saiba : function (x) { return x; })('<p class="muted nota-contexto" style="margin-top:0"><span aria-hidden="true">🦉 </span>' + (e.leisSancionadas != null ? EP.tr(
         "Quase todo projeto aprovado " + casa[1] + " passa " + chefe[1] + ", venha de quem vier. Por isso, este número mostra o que " + casa[2] + " aprovou e " + chefe[0] + " assinou, e não o que " + chefe[0] + " propôs" + (p.propostas ? " (isso está em \"O que " + ele(p) + " propôs\")" : "") + ". ",
         "Almost every bill passed by " + casa[3] + " goes to " + chefe[2] + ", no matter who proposed it. So this number shows what " + casa[3] + " passed and " + chefe[2] + " signed, not what " + chefe[2] + " proposed" + (p.propostas ? " (that is under \"What " + ele(p) + " proposed\")" : "") + ". ") : "") + EP.tr(
         "Vetar também é uma tarefa prevista " + regra[0] + ": o número, sozinho, não diz se as decisões foram boas ou ruins.",
         "Vetoing is also a task set by " + regra[1] + ": the number alone does not say whether the decisions were good or bad.") +
       (e.leisPromulgadasPelaCasa ? " " + EP.tr(casa[0] + " promulga a própria lei quando derruba um veto ou quando " + chefe[0] + " não sanciona nem veta no prazo.",
-        mai(casa[3]) + " promulgates a law itself when it overrides a veto or when " + chefe[2] + " neither signs nor vetoes it in time.") : "") + "</p>" +
+        mai(casa[3]) + " promulgates a law itself when it overrides a veto or when " + chefe[2] + " neither signs nor vetoes it in time.") : "") + "</p>",
+        EP.tr("Assinar não é propor: o que estes números querem dizer", "Signing is not proposing: what these numbers mean")) +
       (comoContou ? '<details class="como-contou"><summary>' + EP.tr("Como contamos", "How we counted") + "</summary><p>" + (EP.en && !(e.nota_en || e.obs_en) ? D.ptHtml(comoContou) : EP.en ? citacoesPt(comoContou) : esc(comoContou)) + "</p></details>" : "") +
       (e.fonte || (e.fontes || []).length ? '<p style="margin-top:10px">' + fonteBtn((e.fontes || []).length ? e.fontes : e.fonte, null, EP.tr("leis e vetos", "laws and vetoes")) + "</p>" : "") + "</section>";
   }
@@ -872,6 +992,11 @@
       peloHistorico = history.length > 1;
     } else if (v && combina(v.pagina, p)) destino = v;
     if (!destino && p.volta) destino = p.volta;  // perfis montados por outro arquivo (ministros do STF, eleitos 2026): o Voltar leva à seção de onde vieram
+    // perfil-mandato-r10: trocar de mandato abre o perfil de novo (um passo a mais no histórico); quem tinha vindo de uma lista
+    // continua voltando para ela de uma vez (o destino e os passos ficam guardados em history.state)
+    var st0 = history.state || {};
+    if ((!ref || !LISTAS.test(ref)) && st0.epVolta && st0.epVolta.pagina) { destino = st0.epVolta; peloHistorico = true; }
+    VOLTA = peloHistorico ? destino : null;
     if (!destino) {
       var federal = /^(dep|sen|pres|vp|min)$/.test(p.tipo);
       destino = { pagina: federal ? "brasil.html" : p.municipio ? "cidade.html?ibge=" + p.municipio.ibge : "estado.html?uf=" + p.uf,
@@ -888,14 +1013,365 @@
     volta.addEventListener("click", function (e) {
       if (e.button || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
       EP.gravaVolta({ pagina: destino.pagina, secao: destino.secao || "", id: destino.id || id, y: destino.y || 0, voltando: Date.now() });
-      if (peloHistorico && !mexeu) { e.preventDefault(); history.back(); }
+      // as abas do perfil (js/abas.js) põem passos no histórico: volta todos de uma vez, até a lista
+      if (peloHistorico && !mexeu) { e.preventDefault(); history.go(-(((history.state || {}).epPassos || 0) + 1)); }
     });
+  }
+
+  // ---------------------------------------------------------------- mandatos (perfil-mandato-r10)
+  // O perfil mostra um mandato de cada vez. O padrão é o de hoje; com ?mandato=<id> (ex.: pessoa.html?id=pres-lula&mandato=dep-1987)
+  // a mesma tela (Quem é, O que propôs, Leis e vetos, Como votou, Gastos, Fontes) mostra só o daquele mandato, com a faixa
+  // amarela "Você está vendo: ..." e o "Voltar para hoje". Os mandatos vêm da linha do tempo (dados/trajetoria/, js/trajetoria.js);
+  // o que a pessoa propôs num mandato antigo vem do próprio perfil (filtrado pelas datas), do perfil de hoje de quem já foi
+  // deputado(a) ou senador(a) (dados/pessoas/<dep|sen>-<id>.json) ou de dados/trajetoria/propostas/. Trocar de mandato abre o
+  // endereço novo (Voltar e Avançar do navegador funcionam, e dá para compartilhar).
+  var MAND = null, VOLTA = null, P0 = null, LISTA0 = null, CHEGOU = null;
+  var LEGIS = /^(dep|sen|dest|ddist|ver)$/, EXEC_T = /^(pres|gov|pref)$/, VICE = /^(vp|vgov|vpref)$/;
+  var CHAVE_TROCA = "ep-perfil-mandato";
+  function dentro(fr) { return function (x) { var d = (x.data || "").slice(0, 10); return !d || (d >= fr[0] && d <= fr[1]); }; }
+  function opcoesMandato() { return MAND ? (MAND.futuro ? [MAND.futuro] : []).concat(MAND.lista) : []; }
+  function mandatoAberto() { return MAND ? MAND.sel || MAND.atual || MAND.futuro : null; }
+  // as abas que cada tipo de mandato tem (para não levar a pessoa a uma aba que o outro mandato não tem)
+  function abasDe(md) {
+    var l = ["sobre", "trajetoria", "fontes"];
+    if (!/^(stf|min)$/.test(md.c)) l.push("propostas");
+    if (EXEC_T.test(md.c)) l.push("leis");
+    if (LEGIS.test(md.c)) l.push("votacoes", "gastos");
+    return l;
+  }
+  // o endereço do perfil num mandato (null = o de hoje), na mesma aba (ou em "aba"), sem os filtros das listas
+  function urlMandato(md, aba) {
+    var u = new URL(location.href);
+    ["mandato", "prop-papel", "prop-status", "prop-tema", "prop-q", "voto-tipo"].forEach(function (k) { u.searchParams.delete(k); });
+    var hoje = !md || md === MAND.atual || md.futuro;
+    if (!hoje) u.searchParams.set("mandato", md.id);
+    var h = aba != null ? aba : location.hash.slice(1);
+    if (h && !hoje && abasDe(md).indexOf(h) < 0) h = "sobre";
+    return (u.pathname.split("/").pop() || "pessoa.html") + u.search + (h ? "#" + h : "");
+  }
+  function vaiPara(md, foco, aba) {
+    try {
+      sessionStorage.setItem(CHAVE_TROCA, JSON.stringify({ id: id, foco: foco, t: Date.now(), volta: VOLTA,
+        passos: ((history.state || {}).epPassos || 0) + 1 }));
+    } catch (e) {}
+    location.href = urlMandato(md, aba);
+  }
+  // chegou trocando de mandato? (o seletor, o botão da linha do tempo ou o "Voltar para hoje"): guarda o caminho de volta para
+  // a lista e para onde vai o foco
+  function chegada() {
+    var x = null;
+    try { x = JSON.parse(sessionStorage.getItem(CHAVE_TROCA) || "null"); sessionStorage.removeItem(CHAVE_TROCA); } catch (e) {}
+    if (!x || x.id !== id || Date.now() - x.t > 20000) return;
+    CHEGOU = x;
+    if (x.volta) {
+      try { history.replaceState(Object.assign({}, history.state || {}, { epPassos: x.passos, epVolta: x.volta }), "", location.href); } catch (e) {}
+    }
+  }
+  function tiraParam() {
+    var u = new URL(location.href);
+    u.searchParams.delete("mandato");
+    try { history.replaceState(history.state, "", u.pathname + u.search + u.hash); } catch (e) {}
+  }
+
+  // carrega a linha do tempo e decide o mandato; num mandato antigo, monta a "vista" daquele mandato
+  function preparaMandato(p) {
+    P0 = p;
+    if (!EP.trajetoria || !EP.trajetoria.carrega || p.tipo === "min") { if (EP.param("mandato")) tiraParam(); return p; }
+    return EP.trajetoria.carrega(p).then(function (x) {
+      if (!x) { if (EP.param("mandato")) tiraParam(); return p; }
+      x.d.cidade = p.municipio && p.municipio.nome;
+      var M = EP.trajetoria.mandatos(p, x.d, x.t), q = EP.param("mandato"), sel = null;
+      MAND = M;
+      if (q) sel = M.lista.filter(function (md) { return md.id === q; })[0] || null;
+      if (q && (!sel || sel === M.atual)) { tiraParam(); sel = null; }
+      M.sel = sel;
+      if (p.propostas) LISTA0 = p.propostas.lista || [];
+      if (!sel) { filtraHoje(p, M); return p; }
+      return vistaMandato(p, sel, M);
+    }).catch(function (e) { if (window.console) console.warn("mandato:", e); return p; });
+  }
+  // o mandato de hoje de deputados e senadores: a lista da Casa tem todos os mandatos; fica só a do mandato de hoje
+  function filtraHoje(p, M) {
+    var md = M.atual, pr = p.propostas;
+    if (!md || !md.m || !pr || !(pr.lista || []).length || !/^(dep|sen)$/.test(p.tipo) || opcoesMandato().length < 2) return;
+    var l = pr.lista.filter(dentro(md.fr));
+    if (l.length === pr.lista.length) return;
+    p.propostas = Object.assign({}, pr, { lista: l, _md: md });
+  }
+  // quantas propostas o perfil de hoje tem em cada mandato da mesma Casa (para o resumo da linha do tempo)
+  function contaProprio(md) {
+    if (!md.m || md.m.pf !== id || !LISTA0) return null;
+    var l = LISTA0.filter(dentro(md.fr));
+    return { prop: l.length, lei: l.filter(function (x) { return x.status === "lei"; }).length };
+  }
+  var URL_PROP = { camara: "https://www.camara.leg.br/propostas-legislativas/", senado: "https://www25.senado.leg.br/web/atividade/materias/-/materia/" };
+  function urlBuscaAutor(m) {
+    return m.casa === "camara" ? "https://www.camara.leg.br/busca-portal?contextoBusca=BuscaProposicoes&pagina=1&order=data&abaEspecifica=true&q=autores.ideCadastro%3A%20" + m.id :
+      "https://www25.senado.leg.br/web/atividade/materias/-/materia/autor/" + m.id + "/p/1";
+  }
+  function urlPaginaCasa(m) {
+    return m.casa === "camara" ? "https://www.camara.leg.br/deputados/" + m.id : "https://www25.senado.leg.br/web/senadores/senador/-/perfil/" + m.id;
+  }
+  // a "vista" de um mandato antigo: a mesma forma de um perfil (os mesmos pedaços desenham), só com o daquele período
+  function vistaMandato(b, md, M) {
+    var d = M.d, c = md.c, g = b.genero, m = md.m;
+    var V = { id: b.id, nome: b.nome, nomeCivil: b.nomeCivil, genero: g, foto: b.foto, fotoCredito: b.fotoCredito, nascimento: b.nascimento,
+      tipo: c === "ddist" ? "dest" : c, cargo: EP.trajetoria.cargo(c, g, false), uf: c === "ddist" ? "DF" : /^(pres|vp)$/.test(c) ? null : md.uf,
+      partido: md.p || null, mandato: { inicio: md.i, fim: md.f }, _md: md, _base: b, _M: M, volta: b.volta };
+    var cid = md.ue && d.ues && d.ues[md.ue];
+    if (cid && cid[0]) V.municipio = { ibge: cid[0], nome: cid[1] };
+    else if (md.it && md.it.cid && b.municipio) V.municipio = b.municipio;
+    var arq = null, lista = null, lugar = null;
+    if (m && m.pf) arq = m.pf === b.id ? Promise.resolve(b) : EP.json("dados/pessoas/" + m.pf + ".json").catch(function () { return null; });
+    else if (m && m.pl) {
+      var k = m.casa === "camara" ? "camara:" + m.id + ":" + m.leg : "senado:" + m.id + ":" + m.i;
+      lista = EP.json("dados/trajetoria/propostas/" + EP.trajetoria.baldePropostas(m.casa + "-" + m.id) + ".json").then(function (o) { return ((o && o.m) || {})[k] || null; }, function () { return null; });
+    }
+    // onde ver mais: a Câmara Municipal e a prefeitura da cidade, ou a Assembleia do estado (dados do próprio site)
+    if (V.municipio && V.municipio.ibge) lugar = EP.json("dados/cidades/" + EP.UF_IBGE[String(V.municipio.ibge).slice(0, 2)] + "/" + V.municipio.ibge + ".json").catch(function () { return null; });
+    else if (/^(gov|vgov|dest|ddist)$/.test(c) && V.uf) lugar = EP.json("dados/estados/" + V.uf + ".json").catch(function () { return null; });
+    return Promise.all([arq, lista, lugar]).then(function (r) {
+      var f = r[0], pl = r[1], lu = r[2];
+      if (lu && lu.onde) { V.onde = lu.onde; V.infoCasa = (lu.vereadores || {}).infoCasa || null; }
+      else if (lu && lu.deputadosEstaduais) V.infoCasa = lu.deputadosEstaduais.infoCasa || null;
+      var escopo = EP.gen(g, "Propostas apresentadas como " + EP.trajetoria.cargo(c, "M", false).toLowerCase(), "Propostas apresentadas como " + EP.trajetoria.cargo(c, "F", false).toLowerCase());
+      if (f && f.propostas) {
+        V.propostas = { lista: (f.propostas.lista || []).filter(dentro(md.fr)), escopo: escopo, fonte: f.propostas.fonte, _md: md, _antigo: true,
+          outrosUrl: (f.propostas.outros || {}).url || (m ? urlBuscaAutor(m) : null) };
+      } else if (pl) {
+        V.propostas = { lista: pl.map(function (x) {
+          var n = String(x.id).split(":");
+          return Object.assign({ tipo: (x.sigla || "").split(" ")[0], url: URL_PROP[n[0]] ? URL_PROP[n[0]] + n[1] : null }, x);
+        }), escopo: escopo, fonte: EP.trajetoria.fontesMandato(m).concat([{ veiculo: m.casa === "camara" ? "Câmara dos Deputados" : "Senado Federal",
+          titulo: m.casa === "camara" ? "Busca oficial de proposições por autor" : "Matérias por autor (página oficial)", url: urlBuscaAutor(m) }]),
+          _md: md, _antigo: true, _semIa: true, outrosUrl: urlBuscaAutor(m) };
+      }
+      // votações e gastos: o site guarda só os do mandato que está em curso (o de hoje daquele perfil)
+      if (f && md.andando && f.votacoes) V.votacoes = Object.assign({}, f.votacoes, { _fr: md.fr });
+      if (f && md.andando && f.gastos && f.gastos.total != null) V.gastos = f.gastos;
+      if (f && f !== b && md.andando) V.comissoes = f.comissoes;
+      return V;
+    });
+  }
+
+  // ---------------------------------------------------------------- seletor, faixa e partes de um mandato antigo
+  function seletorHtml() {
+    if (opcoesMandato().length < 2) return "";
+    return '<div class="mandato-perfil" id="mandato-perfil"><label id="mp-rot" for="mp-campo"><span aria-hidden="true">📅 </span>' + EP.tr("Mandato", "Term") + "</label>" +
+      '<div class="mandato-campo" id="mp-lugar"></div><p class="mandato-dica" id="mp-dica">' +
+      esc(EP.tr("Escolha um mandato para ver só o que é daquele período.", "Choose a term to see only what belongs to that period.")) + "</p></div>";
+  }
+  function ligaSeletor() {
+    var lugar = document.getElementById("mp-lugar");
+    if (!lugar || !EP.combo) return;
+    var ops = opcoesMandato(), aberto = mandatoAberto();
+    function v(md) { return md.id || "hoje"; }
+    EP.combo(lugar, {
+      id: "mp-campo", rotuloId: "mp-rot", descricao: "mp-dica", max: 80, valor: aberto ? v(aberto) : "",
+      placeholder: EP.tr("Escolha o mandato…", "Choose a term…"),
+      itens: ops.map(function (md) { return { v: v(md), t: EP.trajetoria.rotulo(md, P0, MAND.d) }; }),
+      aoEscolher: function (it) {
+        var md = ops.filter(function (x) { return v(x) === it.v; })[0];
+        if (!md || md === aberto) return;
+        vaiPara(md === MAND.atual || md.futuro ? null : md, "seletor");
+      }
+    });
+  }
+  function faixaHtml(V) {
+    var md = V._md, txt = EP.trajetoria.cargoLugar(md, V._base, MAND.d) + ", " + EP.trajetoria.periodo(md);
+    return '<div class="faixa-mandato" id="faixa-mandato" role="region" aria-label="' + esc(EP.tr("Mandato que você está vendo", "Term you are viewing")) + '">' +
+      '<p><span class="fm-txt" id="faixa-mandato-txt" tabindex="-1"><span aria-hidden="true">📅 </span>' + EP.tr("Você está vendo: ", "You are viewing: ") + "<b>" + esc(txt) + "</b></span>" +
+      '<span class="fm-sep" aria-hidden="true"> · </span><a class="fm-hoje" href="' + esc(urlMandato(null)) + '">' + EP.tr("Voltar para hoje", "Back to today") + "</a></p></div>";
+  }
+  // a faixa fica presa logo abaixo da barra das abas (ou do cabeçalho, sem abas) e não cobre o conteúdo: a altura dela entra
+  // na conta do que fica preso no topo (rolagem até um item, listas que abrem)
+  function poeFaixa(V) {
+    var grupo = raiz.querySelector(".abas-grupo"), lista = grupo && grupo.querySelector('[role="tablist"]');
+    lista = lista && (lista.closest(".abas-barra") || lista);  // a faixa vem logo depois da barra das abas
+    var div = document.createElement("div");
+    div.innerHTML = faixaHtml(V);
+    var f = div.firstChild;
+    if (lista) lista.insertAdjacentElement("afterend", f);
+    else { var topo = raiz.querySelector(".perfil-topo"); if (topo) topo.insertAdjacentElement("afterend", f); else raiz.insertBefore(f, raiz.firstChild); }
+    var html = document.documentElement;
+    html.classList.add("com-faixa");
+    if (!lista) html.classList.add("faixa-sem-abas");
+    function mede() {
+      var t = document.querySelector("header.topo");
+      html.style.setProperty("--faixa-h", Math.round(f.getBoundingClientRect().height) + "px");
+      if (!lista && t) html.style.setProperty("--topo-h", Math.round(t.getBoundingClientRect().height) + "px");
+    }
+    mede();
+    if ("ResizeObserver" in window) new ResizeObserver(mede).observe(f);
+    else window.addEventListener("resize", mede);
+    var antes = EP.topoFixo;
+    EP.topoFixo = function () { return (antes ? antes() : (document.querySelector("header.topo") || { offsetHeight: 0 }).offsetHeight) + f.offsetHeight; };
+  }
+  // depois de trocar de mandato: o leitor de tela ouve qual mandato está aberto, e o foco vai para onde a pessoa estava
+  function avisaTroca(V) {
+    if (!CHEGOU) return;
+    var av = document.createElement("p");
+    av.className = "sr";
+    av.setAttribute("role", "status");
+    av.id = "mandato-aviso";
+    raiz.insertBefore(av, raiz.firstChild);
+    var txt = V ? EP.tr("Agora você está vendo o mandato de ", "You are now viewing the term of ") + EP.trajetoria.cargoLugar(V._md, V._base, MAND.d) + ", " + EP.trajetoria.periodo(V._md) + "." :
+      EP.tr("Agora você está vendo o mandato de hoje.", "You are now viewing the current term.");
+    setTimeout(function () { av.textContent = txt; }, 700);
+    setTimeout(function () {
+      var alvo = CHEGOU.foco === "faixa" ? document.getElementById("faixa-mandato-txt") : document.getElementById("mp-campo");
+      if (alvo) alvo.focus({ preventScroll: CHEGOU.foco === "faixa" });
+    }, 60);
+  }
+
+  function semDadosHtml(sec, ic, tit, txt, links) {
+    return '<section class="secao-perfil sem-dados-mandato" id="' + sec + '" aria-labelledby="t-' + sec + '"><h2 id="t-' + sec + '"><span class="ic" aria-hidden="true">' + ic + "</span>" + tit + "</h2>" +
+      '<div class="vazio"><span class="grande" aria-hidden="true">📭</span><p>' + txt + "</p></div>" +
+      (links.length ? '<ul class="links-onde">' + links.join("") + "</ul>" : "") + "</section>";
+  }
+  // links oficiais de onde ver o que o site não tem daquele mandato
+  function linksCasa(V, oque) {
+    var md = V._md, m = md.m, l = [], i = V.infoCasa || {}, o = V.onde || {}, cam = o.camara || {}, pre = o.prefeitura || {};
+    if (m) {
+      if (oque === "propostas") l.push(itemOnde("📜", urlBuscaAutor(m), m.casa === "camara" ? EP.tr("Propostas na busca oficial da Câmara", "Bills on the Chamber's official search") : EP.tr("Propostas no site do Senado", "Bills on the Senate website"), ""));
+      l.push(itemOnde("🏛️", urlPaginaCasa(m), m.casa === "camara" ? EP.tr("Página na Câmara dos Deputados", "Page at the Chamber of Deputies") : EP.tr("Página no Senado Federal", "Page at the Federal Senate"), ""));
+      return l;
+    }
+    var c = md.c;
+    if (/^(dest|ddist|gov|vgov)$/.test(c) && urlBoa(i.site)) l.push(itemOnde("🏛️", i.site, EP.tr("Site oficial da ", "Official website of the ") + nomeAssembleia(V), ""));
+    if (/^(ver|pref|vpref)$/.test(c)) {
+      var up = urlPropostasCamara(cam);
+      if (up && cam.propostasOnline !== false && oque !== "gastos") l.push(itemOnde("📜", up, EP.tr("Propostas no sistema oficial da Câmara Municipal", "Bills on the City Council's official system"), ""));
+      if (urlBoa(i.site) || urlBoa(cam.site)) l.push(itemOnde("🏛️", urlBoa(i.site) || cam.site, EP.tr("Site oficial da Câmara Municipal", "Official website of the City Council"), ""));
+      if (/^pref/.test(c) && urlBoa(pre.site)) l.push(itemOnde("🏢", pre.site, EP.tr("Site oficial da prefeitura", "Official website of the city government"), ""));
+    }
+    if (c === "pres" && oque === "leis") {
+      l.push(itemOnde("📜", "https://www4.planalto.gov.br/legislacao/portal-legis/legislacao-1/leis-ordinarias", EP.tr("Leis federais, por ano (Palácio do Planalto)", "Federal laws, by year (Presidential Palace)"), ""));
+      l.push(itemOnde("✋", "https://www.congressonacional.leg.br/materias/vetos", EP.tr("Vetos presidenciais (Congresso Nacional)", "Presidential vetoes (National Congress)"), ""));
+    }
+    if (c === "pres" && oque === "propostas") l.push(itemOnde("📜", "https://dadosabertos.camara.leg.br/swagger/api.html#staticfile", EP.tr("Dados abertos da Câmara: proposições de cada ano", "Chamber of Deputies open data: bills of each year"), ""));
+    return l;
+  }
+  function semPropHtml(V) {
+    var md = V._md, c = md.c, m = md.m, z = m && m.fez, txt;
+    var casaPt = c === "ver" || /^pref/.test(c) ? "Câmaras Municipais" : "Assembleias Legislativas";
+    if (VICE.test(c)) txt = EP.tr("Quem é vice não apresenta projetos como titular: substitui o titular quando ele viaja ou se afasta, e assume o cargo se ele sair de vez.",
+      "A vice does not file bills as the office holder: they stand in when the office holder travels or steps away, and take over if they leave for good.");
+    else if (m && z && !z.prop) txt = EP.tr("Não apresentou propostas " + (m.casa === "camara" ? "na Câmara" : "no Senado") + " neste mandato, segundo os dados abertos.",
+      "Did not file any bills " + (m.casa === "camara" ? "in the Chamber of Deputies" : "in the Senate") + " in this term, according to the open data.");
+    else if (m) txt = EP.tr("A lista das propostas deste mandato não está neste site." + (z ? " Pelos dados abertos, foram " + EP.num(z.prop) + " (" + EP.num(z.lei || 0) + " " + ((z.lei || 0) === 1 ? "virou lei" : "viraram lei") + ")." : ""),
+      "The list of bills from this term is not on this site." + (z ? " According to the open data, there were " + EP.num(z.prop) + " (" + EP.num(z.lei || 0) + " became law)." : ""));
+    else if (c === "pres") txt = EP.tr("O site reúne as propostas que o presidente manda ao Congresso só no mandato de hoje. As deste mandato não estão aqui.",
+      "This site gathers the bills the President sends to Congress only for the current term. Those from this term are not here.");
+    else if (c === "gov") txt = EP.tr("O site não reúne as propostas que o governo do estado mandou à Assembleia neste mandato.", "This site does not gather the bills the state government sent to the legislature in this term.");
+    else if (c === "pref") txt = EP.tr("O site não reúne as propostas que a prefeitura mandou à Câmara Municipal neste mandato.", "This site does not gather the bills the city government sent to the city council in this term.");
+    else txt = EP.tr("O site só tem as propostas das " + casaPt + " no mandato de hoje. As deste mandato ficam no site oficial da Casa.",
+      "This site only has " + (c === "ver" ? "city council" : "state legislature") + " bills for the current term. Those from this term are on the legislature's official website.");
+    return semDadosHtml("propostas", "📜", EP.tr("O que " + ele(V) + " propôs", "What " + ele(V) + " proposed"), txt, VICE.test(c) ? [] : linksCasa(V, "propostas"));
+  }
+  function semLeisHtml(V) {
+    var c = V._md.c;
+    var txt = c === "pres" ? EP.tr("O site conta as leis sancionadas e os vetos só do mandato de hoje. Os deste mandato estão nos sites oficiais abaixo.",
+        "This site counts the laws signed and the vetoes only for the current term. Those from this term are on the official websites below.") :
+      EP.tr("O site conta as leis sancionadas e os vetos só do mandato de hoje, e só onde o governo publica de um jeito que dá para ler.",
+        "This site counts the laws signed and the vetoes only for the current term, and only where the government publishes them in a readable way.");
+    return semDadosHtml("leis", "✍️", EP.tr("Leis sancionadas e vetos", "Laws signed and vetoes"), txt, linksCasa(V, "leis"));
+  }
+  function desdeLegislatura() {
+    var h = new Date(Date.now() - 3 * 3600e3).toISOString().slice(0, 10), L = 48;
+    while (EP.trajetoria.legDatas(L + 1)[0] <= h) L++;
+    return EP.trajetoria.legDatas(L)[0];
+  }
+  function semVotosHtml(V) {
+    var m = V._md.m;
+    var txt = m ? EP.tr("O site guarda as votações só de quem está no cargo hoje, " + desdeMes(desdeLegislatura()) + ". As deste mandato estão no site oficial.",
+        "This site only keeps the votes of those in office today, " + desdeMes(desdeLegislatura()) + ". Those from this term are on the official website.") :
+      EP.tr("O site só tem as votações das " + (V._md.c === "ver" ? "Câmaras Municipais" : "Assembleias Legislativas") + " no mandato de hoje, e só onde a Casa publica o voto de cada um.",
+        "This site only has " + (V._md.c === "ver" ? "city council" : "state legislature") + " votes for the current term, and only where the legislature publishes each member's vote.");
+    return semDadosHtml("votacoes", "🗳️", EP.tr("Como " + ele(V) + " votou", "How " + ele(V) + " voted"), txt, linksCasa(V, "votacoes"));
+  }
+  function semGastosHtml(V) {
+    var txt = EP.tr("O site mostra os gastos só de quem está no cargo hoje. Os deste mandato estão com a Casa.", "This site only shows the spending of those in office today. Spending from this term is kept by the legislature.");
+    return semDadosHtml("gastos", "💰", EP.tr("Gastos do mandato", "Office spending"), txt, linksCasa(V, "gastos"));
+  }
+  // "Quem é" num mandato antigo: o cargo, o período, como chegou, a eleição, o partido da época e a idade no começo
+  function sobreMandatoHtml(V) {
+    var md = V._md, it = md.it || {}, M = V._M, d = M.d, g = V.genero, m = md.m;
+    var per, fontes = EP.trajetoria.fontes(it, d, V._base);
+    if (m && !m.dl && md.f) per = EP.tr("de " + EP.dataLonga(md.i) + " a " + EP.dataLonga(md.f), "from " + EP.dataLonga(md.i) + " to " + EP.dataLonga(md.f));
+    else if (m && m.dl) per = EP.tr("legislatura de " + EP.trajetoria.periodo(md), "the " + EP.trajetoria.periodo(md) + " legislature") + "<br><small>" +
+      EP.tr("A Câmara não publica o dia em que cada um entrou e saiu nessa legislatura.", "The Chamber does not publish the day each member started and left in that legislature.") + "</small>";
+    else if (!md.f) per = EP.tr("desde " + EP.dataLonga(md.i), "since " + EP.dataLonga(md.i));
+    else per = esc(EP.trajetoria.periodo(md)) + "<br><small>" + EP.tr("O mandato para o qual " + EP.gen(g, "foi eleito", "foi eleita") + ".", "The term " + ele(V) + " was elected for.") + "</small>";
+    var como = null;
+    if (md.como === "suplente") como = EP.tr("Era suplente e assumiu a vaga.", "Was an alternate and took the seat.");
+    else if (it.k === "c") como = EP.trajetoria.resultado(it, g)[0] + EP.tr(" na eleição de " + it.a, " in the " + it.a + " election");
+    else if (it.k === "a" && it.txt) como = esc(EP.tr(it.txt, it.txt_en || it.txt));
+    else if (it.k === "m") como = EP.tr("A eleição deste mandato é anterior a 1994, quando começam os dados do TSE usados aqui.", "The election for this term was before 1994, when the TSE data used here begins.");
+    var votos = it.k === "c" && it.v != null ? EP.num(it.v) + " " + EP.tr(it.v === 1 ? "voto" : "votos", it.v === 1 ? "vote" : "votes") + (it.t === 2 ? EP.tr(" no 2º turno", " in the runoff") : "") :
+      it.k === "c" && it.ch && it.ch.v != null ? EP.num(it.ch.v) + " " + EP.tr("votos (da chapa)", "votes (for the ticket)") : null;
+    var idade = null;
+    if (V.nascimento && /^\d{4}-\d{2}-\d{2}$/.test(md.i)) {
+      var n = V.nascimento, a = +md.i.slice(0, 4) - +n.slice(0, 4) - (md.i.slice(5) < n.slice(5, 10) ? 1 : 0);
+      if (a > 0 && a < 120) idade = EP.tr(a + " anos", a + " years old");
+    }
+    var h = fato("🏛️", EP.tr("Cargo", "Office"), esc(EP.trajetoria.cargoLugar(md, V._base, d))) +
+      fato("📅", EP.tr("Período", "Period"), per) +
+      fato("🔑", EP.tr("Como chegou ao cargo", "How they took office"), como) +
+      fato("🗳️", EP.tr("Votos", "Votes"), votos) +
+      fato("🎗️", EP.tr("Partido na época", "Party at the time"), md.p ? EP.pt(esc(md.p)) : null) +
+      fato("🎂", EP.tr("Idade no começo do mandato", "Age at the start of the term"), idade);
+    var nota = md.aprox && md.f ? '<p class="aviso"><span aria-hidden="true">ℹ️ </span>' + EP.tr(
+      "O site não tem o dia em que " + ele(V) + " entrou e saiu deste cargo: o período é o do mandato para o qual " + EP.gen(g, "foi eleito", "foi eleita") + ". A pessoa pode ter saído antes, por exemplo para assumir outro cargo.",
+      "This site does not have the day " + ele(V) + " started and left this office: the period is that of the term " + ele(V) + " was elected for. The person may have left earlier, for example to take another office.") + "</p>" : "";
+    return '<div class="fatos">' + h + "</div>" + nota +
+      (fontes.length ? '<p class="fonte-mandato">' + fonteBtn(fontes, EP.tr("De onde vêm esses dados?", "Where does this data come from?"), EP.tr("o mandato", "the term")) + "</p>" : "") +
+      oqueFazHtml(V) + comissoesHtml(V);
+  }
+  function partesMandato(V) {
+    var md = V._md, c = md.c, fontesIt = EP.trajetoria.fontes(md.it || {}, V._M.d, V._base);
+    var todas = coletarFontes(fontesIt.concat(V.propostas ? [].concat(V.propostas.fonte || []) : [], V.votacoes ? [].concat(V.votacoes.fonte || []) : [], V.gastos ? [].concat(V.gastos.fonte || []) : []));
+    return [["sobre", "👤", EP.tr("Quem é", "About"), sobreMandatoHtml(V)],
+      ["trajetoria", "🧭", EP.tr("História", "Career"), '<section class="secao-perfil traj" id="trajetoria"></section>'],
+      ["propostas", "📜", EP.tr("O que propôs", "Proposals"), /^(stf|min)$/.test(c) ? "" : V.propostas ? propostasHtml(V) : semPropHtml(V)],
+      ["leis", "✍️", EP.tr("Leis e vetos", "Laws and vetoes"), EXEC_T.test(c) ? semLeisHtml(V) : ""],
+      ["votacoes", "🗳️", EP.tr("Como votou", "Votes"), LEGIS.test(c) ? (V.votacoes ? votacoesHtml(V) : semVotosHtml(V)) : ""],
+      ["gastos", "💰", EP.tr("Gastos", "Spending"), LEGIS.test(c) ? (V.gastos ? gastosHtml(V) : semGastosHtml(V)) : ""],
+      ["fontes", "📚", EP.tr("Fontes", "Sources"), todas.length ? '<section class="secao-perfil" id="fontes" aria-labelledby="t-fontes"><h2 id="t-fontes"><span class="ic" aria-hidden="true">📚</span>' +
+        EP.tr("Todas as fontes deste mandato", "All the sources for this term") + "</h2>" + EP.fontesHtml(todas) + "</section>" : ""]].filter(function (x) { return x[3]; });
+  }
+  // a linha do tempo (aba História), com o botão "Ver este mandato" em cada mandato
+  function montaTrajetoria(p) {
+    if (!EP.trajetoria) return;
+    var el = document.getElementById("trajetoria");
+    var o = MAND && opcoesMandato().length > 1 ? { mandatos: MAND, sel: MAND.sel, url: function (md) { return urlMandato(md, "sobre"); }, conta: contaProprio } : null;
+    EP.trajetoria(el, p._base || p, o);
+  }
+
+  // ---------------------------------------------------------------- caminho e abas (ui-r9)
+  // Início › (Brasil | estado | estado › cidade) › nome. O caminho segue o cargo (não a página de onde a pessoa veio: para
+  // voltar para lá, há o "◀ Voltar" e o Voltar do navegador).
+  function trilhaPerfil(p) {
+    if (!EP.trilha) return;
+    var l = [], lang = EP.en ? "pt-BR" : null;
+    var federal = /^(dep|sen|pres|vp|min|stf)$/.test(p.tipo) || /^stf-/.test(id);
+    if (federal) l.push({ t: EP.tr("A política do Brasil", "Brazil's politics"), href: "brasil.html" + ({ dep: "#camara", sen: "#senado", stf: "#judiciario" }[p.tipo] || "") });
+    if (!federal && p.uf && EP.UFS[p.uf]) l.push({ t: EP.UFS[p.uf], href: "estado.html?uf=" + p.uf });
+    if (p.municipio && p.municipio.ibge) l.push({ t: p.municipio.nome || EP.tr("Cidade", "City"), href: "cidade.html?ibge=" + p.municipio.ibge, lang: lang });
+    l.push({ t: p.nome, lang: lang });
+    EP.trilha(l);
+  }
+  function montaAbas(p) {
+    var nav = raiz.querySelector("nav.atalhos-perfil");
+    if (!nav || !EP.abas) return;
+    EP.abas.monta({ nav: nav });
   }
 
   // ---------------------------------------------------------------- montar
   function render(p) {
     P = p;
-    var cargo = cargoTexto(p);
+    var antigo = !!p._md, base = p._base || p;
+    var cargo = cargoTexto(p) + (antigo ? ", " + EP.trajetoria.periodo(p._md) : "");
     var t = document.querySelector("title");
     if (t) t.removeAttribute("data-en");
     document.title = p.nome + ": " + cargo + EP.tr(" | Entenda Política", " | Understand Politics");
@@ -910,28 +1386,76 @@
     o.removeAttribute("data-en");
     o.textContent = p.nome;
     if (EP.en) o.setAttribute("lang", "pt-BR");
-    ligaVoltar(p);
+    ligaVoltar(base);
+    trilhaPerfil(base);
 
-    if (p.tipo === "stf" && EP.stf) { raiz.innerHTML = EP.stf.perfilHtml(p); return; }  // ministros do STF: o perfil vem do js/stf.js
-    var todas = coletarFontes(p);
-    raiz.innerHTML = topoHtml(p) + fatosHtml(p) + (p.e26 && EP.eleitos ? EP.eleitos.perfilHtml(p) : "") + anterioresHtml(p) + contatosHtml(p) + oqueFazHtml(p) +
-      (p.propostas ? propostasHtml(p) : "") + executivoHtml(p) + votacoesHtml(p) + gastosHtml(p) + comissoesHtml(p) + avisoEMinisterio(p) +
-      (todas.length && p.tipo !== "min" ? '<section class="secao-perfil" aria-labelledby="t-fontes"><h2 id="t-fontes"><span class="ic" aria-hidden="true">📚</span>' + EP.tr("Todas as fontes desta página", "All the sources on this page") + "</h2>" + EP.fontesHtml(todas) +
-        (p.atualizado ? '<p class="muted" style="margin-top:10px">' + EP.tr("Dados atualizados em ", "Data updated on ") + EP.data(p.atualizado) + ".</p>" : "") + "</section>" : "");
-    if (p.propostas && (p.propostas.lista || []).length) redesenhaTudo();
+    if (p.tipo === "stf" && EP.stf && !antigo) {  // ministros do STF: o perfil vem do js/stf.js
+      raiz.innerHTML = EP.stf.perfilHtml(p).replace(/(<\/section>)/, "$1" + (EP.stf.numerosHtml ? EP.stf.numerosHtml(p) : "")) + (EP.trajetoria ? '<section class="secao-perfil traj" id="trajetoria"></section>' : "");  // trajetoria
+      // perfil-mandato-r10: o seletor de mandato embaixo do nome (quem já teve outros mandatos, como deputado ou senador)
+      var sel = seletorHtml(), h1 = raiz.querySelector(".perfil-topo h1");
+      if (sel && h1) { (h1.parentNode.querySelector(".chips") || h1).insertAdjacentHTML("afterend", sel); ligaSeletor(); }
+      montaTrajetoria(p);
+      avisaTroca(null);
+      return;
+    }
+    var todas = coletarFontes(p), partes;
+    if (antigo) partes = partesMandato(p);
+    else {
+      // ui-r9: o perfil em partes (abas, js/abas.js): "Quem é" (a ficha, contatos, comissões e onde ver mais), "O que propôs",
+      // "Leis e vetos", "Como votou", "Gastos" e "Fontes". O topo (foto, nome, partido) fica sempre à vista, em cima das abas.
+      // Com uma parte grande só, fica tudo numa página, como antes (sem abas).
+      partes = [["sobre", "👤", EP.tr("Quem é", "About"), (p.e26 && EP.eleitos ? EP.eleitos.perfilHtml(p) : "") + fatosHtml(p) + (EP.trajetoria ? "" : anterioresHtml(p)) + contatosHtml(p) + oqueFazHtml(p) + comissoesHtml(p) + avisoEMinisterio(p)],
+        // trajetoria (js/trajetoria.js): a história na política; enquanto carrega (ou se não houver dados), "Mandatos anteriores"
+        ["trajetoria", "🧭", EP.tr("História", "Career"), EP.trajetoria ? '<section class="secao-perfil traj" id="trajetoria">' + anterioresHtml(p) + "</section>" : ""],
+        ["propostas", "📜", EP.tr("O que propôs", "Proposals"), p.propostas ? propostasHtml(p) : ""], ["leis", "✍️", EP.tr("Leis e vetos", "Laws and vetoes"), executivoHtml(p)],
+        ["votacoes", "🗳️", EP.tr("Como votou", "Votes"), votacoesHtml(p)], ["gastos", "💰", EP.tr("Gastos", "Spending"), gastosHtml(p)],
+        ["fontes", "📚", EP.tr("Fontes", "Sources"), todas.length && p.tipo !== "min" ? '<section class="secao-perfil" id="fontes" aria-labelledby="t-fontes"><h2 id="t-fontes"><span class="ic" aria-hidden="true">📚</span>' + EP.tr("Todas as fontes desta página", "All the sources on this page") + "</h2>" + EP.fontesHtml(todas) +
+          (p.atualizado ? '<p class="muted" style="margin-top:10px">' + EP.tr("Dados atualizados em ", "Data updated on ") + EP.data(p.atualizado) + ".</p>" : "") + "</section>" : ""]].filter(function (x) { return x[3]; });
+    }
+    var grandes = partes.filter(function (x) { return /^(propostas|leis|votacoes|gastos)$/.test(x[0]); }).length;
+    // num mandato antigo, as mesmas abas mesmo quando a Casa não publica (a aba diz isso)
+    var comAbas = (grandes >= 2 || (antigo && partes.length >= 3)) && !!EP.abas;
+    raiz.innerHTML = topoHtml(p) + numerosHtml(p) + (comAbas ? '<nav class="atalhos atalhos-perfil" aria-label="' + EP.tr("Partes deste perfil", "Parts of this profile") + '">' + partes.map(function (x) {
+      return '<a class="chip" href="#' + x[0] + '"><span aria-hidden="true">' + x[1] + "</span><span>" + esc(x[2]) + "</span></a>";
+    }).join("") + "</nav>" : "") + partes.map(function (x) {
+      if (x[0] !== "sobre") return x[3].replace(/^<section class="secao-perfil"(?! id=)/, '<section class="secao-perfil" id="' + x[0] + '"');
+      return '<section class="secao-perfil sobre" id="sobre" aria-label="' + esc(EP.tr("Quem é", "About")) + '">' + x[3] + "</section>";
+    }).join("");
+    raiz.classList.toggle("perfil-abas", comAbas);
+    ligaSeletor();
+    if (p.propostas && (p.propostas.lista || []).length) {
+      redesenhaTudo();
+      var bp = document.getElementById("busca-prop");
+      if (bp && filtro.q) bp.value = filtro.q;
+      if (nProp0) { mostrando = nProp0; nProp0 = null; desenhaLista(); }
+    }
     if (document.getElementById("lista-votos")) carregaVotos();
+    montaAbas(p);
+    if (antigo) poeFaixa(p);
+    montaTrajetoria(p);  // trajetoria: a história na política
+    avisaTroca(antigo ? p : null);
   }
+
+  // perfil-mandato-r10: "Ver este mandato" (linha do tempo) e "Voltar para hoje" (faixa) guardam para onde vai o foco
+  raiz.addEventListener("click", function (e) {
+    var a = e.target.closest("a.traj-ver-btn, a.fm-hoje, a.d-tempo-item");
+    if (!a || !MAND || e.button || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
+    e.preventDefault();
+    if (a.classList.contains("fm-hoje")) { vaiPara(null, "seletor"); return; }
+    var md = MAND.lista.filter(function (x) { return x.id === a.getAttribute("data-mandato"); })[0];
+    if (md) vaiPara(md, "faixa", "sobre");
+  });
 
   raiz.addEventListener("click", function (e) {
     var t = e.target.closest("[data-papel],[data-status],[data-tema],[data-vcat],#ver-mais-prop,#ver-mais-votos");
     if (!t) return;
-    if (t.id === "ver-mais-prop") { var de = mostrando; mostrando += 20; desenhaLista(de); return; }
-    if (t.id === "ver-mais-votos") { var dv = mostrandoV; mostrandoV += 15; desenhaVotos(dv); return; }
+    if (t.id === "ver-mais-prop") { var de = mostrando; mostrando += LOTE_PROP; desenhaLista(de); return; }
+    if (t.id === "ver-mais-votos") { var dv = mostrandoV; mostrandoV += LOTE_VOTOS; desenhaVotos(dv); return; }
     // tipo de votação: o botão continua no lugar (só muda o aria-pressed), então o foco fica nele
     if (t.hasAttribute("data-vcat")) {
       filtroV = t.getAttribute("data-vcat");
       [].forEach.call(raiz.querySelectorAll("[data-vcat]"), function (b) { b.setAttribute("aria-pressed", String(b.getAttribute("data-vcat") === filtroV)); });
-      mostrandoV = 15;
+      mostrandoV = INI_VOTOS;
       desenhaVotos();
       return;
     }
@@ -946,7 +1470,7 @@
     // os botões de filtro são redesenhados: o foco volta para o mesmo botão
     function redesenhaFiltro(attr, val) {
       desenhaChips();
-      mostrando = 20;
+      mostrando = INI_PROP;
       desenhaLista();
       var b = raiz.querySelector("[" + attr + '="' + (window.CSS && CSS.escape ? CSS.escape(val) : val) + '"]');
       if (b) b.focus();
@@ -958,7 +1482,7 @@
   raiz.addEventListener("input", function (e) {
     if (e.target.id !== "busca-prop") return;
     clearTimeout(tBusca);
-    tBusca = setTimeout(function () { filtro.q = e.target.value; mostrando = 20; desenhaLista(); }, 200);
+    tBusca = setTimeout(function () { filtro.q = e.target.value; mostrando = INI_PROP; desenhaLista(); }, 200);
   });
 
   D.rodapeErros(document.getElementById("links-erro"), "Viu algo errado nesta página?", "Did you see something wrong on this page?");
@@ -970,7 +1494,8 @@
     erro(EP.tr("Faltou dizer quem", "No one was chosen"), EP.tr("Volte e escolha uma pessoa.", "Go back and choose a person."));
     return;
   }
-  carregar().then(render).catch(function (err) {
+  chegada();
+  carregar().then(preparaMandato).then(render).catch(function (err) {
     if (window.console && err && !/não achei|id inválido|^\d{3} /.test(err.message || "")) console.warn(err);
     if (/^e26-/.test(id) && EP.eleitos) { EP.eleitos.semPerfil(raiz); return; }  // eleitos 2026: endereço de antes da posse
     if (err && err.cidade) { semPessoaCidade(err.cidade); return; }  // prefeitos 2026: cargo vago ou não conferido

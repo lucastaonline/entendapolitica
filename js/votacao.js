@@ -256,7 +256,16 @@
         (!filtro.uf || v[3] === filtro.uf) && (!q || EP.norm(v[1]).indexOf(q) > -1);
     });
   }
+  // ui-r9: os filtros de "Quem votou o quê" ficam no endereço (?quem-voto=Sim&quem-partido=PT) e quantos "Mostrar mais"
+  // estavam abertos fica na memória do histórico (EP.memo): voltando de um perfil, a lista aparece como estava
+  function lembraQuem() {
+    if (!EP.memo) return;
+    EP.memo.poeUrl("quem-nome", (filtro.q || "").trim());
+    ["voto", "partido", "uf"].forEach(function (k) { EP.memo.poeUrl("quem-" + k, filtro[k] || ""); });
+    EP.memo.grava("quem-n", mostrando > LOTE ? mostrando : null);
+  }
   function desenhaQuem(focarDe) {
+    lembraQuem();
     var l = filtrados(), vis = l.slice(0, mostrando), el = document.getElementById("lista-quem");
     el.innerHTML = vis.map(function (v, k) { return cartaoVoto(v, focarDe != null && k === focarDe); }).join("") ||
       '<div class="vazio" style="grid-column:1/-1"><span class="grande" aria-hidden="true">🤷</span>' + EP.tr("Ninguém encontrado com esses filtros.", "No one found with these filters.") + "</div>";
@@ -293,6 +302,15 @@
     opcoes(su, [["", EP.tr("Todos os estados", "All states")]].concat(Object.keys(cont.uf).sort(function (a, b) { return EP.norm(EP.UFS[a] || a).localeCompare(EP.norm(EP.UFS[b] || b)); }).map(function (u) {
       return [u, (EP.UFS[u] || u) + " (" + EP.num(cont.uf[u]) + ")", false, u];
     })));
+    var memo = EP.memo || { url: function () { return null; }, le: function () { return null; } };
+    [[sv, "voto"], [sp, "partido"], [su, "uf"]].forEach(function (x) {
+      var v0 = memo.url("quem-" + x[1]);
+      if (v0 && [].some.call(x[0].options, function (op) { return op.value === v0; })) { x[0].value = v0; filtro[x[1]] = v0; }
+    });
+    var q0 = memo.url("quem-nome");
+    if (q0) { document.getElementById("q-nome").value = q0; filtro.q = q0; }
+    var n0 = memo.le("quem-n");
+    if (typeof n0 === "number" && n0 > LOTE) mostrando = n0;
     [[sv, "voto"], [sp, "partido"], [su, "uf"]].forEach(function (x) {
       EP.comboSelect(x[0], { placeholder: EP.tr("Digite para procurar…", "Type to search…") });
       x[0].addEventListener("change", function () { filtro[x[1]] = x[0].value; mostrando = LOTE; desenhaQuem(); });

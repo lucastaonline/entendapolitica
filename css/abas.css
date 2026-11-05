@@ -1,0 +1,223 @@
+/* ====== Abas das páginas grandes (js/abas.js, com o componente "tabs" do Basecoat) ======
+   A barra das abas (div[role=tablist]) fica presa logo abaixo do cabeçalho ao rolar; no celular, rola para o lado. Cada aba é
+   um botão com emoji; a aberta acende. O visual de base (shadcn) vem de vendor/basecoat/basecoat.css; aqui ficam as cores
+   do site e o resto. Nada aqui vale fora de html.com-abas / .abas-ep. */
+html.com-abas { scroll-padding-top: calc(var(--topo-h, 58px) + var(--abas-h, 66px) + 12px); }
+/* a cor da aba aberta (decisão do Lucas pendente: hoje amarela, com letra escura, contraste de 10:1). Para mudar, só aqui. */
+:root { --aba-aberta-fundo: var(--amarelo); --aba-aberta-borda: #d9a400; --aba-aberta-letra: #2a1d00; }
+
+.abas-ep { position: relative; margin-top: 6px; }
+.abas-grupo.tabs { display: flex; flex-direction: column; gap: 0; }
+
+/* ---------- a barra ---------- */
+/* mandatos-r11: a borda da direita é curta (20 px) e a da esquerda acompanha o texto da página (--abas-esq): quando as abas não
+   cabem com o recuo da esquerda, o js/abas.js diminui esse recuo (até 20 px) antes de a barra precisar rolar. Assim, quando
+   tudo cabe, nada fica escondido nem esmaecido */
+.abas-grupo .abas-lista[role="tablist"] {
+  --abas-gap: 8px; --abas-borda: 20px;
+  flex: 1 1 auto; min-width: 0; display: flex; justify-content: flex-start; align-items: center; gap: var(--abas-gap);
+  width: auto; height: auto; margin: 0; padding: 10px var(--abas-borda) 10px var(--abas-esq, max(var(--abas-borda), calc((100% - 1040px) / 2)));
+  border-radius: 0; overflow-x: auto; overscroll-behavior-x: contain;
+  scrollbar-width: none; background: var(--bg); border: 0; box-shadow: none;
+}
+/* site-d-r14: a barra presa (fundo, bordas e sombra) é a div.abas-barra, em volta do tablist e dos botões ‹ ›. Ela corta tudo
+   o que passar dela (overflow: hidden) e a parte que rola corta as abas na própria borda (contain: paint): nada da lista
+   aparece fora da área entre os dois botões, nem por trás deles */
+.abas-grupo > .abas-barra {
+  position: sticky; top: var(--topo-h, 58px); z-index: 55; display: flex; align-items: center; width: 100%; overflow: hidden;
+  background: var(--bg); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+  box-shadow: 0 6px 14px -10px rgba(60, 40, 0, .3);
+}
+.abas-grupo .abas-lista[role="tablist"] { overflow-y: hidden; contain: paint; }
+/* os botões ‹ e › (pedidos do Lucas, 4/11): só quando a barra rola para o lado (.rola), fora da parte que rola, com o fundo da
+   barra. Quando não há aba escondida de um lado, o botão daquele lado fica desativado e apagado (não some: assim a primeira
+   aba não fica recuada nem as abas pulam quando ele volta) */
+.abas-barra > .abas-seta {
+  display: none; position: relative; z-index: 1; flex: 0 0 44px; width: 44px; height: 44px; margin: 0 8px 0 10px; padding: 0;
+  align-items: center; justify-content: center; color: var(--brand); background: var(--bg); border: 1px solid #b9cbe2; border-radius: 999px;
+  box-shadow: none; cursor: pointer; transition: background-color .15s, opacity .15s;
+}
+.abas-barra > .abas-seta-dir { margin: 0 10px 0 8px; }
+.abas-barra.rola > .abas-seta { display: inline-flex; }
+.abas-barra > .abas-seta:disabled { opacity: .35; cursor: default; }
+/* com os botões, a margem deles faz o respiro: a parte que rola não tem borda dos lados (assim cabe inteira a aba quase tão
+   larga quanto ela); ela para sempre com uma aba alinhada à borda (scroll-snap, também no arrasto com o dedo) e sem o
+   esmaecimento (os botões já mostram que há mais) */
+.abas-grupo > .abas-barra.rola > .abas-lista[role="tablist"] { padding-left: 0; padding-right: 0; scroll-snap-type: x mandatory; scroll-padding-inline: 0; }
+.abas-barra.rola > .abas-lista > [role="tab"] { scroll-snap-align: start; transition: opacity .15s, background-color .15s, color .15s, border-color .15s; }
+.abas-barra.rola > .abas-lista::before, .abas-barra.rola > .abas-lista::after { display: none; }
+/* parada, a aba que não aparece inteira numa ponta fica transparente (js/abas.js): nunca há aba cortada à vista */
+.abas-barra.rola > .abas-lista > [role="tab"].fora { opacity: 0; pointer-events: none; }
+.abas-barra > .abas-seta:not(:disabled):hover { background: #eef3fa; }
+.abas-barra > .abas-seta:focus-visible { outline: 3px solid var(--brand); outline-offset: 2px; }
+.abas-barra > .abas-seta svg { pointer-events: none; }
+.abas-grupo .abas-lista[role="tablist"] { background: var(--bg); }
+/* sem a barra de rolagem cinza (pedido do Lucas): a barra rola com o dedo, com a roda do mouse (js/abas.js) e com as setas do
+   teclado; quando há abas escondidas num lado, a borda daquele lado fica esmaecida (aviso de que dá para rolar) */
+.abas-grupo .abas-lista[role="tablist"]::-webkit-scrollbar { display: none; }
+.abas-grupo .abas-lista::before, .abas-grupo .abas-lista::after {
+  content: ""; position: sticky; z-index: 1; flex: 0 0 36px; align-self: stretch; margin: -10px 0; pointer-events: none; opacity: 0; transition: opacity .15s;
+}
+/* as duas bordas esmaecidas são itens da barra sem largura: a margem negativa desconta também o espaço entre as abas (gap),
+   para não empurrar as abas (mandatos-r11: antes, os 2 espaços a mais faziam a barra rolar e esmaecer sem precisar) */
+.abas-grupo .abas-lista::before { left: 0; margin-right: calc(-36px - var(--abas-gap)); background: linear-gradient(to right, var(--bg) 25%, rgba(253, 248, 239, 0)); }
+.abas-grupo .abas-lista::after { right: 0; margin-left: calc(-36px - var(--abas-gap)); background: linear-gradient(to left, var(--bg) 25%, rgba(253, 248, 239, 0)); }
+.abas-grupo .abas-lista.mais-esq::before, .abas-grupo .abas-lista.mais-dir::after { opacity: 1; }
+html.alto-contraste .abas-grupo .abas-lista::before, html.alto-contraste .abas-grupo .abas-lista::after { display: none; }
+#perfil .abas-grupo .abas-lista[role="tablist"] { padding-left: 0; padding-right: 0; }
+
+/* ---------- cada aba ---------- */
+.abas-grupo .abas-lista > [role="tab"] {
+  flex: 0 0 auto; display: inline-flex; align-items: center; gap: 6px; min-height: 44px; height: auto; padding: 7px 14px; white-space: nowrap;
+  font: inherit; font-size: .92rem; font-weight: 800; line-height: 1.2; color: var(--brand); background: #fff; border: 1px solid #c9d8eb; border-radius: 12px;
+  box-shadow: 0 1px 2px rgba(31, 58, 95, .08); cursor: pointer; transition: background-color .15s, color .15s, border-color .15s;
+  /* a aba fica na barra presa: o foco nela não faz a página pular (o navegador acharia que o cabeçalho a cobre) */
+  scroll-margin-top: calc(-1 * (var(--topo-h, 58px) + var(--abas-h, 66px) + 12px));
+}
+.abas-grupo .abas-lista > [role="tab"]:hover { background: #eef3fa; color: var(--brand); }
+/* a aba aberta "acende" em amarelo, como o partido em destaque no plenário (letra escura: contraste de 10:1) */
+.abas-grupo .abas-lista > [role="tab"][aria-selected="true"] {
+  background: var(--aba-aberta-fundo); color: var(--aba-aberta-letra); border-color: var(--aba-aberta-borda); box-shadow: 0 2px 6px rgba(60, 40, 0, .18);
+}
+.abas-grupo .abas-lista > [role="tab"][hidden] { display: none; }
+@media (max-width: 600px) {
+  .abas-grupo .abas-lista[role="tablist"] { --abas-gap: 6px; --abas-borda: 12px; padding: 8px var(--abas-borda) 8px var(--abas-esq, var(--abas-borda)); }
+  .abas-grupo .abas-lista > [role="tab"] { padding: 6px 12px; font-size: .88rem; gap: 5px; }
+  .abas-barra > .abas-seta { margin: 0 6px; }
+  .abas-barra > .abas-seta-dir { margin: 0 6px; }
+}
+
+/* ---------- os painéis (só o aberto aparece) ---------- */
+/* mandatos-r11: sem altura mínima (ela deixava ~800 px em branco depois de uma aba curta). Ao trocar de aba lá embaixo, o
+   js/abas.js leva a pessoa ao começo das abas; se a aba nova for curta, a página só não rola tanto (o fim dela fica à vista) */
+.abas-grupo > [role="tabpanel"] { font-size: inherit; line-height: inherit; }
+.abas-grupo > [role="tabpanel"][hidden] { display: none; }
+/* a seção já não precisa do tracejado de cima (a barra separa) */
+.abas-ep .bloco { border-top: 0; padding-top: 22px; padding-bottom: 22px; }
+.abas-ep .sub { margin-top: 16px; }
+.abas-ep .mais-lista { margin: 10px 0; }
+/* perfil (pessoa.html, ui-r9): as partes do perfil viram abas; a barra fica alinhada com o texto */
+.abas-ep .secao-perfil { border-top: 0; margin-top: 0; padding-top: 18px; }
+.abas-ep .secao-perfil .secao-perfil { border-top: 2px dashed var(--line); margin-top: 26px; padding-top: 24px; }
+.abas-ep .sobre > :first-child { margin-top: 0; }
+/* propostas: no computador, em duas colunas; no celular, os filtros de situação e de assunto numa linha que rola para o lado
+   (todos continuam lá; o Tab e o toque levam a cada um) */
+@media (min-width: 900px) { .abas-ep .lista-prop { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; } }
+/* no computador (mouse), os filtros de situação e de assunto mais baixinhos (36 px: acima dos 24 px da WCAG 2.2; no toque, 44) */
+@media (min-width: 900px) and (pointer: fine) {
+  .abas-ep .status-chips button, .abas-ep .temas-chips button { min-height: 36px; }
+  .abas-ep .temas-chips { gap: 4px 6px; }
+}
+.abas-ep .funil { gap: 8px; }
+.abas-ep .funil-degrau { padding: 9px 16px; }
+.abas-ep .funil-degrau .q { font-size: 1.7rem; }
+.abas-ep .papeis { margin-bottom: 10px; }
+.abas-ep .nota-ia { margin: 8px 0; }
+@media (max-width: 600px) {
+  .abas-ep .status-chips, .abas-ep .temas-chips { flex-wrap: nowrap; overflow-x: auto; overscroll-behavior-x: contain; padding: 2px 2px 8px; scrollbar-width: thin; }
+  .abas-ep .status-chips .rot-filtro, .abas-ep .temas-chips .rot-filtro { width: auto; flex: 0 0 auto; align-self: center; max-width: 7em; line-height: 1.2; }
+  .abas-ep .status-chips button, .abas-ep .temas-chips button { flex: 0 0 auto; }
+  .abas-ep .status-chips button .carimbo, .abas-ep .temas-chips button { white-space: nowrap; }
+  .abas-ep .papeis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .abas-ep .papel-btn small { display: none; }
+}
+/* estado e cidade (ui-r9): o nome da cidade e o "Ver outro mandato" em cima das abas */
+.cidade-cab { padding-top: 28px; }
+.cidade-cab .cab-bloco { margin-bottom: 8px; }
+.cidade-cab .mandato-box { margin-top: 6px; }
+/* site-d-r14 (pedido do Lucas): na tela estreita, o desenho do cabeçalho (Brasil, estado e cidade) fica menor, para o título,
+   o "Ver outro mandato" e as abas aparecerem mais cedo */
+@media (max-width: 860px) {
+  html.com-abas .cab-pagina > .cab-3d { max-height: none; }
+  html.com-abas .cab-pagina > .cab-3d > .cena3d { zoom: .56; }
+}
+@media (max-width: 600px) { html.com-abas .cab-pagina > .cab-3d > .cena3d { zoom: .46; } }
+
+/* ---------- topo da página com abas: a busca e o "Ver outro mandato" lado a lado (no celular, um embaixo do outro) ---------- */
+html.com-abas .topo-ferramentas { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 12px 22px; align-items: start; padding-top: 8px; padding-bottom: 10px; }
+html.com-abas .topo-ferramentas > .bloco { padding: 0; border: 0; margin: 0; max-width: none; }
+html.com-abas .topo-ferramentas .cab-bloco { margin-bottom: 10px; gap: 10px; }
+html.com-abas .topo-ferramentas .ic-bloco { font-size: 1.9rem; }
+html.com-abas .topo-ferramentas h2 { font-size: 1.3rem; }
+html.com-abas .topo-ferramentas > .mandato-lugar { padding: 0; margin: 0; max-width: none; }
+html.com-abas .topo-ferramentas .mandato-box { margin: 0; max-width: none; }
+@media (max-width: 860px) { html.com-abas .topo-ferramentas { grid-template-columns: minmax(0, 1fr); } }
+/* sem o campo de mandatos (quando não há mandatos anteriores), a busca ocupa a largura toda */
+html.com-abas .topo-ferramentas:has(> .mandato-lugar[hidden]) { grid-template-columns: minmax(0, 1fr); }
+
+/* ---------- blocos que abrem: o "accordion" do Basecoat (EP.blocoAbre), em css/componentes.css ---------- */
+
+/* ---------- mais compacto dentro das abas ---------- */
+/* STF: cartões deitados (foto ao lado); os passos mais juntos (no celular, o desenho ao lado do texto) */
+.abas-ep .stf-passos { gap: 8px; }
+.abas-ep .stf-passos li { padding: 12px; font-size: .9rem; line-height: 1.35; gap: 6px; }
+.abas-ep .stf-passos .stf-p-ic { font-size: 1.5rem; }
+@media (max-width: 600px) {
+  .abas-ep .stf-passos li { flex-direction: row; align-items: flex-start; gap: 10px; padding: 10px 42px 10px 12px; }
+}
+.abas-ep .stf-grade { grid-template-columns: repeat(auto-fill, minmax(min(100%, 310px), 1fr)); gap: 10px; }
+.abas-ep .stf-card { flex-direction: row; align-items: flex-start; text-align: left; gap: 12px; padding: 12px 14px; }
+.abas-ep .stf-card .av { width: 64px; height: 64px; font-size: 1.3rem; }
+.abas-ep .stf-c-txt { align-items: flex-start; gap: 4px; }
+.abas-ep .stf-c-txt > b { font-size: 1rem; }
+.abas-ep .stf-chips { justify-content: flex-start; gap: 4px; }
+.abas-ep .stf-fatos { font-size: .8rem; gap: 1px; }
+.abas-ep .stf-card .ver { margin-top: 2px; font-size: .82rem; }
+.abas-ep .stf-card.vaga .stf-cadeira { font-size: 2.4rem; width: 64px; text-align: center; flex-shrink: 0; }
+.abas-ep .stf-presidencia { padding: 14px 16px; }
+@media (min-width: 900px) {
+  .abas-ep .contas-e26 { font-size: .92rem; }
+  /* ui-r9 (estado): as contas em duas colunas e as fotos de quem governa um pouco menores */
+  .abas-ep .contas-e26 ul { columns: 2; column-gap: 28px; }
+  .abas-ep .contas-e26 { padding: 10px 14px; margin: 8px 0; }
+  .abas-ep .exec-topo .pessoa-grande { padding: 14px 16px; }
+  .abas-ep .exec-topo .pessoa-grande .av { width: 88px; height: 88px; }
+}
+/* presidente e vice (de hoje e eleitos): no celular, a foto ao lado do nome, para caberem mais na tela */
+@media (max-width: 600px) {
+  .abas-ep .pessoa-grande { flex-direction: row; text-align: left; gap: 12px; padding: 14px; }
+  .abas-ep .pessoa-grande .av { width: 76px; height: 76px; font-size: 1.8rem; }
+  .abas-ep .pessoa-grande b { font-size: 1.2rem; }
+}
+/* plenário e partidos: a lista de TODOS os partidos continua inteira, só mais junta */
+.abas-ep .barras-p { gap: 2px; }
+/* mandatos-r11: o "Ver mais ›" dos cartões grandes sempre numa linha só dele (antes, ia para o lado do selo quando cabia) */
+.abas-ep .pessoa-grande .ver { display: block; width: fit-content; max-width: 100%; }
+
+/* ---------- "‹ parte anterior" e "próxima parte ›" no fim de cada aba (js/abas.js, pedido do Lucas de 4/11) ---------- */
+.abas-grupo > [role="tabpanel"] > .abas-passos {
+  position: relative; z-index: 2;
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; margin-top: 8px; margin-bottom: 26px; padding-top: 18px;
+  border-top: 2px dashed var(--line);
+}
+.abas-passos > .abas-passo {
+  display: inline-flex; align-items: center; gap: 10px; flex: 0 1 auto; max-width: 100%; min-height: 56px; padding: 8px 18px; text-align: left;
+  font: inherit; color: var(--brand); background: #fff; border: 1px solid #c9d8eb; border-radius: 14px; box-shadow: 0 1px 3px rgba(31, 58, 95, .12);
+  cursor: pointer; transition: background-color .15s;
+}
+.abas-passos > .abas-passo-prox { margin-left: auto; text-align: right; }
+.abas-passos > .abas-passo:hover { background: #eef3fa; }
+.abas-passos > .abas-passo:focus-visible { outline: 3px solid var(--brand); outline-offset: 2px; }
+.abas-passo .ap-txt { display: flex; flex-direction: column; min-width: 0; line-height: 1.25; }
+.abas-passo .ap-txt small { font-size: .8rem; font-weight: 700; color: #4a5361; }
+.abas-passo .ap-txt b { font-size: 1rem; font-weight: 800; overflow-wrap: anywhere; }
+.abas-passo .ap-seta { font-size: 1.7rem; font-weight: 800; line-height: 1; }
+/* no celular estreito, um embaixo do outro, na largura toda */
+@media (max-width: 420px) {
+  .abas-passos > .abas-passo { flex: 1 1 100%; justify-content: space-between; }
+  .abas-passos > .abas-passo-ant { justify-content: flex-start; }
+  .abas-passos > .abas-passo-prox { justify-content: flex-end; }
+}
+html.alto-contraste .abas-passos > .abas-passo { background: #fff; color: #000; border: 2px solid #000; box-shadow: none; }
+html.alto-contraste .abas-passo .ap-txt small { color: #000; }
+html.sem-movimento .abas-passos > .abas-passo { transition: none; }
+
+/* ---------- alto contraste e menos movimento ---------- */
+html.alto-contraste .abas-grupo .abas-lista[role="tablist"] { background: #fff; border-color: #000; backdrop-filter: none; box-shadow: none; }
+html.alto-contraste .abas-grupo > .abas-barra { background: #fff; border-color: #000; box-shadow: none; }
+html.alto-contraste .abas-barra > .abas-seta { background: #fff; color: #000; border: 2px solid #000; box-shadow: none; }
+html.sem-movimento .abas-barra > .abas-seta, html.sem-movimento .abas-barra > .abas-lista > [role="tab"] { transition: none; }
+html.alto-contraste .abas-grupo .abas-lista > [role="tab"] { background: #fff; color: #000; border: 2px solid #000; box-shadow: none; }
+html.alto-contraste .abas-grupo .abas-lista > [role="tab"][aria-selected="true"] { background: #ffdd00; color: #000; border: 3px solid #000; text-decoration: underline; }
+html.sem-movimento .abas-grupo .abas-lista > [role="tab"] { transition: none; }
+@media (prefers-reduced-motion: reduce) { .abas-grupo .abas-lista > [role="tab"], .abas-barra.rola > .abas-lista > [role="tab"], .abas-barra > .abas-seta { transition: none; } }

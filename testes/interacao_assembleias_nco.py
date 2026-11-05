@@ -9,6 +9,8 @@ from pathlib import Path
 
 from playwright.async_api import async_playwright
 
+from ajuda_abas import abre_tudo  # ui-r9
+
 BASE = __import__("os").environ.get("EP_BASE", "http://127.0.0.1:8770/")  # outro servidor: EP_BASE=http://127.0.0.1:8771/
 RAIZ = Path(__file__).resolve().parents[1]
 sys.stdout.reconfigure(encoding="utf-8")
@@ -37,11 +39,14 @@ def com_extra(uf, campo):
 
 
 async def ir(pg, url):
-    """Abre a página e espera a rede parar; se uma foto de site oficial demorar demais, segue com a página já montada."""
+    """Abre a página e espera a rede parar; se uma foto de site oficial demorar demais, segue com a página já montada.
+    ui-r9: estado e perfil em abas: abre todas e os "Ver todos" (testes/ajuda_abas.py), como a página era antes."""
     try:
         await pg.goto(BASE + url, wait_until="networkidle", timeout=25000)
     except Exception:
         await pg.wait_for_timeout(1500)
+    await pg.wait_for_timeout(900)
+    await abre_tudo(pg)
 
 
 async def main():

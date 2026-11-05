@@ -221,7 +221,7 @@ async def main():
         ok("votação que não existe: aviso e caminho para a lista", await pg.locator('a[href="votacoes.html"]').count() > 0 and "Não encontramos" in await pg.locator("main").inner_text())
 
         # ------------------------------------------------------------ 4. perfil: "Como votou" com filtro por tipo, link e orientação
-        await pg.goto(BASE + f"pessoa.html?id={DEP_PL}", wait_until="networkidle")
+        await pg.goto(BASE + f"pessoa.html?id={DEP_PL}#votacoes", wait_until="networkidle")  # ui-r9: "Como votou" é uma aba do perfil
         await pg.locator("#votacoes").scroll_into_view_if_needed()
         await pg.wait_for_selector("#lista-votos .voto-chip", timeout=15000)
         await pg.wait_for_timeout(500)
@@ -240,11 +240,12 @@ async def main():
         ori = await pg.locator("#lista-votos li small", has_text="Orientação").count()
         ok("perfil: a orientação do partido aparece como fato", ori > 0, f"{ori} itens com orientação")
         await axe(pg, "perfil com as votações carregadas e filtradas")
+        n_antes = await pg.locator("#lista-votos > li").count()  # ui-r9: o perfil começa com 8 votações (antes, 15)
         await pg.focus("#ver-mais-votos")
         await pg.keyboard.press("Enter")
         await pg.wait_for_timeout(400)
         foco = await pg.evaluate("[...document.querySelectorAll('#lista-votos > li')].indexOf(document.activeElement)")
-        ok("perfil: “Mostrar mais votações” põe o foco na 16ª", foco == 15, str(foco))
+        ok(f"perfil: “Mostrar mais votações” põe o foco na primeira nova (a {n_antes + 1}ª)", foco == n_antes and n_antes > 0, str(foco))
         link = pg.locator("#lista-votos li .v-txt > a").first
         href = await link.get_attribute("href")
         voto = (await pg.locator("#lista-votos li .voto-chip").first.inner_text()).replace("Voto:", "").strip()
@@ -256,19 +257,19 @@ async def main():
         chip = (await pg.locator("#lista-quem .voto-chip").first.inner_text()).replace("Voto:", "").strip()
         ok("perfil → votação: a página certa, com o mesmo voto da pessoa", "votacao.html?casa=camara&id=" in href and chip == voto, f"{href} | {voto} = {chip}")
 
-        # ------------------------------------------------------------ 5. Brasil: "Como o Congresso votou"
-        await pg.goto(BASE + "brasil.html", wait_until="networkidle")
+        # ------------------------------------------------------------ 5. Brasil: "Como o Congresso votou" (uma aba: brasil.html#votacoes)
+        await pg.goto(BASE + "brasil.html#votacoes", wait_until="networkidle")
         await pg.locator("#votacoes").scroll_into_view_if_needed()
         await pg.wait_for_selector("#votos-recentes .vot-card", timeout=15000)
         await pg.wait_for_timeout(1500)  # espera o bloco terminar de aparecer (animação ao rolar)
         cards = await pg.locator("#votos-recentes .vot-card").all_inner_texts()
         tits = await pg.locator("#votos-recentes .vot-tit").all_inner_texts()
-        ok("Brasil: 3 votações do texto principal, de propostas diferentes", len(cards) == 3 and all("Texto principal" in c for c in cards) and len(set(tits)) == 3, " | ".join(t.split(",")[0] for t in tits))
+        ok("Brasil: 6 votações do texto principal, de propostas diferentes", len(cards) == 6 and all("Texto principal" in c for c in cards) and len(set(tits)) == 6, " | ".join(t.split(",")[0] for t in tits))  # site-d-r14: 6 cartões de placar
         ok("Brasil: botão para todas as votações", await pg.locator('#votacoes a[href="votacoes.html"]').count() == 1)
         await axe(pg, "Brasil com as votações carregadas")
 
         # ------------------------------------------------------------ 6. inglês: o perfil e a lista
-        await pg.goto(BASE + f"pessoa.html?id={DEP_PL}&lang=en", wait_until="networkidle")
+        await pg.goto(BASE + f"pessoa.html?id={DEP_PL}&lang=en#votacoes", wait_until="networkidle")  # ui-r9: aba
         await pg.locator("#votacoes").scroll_into_view_if_needed()
         await pg.wait_for_selector("#lista-votos .voto-chip", timeout=15000)
         await pg.wait_for_timeout(1200)
@@ -276,7 +277,7 @@ async def main():
         ok("perfil em inglês: tipos e orientação em inglês", "Main text" in txt and "Party's orientation" in txt and "Texto principal" not in txt)
         await texto_en(pg, "perfil com as votações")
         await axe(pg, "perfil em inglês com as votações")
-        await pg.goto(BASE + "brasil.html?lang=en", wait_until="networkidle")
+        await pg.goto(BASE + "brasil.html?lang=en#votacoes", wait_until="networkidle")
         await pg.locator("#votacoes").scroll_into_view_if_needed()
         await pg.wait_for_selector("#votos-recentes .vot-card", timeout=15000)
         await pg.wait_for_timeout(1500)
@@ -292,7 +293,7 @@ async def main():
         pc = await ctx2.new_page()
         pc.on("pageerror", lambda e: erros.append(str(e)))
         for url, sec in (("votacoes.html", "#todas"), (f"votacao.html?casa=camara&id={CAMARA}", "#quem"), (f"votacao.html?casa=senado&id={SENADO}&lang=en", "#partidos"),
-                         (f"pessoa.html?id={DEP_PL}", "#votacoes"), ("brasil.html", "#votacoes")):
+                         (f"pessoa.html?id={DEP_PL}#votacoes", "#votacoes"), ("brasil.html#votacoes", "#votacoes")):  # ui-r9: aba do perfil
             await pc.goto(BASE + url, wait_until="networkidle")
             await pc.locator(sec).scroll_into_view_if_needed()
             await pc.wait_for_timeout(1800)

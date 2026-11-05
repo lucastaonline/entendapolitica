@@ -32,10 +32,15 @@
 }
 a.stf-card:hover { transform: perspective(700px) rotateX(5deg) translateY(-3px); box-shadow: 0 8px 18px rgba(60, 40, 0, .12); }
 .stf-card .av { width: 96px; height: 96px; }
+/* as fotos do STF vêm em preto e branco (é como o tribunal publica; não mexemos nelas): o cartão ganha a cor do site em volta
+   da foto e numa faixa no alto, igual em todos os cartões (nenhum ministro em destaque) */
+.stf-card:not(.vaga) { border-top: 6px solid var(--brand); }
+.stf-card:not(.vaga) .av { box-shadow: 0 0 0 3px #fff, 0 0 0 6px var(--amarelo); }
+.stf-pres .av { box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--amarelo); }
 .stf-c-txt { display: flex; flex-direction: column; align-items: center; gap: 6px; width: 100%; }
 .stf-c-txt > b { font-size: 1.08rem; line-height: 1.2; }
 .stf-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
-.stf-chips .chip { white-space: normal; font-size: .72rem; padding: 2px 10px; }
+.stf-chips .chip { white-space: normal; font-size: .75rem; padding: 2px 10px; }
 .stf-fatos { display: flex; flex-direction: column; gap: 3px; font-size: .84rem; color: var(--muted); line-height: 1.35; }
 .stf-fatos b { color: var(--ink); }
 .stf-card .ver { margin-top: auto; font-weight: 900; color: var(--brand); font-size: .9rem; }
@@ -51,7 +56,7 @@ a.stf-card:hover { transform: perspective(700px) rotateX(5deg) translateY(-3px);
 .stf-turma p { margin: 0 0 8px; font-size: .88rem; }
 .stf-turma ul { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; }
 .stf-turma li a { font-weight: 800; }
-.stf-turma .chip { font-size: .68rem; padding: 1px 8px; }
+.stf-turma .chip { font-size: .75rem; padding: 1px 8px; }
 
 /* ---------- o trabalho dos ministros ---------- */
 .stf-trabalho p { margin: 0 0 10px; }

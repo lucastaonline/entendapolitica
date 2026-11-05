@@ -1,0 +1,218 @@
+/* ====== Componentes do Basecoat (visual do shadcn) ajustados ao Entenda Política (ui-r9) ======
+   O Basecoat (vendor/basecoat/basecoat.css) vem numa camada (@layer components) e só vale nos componentes; este arquivo (fora
+   de camada, por isso vence) liga os componentes às cores, letras e tamanhos do site: alvos de toque de 44 px, letra que cresce
+   com o A+, foco amarelo do site, contraste AA com folga, alto contraste e menos movimento. */
+:root {
+  --sombra-menu: 0 12px 32px rgba(31, 58, 95, .18), 0 2px 6px rgba(31, 58, 95, .1);
+  --h-campo: 2.75rem;
+}
+
+/* ---------- botões (.btn): sem o "3D" de antes, com as cores do site ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: .5rem; height: auto; min-height: 2.75rem; padding: .6rem 1.1rem;
+  max-width: 100%; flex-shrink: 1; min-width: 0;
+  white-space: normal; text-align: center; line-height: 1.2; text-decoration: none; font-weight: 800; font-size: 1rem; border-radius: var(--radius-lg, 12px);
+  border: 1px solid transparent; transition: background-color .15s, border-color .15s, color .15s, box-shadow .15s;
+}
+.btn:not([data-variant]):not(.azul):not(.claro):not(.bege) { background: var(--amarelo); color: #2a1d00; border-color: #d9a400; box-shadow: 0 1px 2px rgba(60, 40, 0, .12); }
+.btn:not([data-variant]):not(.azul):not(.claro):not(.bege):hover { background: #e2aa00; }
+.btn.azul { background: var(--brand); color: #fff; box-shadow: 0 1px 2px rgba(0, 0, 0, .15); }
+.btn.azul:hover { background: var(--brand-2); }
+.btn.claro { background: #eef3fa; color: var(--brand); border-color: #c9d8eb; }
+.btn.claro:hover { background: #e1ebf7; }
+.btn.bege, .btn[data-variant="outline"] { background: #fff; color: var(--ink); border-color: var(--input); box-shadow: 0 1px 2px rgba(0, 0, 0, .05); }
+.btn.bege:hover, .btn[data-variant="outline"]:hover { background: #f6f1e6; }
+.btn[data-variant="ghost"] { background: transparent; color: var(--ink); }
+.btn[data-variant="ghost"]:hover { background: var(--muted-bg, #f3efe6); }
+.btn.peq { padding: .45rem .95rem; font-size: .92rem; }
+.btn[disabled], .btn.em-breve { opacity: .55; cursor: default; }
+.btn:active:not([aria-haspopup]) { transform: translateY(1px); }
+
+/* ---------- barra do topo ---------- */
+.topo > a, .topo > button, .topo .ferramentas-topo .btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 44px; min-height: 44px; min-width: 44px; padding: 0 12px;
+  font-size: 16px; font-weight: 800; line-height: 1; white-space: nowrap; text-decoration: none; color: var(--ink);
+  background: #fff; border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 1px 2px rgba(0, 0, 0, .05);
+}
+.topo > a:hover, .topo > button:hover, .topo .ferramentas-topo .btn:hover { background: var(--muted-bg, #f3efe6); }
+.topo .ferramentas-topo .btn[aria-pressed="true"], .topo .ferramentas-topo .btn[aria-expanded="true"],
+.topo > button[aria-pressed="true"] { background: var(--brand); color: #fff; border-color: var(--brand); }
+.topo > .marca { border: 0; box-shadow: none; background: none; padding: 4px 6px; font-weight: 900; color: var(--brand); }
+.ferramentas-topo { display: flex; align-items: center; gap: 8px; margin-left: auto; flex-shrink: 0; }
+.ferramentas-topo .dropdown-menu, .ferramentas-topo .popover { position: relative; display: inline-flex; }
+.topo .seta-menu { width: 16px; height: 16px; color: currentColor; opacity: .75; transition: transform .15s; }
+.topo .btn[aria-expanded="true"] .seta-menu { transform: rotate(180deg); }
+.ic-aa { font-family: Georgia, "Times New Roman", serif; font-weight: 900; font-size: 1.1em; letter-spacing: -.02em; }
+.rotulo-idioma { font-weight: 900; }
+/* a barra fica presa no topo: o foco num botão dela (ou num item de um menu) não pode fazer a página rolar (o navegador achava
+   que a barra estava escondida pelo scroll-padding-top das páginas com abas e rolava a página ~400 px para cima) */
+header.topo, header.topo * { scroll-margin-top: -100vh; scroll-margin-bottom: -100vh; }
+
+/* ---------- painéis dos menus (dropdown-menu e popover do Basecoat) ---------- */
+:is(.topo, .casca-lado) .menu-painel[data-popover] {
+  z-index: 65; width: min(370px, calc(100vw - 16px)); max-width: calc(100vw - 16px); padding: 6px; gap: 2px; font-size: 1rem; text-align: left;
+  color: var(--ink); background: #fff; border-radius: 16px; box-shadow: var(--sombra-menu); overscroll-behavior: contain;
+}
+:is(.topo, .casca-lado) .popover > .menu-painel[data-popover] { padding: 12px; gap: 8px; }
+/* o painel tem altura máxima (rola por dentro): as linhas não podem encolher e se sobrepor */
+:is(.topo, .casca-lado) .menu-painel[data-popover] > *, .menu-painel [role="menu"] > * { flex-shrink: 0; }
+/* a barra do topo e a das abas são opacas: o texto da página não aparece "fantasma" por trás delas ao rolar */
+header.topo { background: #fff; backdrop-filter: none; }
+.menu-painel .menu-tit { margin: 0; padding: 8px 10px 6px; font-size: .8rem; font-weight: 900; letter-spacing: .04em; text-transform: uppercase; color: var(--muted-foreground, #46505d); }
+.menu-painel header { display: flex; align-items: center; }
+.menu-painel [role="menu"] { display: flex; flex-direction: column; gap: 2px; }
+:is(.topo, .casca-lado) .menu-painel .menu-item {
+  display: flex; align-items: center; gap: 10px; width: 100%; min-height: 48px; padding: 8px 10px; padding-inline-end: 2.2rem; border-radius: 10px;
+  white-space: normal; overflow: visible; font-size: 1rem; font-weight: 700; line-height: 1.25; color: var(--ink); text-decoration: none; background: none; border: 0; box-shadow: none; height: auto;
+}
+:is(.topo, .casca-lado) .menu-painel .menu-item.active, :is(.topo, .casca-lado) .menu-painel .menu-item:focus-visible { background: #eef3fa; }
+:is(.topo, .casca-lado) .menu-painel .menu-item:hover { background: #eef3fa; }
+:is(.topo, .casca-lado) .menu-painel .menu-item[aria-current] { background: var(--creme-forte); }
+.menu-item .mi-ic { font-size: 1.3rem; width: 1.6em; text-align: center; flex-shrink: 0; }
+.menu-item b { display: block; }
+.menu-item small { display: block; font-weight: 600; color: var(--muted-foreground, #46505d); font-size: .85em; }
+.menu-item .mi-ok { position: absolute; right: .7rem; color: var(--brand); font-weight: 900; }
+.menu-painel hr[role="separator"] { border: 0; border-top: 1px solid var(--border); margin: 6px -6px; }
+.menu-painel .grupo-a11y { background: var(--muted-bg, #f3efe6); border-radius: 12px; padding: 10px 12px; }
+.tamanhos { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; margin-top: 8px; }
+:is(.topo, .casca-lado) .menu-painel .tamanhos .btn { flex-direction: column; gap: 0; height: auto; min-height: 56px; padding: 4px 2px; line-height: 1.1; white-space: normal; font-size: 16px; }
+:is(.topo, .casca-lado) .menu-painel .tamanhos .btn[aria-pressed="true"] { background: var(--brand); color: #fff; border-color: var(--brand); }
+.tamanhos .ta { font-weight: 900; }
+.tamanhos .tn { font-size: .75rem; font-weight: 800; }
+:is(.topo, .casca-lado) .menu-painel .menu-fecha { align-self: flex-end; height: 44px; font-size: .95rem; border: 1px solid var(--border); }
+.menu-painel .atalhos-teclado summary { min-height: 44px; display: flex; align-items: center; cursor: pointer; font-weight: 800; }
+.menu-painel .atalhos-teclado ul { margin: 4px 0 0; padding-left: 1.2em; display: grid; gap: 4px; font-size: .9rem; }
+
+/* linhas do menu Leitura: o interruptor do Basecoat (input checkbox com role="switch") à direita */
+.opcao-a11y {
+  display: flex; align-items: center; gap: 12px; width: 100%; min-height: 56px; padding: 10px 12px; text-align: left; cursor: pointer;
+  border: 1px solid var(--border); border-radius: 12px; background: #fff; color: var(--ink); font: inherit; font-size: 1rem;
+}
+.opcao-a11y:hover { background: #f3f7fd; }
+.opcao-a11y .oa-ic { font-size: 1.5rem; width: 1.6em; text-align: center; flex-shrink: 0; }
+.opcao-a11y .oa-txt { flex: 1; min-width: 0; }
+.opcao-a11y b { display: block; font-weight: 800; }
+.opcao-a11y small { display: block; color: var(--muted-foreground, #46505d); font-size: .85rem; font-weight: 600; }
+.opcao-a11y .input[type="checkbox"][role="switch"] { width: 48px; height: 28px; flex-shrink: 0; cursor: pointer; border: 1px solid #7d8796; background-color: #c9cfd8; }
+.opcao-a11y .input[type="checkbox"][role="switch"]:checked { background-color: var(--brand); border-color: var(--brand); }
+.opcao-a11y .input[type="checkbox"][role="switch"]::before { width: 22px; height: 22px; margin-left: 2px; box-shadow: 0 1px 3px rgba(0, 0, 0, .3); }
+.opcao-a11y .input[type="checkbox"][role="switch"]:checked::before { transform: translateX(19px); }
+
+@media (max-width: 600px) {
+  .topo { gap: 6px; padding: 6px 8px; }
+  .topo .rotulo { display: none; }
+  .topo > a, .topo > button, .topo .ferramentas-topo .btn { padding: 0 10px; }
+  .topo > .marca { font-size: 15px; padding: 4px 2px; }
+  .ferramentas-topo { gap: 6px; }
+  /* no celular, o painel ocupa a largura da tela, logo abaixo da barra */
+  .topo .menu-painel[data-popover] { position: fixed; left: 8px; right: 8px; top: var(--menu-topo, 64px); width: auto; min-width: 0; max-width: none; margin: 0; }
+}
+/* telas bem estreitas (320 px, ou zoom de 400%): a barra numa linha só; o idioma vai para dentro do ☰ menu */
+@media (max-width: 380px) {
+  .topo { gap: 4px; padding: 6px 4px; }
+  .ferramentas-topo { gap: 4px; }
+  .topo > a, .topo > button, .topo .ferramentas-topo .btn { padding: 0 8px; }
+  .topo .seta-menu { display: none; }
+}
+@media (max-width: 360px) { .ferramentas-topo .dropdown-menu:has(#menu-idioma-btn) { display: none; } }
+.topo-apertado .ferramentas-topo .dropdown-menu:has(#menu-idioma-btn) { display: none; }
+.topo-apertado-2 { gap: 3px; padding-left: 4px; padding-right: 4px; }
+.topo-apertado-2 .ferramentas-topo { gap: 3px; }
+.topo-apertado-2 .seta-menu { display: none; }
+.topo-apertado-2 > a, .topo-apertado-2 > button, .topo-apertado-2 .ferramentas-topo .btn { padding: 0 7px; }
+
+/* ---------- campos de texto e de busca (o "input" do Basecoat) ---------- */
+.busca { position: relative; }
+.busca input, .combo > input[role="combobox"] {
+  width: 100%; height: var(--h-campo); min-height: 44px; font: inherit; font-size: 1rem; color: var(--ink); background: #fff;
+  border: 1px solid var(--input); border-radius: 12px; box-shadow: 0 1px 2px rgba(0, 0, 0, .05); transition: border-color .15s, box-shadow .15s;
+}
+.busca input { height: 3.1rem; padding: 0 16px 0 3rem; font-size: 1.05rem; }
+.busca input::placeholder, .combo > input[role="combobox"]::placeholder { color: var(--muted-foreground, #46505d); opacity: 1; }
+.busca input:hover, .combo > input[role="combobox"]:hover { border-color: #6f6350; }
+.busca input:focus, .combo > input[role="combobox"]:focus { border-color: var(--brand); box-shadow: 0 0 0 3px rgba(31, 58, 95, .18); }
+.busca::before { content: "🔎"; position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); font-size: 1.1rem; pointer-events: none; z-index: 1; }
+
+/* ---------- campo de escolha com busca (o "combobox" do Basecoat) ---------- */
+.combo { position: relative; display: block; width: 100%; min-width: 0; }
+.combo > input[role="combobox"] { padding: 0 4.6rem 0 .9rem; text-overflow: ellipsis; }
+.combo:not(.com-limpa) > input[role="combobox"] { padding-right: 2.6rem; }
+/* a setinha no meio da altura do campo (o Basecoat também a desloca com "translate": aqui fica só o transform) */
+.combo > .combo-seta { position: absolute; right: .85rem; top: calc(var(--h-campo) / 2); translate: none; transform: translateY(-50%); width: 18px; height: 18px; color: var(--muted-foreground, #46505d); pointer-events: none; transition: transform .15s; }
+.combo.aberto > .combo-seta { transform: translateY(-50%) rotate(180deg); }
+.combo > .combo-limpa {
+  position: absolute; right: 2.3rem; top: 0; z-index: 1; display: flex; align-items: center; justify-content: center; width: 2.4rem; height: var(--h-campo);
+  border: 0; border-radius: 10px; background: none; color: var(--muted-foreground, #46505d); cursor: pointer;
+}
+.combo > .combo-limpa:hover { background: var(--muted-bg, #f3efe6); color: var(--ink); }
+.combo > .combo-limpa[hidden] { display: none; }
+.combo.grande { --h-campo: 3.3rem; }
+.combo.grande > input[role="combobox"] { font-size: 1.1rem; padding-left: 3rem; }
+.combo.grande::before { content: "🔎"; position: absolute; left: 1rem; top: calc(var(--h-campo) / 2); transform: translateY(-50%); font-size: 1.15rem; pointer-events: none; z-index: 1; }
+/* a lista: na top layer (atributo popover), em posição fixa calculada pelo js/comum.js; sem top layer, embaixo do campo */
+.combo > .combo-pop[data-popover] {
+  z-index: 58; width: max-content; max-height: none; padding: 0; overflow: hidden;
+  color: var(--ink); background: #fff; border: 1px solid var(--input); border-radius: 14px; box-shadow: var(--sombra-menu); font-size: 1rem;
+}
+.combo > .combo-pop[popover] { inset: auto; margin: 0; }
+/* fechada, a lista não ocupa lugar (antes, invisível, ela ainda empurrava a largura da página para a direita) */
+.combo > .combo-pop[popover]:not(:popover-open) { display: none; }
+/* só a opacidade e o zoom animam: posição e largura mudam na hora (antes, a 1ª abertura media a lista no meio da transição e ela
+   aparecia do outro lado da tela) */
+.combo > .combo-pop[data-popover] { transition-property: opacity, scale, display, overlay; }
+.combo > .combo-pop:not([popover]) { min-width: 100%; max-width: min(32rem, calc(100vw - 16px)); }
+.combo-lista { margin: 0; padding: 4px; list-style: none; overflow-y: auto; overscroll-behavior: contain; max-height: min(22rem, 55vh); }
+.combo .combo-lista [role="option"] {
+  display: grid; grid-template-columns: minmax(0, 1fr); align-items: center; gap: 0; min-height: 44px; padding: 8px 2.4rem 8px 10px; border-radius: 10px;
+  white-space: normal; overflow: visible; text-overflow: clip; font-size: 1rem; line-height: 1.25; cursor: pointer;
+  background-position: center right .7rem; background-size: 1.1rem;
+}
+.combo .combo-lista [role="option"]:hover { background-color: #f3f7fd; }
+.combo .combo-lista [role="option"].active { background-color: var(--creme-forte); box-shadow: inset 0 0 0 2px var(--brand); }
+.combo-lista .combo-t { font-weight: 700; overflow-wrap: anywhere; }
+.combo-lista [aria-selected="true"] .combo-t { font-weight: 900; }
+.combo-lista small { color: var(--muted-foreground, #46505d); font-size: .85rem; }
+.combo-nada { margin: 6px 2px 0; font-size: .9rem; color: var(--muted-foreground, #46505d); }
+
+/* ---------- janela (o "dialog" do Basecoat) ---------- */
+.janela-dialog::backdrop { background: rgba(20, 20, 30, .55); backdrop-filter: blur(2px); }
+/* no Basecoat o <dialog> não tem tamanho (só a caixa de dentro aparece); aqui ele cobre a tela, transparente: clicar fora da caixa
+   cai nele (e fecha), e quem procura a janela (leitor de tela, testes) acha um elemento com tamanho */
+.janela-dialog[open] { position: fixed; inset: 0; width: 100%; height: 100%; }
+/* fechada, some na hora (sem o esmaecer do Basecoat: o texto meio transparente por um instante confundia o leitor de tela e os testes) */
+.janela-dialog:not([open]) { display: none !important; transition: none !important; }
+.janela-dialog > .janela {
+  width: min(760px, calc(100% - 1.5rem)); max-width: none; max-height: calc(100dvh - 1.5rem); overflow: auto; overscroll-behavior: contain;
+  padding: 0 24px 22px; gap: 0; border-radius: 22px; background: #fff; color: var(--ink); font-size: 1rem; line-height: 1.5;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, .3);
+}
+.janela-cab { position: sticky; top: 0; z-index: 1; display: flex; background: #fff; margin: 0 -24px 12px; padding: 18px 150px 12px 24px; border-bottom: 1px solid var(--border); }
+.janela-cab h2 { font-size: 1.3rem; margin: 0; line-height: 1.25; }
+.janela-dialog > .janela > .fechar { position: absolute; top: 12px; right: 14px; z-index: 2; opacity: 1; height: 44px; min-height: 44px; padding: 0 14px; font-size: .95rem; }
+.janela h3 { color: var(--brand); font-size: 1.05rem; margin: 18px 0 8px; }
+@media (max-width: 760px) {
+  .janela-dialog > .janela { padding: 0 16px 18px; }
+  .janela-cab { margin: 0 -16px 12px; padding: 14px 120px 10px 16px; }
+}
+
+/* ---------- blocos que abrem (o "accordion" do Basecoat: <details>) ---------- */
+.bloco-abre { margin: 12px 0; }
+.bloco-abre > details { border: 1px solid var(--border); border-radius: 14px; background: var(--card); box-shadow: 0 1px 2px rgba(60, 40, 0, .05); }
+.bloco-abre > details > summary { align-items: center; gap: 10px; min-height: 48px; padding: 10px 16px; font-size: 1rem; font-weight: 900; color: var(--brand); border-radius: 14px; text-decoration: none; }
+.bloco-abre > details > summary:hover { background: #f3f7fd; text-decoration: none; }
+.bloco-abre > details > summary::-webkit-details-marker { display: none; }
+.bloco-abre .seta-det { width: 20px; height: 20px; margin-left: auto; color: var(--brand); }
+.bloco-abre > details > .det-corpo { padding: 2px 16px 16px; font-size: 1rem; line-height: inherit; overflow: visible; }
+.resumo-det { display: inline-flex; align-items: center; gap: 8px; }
+
+/* ---------- alto contraste e menos movimento ---------- */
+html.alto-contraste .btn, html.alto-contraste .topo > a, html.alto-contraste .topo > button, html.alto-contraste .topo .ferramentas-topo .btn,
+html.alto-contraste .busca input, html.alto-contraste .combo > input[role="combobox"], html.alto-contraste .combo > .combo-pop,
+html.alto-contraste :is(.topo, .casca-lado) .menu-painel[data-popover], html.alto-contraste .opcao-a11y, html.alto-contraste .bloco-abre > details,
+html.alto-contraste .janela-dialog > .janela { border: 2px solid #000 !important; box-shadow: none !important; }
+html.alto-contraste .btn:not(.azul) { background: #fff !important; color: #000 !important; }
+html.alto-contraste .btn.azul, html.alto-contraste .topo .btn[aria-expanded="true"], html.alto-contraste .tamanhos .btn[aria-pressed="true"] { background: #002a6b !important; color: #fff !important; }
+html.alto-contraste .combo .combo-lista [role="option"].active, html.alto-contraste :is(.topo, .casca-lado) .menu-painel .menu-item.active { background: #ffdd00 !important; color: #000 !important; box-shadow: inset 0 0 0 3px #000 !important; }
+html.alto-contraste .opcao-a11y .input[role="switch"] { border: 2px solid #000; }
+html.sem-movimento [data-popover], html.sem-movimento .dialog, html.sem-movimento .dialog > * { transition: none !important; }
+@media (prefers-reduced-motion: reduce) { [data-popover], .dialog, .dialog > * { transition: none !important; } }

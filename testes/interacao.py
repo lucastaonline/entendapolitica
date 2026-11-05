@@ -5,6 +5,10 @@ import sys
 
 from playwright.async_api import async_playwright
 
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from ajuda_abas import pagina_inteira  # site-d-r13
+
 BASE = __import__("os").environ.get("EP_BASE", "http://127.0.0.1:8770/")  # outro servidor: EP_BASE=http://127.0.0.1:8771/
 sys.stdout.reconfigure(encoding="utf-8")
 RES = []
@@ -23,18 +27,19 @@ async def main():
         erros = []
         pg.on("pageerror", lambda e: erros.append(str(e)))
 
-        # 1. busca de político na página inicial
+        # 1. busca de político na página inicial (site-d-r13: o campo grande abre a busca rápida)
         await pg.goto(BASE + "index.html", wait_until="networkidle")
-        await pg.fill("#busca", "lula")
+        await pg.click(".ini-busca")
+        await pg.fill("#br-q", "lula")
         await pg.wait_for_timeout(900)
-        ok("busca 'lula' acha o presidente", await pg.locator('#resultados a[href*="id=pres-lula"]').count() > 0)
-        await pg.fill("#busca", "salvador")
+        ok("busca 'lula' acha o presidente", await pg.locator('#br-lista a[href*="id=pres-lula"]').count() > 0)
+        await pg.fill("#br-q", "salvador")
         await pg.wait_for_timeout(900)
-        n = await pg.locator("#resultados a").count()
+        n = await pg.locator("#br-lista a").count()
         ok("busca por cidade ('salvador') traz resultados", n > 0, f"{n} resultados")
 
         # 2. escolher cidade só com o teclado (página do estado -> página da cidade)
-        await pg.goto(BASE + "estado.html?uf=BA", wait_until="networkidle")
+        await pg.goto(BASE + "estado.html?uf=BA#cidade", wait_until="networkidle")  # ui-r9: a cidade é uma aba do estado
         await pg.focus("#campo-cid")
         await pg.keyboard.type("feira de", delay=40)
         await pg.wait_for_timeout(700)
@@ -46,6 +51,8 @@ async def main():
         await pg.wait_for_timeout(1500)
         nome = await pg.locator("#nome-cidade").text_content() if await pg.locator("#nome-cidade").count() else ""
         ok("Enter abre a página da cidade", "cidade.html?ibge=2910800" in pg.url and "Feira de Santana" in (nome or ""), pg.url.split("/")[-1])
+        await pg.evaluate("EP.abas && EP.abas.mostra('camara-mun')")  # ui-r9: os vereadores ficam na aba Câmara Municipal
+        await pg.wait_for_timeout(800)
         n = await pg.locator("#cidade .pessoa-grande, #cidade .pessoa-card").count()
         ok("cidade mostra prefeito/vereadores", n > 3, f"{n} cartões")
 
@@ -102,8 +109,8 @@ async def main():
         portas = await pg.locator(".portas .porta").evaluate_all("l => l.map(a => a.getAttribute('href'))")
         ok("página inicial tem 4 portas, a 4ª é a cidade", portas == ["entenda.html", "brasil.html", "estado.html", "cidade.html"], str(portas))
 
-        # 2e. filtros das listas (Senado): campo de estado com busca
-        await pg.goto(BASE + "brasil.html", wait_until="networkidle")
+        # 2e. filtros das listas (Senado): campo de estado com busca (o Senado é uma aba: brasil.html#senado)
+        await pg.goto(BASE + "brasil.html#senado", wait_until="networkidle")
         campo = pg.locator("#senado .combo input").first
         await campo.click()
         await pg.keyboard.type("rio", delay=40)
@@ -114,7 +121,7 @@ async def main():
         ok("filtro de estado com busca filtra a lista", await campo.input_value() == "Rio de Janeiro" and "3 de 81" in cont, f"{await campo.input_value()} | {cont}")
 
         # 3. filtro de propostas no perfil
-        await pg.goto(BASE + "pessoa.html?id=pres-lula", wait_until="networkidle")
+        await pg.goto(BASE + "pessoa.html?id=pres-lula#propostas", wait_until="networkidle")  # ui-r9: as propostas são uma aba do perfil
         await pg.wait_for_timeout(800)
         antes = await pg.locator("#propostas").inner_text()
         await pg.click('[data-status="lei"]')
@@ -140,19 +147,20 @@ async def main():
         foco = await pg.evaluate("document.activeElement && document.activeElement.className")
         ok("foco volta para a placa da parada", "placa" in (foco or ""), foco)
 
-        # 5. menu de acessibilidade
+        # 5. menu de acessibilidade (ui-r9: o ♿ virou o menu suspenso "Aa Leitura" da barra)
         await pg.goto(BASE + "brasil.html", wait_until="networkidle")
-        await pg.click("#btn-a11y")
+        await pg.click("#menu-leitura-btn")
         await pg.wait_for_timeout(500)
-        ok("menu ♿ abre como diálogo", await pg.locator('[role="dialog"]:visible').count() > 0)
+        ok("menu de leitura e acessibilidade abre", await pg.locator("#menu-leitura").is_visible() and await pg.get_attribute("#menu-leitura-btn", "aria-expanded") == "true")
         await pg.keyboard.press("Escape")
         await pg.wait_for_timeout(400)
         foco = await pg.evaluate("document.activeElement && document.activeElement.id")
-        ok("Esc fecha e devolve o foco ao botão", foco == "btn-a11y", foco)
+        ok("Esc fecha e devolve o foco ao botão", foco == "menu-leitura-btn" and await pg.locator("#menu-leitura").is_hidden(), foco)
 
         # 6. trocar idioma mantém a página
         await pg.goto(BASE + "pessoa.html?id=sen-5672", wait_until="networkidle")
-        await pg.click("#btn-idioma")
+        await pg.click("#menu-idioma-btn")  # ui-r9: o 🌐 virou um menu de idioma
+        await pg.click('#menu-idioma [data-idioma="en"]')
         await pg.wait_for_load_state("networkidle")
         ok("botão EN mantém o perfil e troca o idioma", "id=sen-5672" in pg.url and "lang=en" in pg.url
            and await pg.evaluate("document.documentElement.lang") == "en", pg.url.split("/")[-1])
@@ -167,6 +175,7 @@ async def main():
             href = await card.get_attribute("href")
             hist0 = await pg.evaluate("history.length")
             await card.click()
+            await pagina_inteira(pg)  # site-d-r13: o cartão abre a gaveta; o perfil fica no “Ver a página inteira”
             await pg.wait_for_url("**/pessoa.html?id=*", timeout=15000)
             await pg.wait_for_load_state("networkidle")
             await pg.wait_for_timeout(600)
@@ -180,14 +189,17 @@ async def main():
             visivel = await pg.evaluate("(() => { const a = document.activeElement; if (!a || !a.getBoundingClientRect) return false; const r = a.getBoundingClientRect(); return r.top >= 0 && r.bottom <= innerHeight; })()")
             ok(f"Voltar leva a {url} com o foco em quem foi aberto", foco == href and visivel and await pg.evaluate("history.length") == hist0 + 1, f"foco={foco} visível={visivel}")
             return href
-        dep = await abre_e_volta("estado.html?uf=BA", "#federais .pessoa-card", "estado.html?uf=BA", "Bahia")
-        await abre_e_volta("brasil.html", "#senado .pessoa-card", "brasil.html#senado", "Brasil")
-        await abre_e_volta("cidade.html?ibge=2927408", "#casa-ver .pessoa-card", "cidade.html?ibge=2927408", "cidade")
+        # ui-r9: estado e cidade em abas: o endereço abre a aba da lista
+        dep = await abre_e_volta("estado.html?uf=BA#federais", "#federais .pessoa-card", "estado.html?uf=BA", "Bahia")
+        await abre_e_volta("brasil.html#senado", "#senado .pessoa-card", "brasil.html#senado", "Brasil")
+        await abre_e_volta("cidade.html?ibge=2927408#camara-mun", "#casa-ver .pessoa-card", "cidade.html?ibge=2927408", "cidade")
         # trocar o idioma no perfil não perde o caminho de volta
-        await pg.goto(BASE + "estado.html?uf=BA", wait_until="networkidle")
+        await pg.goto(BASE + "estado.html?uf=BA#federais", wait_until="networkidle")
         await pg.locator(f'#federais a[href="{dep}"]').first.click()
+        await pagina_inteira(pg)  # site-d-r13: o cartão abre a gaveta; o perfil fica no “Ver a página inteira”
         await pg.wait_for_url("**/pessoa.html?id=*")
-        await pg.click("#btn-idioma")
+        await pg.click("#menu-idioma-btn")
+        await pg.click('#menu-idioma [data-idioma="en"]')
         await pg.wait_for_url("**lang=en*")
         await pg.wait_for_load_state("networkidle")
         vh = await pg.locator("#voltar-lista").get_attribute("href")
@@ -198,13 +210,13 @@ async def main():
         vh = await pg.locator("#voltar-lista").get_attribute("href")
         ok("aberto por link direto (sem caminho), Voltar vai para a lista do cargo", vh.startswith("brasil.html#camara"), vh)
 
-        # 8. plenário por partido: passar o mouse, o teclado e o clique acendem as cadeiras do partido
-        await pg.goto(BASE + "brasil.html", wait_until="networkidle")
+        # 8. plenário por partido: passar o mouse, o teclado e o clique acendem as cadeiras do partido (o Senado é uma aba)
+        await pg.goto(BASE + "brasil.html#senado", wait_until="networkidle")
         await pg.locator("#senado .plen-area").scroll_into_view_if_needed()
         await pg.wait_for_timeout(2200)
         sen = pg.locator("#senado")
-        n_pt = int(await sen.locator('.barra-partido[data-g="3"] .n-p').inner_text())
-        await sen.locator('.barra-partido[data-g="3"]').hover()
+        n_pt = int(await sen.locator('.d-partido[data-g="3"] > span:not(.sr)').inner_text())  # site-d-r14: etiquetas dos partidos
+        await sen.locator('.d-partido[data-g="3"]').hover()
         await pg.wait_for_timeout(300)
         acesas = await sen.locator(".plenario i.aceso").count()
         sigla = await sen.locator(".rot-p.ativo").inner_text()
@@ -214,19 +226,25 @@ async def main():
         ok("tirar o mouse apaga", await sen.locator(".plenario i.aceso").count() == 0)
         await sen.locator('.plenario i[data-g="9"]').first.hover(force=True)
         await pg.wait_for_timeout(300)
-        ok("passar o mouse numa cadeira marca o partido na lista", await sen.locator('.barra-partido.realce[data-g="9"]').count() == 1)
+        ok("passar o mouse numa cadeira marca o partido na lista", await sen.locator('.d-partido.realce[data-g="9"]').count() == 1)
         await sen.locator('.plenario i[data-g="9"]').first.click(force=True)
-        await pg.wait_for_timeout(500)
-        cont = await sen.locator(".contagem").inner_text()
-        ok("clicar numa cadeira mostra só quem é do partido", await sen.locator('.barra-partido[data-g="9"]').get_attribute("aria-pressed") == "true" and "de 81" in cont, cont)
-        await sen.locator('.plenario i[data-g="9"]').first.click(force=True)
+        await pg.wait_for_timeout(700)
+        # site-d-r14: clicar numa cadeira abre a gaveta só com quem é do partido (antes, filtrava a lista da página)
+        n9 = int(await sen.locator('.d-partido[data-g="9"] > span:not(.sr)').inner_text())
+        cont = await pg.locator("#gaveta .contagem").inner_text() if await pg.locator("#gaveta[open]").count() else ""
+        ok("clicar numa cadeira mostra só quem é do partido", await pg.locator("#gaveta .pessoa-card").count() == n9 and "em ordem alfabética" in cont, cont)
+        await pg.keyboard.press("Escape")
+        await pg.wait_for_timeout(1300)  # a gaveta devolve o foco à etiqueta (e confere de novo até 1 s depois)
+        await pg.evaluate("document.activeElement && document.activeElement.blur()")  # o foco voltou para a etiqueta (o teclado acenderia)
         await pg.mouse.move(5, 5)
         await pg.wait_for_timeout(400)
-        ok("clicar de novo mostra todos e apaga", "todos os 81" in await sen.locator(".contagem").inner_text() and await sen.locator(".plenario i.aceso").count() == 0)
-        await sen.locator('.barra-partido[data-g="0"]').focus()
+        # sem filtro, a contagem fala dos 81 (na página do Brasil, a lista começa com um resumo: "os 12 primeiros de 81 senadores")
+        cont = await sen.locator(".contagem").inner_text()
+        ok("clicar de novo mostra todos e apaga", ("todos os 81" in cont or "de 81 senadores" in cont) and await sen.locator(".plenario i.aceso").count() == 0, cont)
+        await sen.locator('.d-partido[data-g="0"]').focus()
         await pg.keyboard.press("Tab")
         await pg.wait_for_timeout(300)
-        n_psd = int(await sen.locator('.barra-partido[data-g="1"] .n-p').inner_text())
+        n_psd = int(await sen.locator('.d-partido[data-g="1"] > span:not(.sr)').inner_text())
         ok("com o teclado (Tab), o partido com foco acende", await sen.locator(".plenario i.aceso").count() == n_psd, f"{n_psd} cadeiras")
 
         ok("sem erros de JavaScript", not erros, "; ".join(erros)[:200])

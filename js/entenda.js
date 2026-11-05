@@ -50,6 +50,14 @@
    vira um botão no fim do slide. Só aceita páginas do próprio site (no inglês, o link já leva ?lang=en).
    Para outra parada: "url":"entenda.html#parte-10" (o mapa voa até ela).
    PULAR (qualquer slide, opcional): "pular": true vira o botão "Pular para o fim" (ex.: antes de uma parte opcional).
+
+   PARTE AVANÇADA (opcional, na parada): uma trilha a mais, só para quem quiser ir a fundo.
+   "avancado": { "nome":"Nome da parte avançada", "resumo":"1 frase", "convite":"o que tem nela (aparece no fim da parada)",
+                 "botao":"(opcional; padrão: Quer ir a fundo na parte técnica?)", "slides":[ ...os mesmos tipos de slide... ] }
+   O fim da parada ganha o botão do convite; a trilha tem endereço próprio (entenda.html#parte-10-avancado, -avancado-2...),
+   contagem própria, a faixa "Parte avançada" em cada slide e o botão de voltar ao caminho simples.
+   ENDEREÇOS ANTIGOS (opcional, na parada): "enderecos_antigos": { "15": "4", "22": "avancado-7" } leva um #parte-N-15 que
+   passou do fim do caminho simples (de quando a parada era maior) ao slide novo.
    ====================================================================== */
 (function () {
   "use strict";
@@ -155,12 +163,14 @@
   var R = {};
   R.abertura = function (s, P) {
     var ilu = s.ilustracao ? T.ilustracao(s.ilustracao, s.emoji) : T.ilustracao(MODELO_PARTE[P.parte]);
+    var A = emAvancado ? P.avancado : null, resumo = A ? A.resumo : P.resumo;
     return '<div class="abertura"><div class="txt">' + (T.cubo ? T.cubo(String(P.parte), P.ic || "", "entra", 110) : "") +
-      '<span class="etiqueta anim">' + tr("Parada ", "Stop ") + P.parte + tr(" de ", " of ") + TOTAL + " · " + esc(P.nome) + "</span>" +
-      "<h1" + anim(1) + ">" + md(s.titulo || P.nome) + "</h1>" +
+      '<span class="etiqueta anim">' + tr("Parada ", "Stop ") + P.parte + (A ? " · " + tr("Parte avançada", "Advanced part") : tr(" de ", " of ") + TOTAL + " · " + esc(P.nome)) + "</span>" +
+      "<h1" + anim(1) + ">" + md(s.titulo || (A ? A.nome : P.nome)) + "</h1>" +
       (s.texto ? '<p class="lead anim" style="--i:2">' + md(s.texto) + "</p>" : "") +
-      (P.resumo ? '<p class="muted anim" style="--i:3"><span aria-hidden="true">🎯 </span>' + md(P.resumo) + "</p>" : "") +
-      '<p class="anim" style="--i:4"><button class="btn" type="button" data-acao="proximo">' + tr("Vamos lá ▶", "Let's go ▶") + "</button></p></div>" +
+      (resumo ? '<p class="muted anim" style="--i:3"><span aria-hidden="true">🎯 </span>' + md(resumo) + "</p>" : "") +
+      '<p class="anim botoes-abertura" style="--i:4"><button class="btn" type="button" data-acao="proximo">' + tr("Vamos lá ▶", "Let's go ▶") + "</button>" +
+      (A ? ' <button class="btn claro" type="button" data-acao="simples">↩ ' + tr("Voltar ao caminho simples", "Back to the simple path") + "</button>" : "") + "</p></div>" +
       '<div class="ilu anim" style="--i:2">' + ilu + "</div></div>";
   };
   R.explica = function (s, P) {
@@ -320,6 +330,11 @@
 
   // ---------------------------------------------------------------- aula de uma parada
   var SL = [], SECS = [], TIT = [], atual = -1, parteAtual = null, QUIZ = {}, GLOSS = [], empurrou = false;
+  // trilha da parada aberta: o caminho simples (padrão) ou a parte avançada ("avancado" no JSON)
+  var emAvancado = false, voltaSimples = null;
+  function temAvancado(P) { return !!(P && P.avancado && P.avancado.slides && P.avancado.slides.length); }
+  function comAbertura(lista) { return (lista || []).some(function (s) { return s.tipo === "abertura"; }); }
+  function totalTrilha(P, av) { var l = av ? P.avancado.slides : (P.slides || []); return l.length + (comAbertura(l) ? 0 : 1) + 1; }
   function textoDoSlide(s) {
     var t = [];
     (function anda(v) {
@@ -337,19 +352,44 @@
       return t && (txt.indexOf(" " + t + " ") > -1 || txt.indexOf(" " + t + "s ") > -1);
     }).slice(0, 4);
   }
+  // no fim do caminho simples: o convite para a parte avançada (só nas paradas que têm "avancado")
+  function conviteAvancado(P, i) {
+    if (!temAvancado(P)) return "";
+    var A = P.avancado, n = totalTrilha(P, true) - 1;
+    return '<div class="convite-avancado anim" style="--i:' + i + '"><button class="btn azul" type="button" data-acao="avancado" aria-describedby="convite-av-txt"><span aria-hidden="true">🔬 </span>' +
+      esc(A.botao || tr("Quer ir a fundo na parte técnica?", "Want to dig into the technical details?")) + ' <span aria-hidden="true">▶</span></button>' +
+      '<p id="convite-av-txt">' + (A.convite ? md(A.convite) + " " : "") + "(" + n + tr(" páginas", " pages") + ")</p></div>";
+  }
   function fimHtml(P) {
     var n = P.parte, I = info(), prox = proximo(n);
-    if (!prox) return fimMapaHtml();
+    if (!prox) return fimMapaHtml(P);
     return '<div class="fim-s"><div class="trofeu anim" aria-hidden="true">⭐</div><h1' + anim(1) + ">" + tr("Parada concluída!", "Stop completed!") + "</h1>" +
       '<p class="lead anim" style="--i:2">' + tr("Você aprendeu: ", "You learned: ") + "<b>" + esc(P.nome) + "</b></p>" +
-      '<p class="placar anim" style="--i:3" id="placar-parada"></p>' +
-      '<div class="botoes anim" style="--i:4">' +
+      '<p class="placar anim" style="--i:3" id="placar-parada"></p>' + conviteAvancado(P, 4) +
+      '<div class="botoes anim" style="--i:5">' +
       '<button class="btn" type="button" data-proxima="' + prox + '">▶ ' + tr("Próxima parada: ", "Next stop: ") + esc(I[prox].nome) + "</button>" +
       '<button class="btn claro" type="button" data-acao="mapa">🗺️ ' + tr("Voltar ao mapa", "Back to the map") + "</button>" +
       '<button class="btn bege" type="button" data-acao="recomecar">↺ ' + tr("Ver esta parada de novo", "See this stop again") + "</button></div></div>";
   }
+  // fim da parte avançada: volta ao caminho simples, segue para a próxima parada ou volta ao mapa
+  function fimAvancadoHtml(P) {
+    var I = info(), prox = proximo(P.parte);
+    return '<div class="fim-s"><div class="trofeu anim" aria-hidden="true">🔬</div><h1' + anim(1) + ">" + tr("Parte avançada concluída!", "Advanced part completed!") + "</h1>" +
+      '<p class="lead anim" style="--i:2">' + tr("Você foi a fundo em: ", "You dug into: ") + "<b>" + esc(P.avancado.nome || P.nome) + "</b></p>" +
+      '<p class="placar anim" style="--i:3" id="placar-parada"></p>' +
+      '<div class="botoes anim" style="--i:4">' +
+      (prox ? '<button class="btn" type="button" data-proxima="' + prox + '">▶ ' + tr("Próxima parada: ", "Next stop: ") + esc(I[prox].nome) + "</button>" : "") +
+      '<button class="btn claro" type="button" data-acao="simples">↩ ' + tr("Voltar ao caminho simples", "Back to the simple path") + "</button>" +
+      '<button class="btn claro" type="button" data-acao="mapa">🗺️ ' + tr("Voltar ao mapa", "Back to the map") + "</button>" +
+      '<button class="btn bege" type="button" data-acao="recomecar">↺ ' + tr("Ver a parte avançada de novo", "See the advanced part again") + "</button></div></div>";
+  }
+  // em cada slide da parte avançada: a faixa que diz onde a pessoa está e o caminho de volta
+  function faixaAvancada() {
+    return '<p class="faixa-avancada"><span class="selo-av"><span aria-hidden="true">🔬 </span>' + tr("Parte avançada", "Advanced part") + "</span>" +
+      '<button type="button" class="btn peq claro" data-acao="simples">↩ ' + tr("Voltar ao caminho simples", "Back to the simple path") + "</button></p>";
+  }
   // fim da última parada que faltava: o mapa está completo. Em vez de sugerir recomeçar, pergunta o que a pessoa quer fazer.
-  function fimMapaHtml() {
+  function fimMapaHtml(P) {
     function porta(tag, attr, ic, titulo, txt) {
       return "<" + tag + " " + attr + '><span aria-hidden="true">' + ic + "</span><span><b>" + titulo + "</b><small>" + txt + "</small></span></" + tag + ">";
     }
@@ -357,7 +397,7 @@
       "<h1" + anim(1) + ">" + tr("Você completou o Mapa da Política!", "You completed the Politics Map!") + "</h1>" +
       '<p class="lead anim" style="--i:2">' + tr("Agora você sabe como a política do Brasil funciona: os Poderes, os cargos, as leis, as eleições e a urna eletrônica.",
         "Now you know how politics works in Brazil: the branches of government, the offices, the laws, the elections and the electronic voting machine.") + "</p>" +
-      '<p class="placar anim" style="--i:3" id="placar-parada"></p>' +
+      '<p class="placar anim" style="--i:3" id="placar-parada"></p>' + conviteAvancado(P, 3) +
       '<h2 class="pergunta-fim anim" style="--i:4">' + tr("E agora, o que você quer fazer?", "What would you like to do next?") + "</h2>" +
       '<div class="portas-fim tres anim" style="--i:5">' +
       porta("a", 'href="brasil.html' + (EP.en ? "?lang=en" : "") + '"', "🏛️", tr("Ver quem está no poder no Brasil", "See who is in power in Brazil"),
@@ -369,12 +409,14 @@
       "</div>" +
       '<p class="anim" style="--i:6"><button class="btn claro peq" type="button" data-acao="mapa">🗺️ ' + tr("Voltar ao mapa", "Back to the map") + "</button></p></div>";
   }
-  function montarAula(n) {
+  function montarAula(n, av) {
     var P = PARTES[n];
     parteAtual = n; DET = []; QUIZ = {}; SL = []; LACRE = {};
+    emAvancado = !!(av && temAvancado(P));
+    $("aula").classList.toggle("trilha-avancada", emAvancado);
     cvPara();
-    var temAbertura = (P.slides || []).some(function (s) { return s.tipo === "abertura"; });
-    var slides = (temAbertura ? [] : [{ tipo: "abertura", titulo: P.nome, texto: P.resumo }]).concat(P.slides || []);
+    var lista = emAvancado ? P.avancado.slides : (P.slides || []);
+    var slides = (comAbertura(lista) ? [] : [emAvancado ? { tipo: "abertura", titulo: P.avancado.nome } : { tipo: "abertura", titulo: P.nome, texto: P.resumo }]).concat(lista);
     slides.forEach(function (s) {
       var fontes = (s.fontes || []).map(function (id) { return (P.fontes || []).filter(function (f) { return f.id === id; })[0]; }).filter(Boolean);
       SL.push({ s: s, P: P, fontes: fontes, palavras: palavrasDo(s, P) });
@@ -385,9 +427,9 @@
     var semTraducao = EP.en && !TRADUZIDA[n];
     palco.innerHTML = SL.map(function (it, i) {
         var html, cls = "";
-        if (it.fim) html = fimHtml(P);
+        if (it.fim) html = emAvancado ? fimAvancadoHtml(P) : fimHtml(P);
         else {
-          html = (R[it.s.tipo] || R.explica)(it.s, P, i) + linkDoSlide(it.s);
+          html = (emAvancado && it.s.tipo !== "abertura" ? faixaAvancada() : "") + (R[it.s.tipo] || R.explica)(it.s, P, i) + linkDoSlide(it.s);
           if (it.s.tipo === "quiz") QUIZ[i] = { primeira: null };
           cls = "t-" + it.s.tipo;
         }
@@ -416,7 +458,7 @@
   }
   function tituloDe(i) {
     var it = SL[i];
-    if (it.fim) return tr("Fim da parada", "End of this stop");
+    if (it.fim) return emAvancado ? tr("Fim da parte avançada", "End of the advanced part") : tr("Fim da parada", "End of this stop");
     var s = it.s, t = s.titulo || s.pergunta || "";
     if (s.tipo === "quiz") t = tr("Pergunta: ", "Question: ") + t;
     if (s.tipo === "abertura") t = tr("Abertura: ", "Opening: ") + (s.titulo || it.P.nome);
@@ -427,7 +469,7 @@
   // ---------------------------------------------------------------- navegação
   function atualizaBarra() {
     var P = PARTES[parteAtual];
-    $("nome-parte").textContent = (P.ic || "") + " " + tr("Parada ", "Stop ") + parteAtual + " · " + P.nome;
+    $("nome-parte").textContent = (P.ic || "") + " " + tr("Parada ", "Stop ") + parteAtual + " · " + (emAvancado ? tr("Parte avançada", "Advanced part") : P.nome);
     $("progresso").style.transform = "scaleX(" + ((atual + 1) / SL.length) + ")";
     $("contador").textContent = (atual + 1) + tr(" de ", " of ") + SL.length;
     $("btn-voltar").disabled = atual === 0;
@@ -500,7 +542,7 @@
       $("placar-parada").textContent = resp ? tr("🎯 Você acertou " + certas + " de " + resp + " perguntas de primeira.", "🎯 You got " + certas + " of " + resp + " questions right on the first try.") : "";
       if (!feitos[parteAtual]) { feitos[parteAtual] = true; salvaFeitos(); confete(); }
       atualizaMapa();
-      EP.track("entenda_parada_" + parteAtual + "_fim");
+      EP.track("entenda_parada_" + parteAtual + (emAvancado ? "_avancado" : "") + "_fim");
     }
   }
   function ir(n, dir) {
@@ -522,7 +564,7 @@
     atual = n;
     entrou(novo, n);
     atualizaBarra();
-    try { history.replaceState(history.state, "", "#parte-" + parteAtual + (n > 0 ? "-" + (n + 1) : "")); } catch (e) {}
+    try { history.replaceState(history.state, "", "#parte-" + parteAtual + (emAvancado ? "-avancado" : "") + (n > 0 ? "-" + (n + 1) : "")); } catch (e) {}
     checaMais();
     setTimeout(checaMais, 700);
     var miolo = novo.querySelector(".miolo");
@@ -538,14 +580,15 @@
 
   // ---------------------------------------------------------------- abrir e fechar uma parada
   var aulaAberta = false;
-  function abrirParte(n, slide0, semVoo) {
+  function abrirParte(n, slide0, semVoo, av) {
     n = +n;
     if (!PARTES[n]) {
       EP.abrir("🗺️ " + tr("Parada não encontrada", "Stop not found"), "<p>" + tr("Essa parada não existe. Escolha uma das " + TOTAL + " paradas do mapa!", "That stop does not exist. Pick one of the " + TOTAL + " stops on the map!") + "</p>");
       return;
     }
     function abre() {
-      montarAula(n);
+      voltaSimples = null;
+      montarAula(n, av);
       aulaAberta = true;
       document.body.classList.add("modo-aula");
       var a = $("aula");
@@ -556,12 +599,38 @@
       $("mapa-tela").setAttribute("inert", "");
       $("mapa-tela").setAttribute("aria-hidden", "true");
       atual = -1;
-      if (!/^#parte-/.test(location.hash)) { try { history.pushState({ parte: n }, "", "#parte-" + n); empurrou = true; } catch (e) {} }
+      if (!/^#parte-/.test(location.hash)) { try { history.pushState({ parte: n }, "", "#parte-" + n + (emAvancado ? "-avancado" : "")); empurrou = true; } catch (e) {} }
       ir(Math.max(0, Math.min(SL.length - 1, slide0 || 0)), 1);
-      EP.track("entenda_parada_" + n);
+      EP.track("entenda_parada_" + n + (emAvancado ? "_avancado" : ""));
     }
     if (semVoo || EP.reduzido || !MAPA) abre();
     else MAPA.voar(n).then(abre);
+  }
+  // troca de trilha (caminho simples ⇄ parte avançada) com a parada aberta
+  function trocarTrilha(av, slide0) {
+    if (!aulaAberta) return;
+    EP.calar();
+    timersEscada.forEach(clearTimeout);
+    if (av && !emAvancado) voltaSimples = atual;
+    var volta = voltaSimples;
+    montarAula(parteAtual, av);
+    if (!emAvancado) voltaSimples = null;
+    atual = -1;
+    var alvo = slide0 != null ? slide0 : (!emAvancado && volta != null ? volta : 0);
+    ir(Math.max(0, Math.min(SL.length - 1, alvo)), emAvancado ? 1 : -1);
+    if (emAvancado) EP.track("entenda_parada_" + parteAtual + "_avancado");
+  }
+  // lê o endereço: #parte-10, #parte-10-4, #parte-10-avancado, #parte-10-avancado-3 (e endereços antigos da parada)
+  function lerEndereco() {
+    var m = /^#parte-(\d+)(-avancado)?(?:-(\d+))?$/.exec(location.hash);
+    if (!m) return null;
+    var n = +m[1], P = PARTES[n], av = !!m[2], k = m[3] ? +m[3] - 1 : 0;
+    if (P && !av && P.enderecos_antigos && k + 1 > totalTrilha(P, false)) {
+      var mm = /^(avancado-)?(\d+)$/.exec(P.enderecos_antigos[String(k + 1)] || "");
+      if (mm) { av = !!mm[1]; k = +mm[2] - 1; }
+    }
+    if (av && !temAvancado(P)) av = false;
+    return { n: n, k: k, av: av };
   }
   function fecharAula(depois) {
     if (!aulaAberta) return;
@@ -569,6 +638,8 @@
     aulaAberta = false;
     timersEscada.forEach(clearTimeout);
     $("aula").hidden = true;
+    $("aula").classList.remove("trilha-avancada");
+    emAvancado = false; voltaSimples = null;
     document.body.classList.remove("modo-aula");
     $("mapa-tela").removeAttribute("inert");
     $("mapa-tela").removeAttribute("aria-hidden");
@@ -592,10 +663,12 @@
   }
   var proximaDepoisDoVoltar = null;
   window.addEventListener("popstate", function () {
-    var m = /^#parte-(\d+)(?:-(\d+))?$/.exec(location.hash);
-    if (m && !aulaAberta) { abrirParte(+m[1], m[2] ? +m[2] - 1 : 0, true); return; }
+    var m = lerEndereco();
+    if (m && !aulaAberta) { abrirParte(m.n, m.k, true, m.av); return; }
     // endereço de outra parada com a aula aberta (ex.: digitado na barra): fecha esta e abre a outra
-    if (m && aulaAberta && +m[1] !== parteAtual && PARTES[+m[1]]) { empurrou = false; fecharAula(+m[1]); return; }
+    if (m && aulaAberta && m.n !== parteAtual && PARTES[m.n]) { empurrou = false; fecharAula(m.n); return; }
+    // a mesma parada, na outra trilha (caminho simples ⇄ parte avançada)
+    if (m && aulaAberta && m.n === parteAtual && m.av !== emAvancado) { trocarTrilha(m.av, m.k); return; }
     if (!m && aulaAberta) { var d = proximaDepoisDoVoltar; proximaDepoisDoVoltar = null; fecharAula(d); }
   });
 
@@ -973,7 +1046,10 @@
     var html = '<ol class="mp-sub">' + SL.map(function (it, i) {
       return '<li><button type="button" data-ir="' + i + '"' + (i === atual ? ' class="atual" aria-current="page"' : "") + '><span class="mp-num">' + (i + 1) + "</span><span>" + esc(TIT[i]) + "</span></button></li>";
     }).join("") + "</ol>";
-    EP.abrir("☰ " + tr("Páginas desta parada", "Pages in this stop"), html +
+    var P = PARTES[parteAtual], troca = "";
+    if (emAvancado) troca = '<p style="margin-top:14px"><button type="button" class="btn peq claro" data-acao="simples">↩ ' + tr("Voltar ao caminho simples", "Back to the simple path") + "</button></p>";
+    else if (temAvancado(P)) troca = '<p style="margin-top:14px"><button type="button" class="btn peq claro" data-acao="avancado"><span aria-hidden="true">🔬 </span>' + tr("Ver a parte avançada", "See the advanced part") + " (" + (totalTrilha(P, true) - 1) + tr(" páginas", " pages") + ")</button></p>";
+    EP.abrir("☰ " + (emAvancado ? tr("Páginas da parte avançada", "Pages in the advanced part") : tr("Páginas desta parada", "Pages in this stop")), html + troca +
       (GLOSS.length ? '<p style="margin-top:14px"><button type="button" class="btn peq claro" data-glossario>📖 ' + tr("Palavras difíceis", "Hard words") + " (" + GLOSS.length + ")</button></p>" : "") +
       '<p style="margin-top:8px"><button type="button" class="btn peq bege" data-acao="mapa">🗺️ ' + tr("Voltar ao mapa", "Back to the map") + "</button></p>");
   }
@@ -1048,6 +1124,8 @@
     if (a === "proximo") proximoSlide();
     else if (a === "recomecar") ir(0, -1);
     else if (a === "fim") ir(SL.length - 1, 1);
+    else if (a === "avancado") { EP.fechar(); trocarTrilha(true); }
+    else if (a === "simples") { EP.fechar(); trocarTrilha(false); }
     else if (a === "mapa") { EP.fechar(); voltarAoMapa(); }
   });
   // lacre digital: recalcula enquanto a pessoa escreve
@@ -1100,7 +1178,7 @@
     var I = info();
     if (MAPA) MAPA.montar($("mapa-tela"), I, function (n) { abrirParte(n); });
     atualizaMapa();
-    var m = /^#parte-(\d+)(?:-(\d+))?$/.exec(location.hash);
-    if (m && PARTES[+m[1]]) abrirParte(+m[1], m[2] ? +m[2] - 1 : 0, true);
+    var m = lerEndereco();
+    if (m && PARTES[m.n]) abrirParte(m.n, m.k, true, m.av);
   });
 })();

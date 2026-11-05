@@ -78,9 +78,9 @@
 .abertura .cubo-num { margin-bottom: 26px; }
 
 /* ---------- cartões que viram ---------- */
-.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-top: 16px; perspective: 1200px; }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); gap: 16px; margin-top: 16px; perspective: 1200px; }
 /* 6 cartões: 3 + 3 no computador (e não 4 + 2) */
-.cards:has(> .card-3d:nth-child(6):last-child) { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+.cards:has(> .card-3d:nth-child(6):last-child) { grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); }
 .card-3d { position: relative; display: grid; transform-style: preserve-3d; transition: transform .7s cubic-bezier(.3, 1.2, .4, 1); }
 .slide.ativo .card-3d.anim { animation: viraCard .8s cubic-bezier(.2, .8, .2, 1) backwards; animation-delay: calc(var(--i, 0) * 130ms + 150ms); }
 /* entrada sem opacity: animar opacity num elemento preserve-3d faz o Chrome "achatar" o 3D, e o verso espelhado aparecia por cima
@@ -102,7 +102,7 @@
 
 /* ---------- escada 3D (passos) ---------- */
 .passos-3d { display: grid; gap: 10px; }
-.lista-passos { list-style: none; margin: 4px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 8px; }
+.lista-passos { list-style: none; margin: 4px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(170px, 100%), 1fr)); gap: 8px; }
 .lista-passos li { display: flex; gap: 8px; align-items: flex-start; background: #fff; border: 2px solid var(--line); border-radius: 14px; padding: 8px 10px; font-size: .86rem; line-height: 1.35; transition: background .3s, border-color .3s, transform .3s; }
 .lista-passos li .n { flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%; background: var(--brand); color: #fff; display: grid; place-items: center; font-weight: 900; font-size: .78rem; }
 .lista-passos li b { display: block; font-size: .92rem; }
@@ -170,7 +170,7 @@
 @keyframes cai { to { transform: translateY(110vh) rotate(540deg); opacity: .6; } }
 
 /* ---------- simulador: quem cuida? (cartões que viram) ---------- */
-.qc-lista { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px; margin-top: 14px; perspective: 1200px; }
+.qc-lista { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr)); gap: 14px; margin-top: 14px; perspective: 1200px; }
 .qc-item { display: grid; transform-style: preserve-3d; transition: transform .7s cubic-bezier(.3, 1.2, .4, 1); }
 .qc-item.virado { transform: rotateY(180deg); }
 .qc-item > .face { grid-area: 1 / 1; backface-visibility: hidden; -webkit-backface-visibility: hidden; background: #fff; border: 2px solid var(--line); border-radius: 18px; padding: 12px 14px; box-shadow: 0 4px 0 #ece3d0; display: flex; flex-direction: column; gap: 8px; }
@@ -453,3 +453,13 @@ html.alto-contraste .lacre-codigo mark, html.alto-contraste .cb-tab tr.achou th,
   .confete { display: none; }
 }
 html.sem-movimento .cv-casa.aqui { transform: none; }
+
+/* ---------- parte avançada (parada com "avancado"): convite no fim, faixa em cada slide ---------- */
+.convite-avancado { margin: 18px auto 6px; max-width: 620px; background: #f3f7fd; border: 3px dashed #9db8dc; border-radius: 20px; padding: 16px 18px; }
+.convite-avancado .btn { font-size: 1.08rem; }
+.convite-avancado p { margin: 10px 0 0; color: var(--muted); font-size: .95rem; line-height: 1.4; }
+.faixa-avancada { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; margin: 0 0 14px; }
+.selo-av { display: inline-block; background: #e6eef8; color: var(--brand); border: 2px solid #9db8dc; border-radius: 999px; padding: 4px 14px; font-weight: 900; font-size: .78rem;
+  letter-spacing: .04em; text-transform: uppercase; }
+.botoes-abertura .btn { margin: 4px 6px 4px 0; }
+html.alto-contraste .convite-avancado, html.alto-contraste .selo-av { border-color: #000; background: #fff; color: #000; }

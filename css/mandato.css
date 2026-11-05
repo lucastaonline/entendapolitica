@@ -1,0 +1,72 @@
+/* ====== Perfil filtrado por mandato (perfil-mandato-r10; js/pessoa.js e js/trajetoria.js) ======
+   O seletor "Mandato" embaixo do nome, a faixa amarela "Você está vendo: ..." (presa logo abaixo da barra das abas) e o botão
+   "Ver este mandato" da linha do tempo. */
+
+/* ---------- o seletor ---------- */
+.mandato-perfil {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; max-width: 600px; margin: 10px 0 4px;
+  background: #fff; border: 2px solid var(--line); border-radius: 18px; padding: 8px 12px; text-align: left;
+}
+.mandato-perfil label { font-weight: 900; color: var(--brand); }
+.mandato-perfil .mandato-campo { flex: 1 1 260px; min-width: 0; }
+.mandato-perfil .mandato-dica { flex: 1 1 100%; margin: 0; font-size: .85rem; color: #4a5361; }
+
+/* ---------- a faixa amarela ---------- */
+.faixa-mandato {
+  position: sticky; top: calc(var(--topo-h, 58px) + var(--abas-h, 66px)); z-index: 54;
+  margin: 0; padding: 8px 14px; background: var(--amarelo); color: #2a1d00; border: 2px solid #c99700; border-top: 0;
+  border-radius: 0 0 14px 14px; box-shadow: 0 6px 12px -8px rgba(60, 40, 0, .45);
+}
+html.faixa-sem-abas .faixa-mandato { top: var(--topo-h, 58px); border-top: 2px solid #c99700; border-radius: 14px; margin: 12px 0 6px; }
+.faixa-mandato p { margin: 0; line-height: 1.35; font-size: .98rem; }
+.faixa-mandato b { font-weight: 900; }
+.faixa-mandato .fm-txt:focus { outline: 3px solid var(--brand); outline-offset: 2px; border-radius: 4px; }
+.faixa-mandato .fm-hoje { display: inline-flex; align-items: center; min-height: 32px; font-weight: 900; color: var(--brand); text-decoration: underline; text-underline-offset: 3px; white-space: nowrap; }
+.faixa-mandato .fm-hoje:hover { text-decoration-thickness: 3px; }
+/* a faixa fica presa: o foco nela não faz a página pular (o navegador acharia que a barra a cobre) */
+.faixa-mandato, .faixa-mandato * { scroll-margin-top: -100vh; }
+/* o que fica preso no topo (cabeçalho, barra das abas e faixa) não cobre o lugar para onde a página rola */
+html.com-faixa.com-abas { scroll-padding-top: calc(var(--topo-h, 58px) + var(--abas-h, 66px) + var(--faixa-h, 0px) + 12px); }
+html.com-faixa .abas-grupo .abas-lista > [role="tab"] { scroll-margin-top: calc(-1 * (var(--topo-h, 58px) + var(--abas-h, 66px) + var(--faixa-h, 0px) + 12px)); }
+html.com-faixa.faixa-sem-abas { scroll-padding-top: calc(var(--topo-h, 58px) + var(--faixa-h, 0px) + 12px); }
+@media (max-width: 600px) {
+  .faixa-mandato { padding: 6px 12px; }
+  .faixa-mandato p { font-size: .92rem; }
+}
+
+/* ---------- as abas sem dados daquele mandato ---------- */
+.sem-dados-mandato .vazio p { max-width: 62ch; margin: 8px auto 0; }
+.fonte-mandato { margin: 10px 0 0; }
+
+/* ====== mandatos-r11: o mesmo layout em todos os mandatos das páginas do Brasil, do estado e da cidade ======
+   A faixa amarela (a mesma do perfil) fica presa embaixo da barra das abas, alinhada com o texto da página; o aviso de onde vêm
+   os dados daquele mandato fica em cima das abas; as abas sem dados daquele período usam o quadro acima. */
+.abas-grupo > .faixa-mandato.faixa-pagina { width: min(1040px, calc(100% - 40px)); margin: 0 auto; }
+html.faixa-sem-abas .faixa-mandato.faixa-pagina { width: auto; }
+.nota-mandato { margin-top: 4px; margin-bottom: 4px; }
+.nota-mandato > .aviso { margin: 0; }
+.nota-mandato .bloco-abre { margin-top: 8px; }
+.nota-mandato .posses { margin: 6px 0 2px; }
+.exec-topo > .sem-dados-mandato, .grade-pessoas > .sem-dados-mandato { grid-column: 1 / -1; }
+.min-futuro { margin-top: 12px; }
+.min-futuro > p { margin: 10px 0 0; }
+.grade-pessoas > .sen-e26 { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.grade-pessoas > .sen-e26 > .pessoa-card { flex: 1 1 auto; }
+#exec-topo + .contas-e26, #lista-sen + .contas-e26 { margin-top: 14px; }
+@media (max-width: 600px) {
+  .abas-grupo > .faixa-mandato.faixa-pagina { width: calc(100% - 24px); }
+}
+
+/* ---------- linha do tempo: "Ver este mandato" ---------- */
+.traj-ver { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; margin-top: 10px; }
+.traj-ver .traj-fez-curto { flex: 1 1 100%; margin: 0; font-size: .92rem; }
+.traj-ver .traj-ver-btn { min-height: 44px; }
+.traj-vendo { margin: 0; font-weight: 800; color: var(--brand); }
+.traj-vendo-item .traj-cartao { box-shadow: 0 0 0 3px var(--amarelo); }
+
+/* ---------- alto contraste ---------- */
+html.alto-contraste .faixa-mandato { background: #fff !important; color: #000 !important; border: 3px solid #000 !important; box-shadow: none !important; }
+html.alto-contraste .faixa-mandato .fm-hoje { color: #000 !important; }
+html.alto-contraste .mandato-perfil { border-color: #000 !important; background: #fff !important; }
+html.alto-contraste .mandato-perfil .mandato-dica { color: #000 !important; }
+html.alto-contraste .traj-vendo-item .traj-cartao { box-shadow: 0 0 0 3px #000; }

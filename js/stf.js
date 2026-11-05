@@ -92,27 +92,7 @@
   }
 
   // ---------------------------------------------------------------- seção da página do Brasil
-  function cartaoHtml(m) {
-    var ind = m.indicacao || {}, posse = (m.posse || {}).data, apos = (m.aposentadoria || {}).data;
-    var chips = [];
-    if (m.papel) chips.push('<span class="chip amarelo"><span aria-hidden="true">⚖️ </span>' + esc(papelTxt(m)) + "</span>");
-    if (m.turma) chips.push('<span class="chip">' + esc(turmaTxt(m.turma)) + (m.presideTurma ? esc(EP.tr(" · preside", " · presides")) : "") + "</span>");
-    else if (m.papel === "presidente") chips.push('<span class="chip neutro">' + esc(EP.tr("Não fica em Turma", "Not in a Chamber")) + "</span>");
-    if (m.decano) chips.push('<span class="chip neutro">' + esc(EP.tr(EP.gen(m.genero, "Decano", "Decana") + ": há mais tempo no STF", "Dean: longest-serving")) + "</span>");
-    return '<li><a class="stf-card" href="pessoa.html?id=' + encodeURIComponent(m.id) + '">' + EP.av(m.foto, m.nome) +
-      '<span class="stf-c-txt"><b>' + nomeHtml(m.nome) + "</b>" +
-      (chips.length ? '<span class="stf-chips">' + chips.join("") + "</span>" : "") +
-      '<span class="stf-fatos">' +
-      (posse ? "<span>" + EP.tr("No STF desde ", "At the STF since ") + "<b>" + esc(EP.data(posse)) + "</b></span>" : "") +
-      (ind.presidente ? "<span>" + EP.tr(EP.gen(m.genero, "Indicado", "Indicada") + " por ", "Nominated by ") + "<b>" + nomeHtml(ind.presidente) + "</b>" +
-        (ind.data ? " (" + ano(ind.data) + ")" : "") + "</span>" : "") +
-      (apos ? "<span>" + EP.tr("Aposentadoria obrigatória: ", "Mandatory retirement: ") + "<b>" + esc(EP.data(apos)) + "</b>" +
-        EP.tr(" (75 anos)", " (age 75)") + "</span>" : "") +
-      "</span>" +
-      '<span class="ver">' + EP.tr("Ver tudo sobre " + EP.gen(m.genero, "ele", "ela"), "See everything about " + EP.gen(m.genero, "him", "her")) + ' <span aria-hidden="true">›</span></span>' +
-      "</span></a></li>";
-  }
-  function vagaHtml(v, d) {
+  function vagaLinhas(v, d) {
     var txt = [], f = [].concat(v.fontes || []);
     var quando = v.desde ? esc(EP.tr(" em " + EP.data(v.desde), " on " + EP.data(v.desde))) : "";
     if (v.de) {
@@ -136,9 +116,7 @@
     });
     if (!v.pendente && d.conferido) txt.push(esc(EP.tr("Até " + EP.data(d.conferido) + ", o Senado não tinha outra indicação para esta vaga.",
       "As of " + EP.data(d.conferido) + ", the Senate had no other nomination for this seat.")));
-    return '<li><div class="stf-card vaga"><span class="stf-cadeira" aria-hidden="true">🪑</span><span class="stf-c-txt"><b>' + esc(EP.tr("Cadeira vazia", "Empty seat")) + "</b>" +
-      txt.map(function (t) { return "<span>" + t + "</span>"; }).join("") +
-      (f.length ? '<span class="stf-fonte-vaga">' + fonteBtn(f, EP.tr("cadeira vazia", "empty seat")) + "</span>" : "") + "</span></div></li>";
+    return { txt: txt, f: f };
   }
   function presidenciaHtml(d, por) {
     var pr = d.presidencia || {}, p = por[pr.presidente], v = por[pr.vice];
@@ -154,57 +132,141 @@
         "The justices themselves choose the President and the Vice President of the Court, for " + (pr.anos || 2) + " years, with no re-election for the next term.")) + "</p>" +
       "<p>" + fonteBtn(pr.fontes, EP.tr("presidência do STF", "presidency of the STF")) + "</p></div>";
   }
-  function turmasHtml(d, por) {
-    var t = d.turmas || [];
-    if (!t.length) return "";
-    return '<h3 class="sub rev" id="stf-turmas"><span aria-hidden="true">👥 </span>' + EP.tr("As Turmas", "The Chambers") + "</h3>" +
-      '<p class="muted">' + esc(EP.tr("O STF julga de dois jeitos: no Plenário, com todos os ministros juntos, e em duas Turmas, com " + (d.cadeirasTurma || 5) + " ministros cada. Quem preside o STF não fica em nenhuma Turma.",
-        "The STF decides cases in two ways: in the Plenary, with all the justices together, and in two Chambers, with " + (d.cadeirasTurma || 5) + " justices each. The President of the STF is not in any Chamber.")) + "</p>" +
-      '<div class="stf-turmas">' + t.map(function (x) {
-        var vagas = (x.cadeiras || 5) - (x.membros || []).length;
-        return '<section class="stf-turma cartao rev" aria-labelledby="t-turma-' + x.numero + '"><h4 id="t-turma-' + x.numero + '">' + esc(turmaTxt(x.numero)) +
-          (EP.en ? ' <small lang="pt-BR">(' + esc(turmaPt(x.numero)) + ")</small>" : "") + "</h4>" +
-          '<p class="muted">' + esc(EP.tr(EP.num((x.membros || []).length) + " de " + (x.cadeiras || 5) + " cadeiras" + (vagas > 0 ? " (" + EP.plural(vagas, "vaga aberta", "vagas abertas") + ")" : ""),
-            EP.num((x.membros || []).length) + " of " + (x.cadeiras || 5) + " seats" + (vagas > 0 ? " (" + EP.plural(vagas, "empty seat", "empty seats") + ")" : ""))) + "</p>" +
-          "<ul>" + (x.membros || []).map(function (id) {
-            var m = por[id];
-            return m ? '<li><a href="pessoa.html?id=' + encodeURIComponent(m.id) + '">' + nomeHtml(m.nome) + "</a>" +
-              (m.presideTurma ? ' <span class="chip">' + esc(EP.tr("preside a Turma", "presides")) + "</span>" : "") + "</li>" : "";
-          }).join("") + "</ul></section>";
-      }).join("") + "</div>" +
-      "<p>" + fonteBtn(d.fonteTurmas, EP.tr("Turmas", "Chambers")) + "</p>";
-  }
-  function trabalhoHtml(d) {
+  // recolhe: na página com abas, o texto longo fica num bloco que abre (EP.blocoAbre), debaixo do título
+  function trabalhoHtml(d, recolhe) {
     var de = d.decisoes;
-    return '<h3 class="sub rev" id="stf-trabalho"><span aria-hidden="true">📊 </span>' + EP.tr("O que o STF publica sobre o trabalho dos ministros", "What the STF publishes about the justices' work") + "</h3>" +
-      '<div class="cartao rev stf-trabalho">' +
-      (de ? "<p>" + esc(EP.tr("A página oficial do STF mostra o total do tribunal: " + EP.num(de.total) + " decisões em " + de.ano + ".",
+    var corpo = (de ? "<p>" + esc(EP.tr("A página oficial do STF mostra o total do tribunal: " + EP.num(de.total) + " decisões em " + de.ano + ".",
         "The STF's official page shows the total for the whole court: " + EP.num(de.total) + " decisions in " + de.ano + ".")) + " " + fonteBtn(de.fonte, EP.tr("decisões do STF", "STF decisions")) + "</p>" : "") +
       "<p>" + EP.md(EP.tr("Os números de cada gabinete (as decisões e os processos de cada ministro) estão nos painéis do Corte Aberta, do próprio STF. Os painéis só funcionam abertos no navegador e não têm um arquivo de dados com endereço fixo que este site consiga ler e conferir. Por isso, os números de cada gabinete não estão copiados aqui: o link leva direto para lá.",
         "The numbers for each justice's office (each justice's decisions and cases) are on the STF's own dashboards, called {{Corte Aberta}}. The dashboards only work when opened in a browser and have no data file at a fixed address that this site could read and check. That is why the numbers for each office are not copied here: the link goes straight there.")) + "</p>" +
       '<p class="muted">' + esc(EP.tr("Contar decisões não mostra se elas são boas ou ruins: os casos são muito diferentes uns dos outros.",
         "Counting decisions does not show whether they are good or bad: cases are very different from one another.")) + "</p>" +
-      corteAberta(d) + "</div>";
+      corteAberta(d);
+    return '<h3 class="sub rev" id="stf-trabalho"><span aria-hidden="true">📊 </span>' + EP.tr("O que o STF publica sobre o trabalho dos ministros", "What the STF publishes about the justices' work") + "</h3>" +
+      (recolhe ? EP.blocoAbre("stf-trabalho", esc(EP.tr("Ver quantas decisões o STF publica e onde achar os números de cada ministro", "See how many decisions the STF publishes and where to find each justice's numbers")), corpo) :
+        '<div class="cartao rev stf-trabalho">' + corpo + "</div>");
+  }
+  // site-d-r14 (protótipo D): as 11 cadeiras (a foto na moldura sobre um assento; a vaga, uma cadeira vazia listrada), as duas
+  // Turmas como fileiras de rostos e o resto (como alguém chega ao STF, quem preside, o que o STF publica) no "💡 Saber mais".
+  // Tocar numa cadeira abre a gaveta com o resumo do ministro (posse, quem indicou, aposentadoria, Turma, fontes) e "Ver a página
+  // inteira"; a cadeira vazia abre a gaveta com o que o Senado fez. O endereço guarda a gaveta (?ver=stf:<id>, ?ver=stf:vaga-0).
+  var DADOS = null;
+  function papelCurto(m) {
+    if (m.papel === "presidente") return EP.tr("Presidente", "President");
+    if (m.papel === "vice") return EP.tr("Vice-presidente", "Vice President");
+    if (m.decano) return EP.tr(EP.gen(m.genero, "Decano", "Decana"), "Dean");
+    return m.turma ? turmaTxt(m.turma) : "";
+  }
+  function cadeiraHtml(m) {
+    return '<li><a class="stf-card d-cadeira" href="pessoa.html?id=' + encodeURIComponent(m.id) + '">' + EP.d.moldura(m.foto, m.nome) + '<span class="d-assento" aria-hidden="true"></span>' +
+      "<b>" + nomeHtml(m.nome) + "</b><small>" + esc(papelCurto(m)) + "</small></a></li>";
+  }
+  function vagaCadeiraHtml(v, k) {
+    return '<li><button type="button" class="stf-card d-cadeira vaga" data-stf-vaga="' + k + '" aria-haspopup="dialog"><span class="d-vaga-ic" aria-hidden="true">🪑</span><span class="d-assento" aria-hidden="true"></span>' +
+      "<b>" + esc(EP.tr("Cadeira vazia", "Empty seat")) + "</b>" + (v.de ? "<small>" + EP.tr("era de ", "it belonged to ") + nomeHtml(v.de) + "</small>" : "") + "</button></li>";
+  }
+  function corpoMinistro(m, d) {
+    var ind = m.indicacao || {}, posse = (m.posse || {}).data, apos = (m.aposentadoria || {}).data;
+    function f(ic, rot, val) { return val ? '<li><span class="d-ic peq" aria-hidden="true">' + ic + "</span><span>" + esc(rot) + "</span><b>" + val + "</b></li>" : ""; }
+    var chips = [];
+    if (m.papel) chips.push('<span class="chip amarelo"><span aria-hidden="true">⚖️ </span>' + esc(papelTxt(m)) + "</span>");
+    if (m.turma) chips.push('<span class="chip">' + esc(turmaTxt(m.turma)) + (m.presideTurma ? esc(EP.tr(" · preside", " · presides")) : "") + "</span>");
+    else if (m.papel === "presidente") chips.push('<span class="chip">' + esc(EP.tr("Não fica em Turma", "Not in a Chamber")) + "</span>");
+    if (m.decano) chips.push('<span class="chip verde">' + esc(EP.tr(EP.gen(m.genero, "Decano", "Decana") + ": há mais tempo no STF", "Dean: longest-serving")) + "</span>");
+    return '<div class="gv-pessoa"><span class="gv-moldura">' + EP.av(m.foto, m.nome, "", true) + '</span><div>' +
+      (chips.length ? '<p class="stf-chips">' + chips.join("") + "</p>" : "") + "</div></div>" +
+      '<ul class="d-fatos">' + f("🏛️", EP.tr("No STF desde", "At the STF since"), posse ? esc(EP.data(posse)) : "") +
+      f("📨", EP.tr(EP.gen(m.genero, "Indicado", "Indicada") + " por", "Nominated by"), ind.presidente ? nomeHtml(ind.presidente) + (ind.data ? " (" + ano(ind.data) + ")" : "") : "") +
+      f("⏳", EP.tr("Aposentadoria obrigatória", "Mandatory retirement"), apos ? esc(EP.data(apos)) + " <small>" + esc(EP.tr("(75 anos)", "(age 75)")) + "</small>" : "") + "</ul>" +
+      EP.d.saiba("<p>" + esc(EP.tr("Os ministros do STF julgam se as leis e os atos do governo respeitam a Constituição, a lei maior do país. Eles não são eleitos: o presidente indica, o Senado aprova, e cada um fica até se aposentar. Quem indicou é só um dado: o site não agrupa ninguém por isso.",
+        "STF justices decide whether laws and government acts follow the Constitution, the country's highest law. They are not elected: the President nominates, the Senate approves, and each one stays until retiring. Who nominated them is just a fact: the site does not group anyone by it.")) + "</p>") +
+      '<p class="gv-fonte">' + fonteBtn(m.fontes, cargoTxt(m)) + "</p>";
+  }
+  function abreMinistro(m, de) {
+    if (!m || !EP.gaveta) return;
+    EP.gaveta({ tit: nomeHtml(m.nome), sub: cargoTxt(m), ver: "stf:" + m.id, pagina: { href: "pessoa.html?id=" + encodeURIComponent(m.id), secao: "judiciario" },
+      corpo: corpoMinistro(m, DADOS || {}) }, de);
+  }
+  function abreVaga(k, de) {
+    var v = ((DADOS || {}).vagas || [])[k];
+    if (!v || !EP.gaveta) return;
+    var ind = (v.indicacoes || []).map(function (s) {
+      var pl = s.plenario || {};
+      return '<div class="gv-ind"><p class="gv-h3">' + EP.tr("Indicação de ", "Nomination of ") + (s.nome ? nomeHtml(s.nome) : esc(EP.tr("uma pessoa", "a nominee"))) + "</p>" +
+        (pl.sim != null ? EP.d.placar({ Sim: pl.sim, "Não": pl.nao || 0, "Abstenção": pl.abstencao || 0, total: (pl.sim || 0) + (pl.nao || 0) + (pl.abstencao || 0) }) : "") + "</div>";
+    }).join("");
+    var x = vagaLinhas(v, DADOS || {});
+    EP.gaveta({ tit: '<span aria-hidden="true">🪑 </span>' + esc(EP.tr("Cadeira vazia", "Empty seat")), ver: "stf:vaga-" + k,
+      corpo: '<ul class="gv-vaga-txt">' + x.txt.map(function (t) { return "<li>" + t + "</li>"; }).join("") + "</ul>" + ind +
+        '<p class="gv-fonte">' + fonteBtn(x.f, EP.tr("cadeira vazia", "empty seat")) + "</p>" }, de);
+  }
+  function turmasD(d, por) {
+    var t = d.turmas || [];
+    if (!t.length) return "";
+    return '<h3 class="sub" id="stf-turmas"><span aria-hidden="true">👥 </span>' + EP.tr("As Turmas", "The Chambers") + "</h3>" +
+      '<p class="d-linha">' + esc(EP.tr("O STF julga com todos juntos (o Plenário) ou em duas Turmas de " + (d.cadeirasTurma || 5) + ". Quem preside o STF não fica em Turma.",
+        "The STF decides with everyone together (the Plenary) or in two Chambers of " + (d.cadeirasTurma || 5) + ". The President of the STF is not in a Chamber.")) + "</p>" +
+      '<div class="stf-turmas d-turmas">' + t.map(function (x) {
+        var vagas = (x.cadeiras || 5) - (x.membros || []).length;
+        return '<section class="stf-turma d-turma" aria-labelledby="t-turma-' + x.numero + '"><h4 id="t-turma-' + x.numero + '">' + esc(turmaTxt(x.numero)) +
+          (EP.en ? ' <small lang="pt-BR">(' + esc(turmaPt(x.numero)) + ")</small>" : "") + ' <small class="d-turma-n">' + esc(EP.tr(EP.num((x.membros || []).length) + " de " + (x.cadeiras || 5) + (vagas > 0 ? " (" + EP.plural(vagas, "vaga aberta", "vagas abertas") + ")" : ""),
+            EP.num((x.membros || []).length) + " of " + (x.cadeiras || 5) + (vagas > 0 ? " (" + EP.plural(vagas, "empty seat", "empty seats") + ")" : ""))) + "</small></h4>" +
+          '<ul class="d-rostos">' + (x.membros || []).map(function (id) {
+            var m = por[id];
+            return m ? '<li><a href="pessoa.html?id=' + encodeURIComponent(m.id) + '">' + EP.d.moldura(m.foto, m.nome, "mini") + '<span class="d-rosto-nome">' + nomeHtml(m.nome) + "</span>" +
+              (m.presideTurma ? ' <span class="chip">' + esc(EP.tr("preside a Turma", "presides")) + "</span>" : "") + "</a></li>" : "";
+          }).join("") + "</ul></section>";
+      }).join("") + "</div><p>" + fonteBtn(d.fonteTurmas, EP.tr("Turmas", "Chambers")) + "</p>";
   }
   function secao(el, d) {
     var ms = d.ministros || [], por = {};
     ms.forEach(function (m) { por[m.id] = m; });
+    DADOS = d;
     var vagas = d.vagas || [], cad = d.cadeiras || 11;
     el.innerHTML =
-      '<h3 class="sub rev" id="stf-como"><span aria-hidden="true">🪜 </span>' + EP.tr("Como alguém chega ao STF", "How someone gets to the STF") + "</h3>" +
-      '<p class="muted">' + esc(EP.tr("Ninguém é eleito para o STF. Os juízes do país, em geral, entram por concurso; os " + cad + " ministros do STF são escolhidos assim:",
-        "No one is elected to the STF. Most judges in Brazil get their jobs through a public exam; the " + cad + " justices of the STF are chosen like this:")) + "</p>" +
-      passosHtml(d) + "<p>" + fonteBtn((d.regras || {}).fontes, EP.tr("como alguém chega ao STF", "how someone gets to the STF"), EP.tr("De onde vêm essas regras?", "Where do these rules come from?")) + "</p>" +
-      '<h3 class="sub rev" id="stf-preside"><span aria-hidden="true">🏛️ </span>' + EP.tr("Quem preside o tribunal", "Who presides over the court") + "</h3>" +
-      presidenciaHtml(d, por) +
-      '<h3 class="sub rev" id="stf-ministros"><span aria-hidden="true">⚖️ </span>' + EP.tr("Os ministros", "The justices") + " <small>(" +
+      '<h3 class="sub" id="stf-ministros"><span aria-hidden="true">⚖️ </span>' + EP.tr("Os ministros", "The justices") + " <small>(" +
       esc(EP.tr(ms.length + " de " + cad + " cadeiras", ms.length + " of " + cad + " seats")) + ")</small></h3>" +
-      '<p class="muted">' + esc(EP.tr("Na ordem oficial do STF: o presidente, o vice-presidente e os outros do mais antigo para o mais novo no tribunal (quem tomou posse antes vem primeiro). Quem indicou cada um é só um dado do cartão: o site não agrupa ninguém por isso.",
-        "In the STF's official order: the President, the Vice President and then the others from the longest-serving to the newest (whoever took office first comes first). Who nominated each justice is just one fact on the card: the site does not group anyone by it.")) + "</p>" +
-      '<ul class="stf-grade">' + ms.map(cartaoHtml).join("") + vagas.map(function (v) { return vagaHtml(v, d); }).join("") + "</ul>" +
+      '<p class="d-linha">' + esc(EP.tr("Cada cadeira é um ministro, na ordem oficial do STF. Toque numa cadeira para saber quem é.",
+        "Each seat is one justice, in the STF's official order. Tap a seat to see who it is.")) + "</p>" +
+      '<ul class="stf-grade d-cadeiras">' + ms.map(cadeiraHtml).join("") + vagas.map(vagaCadeiraHtml).join("") + "</ul>" +
       "<p>" + fonteBtn(d.fontes, EP.tr("lista dos ministros", "list of justices"), EP.tr("De onde vem esta lista?", "Where does this list come from?")) + "</p>" +
-      turmasHtml(d, por) + trabalhoHtml(d) + conferidoHtml(d);
+      turmasD(d, por) +
+      EP.d.saiba('<p class="muted">' + esc(EP.tr("Ninguém é eleito para o STF. Os juízes do país, em geral, entram por concurso; os " + cad + " ministros do STF são escolhidos assim:",
+          "No one is elected to the STF. Most judges in Brazil get their jobs through a public exam; the " + cad + " justices of the STF are chosen like this:")) + "</p>" +
+        passosHtml(d) + "<p>" + fonteBtn((d.regras || {}).fontes, EP.tr("como alguém chega ao STF", "how someone gets to the STF"), EP.tr("De onde vêm essas regras?", "Where do these rules come from?")) + "</p>",
+        EP.tr("Como alguém chega ao STF", "How someone gets to the STF"), "stf-como-det") +
+      EP.d.saiba(presidenciaHtml(d, por) + '<p class="muted">' + esc(EP.tr("As cadeiras estão na ordem oficial do STF: o presidente, o vice-presidente e os outros do mais antigo para o mais novo no tribunal (quem tomou posse antes vem primeiro). Quem indicou cada um é só um dado: o site não agrupa ninguém por isso.",
+          "The seats are in the STF's official order: the President, the Vice President and then the others from the longest-serving to the newest (whoever took office first comes first). Who nominated each justice is just a fact: the site does not group anyone by it.")) + "</p>",
+        EP.tr("Quem preside o tribunal e a ordem das cadeiras", "Who presides over the court and the order of the seats"), "stf-preside-det") +
+      EP.d.saiba(trabalhoHtml(d, false).replace(/^<h3[^>]*>[\s\S]*?<\/h3>/, ""), EP.tr("O que o STF publica sobre o trabalho dos ministros", "What the STF publishes about the justices' work"), "stf-trabalho-det") +
+      conferidoHtml(d);
     EP.revelar(el);
+  }
+  el0Liga();
+  function el0Liga() {
+    var st = document.getElementById("stf");
+    if (!st) return;
+    st.addEventListener("click", function (e) {
+      if (e.defaultPrevented || e.button || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey || !DADOS) return;
+      var a = e.target.closest && e.target.closest("a.stf-card[href]");
+      if (a) {
+        var id = new URLSearchParams(a.getAttribute("href").split("?")[1]).get("id"), m = (DADOS.ministros || []).filter(function (x) { return x.id === id; })[0];
+        if (m) { e.preventDefault(); abreMinistro(m, a); }
+        return;
+      }
+      var b = e.target.closest && e.target.closest("[data-stf-vaga]");
+      if (b) abreVaga(+b.getAttribute("data-stf-vaga"), b);
+    });
+    if (EP.gavetaVer) EP.gavetaVer.stf = function (v) {
+      if (EP.abas && EP.abas.mostra) EP.abas.mostra("judiciario");
+      S.dados().then(function (d) {
+        DADOS = DADOS || d;
+        var mv = /^vaga-(\d+)$/.exec(v);
+        if (mv) { abreVaga(+mv[1], document.querySelector('[data-stf-vaga="' + mv[1] + '"]')); return; }
+        var m = (d.ministros || []).filter(function (x) { return x.id === v; })[0];
+        if (m) abreMinistro(m, document.querySelector('#stf a.stf-card[href="pessoa.html?id=' + encodeURIComponent(m.id) + '"]'));
+      });
+    };
   }
   // mandato que já acabou (brasil.html?mandato=2019): a composição do STF não muda junto com os mandatos; só as regras
   function secaoPassado(el, d) {
@@ -316,6 +378,17 @@
   }
   // as fontes da presidência só entram no perfil de quem preside ou é vice
   function fontesPresidencia(p, d) { return p.papel === "presidente" || p.papel === "vice" ? (d.presidencia || {}).fontes : null; }
+  // site-d-r14: os números grandes do perfil de um ministro do STF (o mesmo jeito de todos os perfis)
+  S.numerosHtml = function (p) {
+    var m = p._m || p, idade = EP.idade(m.nascimento), posse = (m.posse || {}).data, apos = (m.aposentadoria || {}).data;
+    if (!EP.d) return "";
+    return '<div class="d-numeros-perfil">' + EP.d.kpis([
+      idade != null ? { ic: "🎂", n: idade, t: EP.tr("anos de idade", "years old") } : null,
+      posse ? { ic: "🏛️", n: ano(posse), t: EP.tr("ano em que tomou posse no STF", "year they took office at the STF") } : null,
+      apos ? { ic: "⏳", n: ano(apos), t: EP.tr("ano da aposentadoria obrigatória (75 anos)", "year of mandatory retirement (age 75)") } : null,
+      (m.senado || {}).plenario && m.senado.plenario.sim != null ? { ic: "🗳️", n: EP.num(m.senado.plenario.sim), t: EP.tr("votos sim no Senado", "votes in favor in the Senate") } : null
+    ], EP.tr("Números de ", "Numbers for ") + m.nome) + "</div>";
+  };
   S.perfilHtml = function (p) {
     var d = p._stf || {}, m = p._m || p, idade = EP.idade(m.nascimento), apos = m.aposentadoria || {}, ind = m.indicacao || {};
     var meta = document.querySelector('meta[name="description"]');
@@ -324,8 +397,8 @@
     var chips = [];
     if (m.papel) chips.push('<span class="chip amarelo"><span aria-hidden="true">⚖️ </span>' + esc(papelTxt(m)) + "</span>");
     if (m.turma) chips.push('<span class="chip"><span aria-hidden="true">👥 </span>' + esc(turmaTxt(m.turma)) + (m.presideTurma ? esc(EP.tr(" · preside a Turma", " · presides over it")) : "") + "</span>");
-    if (m.decano) chips.push('<span class="chip neutro">' + esc(EP.tr(EP.gen(m.genero, "Decano", "Decana") + ": há mais tempo no STF", "Dean: longest-serving justice")) + "</span>");
-    if ((m.posse || {}).data) chips.push('<span class="chip neutro"><span aria-hidden="true">📅 </span>' + esc(EP.tr("No STF desde " + ano(m.posse.data), "At the STF since " + ano(m.posse.data))) + "</span>");
+    if (m.decano) chips.push('<span class="chip verde">' + esc(EP.tr(EP.gen(m.genero, "Decano", "Decana") + ": há mais tempo no STF", "Dean: longest-serving justice")) + "</span>");
+    if ((m.posse || {}).data) chips.push('<span class="chip verde"><span aria-hidden="true">📅 </span>' + esc(EP.tr("No STF desde " + ano(m.posse.data), "At the STF since " + ano(m.posse.data))) + "</span>");
     var topo = '<section class="perfil-topo" aria-labelledby="nome-pessoa"><div class="moldura">' + EP.av(m.foto, m.nome, null, true) + "</div><div>" +
       '<span class="cargo-p">' + esc(cargoTxt(m)) + '</span><h1 id="nome-pessoa">' + nomeHtml(m.nome) + "</h1>" +
       (m.nomeCivil && EP.norm(m.nomeCivil) !== EP.norm(m.nome) ? '<p class="muted" style="margin:-4px 0 8px">' + EP.tr("Nome completo: ", "Full name: ") + nomeHtml(m.nomeCivil) + "</p>" : "") +
@@ -355,13 +428,18 @@
   };
 
   // ---------------------------------------------------------------- liga a seção, se a página tiver
+  // na página com abas (js/abas.js), a seção é montada na primeira vez que a aba do STF aparece
   var el = document.getElementById("stf");
   if (!el) return;
-  S.dados().then(function (d) {
-    if (EP.hist && EP.hist.param && EP.hist.param()) secaoPassado(el, d);
-    else secao(el, d);
-  }).catch(function () {
-    el.innerHTML = '<div class="vazio"><span class="grande" aria-hidden="true">⚠️</span>' +
-      EP.tr("Não foi possível carregar os ministros do STF agora. Tente de novo daqui a pouco.", "Could not load the STF justices right now. Please try again in a little while.") + "</div>";
-  });
+  function liga() {
+    S.dados().then(function (d) {
+      if (EP.hist && EP.hist.param && EP.hist.param()) secaoPassado(el, d);
+      else secao(el, d);
+    }).catch(function () {
+      el.innerHTML = '<div class="vazio"><span class="grande" aria-hidden="true">⚠️</span>' +
+        EP.tr("Não foi possível carregar os ministros do STF agora. Tente de novo daqui a pouco.", "Could not load the STF justices right now. Please try again in a little while.") + "</div>";
+    });
+  }
+  if (EP.abas && EP.abas.quandoAbrir) EP.abas.quandoAbrir("judiciario", liga);
+  else liga();
 })();

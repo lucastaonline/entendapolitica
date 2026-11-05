@@ -1,6 +1,5 @@
 /* ====== Quem assume nos próximos mandatos (js/proximos.js): linha do tempo das posses, contagens, Senado, Câmara e
    Assembleia a partir da posse, a próxima eleição da cidade e o perfil de quem foi eleito em 2026 (e26-). ====== */
-.lead-e26 { font-size: 1.02rem; max-width: 760px; }
 .pessoa-grande small.posse-e26 { color: var(--ink); font-weight: 900; margin: 4px 0 8px; }
 
 /* folhinha de calendário (desenho; a data vem escrita ao lado) */
@@ -18,7 +17,7 @@
 .folhinha .f-ano { font-size: .7rem; font-weight: 800; color: var(--muted); padding: 0 0 6px; }
 
 /* linha do tempo das posses */
-.posses { list-style: none; margin: 10px 0 6px; padding: 0; display: grid; gap: 14px; }
+.posses { list-style: none; margin: 10px 0 6px; padding: 0; display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr)); }
 .posses > li { display: flex; gap: 16px; align-items: center; background: var(--card); border: 2px solid var(--line); border-radius: 18px;
   padding: 12px 16px; box-shadow: 0 3px 0 #ece3d0; }
 .posses .p-txt { display: flex; flex-direction: column; min-width: 0; overflow-wrap: anywhere; }
@@ -27,14 +26,13 @@
 /* contagens (só números) */
 .contas-e26 { background: #f3f7fd; border: 2px solid #d6e2f1; border-radius: 16px; padding: 12px 16px; margin: 10px 0; }
 .contas-e26 ul { margin: 0 0 8px; padding-left: 1.2em; }
-.contas-e26 li { margin: 4px 0; }
+.contas-e26 li { margin: 4px 0; break-inside: avoid; }
+@media (min-width: 900px) { .contas-e26 ul { columns: 2; column-gap: 32px; } }
 .contas-e26 p { margin: 0; font-size: .88rem; }
 
 /* senadores eleitos no estado, com os suplentes */
-.grade-senado-e26 { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; margin-top: 10px; }
 .sen-e26 { display: flex; flex-direction: column; gap: 6px; }
 .suplentes-e26 { margin: 0; font-size: .9rem; overflow-wrap: anywhere; }
-.continua-e26 { margin-top: 12px; overflow-wrap: anywhere; }
 
 /* a próxima eleição da cidade e as suplementares */
 .proxima-e26 { display: flex; gap: 18px; align-items: flex-start; background: var(--card); border: 2px solid var(--line); border-radius: var(--raio);
@@ -52,7 +50,7 @@
 /* perfil de quem foi eleito e ainda não tomou posse */
 .e26-perfil { background: #f3f7fd; border: 2px solid #d6e2f1; border-radius: var(--raio); padding: 16px 18px; }
 .links-e26 { margin: 10px 0 6px; }
-.bens-e26 { list-style: none; margin: 10px 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 8px; }
+.bens-e26 { list-style: none; margin: 10px 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr)); gap: 8px; }
 .bens-e26 li { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; background: var(--card); border: 2px solid var(--line);
   border-radius: 12px; padding: 8px 12px; }
 .bens-e26 li[hidden] { display: none; }
@@ -73,3 +71,13 @@ html.alto-contraste .folhinha .f-mes { background: #000; color: #fff; }
 html.alto-contraste .folhinha .f-mes::before, html.alto-contraste .folhinha .f-mes::after { background: #fff; }
 html.alto-contraste .posses > li, html.alto-contraste .contas-e26, html.alto-contraste .proxima-e26, html.alto-contraste .e26-perfil,
 html.alto-contraste .bens-e26 li { background: #fff; border-color: #000; box-shadow: none; }
+
+/* ui-r9: "Quem assume em 2027" é o mandato 2027 do "Ver outro mandato" (js/proximos.js). Nas abas de hoje, um aviso curto com
+   link; na página do mandato 2027 (mandatos-r11), as mesmas abas, com a faixa amarela de css/mandato.css */
+.aviso-futuro { margin: 2px 0 14px; }
+.aviso-futuro a {
+  display: inline-flex; align-items: center; gap: 4px; min-height: 44px; padding: 6px 16px; border-radius: 999px; font-weight: 800; text-decoration: none;
+  color: var(--brand); background: #eef3fa; border: 1px solid #c9d8eb;
+}
+.aviso-futuro a:hover { background: #e1ebf7; text-decoration: underline; }
+html.alto-contraste .aviso-futuro a { background: #fff; color: #000; border: 2px solid #000; text-decoration: underline; }

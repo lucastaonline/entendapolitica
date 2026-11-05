@@ -78,7 +78,15 @@
         return itens.sort(function (a, b) { return EP.norm(a.t).localeCompare(EP.norm(b.t)) || a.sub.localeCompare(b.sub); });
       });
     },
-    aoEscolher: function (it) { abre(it.v, true); }
+    // ui-r9: com uma cidade já na tela (em abas), escolher outra abre a página dela (endereço novo, o Voltar volta para a anterior)
+    aoEscolher: function (it) {
+      if (!document.getElementById("cidade").hidden && document.querySelector("#cidade .abas-ep")) {
+        try { sessionStorage.setItem("ep-foca-cidade", "1"); } catch (e) {}
+        location.href = "cidade.html?ibge=" + it.v + (mandato ? "&mandato=" + mandato : "") + (EP.en ? "&lang=en" : "");
+        return;
+      }
+      abre(it.v, true);
+    }
   });
 
   // ---------------------------------------------------------------- uma cidade
@@ -88,7 +96,16 @@
     var caixa = document.getElementById("cidade");
     caixa.hidden = false;
     var mand = ibge === BRASILIA || ibge === NORONHA ? null : mandato;
-    try { history.replaceState(null, "", "cidade.html?ibge=" + ibge + (mand ? "&mandato=" + mand : "") + (EP.en ? "&lang=en" : "")); } catch (e) {}
+    // ui-r9: a mesma cidade (ao abrir a página) guarda o resto do endereço: a aba (#camara-mun), os filtros e a memória do
+    // histórico (EP.memo); outra cidade começa um endereço limpo
+    try {
+      var u = new URL(location.href), mesma = u.searchParams.get("ibge") === String(ibge);
+      if (!mesma) u = new URL("cidade.html", location.href);
+      u.searchParams.set("ibge", ibge);
+      if (mand) u.searchParams.set("mandato", mand); else u.searchParams.delete("mandato");
+      if (EP.en) u.searchParams.set("lang", "en");
+      history.replaceState(mesma ? history.state : null, "", u.pathname.split("/").pop() + u.search + (mesma ? location.hash : ""));
+    } catch (e) {}
     D.canonico({ ibge: ibge, mandato: mand });
     if (ibge === BRASILIA) return especial(caixa, "DF", focar);
     if (ibge === NORONHA) return especial(caixa, "PE", focar);
@@ -99,9 +116,50 @@
       return;
     }
     caixa.innerHTML = '<div class="miolo"><div class="carregando">' + EP.tr("Carregando…", "Loading…") + "</div></div>";
-    if (mand) return EP.hist.cidade(caixa, ibge, uf, mand, function () { depois(caixa, focar); });
+    if (mand) return EP.hist.cidade(caixa, ibge, uf, mand, { esqueleto: esqueleto, pronto: function () { depois(caixa, focar); } });
     EP.json("dados/cidades/" + uf + "/" + ibge + ".json").then(function (c) { desenha(caixa, c, uf, focar); })
       .catch(function () { falhou(caixa, "os dados desta cidade", "the data for this city"); });
+  }
+
+  // ---------------------------------------------------------------- a página de uma cidade (hoje e nos mandatos anteriores)
+  // ui-r9: o nome da cidade, o "Ver outro mandato" e os avisos ficam em cima; embaixo, as abas (js/abas.js): quem governa, a
+  // Câmara Municipal, a próxima eleição e "Quem faz o quê" (cidade.html?ibge=...#camara-mun). mandatos-r11: o mesmo esqueleto
+  // para todos os mandatos (js/historico.js usa este também); só os dados mudam.
+  // x = { nome, uf, periodo?, avisos?, gov (cartões), govNotas?, semCidade? (a cidade ainda não existia: o aviso vai em govNotas),
+  // nTxt?, camDesc?, camAviso?, info?, proxima? (HTML da aba; sem ela, "A próxima eleição" de hoje, do js/proximos.js) }.
+  // Devolve { quando(secao, fn) }: roda fn quando a aba abre.
+  function esqueleto(caixa, x) {
+    var uf = x.uf;
+    caixa.innerHTML =
+      '<div class="miolo cidade-cab"><div class="cab-bloco rev"><span class="ic-bloco" aria-hidden="true">🏙️</span><div>' +
+        '<h2 id="nome-cidade" tabindex="-1">' + esc(x.nome) + (x.periodo ? ' <span class="h1-periodo">' + esc(x.periodo) + "</span>" : "") + "</h2>" +
+        '<p class="muted">' + esc(EP.tr("Uma cidade " + EP.doEstado(uf) + " (" + uf + ")", "A city in " + (EP.UFS[uf] || uf) + " (" + uf + "), Brazil")) + "</p></div></div>" +
+        '<div class="mandato-lugar" id="mandato-lugar"></div>' + (x.avisos || "") + "</div>" +
+      '<nav class="miolo atalhos" aria-label="' + EP.tr("Ir direto para", "Jump to") + '">' +
+        '<a class="chip" href="#governo-cidade"><span aria-hidden="true">🏢</span><span>' + EP.tr("Quem governa", "Who governs") + "</span></a>" +
+        '<a class="chip" href="#camara-mun"><span aria-hidden="true">🏛️</span><span>' + EP.tr("Câmara Municipal", "City Council") + "</span></a>" +
+        '<a class="chip" href="#proxima-eleicao"><span aria-hidden="true">🗳️</span><span>' + EP.tr("A próxima eleição", "The next election") + "</span></a>" +
+        '<a class="chip" href="#papeis"><span aria-hidden="true">🦉</span><span>' + EP.tr("Quem faz o quê", "Who does what") + "</span></a></nav>" +
+      '<section class="miolo bloco" id="governo-cidade" aria-labelledby="t-gov-cid">' +
+        '<h2 class="sub" id="t-gov-cid"><span aria-hidden="true">🏢 </span>' + EP.tr("Quem governa a cidade", "Who governs the city") + "</h2>" +
+        (x.gov ? '<div class="exec-topo">' + x.gov + "</div>" : x.semCidade ? "" : '<div class="vazio">' + EP.tr("O TSE não mostra quem governa esta cidade.", "The TSE does not show who governs this city.") + "</div>") +
+        (x.govNotas || "") + "</section>" +
+      '<section class="miolo bloco" id="camara-mun" aria-labelledby="t-camara-mun"><div class="cab-bloco rev"><span class="ic-bloco" aria-hidden="true">🏛️</span><div>' +
+        '<h2 id="t-camara-mun">' + EP.tr("A Câmara Municipal", "The City Council") + (x.nTxt ? " <small>(" + x.nTxt + ")</small>" : "") + "</h2>" +
+        '<p class="muted">' + (x.camDesc || EP.tr("Os vereadores fazem as leis da cidade e fiscalizam o prefeito.", "City councilors (<span lang=\"pt-BR\">vereadores</span>) make the city's laws and oversee the mayor.")) + "</p></div></div>" +
+        (x.camAviso || "") + '<div id="casa-ver"></div>' + (x.info || "") + "</section>" +
+      // a próxima eleição da cidade e as eleições suplementares (js/proximos.js)
+      '<section class="miolo bloco" id="proxima-eleicao" aria-labelledby="t-proxima-eleicao"><div class="cab-bloco rev"><span class="ic-bloco" aria-hidden="true">🗳️</span><div>' +
+        '<h2 id="t-proxima-eleicao">' + EP.tr("A próxima eleição", "The next election") + "</h2>" +
+        '<p class="muted">' + EP.tr("Quando a cidade escolhe de novo o prefeito, o vice e os vereadores.", "When the city chooses its mayor, vice mayor and city councilors again.") + "</p></div></div>" +
+        (x.proxima || '<div id="proximos-cidade"><div class="carregando">' + EP.tr("Carregando…", "Loading…") + "</div></div>") + "</section>" +
+      '<section class="miolo bloco" aria-label="' + EP.tr("Ver mais", "See more") + '"><div class="links-cidade rev">' +
+        '<a class="btn claro" href="estado.html?uf=' + uf + (EP.en ? "&lang=en" : "") + '"><span aria-hidden="true">📍 </span>' +
+          esc(EP.tr("Ver a política " + EP.doEstado(uf), "See the politics " + EP.doEstado(uf))) + "</a>" +
+        '<button class="btn bege" type="button" id="outra-cidade"><span aria-hidden="true">🔎 </span>' + EP.tr("Procurar outra cidade", "Search for another city") + "</button></div></section>";
+    if (EP.trilha) EP.trilha([{ t: EP.UFS[uf] || uf, href: "estado.html?uf=" + uf }, { t: x.nome, lang: EP.en ? "pt-BR" : null }]);
+    var comAbas = !!(EP.abas && EP.abas.monta({ nav: caixa.querySelector("nav.atalhos") }));
+    return { quando: function (secao, fn) { if (comAbas) EP.abas.quandoAbrir(secao, fn); else fn(); } };
   }
 
   function desenha(caixa, c, uf, focar) {
@@ -114,40 +172,27 @@
     var nc = naoConferido(p);  // prefeitos 2026
     var conferir = !nc && ((p && p.aConfirmar) || (vi && vi.aConfirmar));
     var fp = fontesDe(c, p, vi);
-    caixa.innerHTML =
-      '<section class="miolo bloco" aria-labelledby="nome-cidade"><div class="cab-bloco rev"><span class="ic-bloco" aria-hidden="true">🏙️</span><div>' +
-        '<h2 id="nome-cidade" tabindex="-1">' + esc(c.nome) + "</h2>" +
-        '<p class="muted">' + esc(EP.tr("Uma cidade " + EP.doEstado(uf) + " (" + uf + ")", "A city in " + (EP.UFS[uf] || uf) + " (" + uf + "), Brazil")) + "</p></div></div>" +
-        '<div class="mandato-lugar" id="mandato-lugar"></div>' +
-        (nc ? '<p class="aviso"><span aria-hidden="true">⚠️ </span>' + D.aviso(c.aviso, c.aviso_en) + "</p>" : aviso(D.aviso(c.aviso, c.aviso_en))) +
-        (conferir ? '<p class="aviso"><span aria-hidden="true">⚠️ </span>' + EP.tr("Estamos conferindo se quem aparece aqui ainda está no cargo.", "We are checking whether the people shown here are still in office.") + "</p>" : "") +
-        '<h3 class="sub"><span aria-hidden="true">🏢 </span>' + EP.tr("Quem governa a cidade", "Who governs the city") + "</h3>" +
-        '<div class="exec-topo">' + ((nc ? cartaoNaoConferido(p, c) : EP.cartaoGrande(p, EP.tr(EP.gen(p && p.genero, "Prefeito", "Prefeita"), "Mayor"), sit(p))) +
-          EP.cartaoGrande(vi, EP.tr(EP.gen(vi && vi.genero, "Vice-prefeito", "Vice-prefeita"), "Vice Mayor"), sit(vi)) ||
-          '<div class="vazio">' + EP.tr("O TSE não mostra quem governa esta cidade.", "The TSE does not show who governs this city.") + "</div>") + "</div>" +
-        (fp.length ? '<p style="margin-top:8px">' + EP.botaoFontes(fp) + "</p>" : "") + "</section>" +
-      '<section class="miolo bloco" aria-labelledby="t-camara-mun"><div class="cab-bloco rev"><span class="ic-bloco" aria-hidden="true">🏛️</span><div>' +
-        '<h2 id="t-camara-mun">' + EP.tr("A Câmara Municipal", "The City Council") + " <small>(" + EP.num(n) + " " + EP.tr(n === 1 ? "vereador" : "vereadores", n === 1 ? "councilor" : "councilors") + ")</small></h2>" +
-        '<p class="muted">' + EP.tr("Os vereadores fazem as leis da cidade e fiscalizam o prefeito.", "City councilors (<span lang=\"pt-BR\">vereadores</span>) make the city's laws and oversee the mayor.") + "</p></div></div>" +
-        aviso(D.aviso(v.aviso, v.aviso_en)) + '<div id="casa-ver"></div>' + EP.infoCasa(v.infoCasa) + "</section>" +
-      // a próxima eleição da cidade e as eleições suplementares (js/proximos.js)
-      '<section class="miolo bloco" id="proxima-eleicao" aria-labelledby="t-proxima-eleicao"><div class="cab-bloco rev"><span class="ic-bloco" aria-hidden="true">🗳️</span><div>' +
-        '<h2 id="t-proxima-eleicao">' + EP.tr("A próxima eleição", "The next election") + "</h2>" +
-        '<p class="muted">' + EP.tr("Quando a cidade escolhe de novo o prefeito, o vice e os vereadores.", "When the city chooses its mayor, vice mayor and city councilors again.") + "</p></div></div>" +
-        '<div id="proximos-cidade"><div class="carregando">' + EP.tr("Carregando…", "Loading…") + "</div></div></section>" +
-      '<section class="miolo bloco" aria-label="' + EP.tr("Ver mais", "See more") + '"><div class="links-cidade rev">' +
-        '<a class="btn claro" href="estado.html?uf=' + uf + (EP.en ? "&lang=en" : "") + '"><span aria-hidden="true">📍 </span>' +
-          esc(EP.tr("Ver a política " + EP.doEstado(uf), "See the politics " + EP.doEstado(uf))) + "</a>" +
-        '<button class="btn bege" type="button" id="outra-cidade"><span aria-hidden="true">🔎 </span>' + EP.tr("Procurar outra cidade", "Search for another city") + "</button></div></section>";
-    EP.montaCasa(document.getElementById("casa-ver"), { membros: v.membros || [], filtroUF: false, fonte: v.fonte,
-      atualizado: (v.oficial && (v.infoCasa || {}).conferido) || c.atualizado, nivel: 3,
-      nomes: { um: EP.tr("vereador", "city councilor"), uma: EP.tr("vereadora", "city councilor"), varios: EP.tr("vereadores", "city councilors"), varias: EP.tr("vereadoras", "city councilors") },
-      extra: function (m) {
-        if (m.exercicio) return EP.tr(m.exercicio, m.exercicio_en || m.exercicio);  // suplente que assumiu a vaga
-        return m.votos != null ? EP.tr(EP.num(m.votos) + " votos em 2024", EP.num(m.votos) + " votes in 2024") : "";
-      } });
+    var quando = esqueleto(caixa, {
+      nome: c.nome, uf: uf,
+      avisos: (nc ? '<p class="aviso"><span aria-hidden="true">⚠️ </span>' + D.aviso(c.aviso, c.aviso_en) + "</p>" : aviso(D.aviso(c.aviso, c.aviso_en))) +
+        (conferir ? '<p class="aviso"><span aria-hidden="true">⚠️ </span>' + EP.tr("Estamos conferindo se quem aparece aqui ainda está no cargo.", "We are checking whether the people shown here are still in office.") + "</p>" : ""),
+      gov: (nc ? cartaoNaoConferido(p, c) : EP.cartaoGrande(p, EP.tr(EP.gen(p && p.genero, "Prefeito", "Prefeita"), "Mayor"), sit(p))) +
+        EP.cartaoGrande(vi, EP.tr(EP.gen(vi && vi.genero, "Vice-prefeito", "Vice-prefeita"), "Vice Mayor"), sit(vi)),
+      govNotas: fp.length ? '<p style="margin-top:8px">' + EP.botaoFontes(fp) + "</p>" : "",
+      nTxt: EP.num(n) + " " + EP.tr(n === 1 ? "vereador" : "vereadores", n === 1 ? "councilor" : "councilors"),
+      camAviso: aviso(D.aviso(v.aviso, v.aviso_en)), info: EP.infoCasa(v.infoCasa)
+    }).quando, comAbas = !!(EP.abas && EP.abas.ativa());
+    quando("camara-mun", function () {
+      EP.montaCasa(document.getElementById("casa-ver"), Object.assign({ membros: v.membros || [], filtroUF: false, fonte: v.fonte,
+        atualizado: (v.oficial && (v.infoCasa || {}).conferido) || c.atualizado, nivel: 3,
+        nomes: { um: EP.tr("vereador", "city councilor"), uma: EP.tr("vereadora", "city councilor"), varios: EP.tr("vereadores", "city councilors"), varias: EP.tr("vereadoras", "city councilors") },
+        extra: function (m) {
+          if (m.exercicio) return EP.tr(m.exercicio, m.exercicio_en || m.exercicio);  // suplente que assumiu a vaga
+          return m.votos != null ? EP.tr(EP.num(m.votos) + " votos em 2024", EP.num(m.votos) + " votes in 2024") : "";
+        } }, comAbas ? { lote: EP.RESUMO_CASA, verTodos: true } : {}));
+    });
     if (EP.hist) EP.hist.seletor(document.getElementById("mandato-lugar"), "cidades");  // "Ver outro mandato" (js/historico.js)
-    if (EP.eleitos) EP.eleitos.cidade(document.getElementById("proximos-cidade"), c.ibge, uf, c.nome);
+    if (EP.eleitos) quando("proxima-eleicao", function () { EP.eleitos.cidade(document.getElementById("proximos-cidade"), c.ibge, uf, c.nome); });
     depois(caixa, focar);
   }
 
@@ -190,7 +235,9 @@
   if (window.TRES) EP.fundo3d([["cubo", "5%", "14%", 40, 0, 0, 18], ["esfera", "92%", "10%", 36, 3, 0, 7], ["anel", "90%", "60%", 56, 2, 0, 20], ["esfera", "4%", "72%", 30, 6, 0, 8]], document.body);
   D.rodapeErros(document.getElementById("links-erro"));
   var ibge0 = (EP.param("ibge") || "").replace(/\D/g, "");
-  if (ibge0) { combo.escolhe(ibge0, true); abre(ibge0, false); }
+  var focar0 = false;
+  try { focar0 = sessionStorage.getItem("ep-foca-cidade") === "1"; sessionStorage.removeItem("ep-foca-cidade"); } catch (e) {}
+  if (ibge0) { combo.escolhe(ibge0, true); abre(ibge0, focar0); }
   else D.canonico();
   EP.revelar();
   EP.paralaxe();

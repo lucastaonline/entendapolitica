@@ -30,7 +30,8 @@ async def audita(pg, url):
 
 
 def urls_aulas() -> list[str]:
-    """Todos os slides de todas as paradas, em português e em inglês (+ o slide final de cada parada)."""
+    """Todos os slides de todas as paradas, em português e em inglês (+ o slide final de cada parada e, nas paradas com
+    parte avançada, todos os slides dela: #parte-N-avancado, -avancado-2...)."""
     import json
     raiz = Path(__file__).resolve().parent.parent
     out = []
@@ -38,8 +39,13 @@ def urls_aulas() -> list[str]:
         for n in range(1, 11):
             arq = raiz / "conteudo" / "entenda" / f"{pasta}parte-{n}.json"
             if arq.exists():
-                total = len(json.loads(arq.read_text(encoding="utf-8"))["slides"]) + 1
+                dados = json.loads(arq.read_text(encoding="utf-8"))
+                total = len(dados["slides"]) + 1
                 out += [f"entenda.html{q}#parte-{n}" + (f"-{k}" if k > 1 else "") for k in range(1, total + 1)]
+                av = (dados.get("avancado") or {}).get("slides") or []
+                if av:
+                    total = len(av) + (0 if any(s.get("tipo") == "abertura" for s in av) else 1) + 1
+                    out += [f"entenda.html{q}#parte-{n}-avancado" + (f"-{k}" if k > 1 else "") for k in range(1, total + 1)]
     return out
 
 

@@ -83,8 +83,11 @@
         avisa(EP.tr("Não foi possível carregar a lista de nomes.", "The list of names could not be loaded."));
       });
     }
-    input.addEventListener("input", function () { clearTimeout(t); t = setTimeout(roda, 180); });
+    input.addEventListener("input", function () { clearTimeout(t); t = setTimeout(function () { EP.memo.poeUrl("q", input.value.trim()); roda(); }, 180); });
     input.addEventListener("focus", function () { carregar().catch(function () {}); }, { once: true });
+    // a pesquisa fica no endereço (?q=...): voltando de um perfil (ou abrindo um link com ?q=), ela aparece de novo
+    var q0 = EP.memo ? EP.memo.url("q") : null;
+    if (q0) { input.value = q0; roda(); }
     input.addEventListener("keydown", function (e) {
       if (e.key === "ArrowDown") {
         var a = saida.querySelector("a");

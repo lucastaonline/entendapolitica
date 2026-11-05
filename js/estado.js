@@ -48,7 +48,8 @@
     function cores(u) { var r = REGIOES[REGIAO[u]]; return "--cor:" + r[2] + ";--lado:" + r[3]; }
     var links = ufs.map(function (u) {
       var e = m.ufs[u], nome = EP.UFS[u];
-      return '<a class="uf" href="' + href(u) + '" data-uf="' + u + '" data-nome="' + esc(nome) + '" aria-label="' + u + ", " + esc(nome) + '" style="' + cores(u) + '">' +
+      var reg = EP.tr("região " + REGIOES[REGIAO[u]][0], REGIOES[REGIAO[u]][1] + " region");
+      return '<a class="uf" href="' + href(u) + '" data-uf="' + u + '" data-nome="' + esc(nome) + '" data-regiao="' + esc(reg) + '" aria-label="' + esc(nome) + ", " + u + ", " + esc(reg) + '" style="' + cores(u) + '">' +
         '<path class="topo" d="' + e.d + '"/>' + (e.selo ? "" : '<text class="sigla" x="' + e.x + '" y="' + e.y + '">' + u + "</text>") + "</a>";
     }).join("");
     var selos = ufs.filter(function (u) { return m.ufs[u].selo; }).map(function (u) {
@@ -67,8 +68,12 @@
     document.getElementById("escolher").hidden = false;
     var mapa = document.getElementById("mapa");
     var rot = document.getElementById("rotulo-uf");
-    var dica = "👆 " + EP.tr("Passe o mouse sobre um estado para ver o nome", "Point to a state to see its name");
-    rot.textContent = dica;
+    // ui-r9: a dica serve para toque, mouse e teclado (antes: "Passe o mouse...", que não servia para quem toca ou usa o teclado)
+    var dica = "👆 " + EP.tr("Toque ou clique no seu estado", "Tap or click your state");
+    var dicaTeclado = EP.tr("Com o teclado: Tab ou as setas andam pelos estados, e Enter abre o escolhido.", "With the keyboard: Tab or the arrow keys move between states, and Enter opens the chosen one.");
+    rot.removeAttribute("aria-hidden");
+    rot.innerHTML = esc(dica) + '<span class="dica-mapa" id="dica-mapa">' + esc(dicaTeclado) + "</span>";
+    mapa.setAttribute("aria-describedby", "dica-mapa");
     EP.json("dados/mapa-brasil.json").then(function (m) {
       mapa.innerHTML = mapaSvg(m);
       var svg = mapa.querySelector("svg"), realce = svg.querySelector(".realce"), rSigla = realce.querySelector(".r-sigla");
@@ -76,7 +81,7 @@
       // levanta o estado (ou nenhum) e mostra o nome dele em cima do mapa
       function levanta(a) {
         [].forEach.call(svg.querySelectorAll(".ativo"), function (x) { if (x !== a) x.classList.remove("ativo"); });
-        if (!a) { realce.classList.remove("ligado"); atual = null; rot.textContent = dica; return; }
+        if (!a) { realce.classList.remove("ligado", "teclado"); atual = null; rot.innerHTML = esc(dica) + '<span class="dica-mapa" id="dica-mapa">' + esc(dicaTeclado) + "</span>"; return; }
         var u = a.getAttribute("data-uf"), e = m.ufs[u], selo = svg.querySelector('.selo-link[data-uf="' + u + '"]');
         if (selo) selo.classList.add("ativo");
         if (u === atual) return;
@@ -94,8 +99,11 @@
         rSigla.setAttribute("y", e.y);
         a.classList.add("ativo");
         realce.classList.add("ligado");
-        rot.textContent = "👆 " + a.getAttribute("data-nome");
+        rot.innerHTML = "👆 " + esc(a.getAttribute("data-nome")) + '<span class="dica-mapa" id="dica-mapa">' + esc(a.getAttribute("data-regiao")) + " · " +
+          esc(EP.tr("toque, clique ou aperte Enter para abrir", "tap, click or press Enter to open")) + "</span>";
       }
+      // o foco do teclado levanta o estado com uma borda mais forte (o clique do mouse não deixa contorno)
+      function teclado(a) { var ok = false; try { ok = !!a && a.matches(":focus-visible"); } catch (x) { ok = true; } return ok; }
       function focado() { var f = document.activeElement; return f && svg.contains(f) && f.closest ? f.closest("a.uf") : null; }
       // o selo de um estado pequeno vale pelo próprio estado
       function doAlvo(t) {
@@ -104,8 +112,36 @@
       }
       svg.addEventListener("pointerover", function (e) { var a = doAlvo(e.target); if (a) levanta(a); });
       svg.addEventListener("pointerleave", function () { levanta(focado()); });
-      svg.addEventListener("focusin", function (e) { levanta(e.target.closest("a.uf")); });
-      svg.addEventListener("focusout", function (e) { if (!svg.contains(e.relatedTarget)) levanta(null); });
+      svg.addEventListener("focusin", function (e) {
+        var a = e.target.closest("a.uf");
+        if (!teclado(a)) return;
+        levanta(a);
+        realce.classList.add("teclado");
+      });
+      svg.addEventListener("focusout", function (e) { if (!svg.contains(e.relatedTarget)) { realce.classList.remove("teclado"); levanta(null); } });
+      // clicar fora de um estado (no mar, nos cantos do desenho) não põe o foco no desenho inteiro (o navegador desenhava um
+      // contorno em volta do mapa todo, inclinado como ele)
+      svg.addEventListener("mousedown", function (e) { if (!doAlvo(e.target)) e.preventDefault(); });
+      // setas: vão para o estado mais perto naquela direção (no mapa de verdade); Home e End, para o primeiro e o último da lista
+      var ufsA = [].slice.call(svg.querySelectorAll("a.uf"));
+      svg.addEventListener("keydown", function (e) {
+        var a = e.target.closest && e.target.closest("a.uf");
+        if (!a) return;
+        var k = e.key, alvo = null;
+        if (k === "Home" || k === "End") alvo = ufsA[k === "Home" ? 0 : ufsA.length - 1];
+        else if (/^Arrow/.test(k)) {
+          var o = m.ufs[a.getAttribute("data-uf")], dx = { ArrowLeft: -1, ArrowRight: 1 }[k] || 0, dy = { ArrowUp: -1, ArrowDown: 1 }[k] || 0, melhor = Infinity;
+          ufsA.forEach(function (b) {
+            if (b === a) return;
+            var q = m.ufs[b.getAttribute("data-uf")], vx = q.x - o.x, vy = q.y - o.y, ao = vx * dx + vy * dy;
+            if (ao <= 0) return;
+            var lado = Math.abs(dx ? vy : vx), custo = ao + lado * 2.2;
+            if (custo < melhor) { melhor = custo; alvo = b; }
+          });
+        } else return;
+        e.preventDefault();
+        if (alvo) alvo.focus();
+      });
       document.getElementById("fonte-mapa").innerHTML = EP.botaoFontes([m.fonte], EP.tr("De onde vem este mapa?", "Where does this map come from?"));
     }).catch(function () { falhou(mapa, "o mapa", "the map"); });
     document.getElementById("regioes").innerHTML = Object.keys(REGIOES).map(function (r) {
@@ -138,8 +174,11 @@
   }
   function chipAtalho(href, ic, txt) { return '<a class="chip" href="' + href + '"><span aria-hidden="true">' + ic + "</span><span>" + txt + "</span></a>"; }
 
-  function mostraEstado() {
-    var nome = EP.UFS[uf], de = EP.doEstado(uf), ehDF = uf === "DF";
+  // mandatos-r11: todo mandato tem o mesmo layout de hoje. futuro: o mandato 2027 do "Ver outro mandato"
+  // (estado.html?uf=SP&mandato=2027, quem foi eleito em 2026: js/proximos.js); passado: um mandato anterior
+  // (estado.html?uf=BA&mandato=2019: js/historico.js). As abas e as partes são as mesmas; só os dados mudam
+  function mostraEstado(futuro, passado) {
+    var nome = EP.UFS[uf], de = EP.doEstado(uf), ehDF = uf === "DF", X = EP.eleitos;
     poeTitulo(EP.tr("A política " + de + ": governador, deputados, prefeitos e vereadores | Entenda Política", "Politics " + de + ": governor, deputies, mayors and city councilors | Understand Politics"),
       EP.tr("Quem governa, quem representa e quem faz as leis " + de + ": governador, senadores, deputados federais e estaduais, prefeitos e vereadores. Tudo com fonte.",
         "Who governs, who represents and who makes the laws " + de + ": governor, senators, federal and state deputies, mayors and city councilors. Everything with sources."));
@@ -158,7 +197,6 @@
       chipAtalho("#governo", "🏢", EP.tr("Quem governa", "Who governs")) + chipAtalho("#senadores", "🏛️", EP.tr("Senadores", "Senators")) +
       chipAtalho("#federais", "🏛️", EP.tr("Deputados federais", "Federal deputies")) +
       chipAtalho("#estaduais", "🏛️", ehDF ? EP.tr("Deputados distritais", "District deputies") : EP.tr("Deputados estaduais", "State deputies")) +
-      chipAtalho("#quem-assume", "📅", EP.tr("Quem assume em 2027", "Who takes office in 2027")) +
       (ehDF ? "" : chipAtalho("#cidade", "🏘️", EP.tr("Minha cidade", "Cities"))) + "</nav>" +
       secao("governo", "🏢", esc(EP.tr("Quem governa " + (ehDF ? "o Distrito Federal" : "o estado"), "Who governs " + (ehDF ? "the Federal District" : "the state"))),
         esc(EP.tr("O governador e o vice comandam o Poder Executivo " + de + ".", "The governor and the vice governor lead the executive branch " + de + ".")),
@@ -173,10 +211,6 @@
         EP.tr("A Assembleia Legislativa: deputados estaduais", "The Legislative Assembly: state deputies")),
         esc(EP.tr("Eles fazem as leis " + de + " e fiscalizam o governador.", (ehDF ? "District deputies (the Federal District's legislators)" : "State deputies (Brazil's state legislators)") + " make the laws " + de + " and oversee the governor.")),
         '<div id="aviso-est"></div><div class="casa-corpo" id="casa-est"><div class="carregando">' + EP.tr("Carregando…", "Loading…") + "</div></div>") +
-      // quem foi eleito em 2026 e quando toma posse (js/proximos.js); a seção some sozinha depois das posses
-      secao("quem-assume", "📅", esc(EP.tr("Quem assume em 2027", "Who takes office in 2027")),
-        esc(EP.tr("Quem foi eleito em 2026 " + EP.noEstado(uf) + " e quando cada um toma posse.", "Who was elected in 2026 " + EP.noEstado(uf) + " and when each one takes office.")),
-        '<div id="proximos-estado"><div class="carregando">' + EP.tr("Carregando…", "Loading…") + "</div></div>") +
       (ehDF ? '<section class="miolo bloco" aria-label="' + EP.tr("Cidades", "Cities") + '"><div class="aviso azul" id="aviso-df"><span aria-hidden="true">ℹ️ </span>' +
         esc(EP.tr("O Distrito Federal não é dividido em cidades com prefeito e vereadores. Quem cuida dessas coisas é o próprio governo do DF, e as leis são feitas pela Câmara Legislativa.",
           "The Federal District is not divided into cities with mayors and city councilors. The Federal District's own government takes care of those things, and its laws are made by the Legislative Chamber.")) + "</div></section>" :
@@ -186,8 +220,30 @@
           '<p class="muted" id="dica-cidade" style="font-size:.85rem;margin:6px 0 0">' + EP.tr("Escolha na lista que aparece para abrir a página da cidade.", "Choose it from the list to open the city's page.") + "</p>" +
           '<p id="capital-cid" class="links-cidade"></p></div>'));
     EP.revelar(el);
-    if (EP.hist) EP.hist.seletor(document.getElementById("mandato-lugar"), "estados");  // "Ver outro mandato" (js/historico.js)
-    if (EP.eleitos) EP.eleitos.estado(document.getElementById("proximos-estado"), uf);
+    if (EP.trilha) EP.trilha([{ t: EP.tr("Estados", "States"), href: "estado.html" }, { t: nome }]);
+    // ui-r9: a página em abas (js/abas.js), como a do Brasil: cada seção do menu "Ir direto para" vira uma aba com endereço
+    // próprio (estado.html?uf=SP#federais); as listas grandes começam com um resumo (12) e "Ver todos"
+    var comAbas = !!(EP.abas && EP.abas.monta({ nav: el.querySelector("nav.atalhos") }));
+    function quando(secao, fn) { if (comAbas) EP.abas.quandoAbrir(secao, fn); else fn(); }
+    var RESUMO = comAbas ? { lote: EP.RESUMO_CASA, verTodos: true } : {};
+    // "Ver outro mandato" (js/historico.js), com o de 2027 (eleitos em 2026) enquanto houver eleitos sem posse
+    if (EP.hist) EP.hist.seletor(document.getElementById("mandato-lugar"), "estados", futuro ? X.FUTURO : passado, X && X.opcaoFutura(uf));
+    if (futuro || passado) {
+      if (futuro) X.estadoAbas(uf, { quando: quando });
+      else EP.hist.estado(uf, passado, { quando: quando, resumo: RESUMO });
+      // Minha cidade: as cidades têm outros mandatos (eleições em outros anos); o campo leva à cidade hoje
+      if (!ehDF) {
+        document.getElementById("aviso-cid").innerHTML = aviso(esc(futuro ?
+          EP.tr("Em 2026 não houve eleição nas cidades: prefeitos e vereadores continuam no mandato de 2025 a 2028. Escolha uma cidade para ver quem está no cargo hoje.",
+            "There were no city elections in 2026: mayors and city councilors stay in the 2025–2028 term. Choose a city to see who is in office today.") :
+          EP.tr("Prefeitos e vereadores são eleitos em outros anos (1996, 2000, 2004...), por isso os mandatos das cidades são outros. Escolha uma cidade para ver quem está no cargo hoje; na página dela, o campo “Ver outro mandato” mostra os mandatos anteriores.",
+            "Mayors and city councilors are elected in other years (1996, 2000, 2004...), so city terms are different. Choose a city to see who is in office today; on its page, the “See another term” field shows earlier terms.")));
+        EP.json("dados/estados/" + uf + ".json").then(capital).catch(function () {});
+        ligaCidade();
+      }
+      return;
+    }
+    if (X) X.avisos(uf, [["governo", "governo", "#governo"], ["senado", "senadores", "#senadores"], ["camara", "federais", "#federais"], ["assembleia", "estaduais", "#estaduais"]]);
 
     // governo + Assembleia (arquivo do estado)
     EP.json("dados/estados/" + uf + ".json").then(function (e) {
@@ -204,10 +260,7 @@
       document.getElementById("gov-nota").innerHTML = (notas.length ? '<p class="aviso"><span aria-hidden="true">⚠️ </span>' + esc(notas.join(" ")) + "</p>" : "") +
         (fg.length ? '<p style="margin-top:12px">' + EP.botaoFontes(fg) + "</p>" : "");
       if (e.capital || e.municipios) {
-        var bc = document.getElementById("campo-cid"), cap = document.getElementById("capital-cid");
-        if (bc && e.capital) bc.placeholder = EP.tr("Ex.: ", "E.g.: ") + e.capital.nome;
-        if (cap && e.capital) cap.innerHTML = '<a class="btn claro peq" href="cidade.html?ibge=' + e.capital.ibge + (EP.en ? "&lang=en" : "") + '"><span aria-hidden="true">🏙️ </span>' +
-          esc(EP.tr("Ver a capital, " + e.capital.nome, "See the capital, " + e.capital.nome)) + "</a>";
+        capital(e);
         document.getElementById("lead-uf").insertAdjacentHTML("afterend", '<p class="muted">' +
           (e.capital ? '<span aria-hidden="true">🏙️ </span>' + EP.tr("Capital: ", "Capital: ") + "<b>" + esc(e.capital.nome) + "</b>" : "") +
           (e.municipios ? (e.capital ? " · " : "") + '<span aria-hidden="true">🏘️ </span>' + EP.num(e.municipios) + " " + EP.tr(e.municipios === 1 ? "município" : "municípios", e.municipios === 1 ? "municipality" : "municipalities") : "") + "</p>");
@@ -222,15 +275,18 @@
       var nomesE = uf === "DF" ? { um: EP.tr("deputado distrital", "district deputy"), uma: EP.tr("deputada distrital", "district deputy"), varios: EP.tr("deputados distritais", "district deputies"), varias: EP.tr("deputadas distritais", "district deputies") } :
         { um: EP.tr("deputado estadual", "state deputy"), uma: EP.tr("deputada estadual", "state deputy"), varios: EP.tr("deputados estaduais", "state deputies"), varias: EP.tr("deputadas estaduais", "state deputies") };
       // lista oficial da Assembleia: a data da última leitura completa do site oficial (infoCasa.conferido)
-      EP.montaCasa(document.getElementById("casa-est"), { membros: de2.membros || [], nomes: nomesE, filtroUF: false, fonte: de2.fonte,
-        atualizado: (de2.oficial && (de2.infoCasa || {}).conferido) || e.atualizado,
-        extra: function (m) {
-          if (m.exercicio) return EP.tr(m.exercicio, m.exercicio_en || m.exercicio);  // suplente que assumiu a vaga
-          var a = de2.eleicao || 2022;
-          return m.votos != null ? EP.tr(EP.num(m.votos) + " votos em " + a, EP.num(m.votos) + " votes in " + a) : "";
-        } });
-      // o que o site já tem da Assembleia (lista oficial, propostas, votações, gastos) e as notas dela
-      if (de2.infoCasa) document.getElementById("casa-est").insertAdjacentHTML("afterend", EP.infoCasa(de2.infoCasa));
+      quando("estaduais", function () {
+        EP.montaCasa(document.getElementById("casa-est"), Object.assign({ membros: de2.membros || [], nomes: nomesE, filtroUF: false, fonte: de2.fonte,
+          atualizado: (de2.oficial && (de2.infoCasa || {}).conferido) || e.atualizado,
+          extra: function (m) {
+            if (m.exercicio) return EP.tr(m.exercicio, m.exercicio_en || m.exercicio);  // suplente que assumiu a vaga
+            var a = de2.eleicao || 2022;
+            return m.votos != null ? EP.tr(EP.num(m.votos) + " votos em " + a, EP.num(m.votos) + " votes in " + a) : "";
+          } }, RESUMO));
+        // o que o site já tem da Assembleia (lista oficial, propostas, votações, gastos) e as notas dela
+        if (de2.infoCasa) document.getElementById("casa-est").insertAdjacentHTML("afterend", EP.infoCasa(de2.infoCasa));
+        EP.revelar(el);
+      });
       EP.revelar(el);
     }).catch(function () {
       falhou(document.getElementById("gov"), "os dados deste estado", "the data for this state");
@@ -247,14 +303,24 @@
     }).catch(function () { falhou(document.getElementById("lista-sen"), "a lista de senadores", "the list of senators"); });
     EP.json("dados/camara.json").then(function (d) {
       var l = (d.membros || []).filter(function (m) { return m.uf === uf; });
-      EP.montaCasa(document.getElementById("casa-fed"), { membros: l, filtroUF: false, fonte: d.fonte, atualizado: d.atualizado,
-        nomes: { um: EP.tr("deputado", "deputy"), uma: EP.tr("deputada", "deputy"), varios: EP.tr("deputados", "deputies"), varias: EP.tr("deputadas", "deputies") } });
+      quando("federais", function () {
+        EP.montaCasa(document.getElementById("casa-fed"), Object.assign({ membros: l, filtroUF: false, fonte: d.fonte, atualizado: d.atualizado,
+          nomes: { um: EP.tr("deputado", "deputy"), uma: EP.tr("deputada", "deputy"), varios: EP.tr("deputados", "deputies"), varias: EP.tr("deputadas", "deputies") } }, RESUMO));
+      });
     }).catch(function () { falhou(document.getElementById("casa-fed"), "a lista de deputados federais", "the list of federal deputies"); });
 
     if (!ehDF) ligaCidade();
   }
 
   // ---------------------------------------------------------------- cidade: campo com busca que leva para cidade.html
+  // a capital do estado (dados/estados/UF.json): o exemplo do campo e o botão "Ver a capital"
+  function capital(e) {
+    var bc = document.getElementById("campo-cid"), cap = document.getElementById("capital-cid");
+    if (!e || !e.capital) return;
+    if (bc) bc.placeholder = EP.tr("Ex.: ", "E.g.: ") + e.capital.nome;
+    if (cap) cap.innerHTML = '<a class="btn claro peq" href="cidade.html?ibge=' + e.capital.ibge + (EP.en ? "&lang=en" : "") + '"><span aria-hidden="true">🏙️ </span>' +
+      esc(EP.tr("Ver a capital, " + e.capital.nome, "See the capital, " + e.capital.nome)) + "</a>";
+  }
   function ligaCidade() {
     EP.combo(document.getElementById("busca-cid"), {
       id: "campo-cid", rotuloId: "rotulo-cid", descricao: "dica-cidade", classe: "grande", min: 1, max: 8,
@@ -272,9 +338,9 @@
   D.rodapeErros(document.getElementById("links-erro"));
   if (cidade0 && /^\d{7}$/.test(cidade0)) location.replace("cidade.html?ibge=" + cidade0 + (EP.en ? "&lang=en" : ""));
   else if (uf && EP.UFS[uf]) {
-    // mandato anterior (estado.html?uf=BA&mandato=2019): quem monta a página do passado é o js/historico.js
-    if (EP.hist && EP.hist.param()) EP.hist.estado(uf, EP.hist.param());
-    else mostraEstado();
+    // mandato anterior (estado.html?uf=BA&mandato=2019) e o de 2027: o mesmo layout, com os dados daquele mandato
+    var fut = !!(EP.eleitos && EP.eleitos.ehFuturo());
+    mostraEstado(fut, !fut && EP.hist ? EP.hist.param() : null);
   }
   else mostraMapa();
   EP.paralaxe();

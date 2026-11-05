@@ -1,24 +1,20 @@
 /* ====== Mandatos anteriores (js/historico.js): campo "Ver outro mandato" e a página do passado ====== */
 .mandato-lugar[hidden], .mandato-lugar:empty { display: none; }
+/* ui-r9: mais compacto: o nome e o campo na mesma linha; embaixo, uma frase curta e "ℹ️ Como funciona" (abre o resto) */
 .mandato-box {
-  display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; max-width: 680px; margin: 14px 0 4px;
-  background: #fff; border: 2px dashed #cdbf9f; border-radius: 18px; padding: 10px 14px; text-align: left;
+  display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; max-width: 680px; margin: 14px 0 4px;
+  background: #fff; border: 2px solid var(--line); border-radius: 18px; padding: 8px 12px; text-align: left;
 }
 .mandato-box label { font-weight: 900; color: var(--brand); }
-.mandato-box .mandato-campo { flex: 1 1 220px; min-width: 0; }
-.mandato-box .mandato-dica { flex: 1 1 100%; margin: 0; font-size: .82rem; color: var(--muted); }
-.mandato-box .mandato-fontes { flex: 1 1 100%; margin: 0; }
+.mandato-box .mandato-campo { flex: 1 1 230px; min-width: 0; }
+.mandato-box .mandato-dica { flex: 1 1 auto; margin: 0; font-size: .85rem; color: #4a5361; }
+.mandato-box .mandato-mais { flex: 0 1 auto; font-size: .85rem; }
+.mandato-box .mandato-mais summary { cursor: pointer; font-weight: 800; color: var(--brand); min-height: 32px; display: inline-flex; align-items: center; padding: 0 4px; border-radius: 8px; }
+.mandato-box .mandato-mais[open] { flex-basis: 100%; }
+.mandato-box .mandato-mais p { margin: 6px 0 0; color: #3d4451; }
+.mandato-box .mandato-fontes { margin: 6px 0 0; }
 .cab-pagina .mandato-box { margin-top: 18px; }
 
-/* a faixa que diz, em texto, que a página mostra o passado */
-.faixa-passado {
-  margin: 18px 0 6px; padding: 16px 20px; border-radius: 20px; background: var(--brand); color: #fff;
-  border: 3px solid var(--amarelo); box-shadow: var(--sombra);
-}
-.faixa-passado p { margin: 0 0 .55em; }
-.faixa-passado .faixa-tit { font-size: 1.15rem; line-height: 1.3; }
-.faixa-passado .faixa-acoes { margin: 10px 0 0; }
-.faixa-passado .btn { box-shadow: 0 3px 0 #8a6800; }
 .h1-periodo { display: block; font-size: .5em; margin-top: 6px; color: var(--muted); }
 h2 .h1-periodo { font-size: .6em; }
 
@@ -33,23 +29,17 @@ h2 .h1-periodo { font-size: .6em; }
 .mudancas li .fontes-btn { justify-self: start; }
 
 @media (max-width: 600px) {
-  .faixa-passado { padding: 14px; }
-  .faixa-passado .faixa-tit { font-size: 1.05rem; }
   .mandato-box { padding: 10px 12px; }
 }
 
-/* ministros dos governos anteriores: cartões sem link, um por pasta, com a fonte de cada um */
-.min-hist { margin-top: 22px; }
+/* ministros dos governos anteriores (mandatos-r11: o mesmo cartão .min-card da página de hoje; quem chefiou, as datas e as
+   fontes ficam na janela que abre) */
+.min-hist { margin-top: 12px; }
 .min-gov { margin-top: 18px; }
 .min-gov h4 { font-size: 1.05rem; line-height: 1.3; margin: 0 0 6px; }
 .min-gov h4 small { font-size: .8em; font-weight: 700; color: var(--muted); }
-.min-gov .min-gov-per { display: block; margin-top: 2px; font-size: .84rem; font-weight: 700; color: var(--muted); }
+.min-gov .min-gov-per, .janela .min-gov-per { display: block; margin-top: 2px; font-size: .84rem; font-weight: 700; color: var(--muted); }
 .nota-min { margin: 0 0 10px; font-size: .86rem; color: var(--muted); }
-.grade-min-hist { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
-.min-hist-card {
-  min-width: 0; background: #fff; border: 2px solid var(--line); border-radius: 18px; padding: 12px 14px; box-shadow: 0 3px 0 #ece3d0;
-}
-.min-hist-card h5 { margin: 0 0 8px; font-size: .95rem; line-height: 1.25; overflow-wrap: anywhere; }
 .mh-lista { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
 .mh-lista li { display: grid; gap: 1px; min-width: 0; }
 .mh-lista b { font-size: .92rem; overflow-wrap: anywhere; }
@@ -60,16 +50,9 @@ h2 .h1-periodo { font-size: .6em; }
 .mh-mais { margin-top: 8px; padding-top: 4px; border-top: 1px dashed var(--line); }
 .mh-mais summary { cursor: pointer; padding: 6px 0; font-size: .86rem; font-weight: 800; }
 .mh-expl { margin: 4px 0 8px; font-size: .8rem; color: var(--muted); }
-.mh-fonte { margin: 10px 0 0; }
 
-@media (max-width: 600px) {
-  .grade-min-hist { grid-template-columns: 1fr; }
-}
-
-html.alto-contraste .faixa-passado { background: #fff !important; color: #000 !important; border: 3px solid #000 !important; box-shadow: none !important; }
 html.alto-contraste .mandato-box, html.alto-contraste .mudancas li { border-color: #000 !important; background: #fff !important; }
 html.alto-contraste .h1-periodo { color: #000 !important; }
-html.alto-contraste .min-hist-card { border-color: #000 !important; background: #fff !important; box-shadow: none !important; }
 html.alto-contraste .mh-lacuna { border: 2px solid #000; background: #fff !important; color: #000 !important; }
 html.alto-contraste .mh-mais { border-top-color: #000 !important; }
 html.alto-contraste .mh-anulada { border-left-color: #000 !important; color: #000 !important; }

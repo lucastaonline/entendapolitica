@@ -1,8 +1,15 @@
 /* ====== Páginas de dados: Brasil, meu estado, perfil (e as páginas de informação) ====== */
 html { scroll-padding-top: 84px; }
-.pagina { position: relative; z-index: 1; }
-body > .rodape { position: relative; z-index: 1; }
-.formas.fundo-fixo { position: fixed; z-index: 0; }
+/* ui-r9: os enfeites do fundo ficam atrás de tudo (z-index -1) e só nas margens livres (EP.fundo3d, js/comum.js); a página e o
+   rodapé não criam camadas próprias, para a lista de um campo de escolha (z-index 50) ficar por cima do rodapé */
+.pagina { position: relative; }
+body > .rodape { position: relative; }
+.formas.fundo-fixo { position: fixed; z-index: -1; inset: 0; width: auto; max-width: 100%; }
+/* nada passa da borda direita da tela: os desenhos 3D que sobram para fora são cortados aqui (não criam rolagem para o lado) e
+   textos longos quebram dentro dos cartões, mesmo com a letra grande (Leitura → A maior) */
+main.pagina { overflow-x: clip; }
+.min-card > *, .botao-acao > * { min-width: 0; }
+.min-card b, .min-card small { overflow-wrap: break-word; }
 .cab-pagina { display: flex; align-items: center; gap: 24px; padding-top: 28px; padding-bottom: 4px; }
 .cab-pagina .cab-txt { flex: 1.2; min-width: 0; }
 .cab-pagina h1 { margin-top: 14px; }
@@ -14,7 +21,7 @@ body > .rodape { position: relative; z-index: 1; }
 .em-pt { font-size: .78em; font-weight: 700; color: var(--muted); white-space: nowrap; }
 
 /* ---------- acessibilidade: alvos de toque, foco e estados ---------- */
-.topo a, .topo button { min-height: 44px; min-width: 44px; justify-content: center; }
+.topo > a, .topo > button { min-height: 44px; min-width: 44px; justify-content: center; }
 .fontes-btn, .btn.peq, .mais-p, .mais-lista .btn { min-height: 44px; }
 html :focus-visible { box-shadow: 0 0 0 3px var(--ink); }
 html.alto-contraste :focus-visible { box-shadow: 0 0 0 8px #ffdd00 !important; }
@@ -35,7 +42,7 @@ a.pessoa-grande:hover { transform: perspective(800px) rotateX(4deg) translateY(-
 .pessoa-grande .ver { display: inline-block; margin-top: 6px; font-weight: 900; color: var(--brand); font-size: .9rem; }
 .pessoa-grande .chip { white-space: normal; }
 .fontes-exec { grid-column: 1 / -1; margin: 0; }
-.grade-min { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px; margin-top: 12px; }
+.grade-min { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(230px, 100%), 1fr)); gap: 12px; margin-top: 12px; }
 .min-card {
   display: flex; gap: 12px; align-items: flex-start; text-align: left; background: #fff; border: 2px solid var(--line); border-radius: 18px;
   padding: 12px 14px; box-shadow: 0 3px 0 #ece3d0; font: inherit; color: inherit; width: 100%; min-height: 44px;
@@ -44,7 +51,7 @@ a.pessoa-grande:hover { transform: perspective(800px) rotateX(4deg) translateY(-
 .min-card .m-ic { font-size: 2rem; line-height: 1; flex-shrink: 0; }
 .min-card b { display: block; font-size: .92rem; line-height: 1.25; }
 .min-card small { display: block; color: var(--muted); font-size: .82rem; margin-top: 2px; }
-.min-card .chip { margin-top: 6px; font-size: .66rem; }
+.min-card .chip { margin-top: 6px; font-size: .74rem; }
 
 /* ---------- casas do Congresso ---------- */
 .casa-resumo { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; align-items: center; margin-bottom: 10px; }
@@ -88,7 +95,7 @@ a.pessoa-grande:hover { transform: perspective(800px) rotateX(4deg) translateY(-
 .plen-area.cheio .lin-p.cabe.longe { opacity: 1; }
 .plen-area.tem-aceso .lin-p.cabe:not(.ativo) { opacity: .25; }
 .plen-area .lin-p.ativo.longe { opacity: 1; stroke: #b98a00; stroke-width: 2; stroke-dasharray: none; }
-@media (max-width: 600px) { .rot-p { font-size: .66rem; padding: 0 5px; } }
+@media (max-width: 600px) { .rot-p { font-size: .72rem; padding: 0 5px; } }
 .barra-partido.realce { background: var(--creme-forte); }
 .barra-partido.realce .trilho-p i { background: #f2b705; }
 html.alto-contraste .rot-p { border-color: #000; border-bottom-color: #000; color: #000; box-shadow: none; }
@@ -113,6 +120,10 @@ html.alto-contraste .barra-partido.realce { outline: 3px solid #000; }
   transform: perspective(1300px) rotateX(22deg); transform-origin: 50% 65%; }
 .mapa-br .lados { filter: drop-shadow(0 14px 12px rgba(31, 58, 95, .22)); }
 .mapa-br a { cursor: pointer; outline: none; }
+/* o desenho não recebe foco (clicar fora de um estado não deixa contorno em volta do mapa inteiro; js/estado.js também impede
+   o foco no clique); o foco do teclado aparece no estado escolhido, levantado e com borda amarela e preta (.realce) */
+.mapa-br:focus, .mapa-br:focus-visible, .mapa-uf:focus, .mapa-uf:focus-visible { outline: none !important; box-shadow: none !important; }
+.mapa-br .realce.teclado .r-topo { stroke: var(--ink); stroke-width: 5; }
 .mapa-br .topo { fill: var(--cor); stroke: #fbf7ee; stroke-width: 2; stroke-linejoin: round; }
 .mapa-br .sigla { fill: #fff; font-family: inherit; font-weight: 900; font-size: var(--sigla, 28px); text-anchor: middle; dominant-baseline: central; letter-spacing: .02em; pointer-events: none; }
 .mapa-br .selo { fill: var(--cor); stroke: #fff; stroke-width: 3; }
@@ -136,7 +147,7 @@ html.alto-contraste .mapa-br a { text-decoration: none; }
 html.alto-contraste .mapa-br a:focus-visible { outline: none !important; box-shadow: none !important; }
 .fonte-mapa { text-align: center; margin: 10px 0 0; }
 .rotulo-uf { text-align: center; font-weight: 900; font-size: 1.2rem; color: var(--brand); min-height: 1.6em; margin: 10px 0 0; }
-@media (hover: none) { .rotulo-uf { display: none; } }
+.rotulo-uf .dica-mapa { display: block; font-size: .8rem; font-weight: 700; color: #4a5361; }
 .regioes { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; font-size: .8rem; font-weight: 800; color: var(--muted); list-style: none; padding: 0; margin: 0; }
 .regioes i { display: inline-block; width: 14px; height: 14px; border-radius: 4px; vertical-align: -2px; margin-right: 4px; }
 .escolhe-uf { max-width: 420px; margin: 8px auto 0; }
@@ -164,13 +175,13 @@ html.alto-contraste .mapa-br a:focus-visible { outline: none !important; box-sha
 .perfil-topo .chips { display: flex; flex-wrap: wrap; gap: 8px; }
 .perfil-topo .chips .chip { font-size: .8rem; padding: 4px 12px; white-space: normal; }
 .perfil-topo .credito { font-size: .72rem; margin: 8px 0 0; }
-.fatos { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; margin-top: 20px; }
+.fatos { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(190px, 100%), 1fr)); gap: 12px; margin-top: 20px; }
 .fato { background: #fff; border: 2px solid var(--line); border-radius: 18px; padding: 12px 14px; box-shadow: 0 3px 0 #ece3d0; overflow-wrap: anywhere; }
 .fato .f-ic { font-size: 1.6rem; line-height: 1; }
 .fato .f-rot { display: block; font-size: .78rem; font-weight: 800; color: var(--muted); margin-top: 4px; }
 .fato .f-val { display: block; font-weight: 900; font-size: 1.05rem; line-height: 1.25; }
 .fato .f-val small { font-weight: 700; color: var(--muted); }
-.fato .fontes-btn { margin-top: 6px; font-size: .7rem; padding: 3px 10px; }
+.fato .fontes-btn { margin-top: 6px; font-size: .75rem; padding: 3px 10px; }
 .anteriores, .contatos { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .anteriores > b, .contatos > b { margin-right: 4px; }
 .anteriores .chip { white-space: normal; }
@@ -222,7 +233,7 @@ html.alto-contraste .mapa-br a:focus-visible { outline: none !important; box-sha
 .prop-cab .papel { font-size: .72rem; font-weight: 900; border-radius: 999px; padding: 2px 10px; background: #eef3fa; color: var(--brand); }
 .prop-cab .papel.coautor { background: #f3efe6; color: #4a4f57; }
 .prop .simples { font-size: 1.05rem; font-weight: 700; line-height: 1.4; margin: 0 0 6px; }
-.prop .rot-texto { display: block; font-size: .7rem; font-weight: 900; text-transform: uppercase; letter-spacing: .04em; color: #7a5200; margin-bottom: 2px; }
+.prop .rot-texto { display: block; font-size: .75rem; font-weight: 900; text-transform: uppercase; letter-spacing: .04em; color: #7a5200; margin-bottom: 2px; }
 .prop .oficial { font-size: .86rem; color: #4a5260; background: #f7f3ea; border-radius: 12px; padding: 8px 10px; margin: 6px 0; }
 .prop .oficial .rot-texto { color: var(--muted); }
 .prop .oficial.so-oficial { font-size: .95rem; font-weight: 600; color: var(--ink); }
@@ -251,7 +262,7 @@ html.alto-contraste .mapa-br a:focus-visible { outline: none !important; box-sha
 .gasto .tr { grid-column: 1 / -1; height: 10px; background: #efe9dc; border-radius: 99px; overflow: hidden; }
 .gasto .tr i { display: block; height: 100%; background: #a15c00; border-radius: 99px; }
 .gasto b { font-variant-numeric: tabular-nums; }
-.grandes-n { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+.grandes-n { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr)); gap: 12px; }
 .grande-n { background: #fff; border: 2px solid var(--line); border-radius: 18px; padding: 14px 16px; box-shadow: 0 3px 0 #ece3d0; }
 .grande-n b { display: block; font-size: 1.7rem; color: var(--brand); line-height: 1.1; font-variant-numeric: tabular-nums; }
 .grande-n span { font-size: .85rem; font-weight: 700; color: var(--muted); }
@@ -260,7 +271,7 @@ html.alto-contraste .mapa-br a:focus-visible { outline: none !important; box-sha
 .vazio h1 { font-size: clamp(1.6rem, 5vw, 2.2rem); color: var(--ink); }
 /* funil: só tons de azul (nada de verde/dourado de "vitória"); texto branco com contraste >= 4,5:1 */
 .funil-degrau.d2 { background: linear-gradient(145deg, #2f6496, #2b5c8a); }
-.funil-degrau.d3 { background: linear-gradient(145deg, #4373a3, #3d6f9e); color: #fff; }
+.funil-degrau.d3 { background: linear-gradient(145deg, #3a6694, #355f8b); color: #fff; }  /* ui-r9: mais escuro (branco 5,9:1, era 4,9:1) */
 .lista-votos .desc-voto { margin-top: 2px; }
 .lista-votos .v-txt a { display: inline-flex; align-items: center; min-height: 44px; }
 

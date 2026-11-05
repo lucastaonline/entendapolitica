@@ -9,6 +9,9 @@ from pathlib import Path
 
 from playwright.async_api import async_playwright
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from ajuda_abas import pagina_inteira  # site-d-r13
+
 BASE = __import__("os").environ.get("EP_BASE", "http://127.0.0.1:8770/")  # outro servidor: EP_BASE=http://127.0.0.1:8771/
 RAIZ = Path(__file__).resolve().parent.parent
 sys.stdout.reconfigure(encoding="utf-8")
@@ -52,9 +55,9 @@ async def main():
         # 1. página de cada estado: a lista oficial substitui a do TSE (um cartão por pessoa) e diz o que a Casa tem
         for uf in UFS:
             k = casa(uf)
-            await pg.goto(BASE + f"estado.html?uf={uf}&lang=pt", wait_until="networkidle")
+            await pg.goto(BASE + f"estado.html?uf={uf}&lang=pt#estaduais", wait_until="networkidle")  # ui-r9: aba
             await pg.wait_for_timeout(900)
-            for _ in range(5):  # a lista mostra 60 de cada vez: "Mostrar mais"
+            for _ in range(5):  # a lista mostra um resumo de 12 e "Ver todos" (ui-r9; antes, 60 de cada vez: "Mostrar mais")
                 mais = pg.locator("#casa-est .ver-mais")
                 if not await mais.count():
                     break
@@ -71,16 +74,19 @@ async def main():
 
         # 2. do cartão para o perfil, só com o teclado (MG): propostas com filtros, link oficial e gastos
         m = com_propostas("MG")
-        await pg.goto(BASE + "estado.html?uf=MG&lang=pt", wait_until="networkidle")
+        await pg.goto(BASE + "estado.html?uf=MG&lang=pt#estaduais", wait_until="networkidle")  # ui-r9: aba
         await pg.wait_for_timeout(900)
         card = pg.locator(f'#casa-est a.pessoa-card[href*="{m["id"]}"]')
         await card.focus()
         await pg.keyboard.press("Enter")
+        await pagina_inteira(pg, teclado=True)  # site-d-r13: o cartão abre a gaveta; o perfil fica no “Ver a página inteira”
         await pg.wait_for_url("**/pessoa.html?id=*", timeout=15000)
         await pg.wait_for_load_state("networkidle")
         await pg.wait_for_timeout(1000)
+        await pg.evaluate("EP.abas && EP.abas.mostra('propostas')")  # ui-r9: as propostas são uma aba do perfil
+        await pg.wait_for_timeout(500)
         n_prop = await pg.locator("#lista-prop li.prop").count()
-        ok("MG: perfil mostra as propostas (20 por vez)", n_prop == 20, f"{n_prop} na tela")
+        ok("MG: perfil mostra as propostas (6 por vez; ui-r9, antes 20)", n_prop == 6, f"{n_prop} na tela")
         cont0 = await pg.locator("#contagem-prop").inner_text()
         chip = pg.locator('#status-chips button[data-status="lei"]')
         await chip.focus()
@@ -103,7 +109,7 @@ async def main():
                 ok(f"{uf}: sem propostas (só a lista oficial)", uf == "RJ")
                 continue
             dados = pessoa(m["id"])
-            await pg.goto(BASE + f"pessoa.html?id={m['id']}&lang=pt", wait_until="networkidle")
+            await pg.goto(BASE + f"pessoa.html?id={m['id']}&lang=pt#propostas", wait_until="networkidle")
             await pg.wait_for_timeout(900)
             n = await pg.locator("#lista-prop li.prop").count()
             links = await pg.locator("#lista-prop a.fora, #lista-prop a[target=_blank]").count()
@@ -112,7 +118,7 @@ async def main():
             ok(f"{uf}: bloco de propostas tem fonte", fontes > 0)
             if uf in COM_GASTOS:
                 ok(f"{uf}: gastos aparecem", await pg.locator("#gastos").count() == 1 and bool(dados.get("gastos")))
-            await pg.goto(BASE + f"pessoa.html?id={m['id']}&lang=en", wait_until="networkidle")
+            await pg.goto(BASE + f"pessoa.html?id={m['id']}&lang=en#propostas", wait_until="networkidle")
             await pg.wait_for_timeout(900)
             sts = await pg.locator("#lista-prop .status-txt").all_inner_texts()
             pt = [s for s in sts if any(w in s for w in PT)]
@@ -139,17 +145,17 @@ async def main():
             await pg.goto(BASE + f"pessoa.html?id=gov-{uf}&lang=pt", wait_until="networkidle")
             await pg.wait_for_timeout(900)
             corpo = await pg.locator("#perfil").inner_text()
-            sec = await pg.locator("#t-exec").count() and await pg.locator("section:has(#t-exec)").inner_text() or ""
+            sec = await pg.locator("#t-exec").count() and " ".join((await pg.locator("section:has(#t-exec)").text_content()).split()) or ""  # ui-r9: aba "Leis e vetos"
             nums = [f"{ex[c]:,}".replace(",", ".") for c in ("leisSancionadas", "vetos") if ex.get(c) is not None]
             n = await pg.locator("#lista-prop li.prop").count()
             ok(f"{uf}: governo com projetos e leis no perfil", lista and n > 0 and all(x in sec for x in nums)
                and "Em breve" not in corpo, f"{n} projetos na tela; {', '.join(nums)}")
             await pg.goto(BASE + f"pessoa.html?id=gov-{uf}&lang=en", wait_until="networkidle")
             await pg.wait_for_timeout(900)
-            sec = await pg.locator("#t-exec").count() and await pg.locator("section:has(#t-exec)").inner_text() or ""
+            sec = await pg.locator("#t-exec").count() and " ".join((await pg.locator("section:has(#t-exec)").text_content()).split()) or ""  # ui-r9: aba "Leis e vetos"
             sts = await pg.locator("#lista-prop .status-txt").all_inner_texts()
             pt = [s for s in sts if any(w in s for w in PT)]
-            esc = await pg.locator("#propostas > p.muted").first.inner_text()
+            esc = (await pg.locator("#propostas > p.muted").first.text_content()).strip()
             ok(f"{uf}: governo em inglês", "Laws signed and vetoes" in sec and sts and not pt and esc.startswith("Bills the "),
                (" | ".join(pt[:2]) or esc[:60]))
 

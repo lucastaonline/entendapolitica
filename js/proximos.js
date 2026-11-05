@@ -1,11 +1,13 @@
 /* Quem assume nos próximos mandatos (frente "eleitos 2026"):
-   - "Quem assume em 2027" nas páginas do Brasil (#quem-assume) e do estado: quem foi eleito em 2026, a data da posse de cada
-     cargo e como ficam o Senado, a Câmara e a Assembleia a partir da posse;
+   - o mandato 2027 do "Ver outro mandato" nas páginas do Brasil e do estado (brasil.html?mandato=2027,
+     estado.html?uf=SP&mandato=2027; os links antigos #quem-assume levam para lá): as mesmas abas da página de hoje
+     (mandatos-r11), com quem foi eleito em 2026, a data da posse de cada cargo e como ficam o Senado, a Câmara e a Assembleia
+     a partir da posse (EP.eleitos.brasilAbas, EP.eleitos.estadoAbas);
    - "A próxima eleição" na página da cidade: a data, o que se escolhe, a posse e as eleições suplementares;
    - o perfil de quem foi eleito em 2026 e não tem cargo hoje (pessoa.html?id=e26-<UF>-<SQ_CANDIDATO>), que o js/pessoa.js
      monta com EP.eleitos.perfil(id).
    Lê dados/eleitos/BR.json, dados/eleitos/<UF>.json e dados/eleitos/municipal.json (scripts/eleitos.py). Cada cargo sai dos
-   arquivos no dia da posse: sem nada a mostrar, a seção some sozinha. */
+   arquivos no dia da posse: a aba daquele cargo passa a dizer que ele já tomou posse, e sem arquivo o endereço leva para hoje. */
 (function () {
   "use strict";
   var EP = window.EP, D = EP.trd, esc = EP.esc;
@@ -131,7 +133,7 @@
   // uma Casa a partir da posse: plenário por partido, filtros e a lista (EP.montaCasa, em js/casa.js)
   function casa(el, membros, o) {
     EP.montaCasa(el, Object.assign({
-      membros: membros, nivel: 4, cartao: cartao,
+      membros: membros, nivel: 3, cartao: cartao,
       titPartidos: EP.tr("Quantos de cada partido", "Seats per party"),
       extra: function (m) { return m.extraTxt != null ? m.extraTxt : votos(m.votos, m.votosDaChapa); },
       sabia: function (mu, ho) {
@@ -167,7 +169,100 @@
       EP.tr("Não foi possível carregar esta parte agora. Tente de novo daqui a pouco.", "Could not load this part right now. Please try again in a little while.") + "</div>";
   }
   function semArquivo(err) { return /^404 /.test((err && err.message) || ""); }
-  // ---------------------------------------------------------------- página do Brasil (#quem-assume)
+  // ---------------------------------------------------------------- o próximo mandato, no "Ver outro mandato"
+  // ui-r9 (decisão do Lucas, 30/10): "Quem assume em 2027" deixou de ser aba. Virou o mandato "2027 a 2030 (eleitos em 2026)"
+  // do campo "Ver outro mandato" (js/historico.js), com endereço próprio: brasil.html?mandato=2027, estado.html?uf=SP&mandato=2027.
+  // mandatos-r11 (pedido do Lucas, 3/11): a página do mandato 2027 tem o mesmo layout da de hoje (as mesmas abas e partes), com
+  // quem foi eleito em 2026; a faixa amarela embaixo das abas diz que é o próximo mandato. Os links antigos (#quem-assume e
+  // #qa-...) levam para a aba certa. Nas abas de hoje, um aviso curto com link ("Veja quem assume em 2027"). A opção e os avisos
+  // somem sozinhos depois das posses, junto com os arquivos (dados/eleitos/).
+  X.FUTURO = "2027";
+  function urlFuturo(hash, sem) {
+    var u = new URL(location.href);
+    if (sem) u.searchParams.delete("mandato"); else u.searchParams.set("mandato", X.FUTURO);
+    var q = u.searchParams.toString();
+    return (u.pathname.split("/").pop() || "index.html") + (q ? "?" + q : "") + (hash || "");
+  }
+  X.urlFuturo = function (hash) { return urlFuturo(hash); };
+  // os endereços antigos de dentro do "Quem assume" e a aba de cada um (o resto abre a primeira aba)
+  var ANTIGOS = /^#(quem-assume|qa-[\w-]+|proximos-(brasil|estado))$/;
+  var ABA_ANTIGA = {
+    brasil: { "qa-presidente": "executivo", "qa-senado": "senado", "qa-camara": "camara", "qa-casa-sen": "senado", "qa-casa-cam": "camara" },
+    estado: { "qa-governo": "governo", "qa-senado": "senadores", "qa-camara": "federais", "qa-assembleia": "estaduais", "qa-casa-fed": "federais", "qa-casa-est": "estaduais" }
+  };
+  function abaDoAntigo(hash) {
+    var t = ABA_ANTIGA[/estado\.html$/.test(location.pathname) ? "estado" : "brasil"][hash.slice(1)];
+    return t ? "#" + t : "";
+  }
+  X.ehFuturo = function () {
+    // um link antigo dentro da própria página (#quem-assume) também leva ao mandato 2027
+    window.addEventListener("hashchange", function () {
+      if (ANTIGOS.test(location.hash)) location.replace(urlFuturo(abaDoAntigo(location.hash)));
+    });
+    var futuro = EP.param("mandato") === X.FUTURO;
+    if ((futuro || !EP.param("mandato")) && ANTIGOS.test(location.hash)) {
+      try { history.replaceState(history.state, "", urlFuturo(abaDoAntigo(location.hash))); } catch (e) {}
+      return true;
+    }
+    return futuro;
+  };
+  function temAlgo(d) { return !!d && !!(d.presidencia || d.senado || d.camara || d.governo || d.assembleia); }
+  X.dados = function (arq) { return EP.json("dados/eleitos/" + arq + ".json").then(function (d) { return temAlgo(d) ? d : null; }, function () { return null; }); };
+  X.opcaoFutura = function (arq) {
+    return X.dados(arq).then(function (d) { return d ? { v: X.FUTURO, t: EP.tr("2027 a 2030 (eleitos em 2026)", "2027–2030 (elected in 2026)") } : null; });
+  };
+  // o aviso curto nas abas de hoje: lugares = [[parte do arquivo, id da seção, aba da página de 2027], ...]
+  X.avisos = function (arq, lugares) {
+    X.dados(arq).then(function (d) {
+      if (!d) return;
+      lugares.forEach(function (l) {
+        var s = document.getElementById(l[1]), cab = s && s.querySelector(".cab-bloco");
+        if (!d[l[0]] || !cab || s.querySelector(".aviso-futuro")) return;
+        cab.insertAdjacentHTML("afterend", '<p class="aviso-futuro"><a href="' + esc(urlFuturo(l[2])) + '"><span aria-hidden="true">📅 </span>' +
+          EP.tr("Veja quem assume em 2027", "See who takes office in 2027") + ' <span aria-hidden="true">›</span></a></p>');
+      });
+    });
+  };
+  // ---------------------------------------------------------------- peças da página do mandato 2027
+  // o mesmo resumo da página de hoje (12 pessoas e "Ver todos")
+  function resumoAbas() { return EP.abas && EP.abas.ativa() ? { lote: EP.RESUMO_CASA || 12, verTodos: true } : {}; }
+  // o aviso em cima das abas: de onde vêm os dados e, num bloco que abre, quando cada um toma posse
+  function notaFuturo(itens) {
+    var lt = linhaDoTempo(itens, "qa-posses");
+    return '<p class="aviso azul"><span aria-hidden="true">📅 </span>' + esc(EP.tr(
+      "Você está vendo o próximo mandato. Aqui aparece quem foi eleito em 2026, segundo o TSE, e quando cada um toma posse. Até a posse, quem está no cargo continua sendo quem aparece na página de hoje. Toque em alguém para ver mais.",
+      "You are looking at the next term. This shows who was elected in 2026, according to the TSE, and when each one takes office. Until then, the people in office are still the ones on today's page. Tap anyone to see more.")) + "</p>" +
+      (lt ? EP.blocoAbre("posses-abre", '<span aria-hidden="true">📅</span><span id="qa-posses">' + esc(EP.tr("Quando cada um toma posse", "When each one takes office")) + "</span>", lt) : "");
+  }
+  // uma parte que já tomou posse (os arquivos perdem cada cargo no dia da posse): está na página de hoje
+  function jaTomou(ic, pt, en, aba, linkPt, linkEn) {
+    return EP.hist.semDados(ic, esc(EP.tr(pt, en)), [EP.hist.link(ic, EP.hist.hojeEm(aba), EP.tr(linkPt, linkEn))]);
+  }
+  function cabecalho(selo, h1, lead, onde, txtLead) {
+    var H = EP.hist;
+    H.poeTitulo(EP.tr("Quem assume em 2027 · ", "Who takes office in 2027 · ") + document.title);
+    H.poeOnde(onde);
+    H.poeTexto(selo, EP.tr("Quem assume em 2027", "Who takes office in 2027"));
+    H.poePeriodo(h1, EP.tr("de 2027 a 2030", "2027–2030"));
+    H.poeTexto(lead, txtLead);
+  }
+  function faixaFuturo() { EP.hist.faixa(EP.tr("o próximo mandato, 2027 a 2030 (eleitos em 2026)", "the next term, 2027–2030 (elected in 2026)")); }
+  // os ministros do próximo governo: quem nomeia é o presidente, depois da posse (Constituição, art. 84, I)
+  function ministrosFuturo(posse) {
+    var H = EP.hist, tit = document.getElementById("os-ministros"), desc = tit && tit.nextElementSibling, grade = document.getElementById("ministros");
+    H.poeTexto(desc, EP.tr("Ministros não são eleitos: o presidente escolhe cada um para cuidar de uma área, como a saúde ou a educação.",
+      "Ministers are not elected: the President chooses each one to take care of an area, such as health or education."));
+    if (!grade) return;
+    grade.className = "min-futuro";
+    grade.innerHTML = H.semDados("👔", esc(EP.tr("Quem nomeia os ministros é o presidente, depois de tomar posse" + (posse ? " (em " + EP.dataLonga(posse) + ")" : "") +
+      ". Por isso, os ministros do mandato de 2027 a 2030 não aparecem aqui. Os ministros de hoje estão na página de hoje.",
+      "Ministers are appointed by the President after taking office" + (posse ? " (on " + EP.dataLonga(posse) + ")" : "") +
+      ". That is why the ministers of the 2027–2030 term are not shown here. Today's ministers are on today's page.")),
+    [H.link("👔", H.hojeEm("os-ministros"), EP.tr("Ver os ministros de hoje", "See today's ministers"))]) +
+      "<p>" + EP.botaoFontes([fonteCF("art. 84, I (o presidente nomeia os ministros)", "art. 84, I (the President appoints the ministers)")], EP.tr("De onde vem isso?", "Where does this come from?")) + "</p>";
+  }
+
+  // ---------------------------------------------------------------- Brasil (brasil.html?mandato=2027)
   // a linha do tempo do Brasil: presidente, governadores, Congresso e as Assembleias (as que tomam posse em outro dia vêm à parte)
   function linhaBrasil(d) {
     var ps = d.posses || {}, a = ps.assembleias || {}, ex = a.excecoes || {}, itens = [];
@@ -185,71 +280,96 @@
     });
     return itens;
   }
-  X.brasil = function (el) {
-    if (!el) return;
-    EP.json("dados/eleitos/BR.json").then(function (d) {
-      if (!d || !(d.presidencia || d.senado || d.camara)) { esconde(el); return; }
-      var c = d.contas || {}, pres = d.presidencia;
-      var h = '<p class="lead-e26 rev">' + EP.tr(
-        "A eleição de 2026 já escolheu quem governa e quem faz as leis nos próximos anos. Até o dia da posse, quem está no cargo continua sendo quem aparece mais acima nesta página. Toque em alguém para ver mais.",
-        "The 2026 election has already chosen who will govern and who will make the laws in the coming years. Until the day they take office, the people in office are still the ones shown above on this page. Tap anyone to see more.") + "</p>" +
-        sub("qa-posses", "📅", "Quando cada um toma posse", "When each one takes office") + linhaDoTempo(linhaBrasil(d), "qa-posses") +
-        sub("qa-contas", "🔢", "Quantos voltam e quantos chegam", "How many return and how many are joining") +
-        contas([[c.presidencia, EP.tr("Presidente e vice", "President and Vice President")], [c.governadores, EP.tr("Governadores", "Governors")],
-          [c.senado, EP.tr("Senado", "Senate")], [c.camara, EP.tr("Câmara dos Deputados", "Chamber of Deputies")],
-          [c.assembleias, EP.tr("Assembleias Legislativas e Câmara Legislativa do DF", "State legislatures and the Federal District's Legislative Chamber")]]);
-      if (pres && (pres.presidente || pres.vice)) {
-        h += sub("qa-presidente", "🏢", "Presidente e vice eleitos", "President-elect and Vice President-elect") +
-          '<div class="exec-topo">' + cartaoGrande(pres.presidente) + cartaoGrande(pres.vice) + "</div>";
-      }
+  // js/brasil.js já montou as abas de hoje; aqui entram os eleitos de 2026. o.abre(id, fn) = EP.abas.quandoAbrir
+  X.brasilAbas = function (o) {
+    o = o || {};
+    var abre = o.abre || function (id, fn) { fn(); }, H = EP.hist;
+    return X.dados("BR").then(function (d) {
+      if (!d) { location.replace(urlFuturo("", true)); return; }
+      var main = document.getElementById("conteudo"), cab = main.querySelector(".cab-pagina"), c = d.contas || {}, ps = d.posses || {}, pres = d.presidencia;
+      cabecalho(cab.querySelector(".selo-topo"), cab.querySelector("h1"), cab.querySelector(".lead"), EP.tr("A política do Brasil (2027 a 2030)", "Brazil's politics (2027–2030)"),
+        EP.tr("Aqui você vê quem foi eleito em 2026 para governar o país e fazer as leis de 2027 a 2030, e quando cada um toma posse.",
+          "Here you can see who was elected in 2026 to govern the country and make its laws from 2027 to 2030, and when each one takes office."));
+      H.nota(notaFuturo(linhaBrasil(d)));
+      faixaFuturo();
+      // Quem governa
+      var posseP = (pres && pres.posse) || ps.presidente;
+      H.desc("executivo", EP.tr("O Poder Executivo: o presidente e o vice eleitos em 2026" + (posseP ? ", que tomam posse em " + EP.dataLonga(posseP) : "") + ", e os ministros, que o presidente escolhe.",
+        "The executive branch: the President and the Vice President elected in 2026" + (posseP ? ", who take office on " + EP.dataLonga(posseP) : "") + ", and the ministers, whom the President chooses."));
+      abre("executivo", function () {
+        var topo = document.getElementById("exec-topo");
+        if (pres && (pres.presidente || pres.vice)) {
+          topo.innerHTML = cartaoGrande(pres.presidente) + cartaoGrande(pres.vice);
+          topo.insertAdjacentHTML("afterend", contas([[c.presidencia, EP.tr("Presidente e vice", "President and Vice President")]]) +
+            blocoFontes(fontesArquivo(d), EP.tr("De onde vêm estes dados?", "Where does this data come from?")));
+        } else {
+          topo.innerHTML = jaTomou("🏢", "O presidente e o vice eleitos em 2026 já tomaram posse: eles estão na página de hoje.",
+            "The President and the Vice President elected in 2026 have already taken office: they are on today's page.", "executivo", "Ver quem governa hoje", "See who governs today");
+        }
+        ministrosFuturo(posseP);
+        EP.revelar(document.getElementById("executivo"));
+      });
+      // Senado: os 54 eleitos em 2026 e os 27 que continuam
+      var corpoSen = document.querySelector("#senado .casa-corpo"), corpoCam = document.querySelector("#camara .casa-corpo");
+      if (corpoSen) corpoSen.id = "qa-casa-sen";
+      if (corpoCam) corpoCam.id = "qa-casa-cam";
       if (d.senado) {
         var ne = (d.senado.eleitos || []).length, nc = (d.senado.continuam || []).length;
         var saem = (d.senado.continuam || []).filter(function (m) { return m.eleito2026 && m.assume; });
-        h += sub("qa-senado", "🏛️", "O Senado a partir de " + EP.dataLonga(d.senado.posse), "The Senate from " + EP.dataLonga(d.senado.posse)) +
-          '<p class="muted">' + esc(EP.tr(
-            "São 81 senadores, 3 por estado. Em 2026 foram eleitos " + EP.num(ne) + " (2 por estado e 2 pelo Distrito Federal), para 8 anos. Os outros " + EP.num(nc) + ", eleitos em 2022, continuam até 2031.",
-            "There are 81 senators, 3 per state. In 2026, " + EP.num(ne) + " were elected (2 per state and 2 for the Federal District), for 8-year terms. The other " + EP.num(nc) + ", elected in 2022, stay until 2031.")) +
-          (saem.length ? " " + esc(EP.tr(saem.map(function (m) { return m.nome; }).join(", ") + (saem.length === 1 ? " foi eleito" : " foram eleitos") +
+        H.desc("senado", EP.tr(
+          "São 81 senadores, 3 por estado. Em 2026 foram eleitos " + EP.num(ne) + " (2 por estado e 2 pelo Distrito Federal), para 8 anos, e tomam posse em " + EP.dataLonga(d.senado.posse) + ". Os outros " + EP.num(nc) + ", eleitos em 2022, continuam até 2031.",
+          "There are 81 senators, 3 per state. In 2026, " + EP.num(ne) + " were elected (2 per state and 2 for the Federal District), for 8-year terms, and take office on " + EP.dataLonga(d.senado.posse) + ". The other " + EP.num(nc) + ", elected in 2022, stay until 2031.") +
+          (saem.length ? " " + EP.tr(saem.map(function (m) { return m.nome; }).join(", ") + (saem.length === 1 ? " foi eleito" : " foram eleitos") +
             " para outro cargo em 2026: na posse, " + (saem.length === 1 ? "deixa" : "deixam") + " o Senado, e quem assume é o 1º suplente da chapa (Constituição, art. 56).",
             saem.map(function (m) { return m.nome; }).join(", ") + (saem.length === 1 ? " was" : " were") + " elected to another office in 2026: on taking it, " +
-            (saem.length === 1 ? "leaves" : "they leave") + " the Senate, and the seat goes to the 1st alternate on the ticket (Constitution, art. 56).")) : "") + "</p>" +
-          '<div class="casa-corpo" id="qa-casa-sen"></div>';
+            (saem.length === 1 ? "leaves" : "they leave") + " the Senate, and the seat goes to the 1st alternate on the ticket (Constitution, art. 56).") : ""));
+        abre("senado", function () {
+          if (!corpoSen) return;
+          corpoSen.insertAdjacentHTML("beforebegin", contas([[c.senado, EP.tr("Senado", "Senate")]]));
+          senadoBrasil(corpoSen, d.senado, Object.assign({ atualizado: d.atualizado }, resumoAbas()));
+        });
+      } else if (corpoSen) {
+        corpoSen.innerHTML = jaTomou("🏛️", "Os senadores eleitos em 2026 já tomaram posse: eles estão na página de hoje.", "The senators elected in 2026 have already taken office: they are on today's page.",
+          "senado", "Ver o Senado de hoje", "See today's Senate");
       }
+      // Câmara: os 513 eleitos em 2026
       if (d.camara) {
-        h += sub("qa-camara", "🏛️", "A Câmara dos Deputados a partir de " + EP.dataLonga(d.camara.posse), "The Chamber of Deputies from " + EP.dataLonga(d.camara.posse)) +
-          '<p class="muted">' + esc(EP.tr(
-            "Os " + EP.num((d.camara.membros || []).length) + " deputados federais eleitos em 2026, com o partido da eleição. Quem for eleito e virar ministro ou secretário deixa a vaga para um suplente (Constituição, art. 56).",
-            "The " + EP.num((d.camara.membros || []).length) + " federal deputies elected in 2026, with the party they were elected for. Anyone elected who becomes a minister or a state secretary leaves the seat to an alternate (Constitution, art. 56).")) + "</p>" +
-          '<div class="casa-corpo" id="qa-casa-cam"></div>';
+        H.desc("camara", EP.tr(
+          "Os " + EP.num((d.camara.membros || []).length) + " deputados federais eleitos em 2026, com o partido da eleição. Tomam posse em " + EP.dataLonga(d.camara.posse) + ". Quem for eleito e virar ministro ou secretário deixa a vaga para um suplente (Constituição, art. 56).",
+          "The " + EP.num((d.camara.membros || []).length) + " federal deputies elected in 2026, with the party they were elected for. They take office on " + EP.dataLonga(d.camara.posse) + ". Anyone elected who becomes a minister or a state secretary leaves the seat to an alternate (Constitution, art. 56)."));
+        abre("camara", function () {
+          if (!corpoCam) return;
+          corpoCam.insertAdjacentHTML("beforebegin", contas([[c.camara, EP.tr("Câmara dos Deputados", "Chamber of Deputies")]]));
+          casa(corpoCam, d.camara.membros || [], Object.assign({ nomes: NOMES.dep(), fonte: fontesArquivo(d, [fonteCF("art. 56 (suplentes)", "art. 56 (alternates)")]), atualizado: d.atualizado,
+            notaPlenario: EP.tr("O partido é o da eleição de 2026, segundo o TSE.", "The party is the one each person was elected for in 2026, according to the TSE.") }, resumoAbas()));
+        });
+      } else if (corpoCam) {
+        corpoCam.innerHTML = jaTomou("🏛️", "Os deputados federais eleitos em 2026 já tomaram posse: eles estão na página de hoje.", "The federal deputies elected in 2026 have already taken office: they are on today's page.",
+          "camara", "Ver a Câmara de hoje", "See today's Chamber");
       }
-      h += blocoFontes(fontesArquivo(d, [fonteCF("art. 56 (suplentes)", "art. 56 (alternates)")]), EP.tr("De onde vêm estes dados?", "Where does this data come from?"));
-      el.innerHTML = h;
-      if (d.senado) senadoBrasil(document.getElementById("qa-casa-sen"), d.senado);
-      if (d.camara) casa(document.getElementById("qa-casa-cam"), d.camara.membros || [], { nomes: NOMES.dep(), fonte: fontesArquivo(d), atualizado: d.atualizado,
-        notaPlenario: EP.tr("O partido é o da eleição de 2026, segundo o TSE.", "The party is the one each person was elected for in 2026, according to the TSE.") });
-      EP.revelar(el);
-    }).catch(function (e) { if (semArquivo(e)) esconde(el); else falhou(el); });
+      EP.revelar(main);
+    });
   };
   // o Senado a partir da posse: os 54 eleitos em 2026 e os 27 que continuam até 2031. Quem continua e foi eleito para outro
   // cargo em 2026 deixa o Senado quando toma posse dele (Constituição, art. 54, II, "d"): no lugar, aparece o 1º suplente
   // da chapa de 2022 (art. 56, § 1º), com o partido daquela eleição.
-  function senadoBrasil(el, s) {
-    var membros = (s.eleitos || []).map(function (m) { return Object.assign({}, m, { extraTxt: votos(m.votos) }); });
-    (s.continuam || []).forEach(function (m) {
-      if (m.eleito2026 && m.assume) {
-        membros.push({ id: "sup-" + m.id, link: m.assume.tse, nome: m.assume.nome, partido: m.assume.partido, uf: m.uf, genero: m.assume.genero, foto: m.assume.foto,
-          extraTxt: EP.tr("1º suplente (partido de 2022)", "1st alternate (2022 party)"),
-          chipHtml: chip("🪑", EP.tr("Assume a vaga de " + m.nome, "Takes " + m.nome + "'s seat")) });
-      } else {
-        membros.push(Object.assign({}, m, { extraTxt: m.eleito2026 ? EP.tr("Eleit" + (m.genero === "F" ? "a " : "o ") + minus(m.eleito2026.cargo) + " em 2026",
-          "Elected " + minus(D.cargo(m.eleito2026.cargo)) + " in 2026") : "",
-          chipHtml: chip("⏳", EP.tr("Continua até ", "Stays until ") + String(m.fimMandato || "").slice(0, 4)) }));
-      }
-    });
-    casa(el, membros, { nomes: NOMES.sen(), fonte: s.fontes, coletivo: EP.tr("senadores", "senators"),
-      notaPlenario: EP.tr("Partido: o da eleição de 2026 para quem foi eleito agora e o de hoje para quem continua.", "Party: the one from the 2026 election for those elected now, and today's party for those who stay.") });
+  function suplenteQueAssume(m) {
+    return { id: "sup-" + m.id, link: m.assume.tse, nome: m.assume.nome, partido: m.assume.partido, uf: m.uf, genero: m.assume.genero, foto: m.assume.foto,
+      extraTxt: EP.tr("1º suplente (partido de 2022)", "1st alternate (2022 party)"),
+      chipHtml: chip("🪑", EP.tr("Assume a vaga de " + m.nome, "Takes " + m.nome + "'s seat")) };
   }
-  // ---------------------------------------------------------------- página do estado (#quem-assume)
+  function quemContinua(m) {
+    return Object.assign({}, m, { extraTxt: m.eleito2026 ? EP.tr("Eleit" + (m.genero === "F" ? "a " : "o ") + minus(m.eleito2026.cargo) + " em 2026",
+      "Elected " + minus(D.cargo(m.eleito2026.cargo)) + " in 2026") : "",
+      chipHtml: chip("⏳", EP.tr("Continua até ", "Stays until ") + String(m.fimMandato || "").slice(0, 4)) });
+  }
+  function senadoBrasil(el, s, extra) {
+    var membros = (s.eleitos || []).map(function (m) { return Object.assign({}, m, { extraTxt: votos(m.votos) }); });
+    (s.continuam || []).forEach(function (m) { membros.push(m.eleito2026 && m.assume ? suplenteQueAssume(m) : quemContinua(m)); });
+    casa(el, membros, Object.assign({ nomes: NOMES.sen(), fonte: s.fontes, coletivo: EP.tr("senadores", "senators"),
+      notaPlenario: EP.tr("Partido: o da eleição de 2026 para quem foi eleito agora e o de hoje para quem continua.", "Party: the one from the 2026 election for those elected now, and today's party for those who stay.") }, extra));
+  }
+  // ---------------------------------------------------------------- estado (estado.html?uf=SP&mandato=2027)
   function suplentesHtml(s) {
     var l = s.suplentes || [];
     if (!l.length) return "";
@@ -259,12 +379,14 @@
           '<a href="' + urlPerfil(x.link || x.id) + '">' + EP.pt(esc(x.nome)) + "</a> (" + EP.pt(esc(nomePartido(x.partido))) + ")";
       }).join("; ") + "</small></p>";
   }
-  X.estado = function (el, uf) {
-    if (!el || !uf) return;
-    EP.json("dados/eleitos/" + uf + ".json").then(function (d) {
-      if (!d || !(d.governo || d.senado || d.camara || d.assembleia)) { esconde(el); return; }
-      var c = d.contas || {}, de = EP.doEstado(uf), ehDF = uf === "DF", itens = [];
-      var a = d.assembleia, nomeCasa = a ? (EP.en ? esc(a.casa_en || "Legislative Assembly") : esc(a.casa || "Assembleia Legislativa")) : "";
+  // js/estado.js já montou as abas de hoje; aqui entram os eleitos de 2026. o.quando(id, fn) = EP.abas.quandoAbrir
+  X.estadoAbas = function (uf, o) {
+    o = o || {};
+    var quando = o.quando || function (id, fn) { fn(); }, H = EP.hist;
+    return X.dados(uf).then(function (d) {
+      if (!d) { location.replace(urlFuturo("", true)); return; }
+      var c = d.contas || {}, de = EP.doEstado(uf), ehDF = uf === "DF", itens = [], el = document.getElementById("estado");
+      var a = d.assembleia, nomeCasa = a ? (EP.en ? a.casa_en || "Legislative Assembly" : a.casa || "Assembleia Legislativa") : "";
       if (d.governo) itens.push({ data: d.governo.posse, txt: esc(EP.tr("governador e vice", "governor and vice governor")) });
       var leg = [];
       if (d.senado) leg.push(EP.tr("senadores", "senators"));
@@ -272,56 +394,72 @@
       if (a && a.posse === (d.senado || d.camara || {}).posse) leg.push(EP.tr("deputados " + (ehDF ? "distritais" : "estaduais"), (ehDF ? "district" : "state") + " deputies"));
       else if (a) itens.push({ data: a.posse, txt: esc(EP.tr("deputados " + (ehDF ? "distritais" : "estaduais"), (ehDF ? "district" : "state") + " deputies")) });
       if (leg.length) itens.push({ data: (d.senado || d.camara).posse, txt: esc(leg.slice(0, -1).join(", ") + (leg.length > 1 ? EP.tr(" e ", " and ") : "") + leg[leg.length - 1]) });
-      var h = '<p class="lead-e26 rev">' + esc(EP.tr(
-        "Até a posse, quem está no cargo continua sendo quem aparece mais acima nesta página. Toque em alguém para ver mais.",
-        "Until they take office, the people in office are still the ones shown above on this page. Tap anyone to see more.")) + "</p>" +
-        sub("qa-posses", "📅", "Quando cada um toma posse", "When each one takes office") + linhaDoTempo(itens, "qa-posses") +
-        sub("qa-contas", "🔢", "Quantos voltam e quantos chegam", "How many return and how many are joining") +
-        contas([[c.senado, EP.tr("Senado", "Senate")], [c.camara, EP.tr("Deputados federais", "Federal deputies")],
-          [c.assembleia, a ? (EP.en ? a.casa_en || "Legislative Assembly" : a.casa || "Assembleia Legislativa") : ""]]);
-      if (d.governo && (d.governo.governador || d.governo.vice)) {
-        var gv = d.governo.governador, vc = d.governo.vice;
-        h += sub("qa-governo", "🏢", "Governador e vice eleitos", "Governor-elect and vice governor-elect") +
-          '<div class="exec-topo">' + cartaoGrande(gv) + cartaoGrande(vc) + "</div>";
+      cabecalho(el.querySelector(".cab-pagina .selo-topo"), document.getElementById("titulo-uf"), document.getElementById("lead-uf"), EP.UFS[uf] + EP.tr(" (2027 a 2030)", " (2027–2030)"),
+        EP.tr("Quem foi eleito em 2026 para governar, para representar " + (ehDF ? "o Distrito Federal" : "o estado") + " no Congresso e para fazer as leis " + de + " de 2027 a 2030, e quando cada um toma posse.",
+          "Who was elected in 2026 to govern, to represent " + (ehDF ? "the Federal District" : "the state") + " in the National Congress and to make the laws " + de + " from 2027 to 2030, and when each one takes office."));
+      H.nota(notaFuturo(itens));
+      faixaFuturo();
+      var fCF = fonteCF("arts. 27, 28, 46 e 56 (mandatos, suplentes e posse)", "arts. 27, 28, 46 and 56 (terms, alternates and taking office)");
+      // Quem governa
+      var gov = d.governo, gv = gov && gov.governador, vc = gov && gov.vice;
+      if (gv || vc) {
+        H.desc("governo", EP.tr("O governador e o vice eleitos em 2026, que tomam posse em " + EP.dataLonga(gov.posse) + ".", "The governor and the vice governor elected in 2026, who take office on " + EP.dataLonga(gov.posse) + "."));
+        document.getElementById("gov").innerHTML = cartaoGrande(gv) + cartaoGrande(vc);
+        document.getElementById("gov-nota").innerHTML = blocoFontes(fontesArquivo(d, [fCF]), EP.tr("De onde vêm estes dados?", "Where does this data come from?"));
+      } else {
+        document.getElementById("gov").innerHTML = jaTomou("🏢", "O governador e o vice eleitos em 2026 já tomaram posse: eles estão na página de hoje.",
+          "The governor and the vice governor elected in 2026 have already taken office: they are on today's page.", "governo", "Ver quem governa hoje", "See who governs today");
+        document.getElementById("gov-nota").innerHTML = "";
       }
+      // Senadores: os eleitos em 2026 (com os 2 suplentes) e quem continua, em ordem alfabética, como na página de hoje
+      var ls = document.getElementById("lista-sen");
       if (d.senado) {
-        var ss = d.senado.eleitos || [], ct = d.senado.continuam || [];
-        h += sub("qa-senado", "🏛️", "Senadores eleitos", "Senators-elect") +
-          '<p class="muted">' + esc(EP.tr("Mandato de 8 anos, de " + d.senado.posse.slice(0, 4) + " a " + String(d.senado.fim || "").slice(0, 4) + ". Cada senador foi eleito com 2 suplentes.",
-            "8-year term, from " + d.senado.posse.slice(0, 4) + " to " + String(d.senado.fim || "").slice(0, 4) + ". Each senator was elected with 2 alternates.")) + "</p>" +
-          '<div class="grade-senado-e26">' + ss.map(function (s) {
-            return '<div class="sen-e26">' + cartao(Object.assign({}, s, { uf: "" }), votos(s.votos)) + suplentesHtml(s) + "</div>";
-          }).join("") + "</div>" +
-          (ct.length ? '<p class="muted continua-e26">' + ct.map(function (m) {
-            var sai = m.eleito2026 && m.assume;
-            return EP.tr("Continua até " + String(m.fimMandato || "").slice(0, 4) + ": ", "Stays until " + String(m.fimMandato || "").slice(0, 4) + ": ") +
-              '<a href="' + urlPerfil(m.link || m.id) + '">' + EP.pt(esc(m.nome)) + "</a> (" + EP.pt(esc(nomePartido(m.partido))) + ")" +
-              (sai ? esc(EP.tr(", eleit" + (m.genero === "F" ? "a " : "o ") + minus(m.eleito2026.cargo) + " em 2026: na posse, deixa o Senado e quem assume é o 1º suplente, ",
-                ", elected " + minus(D.cargo(m.eleito2026.cargo)) + " in 2026: on taking office, " + (m.genero === "F" ? "she" : "he") + " leaves the Senate and the seat goes to the 1st alternate, ")) +
-                linkFora(m.assume.tse, EP.pt(esc(m.assume.nome))) + " (" + EP.pt(esc(nomePartido(m.assume.partido))) + EP.tr(" em 2022", " in 2022") + ")" : "") + ".";
-          }).join(" ") + "</p>" : "");
+        var ss = d.senado.eleitos || [], ct = d.senado.continuam || [], fimCt = ct.length ? String(ct[0].fimMandato || "").slice(0, 4) : "";
+        H.desc("senadores", EP.tr("Todo estado tem 3 senadores. Em 2026 foram eleitos " + EP.num(ss.length) + ", cada um com 2 suplentes, para o mandato de 8 anos, de " + d.senado.posse.slice(0, 4) + " a " + String(d.senado.fim || "").slice(0, 4) + "." +
+          (ct.length ? (ct.length === 1 ? " O outro, eleito em 2022, continua até " : " Os outros, eleitos em 2022, continuam até ") + fimCt + "." : ""),
+        "Every state has 3 senators. In 2026, " + EP.num(ss.length) + " were elected, each with 2 alternates, for the 8-year term from " + d.senado.posse.slice(0, 4) + " to " + String(d.senado.fim || "").slice(0, 4) + "." +
+          (ct.length ? (ct.length === 1 ? " The other one, elected in 2022, stays until " : " The others, elected in 2022, stay until ") + fimCt + "." : "")));
+        var lista = ss.map(function (s) { return { nome: s.nome, html: '<div class="sen-e26">' + cartao(Object.assign({}, s, { uf: "" }), votos(s.votos)) + suplentesHtml(s) + "</div>" }; })
+          .concat(ct.map(function (m) {
+            var x = m.eleito2026 && m.assume ? suplenteQueAssume(m) : quemContinua(m);
+            return { nome: x.nome, html: cartao(Object.assign({}, x, { uf: "" }), x.extraTxt) };
+          }));
+        ls.innerHTML = EP.alfabetica(lista).map(function (x) { return x.html; }).join("");
+        ls.insertAdjacentHTML("afterend", contas([[c.senado, EP.tr("Senado", "Senate")]]) + blocoFontes(d.senado.fontes || fontesArquivo(d, [fCF]), EP.tr("De onde vem esta lista?", "Where does this list come from?")));
+      } else {
+        ls.innerHTML = jaTomou("🏛️", "Os senadores eleitos em 2026 já tomaram posse: eles estão na página de hoje.", "The senators elected in 2026 have already taken office: they are on today's page.",
+          "senadores", "Ver os senadores de hoje", "See today's senators");
       }
-      if (d.camara) {
-        h += sub("qa-camara", "🏛️", "Deputados federais eleitos " + de, "Federal deputies elected " + EP.tr(de, "for " + (ehDF ? "the Federal District" : EP.UFS[uf]))) +
-          '<p class="muted">' + esc(EP.tr("Eles representam o povo " + de + " na Câmara dos Deputados a partir de " + EP.dataLonga(d.camara.posse) + ".",
-            "They will represent the people " + de + " in the Chamber of Deputies from " + EP.dataLonga(d.camara.posse) + ".")) + "</p>" +
-          '<div class="casa-corpo" id="qa-casa-fed"></div>';
-      }
-      if (a) {
-        h += "<h3 class=\"sub rev\" id=\"qa-assembleia\"><span aria-hidden=\"true\">🏛️ </span>" + (EP.en ? "The " : "A ") + (EP.en ? nomeCasa : EP.pt(nomeCasa)) + EP.tr(" a partir de ", " from ") + esc(EP.dataLonga(a.posse)) + "</h3>" +
-          '<p class="muted">' + esc(EP.tr("Os " + EP.num((a.membros || []).length) + " deputados " + (ehDF ? "distritais" : "estaduais") + " eleitos em 2026, com o partido da eleição.",
-            "The " + EP.num((a.membros || []).length) + " " + (ehDF ? "district" : "state") + " deputies elected in 2026, with the party they were elected for.")) + "</p>" +
-          '<div class="casa-corpo" id="qa-casa-est"></div>';
-      }
-      h += blocoFontes(fontesArquivo(d, [fonteCF("arts. 27, 28, 46 e 56 (mandatos, suplentes e posse)", "arts. 27, 28, 46 and 56 (terms, alternates and taking office)")]
-        .concat(a && a.fontePosse ? [a.fontePosse] : [])),
-        EP.tr("De onde vêm estes dados?", "Where does this data come from?"));
-      el.innerHTML = h;
       var nota = EP.tr("O partido é o da eleição de 2026, segundo o TSE.", "The party is the one each person was elected for in 2026, according to the TSE.");
-      if (d.camara) casa(document.getElementById("qa-casa-fed"), d.camara.membros || [], { nomes: NOMES.dep(), filtroUF: false, fonte: fontesArquivo(d), atualizado: d.atualizado, notaPlenario: nota });
-      if (a) casa(document.getElementById("qa-casa-est"), a.membros || [], { nomes: ehDF ? NOMES.dist() : NOMES.dest(), filtroUF: false, fonte: fontesArquivo(d), atualizado: d.atualizado, notaPlenario: nota });
+      // Deputados federais
+      if (d.camara) {
+        H.desc("federais", EP.tr("Os " + EP.num((d.camara.membros || []).length) + " deputados federais eleitos " + EP.noEstado(uf) + " em 2026. Eles representam o povo " + de + " na Câmara dos Deputados a partir de " + EP.dataLonga(d.camara.posse) + ".",
+          "The " + EP.num((d.camara.membros || []).length) + " federal deputies elected " + EP.noEstado(uf) + " in 2026. They will represent the people " + de + " in the Chamber of Deputies from " + EP.dataLonga(d.camara.posse) + "."));
+        quando("federais", function () {
+          var el2 = document.getElementById("casa-fed");
+          el2.insertAdjacentHTML("beforebegin", contas([[c.camara, EP.tr("Deputados federais", "Federal deputies")]]));
+          casa(el2, d.camara.membros || [], Object.assign({ nomes: NOMES.dep(), filtroUF: false, fonte: fontesArquivo(d), atualizado: d.atualizado, notaPlenario: nota }, resumoAbas()));
+        });
+      } else {
+        document.getElementById("casa-fed").innerHTML = jaTomou("🏛️", "Os deputados federais eleitos em 2026 já tomaram posse: eles estão na página de hoje.",
+          "The federal deputies elected in 2026 have already taken office: they are on today's page.", "federais", "Ver os deputados federais de hoje", "See today's federal deputies");
+      }
+      // Deputados estaduais (ou distritais)
+      if (a) {
+        H.desc("estaduais", EP.tr("Os " + EP.num((a.membros || []).length) + " deputados " + (ehDF ? "distritais" : "estaduais") + " eleitos em 2026, com o partido da eleição. Tomam posse em " + EP.dataLonga(a.posse) + ".",
+          "The " + EP.num((a.membros || []).length) + " " + (ehDF ? "district" : "state") + " deputies elected in 2026, with the party they were elected for. They take office on " + EP.dataLonga(a.posse) + "."));
+        quando("estaduais", function () {
+          var el3 = document.getElementById("casa-est");
+          el3.insertAdjacentHTML("beforebegin", contas([[c.assembleia, nomeCasa]]));
+          casa(el3, a.membros || [], Object.assign({ nomes: ehDF ? NOMES.dist() : NOMES.dest(), filtroUF: false, fonte: fontesArquivo(d, a.fontePosse ? [a.fontePosse] : []), atualizado: d.atualizado, notaPlenario: nota },
+            resumoAbas()));
+        });
+      } else {
+        document.getElementById("casa-est").innerHTML = jaTomou("🏛️", "Os deputados " + (ehDF ? "distritais" : "estaduais") + " eleitos em 2026 já tomaram posse: eles estão na página de hoje.",
+          "The " + (ehDF ? "district" : "state") + " deputies elected in 2026 have already taken office: they are on today's page.", "estaduais", "Ver a lista de hoje", "See today's list");
+      }
       EP.revelar(el);
-    }).catch(function (e) { if (semArquivo(e)) esconde(el); else falhou(el); });
+    });
   };
   // ---------------------------------------------------------------- página da cidade (#proxima-eleicao)
   var CARGOS_SUP = { prefeito: ["prefeito", "mayor"], vice: ["vice-prefeito", "vice mayor"], vereadores: ["vereadores", "city councilors"] };
@@ -398,6 +536,12 @@
     return l;
   }
   function ehSuplente(x) { return x.tipo === "supl1" || x.tipo === "supl2"; }
+  // a aba da página do mandato 2027 onde a pessoa aparece (o "Voltar" do perfil e26- leva para lá)
+  function abaDoCargo(x) {
+    var t = ehSuplente(x) ? "sen" : x.tipo;
+    if (x.uf === "BR") return { pres: "executivo", vp: "executivo", sen: "senado", dep: "camara" }[t] || "";
+    return { gov: "governo", vgov: "governo", sen: "senadores", dep: "federais", dest: "estaduais" }[t] || "";
+  }
   function perfilDe(x, d, l) {
     var f = d.fontes || {}, supl = ehSuplente(x), chapa = !!x.votosDaChapa, a = x.genero === "F" ? "a" : "o";
     var fCand = { veiculo: "TSE", titulo: "DivulgaCandContas: candidatura de " + x.nome + " (2026)", url: x.tse, data: (f.candidaturas || {}).data || d.atualizado };
@@ -419,7 +563,7 @@
       eleicao2026: { situacao: supl ? "suplente" : "eleito", cargo: x.cargo, txt: txtPt, txt_en: txtEn },
       fontes: [fCand, f.resultados, f.candidaturas, fBens].concat(f.posse || []).filter(Boolean),
       atualizado: d.atualizado,
-      volta: { pagina: x.uf === "BR" ? "brasil.html" : "estado.html?uf=" + x.uf, secao: "quem-assume", id: x.id },
+      volta: { pagina: x.uf === "BR" ? "brasil.html?mandato=" + X.FUTURO : "estado.html?uf=" + x.uf + "&mandato=" + X.FUTURO, secao: abaDoCargo(x), id: x.id },
       e26: { ficha: x, arquivo: d, titular: tit, fBens: fBens }
     };
   }
@@ -497,7 +641,7 @@
       (supl && e.titular ? "<p>" + EP.tr("Senador da chapa: ", "Senator on the ticket: ") + '<a href="' + urlPerfil(e.titular.link || e.titular.id) + '">' + EP.pt(esc(e.titular.nome)) + "</a>.</p>" : "") +
       suplentesHtml(x) +
       '<p class="links-e26">' + linkFora(x.tse, EP.tr("Ver a candidatura no site do TSE (DivulgaCandContas)", "See the candidacy on the TSE website (DivulgaCandContas)")) + "</p>" +
-      '<p><a class="link-seta" href="' + (x.uf === "BR" ? "brasil.html" : "estado.html?uf=" + x.uf) + '#quem-assume">' +
+      '<p><a class="link-seta" href="' + (x.uf === "BR" ? "brasil.html?mandato=" + X.FUTURO : "estado.html?uf=" + x.uf + "&mandato=" + X.FUTURO) + (EP.en ? "&lang=en" : "") + '">' +
       EP.tr("Ver todos que assumem " + (x.uf === "BR" ? "no Brasil" : EP.noEstado(x.uf)), "See everyone taking office " + (x.uf === "BR" ? "in Brazil" : EP.noEstado(x.uf))) +
       ' <span aria-hidden="true">›</span></a> ' + EP.botaoFontes([fonteCF(supl ? "arts. 46, § 3º, e 56, § 1º (suplentes)" : "arts. 27, 28, 44, 46 e 82 (mandatos e posse)",
         supl ? "arts. 46, § 3, and 56, § 1 (alternates)" : "arts. 27, 28, 44, 46 and 82 (terms and taking office)")], EP.tr("Fonte", "Source")) + "</p></section>";

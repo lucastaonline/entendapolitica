@@ -42,7 +42,7 @@
 .ferramentas-topo .dropdown-menu, .ferramentas-topo .popover { position: relative; display: inline-flex; }
 .topo .seta-menu { width: 16px; height: 16px; color: currentColor; opacity: .75; transition: transform .15s; }
 .topo .btn[aria-expanded="true"] .seta-menu { transform: rotate(180deg); }
-.ic-aa { font-family: Georgia, "Times New Roman", serif; font-weight: 900; font-size: 1.1em; letter-spacing: -.02em; }
+.ic-aa { flex: none; font-family: Georgia, "Times New Roman", serif; font-weight: 900; font-size: 1.1em; line-height: 1; letter-spacing: -.02em; }
 .rotulo-idioma { font-weight: 900; }
 /* a barra fica presa no topo: o foco num botão dela (ou num item de um menu) não pode fazer a página rolar (o navegador achava
    que a barra estava escondida pelo scroll-padding-top das páginas com abas e rolava a página ~400 px para cima) */
@@ -74,11 +74,11 @@ header.topo { background: #fff; backdrop-filter: none; }
 .menu-item .mi-ok { position: absolute; right: .7rem; color: var(--brand); font-weight: 900; }
 .menu-painel hr[role="separator"] { border: 0; border-top: 1px solid var(--border); margin: 6px -6px; }
 .menu-painel .grupo-a11y { background: var(--muted-bg, #f3efe6); border-radius: 12px; padding: 10px 12px; }
-.tamanhos { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; margin-top: 8px; }
+.tamanhos { display: grid; grid-template-columns: repeat(auto-fit, minmax(max(4.5rem, 22%), 1fr)); gap: 6px; margin-top: 8px; }
 :is(.topo, .casca-lado) .menu-painel .tamanhos .btn { flex-direction: column; gap: 0; height: auto; min-height: 56px; padding: 4px 2px; line-height: 1.1; white-space: normal; font-size: 16px; }
 :is(.topo, .casca-lado) .menu-painel .tamanhos .btn[aria-pressed="true"] { background: var(--brand); color: #fff; border-color: var(--brand); }
 .tamanhos .ta { font-weight: 900; }
-.tamanhos .tn { font-size: .75rem; font-weight: 800; }
+.tamanhos .tn { font-size: .75rem; font-weight: 800; overflow-wrap: anywhere; }
 :is(.topo, .casca-lado) .menu-painel .menu-fecha { align-self: flex-end; height: 44px; font-size: .95rem; border: 1px solid var(--border); }
 .menu-painel .atalhos-teclado summary { min-height: 44px; display: flex; align-items: center; cursor: pointer; font-weight: 800; }
 .menu-painel .atalhos-teclado ul { margin: 4px 0 0; padding-left: 1.2em; display: grid; gap: 4px; font-size: .9rem; }

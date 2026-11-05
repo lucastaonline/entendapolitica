@@ -439,10 +439,12 @@
     } else {
       var temPapel = !/^(pres|gov|pref)$/.test(p.tipo);  // o Executivo é sempre o autor das propostas que manda
       var nS = lista.filter(function (x) { return EP.en ? x.s_en : x.s; }).length;
-      // ui-r9: a nota da IA fica na coluna da direita, em cima dos filtros (no celular, logo depois do funil)
-      var notaIa = pr._semIa ? '<div class="nota-ia"><span aria-hidden="true">📄</span><p>' + EP.tr(
-        "Neste mandato antigo, cada proposta aparece com o texto oficial (a ementa), do jeito que a Casa publicou, e o link para a página dela.",
-        "For this past term, each bill appears with its official text (the ementa, in Portuguese), as the legislature published it, and a link to its page.") + "</p></div>" :
+      // ui-r9: a nota sobre o texto das propostas fica na coluna da direita, em cima dos filtros (no celular, logo depois do
+      // funil). Sem nenhuma explicação simples (dados/simples/ vazio: o site não usa IA paga), só o texto oficial; a nota
+      // da IA só aparece quando a pessoa tem alguma explicação
+      var notaIa = pr._semIa || !nS ? '<div class="nota-ia"><span aria-hidden="true">📄</span><p>' + EP.tr(
+        "Cada proposta aparece com o texto oficial (a ementa), do jeito que a Casa publicou, e o link para a página dela.",
+        "Each bill appears with its official text (the ementa, in Portuguese), as the legislature published it, and a link to its page.") + "</p></div>" :
         '<div class="nota-ia"><span aria-hidden="true">🤖</span><p>' + EP.tr(
         'As explicações em palavras simples são escritas por <b>inteligência artificial</b> a partir do texto oficial (a ementa), com regras para não puxar para nenhum lado. Como a IA pode errar, o texto oficial aparece sempre embaixo, com o link. <a href="imparcialidade.html#ia">Saiba mais</a>.',
         'The plain-language explanations are written by <b>artificial intelligence</b> from the official summary of each bill (the ementa), following rules so as not to take sides. Since AI can make mistakes, the official text (in Portuguese) always appears below, with a link. <a href="imparcialidade.html#ia">Learn more</a>.') +
@@ -521,8 +523,7 @@
     var corpo = simples ?
       '<p class="simples"><span class="rot-texto">' + EP.tr("Em palavras simples (feita por IA)", "In plain words (written by AI)") + "</span>" + esc(simples) + "</p>" +
       '<div class="oficial"><span class="rot-texto">' + EP.tr("Texto oficial (ementa)", "Official text (ementa, in Portuguese)") + "</span>" + ementa + "</div>" :
-      '<div class="oficial so-oficial"><span class="rot-texto">' + EP.tr("Texto oficial (ementa)", "Official text (ementa, in Portuguese)") + "</span>" + ementa + "</div>" +
-      (P.propostas && P.propostas._semIa ? "" : '<p class="muted preparando"><span aria-hidden="true">⏳ </span>' + EP.tr("Explicação simples em preparo.", "Plain-language explanation in preparation.") + "</p>");
+      '<div class="oficial so-oficial"><span class="rot-texto">' + EP.tr("Texto oficial (ementa)", "Official text (ementa, in Portuguese)") + "</span>" + ementa + "</div>";
     return '<li class="prop s-' + s + '"><div class="prop-cab"><h3 class="sigla"' + (focavel ? ' tabindex="-1"' : "") + (EP.en ? ' lang="pt-BR"' : "") + ">" + esc(x.sigla || x.tipo || "") + "</h3>" +
       (x.data ? '<span class="data"><span class="sr">' + EP.tr("Apresentada em ", "Filed on ") + "</span>" + EP.data(x.data) + "</span>" : "") + EP.carimbo(s) +
       (P.tipo !== "pres" ? '<span class="papel' + (x.papel === "autor" ? "" : " coautor") + '">' + (x.papel === "autor" ? '<span aria-hidden="true">✍️ </span>' + EP.tr(EP.gen(P.genero, "Autor principal", "Autora principal"), "Main author") :

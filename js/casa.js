@@ -80,6 +80,82 @@
         ' <span aria-hidden="true">↗</span><span class="sr"> ' + EP.tr("(abre em outra aba)", "(opens in a new tab)") + "</span></a></p>" : "") + "</div>";
   };
 
+  // ---------------------------------------------------------------- visual D do estado e da cidade (site-d-r16)
+  // um desenho 3D pequeno no cabeçalho de cada aba (enfeite: aria-hidden, sem clique; some abaixo de 900 px, css/d.css).
+  // lista = [[id da seção, nome do desenho em js/tres-politica.js]]
+  EP.desenhosAbas = function (raiz, lista) {
+    lista.forEach(function (x) {
+      var cab = raiz.querySelector("#" + x[0] + " > .cab-bloco");
+      if (!cab || !T[x[1]] || cab.querySelector(".d-ilu-sec")) return;
+      var h = "";
+      try { h = T[x[1]]({ auto: true, peq: true }); } catch (e) { h = ""; }
+      if (h) cab.insertAdjacentHTML("beforeend", '<div class="d-ilu-sec" aria-hidden="true">' + h + "</div>");
+    });
+  };
+  // "Onde ver mais": cartões com ícone que levam aos sites oficiais (site, portal da transparência, Diário Oficial, pedido de
+  // informação). itens = [{ ic, t (texto já no idioma), href, sub? }]; só os endereços http(s) entram.
+  EP.ondeVerD = function (itens, tit) {
+    var l = (itens || []).filter(function (x) { return x && /^https?:\/\//.test(x.href || ""); });
+    if (!l.length) return "";
+    var vistos = {};
+    l = l.filter(function (x) { if (vistos[x.href]) return false; vistos[x.href] = 1; return true; });
+    return '<div class="d-onde-bloco"><h3 class="d-onde-tit"><span aria-hidden="true">🔎 </span>' + esc(tit || EP.tr("Onde ver mais", "Where to see more")) + "</h3>" +
+      '<ul class="d-onde">' + l.map(function (x) {
+        var dom = "";
+        try { dom = new URL(x.href).hostname.replace(/^www\./, ""); } catch (e) {}
+        return '<li><a class="d-onde-card" href="' + esc(x.href) + '" target="_blank" rel="noopener" hreflang="pt-BR">' + EP.d.ic(x.ic, "peq") +
+          '<span class="d-onde-txt"><b>' + esc(x.t) + "</b><small>" + esc(x.sub || dom) + '</small></span><span class="d-onde-seta" aria-hidden="true">↗</span><span class="sr"> ' +
+          EP.tr("(abre em outra aba)", "(opens in a new tab)") + "</span></a></li>";
+      }).join("") + "</ul></div>";
+  };
+  // "Leis e vetos" de quem governa (governador ou prefeito), na aba "Quem governa": um bloco que abre e só então baixa o arquivo
+  // da pessoa (dados/pessoas/gov-<UF>.json ou, do prefeito, o arquivo da cidade dados/camaras/extras/<IBGE>.json). Assim o JSON
+  // baixado ao abrir a página não muda. Mostra os números grandes (leis sancionadas, vetos, propostas enviadas) e a barra dupla
+  // dos vetos (só desenho; os números estão escritos), com a explicação no "Saber mais" e a fonte.
+  EP.leisVetosD = function (p, cargoTxt) {
+    if (!p || !p.id || !p.extras || p.vago) return "";
+    var arq = p.extras === "cidade" ? (/^pref-(\d{7})$/.exec(p.id) ? "dados/camaras/extras/" + p.id.slice(5) + ".json" : "") : "dados/pessoas/" + p.id + ".json";
+    if (!arq) return "";
+    return '<details class="d-saiba d-leis" data-lv-id="' + esc(p.id) + '" data-lv-arq="' + esc(arq) + '"><summary><span aria-hidden="true">📜</span> ' +
+      esc(EP.tr("O que " + cargoTxt + " fez: leis e vetos", "What the " + cargoTxt + " did: laws and vetoes")) + '</summary><div class="d-saiba-corpo d-leis-corpo"><p class="gv-carregando">' +
+      EP.tr("Carregando…", "Loading…") + "</p></div></details>";
+  };
+  function leisVetosCorpo(x, id) {
+    var e = x.executivo || {}, pr = (x.propostas || {}).resumo || {}, k = [];
+    var ini = (e.periodo && e.periodo.inicio) || "", desde = /^\d{4}(-01-01)?$/.test(ini) ? ini.slice(0, 4) : ini ? EP.dataLonga(ini) : "";
+    var d2 = desde ? EP.tr(" desde " + desde, " since " + desde) : "";
+    if (e.leisSancionadas != null) k.push({ ic: "✍️", n: EP.num(e.leisSancionadas), t: EP.tr("leis sancionadas", "laws signed") + d2 });
+    if (e.vetos != null) k.push({ ic: "✋", n: EP.num(e.vetos), t: EP.tr(e.vetos === 1 ? "veto" : "vetos", e.vetos === 1 ? "veto" : "vetoes") + d2 });
+    if (pr.total) k.push({ ic: "📝", n: EP.num(pr.total), t: EP.tr("projetos enviados", "bills sent") });
+    if (pr.total && pr.lei != null) k.push({ ic: "📜", n: EP.num(pr.lei), t: EP.tr("desses viraram lei", "of them became law") });
+    var dupla = e.vetosTotais != null && e.vetosParciais != null && (e.vetosTotais + e.vetosParciais) ? '<div class="d-dupla"><span class="d-dupla-barra" aria-hidden="true"><i style="flex:' + e.vetosTotais +
+      '"></i><i class="b" style="flex:' + e.vetosParciais + '"></i></span><p class="d-dupla-leg"><span><i aria-hidden="true"></i>' + esc(EP.tr("vetos à lei inteira: ", "full vetoes: ")) + EP.num(e.vetosTotais) +
+      '</span><span><i class="b" aria-hidden="true"></i>' + esc(EP.tr("vetos a uma parte: ", "partial vetoes: ")) + EP.num(e.vetosParciais) + "</span></p></div>" : "";
+    var f = [].concat(e.fontes && e.fontes.length ? e.fontes : e.fonte || [], (x.propostas || {}).fonte || []);
+    var nota = EP.en ? e.nota_en : e.nota;
+    if (!k.length) return '<p>' + EP.tr("O site não tem a contagem das leis e dos vetos deste mandato. Na página inteira estão o que o site tem e onde ver mais.",
+      "The site does not have a count of the laws and vetoes of this term. The full page shows what the site has and where to see more.") + "</p>" +
+      '<p><a class="btn peq claro" href="pessoa.html?id=' + encodeURIComponent(id) + '">' + EP.tr("Ver a página inteira", "See the full page") + ' <span aria-hidden="true">›</span></a></p>';
+    return EP.d.kpis(k, EP.tr("Leis e vetos", "Laws and vetoes"), "d-kpis-leis") + dupla +
+      "<p>" + EP.tr("Assinar não é propor: quase toda lei aprovada passa por quem governa, venha de quem vier. Vetar também é uma tarefa prevista nas regras: o número, sozinho, não diz se as decisões foram boas ou ruins.",
+        "Signing is not proposing: almost every law that is passed goes to whoever governs, no matter who proposed it. Vetoing is also a task set by the rules: the number alone does not say whether the decisions were good or bad.") + "</p>" +
+      (nota ? '<details class="como-contou"><summary>' + EP.tr("Como contamos", "How we counted") + "</summary><p>" + (EP.en && !e.nota_en ? EP.pt(esc(e.nota)) : esc(nota)) + "</p></details>" : "") +
+      '<p class="d-leis-pe">' + EP.botaoFontes(f.filter(Boolean)) + ' <a class="btn peq claro" href="pessoa.html?id=' + encodeURIComponent(id) + '">' + EP.tr("Ver a página inteira", "See the full page") + ' <span aria-hidden="true">›</span></a></p>';
+  }
+  document.addEventListener("toggle", function (ev) {
+    var d = ev.target;
+    if (!d || !d.matches || !d.matches("details.d-leis") || !d.open || d._lv) return;
+    d._lv = true;
+    var corpo = d.querySelector(".d-leis-corpo"), id = d.getAttribute("data-lv-id");
+    EP.json(d.getAttribute("data-lv-arq")).then(function (x) {
+      var p = x && x.pessoas ? x.pessoas[id] : x;
+      corpo.innerHTML = leisVetosCorpo(p || {}, id);
+    }).catch(function () {
+      d._lv = false;
+      corpo.innerHTML = "<p>" + EP.tr("Não foi possível carregar agora. Tente de novo daqui a pouco.", "This could not be loaded right now. Please try again in a little while.") + "</p>";
+    });
+  }, true);
+
   // ---------------------------------------------------------------- visual D (site-d-r14)
   // EP.casaD = true (a página do Brasil liga) ou o.d = true: o plenário fica em ordem alfabética dos partidos (os dois tons de
   // azul alternados, os mesmos para todos), e no lugar das barras "Quantos de cada partido" aparecem as etiquetas dos partidos

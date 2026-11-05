@@ -671,6 +671,8 @@
       x.gov = cartaoGrande(p, EP.tr(EP.gen(p && p.genero, "Prefeito", "Prefeita"), "Mayor"), sitP(p)) + cartaoGrande(v, EP.tr(EP.gen(v && v.genero, "Vice-prefeito", "Vice-prefeita"), "Vice Mayor"), sitV(v));
       x.govNotas = aviso(notasP.join(" ")) + '<p style="margin-top:8px">' + EP.botaoFontes(f.fonte) + "</p>";
       x.nTxt = EP.num(n) + " " + EP.tr(n === 1 ? "vereador eleito" : "vereadores eleitos", n === 1 ? "elected councilor" : "elected councilors");
+      x.nVer = n;  // site-d-r16: o número grande do topo
+      x.ano = ano;
       x.camAviso = aviso(notasV.join(" "));
     }
     var pag = o.esqueleto(caixa, x);

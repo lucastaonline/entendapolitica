@@ -361,6 +361,7 @@
     }
     var o = document.getElementById("onde");
     if (o) { o.removeAttribute("data-en"); o.textContent = EP.tr("Votação: ", "Vote: ") + titulo(d); }
+    V.trilha({ t: titulo(d) + " (" + quando + ")" });
     raiz.innerHTML = heroHtml(d) + oqueHtml(d) + resultadoHtml(d) + partidosHtml(d) + liderancasHtml(d) + quemHtml(d) + fontesHtml(d);
     ligaQuem(d);
     // o plenário enche (cadeira por cadeira) quando aparece na tela
@@ -376,6 +377,7 @@
     EP.revelar(raiz);
   }
   function erro(tit, txt) {
+    V.trilha({ t: EP.tr("Votação", "Vote") });
     raiz.innerHTML = '<div class="miolo vazio"><span class="grande" aria-hidden="true">🔎</span><h1>' + tit + "</h1><p>" + txt + "</p>" +
       '<p><a class="btn" href="votacoes.html">' + EP.tr("Ver todas as votações", "See all the votes") + '</a> <a class="btn claro" href="brasil.html">' +
       EP.tr("Ver a política do Brasil", "See Brazil's politics") + "</a></p></div>";

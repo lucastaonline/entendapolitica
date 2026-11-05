@@ -131,6 +131,12 @@ async def lula(nav):
     n_hoje = await n_props(pg)
     lula_p = pessoa("pres-lula")
     ok("hoje: “O que propôs” é o do mandato de hoje", n_hoje == len(lula_p["propostas"]["lista"]), f"{n_hoje}")
+    if not any(x.get("s") for x in lula_p["propostas"]["lista"]):
+        # simples-r17: sem explicações simples (dados/simples/ vazio), só o texto oficial: nada de "em preparo" nem a nota da IA
+        tp = (await pg.locator("#propostas").text_content() or "").lower()
+        ok("hoje, sem explicação simples: cada proposta com o texto oficial em destaque, sem “em preparo” e sem a nota da IA",
+           await pg.locator("#lista-prop .preparando").count() == 0 and await pg.locator("#lista-prop .so-oficial").count() > 0
+           and "inteligência artificial" not in tp and "em preparo" not in tp and "texto oficial (a ementa), do jeito que a casa publicou" in tp, tp[:120])
     # teclado: escolher o mandato de deputado
     await escolhe_teclado(pg, "1987", "**mandato=dep-1987**")
     e = await estado(pg)
@@ -148,7 +154,7 @@ async def lula(nav):
     ok("o texto diz de qual mandato é a lista", "no mandato de 1987 a 1991" in esc, esc[:90])
     links = await pg.locator("#lista-prop a[href^='https://www.camara.leg.br/propostas-legislativas/']").count()
     ok("cada proposta tem o link oficial da Câmara", links >= 6, f"{links}")
-    ok("sem “Explicação simples em preparo” nos mandatos antigos sem explicação", await pg.locator("#lista-prop .preparando").count() == 0)
+    ok("sem “Explicação simples em preparo” nos mandatos antigos (só o texto oficial)", await pg.locator("#lista-prop .preparando").count() == 0)
     await aba(pg, "votacoes")
     t = await texto(pg, "#votacoes")
     ok("“Como votou”: diz que o site guarda as votações só de quem está no cargo hoje e leva à página oficial",

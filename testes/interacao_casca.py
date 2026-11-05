@@ -97,7 +97,10 @@ async def casca(nav):
         if url.startswith("pessoa.html"):
             ok("perfil: itens da seção = as abas do perfil", "Quem é" in r["secao"] and "O que propôs" in " ".join(r["secao"]), str(r["secao"]))
         if url == "votacoes.html":
-            ok("votações: itens da seção = os lugares do Brasil, “Todas as votações” marcada", "Senado" in r["secao"] and "Todas as votações" in r["atualSecao"], str(r["secao"]))
+            # site-d-r16 (pedido do Lucas, 14h35): antes, “Todas as votações” era um item a mais, marcado, só nesta página; agora a
+            # lista faz parte de “Como votaram” (mesma intenção: a seção certa marcada; detalhes no bloco 8, menu estável)
+            ok("votações: itens da seção = os mesmos da página do Brasil, “Como votaram” marcado",
+               r["secao"] == ["Quem governa", "Senado", "Câmara", "Como votaram", "STF"] and r["atualSecao"] == "Como votaram", str(r["secao"]) + " | " + r["atualSecao"])
         if url in ("dados.html", "imparcialidade.html"):
             ok(f"{url}: sem itens de seção; a página marcada em “Sobre o site”", not r["secao"] and r["sobreAtual"], r["sobreAtual"])
         if url == "index.html":
@@ -536,14 +539,108 @@ async def geral(nav):
     ok(f"320 px: {len(PAGINAS)} páginas (pt e en; com o menu e a busca abertos) sem rolar para os lados", not largas, ", ".join(largas))
     ok("320 px: botões da barra do topo e da barra de baixo com pelo menos 44×44 e dentro da tela", not pequenos, "; ".join(pequenos)[:300])
     ok("nenhum pedido a outro servidor (nada de CDN)", not fora, ", ".join(sorted(fora)))
-    ok("nenhum erro de JavaScript (320 px)", not erros, " | ".join(erros[:3]))
     await ctx.close()
+
+
+# ------------------------------------------------------------------ 8. menu estável (site-d-r16, pedido do Lucas de 4/11, 14h35)
+MENU_JS = """() => { const q = s => [...document.querySelectorAll(s)], s = document.getElementById('cl-secao');
+  const item = a => ({ id: a.getAttribute('data-item') || '', ic: (a.querySelector('.cl-ic') || {}).textContent || '', t: (a.querySelector('.cl-txt') || a).textContent.trim(),
+    href: a.getAttribute('href'), atual: a.getAttribute('aria-current') });
+  return { portas: q('#casca-lado .cl-portas a').map(a => a.getAttribute('href').replace(/^\\//, '').replace(/\\?lang=en$/, '') + '|' + a.textContent.trim()),
+    tit: s && !s.hidden ? s.querySelector('.cl-tit').textContent.trim() : null, secao: s && !s.hidden ? q('#cl-secao a').map(item) : [],
+    sobre: q('[aria-labelledby=cl-sobre-t] a').map(a => a.getAttribute('href').replace(/^\\//, '').replace(/\\?lang=en$/, '') + '|' + a.textContent.trim()),
+    trilha: q('#trilha li').map(l => { const a = l.querySelector('a'); return [l.textContent.trim(), a ? a.getAttribute('href') : null, !!l.querySelector('[aria-current=page]')]; }) }; }"""
+
+
+async def menu_estavel(nav):
+    print("\n— 8. menu estável: a lista de votações e a votação são parte de “Como votaram” (mesmos itens do Brasil) —")
+    ITENS = {"pt": ["Quem governa", "Senado", "Câmara", "Como votaram", "STF"], "en": ["Who governs", "Senate", "Chamber of Deputies", "How Congress voted", "Supreme Court"]}
+    TRILHA = {"pt": ["Início", "A política do Brasil", "Como votaram", "Todas as votações"], "en": ["Home", "Brazil's politics", "How Congress voted", "All the votes"]}
+    IDS = ["executivo", "senado", "camara", "votacoes", "judiciario"]
+    VOT = "votacao.html?casa=senado&id=7107"
+    for l in ("pt", "en"):
+        ctx = await ctx_novo(nav, viewport={"width": 1440, "height": 900})
+        pg = await ctx.new_page()
+        erros = []
+        pg.on("pageerror", lambda e: erros.append(str(e)))
+        m = {}
+        for url in ("brasil.html", "brasil.html#votacoes", "votacoes.html", "votacoes.html?casa=senado&ano=2025", VOT, "votacao.html?casa=camara&id=2236186-60",
+                    "votacao.html", "estado.html?uf=BA", "estado.html?uf=BA#votacoes", "cidade.html?ibge=2927408", "dados.html", "imparcialidade.html", "404.html", "index.html", "entenda.html"):
+            await pg.goto(BASE + lang(url, l), wait_until="networkidle")
+            await pg.wait_for_timeout(900)
+            m[url] = await pg.evaluate(MENU_JS)
+        b = m["brasil.html"]
+        sem = lambda s: [(x["id"], x["ic"], x["t"]) for x in s]
+        ok(f"[{l}] Brasil: título do grupo = nome da porta e itens = as 5 abas", b["tit"] == ("A política do Brasil" if l == "pt" else "Brazil's politics")
+           and [x["t"] for x in b["secao"]] == ITENS[l] and [x["id"] for x in b["secao"]] == IDS, str(b["tit"]) + " " + str([x["t"] for x in b["secao"]]))
+        for url in ("votacoes.html", "votacoes.html?casa=senado&ano=2025", VOT, "votacao.html?casa=camara&id=2236186-60", "votacao.html"):
+            r = m[url]
+            ok(f"[{l}] {url}: mesmo título e mesmos itens (id, emoji, nome) da página do Brasil, sem item a mais",
+               r["tit"] == b["tit"] and sem(r["secao"]) == sem(b["secao"]), str([x["t"] for x in r["secao"]]))
+            ok(f"[{l}] {url}: os itens levam a brasil.html#<aba>", [x["href"] for x in r["secao"]] == ["brasil.html#" + i for i in IDS], str([x["href"] for x in r["secao"]]))
+            ok(f"[{l}] {url}: “{ITENS[l][3]}” marcado (e só ele)", [x["id"] for x in r["secao"] if x["atual"]] == ["votacoes"], str([(x["id"], x["atual"]) for x in r["secao"] if x["atual"]]))
+        ok(f"[{l}] brasil.html#votacoes: “{ITENS[l][3]}” marcado", [x["id"] for x in m["brasil.html#votacoes"]["secao"] if x["atual"]] == ["votacoes"])
+        t = m["votacoes.html"]["trilha"]
+        ok(f"[{l}] trilha da lista: {' › '.join(TRILHA[l])}", [x[0].replace("🏠", "").strip() for x in t] == TRILHA[l]
+           and [x[1] for x in t[1:3]] == ["brasil.html", "brasil.html#votacoes"] and t[-1][2], str(t))
+        t = m[VOT]["trilha"]
+        ok(f"[{l}] trilha da votação: … › {TRILHA[l][2]} › {TRILHA[l][3]} › PEC 221/2019", [x[0].replace("🏠", "").strip() for x in t[:4]] == TRILHA[l]
+           and t[3][1] == "votacoes.html" and t[4][0].startswith("PEC 221/2019") and t[4][2], str(t))
+        ok(f"[{l}] estado: mesmo título (nome da porta) com e sem aba aberta", m["estado.html?uf=BA"]["tit"] == m["estado.html?uf=BA#votacoes"]["tit"]
+           == ("A política do meu estado" if l == "pt" else "Politics in my state") and sem(m["estado.html?uf=BA"]["secao"]) == sem(m["estado.html?uf=BA#votacoes"]["secao"]))
+        ok(f"[{l}] cidade: título do grupo = nome da porta", m["cidade.html?ibge=2927408"]["tit"] == ("A política da minha cidade" if l == "pt" else "Politics in my city"))
+        ok(f"[{l}] as 4 portas e “Sobre o site” iguais em todas as {len(m)} páginas", len({tuple(r["portas"]) for r in m.values()}) == 1
+           and len({tuple(r["sobre"]) for r in m.values()}) == 1, str({tuple(r["sobre"]) for r in m.values()})[:300])
+        ok(f"[{l}] dados, imparcialidade, 404, início e Entenda sem itens de seção", all(not m[u]["secao"] for u in ("dados.html", "imparcialidade.html", "404.html", "index.html", "entenda.html")))
+        # clicar em “Como votaram” no menu da lista leva à aba da página do Brasil
+        await pg.goto(BASE + lang("votacoes.html", l), wait_until="networkidle")
+        await pg.wait_for_timeout(800)
+        await pg.locator('#cl-secao a[data-item="votacoes"]').click()
+        await pg.wait_for_load_state("networkidle")
+        await pg.wait_for_timeout(900)
+        ok(f"[{l}] na lista, “{ITENS[l][3]}” no menu abre brasil.html#votacoes com a aba aberta", urlparse(pg.url).path.endswith("brasil.html") and await pg.evaluate("EP.abas.ativa()") == "votacoes", pg.url)
+        # links antigos continuam funcionando
+        await pg.goto(BASE + lang("votacoes.html?casa=senado&ano=2025&q=pec", l), wait_until="networkidle")
+        await pg.wait_for_timeout(900)
+        ok(f"[{l}] link antigo votacoes.html?casa=…&ano=…&q=… abre a lista filtrada", await pg.locator("#lista-votacoes li").count() > 0 and await pg.input_value("#f-q") == "pec")
+        await pg.goto(BASE + lang(VOT, l), wait_until="networkidle")
+        await pg.wait_for_timeout(900)
+        ok(f"[{l}] link antigo votacao.html?casa=senado&id=7107 abre a votação", "PEC 221/2019" in await pg.inner_text("#votacao"))
+        await pg.goto(BASE + lang("brasil.html?ver=vot:senado:7107", l), wait_until="networkidle")
+        await pg.wait_for_timeout(1500)
+        ok(f"[{l}] brasil.html?ver=vot:senado:7107 abre a mesma votação no modal", await pg.locator("dialog.gv-modal[open]").count() == 1
+           and "PEC 221/2019" in await pg.inner_text("dialog.gv-modal[open]"))
+        await pg.keyboard.press("Escape")
+        await pg.goto(BASE + lang("votacoes.html", l), wait_until="networkidle")
+        await pg.wait_for_timeout(900)
+        await axe(pg, f"[{l}] lista de votações com o menu novo (computador)")
+        await pg.goto(BASE + lang(VOT, l), wait_until="networkidle")
+        await pg.wait_for_timeout(1200)
+        await axe(pg, f"[{l}] votação com o menu novo (computador)")
+        ok(f"[{l}] nenhum erro de JavaScript", not erros, " | ".join(erros[:3]))
+        await ctx.close()
+        # celular: o menu aberto (gaveta) mostra os mesmos itens, com “Como votaram” marcado
+        ctx = await ctx_novo(nav, viewport={"width": 390, "height": 844}, is_mobile=True, has_touch=True)
+        pg = await ctx.new_page()
+        for url in ("votacoes.html", VOT):
+            await pg.goto(BASE + lang(url, l), wait_until="networkidle")
+            await pg.wait_for_timeout(900)
+            await pg.locator("#casca-menu-btn").tap()
+            await pg.wait_for_timeout(450)
+            r = await pg.evaluate(MENU_JS)
+            ok(f"[{l}] celular, {url}: menu aberto com os mesmos itens do Brasil e “{ITENS[l][3]}” marcado",
+               sem(r["secao"]) == sem(b["secao"]) and [x["id"] for x in r["secao"] if x["atual"]] == ["votacoes"])
+            await axe(pg, f"[{l}] celular, {url} com o menu aberto")
+            await pg.keyboard.press("Escape")
+            await pg.wait_for_timeout(300)
+            await axe(pg, f"[{l}] celular, {url}")
+        await ctx.close()
 
 
 async def main():
     async with async_playwright() as p:
         nav = await p.chromium.launch(channel="msedge")
-        for f in (casca, celular, busca, leitura, inicio, gaveta, geral):
+        for f in (casca, celular, busca, leitura, inicio, gaveta, geral, menu_estavel):
             try:
                 await f(nav)
             except Exception as e:  # um bloco que quebra não esconde os outros

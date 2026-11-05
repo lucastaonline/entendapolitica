@@ -174,11 +174,68 @@
   }
   function chipAtalho(href, ic, txt) { return '<a class="chip" href="' + href + '"><span aria-hidden="true">' + ic + "</span><span>" + txt + "</span></a>"; }
 
+  // site-d-r16 (protótipo D): os números grandes do topo, os mesmos em todo mandato: o ano da eleição daquele mandato e os
+  // números que a Constituição e a lei fixam (4 anos de mandato do governador, 3 senadores, as vagas de deputado federal do
+  // estado e as da Assembleia). Não pedem arquivo nenhum; cada número leva à aba dele.
+  // Vagas de deputado federal por estado: Lei Complementar nº 78/1993 (a distribuição das 513 vagas usada pelo TSE desde 1994);
+  // deputados estaduais: Constituição, art. 27 (o triplo dos federais até 36; acima disso, mais um por deputado federal acima de 12).
+  var FEDERAIS = { SP: 70, MG: 53, RJ: 46, BA: 39, RS: 31, PR: 30, PE: 25, CE: 22, MA: 18, GO: 17, PA: 17, SC: 16, PB: 12, ES: 10, PI: 10, AL: 9,
+    AM: 8, RN: 8, MT: 8, MS: 8, DF: 8, SE: 8, RO: 8, TO: 8, AC: 8, AP: 8, RR: 8 };
+  EP.VAGAS_FEDERAIS = FEDERAIS;
+  function estaduais(n) { return n <= 12 ? 3 * n : 36 + (n - 12); }
+  // o ano da eleição do mandato de governador em curso: a eleição (anos 2, 6, 10...) cuja posse já aconteceu (1º de janeiro até
+  // 2023; 6 de janeiro a partir de 2027, Emenda Constitucional 111/2021)
+  function anoEleicaoEstadual() {
+    var h = new Date(Date.now() - 3 * 3600e3).toISOString().slice(0, 10), a = +h.slice(0, 4);
+    for (var y = a; y > a - 8; y--) if (y % 4 === 2 && (y + 1) + (y + 1 >= 2027 ? "-01-06" : "-01-01") <= h) return y;
+    return a;
+  }
+  function numerosEstado(futuro, passado) {
+    var el = document.getElementById("numeros-uf");
+    if (!el || !EP.d) return;
+    var ehDF = uf === "DF", nf = FEDERAIS[uf], ne = nf ? estaduais(nf) : null;
+    var ano = futuro ? 2026 : passado ? +String(passado).slice(0, 4) - 1 : anoEleicaoEstadual();
+    var CFU = "https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm";
+    function cf(art, pt, en) { var f = { veiculo: "Planalto", titulo: EP.tr("Constituição Federal, " + art + " (" + pt + ")", "Federal Constitution, " + art + " (" + en + ")"), url: CFU, data: "1988-10-05" }; if (EP.en) f.lang = "en"; return f; }
+    var fontes = [cf("art. 27", "o número de deputados estaduais", "the number of state deputies"), cf("art. 28", "o governador é eleito para 4 anos", "the governor is elected for 4 years"),
+      cf("art. 46", "3 senadores por estado e pelo Distrito Federal", "3 senators per state and for the Federal District"),
+      { veiculo: "Planalto", titulo: EP.tr("Lei Complementar nº 78/1993 (as vagas de deputado federal de cada estado)", "Supplementary Law No. 78/1993 (the federal deputy seats of each state)"), url: "https://www.planalto.gov.br/ccivil_03/leis/lcp/lcp78.htm", data: "1993-12-30", lang: EP.en ? "en" : undefined }];
+    if (ehDF) fontes.push(cf("art. 32", "o Distrito Federal tem a Câmara Legislativa e o governador, como os estados", "the Federal District has the Legislative Chamber and a governor, like the states"));
+    el.innerHTML = EP.d.kpis([
+      { ic: "🗳️", n: ano, t: EP.tr("ano da eleição deste mandato", "year this term was elected") },
+      { ic: "🏢", n: 4, t: EP.tr("anos de mandato do governador", "years in the governor's term"), href: "#governo" },
+      { ic: "🏛️", n: 3, t: EP.tr("senadores " + EP.doEstado(uf), "senators " + EP.doEstado(uf)), href: "#senadores" },
+      { ic: "🏛️", n: nf, t: EP.tr("deputados federais " + EP.doEstado(uf), "federal deputies " + EP.doEstado(uf)), href: "#federais" },
+      { ic: "🏛️", n: ne, t: ehDF ? EP.tr("deputados distritais", "district deputies") : EP.tr("deputados estaduais", "state deputies"), href: "#estaduais" }
+    ], EP.tr(EP.UFS[uf] + " em números", EP.UFS[uf] + " in numbers")) + '<p class="d-fonte-kpis">' + EP.botaoFontes(fontes, EP.tr("De onde vêm estes números?", "Where do these numbers come from?")) + "</p>";
+  }
+  // um desenho 3D pequeno no cabeçalho de cada aba (EP.desenhosAbas, em js/casa.js)
+  function desenhosAbas(raiz, lista) { if (EP.desenhosAbas) EP.desenhosAbas(raiz, lista); }
+  // "Como votaram" (site-d-r16): as votações da Assembleia com o voto de cada deputado (js/votacoes.js), só quando a aba abre
+  function votacoesCasa(de2, quando, ehDF) {
+    var el = document.getElementById("vot-casa"), V = EP.VOT, info = de2.infoCasa || {};
+    if (!el || !V) return;
+    var gente = ehDF ? [EP.tr("deputado distrital", "district deputy"), EP.tr("deputados distritais", "district deputies")] : [EP.tr("deputado estadual", "state deputy"), EP.tr("deputados estaduais", "state deputies")];
+    var notasEn = EP.en && (info.notas_en || []).length === (info.notas || []).length && (info.notas_en || []).length;
+    var notas = (notasEn ? info.notas_en : info.notas || []).filter(function (n) { return /vota|voto|vote|roll-call/i.test(n); })
+      .map(function (n) { return EP.en && !notasEn ? EP.pt(esc(n)) : esc(n); });
+    var sem = V.semVotosLocal({ casaHtml: EP.en && info.casa_en ? esc(info.casa_en) : EP.pt(esc(info.casa || (ehDF ? "Câmara Legislativa" : "Assembleia Legislativa"))),
+      gente: gente, notas: (info.cobertura || {}).votacoes ? [] : notas, site: info.site, sic: info.sic });
+    if ((info.cobertura || {}).votacoes) {
+      quando("votacoes", function () { V.casaLocal(el, { arquivo: "dados/votacoes/assembleias/" + uf + ".json", gente: gente, semVotos: sem }); });
+      return;
+    }
+    el.innerHTML = sem;
+  }
+
   // mandatos-r11: todo mandato tem o mesmo layout de hoje. futuro: o mandato 2027 do "Ver outro mandato"
   // (estado.html?uf=SP&mandato=2027, quem foi eleito em 2026: js/proximos.js); passado: um mandato anterior
   // (estado.html?uf=BA&mandato=2019: js/historico.js). As abas e as partes são as mesmas; só os dados mudam
   function mostraEstado(futuro, passado) {
     var nome = EP.UFS[uf], de = EP.doEstado(uf), ehDF = uf === "DF", X = EP.eleitos;
+    // site-d-r16 (protótipo D): as Casas no visual novo (plenário em ordem alfabética, etiquetas dos partidos e a gaveta do
+    // partido; js/casa.js), em todo mandato desta página (hoje, os anteriores e 2027)
+    EP.casaD = true;
     poeTitulo(EP.tr("A política " + de + ": governador, deputados, prefeitos e vereadores | Entenda Política", "Politics " + de + ": governor, deputies, mayors and city councilors | Understand Politics"),
       EP.tr("Quem governa, quem representa e quem faz as leis " + de + ": governador, senadores, deputados federais e estaduais, prefeitos e vereadores. Tudo com fonte.",
         "Who governs, who represents and who makes the laws " + de + ": governor, senators, federal and state deputies, mayors and city councilors. Everything with sources."));
@@ -193,14 +250,16 @@
       '<p><a class="btn peq bege" href="estado.html"><span aria-hidden="true">🗺️ </span>' + EP.tr("Trocar de estado", "Choose another state") + "</a></p>" +
       '<div class="mandato-lugar" id="mandato-lugar"></div></div>' +
       '<div class="cab-3d rev pop" style="--i:1" aria-hidden="true">' + (window.TRES ? TRES.predio() : "") + "</div></section>" +
+      '<div class="miolo d-numeros" id="numeros-uf"></div>' +
       '<nav class="miolo atalhos rev" aria-label="' + EP.tr("Ir direto para", "Jump to") + '">' +
       chipAtalho("#governo", "🏢", EP.tr("Quem governa", "Who governs")) + chipAtalho("#senadores", "🏛️", EP.tr("Senadores", "Senators")) +
       chipAtalho("#federais", "🏛️", EP.tr("Deputados federais", "Federal deputies")) +
       chipAtalho("#estaduais", "🏛️", ehDF ? EP.tr("Deputados distritais", "District deputies") : EP.tr("Deputados estaduais", "State deputies")) +
+      chipAtalho("#votacoes", "🗳️", EP.tr("Como votaram", "How they voted")) +
       (ehDF ? "" : chipAtalho("#cidade", "🏘️", EP.tr("Minha cidade", "Cities"))) + "</nav>" +
       secao("governo", "🏢", esc(EP.tr("Quem governa " + (ehDF ? "o Distrito Federal" : "o estado"), "Who governs " + (ehDF ? "the Federal District" : "the state"))),
         esc(EP.tr("O governador e o vice comandam o Poder Executivo " + de + ".", "The governor and the vice governor lead the executive branch " + de + ".")),
-        '<div class="exec-topo" id="gov"><div class="carregando">' + EP.tr("Carregando…", "Loading…") + '</div></div><div id="gov-nota"></div>') +
+        '<div class="exec-topo" id="gov"><div class="carregando">' + EP.tr("Carregando…", "Loading…") + '</div></div><div id="gov-nota"></div><div id="gov-mais"></div>') +
       secao("senadores", "🏛️", esc(EP.tr("Os senadores " + de, "The senators " + (ehDF ? "for the Federal District" : "for " + nome))),
         EP.tr(esc("Todo estado tem 3 senadores no Senado Federal, em Brasília."), "Every state, and the Federal District, has 3 senators in the Federal Senate (" + EP.pt("Senado Federal") + "), in Brasília."),
         '<div class="grade-pessoas" id="lista-sen"><div class="carregando">' + EP.tr("Carregando…", "Loading…") + "</div></div>") +
@@ -211,16 +270,22 @@
         EP.tr("A Assembleia Legislativa: deputados estaduais", "The Legislative Assembly: state deputies")),
         esc(EP.tr("Eles fazem as leis " + de + " e fiscalizam o governador.", (ehDF ? "District deputies (the Federal District's legislators)" : "State deputies (Brazil's state legislators)") + " make the laws " + de + " and oversee the governor.")),
         '<div id="aviso-est"></div><div class="casa-corpo" id="casa-est"><div class="carregando">' + EP.tr("Carregando…", "Loading…") + "</div></div>") +
+      secao("votacoes", "🗳️", esc(ehDF ? EP.tr("Como votaram na Câmara Legislativa", "How the Legislative Chamber voted") : EP.tr("Como votaram na Assembleia", "How the Assembly voted")),
+        esc(EP.tr("Em cada votação, os deputados dizem Sim ou Não a uma proposta. Aqui aparece o voto de cada um, quando a Casa publica.",
+          "In each vote, the deputies say Yes or No to a proposal. This shows each one's vote, when the house publishes it.")),
+        '<div class="recentes-vot" id="vot-casa"><div class="carregando">' + EP.tr("Carregando…", "Loading…") + "</div></div>") +
       (ehDF ? '<section class="miolo bloco" aria-label="' + EP.tr("Cidades", "Cities") + '"><div class="aviso azul" id="aviso-df"><span aria-hidden="true">ℹ️ </span>' +
         esc(EP.tr("O Distrito Federal não é dividido em cidades com prefeito e vereadores. Quem cuida dessas coisas é o próprio governo do DF, e as leis são feitas pela Câmara Legislativa.",
           "The Federal District is not divided into cities with mayors and city councilors. The Federal District's own government takes care of those things, and its laws are made by the Legislative Chamber.")) + "</div></section>" :
         secao("cidade", "🏘️", esc(EP.tr("Minha cidade", "Cities")), EP.tr("Escolha a sua cidade para ver o prefeito, o vice e os vereadores.", 'Choose a city to see its mayor, vice mayor and city councilors (<span lang="pt-BR">vereadores</span>).'),
-          '<div id="aviso-cid"></div><div class="cidade-busca"><label id="rotulo-cid" for="campo-cid">' + EP.tr("Digite o nome da sua cidade", "Type the name of a city") + "</label>" +
+          '<div id="aviso-cid"></div><div class="cidade-busca d-cidade-busca"><label id="rotulo-cid" for="campo-cid">' + EP.tr("Digite o nome da sua cidade", "Type the name of a city") + "</label>" +
           '<div id="busca-cid"></div>' +
           '<p class="muted" id="dica-cidade" style="font-size:.85rem;margin:6px 0 0">' + EP.tr("Escolha na lista que aparece para abrir a página da cidade.", "Choose it from the list to open the city's page.") + "</p>" +
           '<p id="capital-cid" class="links-cidade"></p></div>'));
     EP.revelar(el);
     if (EP.trilha) EP.trilha([{ t: EP.tr("Estados", "States"), href: "estado.html" }, { t: nome }]);
+    numerosEstado(futuro, passado);
+    desenhosAbas(el, [["governo", "palacio"], ["senadores", "congresso"], ["federais", "congresso"], ["estaduais", "predio"], ["votacoes", "urna"], ["cidade", "prefeitura"]]);
     // ui-r9: a página em abas (js/abas.js), como a do Brasil: cada seção do menu "Ir direto para" vira uma aba com endereço
     // próprio (estado.html?uf=SP#federais); as listas grandes começam com um resumo (12) e "Ver todos"
     var comAbas = !!(EP.abas && EP.abas.monta({ nav: el.querySelector("nav.atalhos") }));
@@ -231,6 +296,14 @@
     if (futuro || passado) {
       if (futuro) X.estadoAbas(uf, { quando: quando });
       else EP.hist.estado(uf, passado, { quando: quando, resumo: RESUMO });
+      // "Como votaram": o site guarda só as votações da Assembleia de hoje (site-d-r16)
+      var vc = document.getElementById("vot-casa");
+      if (vc && EP.hist) vc.innerHTML = EP.hist.semDados("🗳️", esc(futuro ?
+        EP.tr("Os deputados " + (ehDF ? "distritais" : "estaduais") + " eleitos em 2026 tomam posse em 2027. As votações deste site são as da " + (ehDF ? "Câmara Legislativa" : "Assembleia") + " de hoje.",
+          "The " + (ehDF ? "district" : "state") + " deputies elected in 2026 take office in 2027. The votes on this site are those of today's " + (ehDF ? "Legislative Chamber" : "Assembly") + ".") :
+        EP.tr("O site guarda as votações só do mandato de hoje, e só das Casas que publicam o voto de cada deputado. As votações deste mandato estão no site oficial da " + (ehDF ? "Câmara Legislativa" : "Assembleia") + ".",
+          "The site keeps votes only for today's term, and only from the houses that publish each deputy's vote. The votes of this term are on the official website of the " + (ehDF ? "Legislative Chamber" : "Assembly") + ".")),
+      [EP.hist.link("🗳️", EP.hist.hojeEm("votacoes"), EP.tr("Ver as votações de hoje", "See today's votes"))]);
       // Minha cidade: as cidades têm outros mandatos (eleições em outros anos); o campo leva à cidade hoje
       if (!ehDF) {
         document.getElementById("aviso-cid").innerHTML = aviso(esc(futuro ?
@@ -259,6 +332,12 @@
       var fg = fontesDe(g, v);
       document.getElementById("gov-nota").innerHTML = (notas.length ? '<p class="aviso"><span aria-hidden="true">⚠️ </span>' + esc(notas.join(" ")) + "</p>" : "") +
         (fg.length ? '<p style="margin-top:12px">' + EP.botaoFontes(fg) + "</p>" : "");
+      // site-d-r16: leis e vetos do governador (o arquivo só é baixado quando o bloco abre) e "Onde ver mais"
+      var info0 = (e.deputadosEstaduais || {}).infoCasa || {}, dio = g && g.diarioOficial;
+      document.getElementById("gov-mais").innerHTML = (g ? EP.leisVetosD(g, EP.tr(EP.gen(g.genero, "o governador", "a governadora"), "governor")) : "") +
+        EP.ondeVerD([dio ? { ic: "📰", t: EP.tr("Diário Oficial do estado", "The state's Official Gazette"), href: dio.url, sub: dio.nome } : null,
+          { ic: "🏛️", t: EP.tr("Site oficial da ", "Official website of the ") + (EP.en && info0.casa_en ? info0.casa_en : info0.casa || ""), href: info0.site },
+          { ic: "✉️", t: EP.tr("Pedir uma informação à ", "Ask for information: ") + (info0.sigla || info0.casa || ""), href: info0.sic, sub: EP.tr("Lei de Acesso à Informação", "Access to Information Law") }].filter(function (x) { return x && x.href; }));
       if (e.capital || e.municipios) {
         capital(e);
         document.getElementById("lead-uf").insertAdjacentHTML("afterend", '<p class="muted">' +
@@ -287,27 +366,33 @@
         if (de2.infoCasa) document.getElementById("casa-est").insertAdjacentHTML("afterend", EP.infoCasa(de2.infoCasa));
         EP.revelar(el);
       });
+      votacoesCasa(de2, quando, ehDF);
       EP.revelar(el);
     }).catch(function () {
       falhou(document.getElementById("gov"), "os dados deste estado", "the data for this state");
       falhou(document.getElementById("casa-est"), "a lista de deputados estaduais", "the list of state deputies");
+      falhou(document.getElementById("vot-casa"), "as votações", "the votes");
     });
 
-    // senadores e deputados federais do estado
-    EP.json("dados/senado.json").then(function (d) {
-      var l = EP.alfabetica((d.membros || []).filter(function (m) { return m.uf === uf; }));
-      document.getElementById("lista-sen").innerHTML = l.map(function (m) {
-        return EP.cartaoPessoa(m, m.fimMandato ? EP.tr("Mandato até ", "Term ends in ") + String(m.fimMandato).slice(0, 4) : "");
-      }).join("") || '<div class="vazio">' + EP.tr("Lista indisponível agora.", "This list is not available right now.") + "</div>";
-      if (d.fonte) document.getElementById("lista-sen").insertAdjacentHTML("afterend", '<p class="fonte-casa">' + EP.botaoFontes(d.fonte, EP.tr("De onde vem esta lista?", "Where does this list come from?")) + "</p>");
-    }).catch(function () { falhou(document.getElementById("lista-sen"), "a lista de senadores", "the list of senators"); });
-    EP.json("dados/camara.json").then(function (d) {
-      var l = (d.membros || []).filter(function (m) { return m.uf === uf; });
-      quando("federais", function () {
+    // senadores e deputados federais do estado (site-d-r16: cada lista só é baixada quando a aba dela abre)
+    quando("senadores", function () {
+      EP.json("dados/senado.json").then(function (d) {
+        var l = EP.alfabetica((d.membros || []).filter(function (m) { return m.uf === uf; }));
+        var ls = document.getElementById("lista-sen");
+        ls.classList.add("d-sen");
+        ls.innerHTML = l.map(function (m) {
+          return EP.cartaoPessoa(m, m.fimMandato ? EP.tr("Mandato até ", "Term ends in ") + String(m.fimMandato).slice(0, 4) : "");
+        }).join("") || '<div class="vazio">' + EP.tr("Lista indisponível agora.", "This list is not available right now.") + "</div>";
+        if (d.fonte) ls.insertAdjacentHTML("afterend", '<p class="fonte-casa">' + EP.botaoFontes(d.fonte, EP.tr("De onde vem esta lista?", "Where does this list come from?")) + "</p>");
+      }).catch(function () { falhou(document.getElementById("lista-sen"), "a lista de senadores", "the list of senators"); });
+    });
+    quando("federais", function () {
+      EP.json("dados/camara.json").then(function (d) {
+        var l = (d.membros || []).filter(function (m) { return m.uf === uf; });
         EP.montaCasa(document.getElementById("casa-fed"), Object.assign({ membros: l, filtroUF: false, fonte: d.fonte, atualizado: d.atualizado,
           nomes: { um: EP.tr("deputado", "deputy"), uma: EP.tr("deputada", "deputy"), varios: EP.tr("deputados", "deputies"), varias: EP.tr("deputadas", "deputies") } }, RESUMO));
-      });
-    }).catch(function () { falhou(document.getElementById("casa-fed"), "a lista de deputados federais", "the list of federal deputies"); });
+      }).catch(function () { falhou(document.getElementById("casa-fed"), "a lista de deputados federais", "the list of federal deputies"); });
+    });
 
     if (!ehDF) ligaCidade();
   }

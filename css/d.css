@@ -199,6 +199,106 @@ a.d-kpi:hover { transform: translateY(-3px); box-shadow: 0 7px 0 #e2d6bb; border
 .gv-vaga-txt { margin: 0 0 12px; padding-left: 20px; }
 .gv-ind { margin: 0 0 12px; }
 
+/* ---------- estado e cidade (site-d-r16) ---------- */
+/* os senadores do estado: as 3 cadeiras, com a foto em moldura */
+.d-pag #senadores .grade-pessoas { grid-template-columns: repeat(auto-fill, minmax(min(200px, 100%), 1fr)); gap: 14px; }
+.d-pag #senadores .pessoa-card { padding: 18px 12px 14px; background: linear-gradient(160deg, #fff 0%, #fff8e6 100%); }
+.d-pag #senadores .pessoa-card .av { width: 84px; height: 84px; border-radius: 18px; border: 3px solid #fff; transform: rotate(-3deg);
+  box-shadow: 3px 3px 0 var(--amarelo), 7px 7px 0 #8fb3d9, 0 10px 18px rgba(0, 0, 0, .12); }
+.d-pag #senadores .pessoa-card:hover .av { transform: rotate(0) translateY(-2px); }
+/* a escolha da cidade (estado: "Minha cidade"; cidade: o campo do topo) num cartão claro */
+.d-pag .d-cidade-busca, .d-pag .cab-cidade .busca-cidade { background: linear-gradient(160deg, #fff 0%, #fff8e6 100%); border: 1px solid var(--line); border-radius: 22px;
+  padding: 16px 18px; box-shadow: 0 5px 0 #efe3c3; }
+.d-pag .d-cidade-busca > label, .d-pag .cab-cidade .busca-cidade > label { font-weight: 900; color: var(--brand); }
+.d-pag .cidade-cab .d-numeros { margin: 10px 0 4px; }
+.d-pag .cidade-cab .d-kpis-cidade { grid-template-columns: repeat(auto-fit, minmax(min(170px, 100%), 1fr)); }
+/* o mapa dos estados: o mesmo de sempre, com o título no visual novo */
+.d-pag #escolher .cab-pagina h1 { color: var(--brand); }
+/* "Onde ver mais": cartões com ícone que levam aos sites oficiais */
+.d-onde-bloco { margin: 18px 0 0; }
+.d-onde-tit { font-size: 1.05rem; margin: 0 0 8px; }
+.d-onde { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr)); gap: 10px; }
+.d-onde-card { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 10px; min-height: 56px; padding: 10px 12px; border-radius: 16px;
+  background: #fff; border: 1px solid var(--line); box-shadow: 0 3px 0 #ebe3d2; color: var(--ink); text-decoration: none; transition: transform .15s; }
+.d-onde-card:hover { transform: translateY(-2px); border-color: #e2cf9a; }
+.d-onde-txt b { display: block; font-size: .92rem; line-height: 1.25; color: var(--brand); overflow-wrap: anywhere; }
+.d-onde-txt small { display: block; font-size: .78rem; color: var(--muted); font-weight: 700; overflow-wrap: anywhere; }
+.d-onde-seta { font-weight: 900; color: var(--brand); }
+/* "Leis e vetos" de quem governa */
+.d-leis { margin-top: 16px; }
+.d-kpis-leis { margin: 0 0 8px; }
+.d-leis .d-dupla-leg { margin: 6px 0 10px; }
+.d-leis-pe { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 10px 0 0 !important; }
+/* o quadro "O que o site já tem da Casa": a cobertura em etiquetas com ícone */
+.d-pag .info-casa { border-radius: 20px; background: #fff; }
+.d-pag .cobertura-casa { display: flex; flex-wrap: wrap; gap: 8px; padding: 0; list-style: none; }
+.d-pag .cobertura-casa li { display: inline-flex; align-items: center; gap: 4px; padding: 6px 12px; border-radius: 999px; background: #eef4ea; font-weight: 700; font-size: .88rem; margin: 0; }
+.d-pag .cobertura-casa li.falta { background: #f3efe6; color: var(--muted); }
+.d-pag .site-casa a { display: inline-flex; align-items: center; min-height: 44px; font-weight: 800; }
+
+/* ---------- "Como votaram": o voto de cada pessoa (site-d-r16) ---------- */
+.vp-tit { font-size: 1.1rem; margin: 18px 0 6px; }
+.vp-plen { margin: 4px auto 0; max-width: 440px; padding: 0 6px; overflow-x: clip; }
+.vp-plen .plenario { max-width: 440px; }
+.vp-legenda { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 14px; font-size: .88rem; font-weight: 800; }
+.vp-legenda li { display: inline-flex; align-items: center; gap: 4px; }
+.vp-legenda b { font-variant-numeric: tabular-nums; }
+.vot-q.vp-q-sr { background: #ddd3bf; box-shadow: inset 0 0 0 1px #b8ad96; }
+.vp-cores { text-align: center; font-size: .82rem; color: var(--muted); font-weight: 700; margin: 6px 0 4px; }
+.vp-filtros { margin: 10px 0 0; }
+.vp-grupo { margin: 14px 0 0; }
+.vp-gtit { display: flex; align-items: center; gap: 6px; font-size: 1rem; margin: 0 0 8px; padding: 0 0 6px; border-bottom: 2px solid var(--line); }
+.vp-gn { margin-left: auto; font-variant-numeric: tabular-nums; background: #f3efe6; border-radius: 999px; padding: 1px 10px; }
+.vp-grade { grid-template-columns: repeat(auto-fill, minmax(min(140px, 100%), 1fr)); }
+.vp-grade .voto-card small { overflow-wrap: anywhere; }
+.vp-sr .muted { font-size: .88rem; margin: 0; }
+.vl-linha { margin: 0 0 6px; }
+.vl-sem .notas-casa { margin: 10px 0 0; padding-left: 20px; font-size: .9rem; }
+.vl-sem .links-onde { margin-top: 10px; }
+
+/* ---------- a votação no modal (site-d-r16, 5/11): do que se trata, as abas Pessoas | Partidos e as barras dos partidos ---------- */
+.vt-topo { display: grid; gap: 8px; }
+.vt-oque { margin: 16px 0 0; padding: 14px 16px; border-radius: 18px; background: #fffaf0; border: 1px solid #efe1bd; }
+.vt-oque > h3 { margin: 0 0 8px; font-size: 1.1rem; }
+.vt-simples { font-size: 1.05rem; font-weight: 700; line-height: 1.45; margin: 0 0 8px; }
+.vt-simples .rot-texto { color: #7a5200; }
+.vt-ementa { margin: 0 0 8px; font-size: .95rem; }
+.vt-oque .d-saiba { margin: 8px 0 0; }
+.vt-tipo { display: flex; gap: 10px; align-items: flex-start; margin: 10px 0 0; font-size: .92rem; line-height: 1.45; }
+.vt-tipo .fontes-btn { margin-top: 4px; }
+.vt-links { margin: 8px 0 0; }
+.vt-abas { display: flex; gap: 6px; margin: 18px 0 0; padding: 4px; border-radius: 16px; background: #f3efe6; width: fit-content; max-width: 100%; }
+.vt-aba { min-height: 44px; padding: 8px 18px; border: 0; border-radius: 12px; background: transparent; font: inherit; font-weight: 900; font-size: .95rem; color: var(--brand); cursor: pointer; }
+.vt-aba[aria-selected="true"] { background: #fff; box-shadow: 0 2px 0 #e2dccd, 0 4px 10px rgba(60, 40, 0, .08); }
+.vt-aba:focus-visible { outline: 3px solid var(--brand); outline-offset: 2px; }
+.vt-painel[hidden] { display: none; }
+.vt-ps { list-style: none; margin: 8px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr)); gap: 10px; }
+.vt-p { width: 100%; height: 100%; display: grid; gap: 6px; text-align: left; padding: 10px 14px; min-height: 44px; border-radius: 16px; border: 1px solid var(--line); background: #fff;
+  box-shadow: 0 3px 0 #ebe3d2; font: inherit; color: inherit; cursor: pointer; transition: transform var(--dur-curta, .15s); }
+.vt-p:hover { transform: translateY(-2px); border-color: #e2cf9a; }
+.vt-p-cab { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.vt-p-cab b { font-size: 1.02rem; overflow-wrap: anywhere; }
+.vt-p-n { font-size: .8rem; font-weight: 800; color: var(--muted); white-space: nowrap; }
+.vt-p-barra { display: flex; height: 14px; border-radius: 999px; overflow: hidden; gap: 2px; background: #efe9dc; }
+.vt-p-barra i { display: block; min-width: 3px; }
+.vt-p-nums { display: flex; flex-wrap: wrap; gap: 2px 12px; font-size: .82rem; font-weight: 800; }
+.vt-p-ori { font-size: .82rem; color: var(--muted); }
+.vt-p-ori b { color: var(--ink); }
+.vt-tab-rola { overflow-x: auto; max-width: 100%; }
+.vt-tab-rola:focus-visible { outline: 3px solid var(--brand); outline-offset: 2px; }
+.vt-tab-partidos { max-width: none; }
+.vt-tab-partidos th, .vt-tab-partidos td { padding: 5px 6px; }
+@media (max-width: 520px) {
+  .vt-abas { width: 100%; }
+  .vt-aba { flex: 1; padding: 8px 10px; }
+  .vt-oque { padding: 12px; }
+  .vt-tab-partidos { font-size: .78rem; }
+}
+html.alto-contraste .vt-oque, html.alto-contraste .vt-p { background: #fff; border: 2px solid #000; box-shadow: none; }
+html.alto-contraste .vt-aba[aria-selected="true"] { outline: 3px solid #000; }
+html.sem-movimento .vt-p:hover { transform: none; }
+@media (prefers-reduced-motion: reduce) { .vt-p:hover { transform: none; } }
+
 /* ---------- perfil (pessoa.html: main.d-perfil-pag) ---------- */
 /* o topo: a foto numa moldura com volume (dois contornos, amarelo e azul) dentro de um cartão claro */
 .d-perfil-pag .perfil-topo { margin-top: 18px; padding: 22px 24px; border-radius: 26px; background: linear-gradient(160deg, #fff 0%, #fff8e6 100%); border: 1px solid var(--line); box-shadow: 0 5px 0 #efe3c3; }
@@ -311,6 +411,10 @@ html.alto-contraste .d-perfil-pag .perfil-topo, html.alto-contraste .d-perfil-pa
 html.alto-contraste .d-perfil-pag .fato .f-ic { background: #fff; box-shadow: none; border: 2px solid #000; }
 html.alto-contraste .d-tempo-trilho i, html.alto-contraste .d-tema-trilho i { background: #000; box-shadow: none; }
 html.alto-contraste .d-tempo .aqui .d-tempo-trilho i { background: #000; outline: 3px solid #ffdd00; }
+html.alto-contraste .d-onde-card, html.alto-contraste .d-pag .d-cidade-busca, html.alto-contraste .d-pag .cab-cidade .busca-cidade, html.alto-contraste .d-pag #senadores .pessoa-card { background: #fff; border: 2px solid #000; box-shadow: none; }
+html.alto-contraste .d-pag #senadores .pessoa-card .av { box-shadow: none; border: 2px solid #000; }
+html.alto-contraste .d-pag .cobertura-casa li { background: #fff; border: 2px solid #000; color: #000; }
+html.alto-contraste .vot-q.vp-q-sr { background: #fff; box-shadow: inset 0 0 0 1px #000; }
 
 /* ---------- menos movimento ---------- */
 html.sem-movimento .d-ic, html.sem-movimento .d-moldura, html.sem-movimento .min-card.d-min .m-ic, html.sem-movimento .d-min-ic-g, html.sem-movimento .d-pag .cab-bloco .ic-bloco,
@@ -318,8 +422,10 @@ html.sem-movimento .d-pag .pessoa-grande .av { transform: none; }
 html.sem-movimento .d-kpi b, html.sem-movimento .d-coluna i { animation: none; }
 html.sem-movimento .d-perfil-pag .moldura .av, html.sem-movimento .d-perfil-pag .fato .f-ic { transform: none; }
 html.sem-movimento :is(a.d-kpi, .min-card.d-min, .d-partido, .d-vot):hover { transform: none; }
+html.sem-movimento .d-pag #senadores .pessoa-card .av, html.sem-movimento .d-onde-card:hover { transform: none; }
 @media (prefers-reduced-motion: reduce) {
   .d-kpi b, .d-coluna i { animation: none; }
   .d-ic, .d-moldura, .min-card.d-min .m-ic, .d-min-ic-g, .d-pag .cab-bloco .ic-bloco, .d-pag .pessoa-grande .av, .d-perfil-pag .moldura .av, .d-perfil-pag .fato .f-ic { transform: none; }
   :is(a.d-kpi, .min-card.d-min, .d-partido, .d-vot, .d-moldura):hover, a:hover .d-moldura, button:hover .d-moldura { transform: none; }
+  .d-pag #senadores .pessoa-card .av, .d-onde-card:hover { transform: none; }
 }

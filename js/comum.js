@@ -902,10 +902,18 @@
     { n: 4, ic: "🏘️", href: "cidade.html", t: ["A política da minha cidade", "Politics in my city"], c: ["Cidade", "City"] }];
   var PORTA_DA_PAGINA = { "entenda.html": 1, "brasil.html": 2, "votacoes.html": 2, "votacao.html": 2, "estado.html": 3, "cidade.html": 4 };
   var SOBRE = [["imparcialidade.html", "⚖️", "Como cuidamos da imparcialidade", "How we stay impartial"], ["dados.html", "🗂️", "De onde vêm os dados", "Where the data comes from"]];
-  // nas páginas da porta 2 sem abas (as votações), os itens da seção são os lugares da página do Brasil
-  var ITENS_BRASIL = [["brasil.html#executivo", "🏢", "Quem governa", "Who governs"], ["brasil.html#senado", "🏛️", "Senado", "Senate"],
-    ["brasil.html#camara", "🏛️", "Câmara", "Chamber of Deputies"], ["brasil.html#votacoes", "🗳️", "Como votaram", "How Congress voted"],
-    ["brasil.html#judiciario", "⚖️", "STF", "Supreme Court"], ["votacoes.html", "📊", "Todas as votações", "All the votes"]];
+  // nas páginas da porta 2 sem abas (a lista de todas as votações e a página de uma votação), os itens da seção são os mesmos
+  // da página do Brasil (as abas dela, com os mesmos ids, emojis e nomes), levando a brasil.html#<aba>; a lista de votações faz
+  // parte de "Como votaram", que fica marcado (site-d-r16: antes havia um item a mais, "Todas as votações", só nessas páginas)
+  var ITENS_BRASIL = [["executivo", "🏢", "Quem governa", "Who governs"], ["senado", "🏛️", "Senado", "Senate"],
+    ["camara", "🏛️", "Câmara", "Chamber of Deputies"], ["votacoes", "🗳️", "Como votaram", "How Congress voted"],
+    ["judiciario", "⚖️", "STF", "Supreme Court"]];
+  var PAGINAS_VOTACOES = /^vota(coes|cao)\.html$/;
+  // o título do grupo da seção: o nome da porta (o mesmo em todas as páginas dela); no perfil, "Nesta página" (as abas da pessoa)
+  function titSecao() {
+    var p = EP.PORTAS[(PORTA_DA_PAGINA[arquivoAtual()] || 0) - 1];
+    return p ? EP.tr(p.t[0], p.t[1]) : EP.tr("Nesta página", "On this page");
+  }
   var MQ_LADO = window.matchMedia ? matchMedia("(min-width: 768px)") : { matches: true, addEventListener: function () {} };
   var MQ_CEL = window.matchMedia ? matchMedia("(max-width: 767px)") : { matches: false };
   var casca = { porta: 0, lado: null, btn: null, veu: null, inertes: [] };
@@ -931,14 +939,14 @@
   function itensDaSecao() {
     var tabs = [].filter.call(document.querySelectorAll('.abas-lista [role="tab"][data-aba]'), function (t) { return !t.hidden; });
     if (tabs.length) {
-      return { t: EP.tr("Nesta página", "On this page"), l: tabs.map(function (t) {
+      return { t: titSecao(), l: tabs.map(function (t) {
         var c = t.cloneNode(true), ic = c.querySelector('[aria-hidden="true"]'), e = ic ? ic.textContent.trim() : "";
         [].forEach.call(c.querySelectorAll('[aria-hidden="true"], .sr'), function (x) { x.remove(); });
         return { id: t.getAttribute("data-aba"), href: "#" + t.getAttribute("data-aba"), ic: e || "•", t: c.textContent.replace(/\s+/g, " ").trim() };
       }) };
     }
-    if (/^votaco?e?s?\.html$/.test(arquivoAtual()) || arquivoAtual() === "votacao.html") {
-      return { t: EP.tr("A política do Brasil", "Brazil's politics"), l: ITENS_BRASIL.map(function (x) { return { id: x[0], href: cHref(x[0]), ic: x[1], t: EP.tr(x[2], x[3]) }; }) };
+    if (PAGINAS_VOTACOES.test(arquivoAtual())) {
+      return { t: titSecao(), l: ITENS_BRASIL.map(function (x) { return { id: x[0], href: cHref("brasil.html#" + x[0]), ic: x[1], t: EP.tr(x[2], x[3]) }; }) };
     }
     return { t: "", l: [] };
   }
@@ -954,10 +962,12 @@
       g.hidden = !s.l.length;
     }
     var at = EP.abas && EP.abas.ativa ? EP.abas.ativa() : null, aqui = arquivoAtual();
+    // a lista de todas as votações e a página de uma votação fazem parte de "Como votaram"
+    if (!at && PAGINAS_VOTACOES.test(aqui)) at = "votacoes";
     [].forEach.call(g.querySelectorAll("[data-item]"), function (a) {
       var id = a.getAttribute("data-item");
       if (id === aqui) a.setAttribute("aria-current", "page");
-      else if (at && id === at) a.setAttribute("aria-current", "location");
+      else if (at && id === at) a.setAttribute("aria-current", PAGINAS_VOTACOES.test(aqui) ? "true" : "location");
       else a.removeAttribute("aria-current");
     });
   }
@@ -1096,6 +1106,14 @@
     document.body.appendChild(gav);
     gEl(".gv-volta").addEventListener("click", function () { gPilha.pop(); gDesenha(); gEl("#gaveta-tit").focus(); });
     gEl(".gv-fecha").addEventListener("click", function () { gav.close(); });
+    // site-d-r16: o Tab dá a volta dentro da gaveta (o navegador deixaria o foco sair para a barra de endereço depois do último)
+    gav.addEventListener("keydown", function (e) {
+      if (e.key !== "Tab") return;
+      var f = [].filter.call(gav.querySelectorAll(FOCAVEIS), function (x) { return x.getClientRects().length && !x.closest("[hidden], details:not([open]) > :not(summary)"); });
+      if (!f.length) return;
+      if (e.shiftKey && document.activeElement === f[0]) { e.preventDefault(); f[f.length - 1].focus(); }
+      else if (!e.shiftKey && document.activeElement === f[f.length - 1]) { e.preventDefault(); f[0].focus(); }
+    });
     gav.addEventListener("click", function (e) {
       if (e.target === gav) { gav.close(); return; }
       var a = e.target.closest && e.target.closest("a.gv-pagina");
@@ -1136,6 +1154,17 @@
     pe.innerHTML = v.pagina ? '<a class="btn azul gv-pagina" href="' + EP.esc(v.pagina.href) + '"' + (v.pagina.secao ? ' data-secao="' + EP.esc(v.pagina.secao) + '"' : "") + ">" +
       EP.esc(v.pagina.t || EP.tr("Ver a página inteira", "See the full page")) + ' <span aria-hidden="true">›</span></a>' : "";
     pe.hidden = !v.pagina;
+    // site-d-r16: voltando ("‹ Voltar") para uma gaveta que já estava montada (ex.: a votação, depois de abrir uma pessoa dela),
+    // ela volta como estava (a aba, os filtros, "Ver todos" e a rolagem), sem montar de novo
+    if (v._dom) {
+      corpo.innerHTML = "";
+      corpo.appendChild(v._dom);
+      v._dom = null;
+      corpo.scrollTop = v._y || 0;
+      try { history.replaceState(history.state, "", urlVer(v.ver || "")); } catch (e) {}
+      if (EP.atualizaLinksIdioma) EP.atualizaLinksIdioma();
+      return;
+    }
     corpo.scrollTop = 0;
     corpo.innerHTML = "";
     var r = typeof v.corpo === "function" ? v.corpo(corpo, v) : v.corpo;
@@ -1167,6 +1196,17 @@
         if (EP.memo) EP.memo.grava("y", Math.round(window.scrollY));
         try { history.pushState(Object.assign({}, history.state || {}, { gaveta: 1 }), "", location.href); gEmpurrou = true; } catch (e) { gEmpurrou = false; }
       } else gEmpurrou = false;
+      // site-d-r16: as votações abrem num modal grande, no meio da tela (no celular, a tela cheia); o resto continua na gaveta
+      // do lado. O jeito vale para tudo o que abrir por cima dele (uma pessoa da votação troca o conteúdo, com "‹ Voltar")
+      gav.classList.toggle("gv-modal", !!o.modal);
+    } else {
+      // guarda a gaveta de baixo como está, para o "‹ Voltar" (gDesenha)
+      var cur = gPilha[gPilha.length - 1], corpo = gEl(".gv-corpo");
+      if (cur && corpo.firstChild) {
+        cur._y = corpo.scrollTop;
+        cur._dom = document.createDocumentFragment();
+        while (corpo.firstChild) cur._dom.appendChild(corpo.firstChild);
+      }
     }
     gPilha.push(o);
     gav.setAttribute("data-lado", MQ_CEL.matches ? "baixo" : "direita");

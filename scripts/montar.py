@@ -425,6 +425,15 @@ def _stf_sitemap() -> list:
     return [(f"pessoa.html?id={m['id']}", d.get("atualizado")) for m in d.get("ministros") or [] if m.get("id")]
 
 
+# site-d-r16: as votações recentes de cada Assembleia e Câmara Municipal, com o voto de cada pessoa (scripts/votos_casas.py)
+def _votos_casas() -> str:
+    try:
+        import votos_casas
+        return votos_casas.gravar()
+    except Exception as e:  # não pode parar a junção
+        return f"erro: {e}"
+
+
 def juntar_legislativos() -> tuple[int, int]:
     """dados/assembleias/<UF>.json e dados/camaras/<IBGE>.json (scripts/legislativos.py) -> listas das páginas do estado e
     da cidade, no lugar da lista de eleitos do TSE. A busca (dados/busca.json) passa a ter quem está na lista oficial
@@ -603,6 +612,7 @@ def main() -> None:
     log(f"prefeitos com as leis e os vetos dos Diários Oficiais atualizados: {n_ex}")
     log(f"eleitos em 2026 (até a posse): {_eleitos_2026()}")
     log(f"ministros do STF na busca: {_stf_busca()}")  # ministros do STF
+    log(f"votações recentes por Casa (Assembleias e Câmaras Municipais): {_votos_casas()}")  # site-d-r16
     log(f"dados/cidades.json: {indice_cidades()} cidades")
     log(f"sitemap.xml: {sitemap()} endereços")
     log("pronto")

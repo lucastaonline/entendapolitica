@@ -314,12 +314,27 @@ async def barra(nav):
             await ctx.close()
     ok(f"barra das abas: sem rolagem, nada cortado nem esmaecido; com rolagem, o esmaecimento só do lado das abas escondidas ({total} combinações: "
        f"{len(paginas)} páginas × 6 larguras × letra normal e 1,5× × pt/en)", not falhas, " | ".join(falhas)[:900])
-    # o caso do print do Lucas: estado.html?uf=BA a 1440 px, a última aba ("Minha cidade") inteira e sem esmaecer
+    # o caso do print do Lucas: estado.html?uf=BA a 1440 px, a última aba ("Minha cidade") inteira e sem esmaecer.
+    # site-d-r16: com a aba nova "Como votaram", as 6 abas do estado não cabem em 1440 px; a barra ganha os botões ‹ › (site-d-r14)
+    # e a intenção continua: "Minha cidade" nunca aparece cortada nem esmaecida, e o › leva até ela, inteira
     ctx = await nav.new_context(viewport={"width": 1440, "height": 900})
     pg = await ctx.new_page()
     await ir(pg, "estado.html?uf=BA")
     r = await pg.evaluate(BARRA)
-    ok("estado.html?uf=BA a 1440 px: “Minha cidade” inteira, sem rolagem e sem esmaecer", r and not r["rola"] and r["ultimaInteira"] and not any(e["dir"] or e["esq"] for e in r["estados"]), str(r)[:200])
+    if r and r["rola"]:
+        for _ in range(6):
+            mais = pg.locator(".abas-barra.rola .abas-seta-dir:not([disabled])")
+            if not await mais.count():
+                break
+            await mais.click()
+            await pg.wait_for_timeout(450)
+        fim = await pg.evaluate("""() => { const l = document.querySelector('.abas-lista'), rl = l.getBoundingClientRect();
+          const t = l.querySelector('[role=tab][data-aba="cidade"]'), rt = t.getBoundingClientRect();
+          return { inteira: rt.left >= rl.left - 1 && rt.right <= rl.right + 1, visivel: getComputedStyle(t).opacity === '1', botoes: !!document.querySelector('.abas-barra.rola') }; }""")
+        ok("estado.html?uf=BA a 1440 px: as 6 abas rolam com os botões ‹ ›, e o › leva a “Minha cidade” inteira e sem esmaecer",
+           fim["botoes"] and fim["inteira"] and fim["visivel"], f"{fim} {str(r)[:120]}")
+    else:
+        ok("estado.html?uf=BA a 1440 px: “Minha cidade” inteira, sem rolagem e sem esmaecer", r and not r["rola"] and r["ultimaInteira"] and not any(e["dir"] or e["esq"] for e in r["estados"]), str(r)[:200])
     # recalcula quando a letra muda (A+) sem recarregar e quando as fontes chegam
     await pg.set_viewport_size({"width": 900, "height": 900})
     await pg.wait_for_timeout(400)

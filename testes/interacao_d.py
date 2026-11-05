@@ -15,7 +15,13 @@ aba escondida, fora da parte que rola, ≥ 44 px, rótulos pt/en, o › traz a a
 aberta à vista também pelo endereço e pelo teclado, a janela que muda de largura e a letra maior) e o desenho do cabeçalho
 menor na tela estreita.
 Playwright + Edge; precisa do servidor (EP_BASE, padrão http://127.0.0.1:8770/) e do axe-core em ../ferramentas.
-Uso: python testes/interacao_d.py [brasil|perfil|outros|abas|passos|suave]"""
+5/11 (pedido do Lucas, site-d-r16): a votação num modal (computador e tablet: no meio da tela; celular: a tela cheia, com o
+cabeçalho e o botão de baixo sempre à vista): "Do que se trata" (sem e com a explicação simples, a ementa inteira, o tipo de
+proposta e de votação, os links), a aba "Partidos" (todos os partidos em ordem alfabética, os números iguais aos dados, a
+orientação publicada, a tabela e o toque que filtra as pessoas), Esc, clique fora, foco preso e devolvido, ?ver=, Voltar e
+Avançar, a pessoa por cima e o "‹ Voltar" que traz a votação como estava; no Brasil, no CE e numa Câmara Municipal; inglês, 320 px,
+"menos movimento" e axe com o modal aberto.
+Uso: python testes/interacao_d.py [brasil|perfil|outros|abas|passos|suave|modal]"""
 import asyncio
 import json
 import os
@@ -272,7 +278,8 @@ async def brasil(nav):
     await pg.wait_for_timeout(400)
     await cards.first.click()
     await pg.wait_for_timeout(1500)
-    linhas = await pg.locator("#gaveta .gv-tab-partidos tbody tr").count()
+    # site-d-r16 (5/11): a tabela dos partidos foi para a aba "Partidos" da votação (.vt-tab-partidos), no "Saber mais"
+    linhas = await pg.locator("#gaveta .vt-tab-partidos tbody tr").count()
     vk = q(pg.url, "ver") or ""
     ok("votação: a gaveta abre com o placar e o voto de cada partido (tabela)", await gaveta_aberta(pg) and linhas >= 3 and await pg.locator("#gaveta .d-placar").count() == 1, f"{linhas} partidos")
     href = await pg.locator("#gaveta a.gv-pagina").get_attribute("href")
@@ -280,7 +287,7 @@ async def brasil(nav):
     m = re.match(r"vot:(camara|senado):(.+)$", vk)
     if m:
         v = dados(f"votacoes/{m.group(1)}/{m.group(2)}.json")
-        tot_tab = await pg.locator("#gaveta .gv-tab-partidos tbody td").evaluate_all("l => l.reduce((s, td) => s + (parseInt(td.textContent.replace(/\\D/g, '')) || 0), 0)")
+        tot_tab = await pg.locator("#gaveta .vt-tab-partidos tbody td").evaluate_all("l => l.reduce((s, td) => s + (parseInt(td.textContent.replace(/\\D/g, '')) || 0), 0)")
         ok("votação: a tabela dos partidos soma todos os votos da lista oficial", tot_tab == len(v["votos"]), f"{tot_tab} x {len(v['votos'])}")
     await axe(pg, "Brasil com a gaveta de uma votação aberta")
     await fecha_gaveta(pg)
@@ -856,6 +863,234 @@ async def suave(nav):
     await ctx.close()
 
 
+# ------------------------------------------------------------------ 7. a votação no modal (site-d-r16, pedido do Lucas de 5/11)
+DIALOGO = """() => { const g = document.getElementById('gaveta'); if (!g || !g.open) return null; const r = g.getBoundingClientRect();
+  const cab = g.querySelector('.gv-cab').getBoundingClientRect(), pe = g.querySelector('.gv-pe'), rp = pe && !pe.hidden ? pe.getBoundingClientRect() : null;
+  return { modal: g.classList.contains('gv-modal'), l: r.left, r: r.right, t: r.top, b: r.bottom, w: r.width, h: r.height, cabTop: cab.top, peBottom: rp ? rp.bottom : null,
+    anim: getComputedStyle(g).animationDuration }; }"""
+
+
+def norm_p(p):
+    return norm(p or "Sem partido")
+
+
+async def abre_vot(pg, url, espera=3000):
+    await vai(pg, url, espera)
+    for _ in range(20):
+        if await pg.locator("#gaveta .vt-aba").count():
+            break
+        await pg.wait_for_timeout(250)
+
+
+async def confere_partidos(pg, nome, votos, orient=None):
+    """votos = [(partido, voto)] dos dados; orient = {partido: {orientacao}}."""
+    await pg.locator("#gaveta .vt-aba").nth(1).click()
+    await pg.wait_for_timeout(500)
+    sel = await pg.locator("#gaveta .vt-aba").nth(1).get_attribute("aria-selected")
+    ps = await pg.evaluate("""() => [...document.querySelectorAll('#gaveta .vt-p')].map(b => ({ p: b.getAttribute('data-partido'), t: b.innerText,
+      h: b.getBoundingClientRect().height, cores: [...b.querySelectorAll('.vt-p-barra i')].map(i => i.style.background) }))""")
+    esperado = sorted({p or "Sem partido" for p, _ in votos}, key=norm_p)
+    ok(f"{nome}: a aba “Partidos” abre com uma barra por partido, todos, em ordem alfabética, ≥ 44 px", sel == "true" and [x["p"] for x in ps] == esperado and all(x["h"] >= 44 for x in ps),
+       f"{len(ps)} de {len(esperado)}")
+    soma_ok = True
+    for x in ps:
+        n = sum(1 for p, _ in votos if (p or "Sem partido") == x["p"])
+        nums = sum(int(v) for v in re.findall(r"(?:Sim|Não|Abstenção|Obstrução|motivo|Yes|No)\s+(\d+)", x["t"].replace("\n", " ")))
+        if nums != n:
+            soma_ok = False
+    ok(f"{nome}: os números de cada partido somam as pessoas dele (iguais aos dados)", soma_ok)
+    cores = {c for x in ps for c in x["cores"]}
+    ok(f"{nome}: as barras usam só as cores dos votos (iguais para todos os partidos)", cores and len(cores) <= 5, cores)
+    if orient:
+        com = [p for p in esperado if (orient.get(p) or {}).get("orientacao")]
+        mostra = [x["p"] for x in ps if "Orientação" in x["t"]]
+        ok(f"{nome}: a orientação aparece nos partidos em que a Casa publicou ({len(com)})", sorted(mostra, key=norm_p) == com, f"{len(mostra)}")
+    linhas = await pg.locator("#gaveta .vt-tab-partidos tbody tr").count()
+    ok(f"{nome}: a tabela (equivalente em texto) tem uma linha por partido", linhas == len(esperado))
+    # tocar num partido mostra as pessoas dele
+    alvo = max(esperado, key=lambda p: sum(1 for q_, _ in votos if (q_ or "Sem partido") == p))
+    n = sum(1 for p, _ in votos if (p or "Sem partido") == alvo)
+    await pg.locator(f'#gaveta .vt-p[data-partido="{alvo}"]').click()
+    await pg.wait_for_timeout(700)
+    vis = await pg.locator("#gaveta .vp-pessoas .vp-grupo .pessoa-card").count()
+    ok(f"{nome}: tocar num partido ({alvo}) volta para “Pessoas” só com as {n} pessoas dele", await pg.locator("#gaveta .vt-aba").nth(0).get_attribute("aria-selected") == "true" and vis == n, vis)
+    return alvo, n
+
+
+async def votacao_modal(nav):
+    print("\n— 7. a votação no modal: do que se trata, partidos, modal no computador e no tablet, tela cheia no celular —")
+    pec = dados("votacoes/senado/7112.json")
+    cam = dados("votacoes/camara/2236186-60.json")
+    ctx = await ctx_novo(nav, viewport={"width": 1440, "height": 900})
+    pg = await ctx.new_page()
+    erros = []
+    pg.on("pageerror", lambda e: erros.append(str(e)))
+    # 7a. PEC 18/2025 do Senado, aberta pelo cartão
+    await vai(pg, "brasil.html?lang=pt#votacoes", 2500)
+    await pg.locator('[data-vot-casa="senado"]').click()
+    await pg.wait_for_timeout(500)
+    card = pg.locator("[data-vot='senado:7112']")
+    if not await card.count():
+        await pg.evaluate("() => { for (let i = 0; i < 8; i++) { const b = document.querySelector('[data-vot-mais]'); if (b) b.click(); } }")
+        await pg.wait_for_timeout(600)
+    await card.click()
+    await pg.wait_for_timeout(2500)
+    r = await pg.evaluate(DIALOGO)
+    ok("modal: a votação abre num modal grande no meio da tela (900–1000 px, até 90% da altura)", r and r["modal"] and 900 <= r["w"] <= 1000 and abs((r["l"] + r["r"]) / 2 - 720) < 2 and r["h"] <= 0.9 * 900 + 1, r)
+    ok("modal: ?ver=vot:senado:7112 no endereço", q(pg.url, "ver") == "vot:senado:7112")
+    oque = await pg.locator("#gaveta .vt-oque").inner_text()
+    ementa = pec["proposta"]["ementa"]
+    ok("do que se trata: sem explicação simples, a ementa inteira à vista (sem “…”)", norm(ementa.replace(" ", "")) in norm(oque.replace(" ", "").replace("\n", "")) and "texto oficial da proposta" in oque.lower(), oque[:80])
+    ok("do que se trata: o que é uma PEC e o tipo de votação (texto principal), com fonte", "Proposta de Emenda à Constituição" in oque and "Que votação foi esta: Texto principal" in oque and
+       await pg.locator("#gaveta .vt-oque .vt-tipo .fontes-btn, #gaveta .vt-oque .vt-tipo button").count() >= 2)
+    links = await pg.locator("#gaveta .vt-oque .vt-links a").evaluate_all("l => l.map(a => [a.href, a.target])")
+    ok("do que se trata: o link da proposta e o da votação no site do Senado (outra aba)", [l[0] for l in links] == [pec["proposta"]["url"], pec["url"]] and all(l[1] == "_blank" for l in links), links)
+    await axe(pg, "modal da votação aberto (computador, aba Pessoas)")
+    # a aba "Partidos"
+    votos = [(v[2], v[4]) for v in pec["votos"]]
+    await confere_partidos(pg, "PEC 18/2025", votos, pec.get("orientacaoPartidos"))
+    await pg.locator("#gaveta .vt-aba").nth(1).click()
+    await pg.wait_for_timeout(300)
+    await axe(pg, "modal da votação aberto (computador, aba Partidos)")
+    # teclado nas abas
+    await pg.locator("#gaveta .vt-aba").nth(1).focus()
+    await pg.keyboard.press("ArrowLeft")
+    await pg.wait_for_timeout(200)
+    ok("abas Pessoas | Partidos: as setas trocam de aba e levam o foco", await pg.evaluate("document.activeElement.classList.contains('vt-aba') && document.activeElement.getAttribute('aria-selected') === 'true' && document.activeElement.textContent.includes('Pessoas')"))
+    # o foco fica preso no modal
+    dentro = True
+    for _ in range(30):
+        await pg.keyboard.press("Tab")
+        if not await pg.evaluate("!!document.activeElement.closest('#gaveta')"):
+            dentro = False
+            break
+    ok("modal: o Tab não sai do modal (30 vezes)", dentro)
+    # uma pessoa da votação abre por cima, com "‹ Voltar", e a votação volta como estava
+    await pg.locator("#gaveta .vt-aba").nth(1).click()
+    await pg.wait_for_timeout(300)
+    p0 = sorted({v[2] for v in pec["votos"] if v[2]}, key=norm)[0]
+    await pg.locator(f'#gaveta .vt-p[data-partido="{p0}"]').click()
+    await pg.wait_for_timeout(500)
+    conta = await pg.locator("#gaveta .vp-conta").inner_text()
+    await pg.locator("#gaveta .vp-grupo a.pessoa-card").first.click()
+    await pg.wait_for_timeout(1500)
+    ok("modal: tocar numa pessoa troca o conteúdo pela pessoa, com “‹ Voltar”, ainda no modal", await pg.locator("#gaveta .gv-volta").is_visible() and await pg.locator("#gaveta .vt-oque").count() == 0
+       and (await pg.evaluate(DIALOGO))["modal"])
+    await pg.locator("#gaveta .gv-volta").click()
+    await pg.wait_for_timeout(800)
+    ok("modal: “‹ Voltar” traz a votação como estava (o filtro do partido continua)", await pg.locator("#gaveta .vt-oque").count() == 1 and await pg.locator("#gaveta .vp-conta").inner_text() == conta and
+       q(pg.url, "ver") == "vot:senado:7112", conta)
+    # Esc fecha e o foco volta para o cartão
+    await pg.keyboard.press("Escape")
+    await pg.wait_for_timeout(700)
+    ok("modal: Esc fecha, tira o ?ver= e o foco volta para o cartão", not await gaveta_aberta(pg) and q(pg.url, "ver") is None and
+       await pg.evaluate("document.activeElement && document.activeElement.getAttribute('data-vot') === 'senado:7112'"))
+    # clicar fora fecha
+    await card.click()
+    await pg.wait_for_timeout(2000)
+    await pg.mouse.click(20, 450)
+    await pg.wait_for_timeout(700)
+    ok("modal: clicar fora (no fundo escurecido) fecha", not await gaveta_aberta(pg))
+    # o Voltar do navegador fecha; o Avançar abre de novo
+    await card.click()
+    await pg.wait_for_timeout(2000)
+    await pg.go_back()
+    await pg.wait_for_timeout(900)
+    fechou = not await gaveta_aberta(pg)
+    await pg.go_forward()
+    await pg.wait_for_timeout(2500)
+    ok("modal: o Voltar do navegador fecha e o Avançar abre de novo", fechou and await gaveta_aberta(pg) and (await pg.evaluate(DIALOGO))["modal"])
+    await fecha_gaveta(pg)
+    # com a explicação simples (simulada: os dados de hoje não têm nenhuma) — o rótulo de IA e o texto oficial num bloco que abre
+    simulado = dict(pec, proposta=dict(pec["proposta"], s="Muda a Constituição para mudar regras da segurança pública.", s_en="Changes the Constitution to change public safety rules."))
+
+    async def com_s(route):
+        await route.fulfill(status=200, content_type="application/json", body=json.dumps(simulado, ensure_ascii=False))
+    await pg.route("**/dados/votacoes/senado/7112.json*", com_s)
+    await abre_vot(pg, "brasil.html?lang=pt&ver=vot:senado:7112#votacoes")
+    oque = await pg.locator("#gaveta .vt-oque").inner_text()
+    det = pg.locator("#gaveta .vt-oque details.vt-oficial")
+    ok("do que se trata (com explicação simples): o rótulo “feita por IA a partir do texto oficial” e a explicação",
+       "feita por ia a partir do texto oficial" in oque.lower() and "Muda a Constituição para mudar regras" in oque)
+    ok("do que se trata (com explicação simples): o texto oficial inteiro num “Ver o texto oficial” que abre", await det.count() == 1 and not await det.evaluate("d => d.open") and
+       norm(ementa[:60]) in norm(await det.evaluate("d => d.textContent")))
+    await pg.unroute("**/dados/votacoes/senado/7112.json*")
+    await fecha_gaveta(pg)
+    # 7b. uma votação da Câmara: PLP, quem não registrou voto, a orientação de partidos, federações e blocos
+    await abre_vot(pg, "brasil.html?lang=pt&ver=vot:camara:2236186-60#votacoes")
+    oque = await pg.locator("#gaveta .vt-oque").inner_text()
+    ok("Câmara: “Do que se trata” diz o que é um projeto de lei complementar", "Projeto de lei complementar" in oque and norm(cam["proposta"]["ementa"][:60]) in norm(oque))
+    await confere_partidos(pg, "Câmara 2236186-60", [(v[2], v[4]) for v in cam["votos"]], cam.get("orientacaoPartidos"))
+    await fecha_gaveta(pg)
+    # 7c. a gaveta do lado continua para pessoas e partidos
+    await vai(pg, "brasil.html?lang=pt#senado", 2000)
+    await pg.locator("#senado .d-partido").first.click()
+    await pg.wait_for_timeout(900)
+    r = await pg.evaluate(DIALOGO)
+    ok("a gaveta do partido continua do lado (não é modal)", r and not r["modal"] and abs(r["r"] - 1440) < 2 and r["w"] <= 560)
+    await fecha_gaveta(pg)
+    ok("modal: nenhum erro de JavaScript", not erros, "; ".join(erros)[:200])
+    await ctx.close()
+
+    # 7d. Assembleia do CE e Câmara Municipal de Alta Floresta D'Oeste
+    for url, arq, nome, tipo in (("estado.html?uf=CE", "votacoes/assembleias/CE.json", "CE", "Projeto de lei"), ("cidade.html?ibge=1100015", "votacoes/camaras/1100015.json", "Alta Floresta D'Oeste", "Projeto de lei")):
+        d = dados(arq)
+        v = d["votacoes"][0]
+        ctx = await ctx_novo(nav, viewport={"width": 1440, "height": 900})
+        pg = await ctx.new_page()
+        await vai(pg, url + "&lang=pt#votacoes", 2500)
+        await pg.locator("#vot-casa [data-vl='0']").click()
+        await pg.wait_for_timeout(1500)
+        r = await pg.evaluate(DIALOGO)
+        oque = await pg.locator("#gaveta .vt-oque").inner_text()
+        ok(f"{nome}: a votação abre no modal, com “Do que se trata” (o texto oficial inteiro e o tipo)", r and r["modal"] and tipo in oque and
+           norm((v.get("ementa") or v["descricao"])[:60]) in norm(oque), oque[:80])
+        lk = await pg.locator("#gaveta .vt-oque .vt-links a").evaluate_all("l => l.map(a => a.href)")
+        ok(f"{nome}: os links oficiais (a votação e, quando o site tem, a proposta)", v["url"] in lk and (not v.get("urlProposta") or v["urlProposta"] in lk), lk)
+        votos = [(d["pessoas"][i][2], voto) for voto, idx in v["votos"].items() for i in idx]
+        await confere_partidos(pg, nome, votos)
+        await axe(pg, f"{nome}: modal da votação (aba Pessoas, depois de tocar num partido)")
+        await ctx.close()
+
+    # 7e. tablet: modal no meio; celular: a tela cheia, com o cabeçalho e o botão de baixo sempre à vista
+    ctx = await ctx_novo(nav, viewport={"width": 820, "height": 1180}, has_touch=True)
+    pg = await ctx.new_page()
+    await abre_vot(pg, "brasil.html?lang=pt&ver=vot:senado:7112#votacoes")
+    r = await pg.evaluate(DIALOGO)
+    ok("tablet: a votação abre no modal, no meio da tela", r and r["modal"] and r["w"] <= 820 - 47 and abs((r["l"] + r["r"]) / 2 - 410) < 2, r)
+    await ctx.close()
+    for lang in ("pt", "en"):
+        for w, h in ((390, 844), (320, 700)):
+            ctx = await ctx_novo(nav, lang, viewport={"width": w, "height": h}, is_mobile=True, has_touch=True)
+            pg = await ctx.new_page()
+            await abre_vot(pg, f"brasil.html?lang={lang}&ver=vot:senado:7112#votacoes")
+            r = await pg.evaluate(DIALOGO)
+            ok(f"celular {w} px {lang}: a votação ocupa a tela cheia", r and r["modal"] and r["w"] == w and abs(r["h"] - h) <= 1 and r["t"] == 0, r)
+            await pg.evaluate("() => { const c = document.querySelector('#gaveta .gv-corpo'); c.scrollTop = c.scrollHeight; }")
+            await pg.wait_for_timeout(300)
+            r = await pg.evaluate(DIALOGO)
+            ok(f"celular {w} px {lang}: rolando até o fim, o título e o ✕ continuam no alto e “Ver a votação inteira” embaixo", r["cabTop"] >= 0 and r["peBottom"] is not None and r["peBottom"] <= h + 1, r)
+            for aba_ in (0, 1):
+                await pg.locator("#gaveta .vt-aba").nth(aba_).click()
+                await pg.wait_for_timeout(400)
+                larg = await pg.evaluate("[document.documentElement.scrollWidth, innerWidth, document.querySelector('#gaveta .gv-corpo').scrollWidth, document.querySelector('#gaveta .gv-corpo').clientWidth]")
+                ok(f"celular {w} px {lang} (aba {'Pessoas' if aba_ == 0 else 'Partidos'}): nada passa da tela", larg[0] <= larg[1] and larg[2] <= larg[3] + 1, larg)
+            if lang == "en":
+                t = await pg.locator("#gaveta .gv-corpo").inner_text()
+                ok("inglês: “What it is about”, “People” e “Parties”", "What it is about" in t and "People" in t and "Parties" in t and "Do que se trata" not in t)
+            if w == 390:
+                await axe(pg, f"celular {lang}: a votação em tela cheia (aba Partidos)")
+            await ctx.close()
+
+    # 7f. menos movimento: o modal aparece sem animação
+    ctx = await ctx_novo(nav, viewport={"width": 1440, "height": 900}, reduced_motion="reduce")
+    pg = await ctx.new_page()
+    await abre_vot(pg, "brasil.html?lang=pt&ver=vot:senado:7112#votacoes")
+    r = await pg.evaluate(DIALOGO)
+    ok("menos movimento: o modal abre sem animação", r and r["anim"] in ("0s", "1e-06s"), r and r["anim"])
+    await ctx.close()
+
+
 async def main():
     async with async_playwright() as p:
         nav = await p.chromium.launch(channel="msedge")
@@ -871,6 +1106,8 @@ async def main():
             await abas_passos(nav)
         if SO in ("", "suave"):
             await suave(nav)
+        if SO in ("", "modal"):
+            await votacao_modal(nav)
         await nav.close()
     print(f"\n{sum(RES)}/{len(RES)} passaram")
     sys.exit(0 if all(RES) else 1)

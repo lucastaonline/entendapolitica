@@ -236,8 +236,7 @@ html.alto-contraste .mapa-br a:focus-visible { outline: none !important; box-sha
 .prop .rot-texto { display: block; font-size: .75rem; font-weight: 900; text-transform: uppercase; letter-spacing: .04em; color: #7a5200; margin-bottom: 2px; }
 .prop .oficial { font-size: .86rem; color: #4a5260; background: #f7f3ea; border-radius: 12px; padding: 8px 10px; margin: 6px 0; }
 .prop .oficial .rot-texto { color: var(--muted); }
-.prop .oficial.so-oficial { font-size: .95rem; font-weight: 600; color: var(--ink); }
-.prop .preparando { font-size: .8rem; margin: 0 0 6px; }
+.prop .oficial.so-oficial { font-size: 1rem; line-height: 1.45; font-weight: 600; color: var(--ink); }
 .prop .rodape-prop { display: flex; flex-wrap: wrap; gap: 0 14px; align-items: center; font-size: .85rem; }
 .prop .rodape-prop a { display: inline-flex; align-items: center; min-height: 44px; font-weight: 700; }
 .prop .status-txt { font-weight: 800; }

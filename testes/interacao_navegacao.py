@@ -372,8 +372,10 @@ async def menus(nav):
     await pg.wait_for_timeout(250)  # os painéis do Basecoat aparecem e somem com uma transição curta
     await pg.wait_for_url("**lang=pt**")
     # caminho
+    # site-d-r16 (pedido do Lucas, 14h35): a lista de votações é parte de “Como votaram”, na página do Brasil
     for url, partes in (("estado.html?uf=BA", ["Início", "Estados", "Bahia"]), ("cidade.html?ibge=2927408", ["Início", "Bahia", "Salvador"]),
-                        ("pessoa.html?id=dep-178866", ["Início", "A política do Brasil", "Luizianne Lins"]), ("votacoes.html", ["Início", "Votações do Congresso"]),
+                        ("pessoa.html?id=dep-178866", ["Início", "A política do Brasil", "Luizianne Lins"]),
+                        ("votacoes.html", ["Início", "A política do Brasil", "Como votaram", "Todas as votações"]),
                         ("dados.html", ["Início", "De onde vêm os dados"])):
         await pg.goto(BASE + url + ("&" if "?" in url else "?") + "lang=pt", wait_until="networkidle")
         await pg.wait_for_timeout(1200)
@@ -568,8 +570,9 @@ async def abas(nav):
     ctx = await ctx_novo(nav, viewport={"width": 390, "height": 844}, is_mobile=True, has_touch=True)
     pg = await ctx.new_page()
     # ui-r9 (decisão do Lucas, 11h57): "Quem assume em 2027" deixou de ser aba (é o mandato 2027 do "Ver outro mandato")
-    for url, esperadas in (("estado.html?uf=SP", ["governo", "senadores", "federais", "estaduais", "cidade"]),
-                           ("cidade.html?ibge=3550308", ["governo-cidade", "camara-mun", "proxima-eleicao", "papeis"]),
+    # site-d-r16: a aba nova "Como votaram" (#votacoes) no estado e na cidade
+    for url, esperadas in (("estado.html?uf=SP", ["governo", "senadores", "federais", "estaduais", "votacoes", "cidade"]),
+                           ("cidade.html?ibge=3550308", ["governo-cidade", "camara-mun", "votacoes", "proxima-eleicao", "papeis"]),
                            ("pessoa.html?id=dep-178866", ["sobre", "trajetoria", "propostas", "votacoes", "gastos", "fontes"])):
         await pg.goto(BASE + url + "&lang=pt", wait_until="networkidle")
         await pg.wait_for_timeout(1500)
@@ -699,8 +702,8 @@ async def geral(nav):
 URLS_ABAS = ["index.html", "entenda.html", "dados.html", "imparcialidade.html", "404.html", "votacoes.html", "votacao.html?casa=camara&id=2236186-60",
              "estado.html", "brasil.html?mandato=2027", "estado.html?uf=SP&mandato=2027"] + \
     [f"brasil.html#{a}" for a in ("executivo", "senado", "camara", "votacoes", "judiciario")] + \
-    [f"estado.html?uf=SP#{a}" for a in ("governo", "senadores", "federais", "estaduais", "cidade")] + \
-    [f"cidade.html?ibge=3550308#{a}" for a in ("governo-cidade", "camara-mun", "proxima-eleicao", "papeis")] + \
+    [f"estado.html?uf=SP#{a}" for a in ("governo", "senadores", "federais", "estaduais", "votacoes", "cidade")] + \
+    [f"cidade.html?ibge=3550308#{a}" for a in ("governo-cidade", "camara-mun", "votacoes", "proxima-eleicao", "papeis")] + \
     [f"pessoa.html?id=dep-178866#{a}" for a in ("sobre", "trajetoria", "propostas", "votacoes", "gastos", "fontes")]
 CORTADO_JS = """() => { const W = document.documentElement.clientWidth, r = [];
   const preso = e => { for (let p = e.parentElement; p && p !== document.body; p = p.parentElement) if (getComputedStyle(p).overflowX !== 'visible') return true; return false; };

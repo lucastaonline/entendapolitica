@@ -16,7 +16,6 @@ on:
 
 permissions:
   contents: write
-  models: read
 
 concurrency:
   group: atualizar-dados

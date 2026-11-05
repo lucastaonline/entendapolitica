@@ -61,7 +61,7 @@
 .teclas-cor .cfm { background: #2fa34f; color: #fff; box-shadow: 0 3px 0 #1c6b33; transition: transform .15s, box-shadow .15s; }
 .urna3d.confirmado .teclas-cor .cfm { transform: translateY(3px); box-shadow: 0 0 0 #1c6b33; }
 .dedo3d { position: absolute; font-size: 54px; right: -26px; bottom: -34px; opacity: 0; filter: drop-shadow(0 6px 6px rgba(0, 0, 0, .25));
-  transform: translateZ(80px) translate(60px, 70px); transition: transform .7s cubic-bezier(.2, .8, .2, 1), opacity .4s; }
+  transform: translateZ(80px) translate(60px, 70px); transition: transform var(--dur-longa) var(--curva), opacity var(--dur-media); }
 .urna3d.confirmado .dedo3d { opacity: 1; transform: translateZ(80px); }
 /* urna menor */
 .urna3d.peq { --W: 250px; --H: 165px; --D: 56px; }
@@ -98,7 +98,7 @@
 
 /* ---------- entradas em 3D (ao rolar) ---------- */
 .perspectiva { perspective: 1200px; }
-.r3d { opacity: 0; transform: rotateX(-55deg) translateY(50px); transform-origin: 50% 0; transition: opacity .7s ease, transform .9s cubic-bezier(.2, .8, .2, 1); transition-delay: calc(var(--i, 0) * 110ms); }
+.r3d { opacity: 0; transform: rotateX(-55deg) translateY(50px); transform-origin: 50% 0; transition: opacity var(--dur-media) ease, transform var(--dur-longa) var(--curva); transition-delay: calc(var(--i, 0) * 50ms); }
 .r3d.esq { transform: rotateY(55deg) translateX(-60px); transform-origin: 0 50%; }
 .r3d.dir { transform: rotateY(-55deg) translateX(60px); transform-origin: 100% 50%; }
 .r3d.fundo { transform: translateZ(-400px) rotateX(20deg); }
@@ -127,7 +127,7 @@
 
 /* ---------- cartas que viram ---------- */
 .num3d { perspective: 900px; }
-.num3d .giro { position: relative; transform-style: preserve-3d; transform: rotateY(180deg); transition: transform 1s cubic-bezier(.2, .8, .2, 1); transition-delay: calc(var(--i, 0) * 120ms); height: 100%; }
+.num3d .giro { position: relative; transform-style: preserve-3d; transform: rotateY(180deg); transition: transform var(--dur-longa) var(--curva); transition-delay: calc(var(--i, 0) * 60ms); height: 100%; }
 .num3d.visivel .giro { transform: none; }
 .num3d .face-num, .num3d .verso { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
 .num3d .verso { position: absolute; inset: 0; transform: rotateY(180deg); display: flex; align-items: center; justify-content: center; font-size: 4rem; background: linear-gradient(145deg, #fff3d6, #ffe08a); border-radius: 20px; border: 2px solid #f2d48a; }
@@ -142,7 +142,7 @@
 
 /* ---------- 100 eleitores ---------- */
 .urna100 { display: grid; grid-template-columns: repeat(20, 1fr); gap: 4px; max-width: 520px; margin: 6px 0 10px; }
-.urna100 i { aspect-ratio: 1; border-radius: 50%; background: #e8e2d6; transition: background .5s, opacity .6s, transform .6s; }
+.urna100 i { aspect-ratio: 1; border-radius: 50%; background: #e8e2d6; transition: background var(--dur-longa), opacity var(--dur-longa), transform var(--dur-longa); }
 .urna100 i.a { background: #2f6db5; }
 .urna100 i.b { background: #d0841f; }
 .urna100 i.n { background: #9aa1ab; }

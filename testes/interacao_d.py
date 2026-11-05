@@ -15,7 +15,7 @@ aba escondida, fora da parte que rola, ≥ 44 px, rótulos pt/en, o › traz a a
 aberta à vista também pelo endereço e pelo teclado, a janela que muda de largura e a letra maior) e o desenho do cabeçalho
 menor na tela estreita.
 Playwright + Edge; precisa do servidor (EP_BASE, padrão http://127.0.0.1:8770/) e do axe-core em ../ferramentas.
-Uso: python testes/interacao_d.py [brasil|perfil|outros|abas|passos]"""
+Uso: python testes/interacao_d.py [brasil|perfil|outros|abas|passos|suave]"""
 import asyncio
 import json
 import os
@@ -775,6 +775,86 @@ async def abas_passos(nav):
     await axe(pg, "celular em inglês, estado BA")
     await ctx.close()
 
+# ------------------------------------------------------------------ 6. o site suave (rolagem e transições)
+# clica (pelo JS, sem o mousedown que para a rolagem) e anota a posição da página a cada quadro, por ~40 quadros
+AMOSTRA = """async sel => {
+  const ys = [], el = document.querySelector(sel), g0 = document.querySelector('.abas-grupo'), t0 = document.querySelector('header.topo');
+  const inicio = Math.round(g0.getBoundingClientRect().top - t0.getBoundingClientRect().bottom);
+  el.click();
+  await new Promise(r => { let n = 0; (function f() { ys.push(Math.round(scrollY)); if (++n < 45) requestAnimationFrame(f); else r(); })(); });
+  await new Promise(r => setTimeout(r, 450));
+  const g = document.querySelector('.abas-grupo'), t = document.querySelector('header.topo'), b = document.querySelector('.abas-barra');
+  const h = document.querySelector('.abas-grupo > [role=tabpanel]:not([hidden]) h2');
+  return { ys, inicio, distintos: new Set(ys).size, fimGrupo: Math.round(g.getBoundingClientRect().top - t.getBoundingClientRect().bottom),
+    tituloAbaixo: h ? Math.round(h.getBoundingClientRect().top - b.getBoundingClientRect().bottom) : null };
+}"""
+# a maior duração de transição na página (só as que valem: elementos à vista; a câmera do mapa do Entenda é o passeio entre as
+# paradas e fica de fora)
+MAIOR_TRANS = """() => {
+  const seg = v => v.split(',').map(x => x.trim()).map(x => x.endsWith('ms') ? parseFloat(x) : parseFloat(x) * 1000);
+  let pior = [0, ''];
+  for (const el of document.querySelectorAll('*')) {
+    const cs = getComputedStyle(el), ds = seg(cs.transitionDuration), ps = cs.transitionProperty.split(',').map(x => x.trim());
+    ds.forEach((d, i) => { const pr = ps[i] || ps[0] || ''; if (pr.startsWith('--') || pr === 'left' || pr === 'top') return;
+      if (d > pior[0]) pior = [d, (el.id || el.className || el.tagName) + ' ' + pr]; });
+  }
+  return pior;
+}"""
+
+
+async def suave(nav):
+    print("\n== 6. O site suave ==")
+    for w in (1440, 390):
+        movel = w < 768
+        for modo in ("normal", "sem-movimento", "reduced"):
+            op = dict(viewport={"width": w, "height": 900 if not movel else 844}, is_mobile=movel, has_touch=movel)
+            if modo == "reduced":
+                op["reduced_motion"] = "reduce"
+            ctx = await ctx_novo(nav, **op)
+            pg = await ctx.new_page()
+            await vai(pg, "brasil.html", 2000)
+            await pg.evaluate("document.querySelector('.abas-lista [role=tab][data-aba=\"senado\"]').click()")
+            await pg.wait_for_timeout(1500)
+            if modo == "sem-movimento":
+                await pg.evaluate("EP.a11y('movimento', true)")
+            # lá embaixo da aba (a barra presa), troca de aba pela barra (a aba ganha altura, para haver o que rolar em qualquer tela)
+            await pg.evaluate("document.querySelector('.abas-grupo > [role=tabpanel]:not([hidden])').style.paddingBottom = '2400px'")
+            await pg.evaluate("window.scrollTo({top: document.querySelector('.abas-grupo').getBoundingClientRect().top + scrollY + 900, behavior: 'instant'})")
+            await pg.wait_for_timeout(600)
+            r = await pg.evaluate(AMOSTRA, '.abas-lista [role=tab][data-aba="camara"]')
+            onde = f"{w} px, {modo}"
+            fim_ok = -6 <= r["fimGrupo"] <= 16 and r["tituloAbaixo"] is not None and r["tituloAbaixo"] >= -1
+            if modo == "normal":
+                ok(f"{onde}: trocar de aba pela barra desliza (a posição muda ao longo de vários quadros) e termina no começo das abas, o título abaixo da barra",
+                   r["distintos"] >= 5 and fim_ok, f"{r['distintos']} posições; grupo {r['fimGrupo']}; título {r['tituloAbaixo']}; {r['ys'][:6]}…")
+            else:
+                ok(f"{onde}: trocar de aba é na hora (sem deslizar)", r["distintos"] <= 2 and fim_ok, f"{r['distintos']} posições; {r['ys'][:4]}")
+            # o botão "Próxima parte" no fim da aba
+            await pg.evaluate("document.querySelector('.abas-grupo > [role=tabpanel]:not([hidden]) > .abas-passos').scrollIntoView({block: 'center', behavior: 'instant'})")
+            await pg.wait_for_timeout(500)
+            r = await pg.evaluate(AMOSTRA, '.abas-grupo > [role=tabpanel]:not([hidden]) .abas-passo-prox')
+            fim_ok = -6 <= r["fimGrupo"] <= 16 and r["tituloAbaixo"] is not None and r["tituloAbaixo"] >= -1
+            if modo == "normal":
+                # (se o começo das abas já estava quase no lugar, não há o que deslizar)
+                ok(f"{onde}: “Próxima parte” desliza até o começo das abas e o título fica abaixo da barra", (r["distintos"] >= 5 or abs(r["inicio"]) < 60) and fim_ok, f"início {r['inicio']}; {r['distintos']} posições; grupo {r['fimGrupo']}; título {r['tituloAbaixo']}")
+                foco = await pg.evaluate("document.activeElement.tagName")
+                ok(f"{onde}: o foco foi para o título da aba nova", foco == "H2", foco)
+            else:
+                ok(f"{onde}: “Próxima parte” é na hora", r["distintos"] <= 2 and fim_ok, f"{r['distintos']} posições")
+            if modo != "normal":
+                tr = await pg.evaluate("getComputedStyle(document.querySelector('.abas-lista [role=tab]')).transitionDuration")
+                ok(f"{onde}: sem transições (as abas mudam de cor na hora)", all(float(x.strip().rstrip('ms').rstrip('s') or 0) < 0.01 for x in tr.split(',')) or tr.startswith('1e-'), tr)
+            await ctx.close()
+    # nenhuma transição passa de 300 ms, em todas as páginas
+    ctx = await ctx_novo(nav, viewport={"width": 1280, "height": 900})
+    pg = await ctx.new_page()
+    for u in ("index.html", "entenda.html", "brasil.html", "estado.html?uf=BA", "cidade.html?ibge=2927408", "pessoa.html?id=dep-178866",
+              "votacoes.html", "votacao.html?casa=camara&id=2236186-60", "dados.html", "imparcialidade.html", "404.html"):
+        await vai(pg, u, 1200)
+        m = await pg.evaluate(MAIOR_TRANS)
+        ok(f"{u}: nenhuma transição passa de 300 ms", m[0] <= 300, f"{m[0]:.0f} ms em {m[1]}")
+    await ctx.close()
+
 
 async def main():
     async with async_playwright() as p:
@@ -789,6 +869,8 @@ async def main():
             await abas_botoes(nav)
         if SO in ("", "passos"):
             await abas_passos(nav)
+        if SO in ("", "suave"):
+            await suave(nav)
         await nav.close()
     print(f"\n{sum(RES)}/{len(RES)} passaram")
     sys.exit(0 if all(RES) else 1)

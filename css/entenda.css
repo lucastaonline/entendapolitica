@@ -4,7 +4,7 @@
 .mapa-pag .topo .onde { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
 .mapa-pag .topo .nome-parte { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
 .barra-prog { height: 8px; background: #efe7d6; border-radius: 99px; overflow: hidden; }
-.barra-prog i { display: block; height: 100%; width: 100%; transform: scaleX(0); transform-origin: 0 50%; background: linear-gradient(90deg, #f2b705, #e08a00); border-radius: 99px; transition: transform .4s; }
+.barra-prog i { display: block; height: 100%; width: 100%; transform: scaleX(0); transform-origin: 0 50%; background: linear-gradient(90deg, #f2b705, #e08a00); border-radius: 99px; transition: transform var(--dur-longa); }
 .modo-aula .so-mapa, .so-aula { display: none !important; }
 .modo-aula .so-aula { display: inline-flex !important; }
 .modo-aula .barra-prog.so-aula { display: block !important; }
@@ -81,7 +81,7 @@
 .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); gap: 16px; margin-top: 16px; perspective: 1200px; }
 /* 6 cartões: 3 + 3 no computador (e não 4 + 2) */
 .cards:has(> .card-3d:nth-child(6):last-child) { grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); }
-.card-3d { position: relative; display: grid; transform-style: preserve-3d; transition: transform .7s cubic-bezier(.3, 1.2, .4, 1); }
+.card-3d { position: relative; display: grid; transform-style: preserve-3d; transition: transform var(--dur-longa) cubic-bezier(.3, 1.2, .4, 1); }
 .slide.ativo .card-3d.anim { animation: viraCard .8s cubic-bezier(.2, .8, .2, 1) backwards; animation-delay: calc(var(--i, 0) * 130ms + 150ms); }
 /* entrada sem opacity: animar opacity num elemento preserve-3d faz o Chrome "achatar" o 3D, e o verso espelhado aparecia por cima
    da frente (ícone duplicado do outro lado) até a animação acabar. visibility esconde durante a espera; o giro para em -88° (só a frente). */
@@ -171,7 +171,7 @@
 
 /* ---------- simulador: quem cuida? (cartões que viram) ---------- */
 .qc-lista { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr)); gap: 14px; margin-top: 14px; perspective: 1200px; }
-.qc-item { display: grid; transform-style: preserve-3d; transition: transform .7s cubic-bezier(.3, 1.2, .4, 1); }
+.qc-item { display: grid; transform-style: preserve-3d; transition: transform var(--dur-longa) cubic-bezier(.3, 1.2, .4, 1); }
 .qc-item.virado { transform: rotateY(180deg); }
 .qc-item > .face { grid-area: 1 / 1; backface-visibility: hidden; -webkit-backface-visibility: hidden; background: #fff; border: 2px solid var(--line); border-radius: 18px; padding: 12px 14px; box-shadow: 0 4px 0 #ece3d0; display: flex; flex-direction: column; gap: 8px; }
 .qc-item > .verso { transform: rotateY(180deg); }
@@ -192,12 +192,12 @@
 .qe-p { background: #fff; border: 2px solid var(--line); border-radius: 16px; padding: 10px 14px; border-left: 8px solid var(--cor); }
 .qe-p .linha { display: flex; justify-content: space-between; gap: 10px; font-weight: 800; }
 .qe-p .trilho { height: 14px; background: #f1ece0; border-radius: 99px; overflow: hidden; margin-top: 6px; }
-.qe-p .trilho i { display: block; height: 100%; width: var(--w, 0); background: var(--cor); border-radius: 99px; transition: width 1s cubic-bezier(.2, .8, .2, 1); }
+.qe-p .trilho i { display: block; height: 100%; width: var(--w, 0); background: var(--cor); border-radius: 99px; transition: width var(--dur-longa) var(--curva); }
 .qe-p .cadeiras-p { margin-top: 6px; font-size: .85rem; font-weight: 800; color: var(--muted); min-height: 1.3em; }
 .qe-painel { background: #fff; border: 2px solid var(--line); border-radius: 20px; padding: 16px; box-shadow: var(--sombra); }
 .qe-conta { font-size: 1.05rem; background: var(--creme-forte); border: 2px solid #f2d48a; border-radius: 14px; padding: 10px 14px; margin: 10px 0; min-height: 3em; }
 .qe-cadeiras { display: flex; flex-wrap: wrap; gap: 10px; margin: 14px 0; perspective: 600px; }
-.qe-cadeiras i { width: 40px; height: 40px; border-radius: 10px 10px 6px 6px; background: #e8e2d6; box-shadow: 0 5px 0 #cfc6b4; font-style: normal; transition: background .4s; }
+.qe-cadeiras i { width: 40px; height: 40px; border-radius: 10px 10px 6px 6px; background: #e8e2d6; box-shadow: 0 5px 0 #cfc6b4; font-style: normal; transition: background var(--dur-media); }
 .qe-cadeiras i.ocupada { background: var(--cor); box-shadow: 0 5px 0 rgba(0, 0, 0, .3); animation: cadeiraCai .6s cubic-bezier(.3, 1.5, .5, 1) both; animation-delay: calc(var(--k, 0) * 90ms); }
 @keyframes cadeiraCai { from { transform: translateY(-70px) rotateX(90deg); opacity: 0; } to { transform: none; opacity: 1; } }
 
@@ -205,7 +205,7 @@
 .tabuleiro { position: relative; margin-top: 18px; perspective: 1100px; }
 .casas { list-style: none; margin: 0 auto; padding: 18px 10px 26px; display: grid; grid-template-columns: repeat(var(--n, 8), minmax(0, 1fr)); gap: 10px; transform: rotateX(38deg); transform-style: preserve-3d; max-width: 980px; }
 .casa { position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center; padding: 12px 4px 10px; background: #fff; border: 3px solid var(--line);
-  border-radius: 16px; box-shadow: 0 10px 0 #e6dcc7; transition: border-color .3s, background .3s, transform .4s; transform-style: preserve-3d; }
+  border-radius: 16px; box-shadow: 0 10px 0 #e6dcc7; transition: border-color var(--dur-media), background var(--dur-media), transform var(--dur-longa); transform-style: preserve-3d; }
 .casa .c-ic { font-size: 1.9rem; line-height: 1; display: inline-block; transform: rotateX(-38deg) translateY(-6px); transform-origin: 50% 100%; }
 .casa b { font-size: .74rem; line-height: 1.15; }
 .casa.feita { border-color: #9fd3ae; background: #f2fbf4; }
@@ -316,7 +316,7 @@ html.sem-movimento .vp-op, html.sem-movimento .vp .plenario i { transition: none
 .cv-casa:focus-visible { outline: 4px solid var(--brand); outline-offset: 3px; }
 /* a ficha 🗳️ que anda pela trilha (some de vez com "menos movimento": só pula de casa em casa) */
 .cv-ficha { position: absolute; left: 0; top: 0; z-index: 2; font-size: 1.7rem; line-height: 1; pointer-events: none; opacity: 0;
-  transform: translate(var(--fx, 0px), var(--fy, 0px)) translate(-50%, -72%); transition: transform .6s cubic-bezier(.3, 1.3, .5, 1), opacity .3s; filter: drop-shadow(0 4px 3px rgba(40, 30, 0, .25)); }
+  transform: translate(var(--fx, 0px), var(--fy, 0px)) translate(-50%, -72%); transition: transform var(--dur-longa) cubic-bezier(.3, 1.3, .5, 1), opacity var(--dur-media); filter: drop-shadow(0 4px 3px rgba(40, 30, 0, .25)); }
 .cv-ficha.pronta { opacity: 1; }
 .cv-balao { background: #fff; border: 3px solid var(--brand); border-radius: 20px; padding: 12px 18px; min-height: 8.5em; }
 .cv-balao h3 { margin: 2px 0 6px; color: var(--brand); font-size: 1.2rem; }

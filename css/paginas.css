@@ -70,7 +70,7 @@ a.pessoa-grande:hover { transform: perspective(800px) rotateX(4deg) translateY(-
 .barra-partido[aria-pressed="true"] .nome-p::before { content: "✓ "; }
 .barra-partido .nome-p { font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .barra-partido .trilho-p { height: 14px; background: #efe9dc; border-radius: 99px; overflow: hidden; }
-.barra-partido .trilho-p i { display: block; height: 100%; width: 0; background: var(--brand); border-radius: 99px; transition: width 1s cubic-bezier(.2, .8, .2, 1); }
+.barra-partido .trilho-p i { display: block; height: 100%; width: 0; background: var(--brand); border-radius: 99px; transition: width var(--dur-longa) var(--curva); }
 .barra-partido[aria-pressed="true"] .trilho-p i { background: #a15c00; }
 .barra-partido .n-p { font-weight: 900; text-align: right; font-variant-numeric: tabular-nums; }
 .partidos .mais-p { justify-self: start; border: 0; background: none; font-weight: 800; color: var(--brand); padding: 4px 8px; border-radius: 10px; }

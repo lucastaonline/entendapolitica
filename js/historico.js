@@ -463,7 +463,7 @@
         el.insertAdjacentHTML("beforeend", ps.slice(n).map(function (pa, k) { return cartaoMin(pa, i, n + k); }).join(""));
         b.parentNode.remove();
         var novo = el.querySelector('[data-min-hist="' + i + ":" + n + '"]');
-        if (novo) novo.focus();
+        if (novo) EP.focaSuave(novo);
       });
     });
     if (fonte) fonte.innerHTML = '<small class="muted">' + esc(EP.tr("Cada ministério tem a sua fonte (toque nele). As datas são as da fonte oficial, da nomeação até a saída. Quando a fonte não traz ninguém à frente de uma pasta por mais de 15 dias, o quadro que abre avisa.",

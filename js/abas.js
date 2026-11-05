@@ -66,22 +66,35 @@
   function presa() { return grupo && grupo.getBoundingClientRect().top <= alturaTopo() + 1; }
   // põe o começo das abas logo abaixo do cabeçalho (a barra presa e a aba nova começando embaixo dela). Usado ao trocar de aba
   // lá embaixo de uma lista comprida: sem isso, a pessoa cairia no meio da aba nova
+  // (site-d-r14) deslizando (EP.rolaJanela, js/comum.js); com "menos movimento", na hora
+  // segura(): antes de trocar de aba lá embaixo, as abas guardam a altura de agora até a rolagem terminar (sem isso, uma aba nova
+  // mais curta encurtaria a página e o navegador a puxaria para cima de uma vez, sem deslizar)
+  var soltaT = 0;
+  function solta() { clearTimeout(soltaT); if (grupo) grupo.style.minHeight = ""; }
+  function segura() { if (!grupo) return; clearTimeout(soltaT); grupo.style.minHeight = Math.ceil(grupo.getBoundingClientRect().height) + "px"; soltaT = setTimeout(solta, 900); }
   function vaiAoComeco() {
-    window.scrollTo({ top: Math.max(0, grupo.getBoundingClientRect().top + window.scrollY - alturaTopo()), behavior: "instant" });
+    var y = Math.max(0, grupo.getBoundingClientRect().top + window.scrollY - alturaTopo());
+    if (EP.rolaJanela) EP.rolaJanela(y, solta); else { window.scrollTo({ top: y, behavior: "instant" }); solta(); }
   }
   // rola até um elemento (o scroll-padding do html desconta o cabeçalho e a barra). O conteúdo das abas chega depois (e o
   // "Ver outro mandato", em cima, também): durante 5 s, se algo mudar de tamanho, rola de novo, a não ser que a pessoa role,
   // toque ou use o teclado antes. Se o elemento ainda não existe, espera por ele.
   function rolaPara(id) {
-    var parou = false, ro = null, obs = null, prazo = null, quando = 0;
-    function vai() {
+    var parou = false, ro = null, obs = null, prazo = null, quando = 0, alvo = null;
+    // a primeira vez desliza (EP.rolaJanela); depois, se a página mudou de altura no caminho, corrige: deslizando, se ainda está
+    // indo, ou na hora, se já chegou
+    function vai(suave) {
       var el = document.getElementById(id);
       if (!el || !el.getClientRects().length) return false;
       // a posição sem o deslocamento da animação de aparecer (.rev sobe 34px quando aparece)
       var dy = 0;
       try { dy = new DOMMatrixReadOnly(getComputedStyle(el).transform).m42 || 0; } catch (e) {}
       var pad = parseFloat(getComputedStyle(raiz).scrollPaddingTop) || 0;
-      window.scrollTo({ top: Math.max(0, el.getBoundingClientRect().top - dy + window.scrollY - pad), behavior: "instant" });
+      var y = Math.max(0, el.getBoundingClientRect().top - dy + window.scrollY - pad);
+      if (EP.rolaJanela && (suave || (EP.rolando && EP.rolando()))) {
+        if (suave || alvo == null || Math.abs(y - alvo) > 4) EP.rolaJanela(y);
+      } else window.scrollTo({ top: y, behavior: "instant" });
+      alvo = y;
       return true;
     }
     function fim() {
@@ -96,7 +109,7 @@
     var PARA = ["wheel", "touchstart", "keydown", "mousedown", "focusin", "ep-volta"];
     PARA.forEach(function (t) { window.addEventListener(t, fim, true); });
     function denovo() { if (!parou && Date.now() - quando > 30) { quando = Date.now(); vai(); } }
-    vai();
+    vai(true);
     obs = new MutationObserver(denovo);
     obs.observe(document.body, { childList: true, subtree: true });
     if ("ResizeObserver" in window) { ro = new ResizeObserver(denovo); ro.observe(document.body); }
@@ -153,10 +166,10 @@
     try { lista.scrollTo({ left: p, behavior: suave && !semMovimento() ? "smooth" : "instant" }); } catch (e) { lista.scrollLeft = p; }
   }
   // a aba aberta fica à vista, inteira
-  function emVista(t) {
+  function emVista(t, suave) {
     if (!t || !lista || lista.scrollWidth <= lista.clientWidth + 1) return;
     var g = geo(), x = g.tabs.filter(function (y) { return y.t === t; })[0];
-    if (x && !inteira(x, g, g.sl)) rolaAte(posPara(x, g), false);
+    if (x && !inteira(x, g, g.sl)) rolaAte(posPara(x, g), !!suave);
   }
   // ‹ e ›: a primeira aba escondida daquele lado aparece inteira, alinhada (uma "página" de abas)
   function passo(dir) {
@@ -214,7 +227,7 @@
   function mostra(n) {
     if (!visivel(n)) n = primeira();
     if (!n) return null;
-    var mudou = n !== atual;
+    var mudou = n !== atual, jaTinha = atual !== null;
     atual = n;
     ordem.forEach(function (k) {
       var on = k === n, t = abas[k], p = paineis[k];
@@ -223,7 +236,7 @@
       if (p.hidden === on) p.hidden = !on;
     });
     if (grupo.getAttribute("data-ativa") !== n) grupo.setAttribute("data-ativa", n);
-    emVista(abas[n]);
+    emVista(abas[n], jaTinha);
     if (mudou) {
       monta(n);
       avisa(n);
@@ -256,14 +269,14 @@
     ordem.forEach(function (n) {
       var p = paineis[n], nav = p.querySelector(":scope > .abas-passos"), i = vis.indexOf(n);
       // (os nomes entram na chave: a tradução para o inglês chega às abas depois)
-      var chave = i < 0 || vis.length < 2 ? "" : [vis[i - 1] || "", vis[i + 1] || "", vis[i - 1] ? nomeAba(vis[i - 1]).t : "", vis[i + 1] ? nomeAba(vis[i + 1]).t : "", nomeAba(n).t].join("|");
+      var chave = i < 0 || vis.length < 2 ? "" : [vis[i - 1] || "", vis[i + 1] || "", vis[i - 1] ? nomeAba(vis[i - 1]).t : "", vis[i + 1] ? nomeAba(vis[i + 1]).t : ""].join("|");
       if (nav && nav.getAttribute("data-chave") === chave) return;
       if (nav) nav.remove();
       if (!chave) return;
-      nav = document.createElement("nav");
+      nav = document.createElement("div");  // um grupo (e não um "nav"): com várias abas à vista (impressão, testes), não repete o nome de um ponto de referência
+      nav.setAttribute("role", "group");
       nav.className = "abas-passos nao-ler" + (secoes[n].classList.contains("miolo") ? " miolo" : "");
-      // um nome por aba: com mais de um painel à vista (leitura, impressão), as regiões não ficam com o mesmo nome
-      nav.setAttribute("aria-label", EP.tr("Outras partes desta página (você está em: ", "Other parts of this page (you are in: ") + nomeAba(n).t + ")");
+      nav.setAttribute("aria-label", EP.tr("Outras partes desta página", "Other parts of this page"));
       nav.setAttribute("data-chave", chave);
       if (vis[i - 1]) nav.appendChild(botaoPasso(vis[i - 1], -1));
       if (vis[i + 1]) nav.appendChild(botaoPasso(vis[i + 1], 1));
@@ -272,6 +285,7 @@
   }
   function vaiPasso(n) {
     if (!visivel(n)) return;
+    segura();
     mostra(n);
     poeEndereco(n, "push");
     vaiAoComeco();
@@ -382,9 +396,14 @@
     if (e.nome && !voltando) rolaPara(e.id);
 
     // o Basecoat (tabs) cuida do clique e das setas; antes dele (captura), guarda se a barra estava presa e se foi o teclado
-    grupo.addEventListener("click", function () { estava = presa(); }, true);
+    // (site-d-r14) o Basecoat troca os painéis antes de nós: com a barra presa, as abas seguram a altura já aqui (segura())
+    grupo.addEventListener("click", function (ev) {
+      estava = presa();
+      var t = ev.target.closest ? ev.target.closest('[role="tab"], .abas-passo') : null;
+      if (estava && t && grupo.contains(t)) segura();
+    }, true);
     grupo.addEventListener("keydown", function (ev) {
-      if (/^(Arrow(Left|Right)|Home|End)$/.test(ev.key) && ev.target.getAttribute && ev.target.getAttribute("role") === "tab") { teclado = true; estava = presa(); }
+      if (/^(Arrow(Left|Right)|Home|End)$/.test(ev.key) && ev.target.getAttribute && ev.target.getAttribute("role") === "tab") { teclado = true; estava = presa(); if (estava) segura(); }
     }, true);
     function depois(ev, modo) {
       var t = ev.target.closest ? ev.target.closest('[role="tab"]') : null;
@@ -394,6 +413,7 @@
       if (!visivel(n)) return;
       // clicar na aba que já está aberta leva ao começo dela (útil no fim de uma lista comprida)
       if (n === atual) { if (ev.type === "click" && estava) vaiAoComeco(); return; }
+      if (estava) segura();
       mostra(n);
       poeEndereco(n, modo);
       if (estava) vaiAoComeco();
@@ -411,6 +431,7 @@
         var vis = ordem.filter(visivel), i = vis.indexOf(atual), k = ev.key;
         var n = k === "Home" ? vis[0] : k === "End" ? vis[vis.length - 1] : vis[(i + (k === "ArrowRight" ? 1 : -1) + vis.length) % vis.length];
         ev.preventDefault();
+        if (estava) segura();
         mostra(n);
         abas[n].focus();
         poeEndereco(n, "replace");
@@ -426,7 +447,7 @@
       var x = doEndereco();
       if (x.id && !x.nome) return;  // um id fora das abas (ex.: #procurar, #conteudo): não muda de aba
       var n = x.nome || primeira(), est = presa();
-      if (n !== atual) { mostra(n); if (est) vaiAoComeco(); }
+      if (n !== atual) { if (est) segura(); mostra(n); if (est) vaiAoComeco(); }
       // um link "#..." dentro da página rola até o lugar; o Voltar e o Avançar só trocam a aba
       if (x.nome && ev.type === "hashchange" && Date.now() - ultimoPop > 100) rolaPara(x.id);
     }

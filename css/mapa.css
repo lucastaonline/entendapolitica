@@ -66,7 +66,7 @@ body.mapa-pag { height: 100vh; height: 100dvh; overflow: hidden; display: grid; 
 .lote .w { left: 0; top: 0; width: 16px; height: 220px; transform-origin: 0 50%; transform: rotateY(-90deg); background: #d2c39f; }
 .em-pe { position: absolute; left: 0; top: 0; transform-style: preserve-3d; transform-origin: 0 0;
   transform: translateZ(calc(16px + var(--lift, 0px))) rotateX(-90deg) scale3d(var(--esc), var(--esc), var(--esc)) translateY(calc(-1 * var(--base)));
-  transition: transform .4s cubic-bezier(.3, 1.4, .5, 1); }
+  transition: transform var(--dur-longa) cubic-bezier(.3, 1.4, .5, 1); }
 .lugar:hover .em-pe, .lugar:focus-within .em-pe { --lift: 22px; }
 .lugar:hover .lote .t, .lugar:focus-within .lote .t { background: #fff3c4; }
 .placa {

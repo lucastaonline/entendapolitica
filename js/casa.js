@@ -418,7 +418,7 @@
       // depois de "Mostrar mais", o foco vai para a primeira pessoa nova
       if (focarDe != null) {
         var cards = grade.querySelectorAll(".pessoa-card");
-        if (cards[focarDe]) cards[focarDe].focus();
+        if (cards[focarDe]) EP.focaSuave(cards[focarDe]);
       }
     }
     var t = null;
@@ -473,7 +473,7 @@
         var novos = el.querySelectorAll(".barra-partido[hidden]");
         [].forEach.call(novos, function (x) { x.hidden = false; });
         mp.remove();
-        if (novos[0]) novos[0].focus();
+        if (novos[0]) EP.focaSuave(novos[0]);
         return;
       }
       if (e.target.closest(".ver-mais")) {

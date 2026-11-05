@@ -92,6 +92,11 @@ html.alto-contraste .abas-grupo .abas-lista::before, html.alto-contraste .abas-g
    js/abas.js leva a pessoa ao começo das abas; se a aba nova for curta, a página só não rola tanto (o fim dela fica à vista) */
 .abas-grupo > [role="tabpanel"] { font-size: inherit; line-height: inherit; }
 .abas-grupo > [role="tabpanel"][hidden] { display: none; }
+/* (site-d-r14) a aba que abre chega com um deslize curto de 8 px (só transform: o texto nunca fica apagado, nem por um instante;
+   sem "menos movimento") */
+@keyframes ep-aba-entra { from { transform: translateY(8px); } to { transform: none; } }
+.abas-grupo > [role="tabpanel"]:not([hidden]) { animation: ep-aba-entra var(--dur-media, 250ms) var(--curva, ease-out) both; }
+html.sem-movimento .abas-grupo > [role="tabpanel"] { animation: none !important; }
 /* a seção já não precisa do tracejado de cima (a barra separa) */
 .abas-ep .bloco { border-top: 0; padding-top: 22px; padding-bottom: 22px; }
 .abas-ep .sub { margin-top: 16px; }

@@ -19,6 +19,10 @@
   --raio: 20px;
 }
 * { box-sizing: border-box; }
+/* movimento (site-d-r14, pedido do Lucas: "o site suave por inteiro"): as mesmas durações e a mesma curva no site todo; nenhuma
+   transição passa de 300 ms (a câmera do mapa do Entenda é a exceção: é o passeio entre as paradas). "Menos movimento" (a
+   opção do site e a do sistema) desliga tudo, logo abaixo e no fim deste arquivo */
+:root { --dur-curta: 150ms; --dur-media: 250ms; --dur-longa: 300ms; --curva: cubic-bezier(.2, .8, .2, 1); }
 html { font-size: calc(20px * var(--escala)); scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 body {
   margin: 0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
@@ -157,7 +161,7 @@ select.filtro { appearance: auto; }
 .rodape a { font-weight: 700; }
 
 /* ---------- animação ao rolar ---------- */
-.rev { opacity: 0; transform: translateY(34px); transition: opacity .7s ease, transform .7s cubic-bezier(.2, .8, .2, 1); transition-delay: calc(var(--i, 0) * 110ms); }
+.rev { opacity: 0; transform: translateY(16px); transition: opacity var(--dur-media) ease, transform var(--dur-media) var(--curva); transition-delay: calc(var(--i, 0) * 50ms); }
 .rev.visivel { opacity: 1; transform: none; }
 .rev.pop { transform: scale(.85); }
 .rev.pop.visivel { transform: none; }
@@ -239,6 +243,14 @@ html.sem-movimento *, html.sem-movimento *::before, html.sem-movimento *::after 
   transition-duration: .001ms !important; transition-delay: 0s !important; scroll-behavior: auto !important;
 }
 html.sem-movimento .rev, html.sem-movimento .r3d { opacity: 1 !important; transform: none !important; }
+/* (site-d-r14) a preferência do sistema vale o mesmo que a opção do site: tudo na hora */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0s !important; animation-delay: 0s !important; animation-iteration-count: 1 !important;
+    transition-duration: 0s !important; transition-delay: 0s !important; scroll-behavior: auto !important;
+  }
+  .rev, .r3d { opacity: 1 !important; transform: none !important; }
+}
 
 /* mais espaço no texto (WCAG 1.4.12) */
 html.espacado body { letter-spacing: .06em; word-spacing: .16em; }

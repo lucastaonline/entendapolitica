@@ -80,6 +80,54 @@
     EP.a11y("escala", ESCALAS[(i + 1) % ESCALAS.length]);
   };
   aplicaA11y();
+  if (mqMovimento && mqMovimento.addEventListener) mqMovimento.addEventListener("change", aplicaA11y);
+
+  // ---------------------------------------------------------------- rolagem suave (site-d-r14, pedido do Lucas)
+  // EP.rolaJanela(top[, fim]): leva a página até "top" deslizando (~260 ms, desacelerando no fim). Longe demais (mais de uma tela
+  // e meia), salta até perto e desliza só o último trecho: a página nunca "voa". Com "menos movimento" (a opção do site ou a do
+  // sistema), vai na hora. Para se a pessoa rolar, tocar ou usar o teclado. A rolagem é feita aqui (e não com o "smooth" do
+  // navegador) para durar sempre o mesmo e terminar no lugar certo mesmo se a página mudar de altura no caminho.
+  var rolagem = null;
+  function paraRolagem() { if (rolagem) { cancelAnimationFrame(rolagem.id); rolagem = null; } }
+  ["wheel", "touchstart", "keydown", "mousedown"].forEach(function (t) { window.addEventListener(t, paraRolagem, { passive: true, capture: true }); });
+  EP.rolando = function () { return !!rolagem; };
+  EP.rolaJanela = function (top, fim) {
+    paraRolagem();
+    var raiz = document.documentElement, max = Math.max(0, raiz.scrollHeight - innerHeight);
+    top = Math.max(0, Math.min(max, Math.round(top)));
+    var y0 = window.scrollY, d = top - y0;
+    if (EP.reduzido || Math.abs(d) < 2) {
+      window.scrollTo({ top: top, behavior: "instant" });
+      if (fim) fim();
+      return;
+    }
+    var longe = innerHeight * 1.5;
+    if (Math.abs(d) > longe) { y0 = top - (d > 0 ? 1 : -1) * innerHeight * 0.6; window.scrollTo({ top: y0, behavior: "instant" }); d = top - y0; }
+    var t0 = performance.now(), dur = 260, r = { id: 0 };
+    rolagem = r;
+    function passo(t) {
+      if (rolagem !== r) return;
+      var k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+      window.scrollTo({ top: y0 + d * e, behavior: "instant" });
+      if (k < 1) r.id = requestAnimationFrame(passo);
+      else { rolagem = null; if (fim) fim(); }
+    }
+    r.id = requestAnimationFrame(passo);
+  };
+  // EP.rolaAte(el[, bloco]): o mesmo, até um elemento, descontando o que fica preso no topo (cabeçalho, barra das abas e a faixa)
+  EP.rolaAte = function (el, bloco, fim) {
+    if (!el || !el.getClientRects().length) return;
+    var r = el.getBoundingClientRect(), fixo = EP.topoFixo ? EP.topoFixo() : ((document.querySelector("header.topo") || { offsetHeight: 0 }).offsetHeight);
+    var y = bloco === "center" ? r.top + window.scrollY - (innerHeight + fixo - r.height) / 2 : r.top + window.scrollY - fixo - 12;
+    EP.rolaJanela(y, fim);
+  };
+  // EP.focaSuave(el): põe o foco sem o salto do navegador; se o elemento estiver fora da tela, a página desliza até ele
+  EP.focaSuave = function (el) {
+    if (!el) return;
+    try { el.focus({ preventScroll: true }); } catch (e) { el.focus(); }
+    var r = el.getBoundingClientRect(), fixo = EP.topoFixo ? EP.topoFixo() : 60;
+    if (r.top < fixo || r.bottom > innerHeight) EP.rolaAte(el, "center");
+  };
 
   // ---------------------------------------------------------------- texto
   EP.esc = function (s) {
@@ -1766,11 +1814,12 @@
       if (a) {
         var r = a.getBoundingClientRect(), cobre = EP.topoFixo ? EP.topoFixo() + 8 : 70;  // com abas, a barra presa no topo também cobre
         // voltando da memória do navegador, a página já está onde estava: só devolve o foco
-        if (!daMemoria && (r.top < cobre || r.bottom > innerHeight)) a.scrollIntoView({ block: "center", behavior: "instant" });
+        // (site-d-r14) deslizando até o cartão; voltando da memória, a página já está no lugar (nada se mexe)
+        if (!daMemoria && (r.top < cobre || r.bottom > innerHeight)) EP.rolaAte(a, "center");
         a.focus({ preventScroll: true });
       } else if (!daMemoria) {
         var s = v.secao && document.getElementById(v.secao);
-        if (s) s.scrollIntoView({ behavior: "instant" });
+        if (s) EP.rolaAte(s);
         else if (v.y) window.scrollTo({ top: v.y, behavior: "instant" });
       }
     }

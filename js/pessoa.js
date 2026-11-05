@@ -742,7 +742,7 @@
     }
     document.getElementById("mais-votos").innerHTML = lista.length > vis.length ? '<button type="button" class="btn claro" id="ver-mais-votos">' +
       EP.tr("Mostrar mais votações", "Show more votes") + ' <span aria-hidden="true">▾</span></button>' : "";
-    if (focarDe != null && el.children[focarDe]) el.children[focarDe].focus();
+    if (focarDe != null && el.children[focarDe]) EP.focaSuave(el.children[focarDe]);
   }
 
   // ---------------------------------------------------------------- gastos, comissões, executivo

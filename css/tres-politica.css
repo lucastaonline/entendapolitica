@@ -149,7 +149,7 @@
 .plenario { position: relative; width: 100%; max-width: var(--max, 340px); aspect-ratio: 1000 / 560; margin: 0 auto; transform: perspective(800px) rotateX(38deg); }
 .plenario i { position: absolute; width: var(--tam, 14px); height: var(--tam, 14px); margin: calc(var(--tam, 14px) / -2) 0 0 calc(var(--tam, 14px) / -2);
   border-radius: 30% 30% 20% 20%; background: #d8cfbd; box-shadow: 0 2px 0 #b8ad96;
-  transition: background .4s, transform .4s; transition-delay: calc(var(--k, 0) * 10ms); }
+  transition: background var(--dur-media), transform var(--dur-media); transition-delay: calc(var(--k, 0) * 10ms); }
 .plenario.cheio i { background: var(--cor, #1f3a5f); box-shadow: 0 2px 0 rgba(0, 0, 0, .35); transform: translateY(-2px); }
 .plenario.cheio i.aceso { background: #f2b705; box-shadow: 0 2px 0 #b98a00; transform: translateY(-5px); transition-delay: 0s; }
 .plenario.tem-aceso.cheio i:not(.aceso) { background: #c9cfd8; box-shadow: 0 1px 0 #a9b1bd; transform: none; transition-delay: 0s; }
@@ -329,7 +329,7 @@ html.sem-movimento .cena-urna-boletim .bu-sai { animation: none; opacity: 1; tra
 .degrau-e.aceso { --c1: #e08a00; --c2: #c27600; --c3: #a35f00; --c4: #ffd34d; }
 .degrau-e.feito { --c4: #9fd3ae; }
 .escada3d .ficha { position: absolute; left: 0; top: 0; font-size: 46px; line-height: 1; transform: translate3d(var(--fx), var(--fy), 40px);
-  transition: transform .55s cubic-bezier(.3, 1.6, .5, 1); filter: drop-shadow(0 6px 5px rgba(0, 0, 0, .25)); }
+  transition: transform var(--dur-longa) cubic-bezier(.3, 1.6, .5, 1); filter: drop-shadow(0 6px 5px rgba(0, 0, 0, .25)); }
 @media (max-width: 760px) {
   .cena-escada { height: 240px; }
   .cena-predio .torre3d, .cena-predio .palanque3d { scale: .72; }

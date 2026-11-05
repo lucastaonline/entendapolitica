@@ -1,0 +1,1 @@
+{"name":"montar-basecoat","private":true,"version":"1.0.0","dependencies":{"@tailwindcss/cli":"4.3.3","basecoat-css":"1.1.0","lucide-static":"1.65.0","tailwindcss":"4.3.3"}}

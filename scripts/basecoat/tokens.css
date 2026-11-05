@@ -1,0 +1,67 @@
+/* ====== Entenda Política: tokens do Basecoat (visual do shadcn) ligados às cores e letras do site ======
+   Copiado de basecoat-css/dist/base/base.css (MIT) e trocado: as cores apontam para as variáveis do site (css/base.css),
+   o raio é maior (lúdico) e a letra é a do site. Sem o "@layer base" global do Basecoat (ele mudaria a borda e o contorno de
+   todo elemento da página): o pedaço que importa vale só dentro dos componentes (escopo.css). */
+:root {
+  --radius: 0.75rem;
+  --background: var(--bg, #fdf8ef);
+  --foreground: var(--ink, #1d2430);
+  --card: #fff;
+  --card-foreground: var(--ink, #1d2430);
+  --popover: #fff;
+  --popover-foreground: var(--ink, #1d2430);
+  --primary: var(--brand, #1f3a5f);
+  --primary-foreground: #fff;
+  --secondary: #eef3fa;
+  --secondary-foreground: var(--brand, #1f3a5f);
+  /* "muted" do Basecoat é um fundo; a letra apagada é o --muted do site (7,6:1 no creme) */
+  --muted-bg: #f3efe6;
+  --muted-foreground: #46505d;
+  --accent: #fff3d6;
+  --accent-foreground: var(--ink, #1d2430);
+  --destructive: #b42318;
+  /* bordas: a de enfeite (clara) e a de campos e botões de contorno (3:1 com o branco, WCAG 1.4.11) */
+  --border: #e3dccd;
+  --input: #8f8166;
+  --ring: var(--brand, #1f3a5f);
+  --scrollbar-track: transparent;
+  --scrollbar-thumb: var(--border);
+  --chevron-down-icon: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%2346505d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>');
+  --chevron-down-icon-50: var(--chevron-down-icon);
+  --check-icon: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%231f3a5f" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>');
+}
+/* alto contraste (menu Leitura): preto no branco, bordas pretas, destaque amarelo */
+html.alto-contraste {
+  --background: #fff; --foreground: #000; --card: #fff; --popover: #fff; --popover-foreground: #000;
+  --primary: #002a6b; --primary-foreground: #fff; --secondary: #fff; --secondary-foreground: #000;
+  --muted-bg: #fff; --muted-foreground: #000; --accent: #ffdd00; --accent-foreground: #000;
+  --border: #000; --input: #000; --ring: #000;
+}
+
+@theme {
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji";
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-4xl: 2rem;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted-bg);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+}

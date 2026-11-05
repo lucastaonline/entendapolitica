@@ -1,0 +1,27 @@
+/* ====== Um "reset" pequeno, só dentro dos componentes do Basecoat ======
+   O Basecoat foi feito para o "preflight" do Tailwind (o reset global). Aqui ele NÃO entra: mudaria títulos, listas, links,
+   textos e desenhos 3D do site inteiro. Em vez disso, o mínimo que os componentes precisam vale só dentro deles. */
+@layer base {
+  /* nas abas, na janela e nos blocos que abrem, o conteúdo é o do site (listas, links, textos): o reset vale só para a barra das
+     abas, o cabeçalho da janela e a linha que abre o bloco */
+  :where(.btn, .input, .badge, .dropdown-menu, .popover, .combobox, .tabs, .dialog, .accordion, .card, .kbd),
+  :where(.dropdown-menu, .popover, .combobox, .card) :where(*, ::before, ::after),
+  :where(.tabs > [role="tablist"], .tabs > [role="tablist"] *),
+  :where(.dialog) :where(*:not(.janela-corpo, .janela-corpo *)),
+  :where(.accordion > details, .accordion > details > summary, .accordion > details > summary *) {
+    box-sizing: border-box;
+    border: 0 solid var(--border);
+  }
+  :where(.btn, .input, .combobox input, .dropdown-menu button, .popover button, .tabs [role="tab"], .dialog button) {
+    font: inherit;
+    color: inherit;
+    letter-spacing: inherit;
+    background-color: transparent;
+    margin: 0;
+  }
+  :where(.btn, .dropdown-menu button, .popover button, .tabs [role="tab"], .dialog button, [role="option"]) { cursor: pointer; }
+  :where(.dropdown-menu, .popover, .combobox) :where(ul, ol, menu) { list-style: none; margin: 0; padding: 0; }
+  :where(.dropdown-menu, .popover, .combobox) :where(a) { color: inherit; text-decoration: inherit; }
+  :where(.dialog) { margin: 0; border: 0; padding: 0; }
+  :where(.input[type="checkbox"][role="switch"]) { appearance: none; margin: 0; font: inherit; }
+}

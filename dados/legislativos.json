@@ -14,10 +14,10 @@
     "veiculo": "Assembleia Legislativa do Paraná (Alep)",
     "titulo": "Deputados estaduais em exercício (página oficial)",
     "url": "https://www.assembleia.pr.leg.br/deputados/conheca",
-    "data": "2026-11-13"
+    "data": "2026-11-14"
    },
    "ok": true,
-   "conferido": "2026-11-13"
+   "conferido": "2026-11-14"
   },
   "AL": {
    "casa": "ALE-AL",
@@ -33,10 +33,10 @@
     "veiculo": "Assembleia Legislativa de Alagoas (ALE-AL)",
     "titulo": "Parlamentares no exercício do mandato (20ª Legislatura, página oficial)",
     "url": "https://www.al.al.leg.br/processo-legislativo/20-a-legislatura",
-    "data": "2026-11-13"
+    "data": "2026-11-14"
    },
    "ok": true,
-   "conferido": "2026-11-13"
+   "conferido": "2026-11-14"
   },
   "BA": {
    "casa": "Alba",
@@ -71,10 +71,10 @@
     "veiculo": "Assembleia Legislativa do Ceará (Alece)",
     "titulo": "Deputados em exercício (página oficial)",
     "url": "https://www.al.ce.gov.br/deputados",
-    "data": "2026-11-13"
+    "data": "2026-11-14"
    },
    "ok": true,
-   "conferido": "2026-11-13"
+   "conferido": "2026-11-14"
   },
   "MA": {
    "casa": "Alema",
@@ -90,10 +90,10 @@
     "veiculo": "Assembleia Legislativa do Maranhão (Alema)",
     "titulo": "Parlamentares em atividade na 20ª legislatura (AlemaLegis)",
     "url": "https://alemalegis.al.ma.leg.br/sapl/protocol/parliamentary/research",
-    "data": "2026-11-13"
+    "data": "2026-11-14"
    },
    "ok": true,
-   "conferido": "2026-11-13"
+   "conferido": "2026-11-14"
   },
   "PB": {
    "casa": "ALPB",
@@ -109,10 +109,10 @@
     "veiculo": "Assembleia Legislativa da Paraíba (ALPB)",
     "titulo": "Deputados em exercício na 20ª legislatura (SAPL, dados abertos)",
     "url": "https://sapl.al.pb.leg.br/parlamentar/",
-    "data": "2026-11-13"
+    "data": "2026-11-14"
    },
    "ok": true,
-   "conferido": "2026-11-13"
+   "conferido": "2026-11-14"
   },
   "PE": {
    "casa": "Alepe",
@@ -147,10 +147,10 @@
     "veiculo": "Assembleia Legislativa do Piauí (Alepi)",
     "titulo": "Deputados em exercício na 20ª legislatura (SAPL, dados abertos)",
     "url": "https://sapl.al.pi.leg.br/parlamentar/",
-    "data": "2026-11-13"
+    "data": "2026-11-14"
    },
    "ok": true,
-   "conferido": "2026-11-13"
+   "conferido": "2026-11-14"
   },
   "RN": {
    "casa": "ALRN",
@@ -168,8 +168,9 @@
     "url": "https://transparencialegislativa.al.rn.leg.br/",
     "data": "2026-11-13"
    },
-   "ok": true,
-   "conferido": "2026-11-13"
+   "ok": false,
+   "conferido": "2026-11-13",
+   "erro": "RuntimeError: Falha ao baixar https://api-transparencialegislativa.al.rn.leg.br/elegis-api-transp-legislativa/parlamentar: HTTP Error 500: Internal Server Error"
   },
   "SE": {
    "casa": "Alese",
@@ -244,8 +245,9 @@
     "url": "https://dadosabertos.almg.gov.br/api/v2/deputados/em_exercicio?formato=json",
     "data": "2026-11-13"
    },
-   "ok": true,
-   "conferido": "2026-11-13"
+   "ok": false,
+   "conferido": "2026-11-13",
+   "erro": "RuntimeError: o robots.txt de dadosabertos.almg.gov.br não deixa robôs lerem /api/v2/deputados/em_exercicio?formato=json"
   },
   "RJ": {
    "casa": "Alerj",
@@ -261,10 +263,10 @@
     "veiculo": "Assembleia Legislativa do Estado do Rio de Janeiro (Alerj)",
     "titulo": "Deputados da legislatura atual (página oficial \"Quem são\")",
     "url": "https://www.alerj.rj.gov.br/Deputados/QuemSao",
-    "data": "2026-11-13"
+    "data": "2026-11-14"
    },
    "ok": true,
-   "conferido": "2026-11-13"
+   "conferido": "2026-11-14"
   },
   "RS": {
    "casa": "ALRS",
@@ -288,7 +290,7 @@
   "SC": {
    "casa": "Alesc",
    "membros": 40,
-   "propostas": 2071,
+   "propostas": 2128,
    "cobertura": {
     "lista": true,
     "propostas": true,
@@ -299,10 +301,10 @@
     "veiculo": "Assembleia Legislativa do Estado de Santa Catarina (Alesc)",
     "titulo": "Deputados da legislatura atual (página oficial)",
     "url": "https://www.alesc.sc.gov.br/deputados/",
-    "data": "2026-11-13"
+    "data": "2026-11-14"
    },
    "ok": true,
-   "conferido": "2026-11-13"
+   "conferido": "2026-11-14"
   },
   "SP": {
    "casa": "Alesp",
@@ -320,8 +322,9 @@
     "url": "https://www.al.sp.gov.br/dados-abertos/dataset/41",
     "data": "2026-11-13"
    },
-   "ok": true,
-   "conferido": "2026-11-13"
+   "ok": false,
+   "conferido": "2026-11-13",
+   "erro": "RuntimeError: Falha ao baixar https://www.al.sp.gov.br/repositorioDados/deputados/deputados.xml: HTTP Error 503: Service Unavailable"
   },
   "AC": {
    "casa": "Aleac",
@@ -337,7 +340,7 @@
     "veiculo": "Assembleia Legislativa do Acre (Aleac)",
     "titulo": "Deputados em exercício na 16ª legislatura (SAPL, dados abertos)",
     "url": "https://sapl.al.ac.leg.br/parlamentar/",
-    "data": "2026-11-13"
+    "data": "2026-11-14"
    },
    "legislatura": {
     "numero": 16,
@@ -345,7 +348,7 @@
     "fim": "2027-01-31"
    },
    "ok": true,
-   "conferido": "2026-11-13"
+   "conferido": "2026-11-14"
   },
   "AM": {
    "casa": "Aleam",
@@ -394,8 +397,9 @@
     "inicio": "2023-02-01",
     "fim": "2027-01-31"
    },
-   "ok": true,
-   "conferido": "2026-11-13"
+   "ok": false,
+   "conferido": "2026-11-13",
+   "erro": "RobotsFechado: robots.txt de portal.al.go.leg.br sem resposta (<urlopen error [Errno -3] Temporary failure in name resolution>); o site não é lido nesta rodada"
   },
   "MS": {
    "casa": "Alems",
@@ -411,14 +415,14 @@
     "veiculo": "Assembleia Legislativa de Mato Grosso do Sul (Alems)",
     "titulo": "Deputados em exercício (lista oficial do site da Alems)",
     "url": "https://al.ms.gov.br/Partidos/Lista",
-    "data": "2026-11-13"
+    "data": "2026-11-14"
    },
    "legislatura": {
     "inicio": "2023-02-01",
     "fim": "2027-01-31"
    },
    "ok": true,
-   "conferido": "2026-11-13"
+   "conferido": "2026-11-14"
   },
   "MT": {
    "casa": "ALMT",
@@ -434,14 +438,14 @@
     "veiculo": "Assembleia Legislativa de Mato Grosso (ALMT)",
     "titulo": "Deputados em exercício (página oficial)",
     "url": "https://www.al.mt.gov.br/parlamento/deputados",
-    "data": "2026-11-13"
+    "data": "2026-11-14"
    },
    "legislatura": {
     "inicio": "2023-02-01",
     "fim": "2027-01-31"
    },
    "ok": true,
-   "conferido": "2026-11-13"
+   "conferido": "2026-11-14"
   },
   "PA": {
    "casa": "Alepa",
@@ -457,14 +461,14 @@
     "veiculo": "Assembleia Legislativa do Pará (Alepa)",
     "titulo": "Deputados em exercício (página oficial)",
     "url": "https://www.alepa.pa.gov.br/Home/Page/Deputados",
-    "data": "2026-11-13"
+    "data": "2026-11-14"
    },
    "legislatura": {
     "inicio": "2023-02-01",
     "fim": "2027-01-31"
    },
    "ok": true,
-   "conferido": "2026-11-13"
+   "conferido": "2026-11-14"
   },
   "RO": {
    "casa": "Ale-RO",
@@ -918,7 +922,7 @@
     "veiculo": "Câmara Municipal de Porto Velho",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.portovelho.ro.leg.br/parlamentar/",
-    "data": "2026-11-13"
+    "data": "2026-11-14"
    },
    "votacoes": 1257,
    "prefeito": {
@@ -926,10 +930,10 @@
     "leis": 272,
     "vetos": 182
    },
-   "requisicoes": 12,
+   "requisicoes": 10,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-13"
+   "conferido": "2026-11-14"
   },
   "1100254": {
    "casa": "CMPM",
@@ -1654,7 +1658,7 @@
     "veiculo": "Câmara Municipal de Rio Branco",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.riobranco.ac.leg.br/parlamentar/",
-    "data": "2026-11-13"
+    "data": "2026-11-14"
    },
    "votacoes": 649,
    "prefeito": {
@@ -1662,10 +1666,10 @@
     "leis": null,
     "vetos": 1
    },
-   "requisicoes": 18,
+   "requisicoes": 15,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-13"
+   "conferido": "2026-11-14"
   },
   "1300680": {
    "casa": "CMBVR",
@@ -1973,17 +1977,17 @@
     "veiculo": "Câmara Municipal de Boa Vista",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.boavista.rr.leg.br/parlamentar/",
-    "data": "2026-11-13"
+    "data": "2026-11-14"
    },
    "prefeito": {
     "propostas": 20,
     "leis": 88,
     "vetos": 71
    },
-   "requisicoes": 35,
+   "requisicoes": 32,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-13"
+   "conferido": "2026-11-14"
   },
   "1400472": {
    "casa": "CMR",
@@ -2057,12 +2061,12 @@
     "veiculo": "Câmara Municipal de Belém",
     "titulo": "Vereadores (portal oficial)",
     "url": "https://www.cmb.pa.gov.br/vereadores",
-    "data": "2026-11-13"
+    "data": "2026-11-14"
    },
    "semTse": 0,
-   "requisicoes": 24,
+   "requisicoes": 7,
    "ok": true,
-   "conferido": "2026-11-13"
+   "conferido": "2026-11-14"
   },
   "1502152": {
    "casa": "CMCC",
@@ -4696,7 +4700,7 @@
    "casa": "CMFor",
    "nome": "Câmara Municipal de Fortaleza",
    "membros": 43,
-   "propostas": 1079,
+   "propostas": 1081,
    "cobertura": {
     "lista": true,
     "propostas": true,
@@ -4707,18 +4711,17 @@
     "veiculo": "Câmara Municipal de Fortaleza",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.fortaleza.ce.leg.br/parlamentar/",
-    "data": "2026-11-12"
+    "data": "2026-11-14"
    },
    "prefeito": {
     "propostas": 109,
     "leis": 228,
     "vetos": 52
    },
-   "requisicoes": 16,
+   "requisicoes": 17,
    "semTse": 0,
-   "ok": false,
-   "conferido": "2026-11-12",
-   "erro": "RuntimeError: o servidor pediu para esperar (HTTP 503); fica para a próxima rodada"
+   "ok": true,
+   "conferido": "2026-11-14"
   },
   "2305233": {
    "casa": "CMH",
@@ -5441,7 +5444,7 @@
     "veiculo": "Câmara Municipal de Natal",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.natal.rn.leg.br/parlamentar/",
-    "data": "2026-11-13"
+    "data": "2026-11-14"
    },
    "prefeito": {
     "propostas": 87,
@@ -5451,7 +5454,7 @@
    "requisicoes": 25,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-13"
+   "conferido": "2026-11-14"
   },
   "2408201": {
    "casa": "CMNF",
@@ -6509,7 +6512,7 @@
     "veiculo": "Câmara Municipal de João Pessoa",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.joaopessoa.pb.leg.br/parlamentar/",
-    "data": "2026-11-13"
+    "data": "2026-11-14"
    },
    "votacoes": 5,
    "prefeito": {
@@ -6521,7 +6524,7 @@
    "semTse": 0,
    "vereadoresComGastos": 28,
    "ok": true,
-   "conferido": "2026-11-13"
+   "conferido": "2026-11-14"
   },
   "2508109": {
    "casa": "CML",
@@ -7860,7 +7863,7 @@
     "veiculo": "Câmara Municipal do Recife",
     "titulo": "SAGL: matérias e reuniões plenárias (API pública)",
     "url": "https://publico.recife.pe.leg.br/@@materias",
-    "data": "2026-11-13"
+    "data": "2026-11-14"
    },
    "votacoes": 212,
    "prefeito": {
@@ -7870,7 +7873,7 @@
    },
    "requisicoes": 6,
    "ok": true,
-   "conferido": "2026-11-13"
+   "conferido": "2026-11-14"
   },
   "2611705": {
    "casa": "CMRA",
@@ -9285,7 +9288,7 @@
     "veiculo": "Câmara Municipal de Salvador",
     "titulo": "Vereadores - 20ª Legislatura (portal oficial)",
     "url": "https://www.cms.ba.gov.br/vereadores",
-    "data": "2026-11-13"
+    "data": "2026-11-14"
    },
    "prefeito": {
     "propostas": 36,
@@ -9293,9 +9296,9 @@
     "vetos": null
    },
    "semTse": 0,
-   "requisicoes": 27,
+   "requisicoes": 42,
    "ok": true,
-   "conferido": "2026-11-13"
+   "conferido": "2026-11-14"
   },
   "2929404": {
    "casa": "CMSMM",
@@ -9663,17 +9666,17 @@
     "veiculo": "Câmara Municipal de Belo Horizonte",
     "titulo": "Vereadores em exercício (portal oficial)",
     "url": "https://www.cmbh.mg.gov.br/vereadores",
-    "data": "2026-11-13"
+    "data": "2026-11-14"
    },
    "prefeito": {
     "propostas": 60,
     "leis": null,
     "vetos": null
    },
-   "requisicoes": 26,
+   "requisicoes": 22,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-13"
+   "conferido": "2026-11-14"
   },
   "3106903": {
    "casa": "CMB",
@@ -14432,8 +14435,9 @@
    },
    "requisicoes": 27,
    "semTse": 0,
-   "ok": true,
-   "conferido": "2026-11-13"
+   "ok": false,
+   "conferido": "2026-11-13",
+   "erro": "RuntimeError: robots.txt de https://www.camara.rio não respondeu (URLError); nada é lido desse servidor nesta rodada"
   },
   "3304805": {
    "casa": "CMSF",
@@ -16199,7 +16203,7 @@
    "casa": "CMSP",
    "nome": "Câmara Municipal de São Paulo",
    "membros": 55,
-   "propostas": 2692,
+   "propostas": 2694,
    "cobertura": {
     "lista": true,
     "propostas": true,
@@ -16210,7 +16214,7 @@
     "veiculo": "Câmara Municipal de São Paulo",
     "titulo": "Vereadores em exercício (portal oficial; SPLegis: ocupação dos gabinetes)",
     "url": "https://www.saopaulo.sp.leg.br/vereadores/membros/",
-    "data": "2026-11-13"
+    "data": "2026-11-14"
    },
    "votacoes": 45,
    "vereadoresComGastos": 54,
@@ -16222,7 +16226,7 @@
    "requisicoes": 130,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-13"
+   "conferido": "2026-11-14"
   },
   "3551009": {
    "casa": "CMSV",
@@ -23383,13 +23387,13 @@
     "veiculo": "Câmara Municipal de Goiânia",
     "titulo": "Parlamentares da 20ª Legislatura em exercício (portal oficial)",
     "url": "https://www.goiania.go.leg.br/institucional/parlamentares",
-    "data": "2026-11-13"
+    "data": "2026-11-14"
    },
    "vereadoresComGastos": 37,
    "requisicoes": 0,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-13"
+   "conferido": "2026-11-14"
   },
   "5210109": {
    "casa": "CMI",

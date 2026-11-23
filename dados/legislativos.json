@@ -590,7 +590,7 @@
     "veiculo": "Câmara Municipal de Alta Floresta D'Oeste",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.altaflorestadoeste.ro.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "votacoes": 274,
    "prefeito": {
@@ -598,10 +598,10 @@
     "leis": null,
     "vetos": null
    },
-   "requisicoes": 5,
+   "requisicoes": 7,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "1100031": {
    "casa": "CMC",
@@ -673,18 +673,18 @@
     "veiculo": "Câmara Municipal de Colorado do Oeste",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.coloradodooeste.ro.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "votacoes": 4,
    "prefeito": {
     "propostas": 138,
-    "leis": 138,
+    "leis": 140,
     "vetos": 2
    },
    "requisicoes": 7,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "1100072": {
    "casa": "CMC",
@@ -773,7 +773,7 @@
    "casa": "CMGM",
    "nome": "Câmara Municipal de Guajará-Mirim",
    "membros": 13,
-   "propostas": 97,
+   "propostas": 98,
    "cobertura": {
     "lista": true,
     "propostas": true,
@@ -784,18 +784,18 @@
     "veiculo": "Câmara Municipal de Guajará-Mirim",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.guajaramirim.ro.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "votacoes": 158,
    "prefeito": {
-    "propostas": 266,
-    "leis": 302,
+    "propostas": 269,
+    "leis": 303,
     "vetos": null
    },
-   "requisicoes": 8,
+   "requisicoes": 10,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "1100114": {
    "casa": "CMJ",
@@ -856,7 +856,7 @@
    "casa": "CMRNBO",
    "nome": "Câmara Municipal de Nova Brasilândia D'Oeste",
    "membros": 9,
-   "propostas": 2,
+   "propostas": 3,
    "cobertura": {
     "lista": true,
     "propostas": true,
@@ -867,24 +867,24 @@
     "veiculo": "Câmara Municipal de Nova Brasilândia D'Oeste",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.novabrasilandiadoeste.ro.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
-   "votacoes": 189,
+   "votacoes": 192,
    "prefeito": {
-    "propostas": 199,
+    "propostas": 202,
     "leis": null,
-    "vetos": null
+    "vetos": 1
    },
-   "requisicoes": 9,
+   "requisicoes": 14,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "1100155": {
    "casa": "CMETOPO",
    "nome": "Câmara Municipal de Ouro Preto do Oeste",
    "membros": 11,
-   "propostas": 52,
+   "propostas": 53,
    "cobertura": {
     "lista": true,
     "propostas": true,
@@ -895,18 +895,18 @@
     "veiculo": "Câmara Municipal de Ouro Preto do Oeste",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.ouropretodooeste.ro.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
-   "votacoes": 580,
+   "votacoes": 586,
    "prefeito": {
     "propostas": 239,
     "leis": 238,
     "vetos": 1
    },
-   "requisicoes": 9,
+   "requisicoes": 11,
    "semTse": 1,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "1100205": {
    "casa": "CMPV",
@@ -1001,18 +1001,18 @@
     "veiculo": "Câmara Municipal de Rolim de Moura",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.rolimdemoura.ro.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
-   "votacoes": 255,
+   "votacoes": 258,
    "prefeito": {
-    "propostas": 363,
-    "leis": 335,
+    "propostas": 368,
+    "leis": 337,
     "vetos": 5
    },
-   "requisicoes": 7,
+   "requisicoes": 11,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "1100304": {
    "casa": "CMVV",
@@ -1386,17 +1386,17 @@
     "veiculo": "Câmara Municipal de Parecis",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.parecis.ro.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "prefeito": {
     "propostas": 5,
     "leis": null,
     "vetos": null
    },
-   "requisicoes": 5,
+   "requisicoes": 7,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "1101468": {
    "casa": "CMPO",
@@ -1492,18 +1492,18 @@
     "veiculo": "Câmara Municipal de São Francisco do Guaporé",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.saofranciscodoguapore.ro.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
-   "votacoes": 534,
+   "votacoes": 538,
    "prefeito": {
-    "propostas": 333,
-    "leis": 339,
+    "propostas": 334,
+    "leis": 342,
     "vetos": 2
    },
-   "requisicoes": 7,
+   "requisicoes": 13,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "1101609": {
    "casa": "CMT",
@@ -1575,17 +1575,17 @@
     "veiculo": "Câmara Municipal de Vale do Paraíso",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.valedoparaiso.ro.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "prefeito": {
     "propostas": 264,
-    "leis": 233,
+    "leis": 239,
     "vetos": null
    },
    "requisicoes": 7,
    "semTse": 1,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "1200013": {
    "casa": "CMA",
@@ -1736,17 +1736,17 @@
     "veiculo": "Câmara Municipal de Coari",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.coari.am.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "prefeito": {
     "propostas": 25,
     "leis": null,
     "vetos": null
    },
-   "requisicoes": 6,
+   "requisicoes": 7,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "1301308": {
    "casa": "CMC",
@@ -1845,7 +1845,7 @@
     "veiculo": "Câmara Municipal de Manacapuru",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.manacapuru.am.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "votacoes": 1,
    "prefeito": {
@@ -1853,10 +1853,10 @@
     "leis": 287,
     "vetos": 286
    },
-   "requisicoes": 6,
+   "requisicoes": 7,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "1302603": {
    "casa": "CMM",
@@ -2441,7 +2441,7 @@
     "veiculo": "Câmara Municipal de Abreulândia",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.abreulandia.to.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "votacoes": 41,
    "prefeito": {
@@ -2449,10 +2449,10 @@
     "leis": null,
     "vetos": null
    },
-   "requisicoes": 5,
+   "requisicoes": 7,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "1700350": {
    "casa": "CMD",
@@ -2496,7 +2496,7 @@
     "veiculo": "Câmara Municipal de Barrolândia",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.barrolandia.to.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "votacoes": 36,
    "prefeito": {
@@ -2507,7 +2507,7 @@
    "requisicoes": 7,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "1703909": {
    "casa": "CMC",
@@ -2551,17 +2551,17 @@
     "veiculo": "Câmara Municipal de Chapada da Natividade",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.chapadadanatividade.to.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "prefeito": {
     "propostas": 21,
     "leis": null,
     "vetos": null
    },
-   "requisicoes": 5,
+   "requisicoes": 7,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "1706100": {
    "casa": "CMC",
@@ -2956,17 +2956,17 @@
     "veiculo": "Câmara Municipal de Pedro Afonso",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.pedroafonso.to.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "prefeito": {
-    "propostas": 50,
+    "propostas": 51,
     "leis": null,
     "vetos": 2
    },
-   "requisicoes": 5,
+   "requisicoes": 9,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "1716604": {
    "casa": "CMP",
@@ -3037,17 +3037,17 @@
     "veiculo": "Câmara Municipal de Presidente Kennedy",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.presidentekennedy.to.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "prefeito": {
     "propostas": null,
     "leis": null,
     "vetos": 1
    },
-   "requisicoes": 5,
+   "requisicoes": 7,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "1718451": {
    "casa": "CMP",
@@ -3064,17 +3064,17 @@
     "veiculo": "Câmara Municipal de Pugmil",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.pugmil.to.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "prefeito": {
     "propostas": 50,
     "leis": null,
     "vetos": null
    },
-   "requisicoes": 4,
+   "requisicoes": 6,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "1718659": {
    "casa": "CRC",
@@ -3172,7 +3172,7 @@
     "veiculo": "Câmara Municipal de Santa Tereza do Tocantins",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.santaterezadotocantins.to.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "prefeito": {
     "propostas": 19,
@@ -3182,7 +3182,7 @@
    "requisicoes": 7,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "1720259": {
    "casa": "CSS",
@@ -3242,7 +3242,7 @@
    "casa": "CMTTO",
    "nome": "Câmara Municipal de Talismã",
    "membros": 9,
-   "propostas": 11,
+   "propostas": 15,
    "cobertura": {
     "lista": true,
     "propostas": true,
@@ -3253,17 +3253,17 @@
     "veiculo": "Câmara Municipal de Talismã",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.talisma.to.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "prefeito": {
     "propostas": 36,
     "leis": 50,
     "vetos": null
    },
-   "requisicoes": 5,
+   "requisicoes": 9,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "1721257": {
    "casa": "CM",
@@ -3335,7 +3335,7 @@
     "veiculo": "Câmara Municipal de Benedito Leite",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.beneditoleite.ma.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "votacoes": 13,
    "prefeito": {
@@ -3343,10 +3343,10 @@
     "leis": null,
     "vetos": null
    },
-   "requisicoes": 5,
+   "requisicoes": 7,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "2105153": {
    "casa": "CMIGM",
@@ -3479,7 +3479,7 @@
    "casa": "CMVN",
    "nome": "Câmara Municipal de Vila Nova dos Martírios",
    "membros": 9,
-   "propostas": 20,
+   "propostas": 22,
    "cobertura": {
     "lista": true,
     "propostas": true,
@@ -3490,18 +3490,18 @@
     "veiculo": "Câmara Municipal de Vila Nova dos Martírios",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.vilanovadosmartirios.ma.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
-   "votacoes": 31,
+   "votacoes": 32,
    "prefeito": {
     "propostas": 24,
     "leis": null,
     "vetos": null
    },
-   "requisicoes": 7,
+   "requisicoes": 11,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "2112902": {
    "casa": "CMVTM",
@@ -3771,7 +3771,7 @@
     "veiculo": "Câmara Municipal de Campinas do Piauí",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.campinasdopiaui.pi.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "votacoes": 45,
    "prefeito": {
@@ -3779,10 +3779,10 @@
     "leis": null,
     "vetos": null
    },
-   "requisicoes": 5,
+   "requisicoes": 7,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "2202133": {
    "casa": "CMCGP",
@@ -3988,19 +3988,19 @@
     "veiculo": "Câmara Municipal de Dom Expedito Lopes",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.domexpeditolopes.pi.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "prefeito": {
     "propostas": 15,
     "leis": null,
     "vetos": null
    },
-   "requisicoes": 5,
+   "requisicoes": 7,
    "semTse": 0,
    "conferencia": "o SAPL tem 8 vereadores ativos para 9 vagas",
    "vereadoresComPropostas": 9,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "2203701": {
    "casa": "CME",
@@ -4267,14 +4267,14 @@
     "veiculo": "Câmara Municipal de Pau D'Arco do Piauí",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.paudarcodopiaui.pi.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
-   "requisicoes": 5,
+   "requisicoes": 7,
    "semTse": 0,
    "conferencia": "o SAPL tem 8 vereadores ativos para 9 vagas",
    "vereadoresComPropostas": 8,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "2207801": {
    "casa": "CMP",
@@ -4347,7 +4347,7 @@
     "veiculo": "Câmara Municipal de São João da Fronteira",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.saojoaodafronteira.pi.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "votacoes": 15,
    "prefeito": {
@@ -4355,10 +4355,10 @@
     "leis": 30,
     "vetos": 1
    },
-   "requisicoes": 5,
+   "requisicoes": 7,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "2210052": {
    "casa": "CMSJD",
@@ -4740,18 +4740,18 @@
     "veiculo": "Câmara Municipal de Horizonte",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.horizonte.ce.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
-   "votacoes": 218,
+   "votacoes": 221,
    "prefeito": {
-    "propostas": 126,
-    "leis": 147,
+    "propostas": 127,
+    "leis": 154,
     "vetos": 2
    },
-   "requisicoes": 10,
+   "requisicoes": 11,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "2305357": {
    "casa": "CMI",
@@ -5407,7 +5407,7 @@
    "casa": "CMLN",
    "nome": "Câmara Municipal de Lagoa Nova",
    "membros": 11,
-   "propostas": 56,
+   "propostas": 60,
    "cobertura": {
     "lista": true,
     "propostas": true,
@@ -5418,7 +5418,7 @@
     "veiculo": "Câmara Municipal de Lagoa Nova",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.lagoanova.rn.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "votacoes": 22,
    "prefeito": {
@@ -5426,10 +5426,10 @@
     "leis": null,
     "vetos": 1
    },
-   "requisicoes": 9,
+   "requisicoes": 10,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "2408102": {
    "casa": "CMN",
@@ -6021,7 +6021,7 @@
     "veiculo": "Câmara Municipal de Baraúna",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.barauna.pb.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "votacoes": 110,
    "prefeito": {
@@ -6029,10 +6029,10 @@
     "leis": null,
     "vetos": null
    },
-   "requisicoes": 11,
+   "requisicoes": 7,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "2501708": {
    "casa": "CMBSM",
@@ -6065,7 +6065,7 @@
    "casa": "CMBY",
    "nome": "Câmara Municipal de Bayeux",
    "membros": 17,
-   "propostas": 118,
+   "propostas": 120,
    "cobertura": {
     "lista": true,
     "propostas": true,
@@ -6076,7 +6076,7 @@
     "veiculo": "Câmara Municipal de Bayeux",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.bayeux.pb.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "votacoes": 58,
    "prefeito": {
@@ -6084,10 +6084,10 @@
     "leis": 119,
     "vetos": 15
    },
-   "requisicoes": 7,
+   "requisicoes": 9,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "2502003": {
    "casa": "CMBBC",
@@ -6104,7 +6104,7 @@
     "veiculo": "Câmara Municipal de Belém do Brejo do Cruz",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.belemdobrejodocruz.pb.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "votacoes": 177,
    "prefeito": {
@@ -6115,7 +6115,7 @@
    "requisicoes": 7,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "2502409": {
    "casa": "CMBSF",
@@ -6132,7 +6132,7 @@
     "veiculo": "Câmara Municipal de Bonito de Santa Fé",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.bonitodesantafe.pb.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "votacoes": 47,
    "prefeito": {
@@ -6140,10 +6140,10 @@
     "leis": null,
     "vetos": null
    },
-   "requisicoes": 5,
+   "requisicoes": 7,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "2502904": {
    "casa": "CMBS",
@@ -6255,7 +6255,7 @@
    "casa": "CMC",
    "nome": "Câmara Municipal de Cajazeiras",
    "membros": 0,
-   "propostas": 210,
+   "propostas": 212,
    "cobertura": {
     "lista": false,
     "propostas": true,
@@ -6266,19 +6266,19 @@
     "veiculo": "Câmara Municipal de Cajazeiras",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.cajazeiras.pb.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "prefeito": {
-    "propostas": 8,
+    "propostas": 11,
     "leis": null,
     "vetos": 11
    },
-   "requisicoes": 7,
+   "requisicoes": 9,
    "semTse": 0,
    "conferencia": "o SAPL tem 14 vereadores ativos para 15 vagas",
    "vereadoresComPropostas": 15,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "2504009": {
    "casa": "CMCG",
@@ -6360,10 +6360,10 @@
   "2505006": {
    "casa": "CMC",
    "nome": "Câmara Municipal de Cubati",
-   "membros": 0,
+   "membros": 9,
    "propostas": 6,
    "cobertura": {
-    "lista": false,
+    "lista": true,
     "propostas": true,
     "votacoes": true,
     "gastos": false
@@ -6372,20 +6372,18 @@
     "veiculo": "Câmara Municipal de Cubati",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.cubati.pb.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
-   "votacoes": 20,
+   "votacoes": 22,
    "prefeito": {
-    "propostas": 15,
+    "propostas": 17,
     "leis": null,
     "vetos": null
    },
-   "requisicoes": 5,
+   "requisicoes": 13,
    "semTse": 0,
-   "conferencia": "o SAPL tem 10 vereadores ativos para 9 vagas",
-   "vereadoresComPropostas": 9,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "2505204": {
    "casa": "CMC",
@@ -6449,7 +6447,7 @@
    "casa": "CMG",
    "nome": "Câmara Municipal de Guarabira",
    "membros": 15,
-   "propostas": 414,
+   "propostas": 428,
    "cobertura": {
     "lista": true,
     "propostas": true,
@@ -6460,17 +6458,17 @@
     "veiculo": "Câmara Municipal de Guarabira",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.guarabira.pb.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "prefeito": {
-    "propostas": 19,
+    "propostas": 20,
     "leis": null,
     "vetos": 2
    },
-   "requisicoes": 10,
+   "requisicoes": 14,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "2506905": {
    "casa": "CMI",
@@ -6711,7 +6709,7 @@
     "veiculo": "Câmara Municipal de Olivedos",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.olivedos.pb.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "prefeito": {
     "propostas": 33,
@@ -6721,15 +6719,15 @@
    "requisicoes": 7,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "2511103": {
    "casa": "CMPL",
    "nome": "Câmara Municipal de Pedra Lavrada",
-   "membros": 9,
-   "propostas": 30,
+   "membros": 0,
+   "propostas": 39,
    "cobertura": {
-    "lista": true,
+    "lista": false,
     "propostas": true,
     "votacoes": true,
     "gastos": false
@@ -6738,7 +6736,7 @@
     "veiculo": "Câmara Municipal de Pedra Lavrada",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.pedralavrada.pb.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "votacoes": 78,
    "prefeito": {
@@ -6748,8 +6746,10 @@
    },
    "requisicoes": 9,
    "semTse": 0,
+   "conferencia": "o SAPL tem 8 vereadores ativos para 9 vagas",
+   "vereadoresComPropostas": 9,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "2513208": {
    "casa": "CMSC",
@@ -6991,24 +6991,24 @@
     "veiculo": "Câmara Municipal de Amaraji",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.amaraji.pe.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
-   "votacoes": 83,
+   "votacoes": 85,
    "prefeito": {
     "propostas": 50,
     "leis": null,
     "vetos": null
    },
-   "requisicoes": 9,
+   "requisicoes": 11,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "2601102": {
    "casa": "CMA",
    "nome": "Câmara Municipal de Araripina",
    "membros": 17,
-   "propostas": 133,
+   "propostas": 135,
    "cobertura": {
     "lista": true,
     "propostas": true,
@@ -7019,17 +7019,17 @@
     "veiculo": "Câmara Municipal de Araripina",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.araripina.pe.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "prefeito": {
     "propostas": 81,
-    "leis": 135,
+    "leis": null,
     "vetos": null
    },
-   "requisicoes": 7,
+   "requisicoes": 9,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "2601706": {
    "casa": "CMBJ",
@@ -7197,7 +7197,7 @@
    "casa": "CMC",
    "nome": "Câmara Municipal de Carpina",
    "membros": 15,
-   "propostas": 109,
+   "propostas": 112,
    "cobertura": {
     "lista": true,
     "propostas": true,
@@ -7208,18 +7208,18 @@
     "veiculo": "Câmara Municipal de Carpina",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.carpina.pe.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
-   "votacoes": 278,
+   "votacoes": 282,
    "prefeito": {
     "propostas": 90,
     "leis": null,
     "vetos": 1
    },
-   "requisicoes": 10,
+   "requisicoes": 11,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "2604106": {
    "casa": "CMC",
@@ -7459,17 +7459,17 @@
     "veiculo": "Câmara Municipal de Gravatá",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.gravata.pe.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "prefeito": {
     "propostas": 6,
     "leis": null,
     "vetos": null
    },
-   "requisicoes": 5,
+   "requisicoes": 7,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "2606705": {
    "casa": "CMVI",
@@ -7726,18 +7726,18 @@
     "veiculo": "Câmara Municipal de Olinda",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.olinda.pe.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
-   "votacoes": 85,
+   "votacoes": 86,
    "prefeito": {
     "propostas": 44,
     "leis": 86,
     "vetos": 16
    },
-   "requisicoes": 8,
+   "requisicoes": 9,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "2609709": {
    "casa": "CMO",
@@ -7966,7 +7966,7 @@
    "casa": "CMSCC",
    "nome": "Câmara Municipal de Santa Cruz do Capibaribe",
    "membros": 17,
-   "propostas": 923,
+   "propostas": 938,
    "cobertura": {
     "lista": true,
     "propostas": true,
@@ -7977,18 +7977,18 @@
     "veiculo": "Câmara Municipal de Santa Cruz do Capibaribe",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.santacruzdocapibaribe.pe.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "votacoes": 33,
    "prefeito": {
-    "propostas": 82,
-    "leis": 419,
+    "propostas": 85,
+    "leis": 437,
     "vetos": 14
    },
-   "requisicoes": 9,
+   "requisicoes": 19,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "2612901": {
    "casa": "CMSBS",
@@ -8033,18 +8033,18 @@
     "veiculo": "Câmara Municipal de São Caitano",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.saocaitano.pe.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
-   "votacoes": 148,
+   "votacoes": 150,
    "prefeito": {
-    "propostas": 40,
+    "propostas": 42,
     "leis": 86,
     "vetos": null
    },
-   "requisicoes": 9,
+   "requisicoes": 10,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "2613701": {
    "casa": "CMSLM",
@@ -8366,17 +8366,17 @@
     "veiculo": "Câmara Municipal de Igaci",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.igaci.al.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "prefeito": {
     "propostas": 12,
     "leis": null,
     "vetos": null
    },
-   "requisicoes": 5,
+   "requisicoes": 7,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "2703601": {
    "casa": "CMJ",
@@ -8526,18 +8526,18 @@
     "veiculo": "Câmara Municipal de Lagarto",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.lagarto.se.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "votacoes": 7,
    "prefeito": {
     "propostas": 86,
-    "leis": 144,
+    "leis": 146,
     "vetos": 1
    },
-   "requisicoes": 8,
+   "requisicoes": 7,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "2901007": {
    "casa": "CMA",
@@ -8732,7 +8732,7 @@
    "casa": "CMC",
    "nome": "Câmara Municipal da Cachoeira",
    "membros": 11,
-   "propostas": 120,
+   "propostas": 123,
    "cobertura": {
     "lista": true,
     "propostas": true,
@@ -8743,17 +8743,17 @@
     "veiculo": "Câmara Municipal da Cachoeira",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.cachoeira.ba.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "prefeito": {
     "propostas": 48,
     "leis": null,
     "vetos": null
    },
-   "requisicoes": 5,
+   "requisicoes": 9,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "2905008": {
    "casa": "CMC",
@@ -9179,7 +9179,7 @@
     "veiculo": "Câmara Municipal de Mirante",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.mirante.ba.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "votacoes": 25,
    "prefeito": {
@@ -9187,10 +9187,10 @@
     "leis": null,
     "vetos": null
    },
-   "requisicoes": 5,
+   "requisicoes": 7,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "2922300": {
    "casa": "CMM",
@@ -9538,12 +9538,12 @@
     "veiculo": "Câmara Municipal de Araporã",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.arapora.mg.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
-   "requisicoes": 5,
+   "requisicoes": 7,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "3103801": {
    "casa": "CMA",
@@ -9725,17 +9725,17 @@
     "veiculo": "Câmara Municipal de Bocaiúva",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.bocaiuva.mg.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "prefeito": {
     "propostas": 30,
     "leis": null,
     "vetos": 6
    },
-   "requisicoes": 5,
+   "requisicoes": 7,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "3107406": {
    "casa": "CMBD",
@@ -9998,12 +9998,12 @@
     "veiculo": "Câmara Municipal de Campina Verde",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.campinaverde.mg.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
-   "requisicoes": 5,
+   "requisicoes": 7,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "3111804": {
    "casa": "CMC",
@@ -10104,7 +10104,7 @@
     "veiculo": "Câmara Municipal de Capitólio",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.capitolio.mg.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "votacoes": 247,
    "prefeito": {
@@ -10115,7 +10115,7 @@
    "requisicoes": 8,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "3112901": {
    "casa": "CMC",
@@ -10214,9 +10214,9 @@
     "veiculo": "Câmara Municipal de Carmo da Mata",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.carmodamata.mg.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
-   "votacoes": 212,
+   "votacoes": 214,
    "prefeito": {
     "propostas": 64,
     "leis": null,
@@ -10225,7 +10225,7 @@
    "requisicoes": 9,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "3114303": {
    "casa": "CM",
@@ -10381,18 +10381,18 @@
     "veiculo": "Câmara Municipal de Claraval",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.claraval.mg.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "votacoes": 84,
    "prefeito": {
     "propostas": 57,
-    "leis": 54,
+    "leis": 57,
     "vetos": 1
    },
    "requisicoes": 7,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "3116605": {
    "casa": "CMC",
@@ -10482,7 +10482,7 @@
    "casa": "CMCL",
    "nome": "Câmara Municipal Conselheiro Lafaiete",
    "membros": 13,
-   "propostas": 286,
+   "propostas": 290,
    "cobertura": {
     "lista": true,
     "propostas": true,
@@ -10493,18 +10493,18 @@
     "veiculo": "Câmara Municipal Conselheiro Lafaiete",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.conselheirolafaiete.mg.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
-   "votacoes": 2,
+   "votacoes": 3,
    "prefeito": {
-    "propostas": 99,
-    "leis": 222,
+    "propostas": 100,
+    "leis": 223,
     "vetos": 18
    },
-   "requisicoes": 13,
+   "requisicoes": 15,
    "semTse": 1,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "3118601": {
    "casa": "CMC",
@@ -10602,7 +10602,7 @@
     "veiculo": "Câmara Municipal de Delfinópolis",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.delfinopolis.mg.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "votacoes": 93,
    "prefeito": {
@@ -10610,10 +10610,10 @@
     "leis": null,
     "vetos": null
    },
-   "requisicoes": 10,
+   "requisicoes": 7,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "3122306": {
    "casa": "CMD",
@@ -10824,17 +10824,17 @@
     "veiculo": "Câmara Municipal de Formiga",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.formiga.mg.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "prefeito": {
-    "propostas": 292,
+    "propostas": 293,
     "leis": null,
     "vetos": 13
    },
-   "requisicoes": 9,
+   "requisicoes": 14,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "3127388": {
    "casa": "CMG",
@@ -11072,12 +11072,12 @@
     "veiculo": "Câmara Municipal de Itaguara",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.itaguara.mg.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
-   "requisicoes": 5,
+   "requisicoes": 7,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "3132909": {
    "casa": "CMI",
@@ -11288,7 +11288,7 @@
     "veiculo": "Câmara Municipal de Januária",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.januaria.mg.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "prefeito": {
     "propostas": 81,
@@ -11298,7 +11298,7 @@
    "requisicoes": 7,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "3135308": {
    "casa": "CMJ",
@@ -11509,17 +11509,17 @@
     "veiculo": "Câmara Municipal de Limeira do Oeste",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.limeiradooeste.mg.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "prefeito": {
-    "propostas": 82,
-    "leis": 85,
+    "propostas": 84,
+    "leis": 89,
     "vetos": 1
    },
-   "requisicoes": 7,
+   "requisicoes": 9,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "3138807": {
    "casa": "CML",
@@ -11536,7 +11536,7 @@
     "veiculo": "Câmara Municipal de Luz",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.luz.mg.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "votacoes": 44,
    "prefeito": {
@@ -11544,10 +11544,10 @@
     "leis": null,
     "vetos": null
    },
-   "requisicoes": 10,
+   "requisicoes": 8,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "3139102": {
    "casa": "CMMDM",
@@ -11581,7 +11581,7 @@
    "casa": "CMM",
    "nome": "Câmara Municipal de Manhuaçu",
    "membros": 17,
-   "propostas": 170,
+   "propostas": 171,
    "cobertura": {
     "lista": true,
     "propostas": true,
@@ -11592,18 +11592,18 @@
     "veiculo": "Câmara Municipal de Manhuaçu",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.manhuacu.mg.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
-   "votacoes": 234,
+   "votacoes": 240,
    "prefeito": {
     "propostas": 118,
-    "leis": 187,
+    "leis": 190,
     "vetos": 1
    },
-   "requisicoes": 10,
+   "requisicoes": 11,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "3139508": {
    "casa": "CMM",
@@ -11758,17 +11758,17 @@
     "veiculo": "Câmara Municipal Monte Santo de Minas",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.montesantodeminas.mg.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "prefeito": {
-    "propostas": 83,
-    "leis": 101,
+    "propostas": 84,
+    "leis": 102,
     "vetos": null
    },
-   "requisicoes": 7,
+   "requisicoes": 9,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "3143302": {
    "casa": "CMMOC",
@@ -12115,12 +12115,12 @@
     "veiculo": "Câmara Municipal de Pavão",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.pavao.mg.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
-   "requisicoes": 5,
+   "requisicoes": 7,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "3149101": {
    "casa": "CMP",
@@ -12248,7 +12248,7 @@
     "veiculo": "Câmara Municipal de Perdizes",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.perdizes.mg.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "votacoes": 105,
    "prefeito": {
@@ -12256,10 +12256,10 @@
     "leis": null,
     "vetos": 3
    },
-   "requisicoes": 10,
+   "requisicoes": 7,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "3150208": {
    "casa": "CMPPNOVA",
@@ -12580,7 +12580,7 @@
     "veiculo": "Câmara Municipal de Santa Bárbara",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.santabarbara.mg.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "votacoes": 1,
    "prefeito": {
@@ -12588,10 +12588,10 @@
     "leis": null,
     "vetos": 3
    },
-   "requisicoes": 5,
+   "requisicoes": 7,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "3157906": {
    "casa": "SM",
@@ -12719,7 +12719,7 @@
     "veiculo": "Câmara Municipal de Santana do Paraíso",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.santanadoparaiso.mg.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "prefeito": {
     "propostas": 83,
@@ -12729,7 +12729,7 @@
    "requisicoes": 7,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "3161106": {
    "casa": "CAMSF",
@@ -12802,20 +12802,20 @@
     "veiculo": "Câmara Municipal de São Gonçalo do Pará",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.saogoncalodopara.mg.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
-   "votacoes": 50,
+   "votacoes": 56,
    "prefeito": {
     "propostas": 35,
     "leis": null,
     "vetos": null
    },
-   "requisicoes": 7,
+   "requisicoes": 10,
    "semTse": 0,
    "conferencia": "o SAPL tem 8 vereadores ativos para 9 vagas",
    "vereadoresComPropostas": 9,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "3162005": {
    "casa": "CAMSGS",
@@ -12832,7 +12832,7 @@
     "veiculo": "Câmara Municipal de São Gonçalo do Sapucaí",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.saogoncalodosapucai.mg.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "votacoes": 1,
    "prefeito": {
@@ -12840,10 +12840,10 @@
     "leis": null,
     "vetos": null
    },
-   "requisicoes": 5,
+   "requisicoes": 7,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "3162104": {
    "casa": "CAMSG",
@@ -13194,18 +13194,18 @@
     "veiculo": "Câmara Municipal de Ubá",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.uba.mg.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
-   "votacoes": 111,
+   "votacoes": 125,
    "prefeito": {
-    "propostas": 132,
+    "propostas": 134,
     "leis": 183,
     "vetos": 5
    },
-   "requisicoes": 10,
+   "requisicoes": 14,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "3170404": {
    "casa": "CMU",
@@ -13571,17 +13571,17 @@
     "veiculo": "Câmara Municipal de João Neiva",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.joaoneiva.es.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "prefeito": {
-    "propostas": 104,
+    "propostas": 105,
     "leis": 199,
     "vetos": null
    },
-   "requisicoes": 7,
+   "requisicoes": 9,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "3203346": {
    "casa": "CMMF",
@@ -13680,7 +13680,7 @@
     "veiculo": "Câmara Municipal de Pedro Canário",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.pedrocanario.es.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "votacoes": 58,
    "prefeito": {
@@ -13688,10 +13688,10 @@
     "leis": null,
     "vetos": null
    },
-   "requisicoes": 5,
+   "requisicoes": 7,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "3204500": {
    "casa": "CMSL",
@@ -14235,18 +14235,18 @@
     "veiculo": "Câmara Municipal de Miguel Pereira",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.miguelpereira.rj.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "votacoes": 1,
    "prefeito": {
-    "propostas": 224,
+    "propostas": 225,
     "leis": 238,
     "vetos": 17
    },
-   "requisicoes": 7,
+   "requisicoes": 9,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "3303401": {
    "casa": "CMNF",
@@ -14446,7 +14446,7 @@
    "casa": "CMSF",
    "nome": "Câmara Municipal de São Fidélis",
    "membros": 9,
-   "propostas": 68,
+   "propostas": 70,
    "cobertura": {
     "lista": true,
     "propostas": true,
@@ -14457,17 +14457,17 @@
     "veiculo": "Câmara Municipal de São Fidélis",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.saofidelis.rj.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "prefeito": {
     "propostas": 68,
     "leis": 82,
     "vetos": 3
    },
-   "requisicoes": 8,
+   "requisicoes": 10,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "3305109": {
    "casa": "CMSJM",
@@ -14569,7 +14569,7 @@
     "veiculo": "Câmara Municipal de Adamantina",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.adamantina.sp.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "prefeito": {
     "propostas": 180,
@@ -14579,7 +14579,7 @@
    "requisicoes": 7,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "3501301": {
    "casa": "CM",
@@ -15276,7 +15276,7 @@
    "casa": "CMIC",
    "nome": "Câmara Municipal de Ilha Comprida",
    "membros": 9,
-   "propostas": 56,
+   "propostas": 57,
    "cobertura": {
     "lista": true,
     "propostas": true,
@@ -15287,18 +15287,18 @@
     "veiculo": "Câmara Municipal de Ilha Comprida",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.ilhacomprida.sp.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
-   "votacoes": 357,
+   "votacoes": 362,
    "prefeito": {
-    "propostas": 320,
+    "propostas": 325,
     "leis": 345,
     "vetos": 10
    },
-   "requisicoes": 8,
+   "requisicoes": 12,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "3520707": {
    "casa": "CAMIND",
@@ -15478,18 +15478,18 @@
     "veiculo": "Câmara Municipal de Jardinópolis",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.jardinopolis.sp.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "votacoes": 222,
    "prefeito": {
-    "propostas": 149,
-    "leis": 136,
+    "propostas": 151,
+    "leis": 143,
     "vetos": 2
    },
-   "requisicoes": 8,
+   "requisicoes": 10,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "3525201": {
    "casa": "CMJ",
@@ -15943,9 +15943,9 @@
     "veiculo": "Câmara Municipal de Piedade",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.piedade.sp.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
-   "votacoes": 171,
+   "votacoes": 172,
    "prefeito": {
     "propostas": 60,
     "leis": 100,
@@ -15954,7 +15954,7 @@
    "requisicoes": 9,
    "semTse": 1,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "3539608": {
    "casa": "CM",
@@ -16044,7 +16044,7 @@
    "casa": "CMR",
    "nome": "Câmara Municipal de Registro",
    "membros": 13,
-   "propostas": 154,
+   "propostas": 155,
    "cobertura": {
     "lista": true,
     "propostas": true,
@@ -16055,18 +16055,18 @@
     "veiculo": "Câmara Municipal de Registro",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.registro.sp.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
-   "votacoes": 209,
+   "votacoes": 211,
    "prefeito": {
-    "propostas": 155,
+    "propostas": 156,
     "leis": 181,
-    "vetos": 211
+    "vetos": 216
    },
-   "requisicoes": 9,
+   "requisicoes": 12,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "3544905": {
    "casa": "CMSO",
@@ -16083,18 +16083,18 @@
     "veiculo": "Câmara Municipal de Sales Oliveira",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.salesoliveira.sp.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "votacoes": 47,
    "prefeito": {
-    "propostas": 147,
+    "propostas": 159,
     "leis": 144,
     "vetos": 7
    },
-   "requisicoes": 5,
+   "requisicoes": 10,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "3545100": {
    "casa": "CMS",
@@ -16139,17 +16139,17 @@
     "veiculo": "Câmara Municipal de Santo Antônio da Alegria",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.santoantoniodaalegria.sp.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "prefeito": {
     "propostas": 23,
     "leis": null,
     "vetos": null
    },
-   "requisicoes": 5,
+   "requisicoes": 7,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "3549102": {
    "casa": "CMD",
@@ -16240,7 +16240,7 @@
    "casa": "CMSV",
    "nome": "Câmara Municipal de São Vicente",
    "membros": 15,
-   "propostas": 287,
+   "propostas": 292,
    "cobertura": {
     "lista": true,
     "propostas": true,
@@ -16251,18 +16251,18 @@
     "veiculo": "Câmara Municipal de São Vicente",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.saovicente.sp.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
-   "votacoes": 246,
+   "votacoes": 250,
    "prefeito": {
-    "propostas": 118,
-    "leis": 238,
+    "propostas": 120,
+    "leis": 242,
     "vetos": 36
    },
    "requisicoes": 13,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "3551504": {
    "casa": "CMS",
@@ -16630,7 +16630,7 @@
    "casa": "CMA",
    "nome": "Câmara Municipal de Araucária",
    "membros": 13,
-   "propostas": 496,
+   "propostas": 498,
    "cobertura": {
     "lista": true,
     "propostas": true,
@@ -16641,18 +16641,18 @@
     "veiculo": "Câmara Municipal de Araucária",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.araucaria.pr.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
-   "votacoes": 61,
+   "votacoes": 63,
    "prefeito": {
-    "propostas": 160,
-    "leis": 275,
+    "propostas": 163,
+    "leis": 305,
     "vetos": 77
    },
-   "requisicoes": 14,
+   "requisicoes": 17,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "4102604": {
    "casa": "CMVDBPR",
@@ -16719,17 +16719,17 @@
     "veiculo": "Câmara Municipal de Boa Esperança",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.boaesperanca.pr.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "prefeito": {
     "propostas": 23,
     "leis": null,
     "vetos": null
    },
-   "requisicoes": 5,
+   "requisicoes": 7,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "4103404": {
    "casa": "CMC",
@@ -16804,7 +16804,7 @@
     "veiculo": "Câmara Municipal de Cambé",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.cambe.pr.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "votacoes": 70,
    "prefeito": {
@@ -16815,7 +16815,7 @@
    "requisicoes": 7,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "4103800": {
    "casa": "CMC",
@@ -16999,18 +16999,18 @@
     "veiculo": "Câmara Municipal de Campo Mourão",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.campomourao.pr.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "votacoes": 27,
    "prefeito": {
     "propostas": 186,
-    "leis": 327,
+    "leis": 336,
     "vetos": 12
    },
-   "requisicoes": 5,
+   "requisicoes": 7,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "4104501": {
    "casa": "CMCPR",
@@ -17192,18 +17192,18 @@
     "veiculo": "Câmara Municipal de Chopinzinho",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.chopinzinho.pr.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "votacoes": 2,
    "prefeito": {
-    "propostas": 165,
-    "leis": 183,
+    "propostas": 166,
+    "leis": 184,
     "vetos": null
    },
-   "requisicoes": 5,
+   "requisicoes": 10,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "4105706": {
    "casa": "CMC",
@@ -17631,18 +17631,18 @@
     "veiculo": "Câmara Municipal de Guaraci",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.guaraci.pr.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
-   "votacoes": 83,
+   "votacoes": 84,
    "prefeito": {
-    "propostas": 39,
+    "propostas": 42,
     "leis": null,
     "vetos": null
    },
-   "requisicoes": 8,
+   "requisicoes": 11,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "4109658": {
    "casa": "CMHS",
@@ -17659,7 +17659,7 @@
     "veiculo": "Câmara Municipal de Honório Serpa",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.honorioserpa.pr.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "votacoes": 5,
    "prefeito": {
@@ -17667,10 +17667,10 @@
     "leis": null,
     "vetos": null
    },
-   "requisicoes": 8,
+   "requisicoes": 7,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "4109906": {
    "casa": "CMI",
@@ -17715,18 +17715,18 @@
     "veiculo": "Câmara Municipal de Imbaú",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.imbau.pr.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
-   "votacoes": 169,
+   "votacoes": 173,
    "prefeito": {
     "propostas": 35,
     "leis": 121,
     "vetos": null
    },
-   "requisicoes": 9,
+   "requisicoes": 11,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "4110102": {
    "casa": "CMI",
@@ -17843,7 +17843,7 @@
    "casa": "CMI",
    "nome": "Câmara Municipal de Ivaiporã",
    "membros": 9,
-   "propostas": 64,
+   "propostas": 65,
    "cobertura": {
     "lista": true,
     "propostas": true,
@@ -17854,18 +17854,18 @@
     "veiculo": "Câmara Municipal de Ivaiporã",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.ivaipora.pr.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
-   "votacoes": 204,
+   "votacoes": 217,
    "prefeito": {
-    "propostas": 186,
+    "propostas": 191,
     "leis": 271,
     "vetos": 3
    },
-   "requisicoes": 8,
+   "requisicoes": 12,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "4111605": {
    "casa": "CMI",
@@ -18009,7 +18009,7 @@
    "casa": "CMJT",
    "nome": "Câmara de Vereadores de Joaquim Távora",
    "membros": 9,
-   "propostas": 89,
+   "propostas": 90,
    "cobertura": {
     "lista": true,
     "propostas": true,
@@ -18020,18 +18020,18 @@
     "veiculo": "Câmara de Vereadores de Joaquim Távora",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.joaquimtavora.pr.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
-   "votacoes": 267,
+   "votacoes": 270,
    "prefeito": {
     "propostas": 115,
     "leis": null,
     "vetos": 7
    },
-   "requisicoes": 7,
+   "requisicoes": 12,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "4113106": {
    "casa": "CMK",
@@ -18106,17 +18106,17 @@
     "veiculo": "Câmara Municipal de Leópolis",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.leopolis.pr.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "prefeito": {
     "propostas": 28,
-    "leis": 56,
+    "leis": null,
     "vetos": null
    },
-   "requisicoes": 8,
+   "requisicoes": 10,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "4113601": {
    "casa": "CML",
@@ -18163,18 +18163,18 @@
     "veiculo": "Câmara Municipal de Mamborê",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.mambore.pr.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "votacoes": 215,
    "prefeito": {
-    "propostas": 197,
+    "propostas": 198,
     "leis": 205,
     "vetos": 2
    },
-   "requisicoes": 11,
+   "requisicoes": 9,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "4114104": {
    "casa": "CMM",
@@ -18497,25 +18497,25 @@
     "veiculo": "Câmara Municipal de Medianeira",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.medianeira.pr.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "prefeito": {
     "propostas": 9,
     "leis": null,
     "vetos": null
    },
-   "requisicoes": 5,
+   "requisicoes": 7,
    "semTse": 0,
    "conferencia": "o SAPL tem 0 vereadores ativos para 9 vagas",
    "vereadoresComPropostas": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "4115853": {
    "casa": "CMM",
    "nome": "Câmara Municipal de Mercedes",
    "membros": 9,
-   "propostas": 15,
+   "propostas": 21,
    "cobertura": {
     "lista": true,
     "propostas": true,
@@ -18526,18 +18526,18 @@
     "veiculo": "Câmara Municipal de Mercedes",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.mercedes.pr.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
-   "votacoes": 20,
+   "votacoes": 142,
    "prefeito": {
-    "propostas": 135,
+    "propostas": 142,
     "leis": null,
     "vetos": null
    },
-   "requisicoes": 11,
+   "requisicoes": 30,
    "semTse": 2,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "4116059": {
    "casa": "CMM",
@@ -18689,18 +18689,18 @@
     "veiculo": "Câmara Municipal de Palmeira",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.palmeira.pr.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "votacoes": 130,
    "prefeito": {
-    "propostas": 435,
+    "propostas": 441,
     "leis": null,
     "vetos": 1
    },
-   "requisicoes": 7,
+   "requisicoes": 10,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "4118451": {
    "casa": "CMPB",
@@ -18995,18 +18995,18 @@
     "veiculo": "Câmara Municipal de Prado Ferreira",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.pradoferreira.pr.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "votacoes": 116,
    "prefeito": {
-    "propostas": 53,
+    "propostas": 56,
     "leis": null,
     "vetos": 1
    },
-   "requisicoes": 5,
+   "requisicoes": 9,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "4120507": {
    "casa": "CMPM",
@@ -19238,18 +19238,18 @@
     "veiculo": "Câmara Municipal de Roncador",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.roncador.pr.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "votacoes": 13,
    "prefeito": {
-    "propostas": 82,
+    "propostas": 83,
     "leis": null,
     "vetos": null
    },
-   "requisicoes": 8,
+   "requisicoes": 9,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "4122701": {
    "casa": "CM",
@@ -19293,18 +19293,18 @@
     "veiculo": "Câmara Municipal de Salto do Itararé",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.saltodoitarare.pr.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
-   "votacoes": 146,
+   "votacoes": 150,
    "prefeito": {
-    "propostas": 130,
+    "propostas": 131,
     "leis": null,
     "vetos": null
    },
-   "requisicoes": 7,
+   "requisicoes": 12,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "4123501": {
    "casa": "CMVSH",
@@ -19504,7 +19504,7 @@
    "casa": "CM",
    "nome": "Câmara Municipal de Santo Antônio do Sudoeste",
    "membros": 11,
-   "propostas": 50,
+   "propostas": 51,
    "cobertura": {
     "lista": true,
     "propostas": true,
@@ -19515,24 +19515,24 @@
     "veiculo": "Câmara Municipal de Santo Antônio do Sudoeste",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.santoantoniodosudoeste.pr.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
-   "votacoes": 67,
+   "votacoes": 69,
    "prefeito": {
-    "propostas": 233,
+    "propostas": 243,
     "leis": null,
     "vetos": 1
    },
-   "requisicoes": 10,
+   "requisicoes": 11,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "4124806": {
    "casa": "CMSJ",
    "nome": "Câmara Municipal de São João",
    "membros": 9,
-   "propostas": 18,
+   "propostas": 20,
    "cobertura": {
     "lista": true,
     "propostas": true,
@@ -19543,18 +19543,18 @@
     "veiculo": "Câmara Municipal de São João",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.saojoao.pr.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "votacoes": 6,
    "prefeito": {
-    "propostas": 101,
+    "propostas": 102,
     "leis": null,
     "vetos": 1
    },
-   "requisicoes": 7,
+   "requisicoes": 9,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "4125001": {
    "casa": "CMSJI",
@@ -19682,18 +19682,18 @@
     "veiculo": "Câmara Municipal de São Tomé",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.saotome.pr.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "votacoes": 20,
    "prefeito": {
-    "propostas": 96,
+    "propostas": 98,
     "leis": 82,
     "vetos": null
    },
-   "requisicoes": 7,
+   "requisicoes": 9,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "4126256": {
    "casa": "CMS",
@@ -19992,7 +19992,7 @@
     "veiculo": "Câmara Municipal de Tomazina",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.tomazina.pr.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "votacoes": 25,
    "prefeito": {
@@ -20000,16 +20000,16 @@
     "leis": 68,
     "vetos": null
    },
-   "requisicoes": 5,
+   "requisicoes": 8,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "4127858": {
    "casa": "PLTB",
    "nome": "Câmara Municipal de Três Barras do Paraná",
    "membros": 9,
-   "propostas": 41,
+   "propostas": 46,
    "cobertura": {
     "lista": true,
     "propostas": true,
@@ -20020,18 +20020,18 @@
     "veiculo": "Câmara Municipal de Três Barras do Paraná",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.tresbarrasdoparana.pr.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
-   "votacoes": 148,
+   "votacoes": 151,
    "prefeito": {
-    "propostas": 426,
+    "propostas": 428,
     "leis": null,
     "vetos": 1
    },
-   "requisicoes": 10,
+   "requisicoes": 13,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "4128625": {
    "casa": "CMA",
@@ -20549,7 +20549,7 @@
     "veiculo": "Câmara Municipal de Schroeder",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.schroeder.sc.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "votacoes": 85,
    "prefeito": {
@@ -20557,10 +20557,10 @@
     "leis": null,
     "vetos": 1
    },
-   "requisicoes": 9,
+   "requisicoes": 7,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "4218756": {
    "casa": "CMV",
@@ -20993,7 +20993,7 @@
     "veiculo": "Câmara Municipal de Dilermando de Aguiar",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.dilermandodeaguiar.rs.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "votacoes": 6,
    "prefeito": {
@@ -21004,7 +21004,7 @@
    "requisicoes": 7,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "4306403": {
    "casa": "CMD",
@@ -21121,7 +21121,7 @@
    "casa": "CMV",
    "nome": "Câmara Municipal de Liberato Salzano",
    "membros": 9,
-   "propostas": 9,
+   "propostas": 10,
    "cobertura": {
     "lista": true,
     "propostas": true,
@@ -21132,17 +21132,17 @@
     "veiculo": "Câmara Municipal de Liberato Salzano",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.liberatosalzano.rs.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "prefeito": {
     "propostas": 133,
     "leis": 118,
     "vetos": null
    },
-   "requisicoes": 5,
+   "requisicoes": 9,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "4312401": {
    "casa": "CMM",
@@ -21411,17 +21411,17 @@
     "veiculo": "Câmara Municipal de Sant'Ana do Livramento",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.santanadolivramento.rs.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "prefeito": {
-    "propostas": 62,
+    "propostas": 66,
     "leis": null,
     "vetos": 2
    },
    "requisicoes": 9,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "4317806": {
    "casa": "CMSAUG",
@@ -22072,7 +22072,7 @@
    "casa": "CMBG",
    "nome": "Câmara Municipal de Barra do Garças",
    "membros": 15,
-   "propostas": 199,
+   "propostas": 202,
    "cobertura": {
     "lista": true,
     "propostas": true,
@@ -22083,18 +22083,18 @@
     "veiculo": "Câmara Municipal de Barra do Garças",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.barradogarcas.mt.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
-   "votacoes": 977,
+   "votacoes": 983,
    "prefeito": {
     "propostas": 260,
-    "leis": 308,
+    "leis": 313,
     "vetos": 8
    },
-   "requisicoes": 13,
+   "requisicoes": 15,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "5101852": {
    "casa": "BJA",
@@ -22111,7 +22111,7 @@
     "veiculo": "Câmara Municipal de Bom Jesus do Araguaia",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2029 (dados abertos)",
     "url": "https://sapl.bomjesusdoaraguaia.mt.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "votacoes": 100,
    "prefeito": {
@@ -22119,10 +22119,10 @@
     "leis": 121,
     "vetos": 1
    },
-   "requisicoes": 6,
+   "requisicoes": 7,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "5102504": {
    "casa": "CMC",
@@ -22194,7 +22194,7 @@
     "veiculo": "Câmara Municipal de Campo Verde",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.campoverde.mt.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "votacoes": 242,
    "prefeito": {
@@ -22202,10 +22202,10 @@
     "leis": null,
     "vetos": null
    },
-   "requisicoes": 9,
+   "requisicoes": 8,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "5102686": {
    "casa": "CMCJ",
@@ -22444,18 +22444,18 @@
     "veiculo": "Câmara de Vereadores de Feliz Natal",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.feliznatal.mt.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
-   "votacoes": 156,
+   "votacoes": 157,
    "prefeito": {
-    "propostas": 98,
+    "propostas": 100,
     "leis": 106,
     "vetos": 1
    },
-   "requisicoes": 8,
+   "requisicoes": 11,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "5103858": {
    "casa": "CMGNMT",
@@ -22550,17 +22550,17 @@
     "veiculo": "Câmara Municipal de Ipiranga do Norte",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.ipirangadonorte.mt.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "prefeito": {
     "propostas": 39,
     "leis": null,
     "vetos": null
    },
-   "requisicoes": 5,
+   "requisicoes": 7,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "5105101": {
    "casa": "CMJ",
@@ -22770,17 +22770,17 @@
     "veiculo": "Câmara Municipal de Ponte Branca",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.pontebranca.mt.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "prefeito": {
-    "propostas": 96,
+    "propostas": 101,
     "leis": null,
     "vetos": null
    },
-   "requisicoes": 5,
+   "requisicoes": 10,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "5106778": {
    "casa": "CMPAN",
@@ -23291,18 +23291,18 @@
     "veiculo": "Câmara Municipal de Catalão",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.catalao.go.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "votacoes": 3,
    "prefeito": {
-    "propostas": 205,
-    "leis": 297,
+    "propostas": 207,
+    "leis": 311,
     "vetos": 1
    },
-   "requisicoes": 8,
+   "requisicoes": 9,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "5206404": {
    "casa": "CRI",
@@ -23319,12 +23319,12 @@
     "veiculo": "Câmara Municipal de Vereadores de Crixás",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.crixas.go.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
-   "requisicoes": 5,
+   "requisicoes": 7,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "5206701": {
    "casa": "PLMDGO",
@@ -23448,25 +23448,25 @@
     "veiculo": "Câmara Municipal de Luziânia",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.luziania.go.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "prefeito": {
     "propostas": 84,
     "leis": null,
     "vetos": 19
    },
-   "requisicoes": 5,
+   "requisicoes": 7,
    "semTse": 0,
    "conferencia": "o SAPL tem 22 vereadores ativos para 21 vagas",
    "vereadoresComPropostas": 17,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "5217401": {
    "casa": "CMPR",
    "nome": "Câmara Municipal de Pires do Rio",
    "membros": 13,
-   "propostas": 79,
+   "propostas": 80,
    "cobertura": {
     "lista": true,
     "propostas": true,
@@ -23477,18 +23477,18 @@
     "veiculo": "Câmara Municipal de Pires do Rio",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.piresdorio.go.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
-   "votacoes": 152,
+   "votacoes": 154,
    "prefeito": {
-    "propostas": 117,
+    "propostas": 120,
     "leis": 135,
     "vetos": 1
    },
-   "requisicoes": 9,
+   "requisicoes": 12,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "5218508": {
    "casa": "CM",
@@ -23560,18 +23560,18 @@
     "veiculo": "Câmara Municipal de São Miguel do Passa Quatro",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.saomigueldopassaquatro.go.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
-   "votacoes": 59,
+   "votacoes": 60,
    "prefeito": {
     "propostas": 44,
     "leis": null,
     "vetos": null
    },
-   "requisicoes": 6,
+   "requisicoes": 9,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   },
   "5221304": {
    "casa": "CMTR",
@@ -23606,7 +23606,7 @@
    "casa": "CMU",
    "nome": "Câmara Municipal de Uruaçu",
    "membros": 13,
-   "propostas": 39,
+   "propostas": 41,
    "cobertura": {
     "lista": true,
     "propostas": true,
@@ -23617,18 +23617,18 @@
     "veiculo": "Câmara Municipal de Uruaçu",
     "titulo": "SAPL: vereadores em exercício na legislatura 2025–2028 (dados abertos)",
     "url": "https://sapl.uruacu.go.leg.br/parlamentar/",
-    "data": "2026-11-16"
+    "data": "2026-11-23"
    },
    "prefeito": {
-    "propostas": 41,
+    "propostas": 42,
     "leis": null,
     "vetos": null
    },
-   "requisicoes": 10,
+   "requisicoes": 12,
    "semTse": 0,
    "ok": true,
-   "conferido": "2026-11-16"
+   "conferido": "2026-11-23"
   }
  },
- "atualizado": "2026-11-22"
+ "atualizado": "2026-11-23"
 }
